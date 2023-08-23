@@ -17,13 +17,14 @@ const inputsMap = {};
 let animPlayerStore = {};
 let lastLookPlayerStore = {};
 let projectiles = [];
+let weaponAngleStore = {};
 
 function tick(delta) {
     for (const player of players) {
         const inputs = inputsMap[player.id];
         const anim = animPlayerStore[player.id];
         const lastLooked = lastLookPlayerStore[player.id];
-        // console.log(lastLooked)
+        const weaponAngle = weaponAngleStore[player.id]
 
         if (inputs.up) {
             player.y -= speed;
@@ -39,6 +40,7 @@ function tick(delta) {
 
         player.anim = anim;
         player.lastLooked = lastLooked;
+        player.weaponAngle = weaponAngle;
     }
 
     for (const projectile of projectiles) {
@@ -79,6 +81,7 @@ async function main() {
 
         animPlayerStore[socket.id] = "idleRight";
         lastLookPlayerStore[socket.id] = "right";
+        weaponAngleStore[socket.id] = 0;
 
         players.push({
             id: socket.id,
@@ -86,6 +89,7 @@ async function main() {
             y: 320,
             anim: false,
             lastLooked: "right",
+            weaponAngle: 0,
         });
     
         socket.on("inputs", (inputs) => {
@@ -98,6 +102,10 @@ async function main() {
 
         socket.on("lastLookPlayer", (lastLookPlayer) => {                    
             lastLookPlayerStore[socket.id] = lastLookPlayer;  
+        });
+
+        socket.on("weaponAngle", (weaponAngle) => {                    
+            weaponAngleStore[socket.id] = weaponAngle;  
         });
 
         socket.on("projectile", (angle) => {  

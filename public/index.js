@@ -111,7 +111,7 @@ window.addEventListener("mousemove", (e) => {
       e.clientY - canvasLobby.height / 2,
       e.clientX - canvasLobby.width / 2
     );
-    
+    socket.emit("weaponAngle", angleMouse);
   });
 
 let playerSpriteWidth = character.width / 6;
@@ -202,7 +202,7 @@ function canvasLobbyLoop() {
     
     canvas.save(); // Save the current canvas state
     canvas.translate(player.x - cameraX +18, player.y - cameraY +50); // Translate to the player's position
-    canvas.rotate(angleMouse); // Rotate based on the mouse angle
+    canvas.rotate(player.weaponAngle); // Rotate based on the mouse angle
 
     canvas.fillStyle = "black"; // Set the fill color to black
     canvas.fillRect(0, -7.5, 60, 15); // Draw the rectangle centered around the rotated point
