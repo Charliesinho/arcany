@@ -54,8 +54,8 @@ function tick(delta) {
                 (player.x + 15 - projectile.x) ** 2 + (player.y + 15 - projectile.y) ** 2
                 );
                 if (distance <= 15) {
-                    player.x = 0;
-                    player.y = 0;
+                    player.x = 1280;
+                    player.y = 1220;
                     projectile.timeLeft = -1;
                     break;
                 }
@@ -85,8 +85,8 @@ async function main() {
 
         players.push({
             id: socket.id,
-            x: 180,
-            y: 320,
+            x: 1280,
+            y: 1220,
             anim: false,
             lastLooked: "right",
             weaponAngle: 0,
