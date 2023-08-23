@@ -4,6 +4,12 @@ mapLobby.src = "lobby.png";
 const character = new Image();
 character.src = "player.png";
 
+const WeaponStick = new Image();
+WeaponStick.src = "stick.png";
+
+const bulletStick = new Image();
+bulletStick.src = "bulletStick.png";
+
 const canvasLobby = document.getElementById("canvas-lobby");
 canvasLobby.width = window.innerWidth;
 canvasLobby.height = window.innerHeight;
@@ -204,23 +210,22 @@ function canvasLobbyLoop() {
     canvas.translate(player.x - cameraX +18, player.y - cameraY +50); // Translate to the player's position
     canvas.rotate(player.weaponAngle); // Rotate based on the mouse angle
 
-    canvas.fillStyle = "black"; // Set the fill color to black
-    canvas.fillRect(0, -7.5, 60, 15); // Draw the rectangle centered around the rotated point
+    canvas.drawImage(WeaponStick ,0, -7.5, 80, 20); // Draw the rectangle centered around the rotated point
 
     canvas.restore(); // Restore the canvas state to what it was before translation and rotation
   }
 
   for (const projectile of projectiles) {
-    canvas.fillStyle = "#fffff";
-    canvas.beginPath();
-    canvas.arc(
-      projectile.x - cameraX,
-      projectile.y - cameraY,
-      10,
-      0,
-      2 * Math.PI
-    );
-    canvas.fill();
+    canvas.drawImage(bulletStick, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
+    // canvas.beginPath();
+    // canvas.arc(
+    //   projectile.x - cameraX,
+    //   projectile.y - cameraY,
+    //   10,
+    //   0,
+    //   2 * Math.PI
+    // );
+    // canvas.fill();
   }
 
   playerFramesDrawn++;
