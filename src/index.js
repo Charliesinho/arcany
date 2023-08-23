@@ -8,15 +8,17 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer);
 
-const tickRate = 60;
-const speed = 3.5;
+const tickRate = 50;
+const speed = 2.5;
+const projectileSpeed = 15;
 
 let players = [];
 const inputsMap = {};
 let animPlayerStore = {};
 let lastLookPlayerStore = {};
+let projectiles = [];
 
-function tick() {
+function tick(delta) {
     for (const player of players) {
         const inputs = inputsMap[player.id];
         const anim = animPlayerStore[player.id];
@@ -39,7 +41,29 @@ function tick() {
         player.lastLooked = lastLooked;
     }
 
+    for (const projectile of projectiles) {
+        projectile.x += Math.cos(projectile.angle) * projectileSpeed;
+        projectile.y += Math.sin(projectile.angle) * projectileSpeed;
+        projectile.timeLeft -= delta;
+
+        for (const player of players) {
+            if (player.id === projectile.playerId) continue;
+            const distance = Math.sqrt(
+                (player.x + 15 - projectile.x) ** 2 + (player.y + 15 - projectile.y) ** 2
+                );
+                if (distance <= 15) {
+                    player.x = 0;
+                    player.y = 0;
+                    projectile.timeLeft = -1;
+                    break;
+                }
+        }
+    }
+
+    projectiles = projectiles.filter((projectile) => projectile.timeLeft > 0);
+
     io.emit('players', players);
+    io.emit("projectiles", projectiles);
 }
 
 async function main() {
@@ -76,6 +100,17 @@ async function main() {
             lastLookPlayerStore[socket.id] = lastLookPlayer;  
         });
 
+        socket.on("projectile", (angle) => {  
+            const player = players.find(player => player.id === socket.id)                  
+            projectiles.push({
+                angle,
+                x: player.x + 20,
+                y: player.y + 50,
+                timeLeft: 1000,
+                playerId: socket.id,
+            }) 
+        });
+
         socket.on("disconnect", () => {
             players = players.filter((player) => player.id !== socket.id);
         })
@@ -84,8 +119,14 @@ async function main() {
     app.use(express.static( 'public' ));
     
     httpServer.listen(3000);
-
-    setInterval(tick, 1000 / tickRate);
+    
+    let lastUpdate = Date.now();
+    setInterval(() => {
+        const now = Date.now();
+        const delta = now - lastUpdate;
+        tick(delta);
+        lastUpdate = now;        
+    },tick, 1000 / tickRate);
 }
 
 main();
