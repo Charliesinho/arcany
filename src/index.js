@@ -125,8 +125,10 @@ async function main() {
     });
     
     app.use(express.static( 'public' ));
+
+    const port = process.env.PORT || 3000;
     
-    httpServer.listen(3000);
+    httpServer.listen(port);
     
     let lastUpdate = Date.now();
     setInterval(() => {
