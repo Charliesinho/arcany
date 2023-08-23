@@ -31,7 +31,7 @@ function cameraShake() {
         cameraShakeX = Math.floor(Math.random() * (-140 - -160 + 1)) + -160;
         cameraShakeY = Math.floor(Math.random() * (-170 - -190 + 1)) + -190;
         console.log("shakey")
-    }, 50)
+    }, 30)
     
 }
 
@@ -55,6 +55,7 @@ const inputs = {
 };
 let animPlayer = "idleRight";
 let lastLookPlayer = "right";
+let angleMouse;
 
 window.addEventListener("keydown", (e) => {
   if (e.key === "w") {
@@ -105,6 +106,13 @@ window.addEventListener("click", (e) => {
   socket.emit("projectile", angle);
   cameraShake();
 });
+window.addEventListener("mousemove", (e) => {
+    angleMouse = Math.atan2(
+      e.clientY - canvasLobby.height / 2,
+      e.clientX - canvasLobby.width / 2
+    );
+    
+  });
 
 let playerSpriteWidth = character.width / 6;
 let playerSpriteHeight = character.height / 4;
@@ -191,6 +199,15 @@ function canvasLobbyLoop() {
         playerHeight - 510
       );
     }
+    
+    canvas.save(); // Save the current canvas state
+    canvas.translate(player.x - cameraX +18, player.y - cameraY +50); // Translate to the player's position
+    canvas.rotate(angleMouse); // Rotate based on the mouse angle
+
+    canvas.fillStyle = "black"; // Set the fill color to black
+    canvas.fillRect(0, -7.5, 60, 15); // Draw the rectangle centered around the rotated point
+
+    canvas.restore(); // Restore the canvas state to what it was before translation and rotation
   }
 
   for (const projectile of projectiles) {
