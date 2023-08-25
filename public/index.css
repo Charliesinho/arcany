@@ -18,3 +18,26 @@ body {
     bottom: -15px;
     left: 0;
 }
+
+#chat {
+    position: absolute;
+    z-index: 1;
+    bottom: 20px;
+    left: 20px;
+
+    display: flex;
+}
+
+#chat input {
+    height: 40px;
+    width: 300px;
+
+    border: none;
+    border-radius: 15px;
+    background: linear-gradient(rgb(255, 255, 255) 0%, rgb(222, 255, 221) 100%);
+    
+    padding: 20px;
+    color: rgb(104, 104, 104);
+    font-size: 16px;
+    font-weight: bolder;
+}

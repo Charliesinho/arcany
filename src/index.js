@@ -12,35 +12,44 @@ const tickRate = 50;
 const speed = 2.5;
 const projectileSpeed = 15;
 
+let timeout;
+
 let players = [];
 const inputsMap = {};
 let animPlayerStore = {};
 let lastLookPlayerStore = {};
 let projectiles = [];
 let weaponAngleStore = {};
+let chatMessageStore = {};
+let blockMovementStore = {};
 
 function tick(delta) {
     for (const player of players) {
         const inputs = inputsMap[player.id];
         const anim = animPlayerStore[player.id];
         const lastLooked = lastLookPlayerStore[player.id];
-        const weaponAngle = weaponAngleStore[player.id]
+        const weaponAngle = weaponAngleStore[player.id];
+        const chatMessage = chatMessageStore[player.id];
+        const blockMovement = blockMovementStore[player.id];
 
-        if (inputs.up) {
-            player.y -= speed;
-        } else if (inputs.down) {
-            player.y += speed;
-        }
-
-        if (inputs.left) {
-            player.x -= speed;
-        } else if (inputs.right) {
-            player.x += speed;
+        if (blockMovement === false) {
+            if (inputs.up) {
+                player.y -= speed;
+            } else if (inputs.down) {
+                player.y += speed;
+            }
+    
+            if (inputs.left) {
+                player.x -= speed;
+            } else if (inputs.right) {
+                player.x += speed;
+            }
         }
 
         player.anim = anim;
         player.lastLooked = lastLooked;
         player.weaponAngle = weaponAngle;
+        player.chatMessage = chatMessage;
     }
 
     for (const projectile of projectiles) {
@@ -82,14 +91,21 @@ async function main() {
         animPlayerStore[socket.id] = "idleRight";
         lastLookPlayerStore[socket.id] = "right";
         weaponAngleStore[socket.id] = 0;
+        chatMessageStore[socket.id] = "none";
+        blockMovementStore[socket.id] = false;
 
         players.push({
             id: socket.id,
             x: 1280,
             y: 1220,
+
             anim: false,
             lastLooked: "right",
+
             weaponAngle: 0,
+
+            chatMessage: "none",
+            blockMovement: false,
         });
     
         socket.on("inputs", (inputs) => {
@@ -108,13 +124,27 @@ async function main() {
             weaponAngleStore[socket.id] = weaponAngle;  
         });
 
+        socket.on("chatMessage", (chatMessage) => {                    
+            chatMessageStore[socket.id] = chatMessage; 
+            
+            clearTimeout(timeout);
+
+            timeout = setTimeout(() => {
+                chatMessageStore[socket.id] = "none";
+            }, 5000);
+        });
+        
+        socket.on("blockMovement", (blockMovement) => {                    
+            blockMovementStore[socket.id] = blockMovement;  
+        });
+
         socket.on("projectile", (angle) => {  
             const player = players.find(player => player.id === socket.id)                  
             projectiles.push({
                 angle,
                 x: player.x + 20,
                 y: player.y + 50,
-                timeLeft: 1000,
+                timeLeft: 200,
                 playerId: socket.id,
             }) 
         });

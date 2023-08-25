@@ -10,6 +10,9 @@ WeaponStick.src = "stick.png";
 const bulletStick = new Image();
 bulletStick.src = "bulletStick.png";
 
+const chatBubble = new Image();
+chatBubble.src = "chatBubble.png";
+
 const canvasLobby = document.getElementById("canvas-lobby");
 canvasLobby.width = window.innerWidth;
 canvasLobby.height = window.innerHeight;
@@ -23,6 +26,31 @@ let projectiles = [];
 
 let cameraShakeX = -150;
 let cameraShakeY = -180;
+
+const chatInput = document.getElementById("chatInput");
+let blockMovement = true;
+
+window.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+        e.preventDefault();
+        if (chatInput === document.activeElement) {
+            if (chatInput.value) {
+                const chatMessage = chatInput.value;
+                e.preventDefault();
+                socket.emit("chatMessage", chatMessage);           
+                chatInput.value = "";  
+                chatInput.disabled = true;    
+                chatInput.disabled = false;    
+                blockMovement = false;
+                socket.emit("blockMovement", blockMovement);    
+            }
+        } else {
+            chatInput.focus();
+            blockMovement = true;
+            socket.emit("blockMovement", blockMovement); 
+        }
+    }
+})
 
 function cameraShake() {
     let counter = 0;
@@ -38,7 +66,6 @@ function cameraShake() {
         cameraShakeY = Math.floor(Math.random() * (-170 - -190 + 1)) + -190;
         console.log("shakey")
     }, 30)
-    
 }
 
 socket.on("connect", () => {
@@ -62,6 +89,8 @@ const inputs = {
 let animPlayer = "idleRight";
 let lastLookPlayer = "right";
 let angleMouse;
+
+let mainSkillCooldown = 0;
 
 window.addEventListener("keydown", (e) => {
   if (e.key === "w") {
@@ -104,13 +133,24 @@ window.addEventListener("keyup", (e) => {
   socket.emit("inputs", inputs);
   socket.emit("animPlayer", animPlayer);
 });
-window.addEventListener("click", (e) => {
-  const angle = Math.atan2(
-    e.clientY - canvasLobby.height / 2,
-    e.clientX - canvasLobby.width / 2
-  );
-  socket.emit("projectile", angle);
-  cameraShake();
+window.addEventListener("mousedown", (e) => {
+    if (mainSkillCooldown === 1 || mainSkillCooldown === 0) {
+        const angle = Math.atan2(
+          e.clientY - canvasLobby.height / 2,
+          e.clientX - canvasLobby.width / 2
+        );
+        socket.emit("projectile", angle);
+        cameraShake();
+
+        const interval = setInterval(() => {
+            console.log(mainSkillCooldown)
+            if (mainSkillCooldown > 10) {
+                mainSkillCooldown = 0;
+                clearInterval(interval);
+            }
+            mainSkillCooldown++;
+        }, 50);
+    }
 });
 window.addEventListener("mousemove", (e) => {
     angleMouse = Math.atan2(
@@ -145,6 +185,8 @@ function canvasLobbyLoop() {
   canvas.drawImage(mapLobby, cameraShakeX - cameraX, cameraShakeY - cameraY, 3000, 3000);
 
   for (const player of players) {
+
+    //Movement
     if (player.anim === "idleRight" && player.lastLooked === "right") {
       frameCurrentPlayer = frameCurrentPlayer % 4;
       playerCutX = frameCurrentPlayer * playerWidth;
@@ -205,15 +247,27 @@ function canvasLobbyLoop() {
         playerHeight - 510
       );
     }
+    //Movement
     
+    // Weapon
     canvas.save(); // Save the current canvas state
     canvas.translate(player.x - cameraX +18, player.y - cameraY +50); // Translate to the player's position
     canvas.rotate(player.weaponAngle); // Rotate based on the mouse angle
-
     canvas.drawImage(WeaponStick ,0, -7.5, 80, 20); // Draw the rectangle centered around the rotated point
-
     canvas.restore(); // Restore the canvas state to what it was before translation and rotation
-  }
+    // Weapon
+
+    //Chat
+    if (player.chatMessage !== "none") {
+        canvas.drawImage(chatBubble, player.x - cameraX -85, player.y - cameraY -70, 200, 60)
+    
+        canvas.font = "bolder 14px Arial";
+        canvas.textAlign = "center";
+        canvas.fillStyle = "gray";
+        canvas.fillText(player.chatMessage, player.x - cameraX +15, player.y - cameraY -40);
+    }
+    //Chat
+}
 
   for (const projectile of projectiles) {
     canvas.drawImage(bulletStick, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
