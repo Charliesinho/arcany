@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-COMPATIBLE" content="IE=edge" />
     <meta name="viewport" content="width=Device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="./index.css" />
     <title>Document</title>
   </head>
   <body>
@@ -20,10 +20,51 @@
         />
         <!-- <input type="submit" value="Send"> -->
       </form>
+      <form id="login">
+        <input
+          type="text"
+          id="usernameInput"
+          name="usernameInput"
+          placeholder="Username"
+          maxlength="6"
+        />
+        <input
+          type="text"
+          id="passwordInput"
+          name="passwordInput"
+          placeholder="Password"
+          maxlength="23"
+        />
+      </form>
+      <div id="buttonsLogin">
+        <button id="loginButton" value="Send">Login</button>
+        <button id="createButton" value="Send">Create</button>
+      </div>
+      <div id="playerInfoCorner">
+        <div id="profilePicture"></div>
+        <div id="badge"></div>
+        <img id="hearts" src="./fullHearts.png"/>
+      </div>
+      <div id="inventoryWindow">
+        <img src="./backpack.png" id="backpackImage"/>
+        <div class="inventoryItem inventorySlot0"></div>
+        <div class="inventoryItem inventorySlot1"></div>
+        <div class="inventoryItem inventorySlot2"></div>
+        <div class="inventoryItem inventorySlot3"></div>
+        <div class="inventoryItem inventorySlot4"></div>
+        <div class="inventoryItem inventorySlot5"></div>
+        <div class="inventoryItem inventorySlot6"></div>
+        <div class="inventoryItem inventorySlot7"></div>
+        <div class="inventoryItem inventorySlot8"></div>
+        <div class="inventoryItem inventorySlot9"></div>
+        <div class="inventoryItem inventorySlot10"></div>
+        <div class="inventoryItem inventorySlot11"></div>
+      </div>
     </div>
     <canvas id="canvas-lobby"></canvas>
     <!-- <div id="navBar"></div> -->
     <script src="/socket.io/socket.io.js"></script>
     <script type="module" src="/index.js"></script>
+    <script type="module" src="/public/index.js"></script>
   </body>
 </html>

@@ -13,6 +13,9 @@ bulletStick.src = "bulletStick.png";
 const chatBubble = new Image();
 chatBubble.src = "chatBubble.png";
 
+const nameBubbleGreen = new Image();
+nameBubbleGreen.src = "nameBubbleGreen.png";
+
 const canvasLobby = document.getElementById("canvas-lobby");
 canvasLobby.width = window.innerWidth;
 canvasLobby.height = window.innerHeight;
@@ -29,6 +32,60 @@ let cameraShakeY = -180;
 
 const chatInput = document.getElementById("chatInput");
 let blockMovement = true;
+socket.emit("blockMovement", blockMovement);    
+
+const playerInfoCorner = document.getElementById("playerInfoCorner");
+const loginBox = document.getElementById("login");
+const usernameInput = document.getElementById("usernameInput");
+const passwordInput = document.getElementById("passwordInput");
+const loginButton = document.getElementById("loginButton");
+const createButton = document.getElementById("createButton");
+const healthImage = document.getElementById("hearts");
+
+const inventorySlots = {
+ inventorySlot0: document.querySelector(".inventorySlot0"),
+ inventorySlot1: document.querySelector(".inventorySlot1"),
+ inventorySlot2: document.querySelector(".inventorySlot2"),
+ inventorySlot3: document.querySelector(".inventorySlot3"),
+ inventorySlot4: document.querySelector(".inventorySlot4"),
+ inventorySlot5: document.querySelector(".inventorySlot5"),
+ inventorySlot6: document.querySelector(".inventorySlot6"),
+ inventorySlot7: document.querySelector(".inventorySlot7"),
+ inventorySlot8: document.querySelector(".inventorySlot8"),
+ inventorySlot9: document.querySelector(".inventorySlot9"),
+ inventorySlot10: document.querySelector(".inventorySlot10"),
+ inventorySlot11: document.querySelector(".inventorySlot11")
+};
+
+let shootingBlock = true;
+
+let myPlayer;
+
+chatInput.style.display = "none";
+playerInfoCorner.style.display = "none";
+
+function handleLogin(action) {  
+  
+  const usernameAttempt = usernameInput.value;
+  const passwordAttempt = passwordInput.value;
+
+  const loginInfo = {      
+        username: usernameAttempt,      
+        password: passwordAttempt,
+        action: action,     
+  }
+
+  socket.emit("loginInfo", loginInfo);
+
+}
+
+loginButton.addEventListener("click", function(){
+  handleLogin("login");
+});
+
+createButton.addEventListener("click", function(){
+  handleLogin("create");
+});
 
 window.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
@@ -50,7 +107,7 @@ window.addEventListener("keydown", (e) => {
             socket.emit("blockMovement", blockMovement); 
         }
     }
-})
+});
 
 function cameraShake() {
     let counter = 0;
@@ -64,20 +121,57 @@ function cameraShake() {
         counter++;
         cameraShakeX = Math.floor(Math.random() * (-140 - -160 + 1)) + -160;
         cameraShakeY = Math.floor(Math.random() * (-170 - -190 + 1)) + -190;
-        console.log("shakey")
     }, 30)
-}
+};
 
-socket.on("connect", () => {
+socket.on("connect", (socket) => {
   console.log("connected");
 });
 
 socket.on("players", (serverPlayers) => {
   players = serverPlayers;
+  myPlayer = players.find((player) => player.id === socket.id);
+
+  if (myPlayer.health === 3) {
+    healthImage.src = "./fullHearts.png";
+  } else if (myPlayer.health === 2) {
+    healthImage.src = "./halfHearts.png";
+  } else if (myPlayer.health === 1) {
+    healthImage.src = "./emptyHearts.png";
+  }
+
+  for (const item of myPlayer.inventory) {
+      const index = myPlayer.inventory.indexOf(item);
+      
+      inventorySlots[`inventorySlot${index}`].style.background = `url(${item.image})`;
+      inventorySlots[`inventorySlot${index}`].style.backgroundSize = 'cover';
+  }
 });
 
 socket.on("projectiles", (serverProjectiles) => {
   projectiles = serverProjectiles;
+});
+
+socket.on("loginAttempt", (msg) => { 
+
+  if(msg === "success") {
+    loginBox.style.display = "none";
+    loginButton.style.display = "none";
+    createButton.style.display = "none";
+    chatInput.style.display = "block";
+    playerInfoCorner.style.display = "block";
+  
+    blockMovement = false;
+    socket.emit("blockMovement", blockMovement);  
+
+    shootingBlock = false;
+  } else if (msg === "failed") {
+    passwordInput.style.background = "#ff5471";
+    passwordInput.style.color = "white";
+  } else if (msg === "existing") {
+    usernameInput.style.background = "#ff5471";
+    usernameInput.style.color = "white";       
+  }
 });
 
 const inputs = {
@@ -110,6 +204,11 @@ window.addEventListener("keydown", (e) => {
   socket.emit("inputs", inputs);
   socket.emit("animPlayer", animPlayer);
   socket.emit("lastLookPlayer", lastLookPlayer);
+
+  if(e.key === "e" && fishAvailable === true) {
+    socket.emit("fishing", "trying");
+  };
+  
 });
 window.addEventListener("keyup", (e) => {
   if (e.key === "w") {
@@ -134,6 +233,7 @@ window.addEventListener("keyup", (e) => {
   socket.emit("animPlayer", animPlayer);
 });
 window.addEventListener("mousedown", (e) => {
+  if (shootingBlock === false) {
     if (mainSkillCooldown === 1 || mainSkillCooldown === 0) {
         const angle = Math.atan2(
           e.clientY - canvasLobby.height / 2,
@@ -143,7 +243,6 @@ window.addEventListener("mousedown", (e) => {
         cameraShake();
 
         const interval = setInterval(() => {
-            console.log(mainSkillCooldown)
             if (mainSkillCooldown > 10) {
                 mainSkillCooldown = 0;
                 clearInterval(interval);
@@ -151,6 +250,7 @@ window.addEventListener("mousedown", (e) => {
             mainSkillCooldown++;
         }, 50);
     }
+  }
 });
 window.addEventListener("mousemove", (e) => {
     angleMouse = Math.atan2(
@@ -160,6 +260,7 @@ window.addEventListener("mousemove", (e) => {
     socket.emit("weaponAngle", angleMouse);
   });
 
+//Player Animation
 let playerSpriteWidth = character.width / 6;
 let playerSpriteHeight = character.height / 4;
 const playerWidth = character.width / 6;
@@ -169,20 +270,47 @@ let frameCurrentPlayer = 0;
 let playerCutX = 0;
 let playerCutY = 0;
 let playerFramesDrawn = 0;
+//Player Animation
+
+//Fishing Area
+let fishingArea = {
+  minX: 0,
+  minY: 0,
+  maxX: 0,
+  maxY: 0,
+};
+let fishAvailable = false;
+//Fishing Area
 
 function canvasLobbyLoop() {
   canvas.clearRect(0, 0, canvasLobby.width, canvasLobby.height);
   canvas.imageSmoothingEnabled = false;
 
-  const myPlayer = players.find((player) => player.id === socket.id);
   let cameraX = 0;
   let cameraY = 0;
   if (myPlayer) {
     cameraX = myPlayer.x - canvasLobby.width / 2;
     cameraY = myPlayer.y - canvasLobby.height / 2 + 100;
+
+    if (myPlayer.x > fishingArea.minX && 
+        myPlayer.x < fishingArea.maxX &&
+        myPlayer.y > fishingArea.minY && 
+        myPlayer.y < fishingArea.maxY) {
+          fishAvailable = true;
+      } else {
+          fishAvailable = false;
+      };
+
   }
 
   canvas.drawImage(mapLobby, cameraShakeX - cameraX, cameraShakeY - cameraY, 3000, 3000);
+  
+  //Fishing Area
+  fishingArea.minX = cameraShakeX - cameraX + 1500;
+  fishingArea.minY = cameraShakeY - cameraY + 1800;
+  fishingArea.maxX = fishingArea.minX + 580;
+  fishingArea.maxY = fishingArea.minY + 1000;
+  //Fishing Area
 
   for (const player of players) {
 
@@ -259,14 +387,23 @@ function canvasLobbyLoop() {
 
     //Chat
     if (player.chatMessage !== "none") {
-        canvas.drawImage(chatBubble, player.x - cameraX -85, player.y - cameraY -70, 200, 60)
+        canvas.drawImage(chatBubble, player.x - cameraX -85, player.y - cameraY -100, 200, 60)
     
         canvas.font = "bolder 14px Arial";
         canvas.textAlign = "center";
         canvas.fillStyle = "gray";
-        canvas.fillText(player.chatMessage, player.x - cameraX +15, player.y - cameraY -40);
+        canvas.fillText(player.chatMessage, player.x - cameraX +15, player.y - cameraY -70);
     }
     //Chat
+
+    //Username
+        canvas.drawImage(nameBubbleGreen, player.x - cameraX -33, player.y - cameraY -26, 80,23)
+    
+        canvas.font = "bolder 14px Arial";
+        canvas.textAlign = "center";
+        canvas.fillStyle = "gray";
+        canvas.fillText(player.username, player.x - cameraX +15, player.y - cameraY -10);
+    //Username
 }
 
   for (const projectile of projectiles) {
