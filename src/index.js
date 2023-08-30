@@ -207,6 +207,36 @@ async function main() {
               fishing();
         });
 
+        socket.on("consumable", (item) => {
+            async function consume() {
+                const player = await Player.findOne({socket: socket.id}).exec();
+
+                player.inventory.splice(item.index, 1);
+                console.log(item)
+                                       
+                await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
+    
+                myPlayer[socket.id] = player;                
+                
+                if (myPlayer[socket.id].health < 3) {
+
+                    if (item.name === "sardin") {
+                        myPlayer[socket.id].health += 1;
+                        await Player.findOneAndUpdate({socket: socket.id}, {health:  myPlayer[socket.id].health}, {new: true});
+                    }
+                }
+
+                if (myPlayer[socket.id].health < 2) {
+
+                    if (item.name === "ballo") {
+                        myPlayer[socket.id].health += 2;
+                        await Player.findOneAndUpdate({socket: socket.id}, {health:  myPlayer[socket.id].health}, {new: true});
+                    }
+                }
+              };
+              consume()
+        });
+
         socket.on("loginInfo", (info) => {
             const username = info.username;
             const password = info.password;

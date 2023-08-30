@@ -41,7 +41,9 @@ const passwordInput = document.getElementById("passwordInput");
 const loginButton = document.getElementById("loginButton");
 const createButton = document.getElementById("createButton");
 const healthImage = document.getElementById("hearts");
-
+const fishingBar = document.getElementById("fishingBar");
+const fishingGame = document.getElementById("fishingMinigame");
+const inventoryWindow = document.getElementById("inventoryWindow");
 const inventorySlots = {
  inventorySlot0: document.querySelector(".inventorySlot0"),
  inventorySlot1: document.querySelector(".inventorySlot1"),
@@ -63,6 +65,8 @@ let myPlayer;
 
 chatInput.style.display = "none";
 playerInfoCorner.style.display = "none";
+fishingGame.style.display = "none";
+inventoryWindow.style.visibility = "hidden";
 
 function handleLogin(action) {  
   
@@ -124,6 +128,31 @@ function cameraShake() {
     }, 30)
 };
 
+function interactInventory(item, index) {
+  if (inventorySlots[`inventorySlot${index}`].style.background !== "none") {
+    if(consumeAvailable === true) {
+      
+      consumeAvailable = false;
+
+      setTimeout(() => {
+        consumeAvailable = true;
+      }, 3000);
+      const consumable = {
+        name: item.name,
+        index: index
+      }
+      inventorySlots[`inventorySlot${index}`].style.background = `none`;
+      inventorySlots[`inventorySlot${index}`].removeEventListener("mousedown", (e) => interactInventory(item, index));
+
+      if(item.type === "fish" || item.type === "food") {
+        socket.emit("consumable", consumable);                      
+      }
+    }
+  }
+};
+
+let consumeAvailable = true;
+
 socket.on("connect", (socket) => {
   console.log("connected");
 });
@@ -139,12 +168,18 @@ socket.on("players", (serverPlayers) => {
   } else if (myPlayer.health === 1) {
     healthImage.src = "./emptyHearts.png";
   }
+ 
+ 
+  inventorySlots[`inventorySlot0`].style.background = `none`;
+  if(myPlayer.inventory.length !== 0) {
+    for (const item of myPlayer.inventory) {
+        const index = myPlayer.inventory.indexOf(item);      
+        inventorySlots[`inventorySlot${index}`].style.background = `url(${item.image})`;
+        inventorySlots[`inventorySlot${index}`].style.backgroundSize = 'cover';
+        inventorySlots[`inventorySlot${index + 1}`].style.background = `none`;
 
-  for (const item of myPlayer.inventory) {
-      const index = myPlayer.inventory.indexOf(item);
-      
-      inventorySlots[`inventorySlot${index}`].style.background = `url(${item.image})`;
-      inventorySlots[`inventorySlot${index}`].style.backgroundSize = 'cover';
+        inventorySlots[`inventorySlot${index}`].addEventListener("mousedown", (e) => interactInventory(item, index));           
+    };
   }
 });
 
@@ -160,6 +195,7 @@ socket.on("loginAttempt", (msg) => {
     createButton.style.display = "none";
     chatInput.style.display = "block";
     playerInfoCorner.style.display = "block";
+    inventoryWindow.style.visibility = "visible";
   
     blockMovement = false;
     socket.emit("blockMovement", blockMovement);  
@@ -186,6 +222,9 @@ let angleMouse;
 
 let mainSkillCooldown = 0;
 
+let fishing = false;
+let width = 1;
+
 window.addEventListener("keydown", (e) => {
   if (e.key === "w") {
     inputs["up"] = true;
@@ -205,10 +244,44 @@ window.addEventListener("keydown", (e) => {
   socket.emit("animPlayer", animPlayer);
   socket.emit("lastLookPlayer", lastLookPlayer);
 
-  if(e.key === "e" && fishAvailable === true) {
-    socket.emit("fishing", "trying");
+  //Fishing Minigame
+  if(e.key === "e" && fishAvailable === true && fishing === false) {
+
+    fishingGame.style.display = "block";
+    fishing = true;    
+
+    const number = Math.floor(Math.random() * (10000 - 3000 + 1) + 3000);
+
+    function fishingStart() {
+
+      const interval = setInterval(() => {
+        width += 1;        
+        if (width < 100) {
+          fishingBar.style.width = width + "%";
+        } else {
+          width = 1;
+          clearInterval(interval);
+          fishing = false;
+          fishingBar.style.width = width + "%";;
+          fishingGame.style.display = "none";
+        }       
+      }, 5);
+
+    };
+
+    setTimeout(() => {
+      fishingStart();      
+    }, number);
+
+    
   };
-  
+  if(e.key === "e" && fishAvailable === true && fishing === true) {
+    if (width < 90 && width > 70) {
+      socket.emit("fishing", "trying");
+      width = 100;
+    };
+  }
+   //Fishing Minigame
 });
 window.addEventListener("keyup", (e) => {
   if (e.key === "w") {

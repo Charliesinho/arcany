@@ -210,3 +210,35 @@ body {
     0 0 10px rgba(68, 255, 193, 0.568);
     border: solid 1px rgb(98, 255, 182);
 }
+
+#fishingMinigame {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-43%, 0%);
+
+    width: 150px;
+    background-color: var(--backgroundObjects);
+
+    padding: 5px;
+    border-radius: 5px;
+  
+  }
+  
+  #fishingBar {
+    width: 1%;
+    height: 20px;
+    background-color: rgb(60, 235, 197);
+    border-radius: 5px;
+  }
+
+  #fishingBarHit {
+    position: absolute;
+    top: 5px;
+    right: 20%;
+
+    width: 20%;
+    height: 20px;
+    background-color: rgba(171, 245, 87, 0.87);
+    border-radius: 5px;
+  }
