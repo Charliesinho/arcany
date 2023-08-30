@@ -242,3 +242,7 @@ body {
     background-color: rgba(171, 245, 87, 0.87);
     border-radius: 5px;
   }
+
+  #player-img-rend {
+    display: none;
+  }

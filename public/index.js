@@ -178,7 +178,7 @@ socket.on("players", (serverPlayers) => {
         inventorySlots[`inventorySlot${index}`].style.backgroundSize = 'cover';
         inventorySlots[`inventorySlot${index + 1}`].style.background = `none`;
 
-        inventorySlots[`inventorySlot${index}`].addEventListener("mousedown", (e) => interactInventory(item, index));           
+        inventorySlots[`inventorySlot${index}`].addEventListener("mousedown", (e) => interactInventory(item, index));      
     };
   }
 });
