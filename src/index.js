@@ -23,6 +23,7 @@ const speed = 5.5;
 const projectileSpeed = 25;
 
 let players = [];
+const enemies = [];
 const inputsMap = {};
 let animPlayerStore = {};
 let lastLookPlayerStore = {};
@@ -84,6 +85,39 @@ function tick() {
         player.username = username;
     }
 
+    for (const enemy of enemies) {
+        let tempSpeed = {
+            x: enemy.speed,
+            y: enemy.speed,
+        }
+
+        if (enemy.x > enemy.nextTarget.x) {
+            tempSpeed.x = -enemy.speed;
+        } else if (enemy.x < enemy.nextTarget.x) {
+            tempSpeed.x = enemy.speed;
+        } else {
+            tempSpeed.x = 0;
+        }
+
+        if (enemy.y > enemy.nextTarget.y) {
+            tempSpeed.y = -enemy.speed;
+        } else if (enemy.y < enemy.nextTarget.y) {
+            tempSpeed.y = enemy.speed;
+        } else {
+            tempSpeed.y = 0;
+        }
+
+        enemy.x += tempSpeed.x;
+        enemy.y += tempSpeed.y;
+
+        enemy.nextTargetCount--;
+        if (enemy.nextTargetCount <= 0) {
+            enemy.nextTarget = slimeGetRandomCoords(enemy.originX, enemy.originY);
+            enemy.nextTargetCount = 100;
+        }
+        io.emit("enemies", enemies);
+    }
+
     for (const projectile of projectiles) {
 
         projectile.x += Math.cos(projectile.angle) * projectileSpeed;
@@ -116,6 +150,7 @@ function tick() {
 
     projectiles = projectiles.filter((projectile) => projectile.timeLeft > 0);
 
+    io.emit("enemies", enemies);
     io.emit('players', players);
     io.emit("projectiles", projectiles);
 }
@@ -123,7 +158,6 @@ function tick() {
 async function updateHealth(username, health, id) {    
     const playerHealth = await Player.findOneAndUpdate({username: username}, {health: health}, {new: true});    
     myPlayer[id].health = playerHealth.health;
-    console.log()
 }
 
 async function main() {
@@ -295,6 +329,30 @@ async function main() {
                 playerCreate();
             };
         });
+
+        socket.on("loadEnemies", (_enemies) => {
+            let randomWidthHeight = Math.random() * (128 - 64) + 64;
+            const newEnemy = {
+                damage: 1,
+                health: 4,
+                width: randomWidthHeight,
+                height: randomWidthHeight,
+                img: "slime.png",
+                speed: 4,
+                spriteSheetAmt: 4,
+                type: "slime",
+                x: 1000,
+                y: 1000,
+                originX: 1000,
+                originY: 1000,
+                nextTarget: {x: 1100, y: 1100},
+                nextTargetCount: 100,
+            }
+
+            enemies.push(newEnemy)
+
+            enemies[socket.id] = enemies;
+        })
     
         socket.on("inputs", (inputs) => {
             inputsMap[socket.id] = inputs;
@@ -355,6 +413,14 @@ async function main() {
         tick(delta);
         lastUpdate = now;        
     }, 1000 / tickRate);
+}
+
+function slimeGetRandomCoords(originX, originY) {
+    let newCoords = {
+        x: Math.floor(Math.random() * ((originX - 500) - (originX + 500)) + (originX + 500)),
+        y: Math.floor(Math.random() * ((originY - 500) - (originY + 500)) + (originY + 500))
+    }
+    return newCoords;
 }
 
 main();

@@ -4,6 +4,9 @@ mapLobby.src = "lobby.png";
 const character = new Image();
 character.src = "player.png";
 
+const slime = new Image();
+slime.src = "slime.png";
+
 const WeaponStick = new Image();
 WeaponStick.src = "stick.png";
 
@@ -25,6 +28,7 @@ const canvas = canvasLobby.getContext("2d");
 const socket = io(`ws://localhost:3000`);
 
 let players = [];
+let enemies = [];
 let projectiles = [];
 
 let cameraShakeX = -150;
@@ -80,7 +84,7 @@ function handleLogin(action) {
   }
 
   socket.emit("loginInfo", loginInfo);
-
+  socket.emit("loadEnemies", enemies);
 }
 
 loginButton.addEventListener("click", function(){
@@ -182,6 +186,10 @@ socket.on("players", (serverPlayers) => {
     };
   }
 });
+
+socket.on("enemies", (serverEnemies) => {
+  enemies = serverEnemies;
+})
 
 socket.on("projectiles", (serverProjectiles) => {
   projectiles = serverProjectiles;
@@ -343,6 +351,16 @@ let frameCurrentPlayer = 0;
 let playerCutX = 0;
 let playerCutY = 0;
 let playerFramesDrawn = 0;
+
+// Enemy
+const enemyWidth = slime.width / 4;
+const enemyHeight = slime.height / 1;
+let framesEnemyTotal = 4;
+let frameCurrentEnemy = 0;
+let enemyCutX = 0;
+let enemyCutY = 0;
+let enemyFramesDrawn = 0;
+
 //Player Animation
 
 //Fishing Area
@@ -386,7 +404,6 @@ function canvasLobbyLoop() {
   //Fishing Area
 
   for (const player of players) {
-
     //Movement
     if (player.anim === "idleRight" && player.lastLooked === "right") {
       frameCurrentPlayer = frameCurrentPlayer % 4;
@@ -479,6 +496,24 @@ function canvasLobbyLoop() {
     //Username
 }
 
+  for (const enemy of enemies)
+  {
+    frameCurrentEnemy = frameCurrentEnemy % 4;
+    enemyCutX = frameCurrentEnemy * enemyWidth;
+    canvas.drawImage(
+      slime,
+      enemyCutX,
+      enemyCutY,
+      enemyWidth,
+      enemyHeight,
+      enemy.x - cameraX - 30,
+      enemy.y - cameraY,
+      enemy.width,
+      enemy.height
+    );
+
+  }
+
   for (const projectile of projectiles) {
     canvas.drawImage(bulletStick, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
     // canvas.beginPath();
@@ -496,6 +531,12 @@ function canvasLobbyLoop() {
   if (playerFramesDrawn >= 8) {
     frameCurrentPlayer++;
     playerFramesDrawn = 0;
+  }
+
+  enemyFramesDrawn++
+  if (enemyFramesDrawn >= framesEnemyTotal) {
+    frameCurrentEnemy++;
+    enemyFramesDrawn = 0;
   }
 
   window.requestAnimationFrame(canvasLobbyLoop);
