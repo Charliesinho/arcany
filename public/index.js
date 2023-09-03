@@ -360,6 +360,7 @@ let frameCurrentEnemy = 0;
 let enemyCutX = 0;
 let enemyCutY = 0;
 let enemyFramesDrawn = 0;
+let enemyAnimDelay = 2;
 
 //Player Animation
 
@@ -496,22 +497,22 @@ function canvasLobbyLoop() {
     //Username
 }
 
-  for (const enemy of enemies)
-  {
-    frameCurrentEnemy = frameCurrentEnemy % 4;
-    enemyCutX = frameCurrentEnemy * enemyWidth;
-    canvas.drawImage(
-      slime,
-      enemyCutX,
-      enemyCutY,
-      enemyWidth,
-      enemyHeight,
-      enemy.x - cameraX - 30,
-      enemy.y - cameraY,
-      enemy.width,
-      enemy.height
-    );
-
+  for (const enemy of enemies) {
+    if (enemy.enabled) {
+      frameCurrentEnemy = frameCurrentEnemy % 4;
+      enemyCutX = frameCurrentEnemy * enemyWidth;
+      canvas.drawImage(
+        slime,
+        enemyCutX,
+        enemyCutY,
+        enemyWidth,
+        enemyHeight,
+        enemy.x - cameraX - 30,
+        enemy.y - cameraY,
+        enemy.width,
+        enemy.height
+      );
+    }
   }
 
   for (const projectile of projectiles) {
@@ -533,10 +534,15 @@ function canvasLobbyLoop() {
     playerFramesDrawn = 0;
   }
 
-  enemyFramesDrawn++
-  if (enemyFramesDrawn >= framesEnemyTotal) {
-    frameCurrentEnemy++;
-    enemyFramesDrawn = 0;
+  enemyAnimDelay--
+  if (enemyAnimDelay <= 0)
+  {
+    enemyFramesDrawn++
+    if (enemyFramesDrawn >= framesEnemyTotal) {
+      frameCurrentEnemy++;
+      enemyFramesDrawn = 0;
+    }
+    enemyAnimDelay = 2;
   }
 
   window.requestAnimationFrame(canvasLobbyLoop);

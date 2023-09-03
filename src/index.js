@@ -86,35 +86,34 @@ function tick() {
     }
 
     for (const enemy of enemies) {
-        let tempSpeed = {
-            x: enemy.speed,
-            y: enemy.speed,
-        }
 
-        if (enemy.x > enemy.nextTarget.x) {
-            tempSpeed.x = -enemy.speed;
-        } else if (enemy.x < enemy.nextTarget.x) {
-            tempSpeed.x = enemy.speed;
+        if (enemy.enabled)
+        {
+            if (enemy.x > enemy.nextTarget.x) {
+                enemy.x -= enemy.speed;
+            } else if (enemy.x < enemy.nextTarget.x) {
+                enemy.x += enemy.speed;
+            } 
+    
+            if (enemy.y > enemy.nextTarget.y) {
+                enemy.y -= enemy.speed;
+            } else if (enemy.y < enemy.nextTarget.y) {
+                enemy.y += enemy.speed;
+            } 
+    
+            enemy.nextTargetCount--;
+            if (enemy.nextTargetCount <= 0) {
+                enemy.nextTarget = slimeGetRandomCoords(enemy.originX, enemy.originY);
+                enemy.nextTargetCount = 100;
+            }
         } else {
-            tempSpeed.x = 0;
+            enemy.disabledTimer--;
+            if (enemy.disabledTimer <= 0) {
+                enemy.disabledTimer = 500;
+                enemy.enabled = true;
+            }
         }
 
-        if (enemy.y > enemy.nextTarget.y) {
-            tempSpeed.y = -enemy.speed;
-        } else if (enemy.y < enemy.nextTarget.y) {
-            tempSpeed.y = enemy.speed;
-        } else {
-            tempSpeed.y = 0;
-        }
-
-        enemy.x += tempSpeed.x;
-        enemy.y += tempSpeed.y;
-
-        enemy.nextTargetCount--;
-        if (enemy.nextTargetCount <= 0) {
-            enemy.nextTarget = slimeGetRandomCoords(enemy.originX, enemy.originY);
-            enemy.nextTargetCount = 100;
-        }
         io.emit("enemies", enemies);
     }
 
@@ -146,6 +145,26 @@ function tick() {
                     break;
                 }
         }
+
+        for (const enemy of enemies)
+        {
+            const distance = Math.sqrt(
+                (enemy.x + 20 - projectile.x) ** 2 + (enemy.y + 20 - projectile.y) ** 2
+                );
+                if (distance <= 20) {
+                    
+                    if (enemy.health > 1) {
+                        enemy.health -= 1;
+                        updateEnemyHealth(enemy);
+                    } else {
+                        enemy.enabled = false;
+                        enemy.health = 4;
+                        updateEnemyHealth(enemy);
+                    }
+                    projectile.timeLeft = -1;
+                    break;
+                }
+        }
     }
 
     projectiles = projectiles.filter((projectile) => projectile.timeLeft > 0);
@@ -158,6 +177,10 @@ function tick() {
 async function updateHealth(username, health, id) {    
     const playerHealth = await Player.findOneAndUpdate({username: username}, {health: health}, {new: true});    
     myPlayer[id].health = playerHealth.health;
+}
+async function updateEnemyHealth(enemy) {    
+    const updateEnemy = enemies.indexOf(enemy);
+    updateEnemy.health -= 1;
 }
 
 async function main() {
@@ -331,14 +354,13 @@ async function main() {
         });
 
         socket.on("loadEnemies", (_enemies) => {
-            let randomWidthHeight = Math.random() * (128 - 64) + 64;
             const newEnemy = {
                 damage: 1,
                 health: 4,
-                width: randomWidthHeight,
-                height: randomWidthHeight,
+                width: 106,
+                height: 106,
                 img: "slime.png",
-                speed: 4,
+                speed: 2,
                 spriteSheetAmt: 4,
                 type: "slime",
                 x: 1000,
@@ -347,6 +369,8 @@ async function main() {
                 originY: 1000,
                 nextTarget: {x: 1100, y: 1100},
                 nextTargetCount: 100,
+                enabled: true,
+                disabledTimer: 500,
             }
 
             enemies.push(newEnemy)
