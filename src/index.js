@@ -83,12 +83,19 @@ function tick() {
         player.weaponAngle = weaponAngle;
         player.chatMessage = chatMessage;
         player.username = username;
+
+        if (player.invincible) {
+            player.iFrames--;
+            if (player.iFrames <= 0) {
+                player.iFrames = 75;
+                player.invincible = false;
+            }
+        }
     }
 
     for (const enemy of enemies) {
 
-        if (enemy.enabled)
-        {
+        if (enemy.enabled) {
             if (enemy.x > enemy.nextTarget.x) {
                 enemy.x -= enemy.speed;
             } else if (enemy.x < enemy.nextTarget.x) {
@@ -106,6 +113,27 @@ function tick() {
                 enemy.nextTarget = slimeGetRandomCoords(enemy.originX, enemy.originY);
                 enemy.nextTargetCount = 100;
             }
+
+            for (const player of players) {
+                const username = usernames[player.id]; 
+                const distance = Math.sqrt(
+                    (player.x + 15 - enemy.x) ** 2 + (player.y + 15 - enemy.y) ** 2
+                    );
+                    if (distance <= 15 && !player.invincible) {
+                        
+                        if (player.health > 1) {
+                            player.health -= 1;
+                            updateHealth(username, player.health, player.id);
+                        } else {
+                            player.x = 1280;
+                            player.y = 1220;
+                            player.health = 3;
+                            updateHealth(username, player.health, player.id);
+                        }
+                        player.invincible = true;
+                        break;
+                    }
+                }
         } else {
             enemy.disabledTimer--;
             if (enemy.disabledTimer <= 0) {
@@ -228,6 +256,9 @@ async function main() {
             chatMessage: "none",
             blockMovement: false,
             chatTimer: 0,
+
+            iFrames: 75,
+            invincible: false,
             
         });
 
