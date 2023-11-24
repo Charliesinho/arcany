@@ -10,7 +10,7 @@ const httpServer = createServer(app);
 const io = new Server(httpServer);
 
 const db = mongoose.connection;
-    db.on("error", console.error.bind(console, "connection error: "));
+    db.on("MONGO ERROR:", console.error.bind(console, "connection error: "));
     db.once("open", function () {
     console.log("Connected successfully");    
     });
@@ -51,6 +51,8 @@ function tick() {
             if (player.id === clientPlayer.socket) {                
                 player.health = clientPlayer.health;    
                 player.inventory = clientPlayer.inventory;
+                player.weapon = clientPlayer.weapon;
+                player.fishingLevel = clientPlayer.fishing;
             }
         
         
@@ -234,7 +236,7 @@ async function main() {
         chatMessageStore[socket.id] = "none";
         blockMovementStore[socket.id] = false;
         usernames[socket.id] = "none";
-        myPlayer[socket.id] = {socket: 0, health: 3}
+        myPlayer[socket.id] = {socket: 0, health: 3, weapon: [], fishing: 0}
         inventoryStore[socket.id] = [];
         
 
@@ -245,8 +247,10 @@ async function main() {
             y: 1220,
 
             health: 3,
+            fishingLevel: 0,
 
             inventory: [],
+            weapon: [],
 
             anim: false,
             lastLooked: "right",
@@ -275,20 +279,37 @@ async function main() {
                  value: 3,
                  image: "./inventory/ballo.jpg",
                     };
+            const stick = {
+                type: "weapon",
+                name: "stick",
+                value: 2,
+                image: "./inventory/stick.png",
+            };
             const number = Math.floor(Math.random() * (100 - 1 + 1) + 1);
 
             async function fishing() {
                 const player = await Player.findOne({socket: socket.id}).exec();
-                if (player.inventory.length <= 11) {
+                if (player.inventory.length <= 8) {
 
                     if (number < 80) {
                         player.inventory.push(sardin);
-                    } else {
+                        io.to(socket.id).emit('obtained', sardin);
+                        const fishingLevel = player.fishing + 100;
+                        player.fishing += 100;
+                        await Player.findOneAndUpdate({socket: socket.id}, {fishing: fishingLevel}, {new: true});
+                    } else if (number < 90) {
                         player.inventory.push(ballo);
+                        io.to(socket.id).emit('obtained', ballo);
+                        const fishingLevel = player.fishing + 500;
+                        player.fishing += 500;
+                        await Player.findOneAndUpdate({socket: socket.id}, {fishing: fishingLevel}, {new: true});
+                    } else {
+                        player.inventory.push(stick);
+                        io.to(socket.id).emit('obtained', stick);
                     }
         
                     await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
-    
+
                     myPlayer[socket.id] = player;
                 }
               }
@@ -300,11 +321,16 @@ async function main() {
                 const player = await Player.findOne({socket: socket.id}).exec();
 
                 player.inventory.splice(item.index, 1);
-                console.log(item)
                                        
                 await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
     
-                myPlayer[socket.id] = player;                
+                myPlayer[socket.id] = player;      
+                
+                if (item.name === "stick") {
+                    let arrayWeapon = [item];
+                    myPlayer[socket.id].weapon = arrayWeapon;
+                    await Player.findOneAndUpdate({socket: socket.id}, {weapon:  arrayWeapon}, {new: true});
+                }
                 
                 if (myPlayer[socket.id].health < 3) {
 
@@ -324,6 +350,22 @@ async function main() {
               };
               consume()
         });
+
+        socket.on("unequip", (equipment) => {
+            async function unequip() {
+                const player = await Player.findOne({socket: socket.id}).exec();
+
+                player.inventory.push(equipment);
+                player.weapon.splice(equipment.index, 1);
+                                       
+                await Player.findOneAndUpdate({socket: socket.id}, {weapon: player.weapon}, {new: true});
+                await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
+
+                myPlayer[socket.id] = player;      
+                
+              };
+              unequip()
+        })
 
         socket.on("loginInfo", (info) => {
             const username = info.username;
@@ -386,10 +428,10 @@ async function main() {
 
         socket.on("loadEnemies", (_enemies) => {
             const newEnemy = {
-                damage: 1,
-                health: 4,
-                width: 106,
-                height: 106,
+                damage: 0,
+                health: 3,
+                width: 100,
+                height: 100,
                 img: "slime.png",
                 speed: 2,
                 spriteSheetAmt: 4,

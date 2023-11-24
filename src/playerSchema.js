@@ -34,6 +34,10 @@ const PlayerSchema = new mongoose.Schema({
   currency: {
     type: Number,
     default: 0,
+  },
+  fishing: {
+    type: Number,
+    default: 0,
   }
 });
 

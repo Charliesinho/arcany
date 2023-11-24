@@ -36,8 +36,17 @@ let cameraShakeY = -180;
 
 const chatInput = document.getElementById("chatInput");
 let blockMovement = true;
-socket.emit("blockMovement", blockMovement);    
+socket.emit("blockMovement", blockMovement);   
 
+const menuUi = document.getElementById("ui");
+menuUi.style.width = window.innerWidth;
+menuUi.style.height = window.innerHeight;
+
+const body = document.getElementById("body");
+const fishingLevel = document.getElementById("fishingLevel");
+const obtainedItem = document.querySelector("#obtainedItem");
+const uiTop = document.getElementById("uiTop");
+const usernameMenu = document.getElementById("usernameMenu");
 const playerInfoCorner = document.getElementById("playerInfoCorner");
 const loginBox = document.getElementById("login");
 const usernameInput = document.getElementById("usernameInput");
@@ -62,6 +71,9 @@ const inventorySlots = {
  inventorySlot10: document.querySelector(".inventorySlot10"),
  inventorySlot11: document.querySelector(".inventorySlot11")
 };
+const equippedItems = {
+  weapon: document.querySelector(".weaponEquipped")
+}
 
 let shootingBlock = true;
 
@@ -93,6 +105,16 @@ loginButton.addEventListener("click", function(){
 
 createButton.addEventListener("click", function(){
   handleLogin("create");
+});
+
+uiTop.addEventListener("click", function(){
+  menuUi.style.top = "100vh"
+  body.style.overflow = "none"
+});
+
+playerInfoCorner.addEventListener("click", function(){
+  menuUi.style.top = "0vh"
+  body.style.overflowY = "hidden"
 });
 
 window.addEventListener("keydown", (e) => {
@@ -143,7 +165,9 @@ function interactInventory(item, index) {
       }, 3000);
       const consumable = {
         name: item.name,
-        index: index
+        index: index,
+        image: item.image,
+        type: item.type
       }
       inventorySlots[`inventorySlot${index}`].style.background = `none`;
       inventorySlots[`inventorySlot${index}`].removeEventListener("mousedown", (e) => interactInventory(item, index));
@@ -151,9 +175,53 @@ function interactInventory(item, index) {
       if(item.type === "fish" || item.type === "food") {
         socket.emit("consumable", consumable);                      
       }
+
+      if (item.type === "weapon") {
+        socket.emit("consumable", consumable);
+      }
     }
   }
 };
+
+function interactEquipment (item, index) {
+  if (myPlayer.inventory.length <= 8) {
+
+    if(consumeAvailable === true) {
+      
+        consumeAvailable = false;
+
+        setTimeout(() => {
+          consumeAvailable = true;
+        }, 3000);
+
+      if (item.type === "weapon") {
+
+        if (equippedItems[`weapon`].style.background !== "none") {
+      
+            const equipment = {
+              name: item.name,
+              index: index,
+              image: item.image,
+              type: item.type
+            }
+      
+            socket.emit("unequip", equipment);
+        }       
+      }
+    }
+  }
+};
+
+function obtainedAnim (image) {
+
+  obtainedItem.classList.remove('obtainedAnim');
+
+  setTimeout(() => {
+    obtainedItem.style.background = `url(${image})`;
+    obtainedItem.style.backgroundSize = "cover"
+    obtainedItem.classList.add('obtainedAnim');
+  }, 500);
+}
 
 let consumeAvailable = true;
 
@@ -172,27 +240,65 @@ socket.on("players", (serverPlayers) => {
   } else if (myPlayer.health === 1) {
     healthImage.src = "./emptyHearts.png";
   }
- 
+
+  usernameMenu.innerHTML = myPlayer.username;
+  let fishingLevelNum = Math.trunc(myPlayer.fishingLevel / 1000);
+  if (fishingLevelNum < 1) {
+    fishingLevel.innerHTML = "1";
+  }
+  else if (fishingLevelNum < 3) {
+    fishingLevel.innerHTML = "2";
+  }
+  else if (fishingLevelNum < 6) {
+    fishingLevel.innerHTML = "3";
+  }
+  else if (fishingLevelNum < 12) {
+    fishingLevel.innerHTML = "4";
+  }
+  else {
+    fishingLevel.innerHTML = "5";
+    fishingLevel.style.color = "white"
+    fishingLevel.style.textShadow = "0 0 2px white"
+  }
+
+  for (const item of myPlayer.weapon) {
+    equippedItems[`weapon`].style.background = `url(${item.image})`;
+    equippedItems[`weapon`].style.backgroundSize = 'cover';
+  }
+  
+  if (myPlayer.weapon.length) {
+    equippedItems[`weapon`].addEventListener("mousedown", (e) => interactEquipment(myPlayer.weapon[0]), 0);      
+  }  else {
+    equippedItems[`weapon`].style.background = `none`;
+  }
  
   inventorySlots[`inventorySlot0`].style.background = `none`;
-  if(myPlayer.inventory.length !== 0) {
-    for (const item of myPlayer.inventory) {
-        const index = myPlayer.inventory.indexOf(item);      
-        inventorySlots[`inventorySlot${index}`].style.background = `url(${item.image})`;
-        inventorySlots[`inventorySlot${index}`].style.backgroundSize = 'cover';
-        inventorySlots[`inventorySlot${index + 1}`].style.background = `none`;
+  if (myPlayer.inventory.length !== 0) {
+    for (let i = 0; i < myPlayer.inventory.length; i++) {
 
-        inventorySlots[`inventorySlot${index}`].addEventListener("mousedown", (e) => interactInventory(item, index));      
+        inventorySlots[`inventorySlot${i}`].style.background = `url(${myPlayer.inventory[i].image})`;
+        inventorySlots[`inventorySlot${i}`].style.backgroundSize = 'cover';
+        if ( inventorySlots[`inventorySlot${i + 1}`]) {
+          inventorySlots[`inventorySlot${i + 1}`].style.background = `none`;
+        };
+
+        inventorySlots[`inventorySlot${i}`].addEventListener("mousedown", (e) => interactInventory(myPlayer.inventory[i], i));      
     };
   }
+
 });
 
 socket.on("enemies", (serverEnemies) => {
   enemies = serverEnemies;
-})
+});
 
 socket.on("projectiles", (serverProjectiles) => {
   projectiles = serverProjectiles;
+});
+
+socket.on("obtained", (item) => {
+  const image = item.image;
+  obtainedAnim(image);
 });
 
 socket.on("loginAttempt", (msg) => { 
@@ -313,23 +419,26 @@ window.addEventListener("keyup", (e) => {
   socket.emit("inputs", inputs);
   socket.emit("animPlayer", animPlayer);
 });
-window.addEventListener("mousedown", (e) => {
-  if (shootingBlock === false) {
-    if (mainSkillCooldown === 1 || mainSkillCooldown === 0) {
-        const angle = Math.atan2(
-          e.clientY - canvasLobby.height / 2,
-          e.clientX - canvasLobby.width / 2
-        );
-        socket.emit("projectile", angle);
-        cameraShake();
 
-        const interval = setInterval(() => {
-            if (mainSkillCooldown > 10) {
-                mainSkillCooldown = 0;
-                clearInterval(interval);
-            }
-            mainSkillCooldown++;
-        }, 50);
+body.addEventListener("mousedown", (e) => {
+  if (shootingBlock === false) {
+    if (myPlayer.weapon[0]) {
+      if (mainSkillCooldown === 1 || mainSkillCooldown === 0) {
+          const angle = Math.atan2(
+            e.clientY - canvasLobby.height / 2,
+            e.clientX - canvasLobby.width / 2
+          );
+          socket.emit("projectile", angle);
+          cameraShake();
+  
+          const interval = setInterval(() => {
+              if (mainSkillCooldown > 10) {
+                  mainSkillCooldown = 0;
+                  clearInterval(interval);
+              }
+              mainSkillCooldown++;
+          }, 50);
+      }
     }
   }
 });
@@ -381,8 +490,8 @@ function canvasLobbyLoop() {
   let cameraX = 0;
   let cameraY = 0;
   if (myPlayer) {
-    cameraX = myPlayer.x - canvasLobby.width / 2;
-    cameraY = myPlayer.y - canvasLobby.height / 2 + 100;
+    cameraX = myPlayer.x - canvasLobby.width / 2 + 10;
+    cameraY = myPlayer.y - canvasLobby.height / 2 + 50;
 
     if (myPlayer.x > fishingArea.minX && 
         myPlayer.x < fishingArea.maxX &&
@@ -472,7 +581,11 @@ function canvasLobbyLoop() {
     canvas.save(); // Save the current canvas state
     canvas.translate(player.x - cameraX +18, player.y - cameraY +50); // Translate to the player's position
     canvas.rotate(player.weaponAngle); // Rotate based on the mouse angle
-    canvas.drawImage(WeaponStick ,0, -7.5, 80, 20); // Draw the rectangle centered around the rotated point
+   if (player.weapon[0]) {
+     if (player.weapon[0].name === "stick") {
+       canvas.drawImage(WeaponStick ,0, -7.5, 80, 20); // Draw the rectangle centered around the rotated point
+     }
+    }
     canvas.restore(); // Restore the canvas state to what it was before translation and rotation
     // Weapon
 

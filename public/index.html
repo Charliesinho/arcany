@@ -7,14 +7,45 @@
     <link rel="stylesheet" href="./index.css" />
     <title>Document</title>
   </head>
-  <body>
+  <body id="body">
+    <div id="ui">
+      <div><div id="uiTop"></div></div>
+      <div><img id="skillsUi" src="./inventory/skills.png" /></div>
+      <div id="skillLevels">
+        <p id="fishingLevel"></p>
+        <p id="herbloreLevel">1</p>
+        <p id="craftingLevel">1</p>
+        <p id="magicLevel">1</p>
+      </div>
+      <h1 id="usernameMenu"></h1>
+      <div><div id="circleCharacter"></div></div>
+      <img id="soulImg" src="./souls/basicWarrior.png"></img>
+      <img src="./soulsEnviroments/desert.png" id="mountainsUi"/>
+      <div id="inventoryWindow" class="equipmentWindow">        
+        <div class="inventoryItem equipmentItem weaponEquipped"></div>
+        <div class="inventoryItem equipmentItem"></div>
+        <div class="inventoryItem equipmentItem"></div>
+      </div>
+      <div id="inventoryWindow">
+        <img src="./backpack.png" id="backpackImage"/>
+        <div class="inventoryItem inventorySlot0"></div>
+        <div class="inventoryItem inventorySlot1"></div>
+        <div class="inventoryItem inventorySlot2"></div>
+        <div class="inventoryItem inventorySlot3"></div>
+        <div class="inventoryItem inventorySlot4"></div>
+        <div class="inventoryItem inventorySlot5"></div>
+        <div class="inventoryItem inventorySlot6"></div>
+        <div class="inventoryItem inventorySlot7"></div>
+        <div class="inventoryItem inventorySlot8"></div>
+      </div>
+    </div>
     <div>
       <form id="chat">
         <input
           type="text"
           id="chatInput"
           name="chatInput"
-          placeholder="Chat"
+          placeholder="💬"
           autocomplete="off"
           maxlength="23"
         />
@@ -45,21 +76,7 @@
         <div id="badge"></div>
         <img id="hearts" src="./fullHearts.png"/>
       </div>
-      <div id="inventoryWindow">
-        <img src="./backpack.png" id="backpackImage"/>
-        <div class="inventoryItem inventorySlot0"></div>
-        <div class="inventoryItem inventorySlot1"></div>
-        <div class="inventoryItem inventorySlot2"></div>
-        <div class="inventoryItem inventorySlot3"></div>
-        <div class="inventoryItem inventorySlot4"></div>
-        <div class="inventoryItem inventorySlot5"></div>
-        <div class="inventoryItem inventorySlot6"></div>
-        <div class="inventoryItem inventorySlot7"></div>
-        <div class="inventoryItem inventorySlot8"></div>
-        <div class="inventoryItem inventorySlot9"></div>
-        <div class="inventoryItem inventorySlot10"></div>
-        <div class="inventoryItem inventorySlot11"></div>
-      </div>
+      <div id="obtainedItem" class=""></div>
       <div id="fishingMinigame">
         <div id="fishingBar"></div>
         <div id="fishingBarHit"></div>

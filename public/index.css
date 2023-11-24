@@ -1,13 +1,14 @@
 :root {
-    --backgroundObjects: rgb(65, 49, 49);
-    --backgroundObjectsBorder: rgb(97, 85, 82);
+    --backgroundObjects: rgb(63, 43, 43);
+    --backgroundObjectsBorder: rgb(44, 40, 39);
   }
 
 body {
     margin: 0;
-    width: 100%;
+    width: 100vw;
     height: 100vh;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: none;
 }
 
 #navBar {
@@ -24,23 +25,216 @@ body {
     left: 0;
 }
 
+#ui {
+    background: linear-gradient(hsl(188, 100%, 91%) 0%, rgb(237, 192, 166) 100%);
+    height: 100vh;
+    width: 100vw;
+
+    position: absolute;
+    top: 100vh;
+    left: 0;
+    z-index: 2;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    outline: none 8px var(--backgroundObjects);
+    outline-offset: -8px;
+    border-radius: 10px;
+
+    overflow-x: hidden;
+
+    transition: all .5s ease
+}
+
+#uiTop {
+    height: 30px;
+    width: 100vw;
+    background-color: var(--backgroundObjects);
+    position: relative;
+    margin-bottom: 0px;
+}
+
+#skillsUi {
+    width: 300px;
+    margin-bottom: -110px;
+    margin-top: -5px;
+    position: relative;
+    z-index: 1;
+}
+
+#skillLevels {
+    width: 300px;
+
+    display: flex;
+    justify-content: space-evenly;
+    gap: 28px;
+
+    font-size: 20px;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    color: rgb(70, 70, 70);
+    text-shadow: 0 0 2px rgb(175, 175, 175);
+
+    position: relative;
+    z-index: 2;
+    top: 25px;
+}
+
+#usernameMenu {
+    font-size: 110px;
+    width: 100vw;
+    text-align: center;
+    font-family: sans-serif;
+    font-weight: bolder;
+    color: rgb(255, 255, 255);
+    margin-bottom: -180px;
+    position: relative;
+    top: 0;
+    text-shadow: 0 0 10px rgb(255, 255, 255) ;
+    z-index: 1;
+
+    animation: upAndDown 4s ease infinite;
+}
+
+@keyframes upAndDown {
+    0% {
+        top: -10px
+    }
+    50% {
+        top: 0px;
+    }
+    100% {
+        top: -10px;
+    }
+}
+
+#circleCharacter {
+    height: 250px;
+    width: 250px;
+    background: linear-gradient(rgb(255, 160, 160) 0%, #ff88b0 100%);
+    position: relative;
+    margin-bottom: -250px;
+    margin-top: 50px;
+    border-radius: 50%;
+    outline: solid 1px rgb(255, 160, 160);
+    outline-offset: 20px;
+}
+
+#soulImg {
+    width: 90%;
+    margin-top: 50px;
+    position: relative;
+    z-index: 1;
+    filter: saturate(1.3);
+    opacity: 0;
+}
+
+#mountainsUi {
+    margin-top: -430px;
+    min-width: 100%;
+    height: 400px;
+    position: relative;
+    z-index: 0;
+    filter: blur(2px);
+}
+
+#inventoryWindow {
+    position: relative;
+    bottom: 0px;
+    left: 0;
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center; 
+    gap: 20px;   
+
+    background: rgb(255, 239, 224);
+
+    width: 100%;
+    height: auto;    
+    
+    padding: 50px 10px 40px 10px;
+    margin-top: 0px;
+}
+
+#backpackImage {
+    height: 100px;
+    position: absolute;
+    left: 35%;
+    top: -13%;
+    display: none;
+    
+}
+
+.inventoryItem {
+    position: relative;
+    top: 0;
+    left: 0;
+
+    width: 90px;
+    height: 90px;
+    /* background: url("./inventory/commonFrog.png"); */
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    border-radius: 10px;
+    border: solid 1px rgb(0, 0, 0);
+    background-color: rgba(65, 44, 44, 0);
+    box-shadow: 0 8px rgba(46, 33, 29, 0);
+
+    transition: all .2s ease-out;
+}
+
+.inventoryItem:active {
+    width: 80px;
+    height: 80px;
+    box-shadow: inset 0px 0px 30px rgba(255, 239, 68, 0.568);
+    border: solid 1px rgb(221, 255, 98);
+}
+
+.equipmentWindow {
+    margin-top: 30px;
+    padding: 40px 0px !important;
+    border-bottom: solid 1px rgba(0, 0, 0, 0.202);
+    background-color: transparent !important;
+    background: transparent !important;
+}
+
+.equipmentItem {
+    background: transparent;
+    box-shadow: 8px 8px 0px rgba(127, 101, 66, 0.453);
+}
+
+.equipmentItem:active {
+    width: 90px;
+    height: 90px;
+    left: 8px;
+    top: 8px;
+    box-shadow: 0px 0px 0px rgba(127, 101, 66, 0.453);
+    border: solid 1px rgb(248, 189, 138);
+    background-color: rgba(255, 160, 143, 0.993);
+}
+
 #chat {
     position: absolute;
     z-index: 1;
-    bottom: 20px;
-    left: 20px;
+    bottom: 80px;
+    right: 10px;
     color: rgb(255, 255, 255);
     display: flex;
 }
 
 #chat input {
-    height: 40px;
-    width: 300px;
+    height: 30px;
+    width: 30px;
 
     border: none;
     border-radius: 15px;
-    outline: solid 1px var(--backgroundObjectsBorder);
-    outline-offset: -10px;
+    outline: none 1px white;
+    outline-offset: -5px;
     background: var(--backgroundObjects);
     
     padding: 20px;
@@ -49,9 +243,15 @@ body {
     font-weight: bolder;
 }
 
+#chat input::placeholder {
+    color: white;
+    font-size: 20px;
+    text-align: center;
+}
+
 #login {
     position: absolute;
-    z-index: 1;
+    z-index: 3;
     
     display: flex;
     flex-direction: column;
@@ -72,7 +272,7 @@ body {
 
 #login input {
     height: 40px;
-    width: 300px;
+    width: 200px;
     text-align: center;
 
     border: solid 1px rgb(160, 160, 160);
@@ -93,7 +293,7 @@ body {
     gap: 30px;
 
     position: absolute;
-    z-index: 1;
+    z-index: 3;
 
     top: 50%;
     left: 50%;
@@ -105,7 +305,7 @@ body {
     width: 100px;
     text-align: center;
 
-    border: solid 1px rgb(160, 160, 160);
+    border: none 1px rgb(160, 160, 160);
     border-radius: 15px;
     background: linear-gradient(rgb(255, 255, 255) 0%, rgb(255, 255, 255) 100%);
     
@@ -123,13 +323,27 @@ body {
     color: rgb(255, 255, 255);
 }
 
+#createButton {
+    color: white !important;
+    background: linear-gradient(rgb(19, 121, 255) 0%, rgb(48, 155, 255) 100%) !important;
+}
+
+#loginButton {
+    color: white !important;
+    background: linear-gradient(rgb(169, 255, 19) 0%, rgb(179, 255, 48) 100%) !important;
+}
+
 #hearts {
     position: absolute;
     top: 0;
-    left: 0;
-    transform: translate(70%, 20%);
+    left: 20px;
+    transform: translate(52%, 22%);
+    border-radius: 5px;
+
+    background-color: var(--backgroundObjects);
+    padding: 0 10px 0 20px;
     
-    height:80px;
+    height:50px;
 }
 
 #profilePicture {
@@ -137,13 +351,14 @@ body {
     top: 0;
     left: 0;
     transform: translate(10%, 10%);
+    z-index: 1;
 
-    height: 150px;
-    width: 150px;
+    height: 100px;
+    width: 100px;
 
-    border-radius: 50%;
+    border-radius: 5%;
     border: solid 5px var(--backgroundObjects);
-    outline: solid 1px var(--backgroundObjectsBorder);
+    outline: none 1px var(--backgroundObjectsBorder);
     outline-offset: -15px;
     background: url("https://lh3.googleusercontent.com/KcFxe7njxUgT39S-P7N_eDz8Qoe-JaBiF_ix_7n0Eh04hdMujdsHYVO-aBslmHDkYgCZpglQbQDGQuvL4jiOeoVF1DYd7SIVPf_g");
     background-repeat: no-repeat;
@@ -157,58 +372,51 @@ body {
     color: rgb(255, 255, 255);
 }
 
-#inventoryWindow {
+#obtainedItem {
+    height: 150px;
+    width: 150px;
+    opacity: 1;
+
     position: absolute;
-    bottom: 0;
-    right: 0;
-
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;    
-
-    width: 200px;
-    height: 300px;
-    background-color: var(--backgroundObjects);
-
-    border-radius: 15px;
-    outline: solid 1px var(--backgroundObjectsBorder);
-    outline-offset: -10px;
-    padding: 80px 40px 30px 40px;
-}
-
-#backpackImage {
-    height: 100px;
-    position: absolute;
-    left: 35%;
-    top: -13%;
-    
-}
-
-.inventoryItem {
-    position: relative;
-    top: 0;
-
-    width: 60px;
-    height: 60px;
-    /* background: url("./inventory/commonFrog.png"); */
-    background-repeat: no-repeat;
-    background-size: cover;
+    top: 150vh;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 20;
 
     border-radius: 10px;
-    border: solid 1px var(--backgroundObjectsBorder);
-    box-shadow: 0 8px var(--backgroundObjectsBorder);
-
-    transition: all .2s ease-out;
+    border: none 1px black;
+    background: none;
 }
 
-.inventoryItem:hover {
-    top: 8px;
-    box-shadow: 
-    0 0px var(--backgroundObjectsBorder), 
-    inset 0px 0px 30px rgba(68, 255, 193, 0.568),
-    0 0 10px rgba(68, 255, 193, 0.568);
-    border: solid 1px rgb(98, 255, 182);
+#obtainedItem.obtainedAnim {
+    animation: obtained 3s ease;
+}
+
+@keyframes obtained {
+    0% {
+        height: 0;
+        width: 0;
+        top: 50%;
+        opacity: 0;
+    }
+    20% {
+        height: 190px;
+        width: 190px;
+        top: 50%;
+        opacity: 1;
+    }
+    80% {
+        height: 190px;
+        width: 190px;
+        top: 50%;
+        opacity: 1;
+    }
+    100% {
+        height: 50px;
+        width: 50px;
+        top: 100%;
+        opacity: 0;
+    }
 }
 
 #fishingMinigame {
