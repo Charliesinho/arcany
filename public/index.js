@@ -41,12 +41,15 @@ socket.emit("blockMovement", blockMovement);
 const menuUi = document.getElementById("ui");
 menuUi.style.width = window.innerWidth;
 menuUi.style.height = window.innerHeight;
+const soulImg = document.getElementById("soulImg");
+const circleCharacter = document.getElementById("circleCharacter");
+const mountainsUi = document.getElementById("mountainsUi");
+const usernameMenu = document.getElementById("usernameMenu");
 
 const body = document.getElementById("body");
 const fishingLevel = document.getElementById("fishingLevel");
 const obtainedItem = document.querySelector("#obtainedItem");
 const uiTop = document.getElementById("uiTop");
-const usernameMenu = document.getElementById("usernameMenu");
 const playerInfoCorner = document.getElementById("playerInfoCorner");
 const loginBox = document.getElementById("login");
 const usernameInput = document.getElementById("usernameInput");
@@ -72,7 +75,11 @@ const inventorySlots = {
  inventorySlot11: document.querySelector(".inventorySlot11")
 };
 const equippedItems = {
-  weapon: document.querySelector(".weaponEquipped")
+  weapon: document.querySelector(".weaponEquipped"),
+  soul: document.querySelector(".soulEquipped"),
+}
+const soulsInventory = {
+  soul1: document.querySelector(".soul1"),
 }
 
 let shootingBlock = true;
@@ -155,60 +162,96 @@ function cameraShake() {
 };
 
 function interactInventory(item, index) {
-  if (inventorySlots[`inventorySlot${index}`].style.background !== "none") {
+  if (item.type !== "soul") {
+    if (inventorySlots[`inventorySlot${index}`].style.background !== "none") {
+      if(consumeAvailable === true) {
+        
+        consumeAvailable = false;
+  
+        setTimeout(() => {
+          consumeAvailable = true;
+        }, 3000);
+  
+        const consumable = {
+          name: item.name,
+          index: index,
+          image: item.image,
+          type: item.type
+        }
+        inventorySlots[`inventorySlot${index}`].style.background = `none`;
+        inventorySlots[`inventorySlot${index}`].removeEventListener("mousedown", (e) => interactInventory(item, index));
+  
+        if(item.type === "fish" || item.type === "food") {
+          socket.emit("consumable", consumable);                      
+        }
+  
+        if (item.type === "weapon") {
+          socket.emit("consumable", consumable);
+        }
+      }
+    }
+  } else {
+
     if(consumeAvailable === true) {
-      
+        
       consumeAvailable = false;
 
       setTimeout(() => {
         consumeAvailable = true;
       }, 3000);
-      const consumable = {
-        name: item.name,
-        index: index,
-        image: item.image,
-        type: item.type
-      }
-      inventorySlots[`inventorySlot${index}`].style.background = `none`;
-      inventorySlots[`inventorySlot${index}`].removeEventListener("mousedown", (e) => interactInventory(item, index));
 
-      if(item.type === "fish" || item.type === "food") {
-        socket.emit("consumable", consumable);                      
-      }
-
-      if (item.type === "weapon") {
-        socket.emit("consumable", consumable);
+      if (item.name === "warrior") {
+        socket.emit("consumable", item);
       }
     }
   }
 };
 
 function interactEquipment (item, index) {
-  if (myPlayer.inventory.length <= 8) {
 
-    if(consumeAvailable === true) {
+  if(consumeAvailable === true) {
+
+    if (item.type === "weapon") {
       
-        consumeAvailable = false;
+      if (myPlayer.inventory.length <= 8) {
 
-        setTimeout(() => {
-          consumeAvailable = true;
-        }, 3000);
-
-      if (item.type === "weapon") {
-
-        if (equippedItems[`weapon`].style.background !== "none") {
-      
-            const equipment = {
-              name: item.name,
-              index: index,
-              image: item.image,
-              type: item.type
-            }
-      
-            socket.emit("unequip", equipment);
-        }       
+          consumeAvailable = false;
+  
+          setTimeout(() => {
+            consumeAvailable = true;
+          }, 3000);
+  
+          if (equippedItems[`weapon`].style.background !== "none") {
+        
+              const equipment = {
+                name: item.name,
+                index: index,
+                image: item.image,
+                type: item.type
+              }
+        
+              socket.emit("unequip", equipment);
+          }       
       }
     }
+
+    if (item.type === "soul") {
+
+        console.log(consumeAvailable)
+        if(consumeAvailable === true) {
+        
+          consumeAvailable = false;
+    
+          setTimeout(() => {
+            consumeAvailable = true;
+          }, 3000);
+
+          if (equippedItems[`soul`].style.background !== "none") {
+        
+              socket.emit("unequip", item);
+          }       
+        }
+    } 
   }
 };
 
@@ -229,6 +272,8 @@ socket.on("connect", (socket) => {
   console.log("connected");
 });
 
+//Main Player Function
+
 socket.on("players", (serverPlayers) => {
   players = serverPlayers;
   myPlayer = players.find((player) => player.id === socket.id);
@@ -242,6 +287,7 @@ socket.on("players", (serverPlayers) => {
   }
 
   usernameMenu.innerHTML = myPlayer.username;
+
   let fishingLevelNum = Math.trunc(myPlayer.fishingLevel / 1000);
   if (fishingLevelNum < 1) {
     fishingLevel.innerHTML = "1";
@@ -259,6 +305,50 @@ socket.on("players", (serverPlayers) => {
     fishingLevel.innerHTML = "5";
     fishingLevel.style.color = "white"
     fishingLevel.style.textShadow = "0 0 2px white"
+  }
+
+  if (myPlayer.souls.length) {
+    for (const soul of myPlayer.souls) {
+      if (soul.name = "warrior") {
+        soulsInventory[`soul1`].style.background = `url(${soul.image})`;
+        soulsInventory[`soul1`].style.backgroundSize = 'cover';
+        soulsInventory[`soul1`].addEventListener("mousedown", (e) => interactInventory(soul), 0); 
+      }
+    }
+  }
+
+  if (myPlayer.armor.length) {
+    for (const item of myPlayer.armor) {
+      equippedItems[`soul`].style.background = `url(${item.image})`;
+      equippedItems[`soul`].style.backgroundSize = 'cover';
+  
+      if (item.name === "warrior") {
+        soulImg.src = "./souls/basicWarrior.png";
+        mountainsUi.style.background = "url(\"./soulsEnviroments/mountains.png\")"
+        mountainsUi.style.filter = "blur(2px)";
+        mountainsUi.style.backgroundPosition = "center";
+        menuUi.style.background = "linear-gradient(hsl(184, 100%, 87%) 0%, rgb(209, 175, 147) 100%)";
+        circleCharacter.style.background = ""
+        usernameMenu.style.color = "";
+        usernameMenu.style.textShadow = "";
+      }
+    }
+  } else {
+    soulImg.src = "./souls/souless.png"
+    mountainsUi.style.background = "url(\"./soulsEnviroments/desert.png\")"
+    mountainsUi.style.filter = "blur(2px) saturate(.3)";
+    mountainsUi.style.backgroundPosition = "bottom";
+    mountainsUi.style.backgroundRepeat = "no-repeat";
+    menuUi.style.background = "linear-gradient(hsl(0, 0%, 100%) 0%, rgb(154, 126, 109) 100%)";
+    circleCharacter.style.background = "linear-gradient(rgb(255, 111, 111) 0%, #ff1515 100%)";
+    usernameMenu.style.color = "rgb(255, 255, 255)";
+    usernameMenu.style.textShadow = "0 0 10px rgb(255, 255, 255)";
+  }
+
+  if (myPlayer.armor.length) {
+    equippedItems[`soul`].addEventListener("mousedown", (e) => interactEquipment(myPlayer.souls[0]), 0);      
+  }  else {
+    equippedItems[`soul`].style.background = `none`;
   }
 
   for (const item of myPlayer.weapon) {
@@ -359,10 +449,13 @@ window.addEventListener("keydown", (e) => {
   socket.emit("lastLookPlayer", lastLookPlayer);
 
   //Fishing Minigame
+
   if(e.key === "e" && fishAvailable === true && fishing === false) {
 
     fishingGame.style.display = "block";
+    blockMovement = true;
     fishing = true;    
+    socket.emit("blockMovement", blockMovement); 
 
     const number = Math.floor(Math.random() * (10000 - 3000 + 1) + 3000);
 
@@ -376,6 +469,8 @@ window.addEventListener("keydown", (e) => {
           width = 1;
           clearInterval(interval);
           fishing = false;
+          blockMovement = false;
+          socket.emit("blockMovement", blockMovement); 
           fishingBar.style.width = width + "%";;
           fishingGame.style.display = "none";
         }       
@@ -471,8 +566,6 @@ let enemyCutY = 0;
 let enemyFramesDrawn = 0;
 let enemyAnimDelay = 2;
 
-//Player Animation
-
 //Fishing Area
 let fishingArea = {
   minX: 0,
@@ -481,7 +574,7 @@ let fishingArea = {
   maxY: 0,
 };
 let fishAvailable = false;
-//Fishing Area
+
 
 function canvasLobbyLoop() {
   canvas.clearRect(0, 0, canvasLobby.width, canvasLobby.height);
@@ -494,23 +587,30 @@ function canvasLobbyLoop() {
     cameraY = myPlayer.y - canvasLobby.height / 2 + 50;
 
     if (myPlayer.x > fishingArea.minX && 
-        myPlayer.x < fishingArea.maxX &&
+        myPlayer.x < fishingArea.minX + fishingArea.maxX &&
         myPlayer.y > fishingArea.minY && 
-        myPlayer.y < fishingArea.maxY) {
+        myPlayer.y < fishingArea.minY + fishingArea.maxY) {
           fishAvailable = true;
+          console.log("I CAN FISH")
       } else {
           fishAvailable = false;
       };
-
   }
 
   canvas.drawImage(mapLobby, cameraShakeX - cameraX, cameraShakeY - cameraY, 3000, 3000);
   
   //Fishing Area
-  fishingArea.minX = cameraShakeX - cameraX + 1500;
-  fishingArea.minY = cameraShakeY - cameraY + 1800;
-  fishingArea.maxX = fishingArea.minX + 580;
-  fishingArea.maxY = fishingArea.minY + 1000;
+  fishingArea.minX = 1500 - cameraShakeX - cameraX;
+  fishingArea.minY = 1800 - cameraShakeY - cameraY;
+  fishingArea.maxX = 580;
+  fishingArea.maxY = 1000;
+
+  if (myPlayer && fishingArea.minX && fishingArea.minY) {
+    console.log("PLAYER:", myPlayer.x, myPlayer.y, "FISHING", fishingArea.minX, fishingArea.minY);
+  }
+
+  canvas.fillStyle = "black";
+  canvas.fillRect(fishingArea.minX - 859.5, fishingArea.minY - 409.5, fishingArea.maxX, fishingArea.maxY);
   //Fishing Area
 
   for (const player of players) {
