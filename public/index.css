@@ -159,19 +159,23 @@ body {
     align-items: center; 
     gap: 20px;   
 
-    background: rgb(255, 239, 224);
+    background: rgb(196, 174, 134);
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    border-top: solid 2px black;
 
     width: 100%;
-    height: auto;    
+    height: 400px;    
     
-    padding: 50px 10px 40px 10px;
+    padding: 40px 10px 40px 10px;
     margin-top: 0px;
 }
 
 .inventoryShadow {
-    box-shadow: 
+    /* box-shadow: 
     inset 0px 10px 10px rgba(138, 74, 29, 0.133),
-    inset 0px -10px 10px rgba(138, 74, 29, 0.411);
+    inset 0px -10px 10px rgba(138, 74, 29, 0.411); */
 }
 
 #backpackImage {
@@ -195,31 +199,91 @@ body {
     background-size: cover;
 
     border-radius: 10px;
-    border: solid 1px rgb(0, 0, 0);
-    background-color: rgba(65, 44, 44, 0);
-    box-shadow: 0 8px rgba(46, 33, 29, 0);
+    border: solid 2px rgb(0, 0, 0);
+    
+    box-shadow: 8px 8px rgba(0, 0, 0, 0.192);
+
+    background-color: rgba(64, 45, 29, 0);
 
     transition: all .2s ease-out;
+    
 }
 
 .inventoryItem:active {
-    width: 80px;
-    height: 80px;
-    box-shadow: inset 0px 0px 30px rgba(255, 239, 68, 0.568);
-    border: solid 1px rgb(221, 255, 98);
+    box-shadow: 0 0px rgb(56, 25, 15);
+    border: solid 2px rgb(174, 255, 0);
+    top: 8px;
+    background: rgb(39, 71, 25);
+    filter: brightness(10);
+}
+
+.inventorySwitch {
+    display: flex;
+    justify-content: flex-start;
+    width: 95%;
+    gap: 10px;
+    margin-bottom: -2px;
+    position: relative;
+    z-index: 1;
+}
+
+.inventoryHide {
+    display: flex;
+}
+
+.soulsHide {
+    display: flex;
+}
+
+.switchButton {
+    height: 40px;
+    width: 70px;
+
+    border-top: solid 2px black;
+    border-right: solid 2px black;
+    border-left: solid 2px black;
+    border-bottom: none;
+
+    font-size: 20px;
+
+
+    border-radius: 20px 20px 0 0;
+    
+}
+
+.inventorySwicther {
+    background-color: rgb(196, 174, 134);
+}
+
+.soulsSwitcher {
+    background: rgb(81, 87, 152) ;
+}
+
+.mapSwitcher {
+    background: rgb(69, 196, 80) ;
+}
+
+.booksSwitcher {
+    background: rgb(152, 95, 81) ;
+}
+
+.deleteButton {
+    background: rgb(255, 110, 110) ;
 }
 
 .equipmentWindow {
     margin-top: 30px;
     padding: 40px 0px !important;
-    border-bottom: solid 1px rgba(0, 0, 0, 0.202);
     background-color: transparent !important;
     background: transparent !important;
+    border: none !important;
 }
 
 .equipmentItem {
     background: transparent;
     box-shadow: 8px 8px 0px rgba(127, 101, 66, 0.453);
+    border: solid 2px rgb(0, 0, 0);
+    backdrop-filter: none;
 }
 
 .equipmentItem:active {
@@ -233,13 +297,12 @@ body {
 }
 
 .soulWindow {
-    background:
-    linear-gradient(rgb(85, 50, 98) 0%, #201a47 100%) !important;
+    background: rgb(81, 87, 152) !important;
 }
 
 .soulSlot {
-    border: solid 1px white;
-    box-shadow: inset 0 0 5px rgb(175, 254, 255);
+    border: solid 2px white;
+    
 }
 
 .soulSlot:active {
@@ -449,23 +512,28 @@ body {
 
 #fishingMinigame {
     position: absolute;
-    top: 70%;
-    left: 50%;
+    top: 65%;
+    left: 33%;
     transform: translate(-43%, 0%);
 
-    width: 150px;
-    background-color: var(--backgroundObjects);
+    width: 350px;
+    background-color: transparent;
 
     padding: 5px;
     border-radius: 5px;
-  
+    
+    overflow: hidden;
   }
   
   #fishingBar {
-    width: 1%;
-    height: 20px;
-    background-color: rgb(60, 235, 197);
-    border-radius: 5px;
+    width: 120px;
+    margin-left: -50%;
+    height: 120px;
+    background: url("./Fishing/fishShadow.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 50%;
+    opacity: .5;
   }
 
   #fishingBarHit {
@@ -473,10 +541,64 @@ body {
     top: 5px;
     right: 20%;
 
-    width: 20%;
-    height: 20px;
-    background-color: rgba(171, 245, 87, 0.87);
+    width: 120px;
+    height: 120px;
+    background: url("./Fishing/fishBuoy.png");
+    background-repeat: no-repeat;
+    background-size: cover;
     border-radius: 5px;
+
+    opacity: 1;
+
+    /* animation: startFishing .5s ease; */
+    
+  }
+
+  .noFish {
+    animation: endFishing .5s ease;
+  }
+
+  .startFish {
+    animation: startFishing .5s ease;
+  }
+
+  .gotFish {
+    animation: takeFish .5s ease;
+  }
+
+  @keyframes startFishing {
+    0% {
+        top: -50px;
+        opacity: 0;
+    }
+    100% {
+        top: 5px;
+        opacity: 1;
+    }
+  }
+
+  @keyframes endFishing {
+    0% {
+        top: 5px;
+        opacity: 1;
+    }
+    100% {
+        top: -50px;
+        opacity: 0;
+    }
+  }
+
+  @keyframes takeFish {
+    0% {
+        opacity: 1;
+        width: 120px;
+        height: 120px;
+    }
+    100% {
+        opacity: 0;
+        width: 180px;
+        height: 180px;
+    }
   }
 
   #player-img-rend {

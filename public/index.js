@@ -46,6 +46,8 @@ const circleCharacter = document.getElementById("circleCharacter");
 const mountainsUi = document.getElementById("mountainsUi");
 const usernameMenu = document.getElementById("usernameMenu");
 
+const fishingBarHit = document.getElementById("fishingBarHit");
+
 const body = document.getElementById("body");
 const fishingLevel = document.getElementById("fishingLevel");
 const obtainedItem = document.querySelector("#obtainedItem");
@@ -81,9 +83,15 @@ const equippedItems = {
 const soulsInventory = {
   soul1: document.querySelector(".soul1"),
 }
+const inventorySwitcher = document.querySelector(".inventorySwicther")
+const soulsSwitcher = document.querySelector(".soulsSwitcher")
+const inventoryWindowShow = document.querySelector(".inventoryHide")
+inventoryWindowShow.style.display = "flex"
+const soulsWindowShow = document.querySelector(".soulsHide")
+soulsWindowShow.style.display = "none";
+const deleteButton = document.querySelector(".deleteButton")
 
 let shootingBlock = true;
-
 let myPlayer;
 
 chatInput.style.display = "none";
@@ -161,10 +169,40 @@ function cameraShake() {
     }, 30)
 };
 
+let deleting = false;
+
+inventorySwitcher.addEventListener("click", function () {
+  inventoryWindowShow.style.display = "flex";
+  soulsWindowShow.style.display = "none";
+})
+
+soulsSwitcher.addEventListener("click", function () {
+  inventoryWindowShow.style.display = "none";
+  soulsWindowShow.style.display = "flex";
+
+  deleting = false;
+  inventoryWindowShow.style.background = "rgb(196, 174, 134)";
+  deleteButton.style.background = "rgb(255, 110, 110)";
+})
+
+deleteButton.addEventListener("click", function () {
+  if (deleting && inventoryWindowShow.style.display === "flex") {
+    deleting = false;
+    inventoryWindowShow.style.background = "rgb(196, 174, 134)";
+    deleteButton.style.background = "rgb(255, 110, 110)";
+  } 
+  
+  else if (deleting === false && inventoryWindowShow.style.display === "flex") {
+    deleting = true;
+    inventoryWindowShow.style.background = "rgb(255, 72, 121)";
+    deleteButton.style.background = "rgb(255, 72, 121)";
+  }
+})
+
 function interactInventory(item, index) {
   if (item.type !== "soul") {
     if (inventorySlots[`inventorySlot${index}`].style.background !== "none") {
-      if(consumeAvailable === true) {
+      if(consumeAvailable === true && deleting === false) {
         
         consumeAvailable = false;
   
@@ -207,9 +245,80 @@ function interactInventory(item, index) {
   }
 };
 
+let itemsToDelete = [];
+let timeoutDelete;
+let deleteSelect = true;
+
+function deleteInventory(item, index) {
+  if (item.type !== "soul") {
+    if (inventorySlots[`inventorySlot${index}`].style.background !== "none" && deleteSelect && !itemsToDelete.includes(index)) {
+
+        itemsToDelete.push(index);
+
+        deleteSelect = false
+
+        setTimeout(() => {
+          deleteSelect = true
+        }, 100);
+
+        clearTimeout(timeoutDelete);
+
+        timeoutDelete = setTimeout(() => {
+          
+          inventorySlots[`inventorySlot0`].style.border = `solid 2px black`;
+          inventorySlots[`inventorySlot1`].style.border = `solid 2px black`;
+          inventorySlots[`inventorySlot2`].style.border = `solid 2px black`;
+          inventorySlots[`inventorySlot3`].style.border = `solid 2px black`;
+          inventorySlots[`inventorySlot4`].style.border = `solid 2px black`;
+          inventorySlots[`inventorySlot5`].style.border = `solid 2px black`;
+          inventorySlots[`inventorySlot6`].style.border = `solid 2px black`;
+          inventorySlots[`inventorySlot7`].style.border = `solid 2px black`;
+          inventorySlots[`inventorySlot8`].style.border = `solid 2px black`;
+
+          socket.emit("toDelete", itemsToDelete);
+          itemsToDelete = [];
+        }, 2000);
+
+        inventorySlots[`inventorySlot${index}`].style.border = `solid 2px white`;
+        inventorySlots[`inventorySlot${index}`].removeEventListener("mousedown", (e) => deleteInventory(item, index));
+      
+    } else if (itemsToDelete.includes(index) && deleteSelect) {
+
+        let indexItem = itemsToDelete.indexOf(index);
+
+        itemsToDelete.splice(indexItem, 1);
+        inventorySlots[`inventorySlot${index}`].style.border = `solid 2px black`;
+
+        deleteSelect = false
+
+        setTimeout(() => {
+          deleteSelect = true
+        }, 100);
+
+        clearTimeout(timeoutDelete);
+
+        timeoutDelete = setTimeout(() => {
+          
+          inventorySlots[`inventorySlot0`].style.border = `solid 2px black`;
+          inventorySlots[`inventorySlot1`].style.border = `solid 2px black`;
+          inventorySlots[`inventorySlot2`].style.border = `solid 2px black`;
+          inventorySlots[`inventorySlot3`].style.border = `solid 2px black`;
+          inventorySlots[`inventorySlot4`].style.border = `solid 2px black`;
+          inventorySlots[`inventorySlot5`].style.border = `solid 2px black`;
+          inventorySlots[`inventorySlot6`].style.border = `solid 2px black`;
+          inventorySlots[`inventorySlot7`].style.border = `solid 2px black`;
+          inventorySlots[`inventorySlot8`].style.border = `solid 2px black`;
+          
+          socket.emit("toDelete", itemsToDelete);
+          itemsToDelete = [];
+        }, 2000);
+    }
+  }
+};
+
 function interactEquipment (item, index) {
 
-  if(consumeAvailable === true) {
+  if(consumeAvailable === true && deleting === false) {
 
     if (item.type === "weapon") {
       
@@ -289,6 +398,7 @@ socket.on("players", (serverPlayers) => {
   usernameMenu.innerHTML = myPlayer.username;
 
   let fishingLevelNum = Math.trunc(myPlayer.fishingLevel / 1000);
+  
   if (fishingLevelNum < 1) {
     fishingLevel.innerHTML = "1";
   }
@@ -363,19 +473,59 @@ socket.on("players", (serverPlayers) => {
   }
  
   inventorySlots[`inventorySlot0`].style.background = `none`;
-  if (myPlayer.inventory.length !== 0) {
-    for (let i = 0; i < myPlayer.inventory.length; i++) {
 
-        inventorySlots[`inventorySlot${i}`].style.background = `url(${myPlayer.inventory[i].image})`;
-        inventorySlots[`inventorySlot${i}`].style.backgroundSize = 'cover';
-        if ( inventorySlots[`inventorySlot${i + 1}`]) {
-          inventorySlots[`inventorySlot${i + 1}`].style.background = `none`;
-        };
+  
+    
+    if (myPlayer.inventory.length !== 0) {
+      for (let i = 0; i < myPlayer.inventory.length; i++) {
+  
+          inventorySlots[`inventorySlot${i}`].style.background = `url(${myPlayer.inventory[i].image})`;
+          inventorySlots[`inventorySlot${i}`].style.backgroundSize = '80px';
+          inventorySlots[`inventorySlot${i}`].style.backgroundPosition = 'center';
+          inventorySlots[`inventorySlot${i}`].style.backgroundRepeat = 'no-repeat';
+          if ( inventorySlots[`inventorySlot${i + 1}`]) {
+            inventorySlots[`inventorySlot${i + 1}`].style.background = `none`;
+          };
+          if ( inventorySlots[`inventorySlot${i + 2}`]) {
+            inventorySlots[`inventorySlot${i + 2}`].style.background = `none`;
+          };
+          if ( inventorySlots[`inventorySlot${i + 3}`]) {
+            inventorySlots[`inventorySlot${i + 3}`].style.background = `none`;
+          };
+          if ( inventorySlots[`inventorySlot${i + 4}`]) {
+            inventorySlots[`inventorySlot${i + 4}`].style.background = `none`;
+          };
+          if ( inventorySlots[`inventorySlot${i + 5}`]) {
+            inventorySlots[`inventorySlot${i + 5}`].style.background = `none`;
+          };
+          if ( inventorySlots[`inventorySlot${i + 6}`]) {
+            inventorySlots[`inventorySlot${i + 6}`].style.background = `none`;
+          };
+          if ( inventorySlots[`inventorySlot${i + 7}`]) {
+            inventorySlots[`inventorySlot${i + 7}`].style.background = `none`;
+          };
+          if ( inventorySlots[`inventorySlot${i + 8}`]) {
+            inventorySlots[`inventorySlot${i + 8}`].style.background = `none`;
+          };
 
-        inventorySlots[`inventorySlot${i}`].addEventListener("mousedown", (e) => interactInventory(myPlayer.inventory[i], i));      
-    };
-  }
-
+          if (deleting) {
+            inventorySlots[`inventorySlot${i}`].addEventListener("mousedown", (e) => deleteInventory(myPlayer.inventory[i], i));      
+          } else {
+            inventorySlots[`inventorySlot${i}`].addEventListener("mousedown", (e) => interactInventory(myPlayer.inventory[i], i));     
+          }
+      };
+    } else {
+      inventorySlots[`inventorySlot0`].style.background = `none`;
+      inventorySlots[`inventorySlot1`].style.background = `none`;
+      inventorySlots[`inventorySlot2`].style.background = `none`;
+      inventorySlots[`inventorySlot3`].style.background = `none`;
+      inventorySlots[`inventorySlot4`].style.background = `none`;
+      inventorySlots[`inventorySlot5`].style.background = `none`;
+      inventorySlots[`inventorySlot6`].style.background = `none`;
+      inventorySlots[`inventorySlot7`].style.background = `none`;
+      inventorySlots[`inventorySlot8`].style.background = `none`;
+    }
+  
 });
 
 socket.on("enemies", (serverEnemies) => {
@@ -427,7 +577,8 @@ let angleMouse;
 let mainSkillCooldown = 0;
 
 let fishing = false;
-let width = 1;
+let width = 20;
+let marginFish = -50;
 
 window.addEventListener("keydown", (e) => {
   if (e.key === "w") {
@@ -452,6 +603,8 @@ window.addEventListener("keydown", (e) => {
 
   if(e.key === "e" && fishAvailable === true && fishing === false) {
 
+    fishingBarHit.classList.add('startFish');
+
     fishingGame.style.display = "block";
     blockMovement = true;
     fishing = true;    
@@ -461,18 +614,33 @@ window.addEventListener("keydown", (e) => {
 
     function fishingStart() {
 
+      fishingBarHit.classList.remove('startFish');
+
       const interval = setInterval(() => {
-        width += 1;        
-        if (width < 100) {
-          fishingBar.style.width = width + "%";
+          
+        marginFish += .5;  
+
+        if (marginFish < 100) {
+          
+          fishingBar.style.marginLeft = marginFish + "%";
         } else {
-          width = 1;
+          marginFish = -50;
           clearInterval(interval);
-          fishing = false;
-          blockMovement = false;
-          socket.emit("blockMovement", blockMovement); 
-          fishingBar.style.width = width + "%";;
-          fishingGame.style.display = "none";
+          fishingBar.style.marginLeft = marginFish + "%";
+          
+          setTimeout(() => {
+            
+            fishingGame.style.display = "none";
+            fishing = false;
+            blockMovement = false;
+            socket.emit("blockMovement", blockMovement); 
+            fishingBarHit.classList.remove('noFish');
+            
+          }, 800);
+
+          setTimeout(() => {
+            fishingBarHit.classList.add('noFish');
+          }, 300);
         }       
       }, 5);
 
@@ -485,9 +653,11 @@ window.addEventListener("keydown", (e) => {
     
   };
   if(e.key === "e" && fishAvailable === true && fishing === true) {
-    if (width < 90 && width > 70) {
+    
+    if (marginFish < 60 && marginFish > 40) {
+
       socket.emit("fishing", "trying");
-      width = 100;
+      marginFish = 100;
     };
   }
    //Fishing Minigame
@@ -591,7 +761,6 @@ function canvasLobbyLoop() {
         myPlayer.y > fishingArea.minY && 
         myPlayer.y < fishingArea.minY + fishingArea.maxY) {
           fishAvailable = true;
-          console.log("I CAN FISH")
       } else {
           fishAvailable = false;
       };
@@ -604,13 +773,8 @@ function canvasLobbyLoop() {
   fishingArea.minY = 1800 - cameraShakeY - cameraY;
   fishingArea.maxX = 580;
   fishingArea.maxY = 1000;
-
-  if (myPlayer && fishingArea.minX && fishingArea.minY) {
-    console.log("PLAYER:", myPlayer.x, myPlayer.y, "FISHING", fishingArea.minX, fishingArea.minY);
-  }
-
   canvas.fillStyle = "black";
-  canvas.fillRect(fishingArea.minX - 859.5, fishingArea.minY - 409.5, fishingArea.maxX, fishingArea.maxY);
+  canvas.fillRect(fishingArea.minX, fishingArea.minY, fishingArea.maxX, fishingArea.maxY);
   //Fishing Area
 
   for (const player of players) {

@@ -21,12 +21,20 @@
       <div><div id="circleCharacter"></div></div>
       <img id="soulImg" src="./souls/souless.png"></img>
       <div><div id="mountainsUi"></div></div>
+      
       <div id="inventoryWindow" class="equipmentWindow">        
         <div class="inventoryItem equipmentItem weaponEquipped"></div>
         <div class="inventoryItem equipmentItem soulEquipped"></div>
         <div class="inventoryItem equipmentItem"></div>
       </div>
-      <div id="inventoryWindow" class="inventoryShadow">
+      <div class="inventorySwitch">
+        <button class="switchButton inventorySwicther">🎒</button>
+        <button class="switchButton soulsSwitcher">🌌</button>
+        <button class="switchButton mapSwitcher">🌍</button>
+        <button class="switchButton booksSwitcher">📖</button>
+        <button class="switchButton deleteButton">❌</button>
+      </div>
+      <div id="inventoryWindow" class="inventoryShadow inventoryHide">
         <img src="./backpack.png" id="backpackImage"/>
         <div class="inventoryItem inventorySlot0"></div>
         <div class="inventoryItem inventorySlot1"></div>
@@ -38,10 +46,16 @@
         <div class="inventoryItem inventorySlot7"></div>
         <div class="inventoryItem inventorySlot8"></div>
       </div>
-      <div id="inventoryWindow" class="soulWindow">        
+      <div id="inventoryWindow" class="soulWindow soulsHide">        
         <div class="inventoryItem soulSlot soul1"></div>
         <div class="inventoryItem soulSlot soul2"></div>
         <div class="inventoryItem soulSlot soul3"></div>
+        <div class="inventoryItem soulSlot soul4"></div>
+        <div class="inventoryItem soulSlot soul5"></div>
+        <div class="inventoryItem soulSlot soul6"></div>
+        <div class="inventoryItem soulSlot soul7"></div>
+        <div class="inventoryItem soulSlot soul8"></div>
+        <div class="inventoryItem soulSlot soul9"></div>
       </div>
     </div>
     <div>
@@ -84,7 +98,7 @@
       <div id="obtainedItem" class=""></div>
       <div id="fishingMinigame">
         <div id="fishingBar"></div>
-        <div id="fishingBarHit"></div>
+        <div id="fishingBarHit" class=""></div>
       </div>
     </div>
     <canvas id="canvas-lobby">
