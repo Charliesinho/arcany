@@ -90,6 +90,7 @@ inventoryWindowShow.style.display = "flex"
 const soulsWindowShow = document.querySelector(".soulsHide")
 soulsWindowShow.style.display = "none";
 const deleteButton = document.querySelector(".deleteButton")
+const catchGif = document.getElementById("catchGif");
 
 let shootingBlock = true;
 let myPlayer;
@@ -367,11 +368,13 @@ function interactEquipment (item, index) {
 function obtainedAnim (image) {
 
   obtainedItem.classList.remove('obtainedAnim');
+  catchGif.classList.remove('starsAnim');
 
   setTimeout(() => {
     obtainedItem.style.background = `url(${image})`;
     obtainedItem.style.backgroundSize = "cover"
     obtainedItem.classList.add('obtainedAnim');
+    catchGif.classList.add('starsAnim');
   }, 500);
 }
 
@@ -657,6 +660,7 @@ window.addEventListener("keydown", (e) => {
     if (marginFish < 60 && marginFish > 40) {
 
       socket.emit("fishing", "trying");
+      cameraShake();
       marginFish = 100;
     };
   }

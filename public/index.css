@@ -8,7 +8,8 @@ body {
     width: 100vw;
     height: 100vh;
     overflow-x: hidden;
-    overflow-y: none;
+    overflow-y: hidden;
+    
 }
 
 #navBar {
@@ -47,7 +48,7 @@ body {
 
     overflow-x: hidden;
 
-    transition: all .5s ease
+    transition: all 1s ease
 }
 
 #uiTop {
@@ -477,6 +478,45 @@ body {
     border-radius: 10px;
     border: none 1px black;
     background: none;
+}
+
+#catchGif {
+    height: 250px;
+    width: 250px;
+    opacity: 1;
+
+    filter: saturate(2);
+
+    position: absolute;
+    top: 150vh;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 19;
+
+    border: none;
+}
+
+@keyframes stars {
+    0% {      
+        top: 50vh;
+        opacity: 0;
+    }
+    20% {
+        top: 50vh;
+        opacity: 1;
+    }
+    80% {
+        top: 50vh;
+        opacity: 1;
+    }
+    100% {
+        top: 50vh;
+        opacity: 0;
+    }
+}
+
+#catchGif.starsAnim {
+    animation: stars 3s ease;
 }
 
 #obtainedItem.obtainedAnim {
