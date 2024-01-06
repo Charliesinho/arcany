@@ -716,8 +716,6 @@ async function main() {
         console.log(`Server running on port ${PORT}`);
       });
     
-    httpServer.listen(PORT );
-    
     let lastUpdate = Date.now();
     setInterval(() => {
         const now = Date.now();
