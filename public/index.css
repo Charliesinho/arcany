@@ -1,5 +1,5 @@
 :root {
-    --backgroundObjects: rgb(63, 43, 43);
+    --backgroundObjects: rgb(48, 37, 37);
     --backgroundObjectsBorder: rgb(44, 40, 39);
   }
 
@@ -10,6 +10,12 @@ body {
     overflow-x: hidden;
     overflow-y: hidden;
     
+}
+
+#canvas-lobby {
+    border: solid 20px var(--backgroundObjects);
+    height: calc(100vh - 40px);
+    width: 80vw;
 }
 
 #navBar {
@@ -30,12 +36,18 @@ body {
     background: 
     /* linear-gradient(hsl(188, 100%, 91%) 0%, rgb(237, 192, 166) 100%); */
     linear-gradient(hsl(184, 100%, 87%) 0%, rgb(209, 175, 147) 100%);
-    height: 100vh;
+    height: calc(100vh - 20px);
     width: 100vw;
+    max-width: 20vw;
+    overflow: hidden;
+
+    border-bottom: solid 20px var(--backgroundObjects);
+    border-right: solid 20px var(--backgroundObjects);
+    border-left: solid 20px var(--backgroundObjects);
 
     position: absolute;
-    top: 100vh;
-    left: 0;
+    top: 0;
+    right: 0;
     z-index: 2;
 
     display: flex;
@@ -44,37 +56,45 @@ body {
 
     outline: none 8px var(--backgroundObjects);
     outline-offset: -8px;
-    border-radius: 10px;
+    border-radius: 20px 0 0 20px;
+    
+
+    /* box-shadow: -10px 0 10px rgba(0, 0, 0, 0.412); */
 
     overflow-x: hidden;
 
     transition: all 1s ease
 }
 
+#ui::-webkit-scrollbar {
+    display: none;
+  }
+
 #uiTop {
-    height: 30px;
+    height: 20px;
     width: 100vw;
     background-color: var(--backgroundObjects);
     position: relative;
     margin-bottom: 0px;
+    
 }
 
 #skillsUi {
-    width: 300px;
+    width: 250px;
     margin-bottom: -110px;
-    margin-top: -5px;
     position: relative;
+    top: -18px;
     z-index: 1;
 }
 
 #skillLevels {
-    width: 300px;
+    width: 235px;
 
     display: flex;
     justify-content: space-evenly;
     gap: 28px;
 
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
     font-family: Arial, Helvetica, sans-serif;
     color: rgb(70, 70, 70);
@@ -82,17 +102,18 @@ body {
 
     position: relative;
     z-index: 2;
-    top: 25px;
+    top: 20px;
 }
 
 #usernameMenu {
-    font-size: 110px;
+    font-size: 90px;
     width: 100vw;
     text-align: center;
     font-family: sans-serif;
     font-weight: bolder;
     color: rgb(194, 83, 77);
-    margin-bottom: -180px;
+    margin-bottom: -150px;
+    margin-top: 30px;
     position: relative;
     top: 0;
     text-shadow: 0 0 10px rgb(194, 83, 77) ;
@@ -121,7 +142,7 @@ body {
     linear-gradient(rgb(255, 202, 95) 0%, #ffab5c 100%);
     position: relative;
     margin-bottom: -250px;
-    margin-top: 50px;
+    margin-top: 0px;
     border-radius: 50%;
     outline: solid 1px rgb(255, 160, 160);
     outline-offset: 20px;
@@ -137,7 +158,8 @@ body {
 }
 
 #mountainsUi {
-    margin-top: -430px;
+    margin-top: -330px;
+    margin-bottom: -100px;
     width: 100vw;
     height: 400px;
     position: relative;
@@ -158,25 +180,20 @@ body {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center; 
-    gap: 20px;   
+    gap: 10px;   
 
-    background: rgb(196, 174, 134);
+    background: var(--backgroundObjects);
     background-repeat: no-repeat;
     background-size: cover;
 
     border-top: solid 2px black;
+    border-radius: 0px;
 
-    width: 100%;
-    height: 400px;    
+    width: 97%;
+    height: 100%;    
     
-    padding: 40px 10px 40px 10px;
+    padding: 20px 10px 100% 10px;
     margin-top: 0px;
-}
-
-.inventoryShadow {
-    /* box-shadow: 
-    inset 0px 10px 10px rgba(138, 74, 29, 0.133),
-    inset 0px -10px 10px rgba(138, 74, 29, 0.411); */
 }
 
 #backpackImage {
@@ -193,16 +210,18 @@ body {
     top: 0;
     left: 0;
 
-    width: 90px;
-    height: 90px;
+    width: 80px;
+    height: 80px;
     /* background: url("./inventory/commonFrog.png"); */
     background-repeat: no-repeat;
     background-size: cover;
 
-    border-radius: 10px;
-    border: solid 2px rgb(0, 0, 0);
     
-    box-shadow: 8px 8px rgba(0, 0, 0, 0.192);
+
+    border-radius: 10px;
+    border: solid 2px rgb(41, 34, 34);
+    
+    box-shadow: 5px 5px rgba(0, 0, 0, 0.192);
 
     background-color: rgba(64, 45, 29, 0);
 
@@ -210,10 +229,17 @@ body {
     
 }
 
+.inventoryItem:hover {
+    
+    border: solid 2px rgb(255, 255, 255);
+    box-shadow: 0px 0px rgba(0, 0, 0, 0.192), inset 0px 0px 10px  rgb(255, 255, 255);
+    
+}
+
 .inventoryItem:active {
     box-shadow: 0 0px rgb(56, 25, 15);
     border: solid 2px rgb(174, 255, 0);
-    top: 8px;
+    top: 5px;
     background: rgb(39, 71, 25);
     filter: brightness(10);
 }
@@ -222,7 +248,7 @@ body {
     display: flex;
     justify-content: flex-start;
     width: 95%;
-    gap: 10px;
+    gap: 5px;
     margin-bottom: -2px;
     position: relative;
     z-index: 1;
@@ -253,7 +279,7 @@ body {
 }
 
 .inventorySwicther {
-    background-color: rgb(196, 174, 134);
+    background-color: var(--backgroundObjects);
 }
 
 .soulsSwitcher {
@@ -262,10 +288,20 @@ body {
 
 .mapSwitcher {
     background: rgb(69, 196, 80) ;
+    border-radius: 15px;
+    border: solid 2px black;
+    height: 35px;
+    padding-bottom: 5px;
+    overflow: hidden;
 }
 
 .booksSwitcher {
     background: rgb(152, 95, 81) ;
+    border-radius: 15px;
+    border: solid 2px black;
+    height: 35px;
+    padding-bottom: 5px;
+    overflow: hidden;
 }
 
 .deleteButton {
@@ -273,16 +309,24 @@ body {
 }
 
 .equipmentWindow {
-    margin-top: 30px;
+    margin-top: 0px;
     padding: 40px 0px !important;
     background-color: transparent !important;
     background: transparent !important;
     border: none !important;
+    height: 100vh !important;
+    width: 400px !important;
+    position: absolute !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    z-index: 10 !important;
+    display: flex !important;
+    align-items: flex-end !important;
 }
 
 .equipmentItem {
     background: transparent;
-    box-shadow: 8px 8px 0px rgba(127, 101, 66, 0.453);
+    box-shadow: inset 0px 0px 0px 5px rgba(255, 221, 177, 0.453);
     border: solid 2px rgb(0, 0, 0);
     backdrop-filter: none;
 }
@@ -336,7 +380,7 @@ body {
 }
 
 #chat input::placeholder {
-    color: white;
+    color: rgb(255, 255, 255);
     font-size: 20px;
     text-align: center;
 }
@@ -344,22 +388,33 @@ body {
 #login {
     position: absolute;
     z-index: 3;
+    right: 0;
+    top: 0;
     
     display: flex;
     flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
     gap: 20px;
 
-    top: 50%;
+    height: 100vh;
+    width: 30vw;
+
+    box-shadow: -5px 0 300px 200px rgb(16, 21, 25);
+
+    /* top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%); */
 
-    background-color: rgb(255, 255, 255);
-    padding: 60px;
-    border-radius: 20px;
+    background-color: rgb(16, 21, 25);
+}
 
-    outline: solid 1px rgb(216, 216, 216);
-    outline-offset: -10px;
+#signIn {
+    margin-top: 200px;
+    margin-bottom:10px;
+    color: white;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 40px;
 }
 
 #login input {
@@ -367,13 +422,19 @@ body {
     width: 200px;
     text-align: center;
 
-    border: solid 1px rgb(160, 160, 160);
-    border-radius: 15px;
+    border: solid 1px rgb(255, 255, 255);
+    border-radius: 5px;
+    background-color: rgb(16, 21, 25);
     
     padding: 10px;
-    color: rgb(104, 104, 104);
+    color: rgb(255, 255, 255);
     font-size: 16px;
     font-weight: bolder;
+}
+
+#login input::placeholder {
+    color: white;
+    font-weight: 100;
 }
 
 #usernameInput {
@@ -382,14 +443,15 @@ body {
 
 #buttonsLogin {
     display: flex;
+    justify-content: center;
     gap: 30px;
 
     position: absolute;
     z-index: 3;
+    right: 0;
+    top: 450px;
 
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, 200%);
+    width: 30vw;
 }
 
 #buttonsLogin button {
@@ -398,12 +460,14 @@ body {
     text-align: center;
 
     border: none 1px rgb(160, 160, 160);
-    border-radius: 15px;
-    background: linear-gradient(rgb(255, 255, 255) 0%, rgb(255, 255, 255) 100%);
+    border-radius: 5px;
+    background: rgb(16, 21, 25);
     
-    color: rgb(104, 104, 104);
+    color: rgb(255, 255, 255);
     font-size: 16px;
     font-weight: bolder;
+
+    cursor: pointer;
 
     transition: all .2s ease;
 }
@@ -416,13 +480,27 @@ body {
 }
 
 #createButton {
-    color: white !important;
-    background: linear-gradient(rgb(19, 121, 255) 0%, rgb(48, 155, 255) 100%) !important;
+    color: rgb(20, 20, 20) !important;
+    background: white !important;
+    
 }
 
 #loginButton {
     color: white !important;
-    background: linear-gradient(rgb(169, 255, 19) 0%, rgb(179, 255, 48) 100%) !important;
+    background: rgb(16, 21, 25) !important;
+    border: solid 1px white !important;
+}
+
+#loginArt {
+    width: 80vw;
+    height: 100vh;
+
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    background-color: black;
+
 }
 
 #hearts {
@@ -459,7 +537,7 @@ body {
 
 #createButton:hover {
     
-    background: linear-gradient(rgb(19, 121, 255) 0%, rgb(48, 155, 255) 100%) !important;
+    background: linear-gradient(rgb(78, 155, 255) 0%, rgb(48, 155, 255) 100%) !important;
 
     color: rgb(255, 255, 255);
 }

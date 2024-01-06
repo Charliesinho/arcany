@@ -221,7 +221,7 @@ async function updateEnemyHealth(enemy) {
 
 async function main() {
 
-    await mongoose.connect( 'mongodb://0.0.0.0:27017/arcany', {
+    await mongoose.connect( 'mongodb+srv://Cfroz:Charlie12345!@cluster0.qbivfie.mongodb.net/', {
     useNewUrlParser: true,
     useUnifiedTopology: true
     });  

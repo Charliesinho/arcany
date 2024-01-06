@@ -20,7 +20,8 @@ const nameBubbleGreen = new Image();
 nameBubbleGreen.src = "nameBubbleGreen.png";
 
 const canvasLobby = document.getElementById("canvas-lobby");
-canvasLobby.width = window.innerWidth;
+const widthMinus20vw = window.innerWidth - (20 * window.innerWidth / 100);
+canvasLobby.width = widthMinus20vw;
 canvasLobby.height = window.innerHeight;
 
 const canvas = canvasLobby.getContext("2d");
@@ -54,6 +55,7 @@ const obtainedItem = document.querySelector("#obtainedItem");
 const uiTop = document.getElementById("uiTop");
 const playerInfoCorner = document.getElementById("playerInfoCorner");
 const loginBox = document.getElementById("login");
+const loginArt = document.getElementById("loginArt");
 const usernameInput = document.getElementById("usernameInput");
 const passwordInput = document.getElementById("passwordInput");
 const loginButton = document.getElementById("loginButton");
@@ -182,14 +184,14 @@ soulsSwitcher.addEventListener("click", function () {
   soulsWindowShow.style.display = "flex";
 
   deleting = false;
-  inventoryWindowShow.style.background = "rgb(196, 174, 134)";
+  inventoryWindowShow.style.background = "var(--backgroundObjects)";
   deleteButton.style.background = "rgb(255, 110, 110)";
 })
 
 deleteButton.addEventListener("click", function () {
   if (deleting && inventoryWindowShow.style.display === "flex") {
     deleting = false;
-    inventoryWindowShow.style.background = "rgb(196, 174, 134)";
+    inventoryWindowShow.style.background = "var(--backgroundObjects)";
     deleteButton.style.background = "rgb(255, 110, 110)";
   } 
   
@@ -483,7 +485,7 @@ socket.on("players", (serverPlayers) => {
       for (let i = 0; i < myPlayer.inventory.length; i++) {
   
           inventorySlots[`inventorySlot${i}`].style.background = `url(${myPlayer.inventory[i].image})`;
-          inventorySlots[`inventorySlot${i}`].style.backgroundSize = '80px';
+          inventorySlots[`inventorySlot${i}`].style.backgroundSize = '70px';
           inventorySlots[`inventorySlot${i}`].style.backgroundPosition = 'center';
           inventorySlots[`inventorySlot${i}`].style.backgroundRepeat = 'no-repeat';
           if ( inventorySlots[`inventorySlot${i + 1}`]) {
@@ -550,6 +552,7 @@ socket.on("loginAttempt", (msg) => {
     loginBox.style.display = "none";
     loginButton.style.display = "none";
     createButton.style.display = "none";
+    loginArt.style.display = "none";
     chatInput.style.display = "block";
     playerInfoCorner.style.display = "block";
     inventoryWindow.style.visibility = "visible";
@@ -584,7 +587,7 @@ let width = 20;
 let marginFish = -50;
 
 window.addEventListener("keydown", (e) => {
-  if (e.key === "w") {
+  if (e.key === "w" || e.key === "z" ) {
     inputs["up"] = true;
   } else if (e.key === "s") {
     inputs["down"] = true;
@@ -592,7 +595,7 @@ window.addEventListener("keydown", (e) => {
     inputs["right"] = true;
     animPlayer = "runRight";
     lastLookPlayer = "right";
-  } else if (e.key === "a") {
+  } else if (e.key === "a" || e.key === "q") {
     inputs["left"] = true;
     animPlayer = "runLeft";
     lastLookPlayer = "left";
@@ -667,13 +670,13 @@ window.addEventListener("keydown", (e) => {
    //Fishing Minigame
 });
 window.addEventListener("keyup", (e) => {
-  if (e.key === "w") {
+  if (e.key === "w" || e.key === "z") {
     inputs["up"] = false;
   } else if (e.key === "s") {
     inputs["down"] = false;
   } else if (e.key === "d") {
     inputs["right"] = false;
-  } else if (e.key === "a") {
+  } else if (e.key === "a" || e.key === "q") {
     inputs["left"] = false;
   }
   if (
@@ -750,7 +753,14 @@ let fishingArea = {
 let fishAvailable = false;
 
 
-function canvasLobbyLoop() {
+let lastFrameTime = 0;
+const targetFrameTime = 1000 / 60; // 60 frames per second
+
+function canvasLobbyLoop(timestamp) {
+  const deltaTime = timestamp - lastFrameTime;
+
+  if (deltaTime >= targetFrameTime) {
+    lastFrameTime = timestamp - (deltaTime % targetFrameTime);
   canvas.clearRect(0, 0, canvasLobby.width, canvasLobby.height);
   canvas.imageSmoothingEnabled = false;
 
@@ -925,7 +935,11 @@ function canvasLobbyLoop() {
     }
     enemyAnimDelay = 2;
   }
-
   window.requestAnimationFrame(canvasLobbyLoop);
+  
+  } else {
+    // Not enough time has passed, wait for the next frame
+    window.requestAnimationFrame(canvasLobbyLoop);
+  }
 }
 window.requestAnimationFrame(canvasLobbyLoop);
