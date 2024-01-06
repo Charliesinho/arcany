@@ -26,7 +26,7 @@ canvasLobby.height = window.innerHeight;
 
 const canvas = canvasLobby.getContext("2d");
 
-const socket = io(`ws://localhost:3000`);
+// const socket = io(`ws://localhost:3000`);
 const socket = io(`https://arcany.up.railway.app/`);
 
 let players = [];
