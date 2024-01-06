@@ -711,6 +711,10 @@ async function main() {
     app.use(express.static( 'public' ));
 
     const PORT  = process.env.PORT || 3000;
+
+    server.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+      });
     
     httpServer.listen(PORT );
     
