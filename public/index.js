@@ -27,6 +27,7 @@ canvasLobby.height = window.innerHeight;
 const canvas = canvasLobby.getContext("2d");
 
 const socket = io(`ws://localhost:3000`);
+const socket = io(`https://arcany.up.railway.app/`);
 
 let players = [];
 let enemies = [];
@@ -936,7 +937,7 @@ function canvasLobbyLoop(timestamp) {
     enemyAnimDelay = 2;
   }
   window.requestAnimationFrame(canvasLobbyLoop);
-  
+
   } else {
     // Not enough time has passed, wait for the next frame
     window.requestAnimationFrame(canvasLobbyLoop);
