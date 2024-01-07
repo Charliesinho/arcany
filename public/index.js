@@ -26,8 +26,8 @@ canvasLobby.height = window.innerHeight;
 
 const canvas = canvasLobby.getContext("2d");
 
-// const socket = io(`ws://localhost:3000`);
-const socket = io(`https://arcany.up.railway.app/`);
+const socket = io(`ws://localhost:5000`);
+// const socket = io(`https://arcany.up.railway.app/`);
 
 let players = [];
 let enemies = [];
@@ -94,6 +94,26 @@ const soulsWindowShow = document.querySelector(".soulsHide")
 soulsWindowShow.style.display = "none";
 const deleteButton = document.querySelector(".deleteButton")
 const catchGif = document.getElementById("catchGif");
+
+//Mouse cursor >
+const customCursor = document.querySelector('.custom-cursor');
+const pointerActivator = document.querySelectorAll('.pointerActivator');
+
+document.addEventListener('mousemove', function(e) {
+  customCursor.style.left = e.pageX + 'px';
+  customCursor.style.top = e.pageY + 'px';
+});
+
+pointerActivator.forEach(item => {
+  item.addEventListener('mouseenter', function() {
+    customCursor.style.backgroundImage = "url('../cursors/pointer.png')";
+  });
+
+  item.addEventListener('mouseleave', function() {
+    customCursor.style.backgroundImage = "url('../cursors/default.png')";
+  });
+});
+//Mouse cursor <
 
 let shootingBlock = true;
 let myPlayer;

@@ -3,14 +3,28 @@
     --backgroundObjectsBorder: rgb(44, 40, 39);
   }
 
+* {
+    cursor: none;
+}
+
 body {
     margin: 0;
     width: 100vw;
     height: 100vh;
     overflow-x: hidden;
-    overflow-y: hidden;
+    overflow-y: ;
     
 }
+
+.custom-cursor {
+    position: absolute;
+    z-index: 100;
+    width: 50px; /* Set your desired width */
+    height: 50px; /* Set your desired height */
+    background-image: url('../cursors/default.png'); /* Replace 'path_to_your_image.png' with your image URL */
+    background-size: cover; /* Adjust to fit your image */
+    pointer-events: none; /* Ensures the cursor doesn't block mouse events */
+  }
 
 #canvas-lobby {
     border: solid 20px var(--backgroundObjects);
@@ -495,6 +509,8 @@ body {
     width: 80vw;
     height: 100vh;
 
+    cursor: none;
+
     position: absolute;
     left: 0;
     top: 0;
@@ -506,7 +522,7 @@ body {
 #hearts {
     position: absolute;
     top: 0;
-    left: 20px;
+    left: 35px;
     transform: translate(52%, 22%);
     border-radius: 5px;
 
@@ -527,10 +543,9 @@ body {
     width: 100px;
 
     border-radius: 5%;
-    border: solid 5px var(--backgroundObjects);
-    outline: none 1px var(--backgroundObjectsBorder);
-    outline-offset: -15px;
-    background: url("https://lh3.googleusercontent.com/KcFxe7njxUgT39S-P7N_eDz8Qoe-JaBiF_ix_7n0Eh04hdMujdsHYVO-aBslmHDkYgCZpglQbQDGQuvL4jiOeoVF1DYd7SIVPf_g");
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.383);
+    border: solid 20px var(--backgroundObjects);
+    background: url("https://www.okx.com/cdn/nft/files/68540655-7efc-47b9-96d4-5ba28ce32725.webp/type=detail?x-oss-process=image/resize,w_784,type_6/ignore-error,1");
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -549,7 +564,7 @@ body {
 
     position: absolute;
     top: 150vh;
-    left: 50%;
+    left: 40vw;
     transform: translate(-50%, -50%);
     z-index: 20;
 
@@ -567,7 +582,7 @@ body {
 
     position: absolute;
     top: 150vh;
-    left: 50%;
+    left: 40vw;
     transform: translate(-50%, -50%);
     z-index: 19;
 
@@ -631,8 +646,8 @@ body {
 #fishingMinigame {
     position: absolute;
     top: 65%;
-    left: 33%;
-    transform: translate(-43%, 0%);
+    left: 40vw;
+    transform: translate(-50%, 0%);
 
     width: 350px;
     background-color: transparent;
