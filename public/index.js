@@ -1,3 +1,7 @@
+window.onload = function() {
+  window.scrollTo(0, 0);
+};
+
 const mapLobby = new Image();
 mapLobby.src = "lobby.png";
 
@@ -19,6 +23,39 @@ chatBubble.src = "chatBubble.png";
 const nameBubbleGreen = new Image();
 nameBubbleGreen.src = "nameBubbleGreen.png";
 
+const audioClick = new Audio("./audios/tapWood.wav");
+audioClick.loop = false;
+
+const audioEquip = new Audio("./audios/equip.mp3");
+audioEquip.loop = false;
+
+const audioSplash = new Audio("./audios/splash.mp3");
+audioSplash.loop = false;
+
+const audioSuccess = new Audio("./audios/success.mp3");
+audioSuccess.loop = false;
+
+const audioShootNature = new Audio("./audios/shootNature.mp3");
+audioShootNature.loop = false;
+audioShootNature.volume = 0.5;
+
+const audioIntro = new Audio("./audios/audioIntro.mp3");
+audioShootNature.loop = false;
+
+const loggedIn = new Audio("./audios/loggedIn.mp3");
+loggedIn.loop = false;
+
+const grasslandsLoop1 = new Audio("./audios/grassLandsLoop1.mp3");
+grasslandsLoop1.loop = true;
+
+const grasslandsEnviroment = new Audio("./audios/grasslandsEnviroment.mp3");
+grasslandsEnviroment.loop = true;
+
+const footsteps = new Audio("./audios/footsteps.mp3");
+footsteps.loop = true;
+footsteps.volume = 0.5;
+
+
 const canvasLobby = document.getElementById("canvas-lobby");
 const widthMinus20vw = window.innerWidth - (20 * window.innerWidth / 100);
 canvasLobby.width = widthMinus20vw;
@@ -26,8 +63,12 @@ canvasLobby.height = window.innerHeight;
 
 const canvas = canvasLobby.getContext("2d");
 
-// const socket = io(`ws://localhost:5000`);
-const socket = io(`https://arcany.up.railway.app/`);
+//Change this to push >
+
+const socket = io(`ws://localhost:5000`);
+// const socket = io(`https://arcany.up.railway.app/`);
+
+//Change this to push <
 
 let players = [];
 let enemies = [];
@@ -47,6 +88,11 @@ const soulImg = document.getElementById("soulImg");
 const circleCharacter = document.getElementById("circleCharacter");
 const mountainsUi = document.getElementById("mountainsUi");
 const usernameMenu = document.getElementById("usernameMenu");
+
+const openerScreenButton = document.getElementById("openerScreen-button");
+const openerScreen = document.getElementById("openerScreen");
+
+const loginScreen = document.getElementById("loginScreen");
 
 const fishingBarHit = document.getElementById("fishingBarHit");
 
@@ -138,18 +184,32 @@ function handleLogin(action) {
   socket.emit("loadEnemies", enemies);
 }
 
+openerScreenButton.addEventListener("click", function() {
+  openerScreen.classList.add('animIntro');
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+  setTimeout(() => {
+    audioIntro.play();    
+  }, 500);
+  audioClick.play();
+});
+
 loginButton.addEventListener("click", function(){
   handleLogin("login");
+  audioClick.play();
 });
 
 createButton.addEventListener("click", function(){
   handleLogin("create");
+  audioClick.play();
 });
 
-uiTop.addEventListener("click", function(){
-  menuUi.style.top = "100vh"
-  body.style.overflow = "none"
-});
+// uiTop.addEventListener("click", function(){
+//   menuUi.style.top = "100vh"
+//   body.style.overflow = "none"
+// });
 
 playerInfoCorner.addEventListener("click", function(){
   menuUi.style.top = "0vh"
@@ -196,11 +256,13 @@ function cameraShake() {
 let deleting = false;
 
 inventorySwitcher.addEventListener("click", function () {
+  audioClick.play();
   inventoryWindowShow.style.display = "flex";
   soulsWindowShow.style.display = "none";
 })
 
 soulsSwitcher.addEventListener("click", function () {
+  audioClick.play();
   inventoryWindowShow.style.display = "none";
   soulsWindowShow.style.display = "flex";
 
@@ -210,6 +272,7 @@ soulsSwitcher.addEventListener("click", function () {
 })
 
 deleteButton.addEventListener("click", function () {
+  audioClick.play();
   if (deleting && inventoryWindowShow.style.display === "flex") {
     deleting = false;
     inventoryWindowShow.style.background = "var(--backgroundObjects)";
@@ -392,6 +455,7 @@ function obtainedAnim (image) {
 
   obtainedItem.classList.remove('obtainedAnim');
   catchGif.classList.remove('starsAnim');
+  audioSuccess.play();
 
   setTimeout(() => {
     obtainedItem.style.background = `url(${image})`;
@@ -448,7 +512,11 @@ socket.on("players", (serverPlayers) => {
       if (soul.name = "warrior") {
         soulsInventory[`soul1`].style.background = `url(${soul.image})`;
         soulsInventory[`soul1`].style.backgroundSize = 'cover';
-        soulsInventory[`soul1`].addEventListener("mousedown", (e) => interactInventory(soul), 0); 
+        soulsInventory[`soul1`].addEventListener("mousedown", (e) => {
+          interactInventory(soul);
+          audioEquip.play();
+        
+        }); 
       }
     }
   }
@@ -482,7 +550,10 @@ socket.on("players", (serverPlayers) => {
   }
 
   if (myPlayer.armor.length) {
-    equippedItems[`soul`].addEventListener("mousedown", (e) => interactEquipment(myPlayer.souls[0]), 0);      
+    equippedItems[`soul`].addEventListener("mousedown", (e) => {
+      interactEquipment(myPlayer.souls[0])
+      audioClick.play();
+    });      
   }  else {
     equippedItems[`soul`].style.background = `none`;
   }
@@ -493,7 +564,10 @@ socket.on("players", (serverPlayers) => {
   }
   
   if (myPlayer.weapon.length) {
-    equippedItems[`weapon`].addEventListener("mousedown", (e) => interactEquipment(myPlayer.weapon[0]), 0);      
+    equippedItems[`weapon`].addEventListener("mousedown", (e) => {
+      interactEquipment(myPlayer.weapon[0]);
+      audioClick.play();
+    });      
   }  else {
     equippedItems[`weapon`].style.background = `none`;
   }
@@ -535,9 +609,16 @@ socket.on("players", (serverPlayers) => {
           };
 
           if (deleting) {
-            inventorySlots[`inventorySlot${i}`].addEventListener("mousedown", (e) => deleteInventory(myPlayer.inventory[i], i));      
+            inventorySlots[`inventorySlot${i}`].addEventListener("mousedown", (e) => {
+              deleteInventory(myPlayer.inventory[i], i);
+              audioClick.play();
+            
+            });      
           } else {
-            inventorySlots[`inventorySlot${i}`].addEventListener("mousedown", (e) => interactInventory(myPlayer.inventory[i], i));     
+            inventorySlots[`inventorySlot${i}`].addEventListener("mousedown", (e) => {
+              interactInventory(myPlayer.inventory[i], i);
+              audioClick.play();
+            });     
           }
       };
     } else {
@@ -570,18 +651,32 @@ socket.on("obtained", (item) => {
 socket.on("loginAttempt", (msg) => { 
 
   if(msg === "success") {
-    loginBox.style.display = "none";
-    loginButton.style.display = "none";
-    createButton.style.display = "none";
-    loginArt.style.display = "none";
+    audioIntro.pause();
+    loggedIn.play();
+
+    
+    loginScreen.classList.add('downLogIn');
     chatInput.style.display = "block";
     playerInfoCorner.style.display = "block";
     inventoryWindow.style.visibility = "visible";
+    menuUi.style.display = "flex"
+    
+    setTimeout(() => {
+      loginBox.style.display = "none";
+      loginButton.style.display = "none";
+      createButton.style.display = "none";
+      loginArt.style.display = "none";
+    
+      blockMovement = false;
+      socket.emit("blockMovement", blockMovement);  
   
-    blockMovement = false;
-    socket.emit("blockMovement", blockMovement);  
+      shootingBlock = false;
 
-    shootingBlock = false;
+      grasslandsLoop1.play();
+      grasslandsEnviroment.play();
+      
+    }, 2000);
+
   } else if (msg === "failed") {
     passwordInput.style.background = "#ff5471";
     passwordInput.style.color = "white";
@@ -609,14 +704,22 @@ let marginFish = -50;
 
 window.addEventListener("keydown", (e) => {
   if (e.key === "w" || e.key === "z" ) {
+    footsteps.play();
+    footsteps.loop = true;
     inputs["up"] = true;
   } else if (e.key === "s") {
+    footsteps.play();
+    footsteps.loop = true;
     inputs["down"] = true;
   } else if (e.key === "d") {
+    footsteps.play();
+    footsteps.loop = true;
     inputs["right"] = true;
     animPlayer = "runRight";
     lastLookPlayer = "right";
   } else if (e.key === "a" || e.key === "q") {
+    footsteps.play();
+    footsteps.loop = true;
     inputs["left"] = true;
     animPlayer = "runLeft";
     lastLookPlayer = "left";
@@ -631,6 +734,8 @@ window.addEventListener("keydown", (e) => {
   if(e.key === "e" && fishAvailable === true && fishing === false) {
 
     fishingBarHit.classList.add('startFish');
+
+    audioSplash.play();
 
     fishingGame.style.display = "block";
     blockMovement = true;
@@ -686,10 +791,13 @@ window.addEventListener("keydown", (e) => {
       socket.emit("fishing", "trying");
       cameraShake();
       marginFish = 100;
+      audioClick.play();
     };
   }
+
    //Fishing Minigame
 });
+
 window.addEventListener("keyup", (e) => {
   if (e.key === "w" || e.key === "z") {
     inputs["up"] = false;
@@ -707,16 +815,19 @@ window.addEventListener("keyup", (e) => {
     inputs["left"] === false
   ) {
     animPlayer = "idleRight";
+    footsteps.pause();
+    footsteps.loop = false;
   }
 
   socket.emit("inputs", inputs);
   socket.emit("animPlayer", animPlayer);
 });
 
-body.addEventListener("mousedown", (e) => {
+canvasLobby.addEventListener("mousedown", (e) => {
   if (shootingBlock === false) {
     if (myPlayer.weapon[0]) {
       if (mainSkillCooldown === 1 || mainSkillCooldown === 0) {
+        audioShootNature.play();
           const angle = Math.atan2(
             e.clientY - canvasLobby.height / 2,
             e.clientX - canvasLobby.width / 2
@@ -741,6 +852,13 @@ window.addEventListener("mousemove", (e) => {
       e.clientX - canvasLobby.width / 2
     );
     socket.emit("weaponAngle", angleMouse);
+
+    if (window.scrollY > 0) {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth' // This provides a smooth scrolling effect (not supported in all browsers)
+      });
+    }
   });
 
 //Player Animation

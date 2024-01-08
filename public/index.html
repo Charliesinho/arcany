@@ -8,11 +8,16 @@
     <title>Document</title>
   </head>
   <body id="body">
+    <div id="openerScreen">
+      <button id="openerScreen-button" class="pointerActivator">"{ I understand this is an early alpha version }"</button>
+    </div>
+
     <div class="custom-cursor"></div>
+
     <div id="inventoryWindow" class="equipmentWindow">        
-      <div class="inventoryItem equipmentItem weaponEquipped"></div>
-      <div class="inventoryItem equipmentItem soulEquipped"></div>
-      <div class="inventoryItem equipmentItem"></div>
+      <div class="pointerActivator inventoryItem equipmentItem weaponEquipped"></div>
+      <div class="pointerActivator inventoryItem equipmentItem soulEquipped"></div>
+      <div class="pointerActivator inventoryItem equipmentItem"></div>
     </div>
     <div id="ui">
       <div><div id="uiTop"></div></div>
@@ -72,29 +77,31 @@
         <!-- <input type="submit" value="Send"> -->
       </form>
 
-      <div id="loginArt">
-        <iframe src='https://my.spline.design/crystalcopy-cd35cf24974b9bb9c15c0590dee4980f/' frameborder='0' width='100%' height='100%'></iframe>
-      </div>
-      <form id="login">
-        <h1 id="signIn">Sign in</h1>
-        <input
-          type="text"
-          id="usernameInput"
-          name="usernameInput"
-          placeholder="Username"
-          maxlength="6"
-        />
-        <input
-          type="text"
-          id="passwordInput"
-          name="passwordInput"
-          placeholder="Password"
-          maxlength="23"
-        />
-      </form>
-      <div id="buttonsLogin">
-        <button id="loginButton" value="Send">Login</button>
-        <button id="createButton" value="Send">Create</button>
+      <div id="loginScreen" class="">
+        <div id="loginArt">
+          <iframe src='https://my.spline.design/crystalcopy-cd35cf24974b9bb9c15c0590dee4980f/' frameborder='0' width='100%' height='100%'></iframe>
+        </div>
+        <form id="login">
+          <h1 id="signIn">Sign in</h1>
+          <input
+            type="text"
+            id="usernameInput"
+            name="usernameInput"
+            placeholder="Username"
+            maxlength="6"
+          />
+          <input
+            type="text"
+            id="passwordInput"
+            name="passwordInput"
+            placeholder="Password"
+            maxlength="23"
+          />
+        </form>
+        <div id="buttonsLogin">
+          <button id="loginButton" class="pointerActivator" value="Send">Login</button>
+          <button id="createButton" class="pointerActivator" value="Send">Create</button>
+        </div>
       </div>
 
       <div id="playerInfoCorner">
