@@ -1,3 +1,10 @@
+//Change this to push >
+
+// const socket = io(`ws://localhost:5000`);
+const socket = io(`https://arcany.up.railway.app/`);
+
+//Change this to push <
+
 window.onload = function() {
   window.scrollTo(0, 0);
 };
@@ -69,13 +76,6 @@ canvasLobby.width = widthMinus20vw;
 canvasLobby.height = window.innerHeight;
 
 const canvas = canvasLobby.getContext("2d");
-
-//Change this to push >
-
-const socket = io(`ws://localhost:5000`);
-// const socket = io(`https://arcany.up.railway.app/`);
-
-//Change this to push <
 
 let players = [];
 let enemies = [];
