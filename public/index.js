@@ -6,7 +6,13 @@ const mapLobby = new Image();
 mapLobby.src = "lobby.png";
 
 const character = new Image();
-character.src = "player.png";
+character.src = "./skins/player.png";
+
+const frogWarriorSkin = new Image();
+frogWarriorSkin.src = "./skins/frogWarrior.png";
+
+const cape = new Image();
+cape.src = "./capes/cape.png";
 
 const slime = new Image();
 slime.src = "slime.png";
@@ -21,9 +27,10 @@ const chatBubble = new Image();
 chatBubble.src = "chatBubble.png";
 
 const nameBubbleGreen = new Image();
-nameBubbleGreen.src = "nameBubbleGreen.png";
+nameBubbleGreen.src = "./nameTags/nameTaglvl1.png";
 
 const audioClick = new Audio("./audios/tapWood.wav");
+audioClick.volume = 0.8;
 audioClick.loop = false;
 
 const audioEquip = new Audio("./audios/equip.mp3");
@@ -65,8 +72,8 @@ const canvas = canvasLobby.getContext("2d");
 
 //Change this to push >
 
-// const socket = io(`ws://localhost:5000`);
-const socket = io(`https://arcany.up.railway.app/`);
+const socket = io(`ws://localhost:5000`);
+// const socket = io(`https://arcany.up.railway.app/`);
 
 //Change this to push <
 
@@ -471,7 +478,7 @@ socket.on("connect", (socket) => {
   console.log("connected");
 });
 
-//Main Player Function
+//Main Player Function >
 
 socket.on("players", (serverPlayers) => {
   players = serverPlayers;
@@ -634,6 +641,8 @@ socket.on("players", (serverPlayers) => {
     }
   
 });
+
+//Main Player Function <
 
 socket.on("enemies", (serverEnemies) => {
   enemies = serverEnemies;
@@ -862,9 +871,9 @@ window.addEventListener("mousemove", (e) => {
   });
 
 //Player Animation
-let playerSpriteWidth = character.width / 6;
+let playerSpriteWidth = character.width / 4;
 let playerSpriteHeight = character.height / 4;
-const playerWidth = character.width / 6;
+const playerWidth = character.width / 4;
 const playerHeight = character.height / 4;
 let framesPlayerTotal = 4;
 let frameCurrentPlayer = 0;
@@ -909,98 +918,169 @@ function canvasLobbyLoop(timestamp) {
     cameraX = myPlayer.x - canvasLobby.width / 2 + 10;
     cameraY = myPlayer.y - canvasLobby.height / 2 + 50;
 
-    if (myPlayer.x > fishingArea.minX && 
-        myPlayer.x < fishingArea.minX + fishingArea.maxX &&
-        myPlayer.y > fishingArea.minY && 
-        myPlayer.y < fishingArea.minY + fishingArea.maxY) {
-          fishAvailable = true;
-      } else {
-          fishAvailable = false;
-      };
+    
   }
-
-  canvas.drawImage(mapLobby, cameraShakeX - cameraX, cameraShakeY - cameraY, 3000, 3000);
   
-  //Fishing Area
-  fishingArea.minX = 1500 - cameraShakeX - cameraX;
-  fishingArea.minY = 1800 - cameraShakeY - cameraY;
-  fishingArea.maxX = 580;
-  fishingArea.maxY = 1000;
-  canvas.fillStyle = "black";
-  canvas.fillRect(fishingArea.minX, fishingArea.minY, fishingArea.maxX, fishingArea.maxY);
-  //Fishing Area
+  canvas.drawImage(mapLobby, cameraShakeX - cameraX, cameraShakeY - cameraY, 4000, 4000);
+  
+  if (myPlayer) {
+    let playerColminX = myPlayer.x - cameraX -25;
+    let playerColminY = myPlayer.y - cameraY + 100;
+    let playerColLengthX = playerWidth - 300;
+    let playerColLengthY = playerHeight - 540;
+    canvas.fillStyle = "rgb(255, 0, 13, 0.3)";
+    canvas.fillRect(playerColminX, playerColminY, playerColLengthX, playerColLengthY);
+    
+    //Fishing Area
+    fishingArea.minX = 1400 - cameraShakeX - cameraX;
+    fishingArea.minY = 1900 - cameraShakeY - cameraY;
+    fishingArea.maxX = 580;
+    fishingArea.maxY = 100;
+    canvas.fillStyle = "rgb(0, 89, 255, 0.3)";
+    canvas.fillRect(fishingArea.minX, fishingArea.minY, fishingArea.maxX, fishingArea.maxY); 
+    
+    if (playerColminX > fishingArea.minX && 
+      playerColLengthX + playerColLengthX < fishingArea.minX + fishingArea.maxY + 200 &&
+      playerColminY > fishingArea.minY && 
+      playerColLengthY + playerColLengthY < fishingArea.minY + fishingArea.maxY - 350) {
+        fishAvailable = true;
+        console.log("Fish bitch");
+      } else {
+        fishAvailable = false;
+      };
+
+    //Fishing Area
+    }
+
 
   for (const player of players) {
-    //Movement
+
+    //Armor >
+    let armor = character;
+
+    if (player.armor[0]) {
+      if (player.armor[0].name === "warrior") {
+        armor = frogWarriorSkin;
+      } else {
+        armor = character;
+      }
+    }
+    //Armor <
+
+    //Movement >
     if (player.anim === "idleRight" && player.lastLooked === "right") {
       frameCurrentPlayer = frameCurrentPlayer % 4;
       playerCutX = frameCurrentPlayer * playerWidth;
       canvas.drawImage(
-        character,
+        armor,
         playerCutX,
-        playerCutY,
+        playerCutY + 575,
         playerWidth,
         playerHeight,
-        player.x - cameraX - 30,
+        player.x - cameraX -30,
         player.y - cameraY,
-        playerWidth - 510,
-        playerHeight - 510
+        playerWidth - 300,
+        playerHeight - 440,
+      );
+      canvas.drawImage(
+        cape,
+        playerCutX,
+        playerCutY + 575,
+        playerWidth,
+        playerHeight,
+        player.x - cameraX -30,
+        player.y - cameraY,
+        playerWidth - 300,
+        playerHeight - 440,
       );
     }
     if (player.anim === "idleRight" && player.lastLooked === "left") {
       frameCurrentPlayer = frameCurrentPlayer % 4;
       playerCutX = frameCurrentPlayer * playerWidth;
       canvas.drawImage(
-        character,
+        armor,
         playerCutX,
-        playerCutY + 600,
+        playerCutY + 1728,
         playerWidth,
         playerHeight,
-        player.x - cameraX - 30,
+        player.x - cameraX -15,
         player.y - cameraY,
-        playerWidth - 510,
-        playerHeight - 510
+        playerWidth - 300,
+        playerHeight - 440,
+      );
+      canvas.drawImage(
+        cape,
+        playerCutX,
+        playerCutY + 1728,
+        playerWidth,
+        playerHeight,
+        player.x - cameraX -15,
+        player.y - cameraY,
+        playerWidth - 300,
+        playerHeight - 440,
       );
     }
     if (player.anim === "runRight") {
-      frameCurrentPlayer = frameCurrentPlayer % 6;
+      frameCurrentPlayer = frameCurrentPlayer % 4;
       playerCutX = frameCurrentPlayer * playerWidth;
       canvas.drawImage(
-        character,
+        armor,
         playerCutX,
-        playerCutY + 1200,
+        playerCutY,
         playerWidth,
         playerHeight,
-        player.x - cameraX - 30,
+        player.x - cameraX -30,
         player.y - cameraY,
-        playerWidth - 510,
-        playerHeight - 510
+        playerWidth - 300,
+        playerHeight - 440,
+      );
+      canvas.drawImage(
+        cape,
+        playerCutX,
+        playerCutY,
+        playerWidth,
+        playerHeight,
+        player.x - cameraX -30,
+        player.y - cameraY,
+        playerWidth - 300,
+        playerHeight - 440,
       );
     }
     if (player.anim === "runLeft") {
-      frameCurrentPlayer = frameCurrentPlayer % 6;
+      frameCurrentPlayer = frameCurrentPlayer % 4;
       playerCutX = frameCurrentPlayer * playerWidth;
       canvas.drawImage(
-        character,
+        armor,
         playerCutX,
-        playerCutY + 1800,
+        playerCutY + 1150,
         playerWidth,
         playerHeight,
-        player.x - cameraX - 30,
+        player.x - cameraX - 15,
         player.y - cameraY,
-        playerWidth - 510,
-        playerHeight - 510
+        playerWidth - 300,
+        playerHeight - 440,
+      );
+      canvas.drawImage(
+        cape,
+        playerCutX,
+        playerCutY + 1150,
+        playerWidth,
+        playerHeight,
+        player.x - cameraX - 15,
+        player.y - cameraY,
+        playerWidth - 300,
+        playerHeight - 440,
       );
     }
-    //Movement
+    //Movement <
     
     // Weapon
     canvas.save(); // Save the current canvas state
-    canvas.translate(player.x - cameraX +18, player.y - cameraY +50); // Translate to the player's position
+    canvas.translate(player.x - cameraX +18, player.y - cameraY +60); // Translate to the player's position
     canvas.rotate(player.weaponAngle); // Rotate based on the mouse angle
    if (player.weapon[0]) {
      if (player.weapon[0].name === "stick") {
-       canvas.drawImage(WeaponStick ,0, -7.5, 80, 20); // Draw the rectangle centered around the rotated point
+       canvas.drawImage(WeaponStick ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
      }
     }
     canvas.restore(); // Restore the canvas state to what it was before translation and rotation
@@ -1008,21 +1088,22 @@ function canvasLobbyLoop(timestamp) {
 
     //Chat
     if (player.chatMessage !== "none") {
-        canvas.drawImage(chatBubble, player.x - cameraX -85, player.y - cameraY -100, 200, 60)
+        canvas.drawImage(chatBubble, player.x - cameraX -85, player.y - cameraY -120, 200, 60)
     
         canvas.font = "bolder 14px Arial";
         canvas.textAlign = "center";
         canvas.fillStyle = "gray";
-        canvas.fillText(player.chatMessage, player.x - cameraX +15, player.y - cameraY -70);
+        canvas.fillText(player.chatMessage, player.x - cameraX +15, player.y - cameraY -90);
     }
     //Chat
 
     //Username
-        canvas.drawImage(nameBubbleGreen, player.x - cameraX -33, player.y - cameraY -26, 80,23)
+        // canvas.drawImage(nameBubbleGreen, player.x - cameraX -33, player.y - cameraY -26, 80,23)
+        canvas.drawImage(nameBubbleGreen, player.x - cameraX -33, player.y - cameraY -51, 100,50)
     
         canvas.font = "bolder 14px Arial";
         canvas.textAlign = "center";
-        canvas.fillStyle = "gray";
+        canvas.fillStyle = "black";
         canvas.fillText(player.username, player.x - cameraX +15, player.y - cameraY -10);
     //Username
 }
@@ -1081,4 +1162,6 @@ function canvasLobbyLoop(timestamp) {
     window.requestAnimationFrame(canvasLobbyLoop);
   }
 }
-window.requestAnimationFrame(canvasLobbyLoop);
+setTimeout(() => {
+  window.requestAnimationFrame(canvasLobbyLoop);
+}, 300);
