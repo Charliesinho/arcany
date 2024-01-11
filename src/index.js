@@ -71,19 +71,19 @@ function tick() {
             chatMessageStore[player.id] = "none";
         }
 
-        if (blockMovement === false) {
-            if (inputs.up) {
-                player.y -= speed;
-            } else if (inputs.down) {
-                player.y += speed;
-            }
+        // if (blockMovement === false) {
+        //     if (inputs.up) {
+        //         player.y -= speed;
+        //     } else if (inputs.down) {
+        //         player.y += speed;
+        //     }
     
-            if (inputs.left) {
-                player.x -= speed;
-            } else if (inputs.right) {
-                player.x += speed;
-            }
-        }      
+        //     if (inputs.left) {
+        //         player.x -= speed;
+        //     } else if (inputs.right) {
+        //         player.x += speed;
+        //     }
+        // }      
 
 
         player.anim = anim;
@@ -210,6 +210,8 @@ function tick() {
     io.emit("projectiles", projectiles);
 }
 
+setInterval(tick, 16.67);
+
 async function updateHealth(username, health, id) {    
     const playerHealth = await Player.findOneAndUpdate({username: username}, {health: health}, {new: true}); 
     if (playerHealth) {
@@ -277,6 +279,18 @@ async function main() {
             invincible: false,
             
         });
+
+        socket.on("playerLocation", (playerLocation) => {
+            async function locate() {
+            for (const player of players) {
+                if (player.id === socket.id) {
+                      player.x = playerLocation[0];
+                      player.y = playerLocation[1];
+                }
+            }
+            }
+            locate()
+        })
 
         socket.on("fishing", () => {
 
@@ -736,7 +750,7 @@ async function main() {
     setInterval(() => {
         const now = Date.now();
         const delta = now - lastUpdate;
-        tick(delta);
+        //tick(delta);
         lastUpdate = now;        
     }, 1000 / tickRate);
 }

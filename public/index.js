@@ -753,7 +753,7 @@ socket.on("loginAttempt", (msg) => {
   if(msg === "success") {
     audioIntro.pause();
     loggedIn.play();
-    window.requestAnimationFrame(canvasLobbyLoop);
+    setInterval(canvasLobbyLoop, 16.67);
     
     loginScreen.classList.add('downLogIn');
     chatInput.style.display = "block";
@@ -792,6 +792,7 @@ const inputs = {
   left: false,
   right: false,
 };
+
 let animPlayer = "idleRight";
 let lastLookPlayer = "right";
 let angleMouse;
@@ -812,6 +813,9 @@ let movingUp = false;
 let movingDown = false;
 let movingLeft = false;
 let movingRight = false;
+
+let playerX = 2880;
+let playerY = 3568;
 
 window.addEventListener("keydown", (e) => {
   if (e.key === "w" || e.key === "z" ) {
@@ -967,7 +971,6 @@ canvasLobby.addEventListener("mousedown", (e) => {
 //Weapon shoot <
 
 //Weapon aim >
-
 window.addEventListener("mousemove", (e) => {
     angleMouse = Math.atan2(
       e.clientY - canvasLobby.height / 2,
@@ -981,12 +984,10 @@ window.addEventListener("mousemove", (e) => {
         behavior: 'smooth' // This provides a smooth scrolling effect (not supported in all browsers)
       });
     }
-  });
-
+});
 //Weapon aim <
 
 //Player Animation >
-
 let playerSpriteWidth = character.width / 4;
 let playerSpriteHeight = character.height / 4;
 let playerWidth = character.width / 4;
@@ -999,7 +1000,6 @@ let frameCurrentPlayer = 0;
 let playerCutX = 0;
 let playerCutY = 0;
 let playerFramesDrawn = 0;
-
 //Player Animation <
 
 let frameCurrentMap = 0;
@@ -1037,19 +1037,15 @@ const targetFrameTime = 1000 / 60; // 60 frames per second
 
 //Base Map Canvas >
 
-function canvasLobbyLoop(timestamp) {
-  const deltaTime = timestamp - lastFrameTime;
+function canvasLobbyLoop() {
 
   let cameraX = 0;
   let cameraY = 0;
   if (myPlayer) {
-    cameraX = myPlayer.x - canvasLobby.width / 2 + 10;
-    cameraY = myPlayer.y - canvasLobby.height / 2 + 50;
+    cameraX = playerX - canvasLobby.width / 2 + 10;
+    cameraY = playerY - canvasLobby.height / 2 + 50;
   }
-
-  if (deltaTime >= targetFrameTime) {
   
-  lastFrameTime = timestamp - (deltaTime % targetFrameTime);
   canvas.clearRect(0, 0, canvasLobby.width, canvasLobby.height);
   canvas.imageSmoothingEnabled = false;
   
@@ -1088,30 +1084,38 @@ function canvasLobbyLoop(timestamp) {
     //Player Movement >
     if (movingLeft && allowedMoveUpLeft) {
       inputs["left"] = true;
+      playerX -= 4;
     } else {
       inputs["left"] = false;
     }
     if (movingRight && allowedMoveUpRight) {
       inputs["right"] = true;
+      playerX += 4;
     } else {
       inputs["right"] = false;
     }
     if (movingUp && allowedMoveUpUp) {
       inputs["up"] = true;
+      playerY -= 4;
     } else {
       inputs["up"] = false;
     }
     if (movingDown && allowedMoveUpDown) {
       inputs["down"] = true;
+      playerY += 4;
     } else {
       inputs["down"] = false;
     }
+
+    let playerLocation = [playerX, playerY]
+
     socket.emit("inputs", inputs);
+    socket.emit("playerLocation", playerLocation);
     //Player Movement <
 
     //Player Collision >
-    let playerColminX = myPlayer.x - cameraX -25;
-    let playerColminY = myPlayer.y - cameraY + 80;
+    let playerColminX = playerX - cameraX -25;
+    let playerColminY = playerY - cameraY + 80;
     let playerColLengthX = playerWidth - 310;
     let playerColLengthY = playerHeight - 540;
     canvas.fillStyle = "rgb(255, 0, 13, 0.0)"; //Change the last value to 0.3 to male it visible
@@ -1289,6 +1293,112 @@ function canvasLobbyLoop(timestamp) {
     //Cape <
 
     //Movement >
+    if (player.username === myPlayer.username) {
+      if (player.anim === "idleRight" && player.lastLooked === "right") {
+        frameCurrentPlayer = frameCurrentPlayer % 4;
+        playerCutX = frameCurrentPlayer * playerWidth;
+        canvas.drawImage(
+          armor,
+          playerCutX,
+          playerCutY + 575,
+          playerWidth,
+          playerHeight,
+          playerX - cameraX -30,
+          playerY - cameraY,
+          playerWidth - playerZoomX,
+          playerHeight - playerZoomY,
+        );
+        canvas.drawImage(
+          artifact,
+          playerCutX,
+          playerCutY + 575,
+          playerWidth,
+          playerHeight,
+          playerX - cameraX -30,
+          playerY - cameraY,
+          playerWidth - playerZoomX,
+          playerHeight - playerZoomY,
+        );
+      }
+      if (player.anim === "idleRight" && player.lastLooked === "left") {
+        frameCurrentPlayer = frameCurrentPlayer % 4;
+        playerCutX = frameCurrentPlayer * playerWidth;
+        canvas.drawImage(
+          armor,
+          playerCutX,
+          playerCutY + 1728,
+          playerWidth,
+          playerHeight,
+          playerX - cameraX -15,
+          playerY - cameraY,
+          playerWidth - playerZoomX,
+          playerHeight - playerZoomY,
+        );
+        canvas.drawImage(
+          artifact,
+          playerCutX,
+          playerCutY + 1728,
+          playerWidth,
+          playerHeight,
+          playerX - cameraX -15,
+          playerY - cameraY,
+          playerWidth - playerZoomX,
+          playerHeight - playerZoomY,
+        );
+      }
+      if (player.anim === "runRight") {
+        frameCurrentPlayer = frameCurrentPlayer % 4;
+        playerCutX = frameCurrentPlayer * playerWidth;
+        canvas.drawImage(
+          armor,
+          playerCutX,
+          playerCutY,
+          playerWidth,
+          playerHeight,
+          playerX - cameraX -30,
+          playerY - cameraY,
+          playerWidth - playerZoomX,
+          playerHeight - playerZoomY,
+        );
+        canvas.drawImage(
+          artifact,
+          playerCutX,
+          playerCutY,
+          playerWidth,
+          playerHeight,
+          playerX - cameraX -30,
+          playerY - cameraY,
+          playerWidth - playerZoomX,
+          playerHeight - playerZoomY,
+        );
+      }
+      if (player.anim === "runLeft") {
+        frameCurrentPlayer = frameCurrentPlayer % 4;
+        playerCutX = frameCurrentPlayer * playerWidth;
+        canvas.drawImage(
+          armor,
+          playerCutX,
+          playerCutY + 1150,
+          playerWidth,
+          playerHeight,
+          playerX - cameraX - 15,
+          playerY - cameraY,
+          playerWidth - playerZoomX,
+          playerHeight - playerZoomY,
+        );
+        canvas.drawImage(
+          artifact,
+          playerCutX,
+          playerCutY + 1150,
+          playerWidth,
+          playerHeight,
+          playerX - cameraX - 15,
+          playerY - cameraY,
+          playerWidth - playerZoomX,
+          playerHeight - playerZoomY,
+        );
+      }
+    } else {
     if (player.anim === "idleRight" && player.lastLooked === "right") {
       frameCurrentPlayer = frameCurrentPlayer % 4;
       playerCutX = frameCurrentPlayer * playerWidth;
@@ -1393,16 +1503,28 @@ function canvasLobbyLoop(timestamp) {
         playerHeight - playerZoomY,
       );
     }
+  }
     //Movement <
-    
+
     // Weapon
-    canvas.save(); // Save the current canvas state
-    canvas.translate(player.x - cameraX +18, player.y - cameraY +50); // Translate to the player's position
-    canvas.rotate(player.weaponAngle); // Rotate based on the mouse angle
    if (player.weapon[0]) {
-     if (player.weapon[0].name === "stick") {
-       canvas.drawImage(WeaponStick ,0, -7.5, 80, 20); // Draw the rectangle centered around the rotated point
+
+    if (player.username === myPlayer.username) { 
+      canvas.save(); // Save the current canvas state
+      canvas.translate(playerX - cameraX +18, playerY - cameraY +50); // Translate to the player's position
+      canvas.rotate(player.weaponAngle); // Rotate based on the mouse angle
+      if (player.weapon[0].name === "stick") {
+        canvas.drawImage(WeaponStick ,0, -7.5, 80, 20); // Draw the rectangle centered around the rotated point
+      }
+    } else {
+      canvas.save(); // Save the current canvas state
+      canvas.translate(player.x - cameraX +18, player.y - cameraY +50); // Translate to the player's position
+      canvas.rotate(player.weaponAngle); // Rotate based on the mouse angle
+      if (player.weapon[0].name === "stick") {
+        canvas.drawImage(WeaponStick ,0, -7.5, 80, 20); // Draw the rectangle centered around the rotated point
+      }
      }
+
     }
     canvas.restore(); // Restore the canvas state to what it was before translation and rotation
     // Weapon
@@ -1419,13 +1541,19 @@ function canvasLobbyLoop(timestamp) {
     //Chat
 
     //Username
-        // canvas.drawImage(nameBubbleGreen, player.x - cameraX -33, player.y - cameraY -26, 80,23)
-        canvas.drawImage(nameBubbleGreen, player.x - cameraX -33, player.y - cameraY -51, 100,50)
-    
-        canvas.font = "bolder 14px Arial";
-        canvas.textAlign = "center";
-        canvas.fillStyle = "black";
-        canvas.fillText(player.username, player.x - cameraX +15, player.y - cameraY -10);
+    if (player.username === myPlayer.username) {  
+      canvas.drawImage(nameBubbleGreen, playerX - cameraX -40, playerY- cameraY -51, 100,50)
+      canvas.font = "bolder 14px Arial";
+      canvas.textAlign = "center";
+      canvas.fillStyle = "black";
+      canvas.fillText(player.username, playerX - cameraX +10, playerY - cameraY -10);
+    } else {
+      canvas.drawImage(nameBubbleGreen, player.x - cameraX -40, player.y - cameraY -51, 100,50)
+      canvas.font = "bolder 14px Arial";
+      canvas.textAlign = "center";
+      canvas.fillStyle = "black";
+      canvas.fillText(player.username, player.x - cameraX +10, player.y - cameraY -10);
+    }
     //Username
 }
 
@@ -1476,12 +1604,7 @@ function canvasLobbyLoop(timestamp) {
     }
     enemyAnimDelay = 2;
   }
-  window.requestAnimationFrame(canvasLobbyLoop);
-
-  } else {
-    // Not enough time has passed, wait for the next frame
-    window.requestAnimationFrame(canvasLobbyLoop);
-  }
+  
 }
 
 //Base Map Canvas <
