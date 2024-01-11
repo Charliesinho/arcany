@@ -286,6 +286,7 @@ async function main() {
                 if (player.id === socket.id) {
                       player.x = playerLocation[0];
                       player.y = playerLocation[1];
+                    //   console.log("recieving:", playerLocation[0])
                 }
             }
             }

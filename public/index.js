@@ -817,6 +817,14 @@ let movingRight = false;
 let playerX = 2880;
 let playerY = 3568;
 
+let playerLocation = [playerX, playerY];
+
+setInterval(() => {
+  playerLocation = [playerX, playerY];
+  socket.emit("playerLocation", playerLocation);
+  socket.emit("inputs", inputs);
+}, 100);
+
 window.addEventListener("keydown", (e) => {
   if (e.key === "w" || e.key === "z" ) {
     footsteps.play();
@@ -1106,11 +1114,7 @@ function canvasLobbyLoop() {
     } else {
       inputs["down"] = false;
     }
-
-    let playerLocation = [playerX, playerY]
-
-    socket.emit("inputs", inputs);
-    socket.emit("playerLocation", playerLocation);
+    
     //Player Movement <
 
     //Player Collision >
