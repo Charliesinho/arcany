@@ -17,7 +17,7 @@
     <div id="inventoryWindow" class="equipmentWindow">        
       <div class="pointerActivator inventoryItem equipmentItem weaponEquipped"></div>
       <div class="pointerActivator inventoryItem equipmentItem soulEquipped"></div>
-      <div class="pointerActivator inventoryItem equipmentItem"></div>
+      <div class="pointerActivator inventoryItem equipmentItem artifactEquipped"></div>
     </div>
     <div id="ui">
       <div><div id="uiTop"></div></div>
@@ -35,11 +35,12 @@
       
       <div class="inventorySwitch">
         <button class="pointerActivator switchButton inventorySwicther">🎒</button>
-        <button class="pointerActivator switchButton soulsSwitcher">🌌</button>
-        <button class="pointerActivator switchButton deleteButton">❌</button>
-        <button class="pointerActivator switchButton mapSwitcher">🌍</button>
+        <button class="pointerActivator switchButton soulsSwitcher">✨</button>
+        <button class="pointerActivator switchButton capeSwitcher">🎩</button>
         <button class="pointerActivator switchButton booksSwitcher">📖</button>
+        <button class="pointerActivator switchButton deleteButton">❌</button>
       </div>
+
       <div id="inventoryWindow" class="inventoryShadow inventoryHide">
         <img src="./backpack.png" id="backpackImage"/>
         <div class="pointerActivator inventoryItem inventorySlot0"></div>
@@ -52,6 +53,7 @@
         <div class="pointerActivator inventoryItem inventorySlot7"></div>
         <div class="pointerActivator inventoryItem inventorySlot8"></div>
       </div>
+
       <div id="inventoryWindow" class="soulWindow soulsHide">        
         <div class="pointerActivator inventoryItem soulSlot soul1"></div>
         <div class="pointerActivator inventoryItem soulSlot soul2"></div>
@@ -62,6 +64,18 @@
         <div class="pointerActivator inventoryItem soulSlot soul7"></div>
         <div class="pointerActivator inventoryItem soulSlot soul8"></div>
         <div class="pointerActivator inventoryItem soulSlot soul9"></div>
+      </div>
+
+      <div id="inventoryWindow" class="capeWindow capeHide">        
+        <div class="pointerActivator inventoryItem capeSlot cape1"></div>
+        <div class="pointerActivator inventoryItem capeSlot cape2"></div>
+        <div class="pointerActivator inventoryItem capeSlot cape3"></div>
+        <div class="pointerActivator inventoryItem capeSlot cape4"></div>
+        <div class="pointerActivator inventoryItem capeSlot cape5"></div>
+        <div class="pointerActivator inventoryItem capeSlot cape6"></div>
+        <div class="pointerActivator inventoryItem capeSlot cape7"></div>
+        <div class="pointerActivator inventoryItem capeSlot cape8"></div>
+        <div class="pointerActivator inventoryItem capeSlot cape9"></div>
       </div>
     </div>
     <div>

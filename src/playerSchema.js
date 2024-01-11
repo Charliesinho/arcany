@@ -11,12 +11,10 @@ const PlayerSchema = new mongoose.Schema({
   password: {
     type: String,
   },
-
   health: {
     type: Number,
     default: 3,
   },
-
   inventory: {
     type: Array,
     default: [],
@@ -37,12 +35,19 @@ const PlayerSchema = new mongoose.Schema({
     type: Array,
     default: [],
   },
-
+  artifacts: {
+    type: Array,
+    default: [],
+  },
   currency: {
     type: Number,
     default: 0,
   },
   fishing: {
+    type: Number,
+    default: 0,
+  },
+  level: {
     type: Number,
     default: 0,
   }

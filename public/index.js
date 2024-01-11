@@ -1,7 +1,7 @@
 //Change this to push >
 
-// const socket = io(`ws://localhost:5000`);
-const socket = io(`https://arcany.up.railway.app/`);
+const socket = io(`ws://localhost:5000`);
+// const socket = io(`https://arcany.up.railway.app/`);
 
 //Change this to push <
 
@@ -10,7 +10,7 @@ window.onload = function() {
 };
 
 const mapLobby = new Image();
-mapLobby.src = "lobby.png";
+mapLobby.src = "baseMap.png";
 
 const character = new Image();
 character.src = "./skins/player.png";
@@ -20,6 +20,9 @@ frogWarriorSkin.src = "./skins/frogWarrior.png";
 
 const cape = new Image();
 cape.src = "./capes/cape.png";
+
+const transparentCape = new Image();
+transparentCape.src = "./capes/transparent.png";
 
 const slime = new Image();
 slime.src = "slime.png";
@@ -135,17 +138,16 @@ const inventorySlots = {
 const equippedItems = {
   weapon: document.querySelector(".weaponEquipped"),
   soul: document.querySelector(".soulEquipped"),
+  artifact: document.querySelector(".artifactEquipped"),
 }
 const soulsInventory = {
   soul1: document.querySelector(".soul1"),
 }
-const inventorySwitcher = document.querySelector(".inventorySwicther")
-const soulsSwitcher = document.querySelector(".soulsSwitcher")
-const inventoryWindowShow = document.querySelector(".inventoryHide")
-inventoryWindowShow.style.display = "flex"
-const soulsWindowShow = document.querySelector(".soulsHide")
-soulsWindowShow.style.display = "none";
-const deleteButton = document.querySelector(".deleteButton")
+
+const artifactInventory = {
+  cape1: document.querySelector(".cape1"),
+}
+
 const catchGif = document.getElementById("catchGif");
 
 //Mouse cursor >
@@ -192,12 +194,13 @@ function handleLogin(action) {
 }
 
 openerScreenButton.addEventListener("click", function() {
-  openerScreen.classList.add('animIntro');
+  loginScreen.style.display = "block";
   window.scrollTo({
     top: 0,
     behavior: 'smooth'
   });
   setTimeout(() => {
+    openerScreen.classList.add('animIntro');
     audioIntro.play();    
   }, 500);
   audioClick.play();
@@ -218,10 +221,10 @@ createButton.addEventListener("click", function(){
 //   body.style.overflow = "none"
 // });
 
-playerInfoCorner.addEventListener("click", function(){
-  menuUi.style.top = "0vh"
-  body.style.overflowY = "hidden"
-});
+// playerInfoCorner.addEventListener("click", function(){
+//   menuUi.style.top = "0vh"
+//   body.style.overflowY = "hidden"
+// });
 
 window.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
@@ -262,16 +265,46 @@ function cameraShake() {
 
 let deleting = false;
 
+//Switch inventories >
+
+const inventorySwitcher = document.querySelector(".inventorySwicther")
+const soulsSwitcher = document.querySelector(".soulsSwitcher")
+const capeSwitcher = document.querySelector(".capeSwitcher")
+
+const inventoryWindowShow = document.querySelector(".inventoryHide")
+inventoryWindowShow.style.display = "flex"
+
+const soulsWindowShow = document.querySelector(".soulsHide")
+soulsWindowShow.style.display = "none";
+
+const capeWindowShow = document.querySelector(".capeHide")
+capeWindowShow.style.display = "none";
+
+const deleteButton = document.querySelector(".deleteButton")
+
 inventorySwitcher.addEventListener("click", function () {
   audioClick.play();
   inventoryWindowShow.style.display = "flex";
   soulsWindowShow.style.display = "none";
+  capeWindowShow.style.display = "none";
 })
 
 soulsSwitcher.addEventListener("click", function () {
   audioClick.play();
   inventoryWindowShow.style.display = "none";
   soulsWindowShow.style.display = "flex";
+  capeWindowShow.style.display = "none";
+
+  deleting = false;
+  inventoryWindowShow.style.background = "var(--backgroundObjects)";
+  deleteButton.style.background = "rgb(255, 110, 110)";
+})
+
+capeSwitcher.addEventListener("click", function () {
+  audioClick.play();
+  inventoryWindowShow.style.display = "none";
+  soulsWindowShow.style.display = "none";
+  capeWindowShow.style.display = "flex";
 
   deleting = false;
   inventoryWindowShow.style.background = "var(--backgroundObjects)";
@@ -293,8 +326,40 @@ deleteButton.addEventListener("click", function () {
   }
 })
 
+//Switch inventories <
+
+//Inventory interaction >
+
 function interactInventory(item, index) {
-  if (item.type !== "soul") {
+  if (item.type === "soul") {
+
+    if(consumeAvailable === true) {
+        
+      consumeAvailable = false;
+
+      setTimeout(() => {
+        consumeAvailable = true;
+      }, 3000);
+
+      if (item.name === "warrior") {
+        socket.emit("consumable", item);
+      }
+    }
+  } else if (item.type === "artifact") {
+
+    if(consumeAvailable === true) {
+        
+      consumeAvailable = false;
+
+      setTimeout(() => {
+        consumeAvailable = true;
+      }, 3000);
+
+      if (item.name === "rags") {
+        socket.emit("consumable", item);
+      }
+    }
+  } else {
     if (inventorySlots[`inventorySlot${index}`].style.background !== "none") {
       if(consumeAvailable === true && deleting === false) {
         
@@ -320,20 +385,6 @@ function interactInventory(item, index) {
         if (item.type === "weapon") {
           socket.emit("consumable", consumable);
         }
-      }
-    }
-  } else {
-
-    if(consumeAvailable === true) {
-        
-      consumeAvailable = false;
-
-      setTimeout(() => {
-        consumeAvailable = true;
-      }, 3000);
-
-      if (item.name === "warrior") {
-        socket.emit("consumable", item);
       }
     }
   }
@@ -439,8 +490,6 @@ function interactEquipment (item, index) {
     }
 
     if (item.type === "soul") {
-
-        console.log(consumeAvailable)
         if(consumeAvailable === true) {
         
           consumeAvailable = false;
@@ -455,8 +504,26 @@ function interactEquipment (item, index) {
           }       
         }
     } 
+
+    if (item.type === "artifact") {
+      if(consumeAvailable === true) {
+      
+        consumeAvailable = false;
+  
+        setTimeout(() => {
+          consumeAvailable = true;
+        }, 3000);
+
+        if (equippedItems[`artifact`].style.background !== "none") {
+      
+            socket.emit("unequip", item);
+        }       
+      }
+  } 
   }
 };
+
+//Inventory interaction <
 
 function obtainedAnim (image) {
 
@@ -511,7 +578,7 @@ socket.on("players", (serverPlayers) => {
   else {
     fishingLevel.innerHTML = "5";
     fishingLevel.style.color = "white"
-    fishingLevel.style.textShadow = "0 0 2px white"
+    fishingLevel.style.textShadow = "0 0 3px white"
   }
 
   if (myPlayer.souls.length) {
@@ -527,33 +594,46 @@ socket.on("players", (serverPlayers) => {
       }
     }
   }
-
-  if (myPlayer.armor.length) {
-    for (const item of myPlayer.armor) {
-      equippedItems[`soul`].style.background = `url(${item.image})`;
-      equippedItems[`soul`].style.backgroundSize = 'cover';
   
-      if (item.name === "warrior") {
-        soulImg.src = "./souls/basicWarrior.png";
-        mountainsUi.style.background = "url(\"./soulsEnviroments/mountains.png\")"
-        mountainsUi.style.filter = "blur(2px)";
-        mountainsUi.style.backgroundPosition = "center";
-        menuUi.style.background = "linear-gradient(hsl(184, 100%, 87%) 0%, rgb(209, 175, 147) 100%)";
-        circleCharacter.style.background = ""
-        usernameMenu.style.color = "";
-        usernameMenu.style.textShadow = "";
+    if (myPlayer.armor.length) {
+      for (const item of myPlayer.armor) {
+        equippedItems[`soul`].style.background = `url(${item.image})`;
+        equippedItems[`soul`].style.backgroundSize = 'cover';
+    
+        if (item.name === "warrior") {
+          soulImg.src = "./souls/basicWarrior.png";
+          mountainsUi.style.background = "url(\"./soulsEnviroments/mountains.png\")"
+          mountainsUi.style.filter = "blur(2px)";
+          mountainsUi.style.backgroundPosition = "center";
+          menuUi.style.background = "linear-gradient(hsl(184, 100%, 87%) 0%, rgb(209, 175, 147) 100%)";
+          circleCharacter.style.background = ""
+          usernameMenu.style.color = "";
+          usernameMenu.style.textShadow = "";
+        }
+      }
+    } else {
+      soulImg.src = "./souls/souless.png"
+      mountainsUi.style.background = "url(\"./soulsEnviroments/desert.png\")"
+      mountainsUi.style.filter = "blur(2px) saturate(.3)";
+      mountainsUi.style.backgroundPosition = "bottom";
+      mountainsUi.style.backgroundRepeat = "no-repeat";
+      menuUi.style.background = "linear-gradient(hsl(0, 0%, 100%) 0%, rgb(154, 126, 109) 100%)";
+      circleCharacter.style.background = "linear-gradient(rgb(255, 111, 111) 0%, #ff1515 100%)";
+      usernameMenu.style.color = "rgb(255, 255, 255)";
+      usernameMenu.style.textShadow = "0 0 10px rgb(255, 255, 255)";
+    }
+
+  if (myPlayer.artifacts.length) {
+    for (const artifact of myPlayer.artifacts) {
+      if (artifact.name = "rags") {
+        artifactInventory[`cape1`].style.background = `url(${artifact.image})`;
+        artifactInventory[`cape1`].style.backgroundSize = 'cover';
+        artifactInventory[`cape1`].addEventListener("mousedown", (e) => {
+          interactInventory(artifact);
+          audioEquip.play();        
+        }); 
       }
     }
-  } else {
-    soulImg.src = "./souls/souless.png"
-    mountainsUi.style.background = "url(\"./soulsEnviroments/desert.png\")"
-    mountainsUi.style.filter = "blur(2px) saturate(.3)";
-    mountainsUi.style.backgroundPosition = "bottom";
-    mountainsUi.style.backgroundRepeat = "no-repeat";
-    menuUi.style.background = "linear-gradient(hsl(0, 0%, 100%) 0%, rgb(154, 126, 109) 100%)";
-    circleCharacter.style.background = "linear-gradient(rgb(255, 111, 111) 0%, #ff1515 100%)";
-    usernameMenu.style.color = "rgb(255, 255, 255)";
-    usernameMenu.style.textShadow = "0 0 10px rgb(255, 255, 255)";
   }
 
   if (myPlayer.armor.length) {
@@ -563,6 +643,19 @@ socket.on("players", (serverPlayers) => {
     });      
   }  else {
     equippedItems[`soul`].style.background = `none`;
+  }
+
+  if (myPlayer.artifact.length) {
+
+    equippedItems[`artifact`].style.background = `url(${myPlayer.artifact[0].image})`;
+    equippedItems[`artifact`].style.backgroundSize = 'cover';
+
+    equippedItems[`artifact`].addEventListener("mousedown", (e) => {
+      interactEquipment(myPlayer.artifact[0])
+      audioClick.play();
+    });      
+  }  else {
+    equippedItems[`artifact`].style.background = `none`;
   }
 
   for (const item of myPlayer.weapon) {
@@ -580,8 +673,6 @@ socket.on("players", (serverPlayers) => {
   }
  
   inventorySlots[`inventorySlot0`].style.background = `none`;
-
-  
     
     if (myPlayer.inventory.length !== 0) {
       for (let i = 0; i < myPlayer.inventory.length; i++) {
@@ -662,7 +753,7 @@ socket.on("loginAttempt", (msg) => {
   if(msg === "success") {
     audioIntro.pause();
     loggedIn.play();
-
+    window.requestAnimationFrame(canvasLobbyLoop);
     
     loginScreen.classList.add('downLogIn');
     chatInput.style.display = "block";
@@ -711,34 +802,49 @@ let fishing = false;
 let width = 20;
 let marginFish = -50;
 
+//Player movement >
+let allowedMoveUpUp = true;
+let allowedMoveUpDown = true;
+let allowedMoveUpLeft = true;
+let allowedMoveUpRight = true;
+
+let movingUp = false;
+let movingDown = false;
+let movingLeft = false;
+let movingRight = false;
+
 window.addEventListener("keydown", (e) => {
   if (e.key === "w" || e.key === "z" ) {
     footsteps.play();
     footsteps.loop = true;
-    inputs["up"] = true;
+
+    movingUp = true;  
   } else if (e.key === "s") {
     footsteps.play();
     footsteps.loop = true;
-    inputs["down"] = true;
+
+    movingDown = true;
   } else if (e.key === "d") {
     footsteps.play();
     footsteps.loop = true;
-    inputs["right"] = true;
     animPlayer = "runRight";
     lastLookPlayer = "right";
+
+    movingRight = true;
   } else if (e.key === "a" || e.key === "q") {
     footsteps.play();
     footsteps.loop = true;
-    inputs["left"] = true;
     animPlayer = "runLeft";
     lastLookPlayer = "left";
+
+    movingLeft = true;
   }
 
-  socket.emit("inputs", inputs);
+  // socket.emit("inputs", inputs);
   socket.emit("animPlayer", animPlayer);
   socket.emit("lastLookPlayer", lastLookPlayer);
 
-  //Fishing Minigame
+  //Fishing Minigame >
 
   if(e.key === "e" && fishAvailable === true && fishing === false) {
 
@@ -804,24 +910,25 @@ window.addEventListener("keydown", (e) => {
     };
   }
 
-   //Fishing Minigame
+  //Fishing Minigame <
 });
 
 window.addEventListener("keyup", (e) => {
   if (e.key === "w" || e.key === "z") {
-    inputs["up"] = false;
+    movingUp = false;
   } else if (e.key === "s") {
-    inputs["down"] = false;
+    movingDown = false;
   } else if (e.key === "d") {
-    inputs["right"] = false;
+    movingRight = false;
   } else if (e.key === "a" || e.key === "q") {
-    inputs["left"] = false;
+    // inputs["left"] = false;
+    movingLeft = false;
   }
   if (
-    inputs["up"] === false &&
-    inputs["down"] === false &&
-    inputs["right"] === false &&
-    inputs["left"] === false
+    movingUp === false &&
+    movingDown === false &&
+    movingRight === false &&
+    movingLeft === false
   ) {
     animPlayer = "idleRight";
     footsteps.pause();
@@ -831,7 +938,9 @@ window.addEventListener("keyup", (e) => {
   socket.emit("inputs", inputs);
   socket.emit("animPlayer", animPlayer);
 });
+//Player movement <
 
+//Weapon shoot >
 canvasLobby.addEventListener("mousedown", (e) => {
   if (shootingBlock === false) {
     if (myPlayer.weapon[0]) {
@@ -855,6 +964,10 @@ canvasLobby.addEventListener("mousedown", (e) => {
     }
   }
 });
+//Weapon shoot <
+
+//Weapon aim >
+
 window.addEventListener("mousemove", (e) => {
     angleMouse = Math.atan2(
       e.clientY - canvasLobby.height / 2,
@@ -870,18 +983,32 @@ window.addEventListener("mousemove", (e) => {
     }
   });
 
-//Player Animation
+//Weapon aim <
+
+//Player Animation >
+
 let playerSpriteWidth = character.width / 4;
 let playerSpriteHeight = character.height / 4;
-const playerWidth = character.width / 4;
-const playerHeight = character.height / 4;
+let playerWidth = character.width / 4;
+let playerHeight = character.height / 4;
+let playerZoomX = 315;
+let playerZoomY = 470;
+
 let framesPlayerTotal = 4;
 let frameCurrentPlayer = 0;
 let playerCutX = 0;
 let playerCutY = 0;
 let playerFramesDrawn = 0;
 
-// Enemy
+//Player Animation <
+
+let frameCurrentMap = 0;
+let mapCutX = 0;
+let mapCutY = 0;
+let mapFramesDrawn = 0;
+
+// Enemy >
+
 const enemyWidth = slime.width / 4;
 const enemyHeight = slime.height / 1;
 let framesEnemyTotal = 4;
@@ -891,7 +1018,10 @@ let enemyCutY = 0;
 let enemyFramesDrawn = 0;
 let enemyAnimDelay = 2;
 
-//Fishing Area
+// Enemy <
+
+//Fishing Permissions >
+
 let fishingArea = {
   minX: 0,
   minY: 0,
@@ -900,43 +1030,222 @@ let fishingArea = {
 };
 let fishAvailable = false;
 
+//Fishing Permissions <
 
 let lastFrameTime = 0;
 const targetFrameTime = 1000 / 60; // 60 frames per second
 
+//Base Map Canvas >
+
 function canvasLobbyLoop(timestamp) {
   const deltaTime = timestamp - lastFrameTime;
-
-  if (deltaTime >= targetFrameTime) {
-    lastFrameTime = timestamp - (deltaTime % targetFrameTime);
-  canvas.clearRect(0, 0, canvasLobby.width, canvasLobby.height);
-  canvas.imageSmoothingEnabled = false;
 
   let cameraX = 0;
   let cameraY = 0;
   if (myPlayer) {
     cameraX = myPlayer.x - canvasLobby.width / 2 + 10;
     cameraY = myPlayer.y - canvasLobby.height / 2 + 50;
-
-    
   }
+
+  if (deltaTime >= targetFrameTime) {
   
-  canvas.drawImage(mapLobby, cameraShakeX - cameraX, cameraShakeY - cameraY, 4000, 4000);
+  lastFrameTime = timestamp - (deltaTime % targetFrameTime);
+  canvas.clearRect(0, 0, canvasLobby.width, canvasLobby.height);
+  canvas.imageSmoothingEnabled = false;
+  
+  // canvas.drawImage(mapLobby, cameraShakeX - cameraX, cameraShakeY - cameraY, 4500, 4500);
+
+  //Map Animation >
+
+  frameCurrentMap = frameCurrentMap % 4;
+  mapCutX = frameCurrentMap * 1000;
+
+  canvas.drawImage(
+    mapLobby,
+    mapCutX,
+    mapCutY,
+    1000,
+    1000,
+    cameraShakeX - cameraX,
+    cameraShakeY - cameraY,
+    4500,
+    4500,
+  );
+
+  mapFramesDrawn++;
+
+  if (mapFramesDrawn >= 10) {
+    frameCurrentMap++;
+    mapFramesDrawn = 0;
+  }
+
+  //Map Animation <
+
+  //Local Actions >
   
   if (myPlayer) {
+
+    //Player Movement >
+    if (movingLeft && allowedMoveUpLeft) {
+      inputs["left"] = true;
+    } else {
+      inputs["left"] = false;
+    }
+    if (movingRight && allowedMoveUpRight) {
+      inputs["right"] = true;
+    } else {
+      inputs["right"] = false;
+    }
+    if (movingUp && allowedMoveUpUp) {
+      inputs["up"] = true;
+    } else {
+      inputs["up"] = false;
+    }
+    if (movingDown && allowedMoveUpDown) {
+      inputs["down"] = true;
+    } else {
+      inputs["down"] = false;
+    }
+    socket.emit("inputs", inputs);
+    //Player Movement <
+
+    //Player Collision >
     let playerColminX = myPlayer.x - cameraX -25;
-    let playerColminY = myPlayer.y - cameraY + 100;
-    let playerColLengthX = playerWidth - 300;
+    let playerColminY = myPlayer.y - cameraY + 80;
+    let playerColLengthX = playerWidth - 310;
     let playerColLengthY = playerHeight - 540;
-    canvas.fillStyle = "rgb(255, 0, 13, 0.3)";
+    canvas.fillStyle = "rgb(255, 0, 13, 0.0)"; //Change the last value to 0.3 to male it visible
     canvas.fillRect(playerColminX, playerColminY, playerColLengthX, playerColLengthY);
+    //Player Collision <
+
+    //Player Location >
+    // console.log(myPlayer.x, myPlayer.y)
+    //Player Location <
+
+    //Grasslands walls >
+    let wallsVisibility = 0.0;
     
-    //Fishing Area
-    fishingArea.minX = 1400 - cameraShakeX - cameraX;
-    fishingArea.minY = 1900 - cameraShakeY - cameraY;
-    fishingArea.maxX = 580;
+    //Leftwall of island
+    const grassLeftWallX = 2630 - cameraShakeX - cameraX;
+    const grassLeftWallY = 3100 - cameraShakeY - cameraY;
+    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
+    canvas.fillRect(grassLeftWallX, grassLeftWallY, -20, 600);
+
+    //Wall right of the dock
+    const grassRightWallX1 = 3500 - cameraShakeX - cameraX;
+    const grassRightWallY1 = 3100 - cameraShakeY - cameraY;
+    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
+    canvas.fillRect(grassRightWallX1, grassRightWallY1, 20, 600);
+    
+    //Wall right top of the island
+    const grassRightWallX2 = 3280 - cameraShakeX - cameraX;
+    const grassRightWallY2 = 3040 - cameraShakeY - cameraY;
+    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
+    canvas.fillRect(grassRightWallX2, grassRightWallY2, 20, 300);
+
+    //Wall right down of the island
+    const grassRightWallX3 = 3280 - cameraShakeX - cameraX;
+    const grassRightWallY3 = 3460 - cameraShakeY - cameraY;
+    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
+    canvas.fillRect(grassRightWallX3, grassRightWallY3, 20, 300);
+
+    //Walls of the shop
+    const grassRightWallX4 = 2980 - cameraShakeX - cameraX;
+    const grassRightWallY4 = 3010 - cameraShakeY - cameraY;
+    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
+    canvas.fillRect(grassRightWallX4, grassRightWallY4, 200, 300);
+
+    //Wall bottom of the island
+    const grassRightWallX5 = 2580 - cameraShakeX - cameraX;
+    const grassRightWallY5 = 3600 - cameraShakeY - cameraY;
+    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
+    canvas.fillRect(grassRightWallX5, grassRightWallY5, 800, 20);
+
+    //Wall top of the island
+    const grassRightWallX6 = 2630 - cameraShakeX - cameraX;
+    const grassRightWallY6 = 3230 - cameraShakeY - cameraY;
+    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
+    canvas.fillRect(grassRightWallX6, grassRightWallY6, 800, 20);
+
+    //Wall top of the island
+    const grassRightWallX7 = 2980 - cameraShakeX - cameraX;
+    const grassRightWallY7 = 3250 - cameraShakeY - cameraY;
+    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
+    canvas.fillRect(grassRightWallX7, grassRightWallY7, 800, 20);
+
+    //Wall top of the dock
+    const grassRightWallX8 = 3280 - cameraShakeX - cameraX;
+    const grassRightWallY8 = 3320 - cameraShakeY - cameraY;
+    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
+    canvas.fillRect(grassRightWallX8, grassRightWallY8, 800, 20);
+
+    //Wall down of the dock
+    const grassRightWallX9 = 3280 - cameraShakeX - cameraX;
+    const grassRightWallY9 = 3460 - cameraShakeY - cameraY;
+    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
+    canvas.fillRect(grassRightWallX9, grassRightWallY9, 800, 20);
+
+    //Blockers Right
+    if (
+      playerColminX + playerColLengthX > grassRightWallX1 && playerColminY > grassRightWallY1 && playerColminY < grassRightWallY1 + 600 && playerColminX < grassRightWallX1 + 20
+      ||
+      playerColminX + playerColLengthX > grassRightWallX2 && playerColminY > grassRightWallY2 && playerColminY < grassRightWallY2 + 300 && playerColminX < grassRightWallX2 + 20
+      ||
+      playerColminX + playerColLengthX > grassRightWallX3 && playerColminY > grassRightWallY3 && playerColminY < grassRightWallY3 + 300 && playerColminX < grassRightWallX3 + 20
+      ||
+      playerColminX + playerColLengthX > grassRightWallX4 && playerColminY > grassRightWallY4 && playerColminY < grassRightWallY4 + 300 && playerColminX < grassRightWallX4 + 20
+      
+      ) {
+      allowedMoveUpRight = false;
+    } else {
+      allowedMoveUpRight = true;
+    }
+
+    //Blockers left
+    if (
+      playerColminX < grassLeftWallX && playerColminY > grassLeftWallY && playerColminY < grassLeftWallY + 600 && playerColminX > grassLeftWallX - 20
+      ||
+      playerColminX < grassRightWallX4 + 200 && playerColminY > grassRightWallY4 && playerColminY < grassRightWallY4 + 300 && playerColminX > grassRightWallX4
+      ) {
+      allowedMoveUpLeft = false;
+    } else {
+      allowedMoveUpLeft = true;
+    }
+
+    //Blockers top
+    if (
+      playerColminX + playerColLengthX > grassRightWallX4 && playerColminY > grassRightWallY4 && playerColminY < grassRightWallY4 + 300 && playerColminX < grassRightWallX4 + 200
+      ||
+      playerColminX + playerColLengthX > grassRightWallX6 && playerColminY + playerColLengthY > grassRightWallY6 && playerColminY < grassRightWallY6 + 20 && playerColminX < grassRightWallX6 + 800
+      ||
+      playerColminX + playerColLengthX > grassRightWallX7 && playerColminY + playerColLengthY > grassRightWallY7 && playerColminY < grassRightWallY7 + 20 && playerColminX < grassRightWallX7 + 800
+      ||
+      playerColminX + playerColLengthX > grassRightWallX8 && playerColminY + playerColLengthY > grassRightWallY8 && playerColminY < grassRightWallY8 + 20 && playerColminX < grassRightWallX8 + 800
+      ) {
+      allowedMoveUpUp = false;
+    } else {
+      allowedMoveUpUp = true;
+    }
+
+    //Blockers down
+    if (
+      playerColminX + playerColLengthX > grassRightWallX5 && playerColminY + playerColLengthY > grassRightWallY5 && playerColminY < grassRightWallY5 + 20 && playerColminX < grassRightWallX5 + 800
+      ||
+      playerColminX + playerColLengthX > grassRightWallX9 && playerColminY + playerColLengthY > grassRightWallY9 && playerColminY < grassRightWallY9 + 20 && playerColminX < grassRightWallX9 + 800
+      ) {
+      allowedMoveUpDown = false;
+    } else {
+      allowedMoveUpDown = true;
+    }
+
+    //GrassLands walls <
+    
+    //Fishing Area >
+    fishingArea.minX = 3350 - cameraShakeX - cameraX;
+    fishingArea.minY = 3380 - cameraShakeY - cameraY;
+    fishingArea.maxX = 250;
     fishingArea.maxY = 100;
-    canvas.fillStyle = "rgb(0, 89, 255, 0.3)";
+    canvas.fillStyle = "rgb(0, 89, 255, 0.0)"; //Change the last value to 0.3 to male it visible
     canvas.fillRect(fishingArea.minX, fishingArea.minY, fishingArea.maxX, fishingArea.maxY); 
     
     if (playerColminX > fishingArea.minX && 
@@ -944,13 +1253,13 @@ function canvasLobbyLoop(timestamp) {
       playerColminY > fishingArea.minY && 
       playerColLengthY + playerColLengthY < fishingArea.minY + fishingArea.maxY - 350) {
         fishAvailable = true;
-        console.log("Fish bitch");
       } else {
         fishAvailable = false;
       };
-
-    //Fishing Area
+    //Fishing Area <
     }
+
+  //Local Actions <
 
 
   for (const player of players) {
@@ -967,6 +1276,18 @@ function canvasLobbyLoop(timestamp) {
     }
     //Armor <
 
+    //Cape > 
+    let artifact = transparentCape;
+
+    if (player.artifact[0]) {
+      if (player.artifact[0].name === "rags") {
+        artifact = cape;
+      } else {
+        artifact = transparentCape;
+      }
+    }
+    //Cape <
+
     //Movement >
     if (player.anim === "idleRight" && player.lastLooked === "right") {
       frameCurrentPlayer = frameCurrentPlayer % 4;
@@ -979,19 +1300,19 @@ function canvasLobbyLoop(timestamp) {
         playerHeight,
         player.x - cameraX -30,
         player.y - cameraY,
-        playerWidth - 300,
-        playerHeight - 440,
+        playerWidth - playerZoomX,
+        playerHeight - playerZoomY,
       );
       canvas.drawImage(
-        cape,
+        artifact,
         playerCutX,
         playerCutY + 575,
         playerWidth,
         playerHeight,
         player.x - cameraX -30,
         player.y - cameraY,
-        playerWidth - 300,
-        playerHeight - 440,
+        playerWidth - playerZoomX,
+        playerHeight - playerZoomY,
       );
     }
     if (player.anim === "idleRight" && player.lastLooked === "left") {
@@ -1005,19 +1326,19 @@ function canvasLobbyLoop(timestamp) {
         playerHeight,
         player.x - cameraX -15,
         player.y - cameraY,
-        playerWidth - 300,
-        playerHeight - 440,
+        playerWidth - playerZoomX,
+        playerHeight - playerZoomY,
       );
       canvas.drawImage(
-        cape,
+        artifact,
         playerCutX,
         playerCutY + 1728,
         playerWidth,
         playerHeight,
         player.x - cameraX -15,
         player.y - cameraY,
-        playerWidth - 300,
-        playerHeight - 440,
+        playerWidth - playerZoomX,
+        playerHeight - playerZoomY,
       );
     }
     if (player.anim === "runRight") {
@@ -1031,19 +1352,19 @@ function canvasLobbyLoop(timestamp) {
         playerHeight,
         player.x - cameraX -30,
         player.y - cameraY,
-        playerWidth - 300,
-        playerHeight - 440,
+        playerWidth - playerZoomX,
+        playerHeight - playerZoomY,
       );
       canvas.drawImage(
-        cape,
+        artifact,
         playerCutX,
         playerCutY,
         playerWidth,
         playerHeight,
         player.x - cameraX -30,
         player.y - cameraY,
-        playerWidth - 300,
-        playerHeight - 440,
+        playerWidth - playerZoomX,
+        playerHeight - playerZoomY,
       );
     }
     if (player.anim === "runLeft") {
@@ -1057,30 +1378,30 @@ function canvasLobbyLoop(timestamp) {
         playerHeight,
         player.x - cameraX - 15,
         player.y - cameraY,
-        playerWidth - 300,
-        playerHeight - 440,
+        playerWidth - playerZoomX,
+        playerHeight - playerZoomY,
       );
       canvas.drawImage(
-        cape,
+        artifact,
         playerCutX,
         playerCutY + 1150,
         playerWidth,
         playerHeight,
         player.x - cameraX - 15,
         player.y - cameraY,
-        playerWidth - 300,
-        playerHeight - 440,
+        playerWidth - playerZoomX,
+        playerHeight - playerZoomY,
       );
     }
     //Movement <
     
     // Weapon
     canvas.save(); // Save the current canvas state
-    canvas.translate(player.x - cameraX +18, player.y - cameraY +60); // Translate to the player's position
+    canvas.translate(player.x - cameraX +18, player.y - cameraY +50); // Translate to the player's position
     canvas.rotate(player.weaponAngle); // Rotate based on the mouse angle
    if (player.weapon[0]) {
      if (player.weapon[0].name === "stick") {
-       canvas.drawImage(WeaponStick ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
+       canvas.drawImage(WeaponStick ,0, -7.5, 80, 20); // Draw the rectangle centered around the rotated point
      }
     }
     canvas.restore(); // Restore the canvas state to what it was before translation and rotation
@@ -1162,6 +1483,5 @@ function canvasLobbyLoop(timestamp) {
     window.requestAnimationFrame(canvasLobbyLoop);
   }
 }
-setTimeout(() => {
-  window.requestAnimationFrame(canvasLobbyLoop);
-}, 300);
+
+//Base Map Canvas <

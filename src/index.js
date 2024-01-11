@@ -52,9 +52,11 @@ function tick() {
                 player.health = clientPlayer.health;    
                 player.inventory = clientPlayer.inventory;
                 player.souls = clientPlayer.souls;
+                player.artifacts = clientPlayer.artifacts;
 
                 player.weapon = clientPlayer.weapon;
                 player.armor = clientPlayer.armor;
+                player.artifact = clientPlayer.artifact;
 
                 player.fishingLevel = clientPlayer.fishing;
             }
@@ -242,15 +244,15 @@ async function main() {
         chatMessageStore[socket.id] = "none";
         blockMovementStore[socket.id] = false;
         usernames[socket.id] = "none";
-        myPlayer[socket.id] = {socket: 0, health: 3, weapon: [], souls: [], fishing: 0}
+        myPlayer[socket.id] = {socket: 0, health: 3, weapon: [], artifact: [], souls: [], artifacts: [],  fishing: 0}
         inventoryStore[socket.id] = [];
         
 
         players.push({
             id: socket.id,
             username: "none",
-            x: 1280,
-            y: 1220,
+            x: 2880,
+            y: 3568,
 
             health: 3,
             fishingLevel: 0,
@@ -258,7 +260,9 @@ async function main() {
             inventory: [],
             weapon: [],
             armor: [],
+            artifact: [],
             souls: [],
+            artifacts: [],
 
             anim: false,
             lastLooked: "right",
@@ -459,7 +463,27 @@ async function main() {
             async function consume() {
                 const player = await Player.findOne({socket: socket.id}).exec();
 
-                if (item.type !== "soul") {
+                if (item.type === "soul") {
+                    await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
+        
+                    myPlayer[socket.id] = player;
+
+                    if (item.name === "warrior") {
+                        let arraySoul = [item];
+                        myPlayer[socket.id].armor = arraySoul;
+                        await Player.findOneAndUpdate({socket: socket.id}, {armor:  myPlayer[socket.id].armor}, {new: true});
+                    }
+                } else if (item.type === "artifact") {
+                    //await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
+        
+                    myPlayer[socket.id] = player;
+
+                    if (item.name === "rags") {
+                        let arrayArtifacts = [item];
+                        myPlayer[socket.id].artifact = arrayArtifacts;
+                        await Player.findOneAndUpdate({socket: socket.id}, {artifact:  myPlayer[socket.id].artifact}, {new: true});
+                    }
+                } else {
                     player.inventory.splice(item.index, 1);
                                            
                     await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
@@ -499,16 +523,6 @@ async function main() {
                         }
                     }
     
-                } else if (item.type === "soul") {
-                    await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
-        
-                    myPlayer[socket.id] = player;
-
-                    if (item.name === "warrior") {
-                        let arraySoul = [item];
-                        myPlayer[socket.id].armor = arraySoul;
-                        await Player.findOneAndUpdate({socket: socket.id}, {armor:  myPlayer[socket.id].armor}, {new: true});
-                    }
                 }
               };
               consume()
@@ -517,17 +531,7 @@ async function main() {
         socket.on("unequip", (equipment) => {
             async function unequip() {
 
-                if (equipment.type !== "soul") {
-                    const player = await Player.findOne({socket: socket.id}).exec();
-    
-                    player.inventory.push(equipment);
-                    player.weapon.splice(equipment.index, 1);
-                                           
-                    await Player.findOneAndUpdate({socket: socket.id}, {weapon: player.weapon}, {new: true});
-                    await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
-    
-                    myPlayer[socket.id] = player;      
-                } else {
+                if (equipment.type === "soul") {
                     const player = await Player.findOne({socket: socket.id}).exec();
     
                     player.souls = [equipment];
@@ -537,7 +541,25 @@ async function main() {
                     await Player.findOneAndUpdate({socket: socket.id}, {souls: player.souls}, {new: true});
     
                     myPlayer[socket.id] = player;   
-                }
+                } else if (equipment.type === "artifact") {
+                    const player = await Player.findOne({socket: socket.id}).exec();
+    
+                    player.artifact.splice(equipment.index, 1);
+                                           
+                    await Player.findOneAndUpdate({socket: socket.id}, {artifact: player.artifact}, {new: true});
+    
+                    myPlayer[socket.id] = player;   
+                } else {
+                    const player = await Player.findOne({socket: socket.id}).exec();
+    
+                    player.inventory.push(equipment);
+                    player.weapon.splice(equipment.index, 1);
+                                           
+                    await Player.findOneAndUpdate({socket: socket.id}, {weapon: player.weapon}, {new: true});
+                    await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
+    
+                    myPlayer[socket.id] = player;      
+                } 
                 
               };
               unequip()
@@ -555,8 +577,6 @@ async function main() {
                     arrayOfIndexes.forEach(index => {
                         playerInventory.splice(index, 1); 
                       });
-
-                      console.log(playerInventory)
 
                     await Player.findOneAndUpdate({socket: socket.id}, {inventory: playerInventory}, {new: true});
     
@@ -584,17 +604,6 @@ async function main() {
                     const loginAttempt = "success";
                     io.to(id).emit('loginAttempt', loginAttempt);
 
-                    // const frog = {
-                    //     type: "food",
-                    //     name: "frog",
-                    //     value: 2,
-                    //     image: "./inventory/commonFrog.png",
-                    // };
-
-                    // const inventoryArray = await Player.findOne({username: username}).exec();
-                    // inventoryArray.inventory.push(frog);
-
-                    // await Player.findOneAndUpdate({username: username}, {inventory: inventoryArray.inventory}, {new: true});
 
                 } else if (playerData && playerData.password !== password) { 
                     const loginAttempt = "failed";
@@ -617,7 +626,14 @@ async function main() {
                         image: "./inventory/warriorSoul.png",
                         type: "soul",
                     }
+
+                    const baseCape = {
+                        name: "rags",
+                        image: "./inventory/baseCape.png",
+                        type: "artifact",
+                    }
                     await Player.findOneAndUpdate({socket: socket.id}, {souls: [baseSoul]}, {new: true});
+                    await Player.findOneAndUpdate({socket: socket.id}, {artifacts: [baseCape]}, {new: true});
                     const playerData = await Player.findOne({username: username}).exec();
 
                     myPlayer[socket.id] = playerData;
