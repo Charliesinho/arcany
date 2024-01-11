@@ -1122,6 +1122,7 @@ function canvasLobbyLoop() {
     let playerColminY = playerY - cameraY + 80;
     let playerColLengthX = playerWidth - 310;
     let playerColLengthY = playerHeight - 540;
+    canvas.beginPath();
     canvas.fillStyle = "rgb(255, 0, 13, 0.0)"; //Change the last value to 0.3 to male it visible
     canvas.fillRect(playerColminX, playerColminY, playerColLengthX, playerColLengthY);
     //Player Collision <
@@ -1136,60 +1137,70 @@ function canvasLobbyLoop() {
     //Leftwall of island
     const grassLeftWallX = 2630 - cameraShakeX - cameraX;
     const grassLeftWallY = 3100 - cameraShakeY - cameraY;
+    canvas.beginPath();
     canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
     canvas.fillRect(grassLeftWallX, grassLeftWallY, -20, 600);
 
     //Wall right of the dock
     const grassRightWallX1 = 3500 - cameraShakeX - cameraX;
     const grassRightWallY1 = 3100 - cameraShakeY - cameraY;
+    canvas.beginPath();
     canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
     canvas.fillRect(grassRightWallX1, grassRightWallY1, 20, 600);
     
     //Wall right top of the island
     const grassRightWallX2 = 3280 - cameraShakeX - cameraX;
     const grassRightWallY2 = 3040 - cameraShakeY - cameraY;
+    canvas.beginPath();
     canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
     canvas.fillRect(grassRightWallX2, grassRightWallY2, 20, 300);
 
     //Wall right down of the island
     const grassRightWallX3 = 3280 - cameraShakeX - cameraX;
     const grassRightWallY3 = 3460 - cameraShakeY - cameraY;
+    canvas.beginPath();
     canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
     canvas.fillRect(grassRightWallX3, grassRightWallY3, 20, 300);
 
     //Walls of the shop
     const grassRightWallX4 = 2980 - cameraShakeX - cameraX;
     const grassRightWallY4 = 3010 - cameraShakeY - cameraY;
+    canvas.beginPath();
     canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
     canvas.fillRect(grassRightWallX4, grassRightWallY4, 200, 300);
 
     //Wall bottom of the island
     const grassRightWallX5 = 2580 - cameraShakeX - cameraX;
     const grassRightWallY5 = 3600 - cameraShakeY - cameraY;
+    canvas.beginPath();
     canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
     canvas.fillRect(grassRightWallX5, grassRightWallY5, 800, 20);
 
     //Wall top of the island
     const grassRightWallX6 = 2630 - cameraShakeX - cameraX;
     const grassRightWallY6 = 3230 - cameraShakeY - cameraY;
+    canvas.beginPath();
     canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
     canvas.fillRect(grassRightWallX6, grassRightWallY6, 800, 20);
 
     //Wall top of the island
     const grassRightWallX7 = 2980 - cameraShakeX - cameraX;
     const grassRightWallY7 = 3250 - cameraShakeY - cameraY;
+    canvas.beginPath();
     canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
     canvas.fillRect(grassRightWallX7, grassRightWallY7, 800, 20);
 
     //Wall top of the dock
     const grassRightWallX8 = 3280 - cameraShakeX - cameraX;
     const grassRightWallY8 = 3320 - cameraShakeY - cameraY;
+    canvas.beginPath();
     canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
     canvas.fillRect(grassRightWallX8, grassRightWallY8, 800, 20);
 
     //Wall down of the dock
     const grassRightWallX9 = 3280 - cameraShakeX - cameraX;
     const grassRightWallY9 = 3460 - cameraShakeY - cameraY;
+    canvas.beginPath();
     canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
     canvas.fillRect(grassRightWallX9, grassRightWallY9, 800, 20);
 
@@ -1253,6 +1264,7 @@ function canvasLobbyLoop() {
     fishingArea.minY = 3380 - cameraShakeY - cameraY;
     fishingArea.maxX = 250;
     fishingArea.maxY = 100;
+    canvas.beginPath();
     canvas.fillStyle = "rgb(0, 89, 255, 0.0)"; //Change the last value to 0.3 to male it visible
     canvas.fillRect(fishingArea.minX, fishingArea.minY, fishingArea.maxX, fishingArea.maxY); 
     
@@ -1536,7 +1548,8 @@ function canvasLobbyLoop() {
     //Chat
     if (player.chatMessage !== "none") {
         canvas.drawImage(chatBubble, player.x - cameraX -85, player.y - cameraY -120, 200, 60)
-    
+
+        canvas.beginPath();
         canvas.font = "bolder 14px Arial";
         canvas.textAlign = "center";
         canvas.fillStyle = "gray";
@@ -1547,12 +1560,16 @@ function canvasLobbyLoop() {
     //Username
     if (player.username === myPlayer.username) {  
       canvas.drawImage(nameBubbleGreen, playerX - cameraX -40, playerY- cameraY -51, 100,50)
+
+      canvas.beginPath();
       canvas.font = "bolder 14px Arial";
       canvas.textAlign = "center";
       canvas.fillStyle = "black";
       canvas.fillText(player.username, playerX - cameraX +10, playerY - cameraY -10);
     } else {
       canvas.drawImage(nameBubbleGreen, player.x - cameraX -40, player.y - cameraY -51, 100,50)
+
+      canvas.beginPath();
       canvas.font = "bolder 14px Arial";
       canvas.textAlign = "center";
       canvas.fillStyle = "black";
