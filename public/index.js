@@ -1,7 +1,7 @@
 //Change this to push >
 
-const socket = io(`ws://localhost:5000`);
-// const socket = io(`https://arcany.up.railway.app/`);
+// const socket = io(`ws://localhost:5000`);
+const socket = io(`https://arcany.up.railway.app/`);
 
 //Change this to push <
 
