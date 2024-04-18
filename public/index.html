@@ -24,9 +24,9 @@
       <div><img id="skillsUi" src="./inventory/skills.png" /></div>
       <div id="skillLevels">
         <p id="fishingLevel"></p>
-        <p id="herbloreLevel">1</p>
-        <p id="craftingLevel">1</p>
-        <p id="magicLevel">1</p>
+        <p id="cookingLevel"></p>
+        <p id="exploringLevel">1</p>
+        <p id="combatLevel">1</p>
       </div>
       <h1 id="usernameMenu"></h1>
       <div><div id="circleCharacter"></div></div>
@@ -121,19 +121,51 @@
       <div id="playerInfoCorner">
         <div id="profilePicture"></div>
         <div id="badge"></div>
-        <img id="hearts" src="./fullHearts.png"/>
+        <div id="playerInfo">
+          <img id="hearts" src="./fullHearts.png"/>
+          <!-- <img src="./cursors/GoldCoin.png" id="playerCoins" /> -->
+          <p id="playerCoinsAmount">0</p>
+        </div>
       </div>
+
       <div id="obtainedItem" class=""></div>
+      <img src="./Textures/levellUp.png" class="levelUp" />
+      <img src="./Textures/levelUpCircle.png" class="levelUp levelUpCircle" />
       <img id="catchGif" class="" src="./Fishing/catch.gif"/>
+
       <div id="fishingMinigame">
         <div id="fishingBar"></div>
         <div id="fishingBarHit" class=""></div>
       </div>
+
+      <div id="overlay">
+
+        <div id="exploreMap">
+          <img class="exploreMapImage" src="./beachMap.png"></img>
+          <div class="exploreMapIsland1 pointerActivator"></div>
+        </div>
+
+      </div>
+
+      <div class="shop">
+        <img src="./typography/shopTitle.png" class="shopTitle" />
+        <div class="shopItems">
+          <img src="./cardsShop/shopStick.png" class="cardShop pointerActivator shopItem1" />
+          <img src="./cardsShop/shopBaseCape.png" class="cardShop pointerActivator shopItem2" />
+          <img src="./cardsShop/shopFishermanLocked.png" class="cardShop pointerActivator shopItem3" />
+          <img src="./cardsShop/shopMelrodSeed.png" class="cardShop pointerActivator shopItem4" />
+        </div>
+        <img src="./cardsShop/QuetsFishy.png" class="questShop"/>
+      </div>
+
+      <div class="cookingPot">
+        <div class="inventoryItem cookingItem"></div>
+      </div>
     </div>
     <canvas id="canvas-lobby">
-      <img src="./player.png" id="player-img-rend" />
+      <!-- <img src="./player.png" id="player-img-rend" />
       <img src="./frogWarrior.png" id="frogWarrior-img-rend" />
-      <img src="./slime.png" id="slime-img-rend" />
+      <img src="./slime.png" id="slime-img-rend" /> -->
 
     </canvas>
     <!-- <div id="navBar"></div> -->

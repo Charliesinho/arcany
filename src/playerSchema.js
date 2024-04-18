@@ -39,11 +39,23 @@ const PlayerSchema = new mongoose.Schema({
     type: Array,
     default: [],
   },
+  questsOngoing: {
+    type: Array,
+    default: [],
+  },
+  questsCompleted: {
+    type: Array,
+    default: [],
+  },
   currency: {
     type: Number,
     default: 0,
   },
   fishing: {
+    type: Number,
+    default: 0,
+  },
+  cooking: {
     type: Number,
     default: 0,
   },

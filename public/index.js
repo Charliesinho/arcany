@@ -1,7 +1,7 @@
 //Change this to push >
 
-// const socket = io(`ws://localhost:5000`);
-const socket = io(`https://arcany.up.railway.app/`);
+const socket = io(`ws://localhost:5000`);
+// const socket = io(`https://arcany.up.railway.app/`);
 
 //Change this to push <
 
@@ -20,6 +20,9 @@ frogWarriorSkin.src = "./skins/frogWarrior.png";
 
 const cape = new Image();
 cape.src = "./capes/cape.png";
+
+const fishermanCape = new Image();
+fishermanCape.src = "./capes/mellyCape.png";
 
 const transparentCape = new Image();
 transparentCape.src = "./capes/transparent.png";
@@ -46,6 +49,9 @@ audioClick.loop = false;
 const audioEquip = new Audio("./audios/equip.mp3");
 audioEquip.loop = false;
 
+const audioBuy = new Audio("./audios/buy.wav");
+audioBuy.loop = false;
+
 const audioSplash = new Audio("./audios/splash.mp3");
 audioSplash.loop = false;
 
@@ -57,20 +63,38 @@ audioShootNature.loop = false;
 audioShootNature.volume = 0.5;
 
 const audioIntro = new Audio("./audios/audioIntro.mp3");
-audioShootNature.loop = false;
+audioIntro.loop = true;
+audioIntro.volume = 0.2;
 
 const loggedIn = new Audio("./audios/loggedIn.mp3");
 loggedIn.loop = false;
+loggedIn.volume = 0.3;
 
-const grasslandsLoop1 = new Audio("./audios/grassLandsLoop1.mp3");
+const grasslandsLoop1 = new Audio("./audios/seaShanty.mp3");
 grasslandsLoop1.loop = true;
+grasslandsLoop1.volume = 0.0;
 
 const grasslandsEnviroment = new Audio("./audios/grasslandsEnviroment.mp3");
 grasslandsEnviroment.loop = true;
 
+const levelUpAudio = new Audio("./audios/levelUp.mp3");
+levelUpAudio.loop = false;
+
+const openShopAudio = new Audio("./audios/openShop.wav");
+openShopAudio.loop = false;
+
+const openCookingAudio = new Audio("./audios/kitchen.wav");
+openCookingAudio.loop = false;
+
+const cookingAudio = new Audio("./audios/cooking.wav");
+cookingAudio.loop = false;
+
+const startCookAudio = new Audio("./audios/startCook.wav");
+startCookAudio.loop = false;
+
 const footsteps = new Audio("./audios/footsteps.mp3");
 footsteps.loop = true;
-footsteps.volume = 0.5;
+footsteps.volume = 0.3;
 
 
 const canvasLobby = document.getElementById("canvas-lobby");
@@ -108,7 +132,19 @@ const fishingBarHit = document.getElementById("fishingBarHit");
 
 const body = document.getElementById("body");
 const fishingLevel = document.getElementById("fishingLevel");
+const cookingLevel = document.getElementById("cookingLevel");
 const obtainedItem = document.querySelector("#obtainedItem");
+const levelUp = document.querySelector(".levelUp");
+const levelUpCircle = document.querySelector(".levelUpCircle");
+
+const shop = document.querySelector(".shop");
+const cookingPot = document.querySelector(".cookingPot");
+const shopItem3 = document.querySelector(".shopItem3");
+const shopItem1 = document.querySelector(".shopItem1");
+const shopItem4 = document.querySelector(".shopItem4");
+
+const cookingItem = document.querySelector(".cookingItem");
+
 const uiTop = document.getElementById("uiTop");
 const playerInfoCorner = document.getElementById("playerInfoCorner");
 const loginBox = document.getElementById("login");
@@ -121,6 +157,7 @@ const healthImage = document.getElementById("hearts");
 const fishingBar = document.getElementById("fishingBar");
 const fishingGame = document.getElementById("fishingMinigame");
 const inventoryWindow = document.getElementById("inventoryWindow");
+const playerCoinsAmount = document.getElementById("playerCoinsAmount");
 const inventorySlots = {
  inventorySlot0: document.querySelector(".inventorySlot0"),
  inventorySlot1: document.querySelector(".inventorySlot1"),
@@ -146,11 +183,13 @@ const soulsInventory = {
 
 const artifactInventory = {
   cape1: document.querySelector(".cape1"),
+  cape2: document.querySelector(".cape2"),
 }
 
 const catchGif = document.getElementById("catchGif");
 
 //Mouse cursor >
+
 const customCursor = document.querySelector('.custom-cursor');
 const pointerActivator = document.querySelectorAll('.pointerActivator');
 
@@ -168,6 +207,7 @@ pointerActivator.forEach(item => {
     customCursor.style.backgroundImage = "url('../cursors/default.png')";
   });
 });
+
 //Mouse cursor <
 
 let shootingBlock = true;
@@ -355,37 +395,107 @@ function interactInventory(item, index) {
         consumeAvailable = true;
       }, 3000);
 
-      if (item.name === "rags") {
-        socket.emit("consumable", item);
-      }
+     
+      socket.emit("consumable", item);
     }
   } else {
-    if (inventorySlots[`inventorySlot${index}`].style.background !== "none") {
-      if(consumeAvailable === true && deleting === false) {
-        
-        consumeAvailable = false;
-  
-        setTimeout(() => {
-          consumeAvailable = true;
-        }, 3000);
-  
-        const consumable = {
-          name: item.name,
-          index: index,
-          image: item.image,
-          type: item.type
-        }
-        inventorySlots[`inventorySlot${index}`].style.background = `none`;
-        inventorySlots[`inventorySlot${index}`].removeEventListener("mousedown", (e) => interactInventory(item, index));
-  
-        if(item.type === "fish" || item.type === "food") {
-          socket.emit("consumable", consumable);                      
-        }
-  
-        if (item.type === "weapon") {
-          socket.emit("consumable", consumable);
+    
+    if (cookingPot.style.opacity == "1" && currentlyCooking === false) {
+      
+      if (inventorySlots[`inventorySlot${index}`].style.background !== "none") {
+        if(consumeAvailable === true && deleting === false) {
+          
+          console.log("cooking")
+          consumeAvailable = false;
+          currentlyCooking = true;
+
+          startCookAudio.play();
+    
+          setTimeout(() => {
+            consumeAvailable = true;
+          }, 3000);
+    
+          const consumable = {
+            name: item.name,
+            index: index,
+            image: item.image,
+            type: item.type
+          }
+          inventorySlots[`inventorySlot${index}`].style.background = `none`;
+          inventorySlots[`inventorySlot${index}`].removeEventListener("mousedown", (e) => interactInventory(item, index));
+    
+          if(item.type === "fish" || item.type === "food") {
+            socket.emit("cooking", consumable);                    
+          }
+
         }
       }
+
+    }
+    else if (shop.style.display !== "flex") {
+
+      if (inventorySlots[`inventorySlot${index}`].style.background !== "none") {
+        if(consumeAvailable === true && deleting === false) {
+          
+          consumeAvailable = false;
+    
+          setTimeout(() => {
+            consumeAvailable = true;
+          }, 3000);
+    
+          const consumable = {
+            name: item.name,
+            index: index,
+            image: item.image,
+            type: item.type
+          }
+          inventorySlots[`inventorySlot${index}`].style.background = `none`;
+          inventorySlots[`inventorySlot${index}`].removeEventListener("mousedown", (e) => interactInventory(item, index));
+    
+          if(item.type === "fish" || item.type === "food") {
+            socket.emit("consumable", consumable);                      
+          }
+    
+          if (item.type === "weapon") {
+            socket.emit("consumable", consumable);
+          }
+        }
+      }
+
+    } 
+    else {
+
+      if (inventorySlots[`inventorySlot${index}`].style.background !== "none") {
+        if(consumeAvailable === true && deleting === false) {
+          
+          consumeAvailable = false;
+
+          audioBuy.play();
+    
+          setTimeout(() => {
+            consumeAvailable = true;
+          }, 3000);
+    
+          const consumable = {
+            name: item.name,
+            index: index,
+            image: item.image,
+            type: item.type
+          }
+          inventorySlots[`inventorySlot${index}`].style.background = `none`;
+          inventorySlots[`inventorySlot${index}`].removeEventListener("mousedown", (e) => interactInventory(item, index));
+    
+          if(item.type === "fish" || item.type === "food") {
+            socket.emit("selling", consumable);                      
+          }
+    
+          if (item.type === "weapon") {
+            socket.emit("selling", consumable);
+          }
+
+        }
+      }
+
     }
   }
 };
@@ -523,6 +633,10 @@ function interactEquipment (item, index) {
   }
 };
 
+function buyItem (item) {
+  socket.emit("buyItem", item);
+}
+
 //Inventory interaction <
 
 function obtainedAnim (image) {
@@ -545,7 +659,29 @@ socket.on("connect", (socket) => {
   console.log("connected");
 });
 
+shopItem1.addEventListener("mousedown", (e) => {
+  buyItem("stick");
+  audioBuy.play();
+});  
+
+shopItem4.addEventListener("mousedown", (e) => {
+  buyItem("melrodSeed");
+  audioBuy.play();
+});      
+
 //Main Player Function >
+
+let generalLevel = 0;
+let generalLevelCooking = 0;
+let oldFishingLevel = 0;
+let newFishingLevel = 0;
+let changeFishingLevel = true;
+let fishingLevelSimple = 0;
+
+let oldCookingLevel = 0;
+let newCookingLevel = 0;
+let changeCookingLevel = true;
+let cookingLevelSimple = 0;
 
 socket.on("players", (serverPlayers) => {
   players = serverPlayers;
@@ -560,26 +696,144 @@ socket.on("players", (serverPlayers) => {
   }
 
   usernameMenu.innerHTML = myPlayer.username;
+  playerCoinsAmount.innerHTML = myPlayer.currency
+  // console.log(myPlayer)
+
+  // Cooking level >
+
+  let cookingLevelNum = Math.trunc(myPlayer.cookingLevel / 1000);
+
+  if (changeCookingLevel === true && myPlayer.cookingLevel !== 0) {
+    if (cookingLevelNum < 1) {
+      newCookingLevel = 1;
+    }
+    else if (cookingLevelNum < 3) {
+      newCookingLevel = 2;
+    }
+    else if (cookingLevelNum < 6) {
+      newCookingLevel = 3;
+    }
+    else if (cookingLevelNum < 12) {
+      newCookingLevel = 4;
+    }
+    else {
+      newCookingLevel = 5;
+    }
+
+    changeCookingLevel = false;
+  }
+  
+  if (cookingLevelNum < 1) {
+    cookingLevel.innerHTML = "1";
+    cookingLevelSimple = 1;
+  }
+  else if (cookingLevelNum < 3) {
+    cookingLevel.innerHTML = "2";
+    cookingLevelSimple = 2;
+  }
+  else if (cookingLevelNum < 6) {
+    cookingLevel.innerHTML = "3";
+    cookingLevelSimple = 3;
+  }
+  else if (cookingLevelNum < 12) {
+    cookingLevel.innerHTML = "4";
+    cookingLevelSimple = 4;
+  }
+  else {
+    cookingLevel.innerHTML = "5";
+    cookingLevelSimple = 5;
+    cookingLevel.style.color = "white"
+    cookingLevel.style.textShadow = "0 0 3px white"
+  }
+
+  if (cookingLevelSimple > newCookingLevel && myPlayer.cookingLevel !== 0) {
+    changeCookingLevel = true;
+    levelUp.src = "./Textures/levellUpCooking.png"
+    levelUp.classList.add('fadeInAnim');
+    levelUpCircle.classList.add('rotateAnim');
+    levelUp.style.display = "block";
+    levelUpCircle.style.display = "block";
+    levelUpAudio.play();
+
+    setTimeout(() => {
+      levelUp.style.display = "none";
+      levelUpCircle.style.display = "none";
+      levelUp.classList.remove('fadeInAnim');
+      levelUpCircle.classList.remove('rotateAnim');
+    }, 5000);
+  }
+
+  generalLevelCooking = cookingLevelSimple;
+
+  // Cooking level <
+
+  // Fishing level >
 
   let fishingLevelNum = Math.trunc(myPlayer.fishingLevel / 1000);
+
+  if (changeFishingLevel === true && myPlayer.fishingLevel !== 0) {
+    if (fishingLevelNum < 1) {
+      newFishingLevel = 1;
+    }
+    else if (fishingLevelNum < 3) {
+      newFishingLevel = 2;
+    }
+    else if (fishingLevelNum < 6) {
+      newFishingLevel = 3;
+    }
+    else if (fishingLevelNum < 12) {
+      newFishingLevel = 4;
+    }
+    else {
+      newFishingLevel = 5;
+    }
+
+    changeFishingLevel = false;
+  }
   
   if (fishingLevelNum < 1) {
     fishingLevel.innerHTML = "1";
+    fishingLevelSimple = 1;
   }
   else if (fishingLevelNum < 3) {
     fishingLevel.innerHTML = "2";
+    fishingLevelSimple = 2;
   }
   else if (fishingLevelNum < 6) {
     fishingLevel.innerHTML = "3";
+    fishingLevelSimple = 3;
   }
   else if (fishingLevelNum < 12) {
     fishingLevel.innerHTML = "4";
+    fishingLevelSimple = 4;
   }
   else {
     fishingLevel.innerHTML = "5";
+    fishingLevelSimple = 5;
     fishingLevel.style.color = "white"
     fishingLevel.style.textShadow = "0 0 3px white"
   }
+
+  if (fishingLevelSimple > newFishingLevel && myPlayer.fishingLevel !== 0) {
+    changeFishingLevel = true;
+    levelUp.src = "./Textures/levellUp.png"
+    levelUp.classList.add('fadeInAnim');
+    levelUpCircle.classList.add('rotateAnim');
+    levelUp.style.display = "block";
+    levelUpCircle.style.display = "block";
+    levelUpAudio.play();
+
+    setTimeout(() => {
+      levelUp.style.display = "none";
+      levelUpCircle.style.display = "none";
+      levelUp.classList.remove('fadeInAnim');
+      levelUpCircle.classList.remove('rotateAnim');
+    }, 5000);
+  }
+
+  generalLevel = fishingLevelSimple;
+
+  // Fishing level <
 
   if (myPlayer.souls.length) {
     for (const soul of myPlayer.souls) {
@@ -625,13 +879,26 @@ socket.on("players", (serverPlayers) => {
 
   if (myPlayer.artifacts.length) {
     for (const artifact of myPlayer.artifacts) {
-      if (artifact.name = "rags") {
+      if (artifact.name === "rags") {
         artifactInventory[`cape1`].style.background = `url(${artifact.image})`;
         artifactInventory[`cape1`].style.backgroundSize = 'cover';
-        artifactInventory[`cape1`].addEventListener("mousedown", (e) => {
-          interactInventory(artifact);
-          audioEquip.play();        
-        }); 
+        if (!myPlayer.artifact.length) {
+          artifactInventory[`cape1`].addEventListener("mousedown", (e) => {
+            interactInventory(artifact);
+            audioEquip.play();        
+          }); 
+        }
+      }
+
+      if (artifact.name === "fisherman") {
+        artifactInventory[`cape2`].style.background = `url(${artifact.image})`;
+        artifactInventory[`cape2`].style.backgroundSize = 'cover';
+        if (!myPlayer.artifact.length) {
+          artifactInventory[`cape2`].addEventListener("mousedown", (e) => {
+            interactInventory(artifact);
+            audioEquip.play();        
+          }); 
+        }
       }
     }
   }
@@ -748,6 +1015,37 @@ socket.on("obtained", (item) => {
   obtainedAnim(image);
 });
 
+let cookingColor = 0;
+
+socket.on("startCooking", (item) => {
+  const image = item.image;
+  cookingItem.style.backgroundImage = `url(${image})`
+  cookingItem.style.backgroundSize = "cover"
+  console.log("cooking started")
+  cookingAudio.play()
+  cookingAudio.loop = true
+
+  const intervalCooking = setInterval(() => {
+
+    if (cookingColor > 1) {
+      clearInterval(intervalCooking)
+      cookingColor = 0;
+      cookingItem.style.backgroundImage = `none`
+      currentlyCooking = false
+
+      cookingAudio.pause();
+      cookingAudio.currentTime = 0;
+      cookingAudio.loop = false
+      
+      socket.emit("cookingFinished", item); 
+    }
+    
+    cookingItem.style.filter = `sepia(${cookingColor})`
+    cookingColor += 0.15;
+
+  }, 1000);
+});
+
 socket.on("loginAttempt", (msg) => { 
 
   if(msg === "success") {
@@ -802,6 +1100,13 @@ let mainSkillCooldown = 0;
 let fishing = false;
 let width = 20;
 let marginFish = -50;
+
+let grassShopAvailable = false;
+let grassOpenShop = false;
+
+let grassCookingAvailable = false;
+let grassOpenCooking = false;
+let currentlyCooking = false;
 
 //Player movement >
 let allowedMoveUpUp = true;
@@ -867,7 +1172,6 @@ window.addEventListener("keydown", (e) => {
     fishingGame.style.display = "block";
     blockMovement = true;
     fishing = true;    
-    socket.emit("blockMovement", blockMovement); 
 
     const number = Math.floor(Math.random() * (10000 - 3000 + 1) + 3000);
 
@@ -923,6 +1227,30 @@ window.addEventListener("keydown", (e) => {
   }
 
   //Fishing Minigame <
+
+
+  //Shop grasslands open >
+
+  if(e.key === "e" && grassShopAvailable & !grassOpenShop) {
+    grassOpenShop = true;
+    openShopAudio.play();
+  } else if (e.key === "e" && grassShopAvailable & grassOpenShop) {
+    grassOpenShop = false;
+  }
+
+  //Shop grasslands open <
+
+  //Cooking grasslands open >
+
+  if(e.key === "e" && grassCookingAvailable & !grassOpenCooking) {
+    grassOpenCooking = true;
+    openCookingAudio.play();
+  } else if (e.key === "e" && grassCookingAvailable & grassOpenCooking) {
+    grassOpenCooking = false;
+  }
+
+  //Cooking grasslands open <
+  
 });
 
 window.addEventListener("keyup", (e) => {
@@ -1028,7 +1356,7 @@ let enemyAnimDelay = 2;
 
 // Enemy <
 
-//Fishing Permissions >
+//Permissions >
 
 let fishingArea = {
   minX: 0,
@@ -1038,7 +1366,7 @@ let fishingArea = {
 };
 let fishAvailable = false;
 
-//Fishing Permissions <
+//Permissions <
 
 let lastFrameTime = 0;
 const targetFrameTime = 1000 / 60; // 60 frames per second
@@ -1046,6 +1374,9 @@ const targetFrameTime = 1000 / 60; // 60 frames per second
 //Base Map Canvas >
 
 function canvasLobbyLoop() {
+  // canvas.clearRect(0, 0, canvasLobby.width, canvasLobby.height);
+  canvas.clearRect(0, 0, 4500, 4500);
+  canvas.imageSmoothingEnabled = false;
 
   let cameraX = 0;
   let cameraY = 0;
@@ -1054,8 +1385,6 @@ function canvasLobbyLoop() {
     cameraY = playerY - canvasLobby.height / 2 + 50;
   }
   
-  canvas.clearRect(0, 0, canvasLobby.width, canvasLobby.height);
-  canvas.imageSmoothingEnabled = false;
   
   // canvas.drawImage(mapLobby, cameraShakeX - cameraX, cameraShakeY - cameraY, 4500, 4500);
 
@@ -1123,19 +1452,71 @@ function canvasLobbyLoop() {
     let playerColLengthX = playerWidth - 310;
     let playerColLengthY = playerHeight - 540;
     canvas.beginPath();
-    canvas.fillStyle = "rgb(255, 0, 13, 0.0)"; //Change the last value to 0.3 to male it visible
+    canvas.fillStyle = "rgb(255, 0, 13, 0.0)"; //Change the last value to 0.3 to make it visible
     canvas.fillRect(playerColminX, playerColminY, playerColLengthX, playerColLengthY);
     //Player Collision <
 
+    
     //Player Location >
     // console.log(myPlayer.x, myPlayer.y)
     //Player Location <
-
+    
     //Grasslands walls >
     let wallsVisibility = 0.0;
+
+    //Shop Grasslands activator >
+    const grasslandsShopx = 2980 - cameraShakeX - cameraX;
+    const grasslandsShopY = 3090 - cameraShakeY - cameraY;
+    canvas.beginPath();
+    canvas.fillStyle = `rgb(255, 0, 0, ${wallsVisibility})`;
+    canvas.fillRect(grasslandsShopx, grasslandsShopY, 200, 300);
+
+    if (playerColminX + playerColLengthX > grasslandsShopx && playerColminY + playerColLengthY > grasslandsShopY && playerColminY < grasslandsShopY + 300 && playerColminX < grasslandsShopx + 200) {
+      if (grassOpenShop) {
+        shop.style.display = "flex";
+      } else {
+        shop.style.display = "none";
+      }
+      grassShopAvailable = true;
+    } else {
+      grassShopAvailable = false;
+      grassOpenShop = false;
+      shop.style.display = "none";
+    }
+
+    if (fishingLevelSimple >= 5) {
+      shopItem3.src = "./cardsShop/shopFisherman.png"
+    }
+    //Shop Grasslands activator <
+
+    //Cooking Grasslands activator >
+    const grasslandsCookingx = 2300 - cameraShakeX - cameraX;
+    const grasslandsCookingY = 3000 - cameraShakeY - cameraY;
+    canvas.beginPath();
+    canvas.fillStyle = `rgb(255, 0, 0, ${wallsVisibility})`;
+    canvas.fillRect(grasslandsCookingx, grasslandsCookingY, 200, 300);
+
+    if (playerColminX + playerColLengthX > grasslandsCookingx && playerColminY + playerColLengthY > grasslandsCookingY && playerColminY < grasslandsCookingY + 300 && playerColminX < grasslandsCookingx + 200) {
+      if (grassOpenCooking) {
+        cookingPot.style.opacity = "1";
+      } else {
+        cookingPot.style.opacity = "0";
+      }
+      grassCookingAvailable = true;
+      console.log(grassCookingAvailable)
+    } else {
+      grassCookingAvailable = false;
+      grassOpenCooking = false;
+      cookingPot.style.opacity = "0";
+    }
+
+    if (fishingLevelSimple >= 5) {
+      shopItem3.src = "./cardsShop/shopFisherman.png"
+    }
+    //Cooking Grasslands activator <
     
     //Leftwall of island
-    const grassLeftWallX = 2630 - cameraShakeX - cameraX;
+    const grassLeftWallX = 2130 - cameraShakeX - cameraX;
     const grassLeftWallY = 3100 - cameraShakeY - cameraY;
     canvas.beginPath();
     canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
@@ -1170,11 +1551,11 @@ function canvasLobbyLoop() {
     canvas.fillRect(grassRightWallX4, grassRightWallY4, 200, 300);
 
     //Wall bottom of the island
-    const grassRightWallX5 = 2580 - cameraShakeX - cameraX;
+    const grassRightWallX5 = 1580 - cameraShakeX - cameraX;
     const grassRightWallY5 = 3600 - cameraShakeY - cameraY;
     canvas.beginPath();
     canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grassRightWallX5, grassRightWallY5, 800, 20);
+    canvas.fillRect(grassRightWallX5, grassRightWallY5, 2200, 20);
 
     //Wall top of the island
     const grassRightWallX6 = 2630 - cameraShakeX - cameraX;
@@ -1184,11 +1565,11 @@ function canvasLobbyLoop() {
     canvas.fillRect(grassRightWallX6, grassRightWallY6, 800, 20);
 
     //Wall top of the island
-    const grassRightWallX7 = 2980 - cameraShakeX - cameraX;
-    const grassRightWallY7 = 3250 - cameraShakeY - cameraY;
+    const grassRightWallX7 = 1980 - cameraShakeX - cameraX;
+    const grassRightWallY7 = 3230 - cameraShakeY - cameraY;
     canvas.beginPath();
     canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grassRightWallX7, grassRightWallY7, 800, 20);
+    canvas.fillRect(grassRightWallX7, grassRightWallY7, 1200, 20);
 
     //Wall top of the dock
     const grassRightWallX8 = 3280 - cameraShakeX - cameraX;
@@ -1248,7 +1629,7 @@ function canvasLobbyLoop() {
 
     //Blockers down
     if (
-      playerColminX + playerColLengthX > grassRightWallX5 && playerColminY + playerColLengthY > grassRightWallY5 && playerColminY < grassRightWallY5 + 20 && playerColminX < grassRightWallX5 + 800
+      playerColminX + playerColLengthX > grassRightWallX5 && playerColminY + playerColLengthY > grassRightWallY5 && playerColminY < grassRightWallY5 + 20 && playerColminX < grassRightWallX5 + 2200
       ||
       playerColminX + playerColLengthX > grassRightWallX9 && playerColminY + playerColLengthY > grassRightWallY9 && playerColminY < grassRightWallY9 + 20 && playerColminX < grassRightWallX9 + 800
       ) {
@@ -1302,6 +1683,8 @@ function canvasLobbyLoop() {
     if (player.artifact[0]) {
       if (player.artifact[0].name === "rags") {
         artifact = cape;
+      } else if (player.artifact[0].name === "fisherman") {
+        artifact = fishermanCape;
       } else {
         artifact = transparentCape;
       }
@@ -1566,6 +1949,12 @@ function canvasLobbyLoop() {
       canvas.textAlign = "center";
       canvas.fillStyle = "black";
       canvas.fillText(player.username, playerX - cameraX +10, playerY - cameraY -10);
+
+      canvas.beginPath();
+      canvas.font = "bolder 10px Arial";
+      canvas.textAlign = "center";
+      canvas.fillStyle = "black";
+      canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)) , playerX - cameraX + 10, playerY - cameraY - 32.5);
     } else {
       canvas.drawImage(nameBubbleGreen, player.x - cameraX -40, player.y - cameraY -51, 100,50)
 
@@ -1574,6 +1963,13 @@ function canvasLobbyLoop() {
       canvas.textAlign = "center";
       canvas.fillStyle = "black";
       canvas.fillText(player.username, player.x - cameraX +10, player.y - cameraY -10);
+
+      
+      canvas.beginPath();
+      canvas.font = "bolder 10px Arial";
+      canvas.textAlign = "center";
+      canvas.fillStyle = "black";
+      canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)), playerX - cameraX + 10, playerY - cameraY - 32.5);
     }
     //Username
 }

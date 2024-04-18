@@ -53,12 +53,14 @@ function tick() {
                 player.inventory = clientPlayer.inventory;
                 player.souls = clientPlayer.souls;
                 player.artifacts = clientPlayer.artifacts;
+                player.currency = clientPlayer.currency;
 
                 player.weapon = clientPlayer.weapon;
                 player.armor = clientPlayer.armor;
                 player.artifact = clientPlayer.artifact;
 
                 player.fishingLevel = clientPlayer.fishing;
+                player.cookingLevel = clientPlayer.cooking;
             }
         
         
@@ -258,6 +260,7 @@ async function main() {
 
             health: 3,
             fishingLevel: 0,
+            cookingLevel: 0,
 
             inventory: [],
             weapon: [],
@@ -265,6 +268,8 @@ async function main() {
             artifact: [],
             souls: [],
             artifacts: [],
+
+            currency: 0,
 
             anim: false,
             lastLooked: "right",
@@ -333,7 +338,7 @@ async function main() {
              const octopus = {
                 type: "fish",
                 name: "octopus",
-                value: 5,
+                value: 15,
                 image: "./inventory/octopus.png",
             };
                  
@@ -498,6 +503,11 @@ async function main() {
                         myPlayer[socket.id].artifact = arrayArtifacts;
                         await Player.findOneAndUpdate({socket: socket.id}, {artifact:  myPlayer[socket.id].artifact}, {new: true});
                     }
+                    if (item.name === "fisherman") {
+                        let arrayArtifacts = [item];
+                        myPlayer[socket.id].artifact = arrayArtifacts;
+                        await Player.findOneAndUpdate({socket: socket.id}, {artifact:  myPlayer[socket.id].artifact}, {new: true});
+                    }
                 } else {
                     player.inventory.splice(item.index, 1);
                                            
@@ -539,6 +549,196 @@ async function main() {
                     }
     
                 }
+              };
+              consume()
+        });
+
+        socket.on("selling", (item) => {
+            async function consume() {
+                const player = await Player.findOne({socket: socket.id}).exec();
+
+                    player.inventory.splice(item.index, 1);
+                                           
+                    await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
+        
+                    myPlayer[socket.id] = player;      
+                    
+                    if (item.name === "stick") {
+                        myPlayer[socket.id].currency += 2;
+                        await Player.findOneAndUpdate({socket: socket.id}, {currency:  myPlayer[socket.id].currency}, {new: true});
+                    }
+                    
+                    if (item.name === "bass") {
+                        myPlayer[socket.id].currency += 4;
+                        await Player.findOneAndUpdate({socket: socket.id}, {currency:  myPlayer[socket.id].currency}, {new: true});
+                    }
+                    
+                    if (item.name === "octopus") {
+                        myPlayer[socket.id].currency += 15;
+                        await Player.findOneAndUpdate({socket: socket.id}, {currency:  myPlayer[socket.id].currency}, {new: true});
+                    }
+    
+                    if (item.name === "ballo") {
+                        myPlayer[socket.id].currency += 2;
+                        await Player.findOneAndUpdate({socket: socket.id}, {currency:  myPlayer[socket.id].currency}, {new: true});
+                    } 
+    
+                    if (item.name === "sardin") {
+                        myPlayer[socket.id].currency += 1;
+                        await Player.findOneAndUpdate({socket: socket.id}, {currency:  myPlayer[socket.id].currency}, {new: true});
+                    }
+                    
+    
+                
+              };
+              consume()
+        });
+
+        socket.on("cooking", (item) => {
+
+            async function consume() {
+                const player = await Player.findOne({socket: socket.id}).exec();
+
+                    // player.inventory.splice(item.index, 1);
+                                           
+                    // await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
+        
+                    myPlayer[socket.id] = player;   
+                                     
+                    io.to(socket.id).emit('startCooking', item);
+                
+              };
+              consume()
+        });
+
+        socket.on("cookingFinished", (item) => {
+
+            const sardin = {
+                type: "food",
+                name: "sardin",
+                value: 5,
+                image: "./inventory/sardinCooked.png",
+            };
+            const bass = {
+                type: "food",
+                name: "bass",
+                value: 5,
+                image: "./inventory/bassCooked.png",
+            };
+            const octopus = {
+                type: "food",
+                name: "octopus",
+                value: 5,
+                image: "./inventory/octopusCooked.png",
+            };
+            const ballo = {
+                type: "food",
+                name: "ballo",
+                value: 5,
+                image: "./inventory/balloCooked.png",
+            };
+
+            async function consume() {
+                const player = await Player.findOne({socket: socket.id}).exec();
+
+                    player.inventory.splice(item.index, 1);
+                                           
+                    await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
+        
+                    myPlayer[socket.id] = player;   
+                    
+                    console.log(item)
+                    
+                    if (item.name === "sardin") {
+                        const cookingLevel = player.cooking + 100;
+                        player.cooking += 100;
+                        await Player.findOneAndUpdate({socket: socket.id}, {cooking: cookingLevel}, {new: true});
+                        
+                        player.inventory.push(sardin);                                           
+                        await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
+                        
+                        io.to(socket.id).emit('obtained', sardin);
+                    }  
+
+                    if (item.name === "ballo") {
+                        const cookingLevel = player.cooking + 200;
+                        player.cooking += 100;
+                        await Player.findOneAndUpdate({socket: socket.id}, {cooking: cookingLevel}, {new: true});
+                        
+                        player.inventory.push(ballo);                                           
+                        await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
+                        
+                        io.to(socket.id).emit('obtained', ballo);
+                    }    
+
+                    if (item.name === "bass") {
+                        const cookingLevel = player.cooking + 100;
+                        player.cooking += 100;
+                        await Player.findOneAndUpdate({socket: socket.id}, {cooking: cookingLevel}, {new: true});
+                        
+                        player.inventory.push(bass);                                           
+                        await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
+
+                        io.to(socket.id).emit('obtained', bass);
+                    }                   
+                    if (item.name === "octopus") {
+                        const cookingLevel = player.cooking + 100;
+                        player.cooking += 100;
+                        await Player.findOneAndUpdate({socket: socket.id}, {cooking: cookingLevel}, {new: true});
+                        
+                        player.inventory.push(octopus);                                           
+                        await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
+                        
+                        io.to(socket.id).emit('obtained', octopus);
+                    }                   
+                
+              };
+              consume()
+        });
+
+        socket.on("buyItem", (item) => {
+            async function consume() {
+                
+                const player = await Player.findOne({socket: socket.id}).exec();
+
+                if (player.inventory.length <= 8) {
+                                               
+                        await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
+            
+                        myPlayer[socket.id] = player;      
+                        
+                        if (item === "stick") {
+                            const stick = {
+                                type: "weapon",
+                                name: "stick",
+                                value: 2,
+                                image: "./inventory/stick.png",
+                            };
+    
+                            myPlayer[socket.id].currency -= 10;
+                            await Player.findOneAndUpdate({socket: socket.id}, {currency:  myPlayer[socket.id].currency}, {new: true});
+    
+                            player.inventory.push(stick);                                           
+                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
+                        }     
+
+                        if (item === "melrodSeed") {
+                            const stick = {
+                                type: "seed",
+                                name: "stick",
+                                value: 1,
+                                image: "./inventory/melrodSeed.png",
+                            };
+    
+                            myPlayer[socket.id].currency -= 10;
+                            await Player.findOneAndUpdate({socket: socket.id}, {currency:  myPlayer[socket.id].currency}, {new: true});
+    
+                            player.inventory.push(stick);                                           
+                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
+                        }     
+
+                }
+                
               };
               consume()
         });
@@ -616,6 +816,8 @@ async function main() {
                     myPlayer[socket.id] = newPlayerData;      
                     inventoryStore[socket.id] = myPlayer[socket.id];
 
+                    
+
                     const loginAttempt = "success";
                     io.to(id).emit('loginAttempt', loginAttempt);
 
@@ -647,8 +849,14 @@ async function main() {
                         image: "./inventory/baseCape.png",
                         type: "artifact",
                     }
+
+                    const FishermanCape = {
+                        name: "fisherman",
+                        image: "./inventory/fishermanCape.png",
+                        type: "artifact",
+                    }
                     await Player.findOneAndUpdate({socket: socket.id}, {souls: [baseSoul]}, {new: true});
-                    await Player.findOneAndUpdate({socket: socket.id}, {artifacts: [baseCape]}, {new: true});
+                    await Player.findOneAndUpdate({socket: socket.id}, {artifacts: [baseCape, FishermanCape]}, {new: true});
                     const playerData = await Player.findOne({username: username}).exec();
 
                     myPlayer[socket.id] = playerData;
