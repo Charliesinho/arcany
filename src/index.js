@@ -20,7 +20,7 @@ const { NONAME } = require('dns');
 
 const tickRate = 60;
 const speed = 5.5;
-const projectileSpeed = 25;
+const projectileSpeed = 35;
 
 let players = [];
 const enemies = [];
@@ -61,6 +61,8 @@ function tick() {
 
                 player.fishingLevel = clientPlayer.fishing;
                 player.cookingLevel = clientPlayer.cooking;
+                player.exploringLevel = clientPlayer.explore;
+                player.combatLevel = clientPlayer.combat;
             }
         
         
@@ -101,6 +103,8 @@ function tick() {
                 player.invincible = false;
             }
         }
+
+        io.to(player.room).emit("player", player);
     }
 
     for (const enemy of enemies) {
@@ -125,24 +129,27 @@ function tick() {
             }
 
             for (const player of players) {
-                const username = usernames[player.id]; 
-                const distance = Math.sqrt(
-                    (player.x + 15 - enemy.x) ** 2 + (player.y + 15 - enemy.y) ** 2
-                    );
-                    if (distance <= 15 && !player.invincible) {
-                        
-                        if (player.health > 1) {
-                            player.health -= 1;
-                            updateHealth(username, player.health, player.id);
-                        } else {
-                            player.x = 1280;
-                            player.y = 1220;
-                            player.health = 3;
-                            updateHealth(username, player.health, player.id);
+                if (player.room === "islandOne") {
+
+                    const username = usernames[player.id]; 
+                    const distance = Math.sqrt(
+                        (player.x + 15 - enemy.x) ** 2 + (player.y + 15 - enemy.y) ** 2
+                        );
+                        if (distance <= 15 && !player.invincible) {
+                            
+                            if (player.health > 1) {
+                                player.health -= 1;
+                                updateHealth(username, player.health, player.id);
+                            } else {
+                                player.x = 1280;
+                                player.y = 1220;
+                                player.health = 3;
+                                updateHealth(username, player.health, player.id);
+                            }
+                            player.invincible = true;
+                            break;
                         }
-                        player.invincible = true;
-                        break;
-                    }
+                }
                 }
         } else {
             enemy.disabledTimer--;
@@ -207,12 +214,12 @@ function tick() {
 
     projectiles = projectiles.filter((projectile) => projectile.timeLeft > 0);
 
-    io.emit("enemies", enemies);
-    io.emit('players', players);
-    io.emit("projectiles", projectiles);
+    io.to("islandOne").emit("enemies", enemies);
+    // io.to("baseMap1").emit('players', players);
+    io.to("baseMap").emit("projectiles", projectiles);
 }
 
-setInterval(tick, 16.67);
+setInterval(tick, 33);
 
 async function updateHealth(username, health, id) {    
     const playerHealth = await Player.findOneAndUpdate({username: username}, {health: health}, {new: true}); 
@@ -233,6 +240,7 @@ async function main() {
     });  
 
     io.on('connect', (socket) => {
+        socket.join("baseMap");
         console.log("socket", socket.id)
 
         inputsMap[socket.id] = {
@@ -257,10 +265,13 @@ async function main() {
             username: "none",
             x: 2880,
             y: 3568,
+            room: "baseMap",
 
             health: 3,
             fishingLevel: 0,
             cookingLevel: 0,
+            exploringLevel: 0,
+            combatLevel: 0,
 
             inventory: [],
             weapon: [],
@@ -509,28 +520,43 @@ async function main() {
                         await Player.findOneAndUpdate({socket: socket.id}, {artifact:  myPlayer[socket.id].artifact}, {new: true});
                     }
                 } else {
-                    player.inventory.splice(item.index, 1);
                                            
-                    await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
         
-                    myPlayer[socket.id] = player;      
+                    myPlayer[socket.id] = player;    
                     
-                    if (item.name === "stick") {
-                        let arrayWeapon = [item];
-                        myPlayer[socket.id].weapon = arrayWeapon;
-                        await Player.findOneAndUpdate({socket: socket.id}, {weapon:  arrayWeapon}, {new: true});
+                    if (myPlayer[socket.id].weapon.length === 0) {
+                        player.inventory.splice(item.index, 1);
+
+                        if (item.name === "stick") {
+                            let arrayWeapon = [item];
+                            myPlayer[socket.id].weapon = arrayWeapon;
+                            await Player.findOneAndUpdate({socket: socket.id}, {weapon:  arrayWeapon}, {new: true});
+                            await Player.findOneAndUpdate({socket: socket.id}, {inventory:   player.inventory}, {new: true});
+                        }
+    
+                        if (item.name === "willowStick") {
+                            let arrayWeapon = [item];
+                            myPlayer[socket.id].weapon = arrayWeapon;
+                            await Player.findOneAndUpdate({socket: socket.id}, {weapon:  arrayWeapon}, {new: true});
+                            await Player.findOneAndUpdate({socket: socket.id}, {inventory:   player.inventory}, {new: true});
+                        }
                     }
                     
+                    
                     if (item.name === "bass" || item.name === "octopus") {
+                        player.inventory.splice(item.index, 1);
                         myPlayer[socket.id].health = 3;
                         await Player.findOneAndUpdate({socket: socket.id}, {health:  myPlayer[socket.id].health}, {new: true});
+                        await Player.findOneAndUpdate({socket: socket.id}, {inventory:   player.inventory}, {new: true});
                     }
 
                     if (myPlayer[socket.id].health < 2) {
     
                         if (item.name === "ballo") {
+                            player.inventory.splice(item.index, 1);
                             myPlayer[socket.id].health += 2;
                             await Player.findOneAndUpdate({socket: socket.id}, {health:  myPlayer[socket.id].health}, {new: true});
+                            await Player.findOneAndUpdate({socket: socket.id}, {inventory:   player.inventory}, {new: true});
                         }
 
                     }
@@ -540,11 +566,13 @@ async function main() {
                         if (item.name === "sardin") {
                             myPlayer[socket.id].health += 1;
                             await Player.findOneAndUpdate({socket: socket.id}, {health:  myPlayer[socket.id].health}, {new: true});
+                            await Player.findOneAndUpdate({socket: socket.id}, {inventory:   player.inventory}, {new: true});
                         }
 
                         if (item.name === "ballo") {
                             myPlayer[socket.id].health += 1;
                             await Player.findOneAndUpdate({socket: socket.id}, {health:  myPlayer[socket.id].health}, {new: true});
+                            await Player.findOneAndUpdate({socket: socket.id}, {inventory:   player.inventory}, {new: true});
                         }
                     }
     
@@ -565,6 +593,11 @@ async function main() {
                     
                     if (item.name === "stick") {
                         myPlayer[socket.id].currency += 2;
+                        await Player.findOneAndUpdate({socket: socket.id}, {currency:  myPlayer[socket.id].currency}, {new: true});
+                    }
+
+                    if (item.name === "willowStick") {
+                        myPlayer[socket.id].currency += 15;
                         await Player.findOneAndUpdate({socket: socket.id}, {currency:  myPlayer[socket.id].currency}, {new: true});
                     }
                     
@@ -592,6 +625,32 @@ async function main() {
                 
               };
               consume()
+        });
+
+        socket.on("islandOneExplored", () => {
+            async function explored() {
+                const player = await Player.findOne({socket: socket.id}).exec();
+                const exploringLevelPlus = player.explore + 500;
+                                           
+                await Player.findOneAndUpdate({socket: socket.id}, {explore: exploringLevelPlus}, {new: true});
+        
+                myPlayer[socket.id] = player;      
+                
+              };
+              explored()
+        });
+
+        socket.on("changeRoom", (room) => {
+            async function roomChange() {
+                for (const player of players) {
+                    if (player.id === socket.id) {
+                        player.room = room
+                        socket.join(room);
+                  }
+                }   
+                
+              };
+              roomChange()
         });
 
         socket.on("cooking", (item) => {
@@ -696,6 +755,51 @@ async function main() {
               consume()
         });
 
+        socket.on("rewardChest", (item) => {
+
+            const stick = {
+                type: "weapon",
+                name: "stick",
+                value: 2,
+                image: "./inventory/stick.png",
+            };
+
+            const willowStick = {
+                type: "weapon",
+                name: "willowStick",
+                value: 2,
+                image: "./inventory/willowStick.png",
+            };
+
+            async function consume() {
+
+                const number = Math.floor(Math.random() * (100 - 1 + 1) + 1);
+
+                const player = await Player.findOne({socket: socket.id}).exec();
+
+                if (player.inventory.length <= 8) {
+                    
+                    if (item === "islandOne") {
+
+                        if (number < 80) {
+                            player.inventory.push(stick);  
+                            io.to(socket.id).emit('obtained', stick);
+                        } else {
+                            player.inventory.push(willowStick);                                           
+                            io.to(socket.id).emit('obtained', willowStick);
+                            
+                        }
+                    }
+                    
+                    await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
+                    myPlayer[socket.id] = player;      
+                            
+
+                }
+              }
+              consume()
+        });
+
         socket.on("buyItem", (item) => {
             async function consume() {
                 
@@ -744,6 +848,7 @@ async function main() {
         });
 
         socket.on("unequip", (equipment) => {
+
             async function unequip() {
 
                 if (equipment.type === "soul") {
@@ -766,12 +871,15 @@ async function main() {
                     myPlayer[socket.id] = player;   
                 } else {
                     const player = await Player.findOne({socket: socket.id}).exec();
+
     
                     player.inventory.push(equipment);
                     player.weapon.splice(equipment.index, 1);
                                            
                     await Player.findOneAndUpdate({socket: socket.id}, {weapon: player.weapon}, {new: true});
                     await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
+
+                    console.log("after", player.inventory)
     
                     myPlayer[socket.id] = player;      
                 } 
@@ -886,10 +994,10 @@ async function main() {
                 speed: 2,
                 spriteSheetAmt: 4,
                 type: "slime",
-                x: 1000,
-                y: 1000,
-                originX: 1000,
-                originY: 1000,
+                x: 2880,
+                y: 3768,
+                originX: 2880,
+                originY: 3768,
                 nextTarget: {x: 1100, y: 1100},
                 nextTargetCount: 100,
                 enabled: true,
@@ -965,9 +1073,13 @@ async function main() {
 }
 
 function slimeGetRandomCoords(originX, originY) {
+    const minX = 2880 - 300;
+  const maxX = 2880 + 300;
+  const minY = 3768 - 100;
+  const maxY = 3768 + 100;
     let newCoords = {
-        x: Math.floor(Math.random() * ((originX - 500) - (originX + 500)) + (originX + 500)),
-        y: Math.floor(Math.random() * ((originY - 500) - (originY + 500)) + (originY + 500))
+        x: Math.floor(Math.random() * (maxX - minX + 1)) + minX,
+        y: Math.floor(Math.random() * (minY - maxY + 1)) + minY,
     }
     return newCoords;
 }

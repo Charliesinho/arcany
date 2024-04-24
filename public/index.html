@@ -25,8 +25,8 @@
       <div id="skillLevels">
         <p id="fishingLevel"></p>
         <p id="cookingLevel"></p>
-        <p id="exploringLevel">1</p>
-        <p id="combatLevel">1</p>
+        <p id="exploringLevel"></p>
+        <p id="combatLevel">0</p>
       </div>
       <h1 id="usernameMenu"></h1>
       <div><div id="circleCharacter"></div></div>
@@ -145,6 +145,19 @@
           <div class="exploreMapIsland1 pointerActivator"></div>
         </div>
 
+        <div id="exploreMinigameBeach">
+          
+          <img id="progressExploreMinigame" src="./exploreMinigame/exploreProgress.gif" />
+          <div id="progressBarExploreMinigame"></div>
+          <img id="boatExploreMinigame" src="./exploreMinigame/boat.gif" />
+          <img id="islandExploreMinigame" src="./exploreMinigame/island.png" />
+          <!-- <img class="rockExploreMinigame" src="./exploreMinigame/rock.png" /> -->
+        </div>
+
+        <div id="rewardFrame">
+          <img src="./exploreMinigame/chestOpen.png" class="rewardChest pointerActivator" />
+        </div>
+
       </div>
 
       <div class="shop">
@@ -161,6 +174,8 @@
       <div class="cookingPot">
         <div class="inventoryItem cookingItem"></div>
       </div>
+
+
     </div>
     <canvas id="canvas-lobby">
       <!-- <img src="./player.png" id="player-img-rend" />
