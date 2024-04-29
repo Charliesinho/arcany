@@ -1,7 +1,7 @@
 //Change this to push >
 
-// const socket = io(`ws://localhost:5000`);
-const socket = io(`https://app.netlify.com/`);
+const socket = io(`ws://localhost:5000`);
+// const socket = io(`https://arcany.up.railway.app/`);
 
 //Change this to push <
 
@@ -42,6 +42,9 @@ WeaponWillowStick.src = "willowStick.png";
 const bulletStick = new Image();
 bulletStick.src = "bulletStick.png";
 
+const bulletStickBlue = new Image();
+bulletStickBlue.src = "bulletStickBlue.png";
+
 const chatBubble = new Image();
 chatBubble.src = "chatBubble.png";
 
@@ -64,9 +67,9 @@ audioSplash.loop = false;
 const audioSuccess = new Audio("./audios/success.mp3");
 audioSuccess.loop = false;
 
-const audioShootNature = new Audio("./audios/shootNature.mp3");
+const audioShootNature = new Audio("./audios/shootNature.wav");
 audioShootNature.loop = false;
-audioShootNature.volume = 0.5;
+audioShootNature.volume = 0.3;
 
 const audioIntro = new Audio("./audios/audioIntro.mp3");
 audioIntro.loop = true;
@@ -817,7 +820,7 @@ function interactEquipment (item, index) {
 
           setTimeout(() => {
             consumeAvailable = true;
-          }, 2000);
+          }, 1000);
 
           if (equippedItems[`weapon`].style.background !== "none") {
 
@@ -1376,7 +1379,7 @@ socket.on("loginAttempt", (msg) => {
   if(msg === "success") {
     audioIntro.pause();
     loggedIn.play();
-    intervalCanvasBase = setInterval(canvasLobbyLoop, 16.67);
+    intervalCanvasBase = setInterval(canvasIslandOneLoop, 16.67);
 
     console.log("logged in")
 
@@ -1638,6 +1641,10 @@ window.addEventListener("keyup", (e) => {
 //Player movement <
 
 //Weapon shoot >
+let projectilesClient = [];
+let recoil = 0;
+let shooting = false;
+
 canvasLobby.addEventListener("mousedown", (e) => {
   if (shootingBlock === false) {
     if (myPlayer.weapon[0]) {
@@ -1647,16 +1654,74 @@ canvasLobby.addEventListener("mousedown", (e) => {
             e.clientY - canvasLobby.height / 2,
             e.clientX - canvasLobby.width / 2
           );
-          socket.emit("projectile", angle);
-          cameraShake();
+          // socket.emit("projectile", angle);
+          // cameraShake();
 
-          const interval = setInterval(() => {
-              if (mainSkillCooldown > 10) {
-                  mainSkillCooldown = 0;
-                  clearInterval(interval);
-              }
-              mainSkillCooldown++;
-          }, 50);
+          if (myPlayer?.weapon[0].name === "stick") {
+
+            projectilesClient.push({
+              angle,
+              x: myPlayer.x + 20,
+              y: myPlayer.y + 50,
+              timeLeft: 200,
+              playerId: socket.id,
+            }) 
+
+            shooting = true;
+
+            setTimeout(() => {
+              shooting = false;
+            }, 20);
+  
+            const interval = setInterval(() => {
+                if (mainSkillCooldown > 2) {
+                    mainSkillCooldown = 0;
+                    recoil = 0
+                    clearInterval(interval);
+                }
+                mainSkillCooldown++;
+                recoil += 4
+            }, 20);
+          }
+
+          else if (myPlayer?.weapon[0].name === "willowStick") {
+
+            const bullet1 = angle + 0.1
+            const bullet2 = angle - 0.1
+
+            projectilesClient.push({
+              bullet1,
+              x: myPlayer.x + 20,
+              y: myPlayer.y + 50,
+              timeLeft: 200,
+              playerId: socket.id,
+            }) 
+
+            projectilesClient.push({
+              bullet2,
+              x: myPlayer.x + 20,
+              y: myPlayer.y + 50,
+              timeLeft: 200,
+              playerId: socket.id,
+            }) 
+
+            shooting = true;
+
+            setTimeout(() => {
+              shooting = false;
+            }, 70);
+  
+            const interval = setInterval(() => {
+                if (mainSkillCooldown > 2) {
+                    mainSkillCooldown = 0;
+                    recoil = 0
+                    clearInterval(interval);
+                }
+                mainSkillCooldown++;
+                recoil += 8
+            }, 50);
+          }
+
       }
     }
   }
@@ -1669,12 +1734,12 @@ window.addEventListener("mousemove", (e) => {
       e.clientY - canvasLobby.height / 2,
       e.clientX - canvasLobby.width / 2
     );
-    socket.emit("weaponAngle", angleMouse);
+    // socket.emit("weaponAngle", angleMouse);
 
     if (window.scrollY > 0) {
       window.scrollTo({
         top: 0,
-        behavior: 'smooth' // This provides a smooth scrolling effect (not supported in all browsers)
+        behavior: 'smooth' 
       });
     }
 });
@@ -1774,6 +1839,11 @@ function canvasLobbyLoop() {
   //Local Actions >
 
   if (myPlayer) {
+
+    for (const projectile of projectilesClient) {
+      projectile.x += Math.cos(projectile.angle || projectile.bullet1 || projectile.bullet2) * 35;
+      projectile.y += Math.sin(projectile.angle || projectile.bullet1 || projectile.bullet2) * 35;
+    }
 
     //Player Movement >
     if (movingLeft && allowedMoveUpLeft) {
@@ -2293,8 +2363,8 @@ function canvasLobbyLoop() {
       if (player.username === myPlayer.username) {
         // console.log(player.weapon[0])
         canvas.save(); // Save the current canvas state
-        canvas.translate(playerX - cameraX +18, playerY - cameraY +50); // Translate to the player's position
-        canvas.rotate(player.weaponAngle); // Rotate based on the mouse angle
+        canvas.translate(playerX - cameraX +18 - recoil, playerY - cameraY +50); // Translate to the player's position
+        canvas.rotate(angleMouse); // Rotate based on the mouse angle
         if (player.weapon[0].name === "stick") {
           canvas.drawImage(WeaponStick ,0, -7.5, 80, 20); // Draw the rectangle centered around the rotated point
         }
@@ -2366,17 +2436,13 @@ function canvasLobbyLoop() {
 
 }
 
-  for (const projectile of projectiles) {
-    canvas.drawImage(bulletStick, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
-    // canvas.beginPath();
-    // canvas.arc(
-    //   projectile.x - cameraX,
-    //   projectile.y - cameraY,
-    //   10,
-    //   0,
-    //   2 * Math.PI
-    // );
-    // canvas.fill();
+  for (const projectile of projectilesClient) {
+    if (myPlayer?.weapon[0]?.name === "stick") {
+      canvas.drawImage(bulletStick, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
+    }
+    if (myPlayer?.weapon[0]?.name === "willowStick") {
+      canvas.drawImage(bulletStickBlue, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
+    }
   }
 
   playerFramesDrawn++;
@@ -2399,6 +2465,16 @@ function canvasLobbyLoop() {
 }
 
 //Base Map Canvas <
+
+let particles = [];
+
+// setInterval(() => {
+  
+//   particles.forEach(particle => {
+//     particle.x += Math.cos(particle.angle) * particle.speed;
+//     particle.y += Math.sin(particle.angle) * particle.speed;
+//   })
+// }, 1000);
 
 //Island One Map Canvas >
 
@@ -2443,9 +2519,60 @@ function canvasIslandOneLoop() {
 
   //Map Animation <
 
+  const maxParticles = 1;
+
+if (shooting) {
+  for (let i = 0; i < maxParticles; i++) {
+    const angle = angleMouse + (Math.random() * 0.2 * 2 - 0.2);; // Random angle
+    const radius = Math.random() * 20; // Random radius (adjust as needed)
+    const speed = Math.floor(Math.random() * (20 - 8 + 1)) + 8;; // Random speed (adjust as needed)
+    const size = 8; // Random size between 3 and 8
+
+    const randomNumber = Math.floor(Math.random() * 2) + 1;
+    
+    if (randomNumber === 1) {
+      if (myPlayer?.weapon[0]?.name === "stick") {
+        particles.push({ x: 1, y: 1, size: size, color: '#ffde8c', speed: speed, angle: angle });
+      }
+      else if (myPlayer?.weapon[0]?.name === "willowStick") {
+        particles.push({ x: 1, y: 1, size: size, color: '#8affd4', speed: speed, angle: angle });
+      }
+    } else {
+
+      particles.push({ x: 1, y: 1, size: size, color: 'white', speed: speed, angle: angle });
+    }
+
+  }
+
+}
+
+particles.forEach(particle => {
+  const particleX = myPlayer.x - cameraX +18;
+  const particleY = myPlayer.y - cameraY +50;
+  canvas.beginPath();
+  canvas.fillStyle = particle.color;
+  canvas.fillRect(particleX + particle.x, particleY + particle.y, particle.size, particle.size);
+
+  // Move particles
+  particle.x += Math.cos(particle.angle) * particle.speed;
+  particle.y += Math.sin(particle.angle) * particle.speed;
+
+  // Decrease size over time
+  particle.size -= 0.1;
+  particle.speed -= 0.05 * particle.speed
+});
+
+particles = particles.filter(particle => particle.size > 0 );
+
+
   //Local Actions >
 
   if (myPlayer) {
+
+    for (const projectile of projectilesClient) {
+      projectile.x += Math.cos(projectile.angle || projectile.bullet1 || projectile.bullet2) * 35;
+      projectile.y += Math.sin(projectile.angle || projectile.bullet1 || projectile.bullet2) * 35;
+    }
 
     //Player Movement >
     if (movingLeft && allowedMoveUpLeft) {
@@ -2963,32 +3090,32 @@ function canvasIslandOneLoop() {
       //Movement <
 
       // Weapon >
-     if (player.weapon[0]) {
+      if (player.weapon[0]) {
 
-      if (player.username === myPlayer.username) {
-        // console.log(player.weapon[0])
-        canvas.save(); // Save the current canvas state
-        canvas.translate(playerX - cameraX +18, playerY - cameraY +50); // Translate to the player's position
-        canvas.rotate(player.weaponAngle); // Rotate based on the mouse angle
-        if (player.weapon[0].name === "stick") {
-          canvas.drawImage(WeaponStick ,0, -7.5, 80, 20); // Draw the rectangle centered around the rotated point
+        if (player.username === myPlayer.username) {
+          // console.log(player.weapon[0])
+          canvas.save(); // Save the current canvas state
+          canvas.translate(playerX - cameraX +18 - recoil, playerY - cameraY +50); // Translate to the player's position
+          canvas.rotate(angleMouse); // Rotate based on the mouse angle
+          if (player.weapon[0].name === "stick") {
+            canvas.drawImage(WeaponStick ,0, -7.5, 80, 20); // Draw the rectangle centered around the rotated point
+          }
+          else if (player.weapon[0].name === "willowStick") {
+            canvas.drawImage(WeaponWillowStick ,0, -7.5, 80, 20); // Draw the rectangle centered around the rotated point
+          }
+        } else {
+          canvas.save(); // Save the current canvas state
+          canvas.translate(player.x - cameraX +18, player.y - cameraY +50); // Translate to the player's position
+          canvas.rotate(player.weaponAngle); // Rotate based on the mouse angle
+          if (player.weapon[0].name === "stick") {
+            canvas.drawImage(WeaponStick ,0, -7.5, 80, 20); // Draw the rectangle centered around the rotated point
+          }
+          else if (player.weapon[0].name === "willowStick") {
+            canvas.drawImage(WeaponWillowStick ,0, -7.5, 80, 20); // Draw the rectangle centered around the rotated point
+          }
+         }
+  
         }
-        else if (player.weapon[0].name === "willowStick") {
-          canvas.drawImage(WeaponWillowStick ,0, -7.5, 80, 20); // Draw the rectangle centered around the rotated point
-        }
-      } else {
-        canvas.save(); // Save the current canvas state
-        canvas.translate(player.x - cameraX +18, player.y - cameraY +50); // Translate to the player's position
-        canvas.rotate(player.weaponAngle); // Rotate based on the mouse angle
-        if (player.weapon[0].name === "stick") {
-          canvas.drawImage(WeaponStick ,0, -7.5, 80, 20); // Draw the rectangle centered around the rotated point
-        }
-        else if (player.weapon[0].name === "willowStick") {
-          canvas.drawImage(WeaponWillowStick ,0, -7.5, 80, 20); // Draw the rectangle centered around the rotated point
-        }
-       }
-
-      }
       canvas.restore(); // Restore the canvas state to what it was before translation and rotation
       // Weapon <
 
@@ -3041,18 +3168,16 @@ function canvasIslandOneLoop() {
 
 }
 
-  for (const projectile of projectiles) {
+for (const projectile of projectilesClient) {
+  if (myPlayer?.weapon[0]?.name === "stick") {
     canvas.drawImage(bulletStick, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
-    // canvas.beginPath();
-    // canvas.arc(
-    //   projectile.x - cameraX,
-    //   projectile.y - cameraY,
-    //   10,
-    //   0,
-    //   2 * Math.PI
-    // );
-    // canvas.fill();
   }
+  if (myPlayer?.weapon[0]?.name === "willowStick") {
+    canvas.drawImage(bulletStickBlue, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
+  }
+}
+
+
 
   for (const enemy of enemies) {
     if (enemy.enabled) {
@@ -3071,6 +3196,7 @@ function canvasIslandOneLoop() {
       );
     }
   }
+
 
   playerFramesDrawn++;
   if (playerFramesDrawn >= 8) {
