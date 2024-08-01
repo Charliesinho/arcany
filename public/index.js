@@ -33,6 +33,9 @@ transparentCape.src = "./capes/transparent.png";
 const slime = new Image();
 slime.src = "slime.png";
 
+const slimeDMG = new Image();
+slimeDMG.src = "slimeDMG.png";
+
 const WeaponStick = new Image();
 WeaponStick.src = "stick.png";
 
@@ -70,6 +73,9 @@ audioSuccess.loop = false;
 const audioShootNature = new Audio("./audios/shootNature.wav");
 audioShootNature.loop = false;
 audioShootNature.volume = 0.3;
+
+const splatAudio = new Audio("./audios/splat.mp3");
+splatAudio.loop = false;
 
 const audioIntro = new Audio("./audios/audioIntro.mp3");
 audioIntro.loop = true;
@@ -119,6 +125,9 @@ const footsteps = new Audio("./audios/footsteps.mp3");
 footsteps.loop = true;
 footsteps.volume = 0.3;
 
+const enemyHitAudio = new Audio("./audios/enemyHit.mp3");
+enemyHitAudio.loop = false;
+
 
 const canvasLobby = document.getElementById("canvas-lobby");
 const widthMinus20vw = window.innerWidth - 290;
@@ -129,6 +138,7 @@ const canvas = canvasLobby.getContext("2d");
 
 let players = [];
 let enemies = [];
+let enemiesClient = [];
 let projectiles = [];
 
 let cameraShakeX = -150;
@@ -266,7 +276,7 @@ function handleLogin(action) {
   }
 
   socket.emit("loginInfo", loginInfo);
-  socket.emit("loadEnemies", enemies);
+  // socket.emit("loadEnemies", enemies);
 }
 
 openerScreenButton.addEventListener("click", function() {
@@ -912,6 +922,7 @@ shopItem4.addEventListener("mousedown", (e) => {
 let generalLevel = 0;
 let generalLevelCooking = 0;
 let generalLevelExploring = 0;
+let generalLevelCombat= 0;
 
 let oldFishingLevel = 0;
 let newFishingLevel = 0;
@@ -927,6 +938,11 @@ let oldExploringLevel = 0;
 let newExploringLevel = 0;
 let changeExploringLevel = true;
 let exploringLevelSimple = 0;
+
+let oldCombatLevel = 0;
+let newCombatLevel = 0;
+let changeCombatLevel = true;
+let combatLevelSimple = 0;
 
 socket.on("player", (serverPlayer) => {
 
@@ -955,11 +971,77 @@ socket.on("player", (serverPlayer) => {
   playerCoinsAmount.innerHTML = myPlayer.currency
   // console.log(myPlayer)
 
+   // Combat level >
+
+   let combatLevelNum = Math.trunc(myPlayer.combatLevel / 1000);
+
+   if (changeCombatLevel === true && myPlayer.combatLevel !== 0) {
+     if (combatLevelNum < 1) {
+       newCombatLevel = 1;
+     }
+     else if (combatLevelNum < 3) {
+       newCombatLevel = 2;
+     }
+     else if (combatLevelNum < 6) {
+       newCombatLevel = 3;
+     }
+     else if (combatLevelNum < 12) {
+       newCombatLevel = 4;
+     }
+     else {
+       newCombatLevel = 5;
+     }
+ 
+     changeCombatLevel = false;
+   }
+ 
+   if (combatLevelNum < 1) {
+    combatLevel.innerHTML = "1";
+    combatLevelSimple = 1;
+   }
+   else if (combatLevelNum < 3) {
+    combatLevel.innerHTML = "2";
+    combatLevelSimple = 2;
+   }
+   else if (combatLevelNum < 6) {
+    combatLevel.innerHTML = "3";
+    combatLevelSimple = 3;
+   }
+   else if (combatLevelNum < 12) {
+    combatLevel.innerHTML = "4";
+    combatLevelSimple = 4;
+   }
+   else {
+    combatLevel.innerHTML = "5";
+    combatLevelSimple = 5;
+    combatLevel.style.color = "white"
+    combatLevel.style.textShadow = "0 0 3px white"
+   }
+ 
+   if (combatLevelSimple > newCombatLevel && myPlayer.combatLevel !== 0) {
+     changeCombatLevel = true;
+     levelUp.src = "./Textures/levellUpCombat.png"
+     levelUp.classList.add('fadeInAnim');
+     levelUpCircle.classList.add('rotateAnim');
+     levelUp.style.display = "block";
+     levelUpCircle.style.display = "block";
+     levelUpAudio.play();
+ 
+     setTimeout(() => {
+       levelUp.style.display = "none";
+       levelUpCircle.style.display = "none";
+       levelUp.classList.remove('fadeInAnim');
+       levelUpCircle.classList.remove('rotateAnim');
+     }, 5000);
+   }
+ 
+   generalLevelCombat = combatLevelSimple;
+ 
+   // Combat level <
+
   // Exploring level >
 
   let exploringLevelNum = Math.trunc(myPlayer.exploringLevel / 1000);
-
-  // console.log(exploringLevelNum)
 
   if (changeExploringLevel === true && myPlayer.exploringLevel !== 0) {
     if (exploringLevelNum < 1) {
@@ -1379,7 +1461,7 @@ socket.on("loginAttempt", (msg) => {
   if(msg === "success") {
     audioIntro.pause();
     loggedIn.play();
-    intervalCanvasBase = setInterval(canvasIslandOneLoop, 16.67);
+    intervalCanvasBase = setInterval(canvasLobbyLoop, 16.67); //Initial canvas
 
     console.log("logged in")
 
@@ -1461,6 +1543,8 @@ let playerY = 3568;
 
 let playerLocation = [playerX, playerY];
 
+let noMovement = false;
+
 setInterval(() => {
   playerLocation = [playerX, playerY];
   socket.emit("playerLocation", playerLocation);
@@ -1468,46 +1552,50 @@ setInterval(() => {
 }, 100);
 
 window.addEventListener("keydown", (e) => {
-  if (e.key === "w" || e.key === "z" ) {
-    footsteps.play();
-    footsteps.loop = true;
+  if (!noMovement) {
 
-    movingUp = true;
-  } else if (e.key === "s") {
-    footsteps.play();
-    footsteps.loop = true;
+    if (e.key === "w" || e.key === "z" ) {
+      footsteps.play();
+      footsteps.loop = true;
+  
+      movingUp = true;
+    } else if (e.key === "s") {
+      footsteps.play();
+      footsteps.loop = true;
+  
+      movingDown = true;
+    } else if (e.key === "d") {
+      footsteps.play();
+      footsteps.loop = true;
+      animPlayer = "runRight";
+      lastLookPlayer = "right";
+  
+      movingRight = true;
+    } else if (e.key === "a" || e.key === "q") {
+      footsteps.play();
+      footsteps.loop = true;
+      animPlayer = "runLeft";
+      lastLookPlayer = "left";
+  
+      movingLeft = true;
+    }
+  
+    // socket.emit("inputs", inputs);
+    socket.emit("animPlayer", animPlayer);
+    socket.emit("lastLookPlayer", lastLookPlayer);
 
-    movingDown = true;
-  } else if (e.key === "d") {
-    footsteps.play();
-    footsteps.loop = true;
-    animPlayer = "runRight";
-    lastLookPlayer = "right";
-
-    movingRight = true;
-  } else if (e.key === "a" || e.key === "q") {
-    footsteps.play();
-    footsteps.loop = true;
-    animPlayer = "runLeft";
-    lastLookPlayer = "left";
-
-    movingLeft = true;
   }
-
-  // socket.emit("inputs", inputs);
-  socket.emit("animPlayer", animPlayer);
-  socket.emit("lastLookPlayer", lastLookPlayer);
 
   //Fishing Minigame >
 
   if(e.key === "e" && fishAvailable === true && fishing === false) {
 
     fishingBarHit.classList.add('startFish');
+    noMovement = true
 
     audioSplash.play();
 
     fishingGame.style.display = "block";
-    blockMovement = true;
     fishing = true;
 
     const number = Math.floor(Math.random() * (10000 - 3000 + 1) + 3000);
@@ -1527,13 +1615,12 @@ window.addEventListener("keydown", (e) => {
           marginFish = -50;
           clearInterval(interval);
           fishingBar.style.marginLeft = marginFish + "%";
+          noMovement = false
 
           setTimeout(() => {
 
             fishingGame.style.display = "none";
             fishing = false;
-            blockMovement = false;
-            socket.emit("blockMovement", blockMovement);
             fishingBarHit.classList.remove('noFish');
 
           }, 800);
@@ -1560,6 +1647,7 @@ window.addEventListener("keydown", (e) => {
       cameraShake();
       marginFish = 100;
       audioClick.play();
+      noMovement = false
     };
   }
 
@@ -1638,6 +1726,7 @@ window.addEventListener("keyup", (e) => {
   socket.emit("inputs", inputs);
   socket.emit("animPlayer", animPlayer);
 });
+
 //Player movement <
 
 //Weapon shoot >
@@ -1775,6 +1864,50 @@ let enemyCutX = 0;
 let enemyCutY = 0;
 let enemyFramesDrawn = 0;
 let enemyAnimDelay = 2;
+
+function spawnSlime() {
+
+  const Slime = {
+    damage: 0,
+    health: 3,
+    width: 100,
+    height: 100,
+    img: "slime.png",
+    speed: 1,
+    spriteSheetAmt: 4,
+    type: "slime",
+    x: 2750,
+    y: 3568,
+    originX: 2750,
+    originY: 3768,
+    nextTarget: slimeGetRandomCoords(),
+    nextTargetCount: Math.floor(Math.random() * 100) + 50,
+    enabled: true,
+    disabledTimer: 500,
+    damaged: 0,
+    angle: 0
+  }
+  setTimeout(() => {   
+    enemiesClient.push(Slime)
+  }, 3000);
+
+}
+
+spawnSlime()
+
+function slimeGetRandomCoords() {
+  const minX = 2880 - 300;
+  const maxX = 2880 + 300;
+  const minY = 3768 - 100;
+  const maxY = 3768 + 100;
+  let newCoords = {
+      x: Math.floor(Math.random() * (maxX - minX + 1)) + minX,
+      y: Math.floor(Math.random() * (minY - maxY + 1)) + minY,
+  }
+  return newCoords;
+}
+
+let slimeSpawn = true;
 
 // Enemy <
 
@@ -2468,14 +2601,6 @@ function canvasLobbyLoop() {
 
 let particles = [];
 
-// setInterval(() => {
-  
-//   particles.forEach(particle => {
-//     particle.x += Math.cos(particle.angle) * particle.speed;
-//     particle.y += Math.sin(particle.angle) * particle.speed;
-//   })
-// }, 1000);
-
 //Island One Map Canvas >
 
 function canvasIslandOneLoop() {
@@ -2521,48 +2646,48 @@ function canvasIslandOneLoop() {
 
   const maxParticles = 1;
 
-if (shooting) {
-  for (let i = 0; i < maxParticles; i++) {
-    const angle = angleMouse + (Math.random() * 0.2 * 2 - 0.2);; // Random angle
-    const radius = Math.random() * 20; // Random radius (adjust as needed)
-    const speed = Math.floor(Math.random() * (20 - 8 + 1)) + 8;; // Random speed (adjust as needed)
-    const size = 8; // Random size between 3 and 8
+  if (shooting) {
+    for (let i = 0; i < maxParticles; i++) {
+      const angle = angleMouse + (Math.random() * 0.2 * 2 - 0.2);; // Random angle
+      const radius = Math.random() * 20; // Random radius (adjust as needed)
+      const speed = Math.floor(Math.random() * (20 - 8 + 1)) + 8;; // Random speed (adjust as needed)
+      const size = 10; // Random size between 3 and 8
+      const particleX = myPlayer.x;
+      const particleY = myPlayer.y;
 
-    const randomNumber = Math.floor(Math.random() * 2) + 1;
-    
-    if (randomNumber === 1) {
-      if (myPlayer?.weapon[0]?.name === "stick") {
-        particles.push({ x: 1, y: 1, size: size, color: '#ffde8c', speed: speed, angle: angle });
-      }
-      else if (myPlayer?.weapon[0]?.name === "willowStick") {
-        particles.push({ x: 1, y: 1, size: size, color: '#8affd4', speed: speed, angle: angle });
-      }
-    } else {
+      const randomNumber = Math.floor(Math.random() * 2) + 1;
+      
+      if (randomNumber === 1) {
+        if (myPlayer?.weapon[0]?.name === "stick") {
+          particles.push({ x: 1, y: 1, size: size, color: '#ffde8c', speed: speed, angle: angle, initalX: particleX, intialY: particleY });
+        }
+        else if (myPlayer?.weapon[0]?.name === "willowStick") {
+          particles.push({ x: 1, y: 1, size: size, color: '#8affd4', speed: speed, angle: angle, initalX: particleX, intialY: particleY });
+        }
+      } else {
 
-      particles.push({ x: 1, y: 1, size: size, color: 'white', speed: speed, angle: angle });
+        particles.push({ x: 1, y: 1, size: size, color: 'white', speed: speed, angle: angle, initalX: particleX, intialY: particleY });
+      }
+
     }
 
   }
 
-}
+  particles.forEach(particle => {
+    canvas.beginPath();
+    canvas.fillStyle = particle.color;
+    canvas.fillRect(particle.initalX + particle.x - cameraX - 10, particle.intialY + particle.y - cameraY + 50, particle.size, particle.size);
 
-particles.forEach(particle => {
-  const particleX = myPlayer.x - cameraX +18;
-  const particleY = myPlayer.y - cameraY +50;
-  canvas.beginPath();
-  canvas.fillStyle = particle.color;
-  canvas.fillRect(particleX + particle.x, particleY + particle.y, particle.size, particle.size);
+    // Move particles
+    particle.x += Math.cos(particle.angle) * particle.speed;
+    particle.y += Math.sin(particle.angle) * particle.speed;
 
-  // Move particles
-  particle.x += Math.cos(particle.angle) * particle.speed;
-  particle.y += Math.sin(particle.angle) * particle.speed;
+    // Decrease size over time
+    particle.size -= 0.1;
+    particle.speed -= 0.05 * particle.speed
+  });
 
-  // Decrease size over time
-  particle.size -= 0.1;
-  particle.speed -= 0.05 * particle.speed
-});
-
-particles = particles.filter(particle => particle.size > 0 );
+  particles = particles.filter(particle => particle.size > 0 );
 
 
   //Local Actions >
@@ -3168,34 +3293,180 @@ particles = particles.filter(particle => particle.size > 0 );
 
 }
 
-for (const projectile of projectilesClient) {
-  if (myPlayer?.weapon[0]?.name === "stick") {
-    canvas.drawImage(bulletStick, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
-  }
-  if (myPlayer?.weapon[0]?.name === "willowStick") {
-    canvas.drawImage(bulletStickBlue, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
-  }
-}
-
-
-
-  for (const enemy of enemies) {
-    if (enemy.enabled) {
-      frameCurrentEnemy = frameCurrentEnemy % 4;
-      enemyCutX = frameCurrentEnemy * enemyWidth;
-      canvas.drawImage(
-        slime,
-        enemyCutX,
-        enemyCutY,
-        enemyWidth,
-        enemyHeight,
-        enemy.x - cameraX - 30,
-        enemy.y - cameraY,
-        enemy.width,
-        enemy.height
-      );
+  for (const projectile of projectilesClient) {
+    if (myPlayer?.weapon[0]?.name === "stick") {
+      canvas.drawImage(bulletStick, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
+    }
+    if (myPlayer?.weapon[0]?.name === "willowStick") {
+      canvas.drawImage(bulletStickBlue, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
     }
   }
+
+
+  for (const enemy of enemiesClient) {
+
+          if (enemy.enabled) {
+            
+            frameCurrentEnemy = frameCurrentEnemy % 4;
+            enemyCutX = frameCurrentEnemy * enemyWidth;
+
+            if (enemy.health <= 0) { 
+              spawnSlime()
+              socket.emit("enemyKilled", "slime");
+              enemiesClient.splice(enemiesClient.indexOf(enemy), 1)
+
+              for (let i = 0; i < 20; i++) {
+                const angle = angleMouse + (Math.random() * 0.5 * 2 - 0.2) ;; // Random angle
+                const speed = Math.floor(Math.random() * (20 - 8 + 1)) + 5;; // Random speed (adjust as needed)
+                const size = 25; // Random size between 3 and 8
+                const particleX = enemy.x;
+                const particleY = enemy.y;
+          
+                const randomNumber = Math.floor(Math.random() * 2) + 1;
+                
+                if (randomNumber === 1) {
+
+                    particles.push({ x: 1, y: 1, size: size, color: '#6a91ad', speed: speed, angle: angle, initalX: particleX, intialY: particleY });
+                  
+                } else {
+          
+                    particles.push({ x: 1, y: 1, size: size, color: '#77acd1', speed: speed, angle: angle, initalX: particleX, intialY: particleY });
+                }
+          
+              }
+            }
+            
+            if (enemy.damaged > 0) {
+
+              enemy.damaged--
+
+                canvas.drawImage(
+                  slimeDMG,
+                  enemyCutX,
+                  enemyCutY,
+                  enemyWidth,
+                  enemyHeight,
+                  enemy.x - cameraX - 30,
+                  enemy.y - cameraY,
+                  enemy.width,
+                  enemy.height
+                );
+
+                  enemy.x += Math.cos(enemy.angle) * enemy.damaged ;
+                  enemy.y += Math.sin(enemy.angle) * enemy.damaged;
+
+                  if (enemy.damaged > 8) {
+
+                    
+
+                    for (let i = 0; i < 3; i++) {
+                      const angle = angleMouse + (Math.random() * 0.5 * 2 - 0.2);; // Random angle
+                      const speed = Math.floor(Math.random() * (20 - 8 + 1)) + 13;; // Random speed (adjust as needed)
+                      const size = 15; // Random size between 3 and 8
+                      const particleX = enemy.x;
+                      const particleY = enemy.y;
+                
+                      const randomNumber = Math.floor(Math.random() * 2) + 1;
+                      
+                      if (randomNumber === 1) {
+  
+                          particles.push({ x: 1, y: 1, size: size, color: '#6a91ad', speed: speed, angle: angle, initalX: particleX, intialY: particleY });
+                        
+                      } else {
+                
+                        particles.push({ x: 1, y: 1, size: size, color: '#77acd1', speed: speed, angle: angle, initalX: particleX, intialY: particleY });
+                      }
+                
+                    }
+
+                  }
+
+ 
+                
+              } else {
+                if (enemyHitAudio.currentTime > 0) {
+                  enemyHitAudio.currentTime = 0
+                  enemyHitAudio.pause()
+                }
+
+                canvas.drawImage(
+                  slime,
+                  enemyCutX,
+                  enemyCutY,
+                  enemyWidth,
+                  enemyHeight,
+                  enemy.x - cameraX - 30,
+                  enemy.y - cameraY,
+                  enemy.width,
+                  enemy.height
+                );
+
+                if (enemy.x > enemy.nextTarget.x) {
+                  enemy.x -= enemy.speed;
+                } else if (enemy.x < enemy.nextTarget.x) {
+                    enemy.x += enemy.speed;
+                } 
+        
+                if (enemy.y > enemy.nextTarget.y) {
+                    enemy.y -= enemy.speed;
+                } else if (enemy.y < enemy.nextTarget.y) {
+                    enemy.y += enemy.speed;
+                } 
+              }
+              
+              enemy.nextTargetCount--;
+              if (enemy.nextTargetCount <= 0) {
+                enemy.nextTarget = slimeGetRandomCoords();
+                enemy.nextTargetCount = Math.floor(Math.random() * 100) + 50;;
+              }
+              
+              // if (myPlayer.room === "islandOne") {
+                
+              const username = myPlayer.id; 
+              const distance = Math.sqrt(
+                (myPlayer.x + 15 - enemy.x) ** 2 + (myPlayer.y + 15 - enemy.y) ** 2
+              );
+              if (distance <= 15 && !myPlayer.invincible) {
+                
+                if (myPlayer.health > 1) {
+                  myPlayer.health -= 1;
+                  // updateHealth(username, myPlayer.health, myPlayer.id);
+                } else {
+                  myPlayer.x = 1280;
+                  myPlayer.y = 1220;
+                  myPlayer.health = 3;
+                  // updateHealth(username, myPlayer.health, myPlayer.id);
+                }
+                myPlayer.invincible = true;
+                break;
+              }
+              
+              for (const projectile of projectilesClient) {
+                if (projectile.x > enemy.x && projectile.x < enemy.x + 100 && projectile.y > enemy.y && projectile.y < enemy.y + 100 && enemy.damaged === 0) {
+                  enemy.damaged = 10;
+                  enemy.angle = projectile.angle || projectile.bullet1 || projectile.bullet2;
+                  projectilesClient.splice(projectilesClient.indexOf(projectile), 1)
+                  console.log(generalLevelCombat)
+                  enemy.health = enemy.health - generalLevelCombat
+
+                  if (enemy.health > 0) {
+                    enemyHitAudio.play()
+                  } else {
+                    splatAudio.play()
+                  }
+                }
+              
+              }
+          
+                  
+          } else {
+              enemy.disabledTimer--;
+              if (enemy.disabledTimer <= 0) {
+                  enemy.disabledTimer = 500;
+                  enemy.enabled = true;
+              }
+          }
+    }
 
 
   playerFramesDrawn++;

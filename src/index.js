@@ -107,60 +107,60 @@ function tick() {
         io.to(player.room).emit("player", player);
     }
 
-    for (const enemy of enemies) {
+    // for (const enemy of enemies) {
 
-        if (enemy.enabled) {
-            if (enemy.x > enemy.nextTarget.x) {
-                enemy.x -= enemy.speed;
-            } else if (enemy.x < enemy.nextTarget.x) {
-                enemy.x += enemy.speed;
-            } 
+    //     if (enemy.enabled) {
+    //         if (enemy.x > enemy.nextTarget.x) {
+    //             enemy.x -= enemy.speed;
+    //         } else if (enemy.x < enemy.nextTarget.x) {
+    //             enemy.x += enemy.speed;
+    //         } 
     
-            if (enemy.y > enemy.nextTarget.y) {
-                enemy.y -= enemy.speed;
-            } else if (enemy.y < enemy.nextTarget.y) {
-                enemy.y += enemy.speed;
-            } 
+    //         if (enemy.y > enemy.nextTarget.y) {
+    //             enemy.y -= enemy.speed;
+    //         } else if (enemy.y < enemy.nextTarget.y) {
+    //             enemy.y += enemy.speed;
+    //         } 
     
-            enemy.nextTargetCount--;
-            if (enemy.nextTargetCount <= 0) {
-                enemy.nextTarget = slimeGetRandomCoords(enemy.originX, enemy.originY);
-                enemy.nextTargetCount = 100;
-            }
+    //         enemy.nextTargetCount--;
+    //         if (enemy.nextTargetCount <= 0) {
+    //             enemy.nextTarget = slimeGetRandomCoords(enemy.originX, enemy.originY);
+    //             enemy.nextTargetCount = 100;
+    //         }
 
-            for (const player of players) {
-                if (player.room === "islandOne") {
+    //         for (const player of players) {
+    //             if (player.room === "islandOne") {
 
-                    const username = usernames[player.id]; 
-                    const distance = Math.sqrt(
-                        (player.x + 15 - enemy.x) ** 2 + (player.y + 15 - enemy.y) ** 2
-                        );
-                        if (distance <= 15 && !player.invincible) {
+    //                 const username = usernames[player.id]; 
+    //                 const distance = Math.sqrt(
+    //                     (player.x + 15 - enemy.x) ** 2 + (player.y + 15 - enemy.y) ** 2
+    //                     );
+    //                     if (distance <= 15 && !player.invincible) {
                             
-                            if (player.health > 1) {
-                                player.health -= 1;
-                                updateHealth(username, player.health, player.id);
-                            } else {
-                                player.x = 1280;
-                                player.y = 1220;
-                                player.health = 3;
-                                updateHealth(username, player.health, player.id);
-                            }
-                            player.invincible = true;
-                            break;
-                        }
-                }
-                }
-        } else {
-            enemy.disabledTimer--;
-            if (enemy.disabledTimer <= 0) {
-                enemy.disabledTimer = 500;
-                enemy.enabled = true;
-            }
-        }
+    //                         if (player.health > 1) {
+    //                             player.health -= 1;
+    //                             updateHealth(username, player.health, player.id);
+    //                         } else {
+    //                             player.x = 1280;
+    //                             player.y = 1220;
+    //                             player.health = 3;
+    //                             updateHealth(username, player.health, player.id);
+    //                         }
+    //                         player.invincible = true;
+    //                         break;
+    //                     }
+    //             }
+    //             }
+    //     } else {
+    //         enemy.disabledTimer--;
+    //         if (enemy.disabledTimer <= 0) {
+    //             enemy.disabledTimer = 500;
+    //             enemy.enabled = true;
+    //         }
+    //     }
 
-        io.emit("enemies", enemies);
-    }
+    //     io.emit("enemies", enemies);
+    // }
 
     for (const projectile of projectiles) {
 
@@ -214,7 +214,7 @@ function tick() {
 
     projectiles = projectiles.filter((projectile) => projectile.timeLeft > 0);
 
-    io.to("islandOne").emit("enemies", enemies);
+    // io.to("islandOne").emit("enemies", enemies);
     // io.to("baseMap1").emit('players', players);
     io.to("baseMap").emit("projectiles", projectiles);
 }
@@ -706,7 +706,6 @@ async function main() {
         
                     myPlayer[socket.id] = player;   
                     
-                    console.log(item)
                     
                     if (item.name === "sardin") {
                         const cookingLevel = player.cooking + 100;
@@ -753,6 +752,23 @@ async function main() {
                 
               };
               consume()
+        });
+
+        socket.on("enemyKilled", (item) => {
+
+            async function expObtained() {
+                const player = await Player.findOne({socket: socket.id}).exec();                                           
+        
+                    myPlayer[socket.id] = player;   
+                    
+                    if (item === "slime") {
+                        const combatLevel = player.combat + 10;
+                        player.combat += 10;
+                        await Player.findOneAndUpdate({socket: socket.id}, {combat: combatLevel}, {new: true});
+                    }                   
+                
+              };
+              expObtained()
         });
 
         socket.on("rewardChest", (item) => {
@@ -1004,9 +1020,9 @@ async function main() {
                 disabledTimer: 500,
             }
 
-            enemies.push(newEnemy)
+            // enemies.push(newEnemy)
 
-            enemies[socket.id] = enemies;
+            // enemies[socket.id] = enemies;
         })
     
         socket.on("inputs", (inputs) => {
