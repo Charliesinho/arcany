@@ -5,7 +5,7 @@ const socket = io(`ws://localhost:5000`);
 
 //Change this to push <
 
-window.onload = function() {
+window.onload = async function() {
   window.scrollTo(0, 0);
 };
 
@@ -58,11 +58,16 @@ const audioClick = new Audio("./audios/tapWood.wav");
 audioClick.volume = 0.8;
 audioClick.loop = false;
 
+const audioQuestObtained = new Audio("./audios/questObtained.wav");
+audioQuestObtained.volume = 0.4;
+audioQuestObtained.loop = false;
+
 const audioEquip = new Audio("./audios/equip.mp3");
 audioEquip.loop = false;
 
 const audioBuy = new Audio("./audios/buy.wav");
 audioBuy.loop = false;
+audioBuy.volume = 0.5;
 
 const audioSplash = new Audio("./audios/splash.mp3");
 audioSplash.loop = false;
@@ -81,6 +86,10 @@ const audioIntro = new Audio("./audios/audioIntro.mp3");
 audioIntro.loop = true;
 audioIntro.volume = 0.2;
 
+const shopSong = new Audio("./audios/shopSong.mp3");
+shopSong.loop = true;
+shopSong.volume = 0.5;
+
 const loggedIn = new Audio("./audios/loggedIn.mp3");
 loggedIn.loop = false;
 loggedIn.volume = 0.3;
@@ -94,6 +103,9 @@ grasslandsEnviroment.loop = true;
 
 const levelUpAudio = new Audio("./audios/levelUp.mp3");
 levelUpAudio.loop = false;
+
+const audioCardFlip = new Audio("./audios/cardFlip.wav");
+audioCardFlip.loop = false;
 
 const openShopAudio = new Audio("./audios/openShop.wav");
 openShopAudio.loop = false;
@@ -182,6 +194,7 @@ const cookingPot = document.querySelector(".cookingPot");
 const shopItem3 = document.querySelector(".shopItem3");
 const shopItem1 = document.querySelector(".shopItem1");
 const shopItem4 = document.querySelector(".shopItem4");
+const shopItem5 = document.querySelector(".shopItem5");
 
 const rewardChest = document.querySelector(".rewardChest");
 const rewardFrame = document.getElementById("rewardFrame");
@@ -190,6 +203,9 @@ const cookingItem = document.querySelector(".cookingItem");
 
 const exploreMapIsland1 = document.querySelector(".exploreMapIsland1");
 const rockExploreMinigame = document.querySelector(".rockExploreMinigame");
+
+const questHubIcon = document.querySelector(".cardsIcon");
+const questHub = document.querySelector(".questHub");
 
 const exploreMap = document.getElementById("exploreMap");
 const uiTop = document.getElementById("uiTop");
@@ -301,6 +317,136 @@ createButton.addEventListener("click", function(){
   handleLogin("create");
   audioClick.play();
 });
+
+//Quest system >
+
+questHubIcon.addEventListener("click", function(){
+  questHub.style.display = "flex"
+  paperAudio.play();
+
+  //Upadate quests hub >
+
+  function updateQuestHub () {
+
+    for (const questline of myPlayer.questsOngoing) {
+  
+      
+      for (const quest of questline) {
+    
+        const img = document.createElement('img');
+        
+        if (quest.completed === true) {
+          img.src = `./cardsShop/quest${quest.name}${quest.step}Comp.png`;
+        } else if (quest.started) {
+          img.src = `./cardsShop/quest${quest.name}${quest.step}.png`;
+        } else {
+          img.src = `./cardsShop/questHidden.png`;
+        }
+        
+        img.classList.add('cardShop', 'pointerActivator', `${quest.name}Step${quest.step}`);
+      
+        const questItemsDiv = document.querySelector('.questItems');
+      
+        if (questItemsDiv) {
+          const existingImage = document.querySelectorAll(`.${quest.name}Step${quest.step}`)
+    
+          if (!existingImage.length) {
+    
+            questItemsDiv.appendChild(img);
+            const addedImg = document.querySelector(`.${quest.name}Step${quest.step}`)
+            const cardFlipperHandler = () => cardFlipper(quest);
+
+            if (quest.started) {
+              addedImg.addEventListener("click", cardFlipperHandler)
+            }
+          }
+        }
+      }
+  
+    }
+
+  }
+
+  updateQuestHub()
+
+  
+  function cardFlipper (quest) {
+    let questCompleted = quest.completed
+    const addedImg = document.querySelector(`.${quest.name}Step${quest.step}`)
+
+    if (addedImg.src.includes(`${quest.name}${quest.step}info`)) {
+      addedImg.classList.add("turnCard");
+      audioCardFlip.play();
+
+      setTimeout(() => {
+        if (questCompleted === true) {
+          addedImg.src = `./cardsShop/quest${quest.name}${quest.step}Comp.png`;
+        } else {
+          addedImg.src = `./cardsShop/quest${quest.name}${quest.step}.png`;
+        }
+      }, 250);
+
+      setTimeout(() => {
+        addedImg.classList.remove("turnCard");
+      }, 500);
+
+    } else {
+
+      addedImg.classList.add("turnCard");
+      audioCardFlip.play();
+
+      setTimeout(() => {
+        addedImg.src = `./cardsShop/quest${quest.name}${quest.step}info.png`
+      }, 250);
+
+      setTimeout(() => {
+        addedImg.classList.remove("turnCard");
+      }, 500);
+    }
+  }
+  //Upadate quests hub <
+});
+
+shopItem5.addEventListener("click", function(){
+  socket.emit("questStart", "slime");
+});
+
+socket.on("questStarted", (quest) => {
+    obtainedAnim(`./cardsShop/quest${quest[0].name}${quest[0].step}.png`)
+    audioQuestObtained.play()
+})
+
+socket.on("questStepComp", (quest) => {
+    obtainedAnim(`./cardsShop/quest${quest.name}${quest.step}Comp.png`)
+    audioQuestObtained.play()
+    const questCard = document.querySelector(`.${quest.name}Step${quest.step}`)
+    questCard.src = `./cardsShop/quest${quest.name}${quest.step}Comp.png`
+
+    const parentElement = document.querySelector(".questItems");
+      if (parentElement) {
+        while (parentElement.firstChild) {
+          parentElement.removeChild(parentElement.firstChild);
+        }
+      }
+
+    updateQuestHub()
+
+})
+
+function progressQuestCounter(questItem) {
+  for (const questStep of questItem) {
+    if (questStep.completed === false && questStep.obj > 0) {
+      let questObj = {
+        step: questStep,
+        questLine: questItem
+      }
+      socket.emit("questProgressed", questObj);
+      break;
+    }
+  }
+}
+
+//Quest system <
 
 // Explore minigame >
 
@@ -895,7 +1041,7 @@ function obtainedAnim (image) {
 
   setTimeout(() => {
     obtainedItem.style.background = `url(${image})`;
-    obtainedItem.style.backgroundSize = "cover"
+    obtainedItem.style.backgroundSize = "contain"
     obtainedItem.classList.add('obtainedAnim');
     catchGif.classList.add('starsAnim');
   }, 500);
@@ -970,6 +1116,12 @@ socket.on("player", (serverPlayer) => {
   usernameMenu.innerHTML = myPlayer.username;
   playerCoinsAmount.innerHTML = myPlayer.currency
   // console.log(myPlayer)
+
+  //Adapt shop to player >
+    if (myPlayer.questsOngoing.some(questItem => questItem[0].name === "SlimyProblem") && shopItem5 && myPlayer.room === "baseMap") {
+      shopItem5.parentNode?.removeChild(shopItem5)
+    }
+  //Adapt shop to player <
 
    // Combat level >
 
@@ -1552,6 +1704,8 @@ setInterval(() => {
 }, 100);
 
 window.addEventListener("keydown", (e) => {
+  questHub.style.display = "none"
+
   if (!noMovement) {
 
     if (e.key === "w" || e.key === "z" ) {
@@ -1856,8 +2010,8 @@ let mapFramesDrawn = 0;
 
 // Enemy >
 
-const enemyWidth = slime.width / 4;
-const enemyHeight = slime.height / 1;
+let enemyWidth = slime.width / 4;
+let enemyHeight = slime.height / 1;
 let framesEnemyTotal = 4;
 let frameCurrentEnemy = 0;
 let enemyCutX = 0;
@@ -2032,20 +2186,29 @@ function canvasLobbyLoop() {
     canvas.fillRect(grasslandsShopx, grasslandsShopY, 200, 300);
 
     if (playerColminX + playerColLengthX > grasslandsShopx && playerColminY + playerColLengthY > grasslandsShopY && playerColminY < grasslandsShopY + 300 && playerColminX < grasslandsShopx + 200) {
-      if (grassOpenShop) {
+      if (grassOpenShop &&  shop.style.display !== "flex") {
         shop.style.display = "flex";
-      } else {
+        shop.style.top = "20px";
+        grasslandsEnviroment.pause();
+        shopSong.play();
+      } else if (!grassOpenShop) {
         shop.style.display = "none";
+        shopSong.pause();
+        shopSong.currentTime = 0;
+        grasslandsEnviroment.play();
       }
       grassShopAvailable = true;
     } else {
       grassShopAvailable = false;
       grassOpenShop = false;
       shop.style.display = "none";
+      grasslandsEnviroment.play();
+      shopSong.pause();
+      shopSong.currentTime = 0;
     }
 
     if (fishingLevelSimple >= 5) {
-      shopItem3.src = "./cardsShop/shopFisherman.png"
+      shopItem3.src = "./cardsShop/shopMellyCape.png"
     }
     //Shop Grasslands activator <
 
@@ -2068,10 +2231,6 @@ function canvasLobbyLoop() {
       grassOpenCooking = false;
       cookingPot.style.opacity = "0";
     }
-
-    if (fishingLevelSimple >= 5) {
-      shopItem3.src = "./cardsShop/shopFisherman.png"
-    }
     //Cooking Grasslands activator <
 
     //Explore Grasslands activator >
@@ -2092,10 +2251,6 @@ function canvasLobbyLoop() {
       grassExploreAvailable = false;
       grassOpenExplore = false;
       exploreMap.style.visibility = "hidden";
-    }
-
-    if (fishingLevelSimple >= 5) {
-      shopItem3.src = "./cardsShop/shopFisherman.png"
     }
     //Explore Grasslands activator <
 
@@ -2280,6 +2435,9 @@ function canvasLobbyLoop() {
       if (player.username === myPlayer.username) {
         if (player.anim === "idleRight" && player.lastLooked === "right") {
           frameCurrentPlayer = frameCurrentPlayer % 4;
+          playerWidth = character.width / 4
+          playerHeight = character.height / 4;
+
           playerCutX = frameCurrentPlayer * playerWidth;
           canvas.drawImage(
             armor,
@@ -2304,7 +2462,7 @@ function canvasLobbyLoop() {
             playerHeight - playerZoomY,
           );
         }
-        if (player.anim === "idleRight" && player.lastLooked === "left") {
+        else if (player.anim === "idleRight" && player.lastLooked === "left") {
           frameCurrentPlayer = frameCurrentPlayer % 4;
           playerCutX = frameCurrentPlayer * playerWidth;
           canvas.drawImage(
@@ -2330,7 +2488,7 @@ function canvasLobbyLoop() {
             playerHeight - playerZoomY,
           );
         }
-        if (player.anim === "runRight") {
+        else if (player.anim === "runRight") {
           frameCurrentPlayer = frameCurrentPlayer % 4;
           playerCutX = frameCurrentPlayer * playerWidth;
           canvas.drawImage(
@@ -2356,7 +2514,7 @@ function canvasLobbyLoop() {
             playerHeight - playerZoomY,
           );
         }
-        if (player.anim === "runLeft") {
+        else if (player.anim === "runLeft") {
           frameCurrentPlayer = frameCurrentPlayer % 4;
           playerCutX = frameCurrentPlayer * playerWidth;
           canvas.drawImage(
@@ -2766,10 +2924,6 @@ function canvasIslandOneLoop() {
       IslandOpenChest = false;
       rewardFrame.style.visibility = "hidden";
     }
-
-    if (fishingLevelSimple >= 5) {
-      shopItem3.src = "./cardsShop/shopFisherman.png"
-    }
     //Chest Grasslands activator <
 
     //Cooking Grasslands activator >
@@ -2790,10 +2944,6 @@ function canvasIslandOneLoop() {
       grassCookingAvailable = false;
       grassOpenCooking = false;
       cookingPot.style.opacity = "0";
-    }
-
-    if (fishingLevelSimple >= 5) {
-      shopItem3.src = "./cardsShop/shopFisherman.png"
     }
     //Cooking Grasslands activator <
 
@@ -2816,10 +2966,6 @@ function canvasIslandOneLoop() {
       grassExploreAvailable = false;
       grassOpenExplore = false;
       exploreMap.style.visibility = "hidden";
-    }
-
-    if (fishingLevelSimple >= 5) {
-      shopItem3.src = "./cardsShop/shopFisherman.png"
     }
     //Explore Grasslands activator <
 
@@ -3005,6 +3151,8 @@ function canvasIslandOneLoop() {
         if (player.anim === "idleRight" && player.lastLooked === "right") {
           frameCurrentPlayer = frameCurrentPlayer % 4;
           playerCutX = frameCurrentPlayer * playerWidth;
+          playerWidth = character.width / 4
+          playerHeight = character.height / 4;
           canvas.drawImage(
             armor,
             playerCutX,
@@ -3315,6 +3463,11 @@ function canvasIslandOneLoop() {
               socket.emit("enemyKilled", "slime");
               enemiesClient.splice(enemiesClient.indexOf(enemy), 1)
 
+              if (myPlayer.questsOngoing.some(questItem => questItem[0].name === "SlimyProblem")) {
+                let questItem = myPlayer.questsOngoing.find(questItem => questItem[0].name === "SlimyProblem");
+                progressQuestCounter(questItem)
+              }
+
               for (let i = 0; i < 20; i++) {
                 const angle = angleMouse + (Math.random() * 0.5 * 2 - 0.2) ;; // Random angle
                 const speed = Math.floor(Math.random() * (20 - 8 + 1)) + 5;; // Random speed (adjust as needed)
@@ -3388,6 +3541,8 @@ function canvasIslandOneLoop() {
                   enemyHitAudio.currentTime = 0
                   enemyHitAudio.pause()
                 }
+                enemyWidth = slime.width / 4
+                enemyHeight = slime.height / 1;
 
                 canvas.drawImage(
                   slime,
@@ -3419,8 +3574,6 @@ function canvasIslandOneLoop() {
                 enemy.nextTarget = slimeGetRandomCoords();
                 enemy.nextTargetCount = Math.floor(Math.random() * 100) + 50;;
               }
-              
-              // if (myPlayer.room === "islandOne") {
                 
               const username = myPlayer.id; 
               const distance = Math.sqrt(
@@ -3446,7 +3599,6 @@ function canvasIslandOneLoop() {
                   enemy.damaged = 10;
                   enemy.angle = projectile.angle || projectile.bullet1 || projectile.bullet2;
                   projectilesClient.splice(projectilesClient.indexOf(projectile), 1)
-                  console.log(generalLevelCombat)
                   enemy.health = enemy.health - generalLevelCombat
 
                   if (enemy.health > 0) {

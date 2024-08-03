@@ -4,8 +4,13 @@
   }
 
 * {
+    user-select: none; /* Standard syntax */
+    -webkit-user-select: none; /* Chrome, Safari, Opera */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
     cursor: none;
-}
+  }
+  
 
 body {
     margin: 0;
@@ -399,13 +404,14 @@ body {
     border-radius: none !important;
     border: none !important;
     height: 80px !important;
-    width: 300px !important;
+    width: calc(100vw - 370px) !important;
     position: absolute !important;
-    left: 30vw !important;
+    left: 0vw !important;
     bottom: 5vh !important;
     z-index: 10 !important;
     display: flex !important;
     align-items: flex-end !important;
+    margin-left: 20px;
 }
 
 .equipmentItem {
@@ -702,11 +708,13 @@ body {
     top: 150vh;
     left: 40vw;
     transform: translate(-50%, -50%);
-    z-index: 20;
+    z-index: 25;
 
     border-radius: 10px;
     border: none 1px black;
     background: none;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
 }
 
 #catchGif {
@@ -720,7 +728,7 @@ body {
     top: 150vh;
     left: 40vw;
     transform: translate(-50%, -50%);
-    z-index: 19;
+    z-index: 24;
 
     border: none;
 }
@@ -966,13 +974,86 @@ body {
     box-shadow: 0px 5px rgb(0, 0, 0), 0 0 20px rgba(0, 0, 0, 0.464);
 
     background: url("./shopBack.png");
-
-    transition: all .2s ease-out;
+    background-size: cover;
+    background-position: center;
 
     display: none;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
     flex-direction: column;
+
+    transition: all 1s ease;
+    animation: opacityUp 1s ease forwards;
+}
+
+.questHub {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 20;
+    opacity: 1;
+
+    width: calc(100vw - 330px - 40px);
+    height: calc(100vh - 40px);
+
+    /* border-radius: 10px; */
+    border: solid 2px rgb(0, 0, 0);
+    
+    box-shadow: 0px 5px rgb(0, 0, 0), 0 0 20px rgba(0, 0, 0, 0.464);
+
+    background: url("./questBack.png");
+    background-size: cover;
+    background-position: center;
+
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    transition: all 1s ease;
+    animation: opacityUp 1s ease forwards;
+}
+
+@keyframes opacityUp {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes cardUp {
+    0% {
+        opacity: 0;
+        top: 100px;
+    }
+    100% {
+        opacity: 1;
+        top: 0px;
+    }
+}
+
+@keyframes turnCard {
+    0% {
+        width: 200px;
+        margin-right: 0;
+        margin-left: 0;
+    }
+    50% {
+        width: 2px;
+        margin-right: 99px;
+        margin-left: 99px;
+    }
+    100% {
+        width: 200px;
+        margin-right: 0;
+        margin-left: 0;
+    }
+}
+
+.turnCard {
+    animation: turnCard .5s ease forwards;
 }
 
 .cookingPot {
@@ -1001,49 +1082,102 @@ body {
     pointer-events: none;
 }
 
+.cardsIcon {
+    position: absolute;
+    bottom: -60px;
+    right: -30px;
+    transform: translate(-50%, -50%);
+    z-index: 20;
+    height: 100px;
+    width: 100px;
+    
+}
+
 .shopTitle {
     height: 80px;
     width: 250px;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    position: absolute;
+    top: 100px;
+    left: 50px;
+    opacity: 0;
+
+    animation: UpAndUp 3s ease .5s forwards;
+}
+
+@keyframes UpAndUp {
+    0% {
+        opacity: 0;
+        top: 100px;
+    }
+    10% {
+        opacity: 1;
+        top: 50px;
+    }
+    90% {
+        opacity: 1;
+        top: 50px;
+    }
+    100% {
+        opacity: 0;
+        top: 0px;
+    }
 }
 
 .shopItems {
     display: flex;
     gap: 10px;
     justify-content: center;
+    margin-top: 50px;
+}
+.questItems {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 50px;
 }
 
 .cardShop {
-    width: 100px;
+    width: 200px;
+    height: 300px;
     transition: all .5s ease;
     border: solid 0px black;
-    border-radius: 19px;
-    box-shadow: 0px 5px rgb(0, 0, 0), 0px 20px 0px rgba(0, 0, 0, 0.156);
+    border-radius: 5px;
     position: relative;
+    margin-top: 0;
+    margin-bottom: 0;
     top: 0;
 }
 
 .cardShop:hover {
-    filter: brightness(1.2);
-    box-shadow: 0px 0px rgb(0, 0, 0) , 0px 0px 0px rgba(0, 0, 0, 0.156);
-    top: 5px;
+    filter: brightness(1.3);
+    margin-top: -10px;
+    margin-bottom: 10px;
 }
 
 .shopItem1 {
-
+    opacity: 0;
+    animation: cardUp 1s ease 3s forwards;
 }
 
-.shopItem2 {
 
+.shopItem2 {
+    opacity: 0;
+    animation: cardUp 1s ease 3.4s forwards;
 }
 
 .shopItem3 {
-
+    opacity: 0;
+    animation: cardUp 1s ease 3.6s forwards;
 }
 
 .shopItem4 {
+    opacity: 0;
+    animation: cardUp 1s ease 3.2s forwards;
+}
 
+.shopItem5 {
+    opacity: 0;
+    animation: cardUp 1s ease 3.8s forwards;
 }
 
 .questShop {

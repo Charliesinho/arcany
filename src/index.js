@@ -63,6 +63,8 @@ function tick() {
                 player.cookingLevel = clientPlayer.cooking;
                 player.exploringLevel = clientPlayer.explore;
                 player.combatLevel = clientPlayer.combat;
+                player.questsOngoing = clientPlayer.questsOngoing;
+                player.questsCompleted = clientPlayer.questsCompleted;
             }
         
         
@@ -272,6 +274,8 @@ async function main() {
             cookingLevel: 0,
             exploringLevel: 0,
             combatLevel: 0,
+            questsOngoing: [],
+            questsCompleted: [],
 
             inventory: [],
             weapon: [],
@@ -771,6 +775,118 @@ async function main() {
               expObtained()
         });
 
+        socket.on("questStart", (item) => {
+
+            async function expObtained() {
+                const player = await Player.findOne({socket: socket.id}).exec(); 
+                let quest;
+
+                if (item === "slime") {
+                    quest = [
+                        {
+                        name: "SlimyProblem",
+                        stepName: "First the little ones",
+                        step: 1,
+                        obj: 10,
+                        completed: false,
+                        started: true,
+                        reward: {
+                            type: "coins",
+                            item: 10
+                        }
+                        },
+                        {
+                        name: "SlimyProblem",
+                        stepName: "Cook some fish",
+                        step: 2,
+                        obj: 5,
+                        completed: false,
+                        started: false,
+                        reward: {
+                            type: "item",
+                            item: {
+                                type: "questItem",
+                                name: "slime poison",
+                                value: 20,
+                                image: "./inventory/stick.png",
+                            }
+                        }
+                        }
+                    ]
+                }    
+
+                let questAlreadyThere = player.questsOngoing.some(questItem => questItem[0].name === quest[0].name)
+
+                if (questAlreadyThere === true) {
+                    return;
+                }
+                                                             
+                let questsStarted = player.questsOngoing;
+                
+                questsStarted.push(quest)
+
+                await Player.findOneAndUpdate({socket: socket.id}, {questsOngoing: questsStarted}, {new: true});
+
+                myPlayer[socket.id] = player;
+
+                io.to(socket.id).emit("questStarted", quest);
+                    
+              };
+              expObtained()
+        });
+
+        socket.on("questProgressed", (item) => {
+
+            async function expObtained() {
+                const player = await Player.findOne({socket: socket.id}).exec(); 
+
+                let playerQuests = player.questsOngoing;
+                let questLine = item.questLine;
+                let questStep = item.step;
+
+                for (const questLineItem of playerQuests) {
+
+                    if (questLineItem[0].name === questStep.name) {
+
+                        for (const questStepItem of questLineItem) {
+                            if (questStepItem.step === questStep.step && questStep.obj > 0) {
+                                questStepItem.obj = questStepItem.obj - 1
+
+                                if (questStepItem.obj <= 0) {
+                                    questStepItem.completed = true;
+                                    let indexQuest = questLineItem.indexOf(questStepItem);
+                                    let nextStepIndex = indexQuest + 1
+                                    let nextStep = questLineItem[nextStepIndex];
+                                    if (nextStep) {
+                                        nextStep.started = true;
+                                    }
+
+                                    if (questStepItem.reward.type === "coins") {
+                                        let currentCoins = player.currency
+                                        currentCoins += questStepItem.reward.item;
+                                        await Player.findOneAndUpdate({socket: socket.id}, {currency: currentCoins}, {new: true});
+                                    }
+                                
+                                    io.to(socket.id).emit("questStepComp", questStepItem);
+                                }
+
+                                break;
+                            }
+                        }
+
+                    }
+
+                }
+
+                await Player.findOneAndUpdate({socket: socket.id}, {questsOngoing: playerQuests}, {new: true});
+
+                myPlayer[socket.id] = player;
+
+                    
+              };
+              expObtained()
+        });
+
         socket.on("rewardChest", (item) => {
 
             const stick = {
@@ -821,41 +937,36 @@ async function main() {
                 
                 const player = await Player.findOne({socket: socket.id}).exec();
 
-                if (player.inventory.length <= 8) {
-                                               
-                        await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
+                if (player.inventory.length <= 8) {                                             
             
-                        myPlayer[socket.id] = player;      
+                        myPlayer[socket.id] = player; 
+                        let itemObj;     
                         
                         if (item === "stick") {
-                            const stick = {
+                            itemObj = {
                                 type: "weapon",
                                 name: "stick",
                                 value: 2,
                                 image: "./inventory/stick.png",
-                            };
-    
-                            myPlayer[socket.id].currency -= 10;
-                            await Player.findOneAndUpdate({socket: socket.id}, {currency:  myPlayer[socket.id].currency}, {new: true});
-    
-                            player.inventory.push(stick);                                           
-                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
+                            };                           
                         }     
 
                         if (item === "melrodSeed") {
-                            const stick = {
+                            itemObj = {
                                 type: "seed",
-                                name: "stick",
+                                name: "melrodSeed",
                                 value: 1,
                                 image: "./inventory/melrodSeed.png",
                             };
-    
-                            myPlayer[socket.id].currency -= 10;
+                        }     
+
+                        if (myPlayer[socket.id].currency >= itemObj.value) {
+                            myPlayer[socket.id].currency -= itemObj.value;
                             await Player.findOneAndUpdate({socket: socket.id}, {currency:  myPlayer[socket.id].currency}, {new: true});
     
-                            player.inventory.push(stick);                                           
+                            player.inventory.push(itemObj);                                           
                             await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
-                        }     
+                        }
 
                 }
                 
