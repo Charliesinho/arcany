@@ -5,11 +5,11 @@
     <meta http-equiv="X-UA-COMPATIBLE" content="IE=edge" />
     <meta name="viewport" content="width=Device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./index.css" />
-    <title>Document</title>
+    <title>Arcany</title>
   </head>
   <body id="body">
     <div id="openerScreen">
-      <button id="openerScreen-button" class="pointerActivator">{ I understand this is an early alpha version }</button>
+      <button id="openerScreen-button" class="pointerActivator">I understand this is an early alpha version, and nothing can be recorded or shared</button>
     </div>
 
     <div class="custom-cursor"></div>
@@ -112,11 +112,11 @@
             placeholder="Password"
             maxlength="23"
           />
+          <div id="buttonsLogin">
+            <button id="loginButton" class="pointerActivator" value="Send">Login</button>
+            <button id="createButton" class="pointerActivator" value="Send">Create</button>
+          </div>
         </form>
-        <div id="buttonsLogin">
-          <button id="loginButton" class="pointerActivator" value="Send">Login</button>
-          <button id="createButton" class="pointerActivator" value="Send">Create</button>
-        </div>
       </div>
 
       <div id="playerInfoCorner">
@@ -157,6 +157,38 @@
           <!-- <img class="rockExploreMinigame" src="./exploreMinigame/rock.png" /> -->
         </div>
 
+        
+        <div id="cookingContainer">
+          <div id="paddle"></div>  
+          <img class="cookingItem cookingItem1" src="./Textures/itemPlaceholder.png">
+          <!-- <img class="cookingItem cookingItem2" src="./Textures/itemPlaceholder.png"> -->
+          <img class="cookingItem cookingItem3" src="./Textures/itemPlaceholder.png">
+          <div id="cookingBarParent"><div id="cookingBarChild"></div></div>
+          <div id="cookingPotMin"></div>
+          <div id="cookingFrame"></div>
+        </div>
+
+        <div id="craftingContainer">
+          <div id="progressCraft">
+            <div id="progressCraftChild">
+            </div>
+          </div>
+          
+          <div id="failedCraft">
+            <div id="failedCraftchild">
+            </div>
+          </div>
+          <div id="craftingFrame"></div>
+          <img id="craftingItem1" class="craftingItem" src="./Textures/itemPlaceholder.png" alt="Image 1">
+          <img id="craftingItem2" class="craftingItem" src="./Textures/itemPlaceholder.png" alt="Image 2">
+    
+        
+        <div id="centerCraft">
+          
+        </div>
+        
+      </div>
+
         <div id="rewardFrame">
           <img src="./exploreMinigame/chestOpen.png" class="rewardChest pointerActivator" />
         </div>
@@ -196,7 +228,7 @@
     <!-- <div id="navBar"></div> -->
     <script src="/socket.io/socket.io.js"></script>
     <script type="module" src="/index.js"></script>
-    <script type="module" src="/public/controller.js"></script>
-    <script type="module" src="/public/index.js"></script>
+    <!-- <script type="module" src="/public/controller.js"></script> -->
+    <!-- <script type="module" src="/public/index.js"></script> -->
   </body>
 </html>

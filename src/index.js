@@ -314,48 +314,6 @@ async function main() {
         })
 
         socket.on("fishing", () => {
-
-            //Level 1
-
-            const sardin = {
-                type: "fish",
-                name: "sardin",
-                value: 1,
-                image: "./inventory/sarding.png",
-            };
-            const stick = {
-                type: "weapon",
-                name: "stick",
-                value: 2,
-                image: "./inventory/stick.png",
-            };
-
-            //Level 2
-
-            const ballo = {
-                 type: "fish",
-                 name: "ballo",
-                 value: 3,
-                 image: "./inventory/ballo.jpg",
-            };
-            
-            //Level 3
-
-            const bass = {
-                type: "fish",
-                name: "bass",
-                value: 5,
-                image: "./inventory/bass.png",
-            };
-
-             //Level 5
-
-             const octopus = {
-                type: "fish",
-                name: "octopus",
-                value: 15,
-                image: "./inventory/octopus.png",
-            };
                  
 
             const number = Math.floor(Math.random() * (100 - 1 + 1) + 1);
@@ -377,10 +335,15 @@ async function main() {
                             io.to(socket.id).emit('obtained', sardin);
                             const fishingLevel = player.fishing + 100;
                             player.fishing += 100;
-                            await Player.findOneAndUpdate({socket: socket.id}, {fishing: fishingLevel}, {new: true});
+                            await Player.findOneAndUpdate({socket: socket.id}, {fishing: fishingLevel}, {new: true}).exec();
+                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
+                            myPlayer[socket.id].inventory = player.inventory;
+                            myPlayer[socket.id].fishingLevel = player.fishingLevel;
                         } else {
                             player.inventory.push(stick);
                             io.to(socket.id).emit('obtained', stick);
+                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
+                            myPlayer[socket.id].inventory = player.inventory;
                         }
                     }
 
@@ -393,7 +356,10 @@ async function main() {
                             io.to(socket.id).emit('obtained', sardin);
                             const fishingLevel = player.fishing + 100;
                             player.fishing += 100;
-                            await Player.findOneAndUpdate({socket: socket.id}, {fishing: fishingLevel}, {new: true});
+                            await Player.findOneAndUpdate({socket: socket.id}, {fishing: fishingLevel}, {new: true}).exec();
+                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
+                            myPlayer[socket.id].inventory = player.inventory;
+                            myPlayer[socket.id].fishingLevel = player.fishingLevel;
                         } 
                         
                         else if (number < 90) {
@@ -401,12 +367,17 @@ async function main() {
                             io.to(socket.id).emit('obtained', ballo);
                             const fishingLevel = player.fishing + 500;
                             player.fishing += 500;
-                            await Player.findOneAndUpdate({socket: socket.id}, {fishing: fishingLevel}, {new: true});
+                            await Player.findOneAndUpdate({socket: socket.id}, {fishing: fishingLevel}, {new: true}).exec();
+                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
+                            myPlayer[socket.id].inventory = player.inventory;
+                            myPlayer[socket.id].fishingLevel = player.fishingLevel;
                         } 
                         
                         else {
                             player.inventory.push(stick);
                             io.to(socket.id).emit('obtained', stick);
+                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
+                            myPlayer[socket.id].inventory = player.inventory;
                         }
                     }
 
@@ -419,7 +390,10 @@ async function main() {
                             io.to(socket.id).emit('obtained', sardin);
                             const fishingLevel = player.fishing + 100;
                             player.fishing += 100;
-                            await Player.findOneAndUpdate({socket: socket.id}, {fishing: fishingLevel}, {new: true});
+                            await Player.findOneAndUpdate({socket: socket.id}, {fishing: fishingLevel}, {new: true}).exec();
+                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
+                            myPlayer[socket.id].inventory = player.inventory;
+                            myPlayer[socket.id].fishingLevel = player.fishingLevel;
                         } 
                         
                         else if (number < 75) {
@@ -427,7 +401,10 @@ async function main() {
                             io.to(socket.id).emit('obtained', ballo);
                             const fishingLevel = player.fishing + 500;
                             player.fishing += 500;
-                            await Player.findOneAndUpdate({socket: socket.id}, {fishing: fishingLevel}, {new: true});
+                            await Player.findOneAndUpdate({socket: socket.id}, {fishing: fishingLevel}, {new: true}).exec();
+                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
+                            myPlayer[socket.id].inventory = player.inventory;
+                            myPlayer[socket.id].fishingLevel = player.fishingLevel;
                         } 
 
                         else if (number < 85) {
@@ -435,12 +412,17 @@ async function main() {
                             io.to(socket.id).emit('obtained', bass);
                             const fishingLevel = player.fishing + 1000;
                             player.fishing += 1000;
-                            await Player.findOneAndUpdate({socket: socket.id}, {fishing: fishingLevel}, {new: true});
+                            await Player.findOneAndUpdate({socket: socket.id}, {fishing: fishingLevel}, {new: true}).exec();
+                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
+                            myPlayer[socket.id].inventory = player.inventory;
+                            myPlayer[socket.id].fishingLevel = player.fishingLevel;
                         } 
                         
                         else {
                             player.inventory.push(stick);
                             io.to(socket.id).emit('obtained', stick);
+                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
+                            myPlayer[socket.id].inventory = player.inventory;
                         }
                     }
 
@@ -453,7 +435,10 @@ async function main() {
                             io.to(socket.id).emit('obtained', sardin);
                             const fishingLevel = player.fishing + 100;
                             player.fishing += 100;
-                            await Player.findOneAndUpdate({socket: socket.id}, {fishing: fishingLevel}, {new: true});
+                            await Player.findOneAndUpdate({socket: socket.id}, {fishing: fishingLevel}, {new: true}).exec();
+                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
+                            myPlayer[socket.id].inventory = player.inventory;
+                            myPlayer[socket.id].fishingLevel = player.fishingLevel;
                         } 
                         
                         else if (number < 50) {
@@ -461,7 +446,10 @@ async function main() {
                             io.to(socket.id).emit('obtained', ballo);
                             const fishingLevel = player.fishing + 500;
                             player.fishing += 500;
-                            await Player.findOneAndUpdate({socket: socket.id}, {fishing: fishingLevel}, {new: true});
+                            await Player.findOneAndUpdate({socket: socket.id}, {fishing: fishingLevel}, {new: true}).exec();
+                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
+                            myPlayer[socket.id].inventory = player.inventory;
+                            myPlayer[socket.id].fishingLevel = player.fishingLevel;
                         } 
 
                         else if (number < 87) {
@@ -469,7 +457,10 @@ async function main() {
                             io.to(socket.id).emit('obtained', bass);
                             const fishingLevel = player.fishing + 1000;
                             player.fishing += 1000;
-                            await Player.findOneAndUpdate({socket: socket.id}, {fishing: fishingLevel}, {new: true});
+                            await Player.findOneAndUpdate({socket: socket.id}, {fishing: fishingLevel}, {new: true}).exec();
+                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
+                            myPlayer[socket.id].inventory = player.inventory;
+                            myPlayer[socket.id].fishingLevel = player.fishingLevel;
                         } 
 
                         else if (number < 97) {
@@ -477,18 +468,20 @@ async function main() {
                             io.to(socket.id).emit('obtained', octopus);
                             const fishingLevel = player.fishing + 1500;
                             player.fishing += 1500;
-                            await Player.findOneAndUpdate({socket: socket.id}, {fishing: fishingLevel}, {new: true});
+                            await Player.findOneAndUpdate({socket: socket.id}, {fishing: fishingLevel}, {new: true}).exec();
+                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
+                            myPlayer[socket.id].inventory = player.inventory;
+                            myPlayer[socket.id].fishingLevel = player.fishingLevel;
                         } 
                         
                         else {
                             player.inventory.push(stick);
                             io.to(socket.id).emit('obtained', stick);
+                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
+                            myPlayer[socket.id].inventory = player.inventory;
                         }
                     }
-        
-                    await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
-
-                    myPlayer[socket.id] = player;
+    
                 }
               }
               fishing();
@@ -523,7 +516,7 @@ async function main() {
                         myPlayer[socket.id].artifact = arrayArtifacts;
                         await Player.findOneAndUpdate({socket: socket.id}, {artifact:  myPlayer[socket.id].artifact}, {new: true});
                     }
-                } else {
+                } else if (item.type === "weapon") {
                                            
         
                     myPlayer[socket.id] = player;    
@@ -531,14 +524,7 @@ async function main() {
                     if (myPlayer[socket.id].weapon.length === 0) {
                         player.inventory.splice(item.index, 1);
 
-                        if (item.name === "stick") {
-                            let arrayWeapon = [item];
-                            myPlayer[socket.id].weapon = arrayWeapon;
-                            await Player.findOneAndUpdate({socket: socket.id}, {weapon:  arrayWeapon}, {new: true});
-                            await Player.findOneAndUpdate({socket: socket.id}, {inventory:   player.inventory}, {new: true});
-                        }
-    
-                        if (item.name === "willowStick") {
+                        if (item.name === "arcaneStaffCommon" || item.name === "solarStaffCommon" || item.name === "nuclearStaffCommon") {
                             let arrayWeapon = [item];
                             myPlayer[socket.id].weapon = arrayWeapon;
                             await Player.findOneAndUpdate({socket: socket.id}, {weapon:  arrayWeapon}, {new: true});
@@ -587,6 +573,7 @@ async function main() {
 
         socket.on("selling", (item) => {
             async function consume() {
+                console.log(item)
                 const player = await Player.findOne({socket: socket.id}).exec();
 
                     player.inventory.splice(item.index, 1);
@@ -595,37 +582,8 @@ async function main() {
         
                     myPlayer[socket.id] = player;      
                     
-                    if (item.name === "stick") {
-                        myPlayer[socket.id].currency += 2;
-                        await Player.findOneAndUpdate({socket: socket.id}, {currency:  myPlayer[socket.id].currency}, {new: true});
-                    }
-
-                    if (item.name === "willowStick") {
-                        myPlayer[socket.id].currency += 15;
-                        await Player.findOneAndUpdate({socket: socket.id}, {currency:  myPlayer[socket.id].currency}, {new: true});
-                    }
-                    
-                    if (item.name === "bass") {
-                        myPlayer[socket.id].currency += 4;
-                        await Player.findOneAndUpdate({socket: socket.id}, {currency:  myPlayer[socket.id].currency}, {new: true});
-                    }
-                    
-                    if (item.name === "octopus") {
-                        myPlayer[socket.id].currency += 15;
-                        await Player.findOneAndUpdate({socket: socket.id}, {currency:  myPlayer[socket.id].currency}, {new: true});
-                    }
-    
-                    if (item.name === "ballo") {
-                        myPlayer[socket.id].currency += 2;
-                        await Player.findOneAndUpdate({socket: socket.id}, {currency:  myPlayer[socket.id].currency}, {new: true});
-                    } 
-    
-                    if (item.name === "sardin") {
-                        myPlayer[socket.id].currency += 1;
-                        await Player.findOneAndUpdate({socket: socket.id}, {currency:  myPlayer[socket.id].currency}, {new: true});
-                    }
-                    
-    
+                    myPlayer[socket.id].currency += item.value;
+                    await Player.findOneAndUpdate({socket: socket.id}, {currency:  myPlayer[socket.id].currency}, {new: true});
                 
               };
               consume()
@@ -657,9 +615,9 @@ async function main() {
               roomChange()
         });
 
-        socket.on("cooking", (item) => {
+        socket.on("cooking", (items) => {
 
-            async function consume() {
+            async function cooking() {
                 const player = await Player.findOne({socket: socket.id}).exec();
 
                     // player.inventory.splice(item.index, 1);
@@ -667,95 +625,108 @@ async function main() {
                     // await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
         
                     myPlayer[socket.id] = player;   
-                                     
-                    io.to(socket.id).emit('startCooking', item);
+
+                    let arrayOfTypes = []
+                    let arrayOfRarity = []
+
+                    for (const item of items) {
+                        if (!arrayOfTypes.includes(item.type)) {
+                            arrayOfTypes.push(item.type)
+                        }
+                        if (!arrayOfRarity.includes(item.rarity)) {
+                            arrayOfRarity.push(item.rarity)
+                        }
+                    }
+
+                    let plate;
+
+                    if (arrayOfTypes.includes("fish") && arrayOfTypes.includes("stick")) {
+                        if (arrayOfRarity.includes("rare")) {
+                            plate = rareFishStick;
+                        }
+                        else if (arrayOfRarity.includes("uncommon")) {
+                            plate = uncommonFishStick;
+                        }
+                        else if (arrayOfRarity.includes("common")) {
+                            plate = commonFishStick;
+                        }
+                    }
+                    else if (arrayOfTypes.includes("fish")) {
+                        if (arrayOfRarity.includes("rare")) {
+                            plate = rareFish;
+                        }
+                        else if (arrayOfRarity.includes("uncommon")) {
+                            plate = uncommonFish;
+                        }
+                        else if (arrayOfRarity.includes("common")) {
+                            plate = commonFish;
+                        }
+                    }
+
+                    player.inventory.push(plate);                                           
+                    await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
+                    io.to(socket.id).emit('obtained', plate);
+
+                    console.log(arrayOfTypes)
                 
               };
-              consume()
+              cooking()
         });
+        
+        socket.on("crafting", (items) => {
 
-        socket.on("cookingFinished", (item) => {
-
-            const sardin = {
-                type: "food",
-                name: "sardin",
-                value: 5,
-                image: "./inventory/sardinCooked.png",
-            };
-            const bass = {
-                type: "food",
-                name: "bass",
-                value: 5,
-                image: "./inventory/bassCooked.png",
-            };
-            const octopus = {
-                type: "food",
-                name: "octopus",
-                value: 5,
-                image: "./inventory/octopusCooked.png",
-            };
-            const ballo = {
-                type: "food",
-                name: "ballo",
-                value: 5,
-                image: "./inventory/balloCooked.png",
-            };
-
-            async function consume() {
+            async function cooking() {
                 const player = await Player.findOne({socket: socket.id}).exec();
 
-                    player.inventory.splice(item.index, 1);
+                    // player.inventory.splice(item.index, 1);
                                            
-                    await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
+                    // await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
         
                     myPlayer[socket.id] = player;   
+
+                    let arrayOfNames = []
+                    let arrayOfRarity = []
+
+                    for (const item of items) {
+                        if (!arrayOfNames.includes(item.name)) {
+                            arrayOfNames.push(item.name)
+                        }
+                        if (!arrayOfRarity.includes(item.rarity)) {
+                            arrayOfRarity.push(item.rarity)
+                        }
+                    }
+
+                    let staff;
+
+                    if (arrayOfNames.includes("solarGem")) {
+
+                        if (arrayOfRarity.includes("common")) {
+                            staff = solarStaffCommon;
+                        }
+                        
+                    }
+                    else if (arrayOfNames.includes("arcaneGem")) {
+
+                        if (arrayOfRarity.includes("common")) {
+                            staff = arcaneStaffCommon;
+                        }
+                        
+                    }
+                    else if (arrayOfNames.includes("nuclearGem")) {
+
+                        if (arrayOfRarity.includes("common")) {
+                            staff = nuclearStaffCommon;
+                        }
+                        
+                    }
                     
-                    
-                    if (item.name === "sardin") {
-                        const cookingLevel = player.cooking + 100;
-                        player.cooking += 100;
-                        await Player.findOneAndUpdate({socket: socket.id}, {cooking: cookingLevel}, {new: true});
-                        
-                        player.inventory.push(sardin);                                           
-                        await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
-                        
-                        io.to(socket.id).emit('obtained', sardin);
-                    }  
 
-                    if (item.name === "ballo") {
-                        const cookingLevel = player.cooking + 200;
-                        player.cooking += 100;
-                        await Player.findOneAndUpdate({socket: socket.id}, {cooking: cookingLevel}, {new: true});
-                        
-                        player.inventory.push(ballo);                                           
-                        await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
-                        
-                        io.to(socket.id).emit('obtained', ballo);
-                    }    
-
-                    if (item.name === "bass") {
-                        const cookingLevel = player.cooking + 100;
-                        player.cooking += 100;
-                        await Player.findOneAndUpdate({socket: socket.id}, {cooking: cookingLevel}, {new: true});
-                        
-                        player.inventory.push(bass);                                           
-                        await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
-
-                        io.to(socket.id).emit('obtained', bass);
-                    }                   
-                    if (item.name === "octopus") {
-                        const cookingLevel = player.cooking + 100;
-                        player.cooking += 100;
-                        await Player.findOneAndUpdate({socket: socket.id}, {cooking: cookingLevel}, {new: true});
-                        
-                        player.inventory.push(octopus);                                           
-                        await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
-                        
-                        io.to(socket.id).emit('obtained', octopus);
-                    }                   
+                    player.inventory.push(staff);                                           
+                    await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
+                    io.to(socket.id).emit('obtained', staff);
                 
               };
-              consume()
+              cooking()
         });
 
         socket.on("enemyKilled", (item) => {
@@ -792,7 +763,7 @@ async function main() {
                         started: true,
                         reward: {
                             type: "coins",
-                            item: 10
+                            item: 5
                         }
                         },
                         {
@@ -806,10 +777,22 @@ async function main() {
                             type: "item",
                             item: {
                                 type: "questItem",
-                                name: "slime poison",
+                                name: "slimePoison",
                                 value: 20,
-                                image: "./inventory/stick.png",
+                                image: "./inventory/slimePotion.png",
                             }
+                        }
+                        },
+                        {
+                        name: "SlimyProblem",
+                        stepName: "Kings sink too",
+                        step: 3,
+                        obj: 1,
+                        completed: false,
+                        started: false,
+                        reward: {
+                            type: "coins",
+                            item: 20
                         }
                         }
                     ]
@@ -835,12 +818,14 @@ async function main() {
               expObtained()
         });
 
-        socket.on("questProgressed", (item) => {
+        socket.on("questProgressed", (array) => {
 
             async function expObtained() {
                 const player = await Player.findOne({socket: socket.id}).exec(); 
 
                 let playerQuests = player.questsOngoing;
+                let item = array[0]
+                let currentStep = array[1]
                 let questLine = item.questLine;
                 let questStep = item.step;
 
@@ -849,11 +834,12 @@ async function main() {
                     if (questLineItem[0].name === questStep.name) {
 
                         for (const questStepItem of questLineItem) {
-                            if (questStepItem.step === questStep.step && questStep.obj > 0) {
+                            if (currentStep === questStepItem.step && questStepItem.obj > 0) {
                                 questStepItem.obj = questStepItem.obj - 1
 
                                 if (questStepItem.obj <= 0) {
                                     questStepItem.completed = true;
+
                                     let indexQuest = questLineItem.indexOf(questStepItem);
                                     let nextStepIndex = indexQuest + 1
                                     let nextStep = questLineItem[nextStepIndex];
@@ -862,12 +848,29 @@ async function main() {
                                     }
 
                                     if (questStepItem.reward.type === "coins") {
+
                                         let currentCoins = player.currency
                                         currentCoins += questStepItem.reward.item;
-                                        await Player.findOneAndUpdate({socket: socket.id}, {currency: currentCoins}, {new: true});
+                                        await Player.findOneAndUpdate({socket: socket.id}, {currency: currentCoins}, {new: true}).exec();
+                                        myPlayer[socket.id].currency = currentCoins;
+                                        io.to(socket.id).emit("questStepComp", questStepItem);
+
+                                    } else if (questStepItem.reward.type === "item") {
+                                        
+                                        setTimeout(async () => {
+                                            player.inventory.push(questStepItem.reward.item);
+                                            Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
+                                            myPlayer[socket.id].inventory = player.inventory;
+                                            io.to(socket.id).emit("questStepComp", questStepItem);
+                                            await Player.findOneAndUpdate({socket: socket.id}, {questsOngoing: playerQuests}, {new: true}).exec();
+                                        myPlayer[socket.id].questsOngoing = playerQuests;
+                                        }, 5000);
+
                                     }
-                                
-                                    io.to(socket.id).emit("questStepComp", questStepItem);
+
+                                    await Player.findOneAndUpdate({socket: socket.id}, {questsOngoing: playerQuests}, {new: true}).exec();
+                                    myPlayer[socket.id].questsOngoing = playerQuests;
+                            
                                 }
 
                                 break;
@@ -878,9 +881,8 @@ async function main() {
 
                 }
 
-                await Player.findOneAndUpdate({socket: socket.id}, {questsOngoing: playerQuests}, {new: true});
-
-                myPlayer[socket.id] = player;
+                await Player.findOneAndUpdate({socket: socket.id}, {questsOngoing: playerQuests}, {new: true}).exec();
+                myPlayer[socket.id].questsOngoing = playerQuests;
 
                     
               };
@@ -888,20 +890,6 @@ async function main() {
         });
 
         socket.on("rewardChest", (item) => {
-
-            const stick = {
-                type: "weapon",
-                name: "stick",
-                value: 2,
-                image: "./inventory/stick.png",
-            };
-
-            const willowStick = {
-                type: "weapon",
-                name: "willowStick",
-                value: 2,
-                image: "./inventory/willowStick.png",
-            };
 
             async function consume() {
 
@@ -944,7 +932,7 @@ async function main() {
                         
                         if (item === "stick") {
                             itemObj = {
-                                type: "weapon",
+                                type: "stick",
                                 name: "stick",
                                 value: 2,
                                 image: "./inventory/stick.png",
@@ -1046,7 +1034,7 @@ async function main() {
                 const playerData = await Player.findOne({username: username}).exec();
     
                 if (playerData && playerData.password === password) {
-                    const newPlayerData = await Player.findOneAndUpdate({username: username}, {socket: id}, {new: true});   
+                    const newPlayerData = await Player.findOneAndUpdate({username: username}, {socket: id}, {new: true}).exec()  
                     usernames[socket.id] = username;  
                     myPlayer[socket.id] = newPlayerData;      
                     inventoryStore[socket.id] = myPlayer[socket.id];
@@ -1054,6 +1042,20 @@ async function main() {
                     
 
                     const loginAttempt = "success";
+                    // pushItem(solarGem, socket)
+
+                    // let item = {
+                    //     type: "questItem",
+                    //     name: "slimePoison",
+                    //     value: 20,
+                    //     image: "./inventory/slimePotion.png",
+                    // }
+                    // let inventory = newPlayerData.inventory
+                    // inventory.push(item);
+                    // await Player.findOneAndUpdate({username: username}, {inventory: inventory}, {new: true}).exec()
+                    // myPlayer[socket.id] = newPlayerData;
+
+
                     io.to(id).emit('loginAttempt', loginAttempt);
 
 
@@ -1212,3 +1214,151 @@ function slimeGetRandomCoords(originX, originY) {
 }
 
 main();
+
+async function pushItem(item, socket) {
+    const player = await Player.findOne({socket: socket.id}).exec();
+    player.inventory.push(item);                                           
+    await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
+    myPlayer[socket.id].inventory = player.inventory
+}
+
+const arcaneGem = {
+    type: "gem",
+    name: "arcaneGem",
+    value: 5,
+    rarity: "common",
+    image: "./inventory/arcaneGem.png",
+};
+const solarGem = {
+    type: "gem",
+    name: "solarGem",
+    value: 5,
+    rarity: "common",
+    image: "./inventory/solarGem.png",
+};
+const nuclearGem = {
+    type: "gem",
+    name: "nuclearGem",
+    value: 5,
+    rarity: "common",
+    image: "./inventory/nuclearGem.png",
+};
+const commonFishStick = {
+    type: "food",
+    name: "commonFishStick",
+    value: 5,
+    rarity: "common",
+    image: "./inventory/commonFishStick.png",
+};
+const uncommonFishStick = {
+    type: "food",
+    name: "uncommonFishStick",
+    value: 5,
+    rarity: "uncommon",
+    image: "./inventory/uncommonFishStick.png",
+};
+const rareFishStick = {
+    type: "food",
+    name: "rareFishStick",
+    value: 5,
+    rarity: "rare",
+    image: "./inventory/rareFishStick.gif",
+};
+const commonFish = {
+    type: "food",
+    name: "commonFish",
+    value: 5,
+    rarity: "common",
+    image: "./inventory/commonFish.png",
+};
+const arcaneStaffCommon = {
+    type: "weapon",
+    name: "arcaneStaffCommon",
+    value: 30,
+    rarity: "common",
+    image: "./inventory/arcaneStaffCommon.png",
+};
+const solarStaffCommon = {
+    type: "weapon",
+    name: "solarStaffCommon",
+    value: 20,
+    rarity: "common",
+    image: "./inventory/solarStaffCommon.png",
+};
+const nuclearStaffCommon = {
+    type: "weapon",
+    name: "nuclearStaffCommon",
+    value: 50,
+    rarity: "common",
+    image: "./inventory/nuclearStaffCommon.png",
+};
+const uncommonFish = {
+    type: "food",
+    name: "uncommonFish",
+    value: 5,
+    rarity: "uncommon",
+    image: "./inventory/uncommonFish.png",
+};
+const rareFish = {
+    type: "food",
+    name: "rareFish",
+    value: 5,
+    rarity: "rare",
+    image: "./inventory/rareFish.gif",
+};
+
+const stick = {
+    type: "stick",
+    name: "stick",
+    value: 2,
+    rarity: "common",
+    image: "./inventory/stick.png",
+};
+
+const willowStick = {
+    type: "stick",
+    name: "willowStick",
+    value: 2,
+    rarity: "rare",
+    image: "./inventory/willowStick.png",
+};
+
+//Level 1
+
+const sardin = {
+    type: "fish",
+    name: "sardin",
+    value: 1,
+    rarity: "common",
+    image: "./inventory/sarding.png",
+};
+
+//Level 2
+
+const ballo = {
+     type: "fish",
+     name: "ballo",
+     value: 2,
+     rarity: "uncommon",
+     image: "./inventory/ballo.jpg",
+};
+
+//Level 3
+
+const bass = {
+    type: "fish",
+    name: "bass",
+    value: 3,
+    rarity: "rare",
+    image: "./inventory/bass.png",
+};
+
+ //Level 5
+
+ const octopus = {
+    type: "fish",
+    name: "octopus",
+    value: 4,
+    rarity: "rare",
+    image: "./inventory/octopus.png",
+};
