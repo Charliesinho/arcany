@@ -14,13 +14,36 @@
 
     <div class="custom-cursor"></div>
 
-    <div id="inventoryWindow" class="equipmentWindow">        
-      <div class="pointerActivator inventoryItem equipmentItem weaponEquipped"></div>
-      <div class="pointerActivator inventoryItem equipmentItem soulEquipped"></div>
-      <div class="pointerActivator inventoryItem equipmentItem artifactEquipped"></div>
+    <div id="inventoryWindow" class="equipmentWindow">     
+      <div class="inventorySlotBG">
+        <div class="pointerActivator inventoryItem equipmentItem weaponEquipped"></div>
+      </div>   
+      <div class="inventorySlotBG">         
+        <div class="pointerActivator inventoryItem equipmentItem soulEquipped"></div>
+      </div> 
+      <div class="inventorySlotBG">
+        <div class="pointerActivator inventoryItem equipmentItem artifactEquipped"></div>
+      </div> 
       <img src="./icons/cards.png" class="pointerActivator cardsIcon" />
     </div>
+    
+    <div id="uiDev">
+      <button id="placeWalls" class="buttonDev pointerActivator">Place wall</button>
+      <button id="placeFishingArea" class="buttonDev pointerActivator">Place fishing area</button>
+      <button id="placeCraftingArea" class="buttonDev pointerActivator">Place crafting area</button>
+      <button id="placeCookingArea" class="buttonDev pointerActivator">Place cooking area</button>
+      <button id="placeChest" class="buttonDev pointerActivator">Place chest</button>
+      <button id="placeTransition" class="buttonDev pointerActivator">Place transition</button>
+      <button id="placeDialog" class="buttonDev pointerActivator">Place dialog</button>
+      <button id="placeQuest" class="buttonDev pointerActivator">Place quest</button>
+      <button id="deleteWalls" class="buttonDev pointerActivator">Delete Collision</button>
+      <button id="showWalls" class="buttonDev pointerActivator">Show Collisions</button>
+      <button id="exportWalls" class="buttonDev pointerActivator">Export walls</button>
+    </div>
+
     <div id="ui">
+
+
       <div><div id="uiTop"></div></div>
       <div><img id="skillsUi" src="./inventory/skills.png" /></div>
       <div id="skillLevels">
@@ -29,54 +52,74 @@
         <p id="exploringLevel"></p>
         <p id="combatLevel">0</p>
       </div>
-      <h1 id="usernameMenu"></h1>
-      <div><div id="circleCharacter"></div></div>
+      <!-- <h1 id="usernameMenu"></h1>
+      <div><div id="circleCharacter"></div></div> -->
       <img id="soulImg" src="./souls/souless.png"></img>
-      <div><div id="mountainsUi"></div></div>
+      <!-- <div><div id="mountainsUi"></div></div> -->
       
-      <div class="inventorySwitch">
-        <button class="pointerActivator switchButton inventorySwicther">🎒</button>
-        <button class="pointerActivator switchButton soulsSwitcher">✨</button>
-        <button class="pointerActivator switchButton capeSwitcher">🎩</button>
-        <button class="pointerActivator switchButton booksSwitcher">📖</button>
-        <button class="pointerActivator switchButton deleteButton">❌</button>
-      </div>
-
-      <div id="inventoryWindow" class="inventoryShadow inventoryHide">
-        <img src="./backpack.png" id="backpackImage"/>
-        <div class="pointerActivator inventoryItem inventorySlot0"></div>
-        <div class="pointerActivator inventoryItem inventorySlot1"></div>
-        <div class="pointerActivator inventoryItem inventorySlot2"></div>
-        <div class="pointerActivator inventoryItem inventorySlot3"></div>
-        <div class="pointerActivator inventoryItem inventorySlot4"></div>
-        <div class="pointerActivator inventoryItem inventorySlot5"></div>
-        <div class="pointerActivator inventoryItem inventorySlot6"></div>
-        <div class="pointerActivator inventoryItem inventorySlot7"></div>
-        <div class="pointerActivator inventoryItem inventorySlot8"></div>
-      </div>
-
-      <div id="inventoryWindow" class="soulWindow soulsHide">        
-        <div class="pointerActivator inventoryItem soulSlot soul1"></div>
-        <div class="pointerActivator inventoryItem soulSlot soul2"></div>
-        <div class="pointerActivator inventoryItem soulSlot soul3"></div>
-        <div class="pointerActivator inventoryItem soulSlot soul4"></div>
-        <div class="pointerActivator inventoryItem soulSlot soul5"></div>
-        <div class="pointerActivator inventoryItem soulSlot soul6"></div>
-        <div class="pointerActivator inventoryItem soulSlot soul7"></div>
-        <div class="pointerActivator inventoryItem soulSlot soul8"></div>
-        <div class="pointerActivator inventoryItem soulSlot soul9"></div>
-      </div>
-
-      <div id="inventoryWindow" class="capeWindow capeHide">        
-        <div class="pointerActivator inventoryItem capeSlot cape1"></div>
-        <div class="pointerActivator inventoryItem capeSlot cape2"></div>
-        <div class="pointerActivator inventoryItem capeSlot cape3"></div>
-        <div class="pointerActivator inventoryItem capeSlot cape4"></div>
-        <div class="pointerActivator inventoryItem capeSlot cape5"></div>
-        <div class="pointerActivator inventoryItem capeSlot cape6"></div>
-        <div class="pointerActivator inventoryItem capeSlot cape7"></div>
-        <div class="pointerActivator inventoryItem capeSlot cape8"></div>
-        <div class="pointerActivator inventoryItem capeSlot cape9"></div>
+      <div class="inventoriesParent">
+        <div class="inventorySwitch">
+          <button class="pointerActivator switchButton inventorySwicther"></button>
+          <button class="pointerActivator switchButton soulsSwitcher"></button>
+          <button class="pointerActivator switchButton capeSwitcher"></button>
+          <button class="pointerActivator switchButton booksSwitcher"></button>
+          <button class="pointerActivator switchButton deleteButton"></button>
+        </div>
+  
+        <div id="inventoryWindow" class="inventoryShadow inventoryHide">
+          <img src="./backpack.png" id="backpackImage"/>
+          <div class="inventorySlotBG">
+            <div class="pointerActivator inventoryItem inventorySlot0"></div>
+          </div>
+          <div class="inventorySlotBG">          
+            <div class="pointerActivator inventoryItem inventorySlot1"></div>
+          </div>
+          <div class="inventorySlotBG">          
+            <div class="pointerActivator inventoryItem inventorySlot2"></div>
+          </div>
+          <div class="inventorySlotBG">          
+            <div class="pointerActivator inventoryItem inventorySlot3"></div>
+          </div>
+          <div class="inventorySlotBG">          
+            <div class="pointerActivator inventoryItem inventorySlot4"></div>
+          </div>
+          <div class="inventorySlotBG">          
+            <div class="pointerActivator inventoryItem inventorySlot5"></div>
+          </div>
+          <div class="inventorySlotBG">          
+            <div class="pointerActivator inventoryItem inventorySlot6"></div>
+          </div>
+          <div class="inventorySlotBG">          
+            <div class="pointerActivator inventoryItem inventorySlot7"></div>
+          </div>
+          <div class="inventorySlotBG">          
+            <div class="pointerActivator inventoryItem inventorySlot8"></div>
+          </div>
+        </div>
+  
+        <div id="inventoryWindow" class="soulWindow soulsHide">        
+          <div class="pointerActivator inventoryItem soulSlot soul1"></div>
+          <div class="pointerActivator inventoryItem soulSlot soul2"></div>
+          <div class="pointerActivator inventoryItem soulSlot soul3"></div>
+          <div class="pointerActivator inventoryItem soulSlot soul4"></div>
+          <div class="pointerActivator inventoryItem soulSlot soul5"></div>
+          <div class="pointerActivator inventoryItem soulSlot soul6"></div>
+          <div class="pointerActivator inventoryItem soulSlot soul7"></div>
+          <div class="pointerActivator inventoryItem soulSlot soul8"></div>
+          <div class="pointerActivator inventoryItem soulSlot soul9"></div>
+        </div>
+  
+        <div id="inventoryWindow" class="capeWindow capeHide">        
+          <div class="pointerActivator inventoryItem capeSlot cape1"></div>
+          <div class="pointerActivator inventoryItem capeSlot cape2"></div>
+          <div class="pointerActivator inventoryItem capeSlot cape3"></div>
+          <div class="pointerActivator inventoryItem capeSlot cape4"></div>
+          <div class="pointerActivator inventoryItem capeSlot cape5"></div>
+          <div class="pointerActivator inventoryItem capeSlot cape6"></div>
+          <div class="pointerActivator inventoryItem capeSlot cape7"></div>
+          <div class="pointerActivator inventoryItem capeSlot cape8"></div>
+          <div class="pointerActivator inventoryItem capeSlot cape9"></div>
+        </div>
       </div>
     </div>
     <div>
@@ -207,6 +250,8 @@
           <img src="./cardsShop/questSlimyProblem1.png" class="cardShop pointerActivator shopItem5" />
         </div>
       </div>
+
+      <div class="glitchOverlay"></div>
 
       <div class="questHub">
         <div class="questItems">

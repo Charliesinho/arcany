@@ -99,9 +99,8 @@ body {
 }
 
 #canvas-lobby {
-    border: solid 20px var(--backgroundObjects);
-    height: calc(100vh - 40px);
-    width: calc(100vw - 290px);
+    height: calc(100vh - 0px);
+    width: calc(100vw - 400px);
     image-rendering: pixelated;
 }
 
@@ -120,43 +119,66 @@ body {
 }
 
 #ui {
-    background: 
-    /* linear-gradient(hsl(188, 100%, 91%) 0%, rgb(237, 192, 166) 100%); */
-    linear-gradient(hsl(184, 100%, 87%) 0%, rgb(209, 175, 147) 100%);
-    height: calc(100vh - 20px);
+    background: url(./Textures/uiback.gif);
+    height: calc(100vh);
     width: 100vw;
-    max-width: 290px;
-    min-width: 290px;
+    max-width: 400px;
+    min-width: 400px;
     overflow: hidden;
-
-    border-bottom: solid 20px var(--backgroundObjects);
-    border-right: solid 20px var(--backgroundObjects);
-    border-left: solid 20px var(--backgroundObjects);
-
+    /* border-bottom: solid 20px var(--backgroundObjects); */
+    /* border-right: solid 20px var(--backgroundObjects); */
+    border-left: solid 3px rgb(26, 26, 26);
     position: absolute;
     top: 0;
     right: 0;
     z-index: 2;
-
     display: flex;
     flex-direction: column;
     align-items: center;
-
+    justify-content: space-between;
     outline: none 8px var(--backgroundObjects);
     outline-offset: -8px;
     border-radius: 0px 0 0 0px;
-    
-
     /* box-shadow: -10px 0 10px rgba(0, 0, 0, 0.412); */
-
     overflow-x: hidden;
-
-    transition: all 1s ease
+    transition: all 1s ease;
 }
 
 #ui::-webkit-scrollbar {
     display: none;
   }
+
+#uiDev {
+    position: absolute;
+    left: 0;
+    top: 200px;
+    width: 150px;
+    height: 400px;
+    background-color: rgb(0 0 0);
+    border: solid 2px black;
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.buttonDev {
+    height: 50px;
+    width: 150px;
+    background-color: white;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: all .5s ease;
+    color: black;
+    border: none;
+}
+
+.buttonDev:hover {
+    background-color: rgb(255, 210, 142);
+}
 
 #uiTop {
     height: 20px;
@@ -164,6 +186,7 @@ body {
     background-color: var(--backgroundObjects);
     position: relative;
     margin-bottom: 0px;
+    display: none;
     
 }
 
@@ -237,12 +260,12 @@ body {
 }
 
 #soulImg {
-    width: 90%;
-    margin-top: 50px;
+    margin-top: 0px;
     position: relative;
     z-index: 1;
     filter: saturate(1.3);
     opacity: 1;
+    height: 330px;
 }
 
 #mountainsUi {
@@ -263,29 +286,27 @@ body {
     position: relative;
     bottom: 0px;
     left: 0;
-
-    display: flex;
+    /* display: flex; */
     flex-wrap: wrap;
     justify-content: center;
-    align-items: center; 
-    gap: 10px;   
-
-    background: var(--backgroundObjects);
+    align-items: center;
+    gap: 10px;
+    background: #c18569;
     background-repeat: no-repeat;
     background-size: cover;
-
-    border-top: solid 2px black;
+    border-top: solid 3px rgb(22, 22, 22);
     border-radius: 0px;
-
-    width: 97%;
-    height: 100%;    
-    
-    padding: 20px 10px 100% 10px;
+    /* width: 99%; */
+    height: 300px;
+    padding: 40px 0px !important;
     margin-top: 0px;
+}
 
-    @media screen and (min-width: 1000px) {
-        padding: 20px 30px 100% 30px;
-    }
+.inventorySlotBG {
+    background: url("./Textures/InventorySlotBackground.png");
+    background-size: contain;
+    background-repeat: none;
+    padding: 5px;
 }
 
 #backpackImage {
@@ -310,12 +331,13 @@ body {
 
     
 
-    border-radius: 10px;
-    border: solid 2px rgb(41, 34, 34);
+    /* border-radius: 10px; */
+    border: none;
+    border: solid 2px rgba(255, 255, 255, 0);
     
-    box-shadow: 5px 5px rgba(0, 0, 0, 0.192);
+    /* box-shadow: 5px 5px rgba(0, 0, 0, 0.192); */
 
-    background-color: rgba(64, 45, 29, 0);
+    /* background-color: rgba(64, 45, 29, 0); */
 
     transition: all .2s ease-out;
     
@@ -323,25 +345,21 @@ body {
 
 .inventoryItem:hover {
     
-    border: solid 2px rgb(255, 255, 255);
-    box-shadow: 0px 0px rgba(0, 0, 0, 0.192), inset 0px 0px 10px  rgb(255, 255, 255);
+    filter: brightness(1.5);
+    top: -5px;
     
 }
 
 .inventoryItem:active {
-    box-shadow: 0 0px rgb(56, 25, 15);
-    border: solid 2px rgb(174, 255, 0);
-    top: 5px;
-    background: rgb(39, 71, 25);
     filter: brightness(10);
 }
 
 .inventorySwitch {
     display: flex;
-    justify-content: flex-start;
-    width: 95%;
+    justify-content: center;
+    width: 100%;
     gap: 5px;
-    margin-bottom: -2px;
+    margin-bottom: -3px;
     position: relative;
     z-index: 1;
 }
@@ -356,43 +374,34 @@ body {
 
 .switchButton {
     height: 40px;
-    width: 70px;
+    width: 62px;
+    border: none;
 
-    border-top: solid 2px black;
-    border-right: solid 2px black;
-    border-left: solid 2px black;
-    border-bottom: none;
+     
+     background-size: contain !important;
 
     font-size: 20px;
-
-
-    border-radius: 20px 20px 0 0;
     
 }
 
 .inventorySwicther {
-    background-color: var(--backgroundObjects);
+    background: url("./Textures/tabInv.png");
 }
 
 .soulsSwitcher {
-    background: rgb(81, 87, 152) ;
+    background: url("./Textures/tabSkin.png");
 }
 
 .capeSwitcher {
-    background: rgb(255, 248, 146) !important ;
+    background: url("./Textures/tabCloth.png");
 }
 
 .booksSwitcher {
-    background: rgb(152, 95, 81) ;
-    border-radius: 15px;
-    border: solid 2px black;
-    height: 35px;
-    padding-bottom: 5px;
-    overflow: hidden;
+    background: url("./Textures/tabBooks.png");
 }
 
 .deleteButton {
-    background: rgb(255, 110, 110) ;
+    background: url("./Textures/tabDel.png");
 }
 
 .equipmentWindow {
@@ -417,8 +426,8 @@ body {
 .equipmentItem {
     background: rgba(0, 0, 0, 0.101);
     /* box-shadow: inset 0px 0px 0px 5px rgba(255, 221, 177, 0.453); */
-    border: solid 2px rgb(0, 0, 0);
-    backdrop-filter: blur(5px);
+    /* border: solid 2px rgb(0, 0, 0);
+    backdrop-filter: blur(5px); */
 }
 
 .equipmentItem:active {
@@ -962,58 +971,61 @@ body {
     }
 }
 
-.shop {
+.glitchOverlay {
     position: absolute;
-    top: 20px;
-    left: 20px;
+    top: 0px !important;
     z-index: 20;
     opacity: 1;
-
-    width: calc(100vw - 330px - 20px);
-    height: calc(100vh - 40px);
-
-    /* border-radius: 10px; */
+    width: calc(100vw - 330px - 75px);
+    height: calc(100vh - 5px);
     border: solid 2px rgb(0, 0, 0);
-    
     box-shadow: 0px 5px rgb(0, 0, 0), 0 0 20px rgba(0, 0, 0, 0.464);
-
-    background: url("./shopBack.png");
+    background: url(./Textures/glitchGif.gif);
     background-size: cover;
     background-position: center;
+    display: none;
+}
 
+.shop {
+    position: absolute;
+    top: 0px !important;
+    /* left: 20px; */
+    z-index: 20;
+    opacity: 1;
+    width: calc(100vw - 330px - 75px);
+    height: calc(100vh - 5px);
+    /* border-radius: 10px; */
+    border: solid 2px rgb(0, 0, 0);
+    box-shadow: 0px 5px rgb(0, 0, 0), 0 0 20px rgba(0, 0, 0, 0.464);
+    background: url(./shopBack.png);
+    background-size: cover;
+    background-position: center;
     display: none;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-
     transition: all 1s ease;
     animation: opacityUp 1s ease forwards;
 }
 
 .questHub {
     position: absolute;
-    top: 20px;
-    left: 20px;
+    /* top: 20px; */
+    /* left: 20px; */
     z-index: 20;
     opacity: 1;
-
-    width: calc(100vw - 330px - 40px);
-    height: calc(100vh - 40px);
-
+    width: calc(100vw - 330px - 75px);
+    height: calc(100vh - 5px);
     /* border-radius: 10px; */
     border: solid 2px rgb(0, 0, 0);
-    
     box-shadow: 0px 5px rgb(0, 0, 0), 0 0 20px rgba(0, 0, 0, 0.464);
-
-    background: url("./questBack.png");
+    background: url(./questBack.png);
     background-size: cover;
     background-position: center;
-
     display: none;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-
     transition: all 1s ease;
     animation: opacityUp 1s ease forwards;
 }
@@ -1190,11 +1202,11 @@ body {
 .cardsIcon {
     position: absolute;
     bottom: -60px;
-    right: -30px;
+    right: 10px;
     transform: translate(-50%, -50%);
     z-index: 20;
-    height: 100px;
-    width: 100px;
+    height: 90px;
+    width: 90px;
     
 }
 
@@ -1294,7 +1306,7 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    width: calc(100vw - 330px - 0px);
+    width: calc(100vw - 330px - 63px);
     height: calc(100vh - 0px);
 
     background: transparent;
