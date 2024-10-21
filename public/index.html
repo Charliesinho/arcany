@@ -28,17 +28,30 @@
     </div>
     
     <div id="uiDev">
-      <button id="placeWalls" class="buttonDev pointerActivator">Place wall</button>
-      <button id="placeFishingArea" class="buttonDev pointerActivator">Place fishing area</button>
-      <button id="placeCraftingArea" class="buttonDev pointerActivator">Place crafting area</button>
-      <button id="placeCookingArea" class="buttonDev pointerActivator">Place cooking area</button>
-      <button id="placeChest" class="buttonDev pointerActivator">Place chest</button>
-      <button id="placeTransition" class="buttonDev pointerActivator">Place transition</button>
-      <button id="placeDialog" class="buttonDev pointerActivator">Place dialog</button>
-      <button id="placeQuest" class="buttonDev pointerActivator">Place quest</button>
-      <button id="deleteWalls" class="buttonDev pointerActivator">Delete Collision</button>
-      <button id="showWalls" class="buttonDev pointerActivator">Show Collisions</button>
-      <button id="exportWalls" class="buttonDev pointerActivator">Export walls</button>
+      <button id="placeWalls" class="buttonDev pointerActivator">🧱</button>
+      <button id="placeFishingArea" class="buttonDev pointerActivator">🐟</button>
+      <button id="placeCraftingArea" class="buttonDev pointerActivator">🛠️</button>
+      <button id="placeCookingArea" class="buttonDev pointerActivator">🥩</button>
+      <br></br>
+      <button id="placeChest" class="buttonDev pointerActivator">💼</button>
+      <div id="chestTypeSelectors">
+        <button id="placeChestStick" class="buttonDev buttonDevSmall pointerActivator">🪵</button>
+        <button id="placeChestGem" class="buttonDev buttonDevSmall pointerActivator">💎</button>
+        <button id="placeChestVeg" class="buttonDev buttonDevSmall pointerActivator">🍅</button>
+      </div>
+      <br></br>
+      <button id="placeTransition" class="buttonDev pointerActivator">➡️</button>
+      <div id="chestTypeSelectors">
+        <button id="arcaneTransition" class="buttonDev buttonDevSmall pointerActivator">🔮</button>
+        <button id="liquidTransition" class="buttonDev buttonDevSmall pointerActivator">💦</button>
+      </div>
+      <br></br>
+      <div id="roomsDev"></div>
+      <button id="placeDialog" class="buttonDev pointerActivator">🗯️</button>
+      <button id="placeQuest" class="buttonDev pointerActivator">🧭</button>
+      <button id="deleteWalls" class="buttonDev pointerActivator">❌</button>
+      <button id="showWalls" class="buttonDev pointerActivator">👁️</button>
+      <button id="exportWalls" class="buttonDev pointerActivator">📤</button>
     </div>
 
     <div id="ui">
@@ -252,6 +265,7 @@
       </div>
 
       <div class="glitchOverlay"></div>
+      <div class="liquidOverlay"></div>
 
       <div class="questHub">
         <div class="questItems">
@@ -272,7 +286,8 @@
     </canvas>
     <!-- <div id="navBar"></div> -->
     <script src="/socket.io/socket.io.js"></script>
-    <script type="module" src="/index.js"></script>
+    <script src="/index.js"></script>
+    <!-- <script type="module" src="/index.js"></script> -->
     <!-- <script type="module" src="/public/controller.js"></script> -->
     <!-- <script type="module" src="/public/index.js"></script> -->
   </body>

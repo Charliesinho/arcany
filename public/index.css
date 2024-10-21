@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
+
 :root {
     --backgroundObjects: rgb(48, 37, 37);
     --backgroundObjectsBorder: rgb(44, 40, 39);
@@ -9,6 +11,7 @@
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* Internet Explorer/Edge */
     cursor: none;
+    font-family: "Pixelify Sans", sans-serif !important;
   }
   
 
@@ -151,34 +154,86 @@ body {
 #uiDev {
     position: absolute;
     left: 0;
-    top: 200px;
-    width: 150px;
-    height: 400px;
-    background-color: rgb(0 0 0);
-    border: solid 2px black;
+    top: 0;
+    width: 50px;
+    height: 100vh;
+    background-color: rgb(30 26 37);
+    border: none;
     display: flex;
-    gap: 10px;
+    gap: 5px;
+    flex-wrap: wrap;
+    z-index: 50;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 10px;
-    border-radius: 5px;
 }
 
 .buttonDev {
-    height: 50px;
-    width: 150px;
-    background-color: white;
+    height: 40px;
+    width: 40px;
+    background-color: rgb(0, 0, 0);
     border-radius: 5px;
-    font-size: 16px;
+    font-size: 20px;
     transition: all .5s ease;
     color: black;
     border: none;
+    outline: solid 2px rgb(31, 31, 31);
+    outline-offset: -4px;
+
+    transition: all .2s ease;
 }
 
 .buttonDev:hover {
-    background-color: rgb(255, 210, 142);
+    background-color: rgb(255, 210, 142) !important;
 }
+
+#roomsDev {
+    position: absolute;
+    background-color: rgb(30 26 37);
+    left: 70px;
+    padding: 10px;
+    top: 560px;
+    color: white;
+    font-size: 20px;
+    -webkit-font-smoothing: none;
+    display: none;
+}
+
+.roomsDev-item {
+    background-color: none;
+    margin: 0;
+    padding: 5px;
+    position: relative;
+    border-radius: 5px;
+}
+.roomsDev-item:hover {
+    background-color: rgb(255, 210, 142);
+    color: black;
+}
+
+.textjump {
+    animation: jumpUp .3s ease-in-out;
+  }
+  
+  @keyframes jumpUp {
+    0% {
+      right: 0;
+      background-color: rgb(255, 210, 142);
+    }
+    20% {
+      right: -20px;  /* Jump up */
+      background-color: #a4eca4;  /* Green background */
+    }
+    30% {
+      right: -20px;  /* Back to original position */
+      background-color: #a4eca4;  /* Fade back to original color */
+    }
+    100% {
+      right: 0;
+      background-color: rgb(255, 210, 142);  /* Ensure it stays white */
+    }
+  }
 
 #uiTop {
     height: 20px;
@@ -985,6 +1040,20 @@ body {
     background-position: center;
     display: none;
 }
+.liquidOverlay {
+    position: absolute;
+    top: 0px !important;
+    z-index: 20;
+    opacity: 1;
+    width: calc(100vw - 330px - 75px);
+    height: calc(100vh - 5px);
+    border: solid 2px rgb(0, 0, 0);
+    box-shadow: 0px 5px rgb(0, 0, 0), 0 0 20px rgba(0, 0, 0, 0.464);
+    background: url(./Textures/liquidTransition.gif);
+    background-size: cover;
+    background-position: center;
+    display: none;
+}
 
 .shop {
     position: absolute;
@@ -1452,6 +1521,19 @@ body {
     
     position: relative;
     left: 0;
+  }
+
+  #chestTypeSelectors {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    border-radius: 50% !important;
+  }
+
+  .buttonDevSmall {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
   }
 
   #craftingContainer {

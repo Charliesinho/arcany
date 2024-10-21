@@ -18,8 +18,14 @@ islandOneMap.src = "./islands/islandOne.png";
 const islandOneMapArcane = new Image();
 islandOneMapArcane.src = "./islands/islandOneArcane.png";
 
+const lobbyMap = new Image();
+lobbyMap.src = "./islands/lobby.png";
+
 const islandOneMapFront = new Image();
 islandOneMapFront.src = "./islands/islandOneFront.png";
+
+const islandOneMapArcaneFront = new Image();
+islandOneMapArcaneFront.src = "./islands/islandOneArcaneFront.png";
 
 const character = new Image();
 character.src = "./skins/player.png";
@@ -241,6 +247,7 @@ const levelUp = document.querySelector(".levelUp");
 const levelUpCircle = document.querySelector(".levelUpCircle");
 
 const glitchOverlay = document.querySelector(".glitchOverlay");
+const liquidOverlay = document.querySelector(".liquidOverlay");
 
 const shop = document.querySelector(".shop");
 const cookingPot = document.querySelector(".cookingPot");
@@ -252,6 +259,9 @@ const shopItem5 = document.querySelector(".shopItem5");
 
 const rewardChest = document.querySelector(".rewardChest");
 const rewardFrame = document.getElementById("rewardFrame");
+const placeChestStick = document.getElementById("placeChestStick");
+const placeChestGem = document.getElementById("placeChestGem");
+const placeChestVeg = document.getElementById("placeChestVeg");
 
 const cookingItem = document.querySelector(".cookingItem");
 const container = document.getElementById('cookingContainer');
@@ -280,6 +290,11 @@ const exportWalls = document.getElementById("exportWalls");
 const placeFishingArea = document.getElementById("placeFishingArea");
 const placeCraftingArea = document.getElementById("placeCraftingArea");
 const placeCookingArea = document.getElementById("placeCookingArea");
+const placeChest = document.getElementById("placeChest");
+const placeTransition = document.getElementById("placeTransition");
+const roomsDiv = document.getElementById('roomsDev');
+const arcaneTransition = document.getElementById('arcaneTransition');
+const liquidTransition = document.getElementById('liquidTransition');
 
 const exploreMap = document.getElementById("exploreMap");
 const uiTop = document.getElementById("uiTop");
@@ -421,8 +436,6 @@ function updateQuestHub() {
     for (const quest of questline) {
   
       const img = document.createElement('img');
-
-      console.log(quest);
       
       if (quest.completed === true) {
         img.src = `./cardsShop/quest${quest.name}${quest.step}Comp.png`;
@@ -537,159 +550,17 @@ function progressQuestCounter(questItem, step) {
 
 //Quest system <
 
-// Explore minigame >
-
-const parentWidthExplore = exploreMinigameBeach.offsetWidth;
-const parentHeightExplore = exploreMinigameBeach.offsetHeight;
-const boatWidth = boatExploreMinigame.offsetWidth;
-const leftPositionBoat = (parentWidthExplore - boatWidth) / 2;
-boatExploreMinigame.style.left = leftPositionBoat + 'px';
-
-let boatPositionLimits = 1;
-
-let positionRock1 = 0;
-
-function moveRock1ChildImg() {
-
-  const rockImg = new Image();
-  rockImg.src = './exploreMinigame/rock.png';
-  rockImg.className = 'rockExploreMinigame';
-
-  const numbers = [0, 300, -300];
-  const randomIndex = numbers[Math.floor(Math.random() * numbers.length)];
-  console.log(randomIndex)
-
-  let positionRock = -500;
-  rockImg.style.position = 'absolute';
-  rockImg.style.top = positionRock + 'px';
-  rockImg.style.left = randomIndex + leftPositionBoat + 'px';
-
-  exploreMinigameBeach.appendChild(rockImg);
-
-  function moveRock() {
-    positionRock += 5;
-
-    if (positionRock >= window.innerHeight) {
-
-      rockImg.parentNode.removeChild(rockImg);
-      return;
-    }
-
-    rockImg.style.top = positionRock + 'px';
-
-    requestAnimationFrame(moveRock);
-  }
-
-  moveRock();
-  checkCollisions()
-}
-
-let progressExploreWidth = 0;
-
-function exploreProgressBar () {
-  progressExploreWidth += 2;
-  progressBarExploreMinigame.style.width = progressExploreWidth + "px";
-
-  if (progressExploreWidth > 320) {
-    progressExploreWidth = 0;
-    clearInterval(progressExploreWidthInterval);
-    handleExploreWin();
-  }
-
-}
-
-function checkCollisions() {
-  const boatRect = boatExploreMinigame.getBoundingClientRect();
-
-  const rocks = document.querySelectorAll('.rockExploreMinigame');
-  rocks.forEach((rock) => {
-    const rockRect = rock.getBoundingClientRect();
-    if (
-      boatRect.left < rockRect.right &&
-      boatRect.right > rockRect.left &&
-      boatRect.top < rockRect.bottom &&
-      boatRect.bottom > rockRect.top
-    ) {
-      handleCollision();
-    }
-  });
-}
-
-function handleCollision() {
-  clearInterval(exploreMinigameInterval);
-  clearInterval(progressExploreWidthInterval);
-  exploreMinigameBeach.style.visibility = "hidden"
-  socket.emit("changeRoom", "baseMap");
-  intervalCanvasBase = setInterval(canvasLobbyLoop, 16.67);
-  grassOpenExplore = false;
-  exploreMap.style.display = "block";
-  progressExploreWidth = 0;
-  seaShantyAudio.currentTime = 0;
-
-  motorAudio.currentTime = 0;
-  seaShantyAudio.pause()
-
-  motorAudio.pause()
-}
-
-let islandExploreTop = 100;
-
-function handleExploreWin() {
-  clearInterval(exploreMinigameInterval);
 
 
-  const islandIntervalExplore = setInterval(() => {
-    islandExploreTop -= 1;
-    islandExploreMinigame.style.top = `-${islandExploreTop}%`
 
-    if (islandExploreTop <= 10) {
-      socket.emit("islandOneExplored");
-      socket.emit("changeRoom", "islandOne");
-      seaShantyAudio.currentTime = 0;
 
-      motorAudio.currentTime = 0;
-      seaShantyAudio.pause()
-
-      motorAudio.pause()
-      audioSuccess.play()
-      islandExploreTop = 100;
-      islandExploreMinigame.style.top = "-100%"
-      clearInterval(islandIntervalExplore)
-      exploreMinigameBeach.style.visibility = "hidden"
-      intervalCanvasBase = setInterval(canvasIslandOneLoop, 16.67);
-      grassOpenExplore = false;
-      exploreMap.style.display = "block";
-      progressExploreWidth = 0;
-    }
-  }, 50);
-}
-
-let exploreMinigameInterval;
-let progressExploreWidthInterval;
-
-exploreMapIsland1.addEventListener("click", () => {
-        clearInterval(intervalCanvasBase);
-        exploreMap.style.visibility = "hidden";
-        exploreMap.style.display = "none";
-        exploreMinigameBeach.style.visibility = "visible";
-        seaShantyAudio.play()
-
-        motorAudio.play()
-        IslandChestOpened = false;
-        rewardChest.style.left = `0%`;
-        exploreMinigameInterval = setInterval(() => {
-          moveRock1ChildImg()
-        }, 800);
-        progressExploreWidthInterval = setInterval(() => {
-          exploreProgressBar()
-        }, 200);
-});
-
+// Chest > 
 rewardChest.addEventListener("click", () => {
   openChestIsland ()
 });
 
 let currentLeft = 0
+let currentChestItem = "stick"
 
 function openChestIsland () {
   if (IslandChestOpened === false) {
@@ -703,7 +574,7 @@ function openChestIsland () {
 
         openChestAudio.play()
 
-        socket.emit("rewardChest", "islandOne");
+        socket.emit("rewardChest", currentChestItem);
 
         setTimeout(() => {
           currentLeft = 0
@@ -718,7 +589,9 @@ function openChestIsland () {
 
 }
 
-// Explore minigame <
+// Chest
+
+
 
 
 window.addEventListener("keydown", (e) => {
@@ -748,25 +621,9 @@ window.addEventListener("keydown", (e) => {
 
     //   setTimeout(() => {
     //     console.log("canvas restarted")
-    //     intervalCanvasBase = setInterval(canvasLobbyLoop, 16.67);
+    //     intervalCanvasBase = setInterval(lobbyLoop, 16.67);
     //   }, 2000);
     // }
-
-    if (exploreMinigameBeach.style.visibility !== "hidden") {
-      let currentPositionBoat = boatExploreMinigame.style.left.slice(0, -2)
-      let currentPositionBoatNum = parseFloat(currentPositionBoat)
-
-      if (e.key === "d" && boatPositionLimits < 2) {
-        currentPositionBoatNum += 300
-        boatPositionLimits += 1
-        boatExploreMinigame.style.left = `${currentPositionBoatNum}px`;
-      }
-      if (e.key === "q" && boatPositionLimits > 0) {
-        currentPositionBoatNum -= 300
-        boatPositionLimits -= 1
-        boatExploreMinigame.style.left = `${currentPositionBoatNum}px`;
-      }
-    }
 
 });
 
@@ -2140,10 +1997,8 @@ socket.on("loginAttempt", (msg) => {
   if(msg === "success") {
     audioIntro.pause();
     loggedIn.play();
-    // intervalCanvasBase = setInterval(canvasLobbyLoop, 16.67); //Initial canvas
-    intervalCanvasBase = setInterval(canvasIslandOneLoop, 16.67); //Initial canvas
-    console.log("heqksdoqjsdo")
-
+    // intervalCanvasBase = setInterval(lobbyLoop, 16.67); //Initial canvas
+    intervalCanvasBase = setInterval(islandOneLoop, 16.67); //Initial canvas
     console.log("logged in")
 
     loginScreen.classList.add('downLogIn');
@@ -2283,23 +2138,7 @@ window.addEventListener("keydown", (e) => {
 
   // Testing >
   if (e.key === "f") {
-    glitchArcane.play()
-    
-    setTimeout(() => {
-      glitchOverlay.style.display = "block"
-    }, 600);
-    
-    setTimeout(() => {
-      ArcaneEnv.play()
-      clearInterval(intervalCanvasBase)
-      intervalCanvasBase = setInterval(canvasIslandOneArcaneLoop, 16.67);
-      grasslandsLoop1.pause();
-      grasslandsEnviroment.pause();
-    }, 1000);
-    
-    setTimeout(() => {
-      glitchOverlay.style.display = "none"
-    }, 1100);
+    transitionLiquid()
   }
   if (e.key === "g") {
     if (!cutscene) {
@@ -2311,8 +2150,6 @@ window.addEventListener("keydown", (e) => {
  
 
   //Fishing Minigame >
-
-  console.log(e.key, grassCookingAvailable, grassOpenCooking)
 
   if(e.key === "e" && fishAvailable === true && fishing === false) {
 
@@ -2419,22 +2256,10 @@ window.addEventListener("keydown", (e) => {
 
   //Crafting grasslands open <
 
-  //Explore grasslands open >
-
-  if(e.key === "e" && grassExploreAvailable & !grassOpenExplore) {
-    grassOpenExplore = true;
-    paperAudio.play();
-  } else if (e.key === "e" && grassExploreAvailable & grassOpenExplore) {
-    grassOpenExplore = false;
-  }
-
-  //Explore grasslands open <
-
   //Chest island open >
 
   if(e.key === "e" && IslandChestAvailable & !IslandOpenChest) {
     IslandOpenChest = true;
-    console.log(IslandOpenChest)
     openShopAudio.play();
   } else if (e.key === "e" && IslandChestAvailable & IslandOpenChest) {
     IslandOpenChest = false;
@@ -2747,7 +2572,7 @@ function drawOnTop (img, x, y, width, height, cx, cy) {
 
 //Base Map Canvas >
 
-function canvasLobbyLoop() {
+function lobbyLoop() {
   // canvas.clearRect(0, 0, canvasLobby.width, canvasLobby.height);
   canvas.clearRect(0, 0, 4500, 4500);
   canvas.imageSmoothingEnabled = false;
@@ -3491,7 +3316,102 @@ let particles = [];
 //Island One Map Canvas >
 
 
+// Transitions >
+let transitionType = "arcane"
+let transitionTimeout = false;
 
+function transition (format) {
+  if (format === "arcane") {
+    transitionArcane()
+  }
+  else if (format === "liquid") {
+    transitionLiquid()
+  }
+}
+function transitionArcane () {
+  
+  glitchArcane.play()
+  setTimeout(() => {
+    glitchOverlay.style.display = "block"
+  }, 600);
+  
+  const dynamicFunctionName = currentSelectedMap + "Loop";
+  
+  setTimeout(() => {
+    clearInterval(intervalCanvasBase)
+    const dynamicFunction = window[dynamicFunctionName];
+    if (typeof dynamicFunction === "function") {
+      intervalCanvasBase = setInterval(dynamicFunction, 16.67);
+    } else {
+      console.error(`${dynamicFunctionName} is not a valid function`);
+    }
+    // ArcaneEnv.play()
+      // grasslandsLoop1.pause();
+      // grasslandsEnviroment.pause();
+    }, 1000);
+    
+    setTimeout(() => {
+      glitchOverlay.style.display = "none"
+    }, 1100);
+}
+
+function transitionLiquid () {
+  if (transitionTimeout === false) {
+
+    transitionTimeout = true;
+  
+    const currentBg = liquidOverlay.style.backgroundImage;
+  
+    liquidOverlay.style.backgroundImage = 'none';
+  
+    setTimeout(() => {
+      liquidOverlay.style.backgroundImage = currentBg; // Set it back to the original GIF
+    }, 0);
+  
+    liquidOverlay.style.display = "block"
+  
+  
+    
+    const dynamicFunctionName = currentSelectedMap + "Loop";
+    
+    setTimeout(() => {
+      clearInterval(intervalCanvasBase)
+      const dynamicFunction = window[dynamicFunctionName];
+      if (typeof dynamicFunction === "function") {
+        intervalCanvasBase = setInterval(dynamicFunction, 16.67);
+      } else {
+        console.error(`${dynamicFunctionName} is not a valid function`);
+      }
+      // ArcaneEnv.play()
+        // grasslandsLoop1.pause();
+        // grasslandsEnviroment.pause();
+      }, 1800);
+      
+      setTimeout(() => {
+        liquidOverlay.style.display = "none"
+        transitionTimeout = false;
+      }, 3900);
+  }
+}
+
+arcaneTransition.style.backgroundColor = "rgba(170, 233, 170, 1)"
+
+arcaneTransition.addEventListener("click", function() {
+  if (transitionType !== "arcane") {
+    transitionType = "arcane"
+    arcaneTransition.style.backgroundColor = "rgba(170, 233, 170, 1)"
+    liquidTransition.style.backgroundColor = "black"
+  }
+ });
+
+liquidTransition.addEventListener("click", function() {
+  if (transitionType !== "liquid") {
+    transitionType = "liquid"
+    liquidTransition.style.backgroundColor = "rgba(170, 233, 170, 1)"
+    arcaneTransition.style.backgroundColor = "black"
+  }
+ });
+// Transitions <
 
 
 
@@ -3499,8 +3419,19 @@ let particles = [];
 
 let currentLand= "none";
 
-let walls = {
-  islandOne: [],
+let mapsInfo = {
+  islandOne: {
+    colliders: [],
+  },
+  islandOneArcane: {
+    colliders: [],
+  },
+  lobby: {
+    colliders: [],
+  },
+  lobbyMap: {
+    colliders: [],
+  },
 };
 
 let selectedXcoord = 0;
@@ -3510,6 +3441,7 @@ let heightCoord = 0;
 let currentDevAction = "none"
 let currentlyPlacingWall = false;
 let currentSelectedWall = null;
+let currentSelectedMap = "none"
 
 const rect = canvasLobby.getBoundingClientRect();
 
@@ -3528,7 +3460,7 @@ addEventListener("mousemove", (event) => {
 
     let collidingWitWall = false;
 
-    walls[currentLand].forEach(wall => {
+    mapsInfo[currentLand].colliders.forEach(wall => {
 
       const mouseCollider = {
         x: x,
@@ -3540,7 +3472,7 @@ addEventListener("mousemove", (event) => {
       
       if (isColliding(mouseCollider, { x: wall.x, y: wall.y, width: wall.width, height: wall.height })) {
         wall.color = `rgba(210, 45, 45, 0.5)`
-        currentSelectedWall = walls[currentLand].indexOf(wall);
+        currentSelectedWall = mapsInfo[currentLand].colliders.indexOf(wall);
         collidingWitWall = true;
       } else {
         wall.color = `rgb(0, 0, 0, ${wallsVisibility})`
@@ -3566,7 +3498,7 @@ canvasLobby.addEventListener('click', function(event) {
     const newWidth = x - selectedXcoord;
     const newHeight = y - selectedYcoord;
     
-    walls[currentLand].push({
+    mapsInfo[currentLand].colliders.push({
       type: "wall",
       x: selectedXcoord,
       y: selectedYcoord,
@@ -3579,7 +3511,7 @@ canvasLobby.addEventListener('click', function(event) {
 
 
   else if (currentSelectedWall >= 0 && currentDevAction === "delete") {
-    walls[currentLand].splice(currentSelectedWall, 1)
+    mapsInfo[currentLand].colliders.splice(currentSelectedWall, 1)
     currentSelectedWall = null;
   }
 
@@ -3595,7 +3527,7 @@ canvasLobby.addEventListener('click', function(event) {
     const newWidth = x - selectedXcoord;
     const newHeight = y - selectedYcoord;
     
-    walls[currentLand].push({
+    mapsInfo[currentLand].colliders.push({
       type: "fish",
       x: selectedXcoord,
       y: selectedYcoord,
@@ -3618,7 +3550,7 @@ canvasLobby.addEventListener('click', function(event) {
     const newWidth = x - selectedXcoord;
     const newHeight = y - selectedYcoord;
     
-    walls[currentLand].push({
+    mapsInfo[currentLand].colliders.push({
       type: "cook",
       x: selectedXcoord,
       y: selectedYcoord,
@@ -3628,82 +3560,257 @@ canvasLobby.addEventListener('click', function(event) {
     })
     currentlyPlacingWall = false;
   }
+  
+  
+  else if (!currentlyPlacingWall && currentDevAction === "craft" && currentSelectedWall === null) {
+    selectedXcoord = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
+    selectedYcoord = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    currentlyPlacingWall = true;
+  }
+  else if (currentSelectedWall === null && currentlyPlacingWall && currentDevAction === "craft") {
+    const x = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
+    const y = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    const newWidth = x - selectedXcoord;
+    const newHeight = y - selectedYcoord;
+    
+    mapsInfo[currentLand].colliders.push({
+      type: "craft",
+      x: selectedXcoord,
+      y: selectedYcoord,
+      width: newWidth,
+      height: newHeight,
+      color: `rgb(153, 102, 51, ${wallsVisibility})`
+    })
+    currentlyPlacingWall = false;
+  }
+  
+  
+  else if (!currentlyPlacingWall && currentDevAction === "chest" && currentSelectedWall === null) {
+    selectedXcoord = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
+    selectedYcoord = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    currentlyPlacingWall = true;
+  }
+  else if (currentSelectedWall === null && currentlyPlacingWall && currentDevAction === "chest") {
+    const x = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
+    const y = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    const newWidth = x - selectedXcoord;
+    const newHeight = y - selectedYcoord;
+    
+    mapsInfo[currentLand].colliders.push({
+      type: "chest",
+      item: currentChestItem,
+      x: selectedXcoord,
+      y: selectedYcoord,
+      width: newWidth,
+      height: newHeight,
+      color: `rgb(255, 255, 204, ${wallsVisibility})`
+    })
+    currentlyPlacingWall = false;
+  }
+
+  
+  else if (!currentlyPlacingWall && currentDevAction === "transition" && currentSelectedWall === null) {
+    selectedXcoord = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
+    selectedYcoord = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    currentlyPlacingWall = true;
+  }
+  else if (currentSelectedWall === null && currentlyPlacingWall && currentDevAction === "transition") {
+    const x = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
+    const y = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    const newWidth = x - selectedXcoord;
+    const newHeight = y - selectedYcoord;
+    
+    mapsInfo[currentLand].colliders.push({
+      type: "transition",
+      format: transitionType,
+      destination: currentSelectedMap,
+      x: selectedXcoord,
+      y: selectedYcoord,
+      width: newWidth,
+      height: newHeight,
+      color: `rgb(204, 0, 204, ${wallsVisibility})`
+    })
+    currentlyPlacingWall = false;
+  }
    
 });
 
 placeWalls.addEventListener("click", function() {
  if (currentDevAction !== "wall") {
   currentDevAction = "wall";
-  placeWalls.style.backgroundColor = "limeGreen"
-  deleteWalls.style.backgroundColor = "white"
-  placeFishingArea.style.backgroundColor = "white"
-  placeCookingArea.style.backgroundColor = "white"
+  roomsDiv.style.display = "none"
+  deleteWalls.style.backgroundColor = "black"
+  placeFishingArea.style.backgroundColor = "black"
+  placeCookingArea.style.backgroundColor = "black"
+  placeCraftingArea.style.backgroundColor = "black"
+  placeChest.style.backgroundColor = "black"
+  placeTransition.style.backgroundColor = "black"
+  placeWalls.style.backgroundColor = "rgba(170, 233, 170, 1)"
  } else {
   currentDevAction = "none";
-  placeWalls.style.backgroundColor = "white"
+  placeWalls.style.backgroundColor = "black"
  }
 });
 
 deleteWalls.addEventListener("click", function() {
   if (currentDevAction !== "delete") {
     currentDevAction = "delete";
-    deleteWalls.style.backgroundColor = "limeGreen"
-    placeWalls.style.backgroundColor = "white"
-    placeFishingArea.style.backgroundColor = "white"
-    placeCookingArea.style.backgroundColor = "white"
+    roomsDiv.style.display = "none"
+    placeWalls.style.backgroundColor = "black"
+    placeFishingArea.style.backgroundColor = "black"
+    placeCookingArea.style.backgroundColor = "black"
+    placeCraftingArea.style.backgroundColor = "black"
+    placeChest.style.backgroundColor = "black"
+    placeTransition.style.backgroundColor = "black"
+    deleteWalls.style.backgroundColor = "rgba(170, 233, 170, 1)"
   } else {
     currentDevAction = "none";
-    deleteWalls.style.backgroundColor = "white"
+    deleteWalls.style.backgroundColor = "black"
   }
  });
 
 placeFishingArea.addEventListener("click", function() {
   if (currentDevAction !== "fish") {
     currentDevAction = "fish";
-    deleteWalls.style.backgroundColor = "white"
-    placeWalls.style.backgroundColor = "white"
-    placeCookingArea.style.backgroundColor = "white"
-    placeFishingArea.style.backgroundColor = "limeGreen"
+    roomsDiv.style.display = "none"
+    deleteWalls.style.backgroundColor = "black"
+    placeWalls.style.backgroundColor = "black"
+    placeCookingArea.style.backgroundColor = "black"
+    placeCraftingArea.style.backgroundColor = "black"
+    placeChest.style.backgroundColor = "black"
+    placeTransition.style.backgroundColor = "black"
+    placeFishingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
   } else {
     currentDevAction = "none";
-    placeFishingArea.style.backgroundColor = "white"
+    placeFishingArea.style.backgroundColor = "black"
   }
  });
 
- placeCookingArea.addEventListener("click", function() {
-  if (currentDevAction !== "cook") {
-    currentDevAction = "cook";
-    deleteWalls.style.backgroundColor = "white"
-    placeWalls.style.backgroundColor = "white"
-    placeFishingArea.style.backgroundColor = "white"
-    placeCookingArea.style.backgroundColor = "limeGreen"
-  } else {
-    currentDevAction = "none";
-    placeCookingArea.style.backgroundColor = "white"
+placeCookingArea.addEventListener("click", function() {
+if (currentDevAction !== "cook") {
+  currentDevAction = "cook";
+  roomsDiv.style.display = "none"
+  deleteWalls.style.backgroundColor = "black"
+  placeWalls.style.backgroundColor = "black"
+  placeFishingArea.style.backgroundColor = "black"
+  placeCraftingArea.style.backgroundColor = "black"
+  placeChest.style.backgroundColor = "black"
+  placeTransition.style.backgroundColor = "black"
+  placeCookingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
+} else {
+  currentDevAction = "none";
+  placeCookingArea.style.backgroundColor = "black"
+}
+});
+
+placeCraftingArea.addEventListener("click", function() {
+if (currentDevAction !== "craft") {
+  currentDevAction = "craft";
+  roomsDiv.style.display = "none"
+  deleteWalls.style.backgroundColor = "black"
+  placeWalls.style.backgroundColor = "black"
+  placeFishingArea.style.backgroundColor = "black"
+  placeCookingArea.style.backgroundColor = "black"
+  placeChest.style.backgroundColor = "black"
+  placeTransition.style.backgroundColor = "black"
+  placeCraftingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
+} else {
+  currentDevAction = "none";
+  placeCraftingArea.style.backgroundColor = "black"
+}
+});
+
+placeTransition.addEventListener("click", function() {
+if (currentDevAction !== "transition") {
+  currentDevAction = "transition";
+  roomsDiv.style.display = "block"
+  deleteWalls.style.backgroundColor = "black"
+  placeWalls.style.backgroundColor = "black"
+  placeFishingArea.style.backgroundColor = "black"
+  placeCookingArea.style.backgroundColor = "black"
+  placeChest.style.backgroundColor = "black"
+  placeCraftingArea.style.backgroundColor = "black"
+  placeTransition.style.backgroundColor = "rgba(170, 233, 170, 1)"
+} else {
+  roomsDiv.style.display = "none"
+  currentDevAction = "none";
+  placeTransition.style.backgroundColor = "black"
+}
+});
+
+placeChest.addEventListener("click", function() {
+if (currentDevAction !== "chest") {
+  currentDevAction = "chest";
+  roomsDiv.style.display = "none"
+  deleteWalls.style.backgroundColor = "black"
+  placeWalls.style.backgroundColor = "black"
+  placeFishingArea.style.backgroundColor = "black"
+  placeCookingArea.style.backgroundColor = "black"
+  placeCraftingArea.style.backgroundColor = "black"
+  placeTransition.style.backgroundColor = "black"
+  placeChest.style.backgroundColor = "rgba(170, 233, 170, 1)"
+} else {
+  currentDevAction = "none";
+  placeChest.style.backgroundColor = "black"
+}
+});
+
+placeChestStick.style.backgroundColor = "rgba(170, 233, 170, 1)" //Initially selected
+
+placeChestStick.addEventListener("click", function() {
+  if (currentChestItem !== "stick") {
+    currentChestItem = "stick";
+    placeChestGem.style.backgroundColor = "black"
+    placeChestVeg.style.backgroundColor = "black"
+    placeChestStick.style.backgroundColor = "rgba(170, 233, 170, 1)"
   }
- });
+});
+
+placeChestVeg.addEventListener("click", function() {
+  if (currentChestItem !== "vegetable") {
+    currentChestItem = "vegetable";
+    placeChestGem.style.backgroundColor = "black"
+    placeChestStick.style.backgroundColor = "black"
+    placeChestVeg.style.backgroundColor = "rgba(170, 233, 170, 1)"
+  }
+});
+
+placeChestGem.addEventListener("click", function() {
+  if (currentChestItem !== "gem") {
+    currentChestItem = "gem";
+    placeChestVeg.style.backgroundColor = "black"
+    placeChestStick.style.backgroundColor = "black"
+    placeChestGem.style.backgroundColor = "rgba(170, 233, 170, 1)"
+  }
+});
 
 showWalls.addEventListener("click", function() {
 if (wallsVisibility === 0) {
   wallsVisibility = 0.5;
-  showWalls.style.backgroundColor = "limeGreen"
+  showWalls.style.backgroundColor = "rgba(170, 233, 170, 1)"
 } else {
   wallsVisibility = 0;
-  showWalls.style.backgroundColor = "white"
+  showWalls.style.backgroundColor = "black"
 }
-walls[currentLand].forEach(wall => {
+mapsInfo[currentLand].colliders.forEach(wall => {
   if (wall.type === "wall") {
     wall.color = `rgb(0, 0, 0, ${wallsVisibility})`;
   } else if (wall.type === "fish") {
     wall.color = `rgb(51, 102, 255, ${wallsVisibility})`
   } else if (wall.type === "cook") {
     wall.color = `rgb(153, 255, 102, ${wallsVisibility})`
+  } else if (wall.type === "craft") {
+    wall.color = `rgb(153, 102, 51, ${wallsVisibility})`
+  } else if (wall.type === "chest") {
+    wall.color = `rgb(255, 255, 204, ${wallsVisibility})`
+  } else if (wall.type === "transition") {
+    wall.color = `rgb(204, 0, 204, ${wallsVisibility})`
   }
 })
 });
 
 exportWalls.addEventListener("click", function() {
-exportObjectAsText(walls[currentLand], "walls")
+exportObjectAsText(mapsInfo[currentLand].colliders, "walls")
 });
 
 function exportObjectAsText(obj, fileName) {
@@ -3725,6 +3832,30 @@ function isColliding(player, wall) {
       player.y + player.height > wall.y
   );
 }
+
+function addMapsInfoToDiv() {
+
+  for (const key in mapsInfo) {
+    if (mapsInfo.hasOwnProperty(key)) {
+      const pElement = document.createElement('p');
+      
+      pElement.innerHTML = key;
+      pElement.classList.add('roomsDev-item');
+
+      pElement.addEventListener('click', () => {
+        currentSelectedMap = key;
+
+        pElement.classList.add('textjump');
+        setTimeout(() => {
+          pElement.classList.remove('textjump');
+        }, 1000);
+      });
+
+      roomsDiv.appendChild(pElement);
+    }
+  }
+}
+addMapsInfoToDiv();
 
 // Developer UI <
 
@@ -3770,9 +3901,13 @@ function cameraFollow () {
 
 
 
-function canvasIslandOneLoop() {
+function islandOneLoop() {
 
   currentLand = "islandOne";
+  fishAvailable = false;
+  grassCookingAvailable = false;
+  grassCraftingAvailable = false;
+  IslandChestAvailable = false;
 
   canvas.clearRect(0, 0, 4500, 4500);
   canvas.imageSmoothingEnabled = false;
@@ -3934,9 +4069,8 @@ function canvasIslandOneLoop() {
     let playerColLengthX = playerWidth + 50;
     let playerColLengthY = playerHeight + 22;
     canvas.beginPath();
-    canvas.fillStyle = `rgb(255, 0, 13, ${wallsVisibility})`; //Change the last value to 0.3 to make it visible
+    canvas.fillStyle = `rgb(255, 0, 13, ${wallsVisibility})`;
     canvas.fillRect(playerColminX, playerColminY, playerColLengthX, playerColLengthY);
-    // console.log(playerX - 30 - 150, playerY + 70 - 180)
     //Player Collision <
 
 
@@ -3944,59 +4078,12 @@ function canvasIslandOneLoop() {
     // console.log(myPlayer.x, myPlayer.y)
     //Player Location <
 
-    //Grasslands walls >
-
-    //Chest Grasslands activator >
-    const grasslandsShopx = 3180 - cameraShakeX - cameraX;
-    const grasslandsShopY = 2700 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(255, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grasslandsShopx, grasslandsShopY, 200, 300);
-
-    if (playerColminX + playerColLengthX > grasslandsShopx && playerColminY + playerColLengthY > grasslandsShopY && playerColminY < grasslandsShopY + 300 && playerColminX < grasslandsShopx + 200) {
-      if (IslandOpenChest) {
-        rewardFrame.style.visibility = "visible";
-        rewardFrame.style.opacity = "1";
-      } else {
-        rewardFrame.style.opacity = "0";
-        rewardFrame.style.visibility = "hidden";
-      }
-      IslandChestAvailable = true;
-    } else {
-      IslandChestAvailable = false;
-      IslandOpenChest = false;
-      rewardFrame.style.visibility = "hidden";
-    }
-    //Chest Grasslands activator <
-
-    // //Crafting Grasslands activator >
-    // const grasslandsCraftingx = 2600 - cameraShakeX - cameraX;
-    // const grasslandsCraftingY = 3000 - cameraShakeY - cameraY;
-    // canvas.beginPath();
-    // canvas.fillStyle = `rgb(255, 0, 0, ${wallsVisibility})`;
-    // canvas.fillRect(grasslandsCraftingx, grasslandsCraftingY, 200, 300);
-
-    // if (playerColminX + playerColLengthX > grasslandsCraftingx && playerColminY + playerColLengthY > grasslandsCraftingY && playerColminY < grasslandsCraftingY + 300 && playerColminX < grasslandsCraftingx + 200) {
-    //   if (grassOpenCrafting) {
-    //     craftingContainer.style.display = "block";
-    //   } else {
-    //     craftingContainer.style.display = "none";
-    //   }
-    //   grassCraftingAvailable = true;
-    // } else {
-    //   grassCraftingAvailable = false;
-    //   grassOpenCrafting = false;
-    // }
-    // //Crafting Grasslands activator <
-
     allowedMoveUpRight = true;
     allowedMoveUpLeft = true;
     allowedMoveUpUp = true;
     allowedMoveUpDown = true;
-    fishAvailable = false;
-    grassCookingAvailable = false;
-
-    walls[currentLand].forEach(wall => {
+    
+    mapsInfo[currentLand].colliders.forEach(wall => {
       const adjustedX = wall.x - cameraShakeX - cameraX;
       const adjustedY = wall.y - cameraShakeY - cameraY;
 
@@ -4038,6 +4125,10 @@ function canvasIslandOneLoop() {
         else if (wall.type === "fish") {
           fishAvailable = true;
         }
+        else if (wall.type === "transition") {
+          currentSelectedMap = wall.destination
+          transition(wall.format)
+        }
         else if (wall.type === "cook") {
           grassCookingAvailable = true;
           if (grassOpenCooking) {
@@ -4046,11 +4137,39 @@ function canvasIslandOneLoop() {
             cookingContainer.style.display = "none";
           }
         }
+        else if (wall.type === "craft") {
+          grassCraftingAvailable = true;
+          if (grassOpenCrafting) {
+            craftingContainer.style.display = "block";
+          } else {
+            craftingContainer.style.display = "none";
+          }
+        }
+        else if (wall.type === "chest") {
+          IslandChestAvailable = true;
+          currentChestItem = wall.item;
+          if (IslandOpenChest) {
+            rewardFrame.style.visibility = "visible";
+            rewardFrame.style.opacity = "1";
+          } else {
+            rewardFrame.style.opacity = "0";
+            rewardFrame.style.visibility = "hidden";
+          }
+        }
       }
       else {
         if (wall.type === "cook") {
           grassOpenCooking = false;
           cookingContainer.style.display = "none";
+        }
+        if (wall.type === "craft") {
+          grassOpenCrafting = false;
+          craftingContainer.style.display = "none";
+        }
+        if (wall.type === "chest") {
+          IslandChestAvailable = false;
+          IslandOpenChest = false;
+          rewardFrame.style.visibility = "hidden";
         }
       }
     
@@ -4552,7 +4671,6 @@ for (const projectile of projectilesClient) {
 
   //Wall you are about to place
   if (currentlyPlacingWall) {
-    console.log("placing")
     canvas.fillStyle = `rgba(210, 45, 45, 0.5)`;
     canvas.fillRect(selectedXcoord - cameraShakeX - cameraX, selectedYcoord - cameraShakeY - cameraY, widthCoord, heightCoord);
   }
@@ -4613,19 +4731,32 @@ for (const projectile of projectilesClient) {
   }
 
 }
-function canvasIslandOneArcaneLoop() {
+function islandOneArcaneLoop() {
   // canvas.clearRect(0, 0, canvasLobby.width, canvasLobby.height);
   canvas.clearRect(0, 0, 4500, 4500);
   canvas.imageSmoothingEnabled = false;
 
-  let cameraX = 0;
-  let cameraY = 0;
-  if (myPlayer) {
-    cameraX = playerX - canvasLobby.width / 2 + 10;
-    cameraY = playerY - canvasLobby.height / 2 + 50;
+  currentLand = "islandOneArcane";
+  fishAvailable = false;
+  grassCookingAvailable = false;
+  grassCraftingAvailable = false;
+  IslandChestAvailable = false;
+
+  canvas.clearRect(0, 0, 4500, 4500);
+  canvas.imageSmoothingEnabled = false;
+
+  // Camera 
+  if (myPlayer && !cutscene) {
+    secondaryCameraX = playerX - canvasLobby.width / 2 + 10;
+    secondaryCameraY = playerY - canvasLobby.height / 2 + 50;
+    cameraFollow()
+  } else if (cutscene) {
+    secondaryCameraX = 800;
+    secondaryCameraY = 2000;
+    cameraFollow()
   }
 
-
+  //Background map Image
   canvas.drawImage(islandOneMapArcane, cameraShakeX - cameraX, cameraShakeY - cameraY, 4500, 4500);
 
   //Map Animation >
@@ -4771,9 +4902,8 @@ function canvasIslandOneArcaneLoop() {
     let playerColLengthX = playerWidth + 50;
     let playerColLengthY = playerHeight + 22;
     canvas.beginPath();
-    canvas.fillStyle = "rgb(255, 0, 13, 0.0)"; //Change the last value to 0.3 to make it visible
+    canvas.fillStyle = `rgb(255, 0, 13, ${wallsVisibility})`;
     canvas.fillRect(playerColminX, playerColminY, playerColLengthX, playerColLengthY);
-    console.log(playerX - 30 - 150, playerY + 70 - 180)
     //Player Collision <
 
 
@@ -4781,317 +4911,103 @@ function canvasIslandOneArcaneLoop() {
     // console.log(myPlayer.x, myPlayer.y)
     //Player Location <
 
-    //Grasslands walls >
-    let wallsVisibility = 0.0;
+    allowedMoveUpRight = true;
+    allowedMoveUpLeft = true;
+    allowedMoveUpUp = true;
+    allowedMoveUpDown = true;
+    
+    mapsInfo[currentLand].colliders.forEach(wall => {
+      const adjustedX = wall.x - cameraShakeX - cameraX;
+      const adjustedY = wall.y - cameraShakeY - cameraY;
 
-    //Chest Grasslands activator >
-    const grasslandsShopx = 3180 - cameraShakeX - cameraX;
-    const grasslandsShopY = 2700 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(255, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grasslandsShopx, grasslandsShopY, 200, 300);
+      canvas.fillStyle = wall.color;
+      canvas.fillRect(adjustedX, adjustedY, wall.width, wall.height);
 
-    if (playerColminX + playerColLengthX > grasslandsShopx && playerColminY + playerColLengthY > grasslandsShopY && playerColminY < grasslandsShopY + 300 && playerColminX < grasslandsShopx + 200) {
-      if (IslandOpenChest) {
-        rewardFrame.style.visibility = "visible";
-        rewardFrame.style.opacity = "1";
-      } else {
-        rewardFrame.style.opacity = "0";
-        rewardFrame.style.visibility = "hidden";
+      const playerCollider = {
+        x: playerColminX,
+        y: playerColminY,
+        width: playerColLengthX,
+        height: playerColLengthY
       }
-      IslandChestAvailable = true;
-    } else {
-      IslandChestAvailable = false;
-      IslandOpenChest = false;
-      rewardFrame.style.visibility = "hidden";
-    }
-    //Chest Grasslands activator <
 
-    //Cooking Grasslands activator >
-    const grasslandsCookingx = 0 - cameraShakeX - cameraX;
-    const grasslandsCookingY = 0 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(255, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grasslandsCookingx, grasslandsCookingY, 200, 300);
+      
+      if (isColliding(playerCollider, { x: adjustedX, y: adjustedY, width: wall.width, height: wall.height })) {
+        const playerCenterX = playerCollider.x + playerCollider.width / 2;
+        const playerCenterY = playerCollider.y + playerCollider.height / 2;
+        const wallCenterX = adjustedX + wall.width / 2;
+        const wallCenterY = adjustedY + wall.height / 2;
 
-    if (playerColminX + playerColLengthX > grasslandsCookingx && playerColminY + playerColLengthY > grasslandsCookingY && playerColminY < grasslandsCookingY + 300 && playerColminX < grasslandsCookingx + 200) {
-      if (grassOpenCooking) {
-        cookingPot.style.opacity = "1";
-      } else {
-        cookingPot.style.opacity = "0";
+        const overlapX = (playerCollider.width / 2 + wall.width / 2) - Math.abs(playerCenterX - wallCenterX);
+        const overlapY = (playerCollider.height / 2 + wall.height / 2) - Math.abs(playerCenterY - wallCenterY);
+
+        if (wall.type === "wall") {
+          if (overlapX < overlapY) {
+              if (playerCenterX < wallCenterX) {
+                  allowedMoveUpRight = false; 
+              } else {
+                  allowedMoveUpLeft = false;
+              }         
+          } else {
+              if (playerCenterY < wallCenterY) {
+                  allowedMoveUpDown = false;
+              } else {
+                  allowedMoveUpUp = false;
+              }
+          }
+        }
+        else if (wall.type === "fish") {
+          fishAvailable = true;
+        }
+        else if (wall.type === "transition") {
+          currentSelectedMap = wall.destination
+          transition(wall.format)
+        }
+        else if (wall.type === "cook") {
+          grassCookingAvailable = true;
+          if (grassOpenCooking) {
+            cookingContainer.style.display = "block";
+          } else {
+            cookingContainer.style.display = "none";
+          }
+        }
+        else if (wall.type === "craft") {
+          grassCraftingAvailable = true;
+          if (grassOpenCrafting) {
+            craftingContainer.style.display = "block";
+          } else {
+            craftingContainer.style.display = "none";
+          }
+        }
+        else if (wall.type === "chest") {
+          IslandChestAvailable = true;
+          currentChestItem = wall.item;
+          if (IslandOpenChest) {
+            rewardFrame.style.visibility = "visible";
+            rewardFrame.style.opacity = "1";
+          } else {
+            rewardFrame.style.opacity = "0";
+            rewardFrame.style.visibility = "hidden";
+          }
+        }
       }
-      grassCookingAvailable = true;
-    } else {
-      grassCookingAvailable = false;
-      grassOpenCooking = false;
-      cookingPot.style.opacity = "0";
-    }
-    //Cooking Grasslands activator <
-
-    //Explore Grasslands activator >
-    const grasslandsExplorex = 2000 - cameraShakeX - cameraX;
-    const grasslandsExploreY = 3300 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(0, 255, 0, ${wallsVisibility})`;
-    canvas.fillRect(grasslandsExplorex, grasslandsExploreY, 200, 300);
-
-    if (playerColminX + playerColLengthX > grasslandsExplorex && playerColminY + playerColLengthY > grasslandsExploreY && playerColminY < grasslandsExploreY + 300 && playerColminX < grasslandsExplorex + 200) {
-      if (grassOpenExplore) {
-        exploreMap.style.visibility = "visible";
-        exploreMap.style.opacity = "visible";
-      } else {
-        exploreMap.style.visibility = "hidden";
+      else {
+        if (wall.type === "cook") {
+          grassOpenCooking = false;
+          cookingContainer.style.display = "none";
+        }
+        if (wall.type === "craft") {
+          grassOpenCrafting = false;
+          craftingContainer.style.display = "none";
+        }
+        if (wall.type === "chest") {
+          IslandChestAvailable = false;
+          IslandOpenChest = false;
+          rewardFrame.style.visibility = "hidden";
+        }
       }
-      grassExploreAvailable = true;
-    } else {
-      grassExploreAvailable = false;
-      grassOpenExplore = false;
-      exploreMap.style.visibility = "hidden";
-    }
-    //Explore Grasslands activator <
-
-    //Leftwall of island
-    const grassLeftWallX = 1668 - cameraShakeX - cameraX;
-    const grassLeftWallY = 3000 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grassLeftWallX, grassLeftWallY, -20, 600);
-   
-    //Leftwall up of island
-    const grassLeftWallX12 = 2332 - cameraShakeX - cameraX;
-    const grassLeftWallY12 = 2300 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grassLeftWallX12, grassLeftWallY12, -20, 600);
     
-    //Leftwall up of island
-    const grassLeftWallX13 = 1920 - cameraShakeX - cameraX;
-    const grassLeftWallY13 = 2550 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grassLeftWallX13, grassLeftWallY13, -20, 600);
-    
-    //Leftwall down of island
-    const grassLeftWallX14 = 2196 - cameraShakeX - cameraX;
-    const grassLeftWallY14 = 3554 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grassLeftWallX14, grassLeftWallY14, -20, 600);
-    
-    //Leftwall down of island
-    const grassLeftWallX15 = 1920 - cameraShakeX - cameraX;
-    const grassLeftWallY15 = 3410 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grassLeftWallX15, grassLeftWallY15, -20, 600);
+    })
 
-    //Wall right of the dock
-    const grassRightWallX1 = 3700 - cameraShakeX - cameraX;
-    const grassRightWallY1 = 2800 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grassRightWallX1, grassRightWallY1, 20, 800);
-
-    //Wall right top of the island
-    const grassRightWallX2 = 4080 - cameraShakeX - cameraX;
-    const grassRightWallY2 = 2200 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grassRightWallX2, grassRightWallY2, 20, 300);
-
-    //Wall right top left up of the island
-    const grassRightWallX16 = 1916 - cameraShakeX - cameraX;
-    const grassRightWallY16 = 2874 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grassRightWallX16, grassRightWallY16, 420, 20);
-
-    //Wall right top left down of the island
-    const grassRightWallX17 = 1664 - cameraShakeX - cameraX;
-    const grassRightWallY17 = 3122 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grassRightWallX17, grassRightWallY17, 260, 20);
-
-    //Wall right top of the island
-    const grassRightWallX11 = 3320 - cameraShakeX - cameraX;
-    const grassRightWallY11 = 2746 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grassRightWallX11, grassRightWallY11, 20, 400);
-    
-    //Wall right top of the island
-    const grassRightWallX12 = 2880 - cameraShakeX - cameraX;
-    const grassRightWallY12 = 2506 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grassRightWallX12, grassRightWallY12, 20, 400);
-
-    //Wall right down of the island
-    const grassRightWallX3 = 3080 - cameraShakeX - cameraX;
-    const grassRightWallY3 = 3450 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grassRightWallX3, grassRightWallY3, 20, 300);
-
-    //Walls of the shop
-    const grassRightWallX4 = 0 - cameraShakeX - cameraX;
-    const grassRightWallY4 = 0 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grassRightWallX4, grassRightWallY4, 200, 300);
-
-    //Wall bottom of the island
-    const grassRightWallX5 = 1580 - cameraShakeX - cameraX;
-    const grassRightWallY5 = 3700 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grassRightWallX5, grassRightWallY5, 2200, 20);
-    
-    //Wall bottom of the island
-    const grassRightWallX18 = 0 - cameraShakeX - cameraX;
-    const grassRightWallY18 = 3554 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grassRightWallX18, grassRightWallY18, 2200, 20);
-    
-    //Wall bottom of the island
-    const grassRightWallX19 = 0 - cameraShakeX - cameraX;
-    const grassRightWallY19 = 3410 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grassRightWallX19, grassRightWallY19, 1920, 20);
-
-    //Wall top of the island
-    const grassRightWallX6 = 2630 - cameraShakeX - cameraX;
-    const grassRightWallY6 = 2730 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grassRightWallX6, grassRightWallY6, 800, 20);
-
-    //Wall top of the island
-    const grassRightWallX7 = 1980 - cameraShakeX - cameraX;
-    const grassRightWallY7 = 2730 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grassRightWallX7, grassRightWallY7, 1200, 20);
-
-    //Wall top of the dock
-    const grassRightWallX8 = 3326 - cameraShakeX - cameraX;
-    const grassRightWallY8 = 3110 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grassRightWallX8, grassRightWallY8, 800, 20);
-    
-    //Wall top of the ruins
-    const grassRightWallX10 = 2880 - cameraShakeX - cameraX;
-    const grassRightWallY10 = 2902 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grassRightWallX10, grassRightWallY10, 800, 20);
-
-    //Wall down of the dock
-    const grassRightWallX9 = 3080 - cameraShakeX - cameraX;
-    const grassRightWallY9 = 3460 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grassRightWallX9, grassRightWallY9, 800, 20);
-
-    //Blockers Right
-    if (
-      playerColminX + playerColLengthX > grassRightWallX1 && playerColminY > grassRightWallY1 && playerColminY < grassRightWallY1 + 800 && playerColminX < grassRightWallX1 + 20
-      ||
-      playerColminX + playerColLengthX > grassRightWallX2 && playerColminY > grassRightWallY2 && playerColminY < grassRightWallY2 + 300 && playerColminX < grassRightWallX2 + 20
-      ||
-      playerColminX + playerColLengthX > grassRightWallX3 && playerColminY > grassRightWallY3 && playerColminY < grassRightWallY3 + 300 && playerColminX < grassRightWallX3 + 20
-      ||
-      playerColminX + playerColLengthX > grassRightWallX4 && playerColminY > grassRightWallY4 && playerColminY < grassRightWallY4 + 300 && playerColminX < grassRightWallX4 + 20
-      ||
-      playerColminX + playerColLengthX > grassRightWallX11 && playerColminY > grassRightWallY11 && playerColminY < grassRightWallY11 + 400 && playerColminX < grassRightWallX11 + 20
-      ||
-      playerColminX + playerColLengthX > grassRightWallX12 && playerColminY > grassRightWallY12 && playerColminY < grassRightWallY12 + 400 && playerColminX < grassRightWallX12 + 20
-
-      ) {
-      allowedMoveUpRight = false;
-    } else {
-      allowedMoveUpRight = true;
-    }
-
-    //Blockers left
-    if (
-      playerColminX < grassLeftWallX && playerColminY > grassLeftWallY && playerColminY < grassLeftWallY + 600 && playerColminX > grassLeftWallX - 20
-      ||
-      playerColminX < grassLeftWallX12 && playerColminY > grassLeftWallY12 && playerColminY < grassLeftWallY12 + 600 && playerColminX > grassLeftWallX12 - 20
-      ||
-      playerColminX < grassLeftWallX13 && playerColminY > grassLeftWallY13 && playerColminY < grassLeftWallY13 + 600 && playerColminX > grassLeftWallX13 - 20
-      ||
-      playerColminX < grassLeftWallX14 && playerColminY > grassLeftWallY14 && playerColminY < grassLeftWallY14 + 600 && playerColminX > grassLeftWallX14 - 20
-      ||
-      playerColminX < grassLeftWallX15 && playerColminY > grassLeftWallY15 && playerColminY < grassLeftWallY15 + 600 && playerColminX > grassLeftWallX15 - 20
-      ||
-      playerColminX < grassRightWallX4 + 200 && playerColminY > grassRightWallY4 && playerColminY < grassRightWallY4 + 300 && playerColminX > grassRightWallX4
-      ) {
-      allowedMoveUpLeft = false;
-    } else {
-      allowedMoveUpLeft = true;
-    }
-
-    //Blockers top
-    if (
-      playerColminX + playerColLengthX > grassRightWallX4 && playerColminY > grassRightWallY4 && playerColminY < grassRightWallY4 + 300 && playerColminX < grassRightWallX4 + 200
-      ||
-      playerColminX + playerColLengthX > grassRightWallX6 && playerColminY + playerColLengthY > grassRightWallY6 && playerColminY < grassRightWallY6 + 20 && playerColminX < grassRightWallX6 + 800
-      ||
-      playerColminX + playerColLengthX > grassRightWallX7 && playerColminY + playerColLengthY > grassRightWallY7 && playerColminY < grassRightWallY7 + 20 && playerColminX < grassRightWallX7 + 800
-      ||
-      playerColminX + playerColLengthX > grassRightWallX8 && playerColminY + playerColLengthY > grassRightWallY8 && playerColminY < grassRightWallY8 + 20 && playerColminX < grassRightWallX8 + 800
-      ||
-      playerColminX + playerColLengthX > grassRightWallX10 && playerColminY + playerColLengthY > grassRightWallY10 && playerColminY < grassRightWallY10 + 20 && playerColminX < grassRightWallX10 + 800
-      ||
-      playerColminX + playerColLengthX > grassRightWallX16 && playerColminY + playerColLengthY > grassRightWallY16 && playerColminY < grassRightWallY16 + 20 && playerColminX < grassRightWallX16 + 420
-      ||
-      playerColminX + playerColLengthX > grassRightWallX17 && playerColminY + playerColLengthY > grassRightWallY17 && playerColminY < grassRightWallY17 + 20 && playerColminX < grassRightWallX17 + 260
-      ) {
-      allowedMoveUpUp = false;
-    } else {
-      allowedMoveUpUp = true;
-    }
-
-    //Blockers down
-    if (
-      playerColminX + playerColLengthX > grassRightWallX5 && playerColminY + playerColLengthY > grassRightWallY5 && playerColminY < grassRightWallY5 + 20 && playerColminX < grassRightWallX5 + 2200
-      ||
-      playerColminX + playerColLengthX > grassRightWallX18 && playerColminY + playerColLengthY > grassRightWallY18 && playerColminY < grassRightWallY18 + 20 && playerColminX < grassRightWallX18 + 2200
-      ||
-      playerColminX + playerColLengthX > grassRightWallX19 && playerColminY + playerColLengthY > grassRightWallY19 && playerColminY < grassRightWallY19 + 20 && playerColminX < grassRightWallX19 + 1920
-      ||
-      playerColminX + playerColLengthX > grassRightWallX9 && playerColminY + playerColLengthY > grassRightWallY9 && playerColminY < grassRightWallY9 + 20 && playerColminX < grassRightWallX9 + 800
-      ) {
-      allowedMoveUpDown = false;
-    } else {
-      allowedMoveUpDown = true;
-    }
-
-    //GrassLands walls <
-
-    //Fishing Area >
-    fishingArea.minX = 3350 - cameraShakeX - cameraX;
-    fishingArea.minY = 3380 - cameraShakeY - cameraY;
-    fishingArea.maxX = 250;
-    fishingArea.maxY = 100;
-    canvas.beginPath();
-    canvas.fillStyle = "rgb(0, 89, 255, 0.0)"; //Change the last value to 0.3 to male it visible
-    canvas.fillRect(fishingArea.minX, fishingArea.minY, fishingArea.maxX, fishingArea.maxY);
-
-    if (playerColminX > fishingArea.minX &&
-      playerColLengthX + playerColLengthX < fishingArea.minX + fishingArea.maxY + 200 &&
-      playerColminY > fishingArea.minY &&
-      playerColLengthY + playerColLengthY < fishingArea.minY + fishingArea.maxY - 350) {
-        fishAvailable = true;
-      } else {
-        fishAvailable = false;
-      };
-    //Fishing Area <
     }
 
   //Local Actions <
@@ -5394,16 +5310,216 @@ function canvasIslandOneArcaneLoop() {
       }
       //Chat
 
-      //Username
+    }
+
+}
+
+for (const projectile of projectilesClient) {
+  if (myPlayer?.weapon[0]?.name === "solarStaffCommon") {
+    canvas.drawImage(bulletStick, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
+  }
+  if (myPlayer?.weapon[0]?.name === "arcaneStaffCommon") {
+    canvas.drawImage(bulletStickBlue, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
+  }
+}
+
+
+  for (const enemy of enemiesClient) {
+
+          if (enemy.enabled) {
+            
+            frameCurrentEnemy = frameCurrentEnemy % 4;
+            enemyCutX = frameCurrentEnemy * enemyWidth;
+
+            if (enemy.health <= 0) { 
+              spawnSlime()
+              socket.emit("enemyKilled", "slime");
+              enemiesClient.splice(enemiesClient.indexOf(enemy), 1)
+
+              if (myPlayer.questsOngoing.some(questItem => questItem[0].name === "SlimyProblem")) {
+                let questItem = myPlayer.questsOngoing.find(questItem => questItem[0].name === "SlimyProblem");
+                progressQuestCounter(questItem, 1)
+              }
+
+              for (let i = 0; i < 20; i++) {
+                const angle = angleMouse + (Math.random() * 0.5 * 2 - 0.2) ;; // Random angle
+                const speed = Math.floor(Math.random() * (20 - 8 + 1)) + 5;; // Random speed (adjust as needed)
+                const size = 25; // Random size between 3 and 8
+                const particleX = enemy.x;
+                const particleY = enemy.y;
+          
+                const randomNumber = Math.floor(Math.random() * 2) + 1;
+                
+                if (randomNumber === 1) {
+
+                  particles.push({ x: 1, y: 1, size: size, color: '#6d64b6', speed: speed, angle: angle, initalX: particleX, intialY: particleY });
+                        
+                } else {
+          
+                  particles.push({ x: 1, y: 1, size: size, color: '#afa6ff', speed: speed, angle: angle, initalX: particleX, intialY: particleY });
+                }
+          
+              }
+            }
+            
+            if (enemy.damaged > 0) {
+
+              enemy.damaged--
+
+                canvas.drawImage(
+                  slimeDMG,
+                  enemyCutX,
+                  enemyCutY,
+                  enemyWidth,
+                  enemyHeight,
+                  enemy.x - cameraX - 30,
+                  enemy.y - cameraY,
+                  enemy.width * 1.5,
+                  enemy.height * 1.5
+                );
+
+                  enemy.x += Math.cos(enemy.angle) * enemy.damaged ;
+                  enemy.y += Math.sin(enemy.angle) * enemy.damaged;
+
+                  if (enemy.damaged > 8) {
+
+                    
+
+                    for (let i = 0; i < 3; i++) {
+                      const angle = angleMouse + (Math.random() * 0.5 * 2 - 0.2);; // Random angle
+                      const speed = Math.floor(Math.random() * (20 - 8 + 1)) + 13;; // Random speed (adjust as needed)
+                      const size = 15; // Random size between 3 and 8
+                      const particleX = enemy.x;
+                      const particleY = enemy.y;
+                
+                      const randomNumber = Math.floor(Math.random() * 2) + 1;
+                      
+                      if (randomNumber === 1) {
+  
+                          particles.push({ x: 1, y: 1, size: size, color: '#6d64b6', speed: speed, angle: angle, initalX: particleX, intialY: particleY });
+                        
+                      } else {
+                
+                        particles.push({ x: 1, y: 1, size: size, color: '#afa6ff', speed: speed, angle: angle, initalX: particleX, intialY: particleY });
+                      }
+                
+                    }
+
+                  }
+
+ 
+                
+              } else {
+                if (enemyHitAudio.currentTime > 0) {
+                  enemyHitAudio.currentTime = 0
+                  enemyHitAudio.pause()
+                }
+                enemyWidth = slime.width / 4
+                enemyHeight = slime.height / 1;
+
+                canvas.drawImage(
+                  slime,
+                  enemyCutX,
+                  enemyCutY,
+                  enemyWidth,
+                  enemyHeight,
+                  enemy.x - cameraX - 30,
+                  enemy.y - cameraY,
+                  enemy.width * 1.5,
+                  enemy.height * 1.5
+                );
+
+                if (enemy.x > enemy.nextTarget.x) {
+                  enemy.x -= enemy.speed;
+                } else if (enemy.x < enemy.nextTarget.x) {
+                    enemy.x += enemy.speed;
+                } 
+        
+                if (enemy.y > enemy.nextTarget.y) {
+                    enemy.y -= enemy.speed;
+                } else if (enemy.y < enemy.nextTarget.y) {
+                    enemy.y += enemy.speed;
+                } 
+              }
+              
+              enemy.nextTargetCount--;
+              if (enemy.nextTargetCount <= 0) {
+                enemy.nextTarget = slimeGetRandomCoords();
+                enemy.nextTargetCount = Math.floor(Math.random() * 100) + 50;;
+              }
+                
+              const username = myPlayer.id; 
+              const distance = Math.sqrt(
+                (myPlayer.x + 15 - enemy.x) ** 2 + (myPlayer.y + 15 - enemy.y) ** 2
+              );
+              if (distance <= 15 && !myPlayer.invincible) {
+                
+                if (myPlayer.health > 1) {
+                  myPlayer.health -= 1;
+                  // updateHealth(username, myPlayer.health, myPlayer.id);
+                } else {
+                  myPlayer.x = 1280;
+                  myPlayer.y = 1220;
+                  myPlayer.health = 3;
+                  // updateHealth(username, myPlayer.health, myPlayer.id);
+                }
+                myPlayer.invincible = true;
+                break;
+              }
+              
+              for (const projectile of projectilesClient) {
+                if (projectile.x > enemy.x && projectile.x < enemy.x + 100 && projectile.y > enemy.y && projectile.y < enemy.y + 100 && enemy.damaged === 0 && myPlayer?.weapon[0]?.name === "solarStaffCommon") {
+                  enemy.damaged = 10;
+                  enemy.angle = projectile.angle || projectile.bullet1 || projectile.bullet2;
+                  projectilesClient.splice(projectilesClient.indexOf(projectile), 1)
+                  enemy.health = enemy.health - generalLevelCombat
+
+                  if (enemy.health > 0) {
+                    enemyHitAudio.play()
+                  } else {
+                    splatAudio.play()
+                  }
+                }
+              
+              }
+          
+                  
+          } else {
+              enemy.disabledTimer--;
+              if (enemy.disabledTimer <= 0) {
+                  enemy.disabledTimer = 500;
+                  enemy.enabled = true;
+              }
+          }
+    }
+
+  for (const obj of islandOneObj) {
+    if (!((playerY - cameraY + 120) > (obj.y - cameraY))) {
+      drawOnTop(obj.img, obj.x, obj.y, obj.width, obj.height, cameraX, cameraY)
+    }
+  }
+
+  //Foreground map Image
+  canvas.drawImage(islandOneMapArcaneFront, cameraShakeX - cameraX, cameraShakeY - cameraY, 4500, 4500);
+
+  //Wall you are about to place
+  if (currentlyPlacingWall) {
+    canvas.fillStyle = `rgba(210, 45, 45, 0.5)`;
+    canvas.fillRect(selectedXcoord - cameraShakeX - cameraX, selectedYcoord - cameraShakeY - cameraY, widthCoord, heightCoord);
+  }
+
+  //Username
+  for (const player of players) {
+    if (player.room === myPlayer.room) {
       if (player.username === myPlayer.username) {
         canvas.drawImage(nameBubbleGreen, playerX - cameraX -40, playerY- cameraY -51, 100,50)
-
+    
         canvas.beginPath();
         canvas.font = "bolder 14px Arial";
         canvas.textAlign = "center";
         canvas.fillStyle = "black";
         canvas.fillText(player.username, playerX - cameraX +10, playerY - cameraY -10);
-
+    
         canvas.beginPath();
         canvas.font = "bolder 10px Arial";
         canvas.textAlign = "center";
@@ -5411,21 +5527,621 @@ function canvasIslandOneArcaneLoop() {
         canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)) , playerX - cameraX + 10, playerY - cameraY - 32.5);
       } else {
         canvas.drawImage(nameBubbleGreen, player.x - cameraX -40, player.y - cameraY -51, 100,50)
-
+    
         canvas.beginPath();
         canvas.font = "bolder 14px Arial";
         canvas.textAlign = "center";
         canvas.fillStyle = "black";
         canvas.fillText(player.username, player.x - cameraX +10, player.y - cameraY -10);
-
-
+    
+    
         canvas.beginPath();
         canvas.font = "bolder 10px Arial";
         canvas.textAlign = "center";
         canvas.fillStyle = "black";
         canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)), playerX - cameraX + 10, playerY - cameraY - 32.5);
       }
-      //Username
+    }
+  }
+
+
+
+  playerFramesDrawn++;
+  if (playerFramesDrawn >= 6) {
+    frameCurrentPlayer++;
+    playerFramesDrawn = 0;
+  }
+
+  enemyAnimDelay--
+  if (enemyAnimDelay <= 0)
+  {
+    enemyFramesDrawn++
+    if (enemyFramesDrawn >= framesEnemyTotal) {
+      frameCurrentEnemy++;
+      enemyFramesDrawn = 0;
+    }
+    enemyAnimDelay = 2;
+  }
+
+}
+function lobbyMapLoop() {
+  // canvas.clearRect(0, 0, canvasLobby.width, canvasLobby.height);
+  canvas.clearRect(0, 0, 4500, 4500);
+  canvas.imageSmoothingEnabled = false;
+
+  currentLand = "lobbyMap";
+  fishAvailable = false;
+  grassCookingAvailable = false;
+  grassCraftingAvailable = false;
+  IslandChestAvailable = false;
+
+  canvas.clearRect(0, 0, 4500, 4500);
+  canvas.imageSmoothingEnabled = false;
+
+  // Camera 
+  if (myPlayer && !cutscene) {
+    secondaryCameraX = playerX - canvasLobby.width / 2 + 10;
+    secondaryCameraY = playerY - canvasLobby.height / 2 + 50;
+    cameraFollow()
+  } else if (cutscene) {
+    secondaryCameraX = 800;
+    secondaryCameraY = 2000;
+    cameraFollow()
+  }
+
+  //Background map Image
+  canvas.drawImage(lobbyMap, cameraShakeX - cameraX, cameraShakeY - cameraY, 4500, 4500);
+
+  //Map Animation >
+
+  // frameCurrentMap = frameCurrentMap % 4;
+  // mapCutX = frameCurrentMap * 1000;
+
+  // canvas.drawImage(
+  //   islandOneMap,
+  //   mapCutX,
+  //   mapCutY,
+  //   1000,
+  //   1000,
+  //   cameraShakeX - cameraX,
+  //   cameraShakeY - cameraY,
+  //   4500,
+  //   4500,
+  // );
+
+
+  for (const obj of islandOneObj) {
+    if ((playerY - cameraY + 120) >= (obj.y - cameraY)) {
+      drawOnTop(obj.img, obj.x, obj.y, obj.width, obj.height, cameraX, cameraY)
+    }
+  }
+
+  mapFramesDrawn++;
+
+  if (mapFramesDrawn >= 10) {
+    frameCurrentMap++;
+    mapFramesDrawn = 0;
+  }
+
+  //Map Animation <
+
+  const maxParticles = 1;
+
+  if (shooting) {
+    for (let i = 0; i < maxParticles; i++) {
+      const angle = angleMouse + (Math.random() * 0.2 * 2 - 0.2);; // Random angle
+      const radius = Math.random() * 20; // Random radius (adjust as needed)
+      const speed = Math.floor(Math.random() * (20 - 8 + 1)) + 8;; // Random speed (adjust as needed)
+      const size = 10; // Random size between 3 and 8
+      const particleX = myPlayer.x;
+      const particleY = myPlayer.y;
+
+      const randomNumber = Math.floor(Math.random() * 2) + 1;
+      
+      if (randomNumber === 1) {
+        if (myPlayer?.weapon[0]?.name === "solarStaffCommon") {
+          particles.push({ x: 1, y: 1, size: size, color: 'red', speed: speed, angle: angle, initalX: particleX, intialY: particleY });
+        }
+        else if (myPlayer?.weapon[0]?.name === "arcaneStaffCommon") {
+          particles.push({ x: 1, y: 1, size: size, color: 'purple', speed: speed, angle: angle, initalX: particleX, intialY: particleY });
+        }
+        else if (myPlayer?.weapon[0]?.name === "nuclearStaffCommon") {
+          particles.push({ x: 1, y: 1, size: size, color: 'green', speed: speed, angle: angle, initalX: particleX, intialY: particleY });
+        }
+      } else {
+
+        particles.push({ x: 1, y: 1, size: size, color: 'white', speed: speed, angle: angle, initalX: particleX, intialY: particleY });
+      }
+
+    }
+
+  }
+
+  particles.forEach(particle => {
+    canvas.beginPath();
+    canvas.fillStyle = particle.color;
+    canvas.fillRect(particle.initalX + particle.x - cameraX - 10, particle.intialY + particle.y - cameraY + 50, particle.size, particle.size);
+
+    // Move particles
+    particle.x += Math.cos(particle.angle) * particle.speed;
+    particle.y += Math.sin(particle.angle) * particle.speed;
+
+    // Decrease size over time
+    particle.size -= 0.1;
+    particle.speed -= 0.05 * particle.speed
+  });
+
+  particles = particles.filter(particle => particle.size > 0 );
+
+
+  //Local Actions >
+
+  if (myPlayer) {
+
+    for (const projectile of projectilesClient) {
+      projectile.x += Math.cos(projectile.angle || projectile.bullet1 || projectile.bullet2) * 35;
+      projectile.y += Math.sin(projectile.angle || projectile.bullet1 || projectile.bullet2) * 35;
+    }
+
+    //Player Movement >
+    if (movingLeft && allowedMoveUpLeft) {
+      inputs["left"] = true;
+      playerX -= playerSpeed;
+    } else {
+      inputs["left"] = false;
+    }
+    if (movingRight && allowedMoveUpRight) {
+      inputs["right"] = true;
+      playerX += playerSpeed;
+    } else {
+      inputs["right"] = false;
+    }
+    if (movingUp && allowedMoveUpUp) {
+      inputs["up"] = true;
+      playerY -= playerSpeed;
+    } else {
+      inputs["up"] = false;
+    }
+    if (movingDown && allowedMoveUpDown) {
+      inputs["down"] = true;
+      playerY += playerSpeed;
+    } else {
+      inputs["down"] = false;
+    }
+
+    if (movingDown || movingUp || movingLeft || movingRight) {
+      for (let i = 0; i < 1; i++) {
+        const speed = Math.floor(Math.random() * (1 - 1 + 1)) + 1;; // Random speed (adjust as needed)
+        const size = 20; // Random size between 3 and 8
+        const particleX = myPlayer.x;
+        const particleY = myPlayer.y + 30;
+  
+        const randomNumber = Math.floor(Math.random() * 2) + 1;
+        
+        if (randomNumber === 1) {
+          
+          particles.push({ x: 1, y: 1, size: size, color: 'white', speed: speed, angle: -190, initalX: particleX, intialY: particleY });
+          
+        }
+  
+      }
+    }
+
+    //Player Movement <
+
+    //Player Collision >
+    let playerColminX = playerX - cameraX - 30;
+    let playerColminY = playerY - cameraY + 70;
+    let playerColLengthX = playerWidth + 50;
+    let playerColLengthY = playerHeight + 22;
+    canvas.beginPath();
+    canvas.fillStyle = `rgb(255, 0, 13, ${wallsVisibility})`;
+    canvas.fillRect(playerColminX, playerColminY, playerColLengthX, playerColLengthY);
+    //Player Collision <
+
+
+    //Player Location >
+    // console.log(myPlayer.x, myPlayer.y)
+    //Player Location <
+
+    allowedMoveUpRight = true;
+    allowedMoveUpLeft = true;
+    allowedMoveUpUp = true;
+    allowedMoveUpDown = true;
+    
+    mapsInfo[currentLand].colliders.forEach(wall => {
+      const adjustedX = wall.x - cameraShakeX - cameraX;
+      const adjustedY = wall.y - cameraShakeY - cameraY;
+
+      canvas.fillStyle = wall.color;
+      canvas.fillRect(adjustedX, adjustedY, wall.width, wall.height);
+
+      const playerCollider = {
+        x: playerColminX,
+        y: playerColminY,
+        width: playerColLengthX,
+        height: playerColLengthY
+      }
+
+      
+      if (isColliding(playerCollider, { x: adjustedX, y: adjustedY, width: wall.width, height: wall.height })) {
+        const playerCenterX = playerCollider.x + playerCollider.width / 2;
+        const playerCenterY = playerCollider.y + playerCollider.height / 2;
+        const wallCenterX = adjustedX + wall.width / 2;
+        const wallCenterY = adjustedY + wall.height / 2;
+
+        const overlapX = (playerCollider.width / 2 + wall.width / 2) - Math.abs(playerCenterX - wallCenterX);
+        const overlapY = (playerCollider.height / 2 + wall.height / 2) - Math.abs(playerCenterY - wallCenterY);
+
+        if (wall.type === "wall") {
+          if (overlapX < overlapY) {
+              if (playerCenterX < wallCenterX) {
+                  allowedMoveUpRight = false; 
+              } else {
+                  allowedMoveUpLeft = false;
+              }         
+          } else {
+              if (playerCenterY < wallCenterY) {
+                  allowedMoveUpDown = false;
+              } else {
+                  allowedMoveUpUp = false;
+              }
+          }
+        }
+        else if (wall.type === "fish") {
+          fishAvailable = true;
+        }
+        else if (wall.type === "transition") {
+          currentSelectedMap = wall.destination
+          transition(wall.format)
+        }
+        else if (wall.type === "cook") {
+          grassCookingAvailable = true;
+          if (grassOpenCooking) {
+            cookingContainer.style.display = "block";
+          } else {
+            cookingContainer.style.display = "none";
+          }
+        }
+        else if (wall.type === "craft") {
+          grassCraftingAvailable = true;
+          if (grassOpenCrafting) {
+            craftingContainer.style.display = "block";
+          } else {
+            craftingContainer.style.display = "none";
+          }
+        }
+        else if (wall.type === "chest") {
+          IslandChestAvailable = true;
+          currentChestItem = wall.item;
+          if (IslandOpenChest) {
+            rewardFrame.style.visibility = "visible";
+            rewardFrame.style.opacity = "1";
+          } else {
+            rewardFrame.style.opacity = "0";
+            rewardFrame.style.visibility = "hidden";
+          }
+        }
+      }
+      else {
+        if (wall.type === "cook") {
+          grassOpenCooking = false;
+          cookingContainer.style.display = "none";
+        }
+        if (wall.type === "craft") {
+          grassOpenCrafting = false;
+          craftingContainer.style.display = "none";
+        }
+        if (wall.type === "chest") {
+          IslandChestAvailable = false;
+          IslandOpenChest = false;
+          rewardFrame.style.visibility = "hidden";
+        }
+      }
+    
+    })
+
+    }
+
+  //Local Actions <
+
+
+  for (const player of players) {
+    if (player.room === myPlayer.room) {
+
+      //Armor >
+      let armor = character;
+
+      if (player.armor[0]) {
+        if (player.armor[0].name === "warrior") {
+          armor = frogWarriorSkin;
+        } else {
+          armor = character;
+        }
+      }
+      //Armor <
+
+      //Cape >
+      let artifact = transparentCape;
+
+      if (player.artifact[0]) {
+        if (player.artifact[0].name === "rags") {
+          artifact = cape;
+        } else if (player.artifact[0].name === "fisherman") {
+          artifact = fishermanCape;
+        } else {
+          artifact = transparentCape;
+        }
+      }
+      //Cape <
+
+      //Movement >
+      if (player.username === myPlayer.username) {
+        playerWidth = character.width / 6
+        playerHeight = character.height / 4;
+
+        if (player.anim === "idleRight" && player.lastLooked === "right") {
+          frameCurrentPlayer = frameCurrentPlayer % 4;
+
+          playerCutX = frameCurrentPlayer * playerWidth;
+          canvas.drawImage(
+            armor,
+            playerCutX,
+            playerCutY,
+            playerWidth,
+            playerHeight,
+            playerX - cameraX + 65,
+            playerY - cameraY + 120,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+          canvas.drawImage(
+            artifact,
+            playerCutX,
+            playerCutY,
+            playerWidth,
+            playerHeight,
+            playerX - cameraX + 65,
+            playerY - cameraY + 120,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+        }
+        else if (player.anim === "idleRight" && player.lastLooked === "left") {
+          frameCurrentPlayer = frameCurrentPlayer % 4;
+          playerCutX = frameCurrentPlayer * playerWidth;
+          canvas.drawImage(
+            armor,
+            playerCutX,
+            playerCutY + 24,
+            playerWidth,
+            playerHeight,
+            playerX - cameraX + 65,
+            playerY - cameraY + 120,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+          canvas.drawImage(
+            artifact,
+            playerCutX,
+            playerCutY + 24,
+            playerWidth,
+            playerHeight,
+            playerX - cameraX + 65,
+            playerY - cameraY + 120,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+        }
+        else if (player.anim === "runRight") {
+          frameCurrentPlayer = frameCurrentPlayer % 6;
+          playerCutX = frameCurrentPlayer * playerWidth;
+          canvas.drawImage(
+            armor,
+            playerCutX,
+            playerCutY + 48,
+            playerWidth,
+            playerHeight,
+            playerX - cameraX + 65,
+            playerY - cameraY + 120,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+          canvas.drawImage(
+            artifact,
+            playerCutX,
+            playerCutY + 48,
+            playerWidth,
+            playerHeight,
+            playerX - cameraX + 65,
+            playerY - cameraY + 120,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+        }
+        else if (player.anim === "runLeft") {
+          frameCurrentPlayer = frameCurrentPlayer % 6;
+          playerCutX = frameCurrentPlayer * playerWidth;
+          canvas.drawImage(
+            armor,
+            playerCutX,
+            playerCutY + 72,
+            playerWidth,
+            playerHeight,
+            playerX - cameraX + 65,
+            playerY - cameraY + 120,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+          canvas.drawImage(
+            artifact,
+            playerCutX,
+            playerCutY + 72,
+            playerWidth,
+            playerHeight,
+            playerX - cameraX + 65,
+            playerY - cameraY + 120,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+        }
+      } else {
+        if (player.anim === "idleRight" && player.lastLooked === "right") {
+          frameCurrentPlayer = frameCurrentPlayer % 4;
+
+          playerCutX = frameCurrentPlayer * playerWidth;
+          canvas.drawImage(
+            armor,
+            playerCutX,
+            playerCutY,
+            playerWidth,
+            playerHeight,
+            playerX - cameraX + 65,
+            playerY - cameraY + 120,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+          canvas.drawImage(
+            artifact,
+            playerCutX,
+            playerCutY,
+            playerWidth,
+            playerHeight,
+            playerX - cameraX + 65,
+            playerY - cameraY + 120,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+        }
+        else if (player.anim === "idleRight" && player.lastLooked === "left") {
+          frameCurrentPlayer = frameCurrentPlayer % 4;
+          playerCutX = frameCurrentPlayer * playerWidth;
+          canvas.drawImage(
+            armor,
+            playerCutX,
+            playerCutY + 24,
+            playerWidth,
+            playerHeight,
+            playerX - cameraX + 65,
+            playerY - cameraY + 120,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+          canvas.drawImage(
+            artifact,
+            playerCutX,
+            playerCutY + 24,
+            playerWidth,
+            playerHeight,
+            playerX - cameraX + 65,
+            playerY - cameraY + 120,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+        }
+        else if (player.anim === "runRight") {
+          frameCurrentPlayer = frameCurrentPlayer % 6;
+          playerCutX = frameCurrentPlayer * playerWidth;
+          canvas.drawImage(
+            armor,
+            playerCutX,
+            playerCutY + 48,
+            playerWidth,
+            playerHeight,
+            playerX - cameraX + 65,
+            playerY - cameraY + 120,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+          canvas.drawImage(
+            artifact,
+            playerCutX,
+            playerCutY + 48,
+            playerWidth,
+            playerHeight,
+            playerX - cameraX + 65,
+            playerY - cameraY + 120,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+        }
+        else if (player.anim === "runLeft") {
+          frameCurrentPlayer = frameCurrentPlayer % 6;
+          playerCutX = frameCurrentPlayer * playerWidth;
+          canvas.drawImage(
+            armor,
+            playerCutX,
+            playerCutY + 72,
+            playerWidth,
+            playerHeight,
+            playerX - cameraX + 65,
+            playerY - cameraY + 120,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+          canvas.drawImage(
+            artifact,
+            playerCutX,
+            playerCutY + 72,
+            playerWidth,
+            playerHeight,
+            playerX - cameraX + 65,
+            playerY - cameraY + 120,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+        }
+    }
+      //Movement <
+
+      // Weapon >
+      if (player.weapon[0]) {
+
+        if (player.username === myPlayer.username) {
+          // console.log(player.weapon[0])
+          canvas.save(); // Save the current canvas state
+          canvas.translate(playerX - cameraX +18 - recoil, playerY - cameraY +70); // Translate to the player's position
+          canvas.rotate(angleMouse); // Rotate based on the mouse angle
+          if (player.weapon[0].name === "solarStaffCommon") {
+            canvas.drawImage(solarStaffCommon ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
+          }
+          else if (player.weapon[0].name === "arcaneStaffCommon") {
+            canvas.drawImage(arcaneStaffCommon ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
+          }
+          else if (player.weapon[0].name === "nuclearStaffCommon") {
+            canvas.drawImage(nuclearStaffCommon ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
+          }
+        } else {
+          canvas.save(); // Save the current canvas state
+          canvas.translate(player.x - cameraX +18, player.y - cameraY +50); // Translate to the player's position
+          canvas.rotate(player.weaponAngle); // Rotate based on the mouse angle
+          console.log(player.weapon[0])
+          if (player.weapon[0].name === "solarStaffCommon") {
+            canvas.drawImage(solarStaffCommon ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
+          }
+          else if (player.weapon[0].name === "arcaneStaffCommon") {
+            canvas.drawImage(arcaneStaffCommon ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
+          }
+          else if (player.weapon[0].name === "nuclearStaffCommon") {
+            canvas.drawImage(nuclearStaffCommon ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
+          }
+         }
+  
+        }
+        canvas.restore(); // Restore the canvas state to what it was before translation and rotation
+      // Weapon <
+
+      //Chat
+      if (player.chatMessage !== "none") {
+          canvas.drawImage(chatBubble, player.x - cameraX -85, player.y - cameraY -120, 200, 60)
+
+          canvas.beginPath();
+          canvas.font = "bolder 14px Arial";
+          canvas.textAlign = "center";
+          canvas.fillStyle = "gray";
+          canvas.fillText(player.chatMessage, player.x - cameraX +15, player.y - cameraY -90);
+      }
+      //Chat
 
     }
 
@@ -5616,7 +6332,51 @@ for (const projectile of projectilesClient) {
     }
   }
 
-  // canvas.drawImage(islandOneMapFront, cameraShakeX - cameraX, cameraShakeY - cameraY, 4500, 4500);
+  //Foreground map Image
+  // canvas.drawImage(islandOneMapArcaneFront, cameraShakeX - cameraX, cameraShakeY - cameraY, 4500, 4500);
+
+  //Wall you are about to place
+  if (currentlyPlacingWall) {
+    canvas.fillStyle = `rgba(210, 45, 45, 0.5)`;
+    canvas.fillRect(selectedXcoord - cameraShakeX - cameraX, selectedYcoord - cameraShakeY - cameraY, widthCoord, heightCoord);
+  }
+
+  //Username
+  for (const player of players) {
+    if (player.room === myPlayer.room) {
+      if (player.username === myPlayer.username) {
+        canvas.drawImage(nameBubbleGreen, playerX - cameraX -40, playerY- cameraY -51, 100,50)
+    
+        canvas.beginPath();
+        canvas.font = "bolder 14px Arial";
+        canvas.textAlign = "center";
+        canvas.fillStyle = "black";
+        canvas.fillText(player.username, playerX - cameraX +10, playerY - cameraY -10);
+    
+        canvas.beginPath();
+        canvas.font = "bolder 10px Arial";
+        canvas.textAlign = "center";
+        canvas.fillStyle = "black";
+        canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)) , playerX - cameraX + 10, playerY - cameraY - 32.5);
+      } else {
+        canvas.drawImage(nameBubbleGreen, player.x - cameraX -40, player.y - cameraY -51, 100,50)
+    
+        canvas.beginPath();
+        canvas.font = "bolder 14px Arial";
+        canvas.textAlign = "center";
+        canvas.fillStyle = "black";
+        canvas.fillText(player.username, player.x - cameraX +10, player.y - cameraY -10);
+    
+    
+        canvas.beginPath();
+        canvas.font = "bolder 10px Arial";
+        canvas.textAlign = "center";
+        canvas.fillStyle = "black";
+        canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)), playerX - cameraX + 10, playerY - cameraY - 32.5);
+      }
+    }
+  }
+
 
 
   playerFramesDrawn++;

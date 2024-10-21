@@ -899,7 +899,7 @@ async function main() {
 
                 if (player.inventory.length <= 8) {
                     
-                    if (item === "islandOne") {
+                    if (item === "stick") {
 
                         if (number < 80) {
                             player.inventory.push(stick);  
@@ -908,6 +908,20 @@ async function main() {
                             player.inventory.push(willowStick);                                           
                             io.to(socket.id).emit('obtained', willowStick);
                             
+                        }
+                    }
+
+                    if (item === "gem") {
+
+                        if (number < 80) {
+                            player.inventory.push(solarGem);  
+                            io.to(socket.id).emit('obtained', solarGem);
+                        } else if (number >= 80 && number <= 98) {
+                            player.inventory.push(arcaneGem);                                           
+                            io.to(socket.id).emit('obtained', arcaneGem);
+                        } else {
+                            player.inventory.push(nuclearGem);                                           
+                            io.to(socket.id).emit('obtained', nuclearGem);
                         }
                     }
                     
