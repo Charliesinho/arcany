@@ -221,7 +221,7 @@ function tick() {
     io.to("baseMap").emit("projectiles", projectiles);
 }
 
-setInterval(tick, 33);
+setInterval(tick, 600);
 
 async function updateHealth(username, health, id) {    
     const playerHealth = await Player.findOneAndUpdate({username: username}, {health: health}, {new: true}); 

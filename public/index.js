@@ -1,7 +1,7 @@
 //Change this to push >
 
-const socket = io(`ws://localhost:5000`);
-// const socket = io(`https://arcany.up.railway.app/`);
+// const socket = io(`ws://localhost:5000`);
+const socket = io(`https://arcany.up.railway.app/`);
 
 //Change this to push <
 
@@ -2091,6 +2091,7 @@ setInterval(() => {
   playerLocation = [playerX, playerY];
   socket.emit("playerLocation", playerLocation);
   socket.emit("inputs", inputs);
+  socket.emit("animPlayer", animPlayer);
 }, 100);
 
 window.addEventListener("keydown", (e) => {
@@ -2125,8 +2126,13 @@ window.addEventListener("keydown", (e) => {
     } else if (e.code === "Space" && playerSpeed < 6) {
       playerSpeed = 30
 
-      setTimeout(() => {
-        playerSpeed = 4;
+      const interval = setInterval(() => {
+        playerSpeed -= 10;
+
+        if (playerSpeed < 4) {
+          playerSpeed = 4;
+          clearInterval(interval)
+        }
       }, 50);
     }
   
@@ -2290,9 +2296,6 @@ window.addEventListener("keyup", (e) => {
     footsteps.pause();
     footsteps.loop = false;
   }
-
-  socket.emit("inputs", inputs);
-  socket.emit("animPlayer", animPlayer);
 });
 
 //Player movement <
@@ -2318,8 +2321,8 @@ canvasLobby.addEventListener("mousedown", (e) => {
 
             projectilesClient.push({
               angle,
-              x: myPlayer.x + 20,
-              y: myPlayer.y + 50,
+              x: playerX + 20,
+              y: playerY + 50,
               timeLeft: 200,
               playerId: socket.id,
             }) 
@@ -2344,8 +2347,8 @@ canvasLobby.addEventListener("mousedown", (e) => {
 
             projectilesClient.push({
               angle,
-              x: myPlayer.x + 20,
-              y: myPlayer.y + 50,
+              x: playerX + 20,
+              y: playerY + 50,
               timeLeft: 200,
               playerId: socket.id,
             }) 
@@ -2370,8 +2373,8 @@ canvasLobby.addEventListener("mousedown", (e) => {
 
             projectilesClient.push({
               angle,
-              x: myPlayer.x + 20,
-              y: myPlayer.y + 50,
+              x: playerX + 20,
+              y: playerY + 50,
               timeLeft: 200,
               playerId: socket.id,
             }) 
@@ -2400,16 +2403,16 @@ canvasLobby.addEventListener("mousedown", (e) => {
 
             projectilesClient.push({
               bullet1,
-              x: myPlayer.x + 20,
-              y: myPlayer.y + 50,
+              x: playerX + 20,
+              y: playerY + 50,
               timeLeft: 200,
               playerId: socket.id,
             }) 
 
             projectilesClient.push({
               bullet2,
-              x: myPlayer.x + 20,
-              y: myPlayer.y + 50,
+              x: playerX + 20,
+              y: playerY + 50,
               timeLeft: 200,
               playerId: socket.id,
             }) 
@@ -3316,6 +3319,9 @@ let particles = [];
 //Island One Map Canvas >
 
 
+
+
+
 // Transitions >
 let transitionType = "arcane"
 let transitionTimeout = false;
@@ -3328,69 +3334,60 @@ function transition (format) {
     transitionLiquid()
   }
 }
+function changeMap (dynamicFunctionName) {
+  clearInterval(intervalCanvasBase)
+  const canvasFunction = window[dynamicFunctionName];
+  if (typeof canvasFunction === "function") {
+    stopAllSound()
+    mapsInfo[currentSelectedMap].areaSounds();
+    intervalCanvasBase = setInterval(canvasFunction, 16.67);
+    setTimeout(() => {
+      transitionTimeout = false;
+    }, 5000);
+  } else {
+    console.error(`${dynamicFunctionName} is not a valid function`);
+  }
+}
 function transitionArcane () {
-  
-  glitchArcane.play()
-  setTimeout(() => {
-    glitchOverlay.style.display = "block"
-  }, 600);
-  
-  const dynamicFunctionName = currentSelectedMap + "Loop";
-  
-  setTimeout(() => {
-    clearInterval(intervalCanvasBase)
-    const dynamicFunction = window[dynamicFunctionName];
-    if (typeof dynamicFunction === "function") {
-      intervalCanvasBase = setInterval(dynamicFunction, 16.67);
-    } else {
-      console.error(`${dynamicFunctionName} is not a valid function`);
-    }
-    // ArcaneEnv.play()
-      // grasslandsLoop1.pause();
-      // grasslandsEnviroment.pause();
-    }, 1000);
-    
+  if (transitionTimeout === false) {
+
+    transitionTimeout = true; 
+    glitchArcane.play()
+    setTimeout(() => {
+      glitchOverlay.style.display = "block"
+    }, 600);   
+    const dynamicFunctionName = currentSelectedMap + "Loop";   
+    setTimeout(() => {
+      changeMap(dynamicFunctionName)
+    }, 1000);   
     setTimeout(() => {
       glitchOverlay.style.display = "none"
     }, 1100);
+  }
 }
-
-function transitionLiquid () {
+function transitionLiquid() {
   if (transitionTimeout === false) {
+    transitionTimeout = true;  
+    
+    const gifUrl = "./Textures/liquidTransition.gif"; // Remove `url("")` from the string
+    const newGifUrl = gifUrl + "?" + new Date().getTime(); // Append a timestamp to force reload
+    
+    liquidOverlay.style.background = 'none'; 
+    
+    setTimeout(() => {
+      liquidOverlay.style.background = `url(${newGifUrl})`;
+    }, 10); 
 
-    transitionTimeout = true;
-  
-    const currentBg = liquidOverlay.style.backgroundImage;
-  
-    liquidOverlay.style.backgroundImage = 'none';
-  
-    setTimeout(() => {
-      liquidOverlay.style.backgroundImage = currentBg; // Set it back to the original GIF
-    }, 0);
-  
-    liquidOverlay.style.display = "block"
-  
-  
+    liquidOverlay.style.display = "block";
     
-    const dynamicFunctionName = currentSelectedMap + "Loop";
+    const dynamicFunctionName = currentSelectedMap + "Loop";    
+    setTimeout(() => {
+      changeMap(dynamicFunctionName);
+    }, 1800);   
     
     setTimeout(() => {
-      clearInterval(intervalCanvasBase)
-      const dynamicFunction = window[dynamicFunctionName];
-      if (typeof dynamicFunction === "function") {
-        intervalCanvasBase = setInterval(dynamicFunction, 16.67);
-      } else {
-        console.error(`${dynamicFunctionName} is not a valid function`);
-      }
-      // ArcaneEnv.play()
-        // grasslandsLoop1.pause();
-        // grasslandsEnviroment.pause();
-      }, 1800);
-      
-      setTimeout(() => {
-        liquidOverlay.style.display = "none"
-        transitionTimeout = false;
-      }, 3900);
+      liquidOverlay.style.display = "none";
+    }, 3900);
   }
 }
 
@@ -3415,21 +3412,61 @@ liquidTransition.addEventListener("click", function() {
 
 
 
+
+
+// Sounds >
+
+function stopAllSound () {
+  grasslandsLoop1.pause();
+  grasslandsEnviroment.pause();
+  ArcaneEnv.pause()
+}
+
+function arcaneSoundtrack () {
+  ArcaneEnv.play()
+}
+
+function lobbySoundtrack () {
+  grasslandsLoop1.play();
+  grasslandsEnviroment.play();
+}
+
+// Sounds <
+
+
+
+
+
+
 // Developer UI >
 
 let currentLand= "none";
 
 let mapsInfo = {
   islandOne: {
+    areaSounds: lobbySoundtrack,
+    backgroundImage: islandOneMap,
+    foregroundImage: islandOneMapFront,
+    playerPos: {
+      x: 0,
+      y: 0
+    },
     colliders: [],
   },
   islandOneArcane: {
-    colliders: [],
-  },
-  lobby: {
+    areaSounds: arcaneSoundtrack,
+    playerPos: {
+      x: 0,
+      y: 0
+    },
     colliders: [],
   },
   lobbyMap: {
+    areaSounds: lobbySoundtrack,
+    playerPos: {
+      x: 0,
+      y: 0
+    },
     colliders: [],
   },
 };
@@ -3846,8 +3883,10 @@ function addMapsInfoToDiv() {
         currentSelectedMap = key;
 
         pElement.classList.add('textjump');
+        pElement.innerHTML = "Selected!";
         setTimeout(() => {
           pElement.classList.remove('textjump');
+          pElement.innerHTML = key;
         }, 1000);
       });
 
@@ -3870,6 +3909,11 @@ let secondaryCameraY = 0;
 let cutscene = false;
 const minSpeed = 0.5;
 const speedFactor = 0.05;
+
+let playerColminX;
+let playerColminY;
+let playerColLengthX;
+let playerColLengthY;
 
 function cameraFollow () {
 
@@ -3898,186 +3942,124 @@ function cameraFollow () {
 // Camera <
 
 
+// Map functions >
+const smoothPlayers = {};
 
-
-
-function islandOneLoop() {
-
-  currentLand = "islandOne";
-  fishAvailable = false;
-  grassCookingAvailable = false;
-  grassCraftingAvailable = false;
-  IslandChestAvailable = false;
-
-  canvas.clearRect(0, 0, 4500, 4500);
-  canvas.imageSmoothingEnabled = false;
-
-  // Camera 
-  if (myPlayer && !cutscene) {
-    secondaryCameraX = playerX - canvasLobby.width / 2 + 10;
-    secondaryCameraY = playerY - canvasLobby.height / 2 + 50;
-    cameraFollow()
-  } else if (cutscene) {
-    secondaryCameraX = 800;
-    secondaryCameraY = 2000;
-    cameraFollow()
-  }
-
-  //Background map Image
-  canvas.drawImage(islandOneMap, cameraShakeX - cameraX, cameraShakeY - cameraY, 4500, 4500);
-
-  //Map Animation >
-
-  // frameCurrentMap = frameCurrentMap % 4;
-  // mapCutX = frameCurrentMap * 1000;
-
-  // canvas.drawImage(
-  //   islandOneMap,
-  //   mapCutX,
-  //   mapCutY,
-  //   1000,
-  //   1000,
-  //   cameraShakeX - cameraX,
-  //   cameraShakeY - cameraY,
-  //   4500,
-  //   4500,
-  // );
-
-
-  for (const obj of islandOneObj) {
-    if ((playerY - cameraY + 120) >= (obj.y - cameraY)) {
-      drawOnTop(obj.img, obj.x, obj.y, obj.width, obj.height, cameraX, cameraY)
+function initializeSmoothOnlinePlayers() {
+  for (const player of players) {
+    if (!smoothPlayers.hasOwnProperty(player.username)) {
+      console.log(smoothPlayers)
+      smoothPlayers[player.username] = {
+        username: player.username,
+        smoothX: player.x,  // Start at the actual position
+        smoothY: player.y,  // Start at the actual position
+      };
     }
   }
+}
 
-  mapFramesDrawn++;
-
-  if (mapFramesDrawn >= 10) {
-    frameCurrentMap++;
-    mapFramesDrawn = 0;
-  }
-
-  //Map Animation <
-
-  const maxParticles = 1;
-
-  if (shooting) {
-    for (let i = 0; i < maxParticles; i++) {
-      const angle = angleMouse + (Math.random() * 0.2 * 2 - 0.2);; // Random angle
-      const radius = Math.random() * 20; // Random radius (adjust as needed)
-      const speed = Math.floor(Math.random() * (20 - 8 + 1)) + 8;; // Random speed (adjust as needed)
-      const size = 10; // Random size between 3 and 8
-      const particleX = myPlayer.x;
-      const particleY = myPlayer.y;
-
-      const randomNumber = Math.floor(Math.random() * 2) + 1;
-      
-      if (randomNumber === 1) {
-        if (myPlayer?.weapon[0]?.name === "solarStaffCommon") {
-          particles.push({ x: 1, y: 1, size: size, color: 'red', speed: speed, angle: angle, initalX: particleX, intialY: particleY });
-        }
-        else if (myPlayer?.weapon[0]?.name === "arcaneStaffCommon") {
-          particles.push({ x: 1, y: 1, size: size, color: 'purple', speed: speed, angle: angle, initalX: particleX, intialY: particleY });
-        }
-        else if (myPlayer?.weapon[0]?.name === "nuclearStaffCommon") {
-          particles.push({ x: 1, y: 1, size: size, color: 'green', speed: speed, angle: angle, initalX: particleX, intialY: particleY });
-        }
-      } else {
-
-        particles.push({ x: 1, y: 1, size: size, color: 'white', speed: speed, angle: angle, initalX: particleX, intialY: particleY });
+function updateSmoothOnlinePlayerPosition(smoothPlayer) {
+  for (const player of players) {
+    const speed = Math.abs(smoothPlayer.smoothX - player.x) < 200 ? 4 : 10; 
+    if (player && player.username === smoothPlayer.username && player.username !== myPlayer.username) {
+      if (Math.abs(smoothPlayer.smoothX - player.x) > 10) {
+        smoothPlayer.smoothX += smoothPlayer.smoothX < player.x ? speed : -speed;
       }
-
+      if (Math.abs(smoothPlayer.smoothY - player.y) > 10) {
+        smoothPlayer.smoothY += smoothPlayer.smoothY < player.y ? speed : -speed;
+      }
     }
-
   }
+}
 
-  particles.forEach(particle => {
-    canvas.beginPath();
-    canvas.fillStyle = particle.color;
-    canvas.fillRect(particle.initalX + particle.x - cameraX - 10, particle.intialY + particle.y - cameraY + 50, particle.size, particle.size);
-
-    // Move particles
-    particle.x += Math.cos(particle.angle) * particle.speed;
-    particle.y += Math.sin(particle.angle) * particle.speed;
-
-    // Decrease size over time
-    particle.size -= 0.1;
-    particle.speed -= 0.05 * particle.speed
-  });
-
-  particles = particles.filter(particle => particle.size > 0 );
-
-
-  //Local Actions >
-
+function mapSetup () {
   if (myPlayer) {
+    // Canvas cleanup
+    canvas.clearRect(0, 0, 4500, 4500);
+    canvas.imageSmoothingEnabled = false;
+    canvas.drawImage(mapsInfo[currentLand].backgroundImage, cameraShakeX - cameraX, cameraShakeY - cameraY, 4500, 4500);
+
+    // Reset variables
+    fishAvailable = false;
+    grassCookingAvailable = false;
+    grassCraftingAvailable = false;
+    IslandChestAvailable = false;
+
+    // Set cameras
+    if (!cutscene) {
+      secondaryCameraX = playerX - canvasLobby.width / 2 + 10;
+      secondaryCameraY = playerY - canvasLobby.height / 2 + 50;
+      cameraFollow()
+    } else if (cutscene) {
+      secondaryCameraX = 800;
+      secondaryCameraY = 2000;
+      cameraFollow()
+    }
+    
+    // Set player position
+    if (myPlayer) {
+      playerX = mapsInfo[currentLand].playerPos.x
+      playerY = mapsInfo[currentLand].playerPos.y
+      localPlayerMovement()
+    }
 
     for (const projectile of projectilesClient) {
       projectile.x += Math.cos(projectile.angle || projectile.bullet1 || projectile.bullet2) * 35;
       projectile.y += Math.sin(projectile.angle || projectile.bullet1 || projectile.bullet2) * 35;
     }
 
-    //Player Movement >
-    if (movingLeft && allowedMoveUpLeft) {
-      inputs["left"] = true;
-      playerX -= playerSpeed;
-    } else {
-      inputs["left"] = false;
+    drawColliders()
+  }
+}
+
+function drawObjectsBehind () {
+  for (const obj of islandOneObj) {
+    if ((playerY - cameraY + 120) >= (obj.y - cameraY)) {
+      drawOnTop(obj.img, obj.x, obj.y, obj.width, obj.height, cameraX, cameraY)
     }
-    if (movingRight && allowedMoveUpRight) {
-      inputs["right"] = true;
-      playerX += playerSpeed;
-    } else {
-      inputs["right"] = false;
-    }
-    if (movingUp && allowedMoveUpUp) {
-      inputs["up"] = true;
-      playerY -= playerSpeed;
-    } else {
-      inputs["up"] = false;
-    }
-    if (movingDown && allowedMoveUpDown) {
-      inputs["down"] = true;
-      playerY += playerSpeed;
-    } else {
-      inputs["down"] = false;
-    }
+  }
+}
 
-    if (movingDown || movingUp || movingLeft || movingRight) {
-      for (let i = 0; i < 1; i++) {
-        const speed = Math.floor(Math.random() * (1 - 1 + 1)) + 1;; // Random speed (adjust as needed)
-        const size = 20; // Random size between 3 and 8
-        const particleX = myPlayer.x;
-        const particleY = myPlayer.y + 30;
-  
-        const randomNumber = Math.floor(Math.random() * 2) + 1;
-        
-        if (randomNumber === 1) {
-          
-          particles.push({ x: 1, y: 1, size: size, color: 'white', speed: speed, angle: -190, initalX: particleX, intialY: particleY });
-          
-        }
-  
-      }
-    }
+function localPlayerMovement () {
+  if (movingLeft && allowedMoveUpLeft) {
+    inputs["left"] = true;
+    playerX -= playerSpeed;
+  } else {
+    inputs["left"] = false;
+  }
+  if (movingRight && allowedMoveUpRight) {
+    inputs["right"] = true;
+    playerX += playerSpeed;
+  } else {
+    inputs["right"] = false;
+  }
+  if (movingUp && allowedMoveUpUp) {
+    inputs["up"] = true;
+    playerY -= playerSpeed;
+  } else {
+    inputs["up"] = false;
+  }
+  if (movingDown && allowedMoveUpDown) {
+    inputs["down"] = true;
+    playerY += playerSpeed;
+  } else {
+    inputs["down"] = false;
+  }
+}
 
-    //Player Movement <
+function playerCollision () {
+  playerColminX = playerX - cameraX - 30;
+  playerColminY = playerY - cameraY + 70;
+  playerColLengthX = playerWidth + 50;
+  playerColLengthY = playerHeight + 22;
+  mapsInfo[currentLand].playerPos.x = playerX;
+  mapsInfo[currentLand].playerPos.y = playerY;
+  canvas.beginPath();
+  canvas.fillStyle = `rgb(255, 0, 13, ${wallsVisibility})`;
+  canvas.fillRect(playerColminX, playerColminY, playerColLengthX, playerColLengthY);
+}
 
-    //Player Collision >
-    let playerColminX = playerX - cameraX - 30;
-    let playerColminY = playerY - cameraY + 70;
-    let playerColLengthX = playerWidth + 50;
-    let playerColLengthY = playerHeight + 22;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(255, 0, 13, ${wallsVisibility})`;
-    canvas.fillRect(playerColminX, playerColminY, playerColLengthX, playerColLengthY);
-    //Player Collision <
-
-
-    //Player Location >
-    // console.log(myPlayer.x, myPlayer.y)
-    //Player Location <
-
+function drawColliders () {
     allowedMoveUpRight = true;
     allowedMoveUpLeft = true;
     allowedMoveUpUp = true;
@@ -4174,296 +4156,509 @@ function islandOneLoop() {
       }
     
     })
+}
+
+function drawLocalPlayer () {
+  for (const player of players) {
+    if (player.username === myPlayer.username && player.room === myPlayer.room) {
+      drawUsernameLocal(player)
+      let armor = drawPlayerArmor(player);
+      let artifact = drawPlayerArtifact(player);
+      if (animPlayer === "idleRight" && player.lastLooked === "right") {
+      frameCurrentPlayer = frameCurrentPlayer % 4;
+  
+      playerCutX = frameCurrentPlayer * playerWidth;
+
+      canvas.drawImage(
+        armor,
+        playerCutX,
+        playerCutY,
+        playerWidth,
+        playerHeight,
+        playerX - cameraX + 65,
+        playerY - cameraY + 120,
+        playerWidth - playerZoomX,
+        playerHeight - playerZoomY,
+      );
+      canvas.drawImage(
+        artifact,
+        playerCutX,
+        playerCutY,
+        playerWidth,
+        playerHeight,
+        playerX - cameraX + 65,
+        playerY - cameraY + 120,
+        playerWidth - playerZoomX,
+        playerHeight - playerZoomY,
+      );
+      }
+      else if (animPlayer === "idleRight" && player.lastLooked === "left") {
+        frameCurrentPlayer = frameCurrentPlayer % 4;
+        playerCutX = frameCurrentPlayer * playerWidth;
+        canvas.drawImage(
+          armor,
+          playerCutX,
+          playerCutY + 24,
+          playerWidth,
+          playerHeight,
+          playerX - cameraX + 65,
+          playerY - cameraY + 120,
+          playerWidth - playerZoomX,
+          playerHeight - playerZoomY,
+        );
+        canvas.drawImage(
+          artifact,
+          playerCutX,
+          playerCutY + 24,
+          playerWidth,
+          playerHeight,
+          playerX - cameraX + 65,
+          playerY - cameraY + 120,
+          playerWidth - playerZoomX,
+          playerHeight - playerZoomY,
+        );
+      }
+      else if (animPlayer === "runRight") {
+        frameCurrentPlayer = frameCurrentPlayer % 6;
+        playerCutX = frameCurrentPlayer * playerWidth;
+        canvas.drawImage(
+          armor,
+          playerCutX,
+          playerCutY + 48,
+          playerWidth,
+          playerHeight,
+          playerX - cameraX + 65,
+          playerY - cameraY + 120,
+          playerWidth - playerZoomX,
+          playerHeight - playerZoomY,
+        );
+        canvas.drawImage(
+          artifact,
+          playerCutX,
+          playerCutY + 48,
+          playerWidth,
+          playerHeight,
+          playerX - cameraX + 65,
+          playerY - cameraY + 120,
+          playerWidth - playerZoomX,
+          playerHeight - playerZoomY,
+        );
+      }
+      else if (animPlayer === "runLeft") {
+        frameCurrentPlayer = frameCurrentPlayer % 6;
+        playerCutX = frameCurrentPlayer * playerWidth;
+        canvas.drawImage(
+          armor,
+          playerCutX,
+          playerCutY + 72,
+          playerWidth,
+          playerHeight,
+          playerX - cameraX + 65,
+          playerY - cameraY + 120,
+          playerWidth - playerZoomX,
+          playerHeight - playerZoomY,
+        );
+        canvas.drawImage(
+          artifact,
+          playerCutX,
+          playerCutY + 72,
+          playerWidth,
+          playerHeight,
+          playerX - cameraX + 65,
+          playerY - cameraY + 120,
+          playerWidth - playerZoomX,
+          playerHeight - playerZoomY,
+        );
+      }
+      drawPlayerWeaponOut(player)
+    }
+  }
+}
+
+function drawOnlinePlayers () {
+  initializeSmoothOnlinePlayers()
+  for (const player of players) {
+    if (player.username !== myPlayer.username && player.room === myPlayer.room) {
+      let smoothPlayer = Object.values(smoothPlayers).find(Splayer => Splayer.username === player.username)
+      updateSmoothOnlinePlayerPosition(smoothPlayer)
+      drawPlayerWeaponSheated(player)
+      drawUsernameOnline(player, smoothPlayer)
+      let armor = drawPlayerArmor(player);
+      let artifact = drawPlayerArtifact(player);
+      if (player.anim === "idleRight" && player.lastLooked === "right") {
+      frameCurrentPlayer = frameCurrentPlayer % 4;
+      playerCutX = frameCurrentPlayer * playerWidth;
+
+      canvas.drawImage(
+        armor,
+        playerCutX,
+        playerCutY,
+        playerWidth,
+        playerHeight,
+        smoothPlayer.smoothX - cameraX + 65,
+        smoothPlayer.smoothY - cameraY + 120,
+        playerWidth - playerZoomX,
+        playerHeight - playerZoomY,
+      );
+      canvas.drawImage(
+        artifact,
+        playerCutX,
+        playerCutY,
+        playerWidth,
+        playerHeight,
+        smoothPlayer.smoothX - cameraX + 65,
+        smoothPlayer.smoothY - cameraY + 120,
+        playerWidth - playerZoomX,
+        playerHeight - playerZoomY,
+      );
+      }
+      else if (player.anim === "idleRight" && player.lastLooked === "left") {
+        frameCurrentPlayer = frameCurrentPlayer % 4;
+        playerCutX = frameCurrentPlayer * playerWidth;
+        canvas.drawImage(
+          armor,
+          playerCutX,
+          playerCutY + 24,
+          playerWidth,
+          playerHeight,
+          smoothPlayer.smoothX - cameraX + 65,
+          smoothPlayer.smoothY - cameraY + 120,
+          playerWidth - playerZoomX,
+          playerHeight - playerZoomY,
+        );
+        canvas.drawImage(
+          artifact,
+          playerCutX,
+          playerCutY + 24,
+          playerWidth,
+          playerHeight,
+          smoothPlayer.smoothX - cameraX + 65,
+          smoothPlayer.smoothY - cameraY + 120,
+          playerWidth - playerZoomX,
+          playerHeight - playerZoomY,
+        );
+      }
+      else if (player.anim === "runRight") {
+        frameCurrentPlayer = frameCurrentPlayer % 6;
+        playerCutX = frameCurrentPlayer * playerWidth;
+        canvas.drawImage(
+          armor,
+          playerCutX,
+          playerCutY + 48,
+          playerWidth,
+          playerHeight,
+          smoothPlayer.smoothX - cameraX + 65,
+          smoothPlayer.smoothY - cameraY + 120,
+          playerWidth - playerZoomX,
+          playerHeight - playerZoomY,
+        );
+        canvas.drawImage(
+          artifact,
+          playerCutX,
+          playerCutY + 48,
+          playerWidth,
+          playerHeight,
+          smoothPlayer.smoothX - cameraX + 65,
+          smoothPlayer.smoothY - cameraY + 120,
+          playerWidth - playerZoomX,
+          playerHeight - playerZoomY,
+        );
+      }
+      else if (player.anim === "runLeft") {
+        frameCurrentPlayer = frameCurrentPlayer % 6;
+        playerCutX = frameCurrentPlayer * playerWidth;
+        canvas.drawImage(
+          armor,
+          playerCutX,
+          playerCutY + 72,
+          playerWidth,
+          playerHeight,
+          smoothPlayer.smoothX - cameraX + 65,
+          smoothPlayer.smoothY - cameraY + 120,
+          playerWidth - playerZoomX,
+          playerHeight - playerZoomY,
+        );
+        canvas.drawImage(
+          artifact,
+          playerCutX,
+          playerCutY + 72,
+          playerWidth,
+          playerHeight,
+          smoothPlayer.smoothX - cameraX + 65,
+          smoothPlayer.smoothY - cameraY + 120,
+          playerWidth - playerZoomX,
+          playerHeight - playerZoomY,
+        );
+      }
+    }
+  }
+}
+
+function drawPlayerArmor (player) {
+  if (player.armor[0]) {
+    if (player.armor[0].name === "warrior") {
+      return frogWarriorSkin;
+    } else {
+      return character;
+    }
+  } else {
+    return character;
+  }
+}
+
+function drawPlayerArtifact (player) {
+  if (player.artifact[0]) {
+    if (player.artifact[0].name === "rags") {
+      return cape;
+    } else if (player.artifact[0].name === "fisherman") {
+      return fishermanCape;
+    } else {
+      return transparentCape;
+    }
+  } else {
+    return transparentCape;
+  }
+}
+
+function drawPlayerWeaponOut (player) {
+  if (player.weapon[0]) {
+    canvas.save(); // Save the current canvas state
+    canvas.translate(playerX - cameraX +18 - recoil, playerY - cameraY +70); // Translate to the player's position
+    canvas.rotate(angleMouse); // Rotate based on the mouse angle
+    if (player.weapon[0].name === "solarStaffCommon") {
+      canvas.drawImage(solarStaffCommon ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
+    }
+    else if (player.weapon[0].name === "arcaneStaffCommon") {
+      canvas.drawImage(arcaneStaffCommon ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
+    }
+    else if (player.weapon[0].name === "nuclearStaffCommon") {
+      canvas.drawImage(nuclearStaffCommon ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
+    }
+    canvas.restore();
+  }
+}
+
+function drawPlayerWeaponSheated(player) {
+  if (player.weapon[0]) {
+    let smoothPlayer = Object.values(smoothPlayers).find(Splayer => Splayer.username === player.username)
+    canvas.save(); // Save the current canvas state
+    canvas.translate(smoothPlayer.smoothX - cameraX, smoothPlayer.smoothY - cameraY +90);  // Translate to the player's position
+    canvas.rotate(player.weaponAngle); // Rotate based on the mouse angle
+    canvas.rotate(-190); // Rotate based on the mouse angle
+    if (player.weapon[0].name === "solarStaffCommon") {
+      canvas.drawImage(solarStaffCommon ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
+    }
+    else if (player.weapon[0].name === "arcaneStaffCommon") {
+      canvas.drawImage(arcaneStaffCommon ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
+    }
+    else if (player.weapon[0].name === "nuclearStaffCommon") {
+      canvas.drawImage(nuclearStaffCommon ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
+    }
+    canvas.restore();
+  }
+}
+
+function drawUsernameOnline (player, smoothPlayer) {
+  canvas.drawImage(nameBubbleGreen, smoothPlayer.smoothX - cameraX -40, smoothPlayer.smoothY - cameraY -51, 100,50)
+  canvas.beginPath();
+  canvas.font = "bolder 14px Arial";
+  canvas.textAlign = "center";
+  canvas.fillStyle = "black";
+  canvas.fillText(player.username, smoothPlayer.smoothX - cameraX +10, smoothPlayer.smoothY  - cameraY -10);
+  canvas.beginPath();
+  canvas.font = "bolder 10px Arial";
+  canvas.textAlign = "center";
+  canvas.fillStyle = "black";
+  canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)) , smoothPlayer.smoothX - cameraX + 10, smoothPlayer.smoothY  - cameraY - 32.5);
+}
+
+function drawUsernameLocal (player) {
+  canvas.drawImage(nameBubbleGreen, playerX - cameraX -40, playerY - cameraY -51, 100,50)
+  canvas.beginPath();
+  canvas.font = "bolder 14px Arial";
+  canvas.textAlign = "center";
+  canvas.fillStyle = "black";
+  canvas.fillText(player.username, playerX - cameraX +10, playerY  - cameraY -10);
+  canvas.beginPath();
+  canvas.font = "bolder 10px Arial";
+  canvas.textAlign = "center";
+  canvas.fillStyle = "black";
+  canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)) , playerX - cameraX + 10, playerY  - cameraY - 32.5);
+}
+
+// Map functions <
+
+
+
+
+// Particle system >
+
+const maxParticlesShootDefault = 3;
+const maxParticlesWalk = 1;
+const highParticles = 5;
+
+let particlesSystem = {
+  partShootDefault:
+  {
+    name: "shootDefault",
+    speedDec: 0.1,
+    sizeDec: 0.2
+  },
+  partWalk:
+  {
+    name: "walk",
+    speedDec: 0.1,
+    sizeDec: 0.8
+  },
+  partSlime:
+  {
+    name: "slime",
+    speedDec: 0.05,
+    sizeDec: 0.3
+  },
+  partDash:
+  {
+    name: "dash",
+    speedDec: 0.1,
+    sizeDec: 0.5
+  },
+}
+
+function particlesActor () {
+  particles.forEach(particle => {
+    canvas.beginPath();
+    canvas.fillStyle = particle.color;
+    canvas.fillRect(particle.initalX + particle.x - cameraX - 10, particle.intialY + particle.y - cameraY + 50, particle.size, particle.size);
+    canvas.lineWidth = 2; 
+    canvas.strokeStyle = 'black';
+    canvas.strokeRect(particle.initalX + particle.x - cameraX - 10, particle.intialY + particle.y - cameraY + 50, particle.size, particle.size)  
+
+    // Move particles
+    particle.x += Math.cos(particle.angle) * particle.speed;
+    if (particle.name !== "walk") {
+      particle.y += Math.sin(particle.angle) * particle.speed;
+    } else {
+      particle.y -= 1;
+    }
+
+    // Decrease size over time
+    particle.size -= particle.sizeDecrease;
+    particle.speed -= particle.speedDecrease * particle.speed
+  });
+
+  particles = particles.filter(particle => particle.size > 0 );
+
+}
+
+function shootingParticles () {
+  if (shooting) {
+    for (let i = 0; i < maxParticlesShootDefault; i++) {
+      const angle = angleMouse + (Math.random() * 0.2 * 2 - 0.2);; // Random angle
+      const radius = Math.random() * 20; // Random radius (adjust as needed)
+      const speed = Math.floor(Math.random() * (50 + 1)) + 1; // Random speed (adjust as needed)
+      const size = 15; // Random size between 3 and 8
+      const particleX = playerX;
+      const particleY = playerY;
+
+      const randomNumber = Math.floor(Math.random() * 2) + 1;
+      
+      if (randomNumber === 1) {
+        if (myPlayer?.weapon[0]?.name === "solarStaffCommon") {
+          particles.push({ x: 1, y: 1, size: size, color: 'red', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partShootDefault"].speedDec, sizeDecrease: particlesSystem["partShootDefault"].sizeDec, name: particlesSystem["partShootDefault"].name });
+        }
+        else if (myPlayer?.weapon[0]?.name === "arcaneStaffCommon") {
+          particles.push({ x: 1, y: 1, size: size, color: 'purple', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partShootDefault"].speedDec, sizeDecrease: particlesSystem["partShootDefault"].sizeDec, name: particlesSystem["partShootDefault"].name });
+        }
+        else if (myPlayer?.weapon[0]?.name === "nuclearStaffCommon") {
+          particles.push({ x: 1, y: 1, size: size, color: 'green', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partShootDefault"].speedDec, sizeDecrease: particlesSystem["partShootDefault"].sizeDec, name: particlesSystem["partShootDefault"].name });
+        }
+      } else {
+
+        particles.push({ x: 1, y: 1, size: size, color: 'white', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partShootDefault"].speedDec, sizeDecrease: particlesSystem["partShootDefault"].sizeDec, name: particlesSystem["partShootDefault"].name });
+      }
 
     }
 
-  //Local Actions <
+  }
+}
 
+function dashParticles () {
+  if (playerSpeed > 10 && (movingDown || movingUp || movingLeft || movingRight)) {
+    for (let i = 0; i < highParticles; i++) {
+      const angleDegrees = Math.random() * 360;
+      const angleRadians = angleDegrees * (Math.PI / 180); // Convert degrees to radians
+      const speed = (Math.random() * 6) + 1; // Random speed (adjust as needed)
+      const size = 20; // Random size between 3 and 8
+      const particleX = playerX;
+      const particleY = playerY;
+
+      
+      particles.push({ x: 1, y: 1, size: size, color: 'white', speed: speed, angle: angleRadians, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partDash"].speedDec, sizeDecrease: particlesSystem["partDash"].sizeDec, name: particlesSystem["partDash"].name });   
+      
+
+    }
+
+  }
+}
+
+function playerTrailParticles () {
+  if (movingDown || movingUp || movingLeft || movingRight) {
+    for (let i = 0; i < maxParticlesWalk; i++) {
+      const speed = Math.floor(Math.random() * (1 - 1 + 8)) + 1;
+      const size = 15 ;
+      const particleX = playerX;
+      const particleY = playerY + 30;
+      
+      particles.push({ x: 1, y: 1, size: size, color: 'white', speed: speed, angle: -190, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partWalk"].speedDec, sizeDecrease: particlesSystem["partWalk"].sizeDec, name: particlesSystem["partWalk"].name });   
+    }
+  }
+}
+
+// Particle system <
+
+
+function islandOneLoop() {
+
+  currentLand = "islandOne";
+
+  mapSetup();
+  drawObjectsBehind()
+  shootingParticles()
+  dashParticles()
+  playerTrailParticles()
+  particlesActor()
+  playerCollision()
+
+  drawLocalPlayer()
+  drawOnlinePlayers()
+
+  // frameCurrentMap = frameCurrentMap % 4;
+  // mapCutX = frameCurrentMap * 1000;
+  // canvas.drawImage(
+  //   islandOneMap,
+  //   mapCutX,
+  //   mapCutY,
+  //   1000,
+  //   1000,
+  //   cameraShakeX - cameraX,
+  //   cameraShakeY - cameraY,
+  //   4500,
+  //   4500,
+  // );
+  // mapFramesDrawn++;
+  // if (mapFramesDrawn >= 10) {
+  //   frameCurrentMap++;
+  //   mapFramesDrawn = 0;
+  // }
 
   for (const player of players) {
     if (player.room === myPlayer.room) {
-
-      //Armor >
-      let armor = character;
-
-      if (player.armor[0]) {
-        if (player.armor[0].name === "warrior") {
-          armor = frogWarriorSkin;
-        } else {
-          armor = character;
-        }
-      }
-      //Armor <
-
-      //Cape >
-      let artifact = transparentCape;
-
-      if (player.artifact[0]) {
-        if (player.artifact[0].name === "rags") {
-          artifact = cape;
-        } else if (player.artifact[0].name === "fisherman") {
-          artifact = fishermanCape;
-        } else {
-          artifact = transparentCape;
-        }
-      }
-      //Cape <
-
-      //Movement >
       if (player.username === myPlayer.username) {
         playerWidth = character.width / 6
         playerHeight = character.height / 4;
+      } 
 
-        if (player.anim === "idleRight" && player.lastLooked === "right") {
-          frameCurrentPlayer = frameCurrentPlayer % 4;
-
-          playerCutX = frameCurrentPlayer * playerWidth;
-          canvas.drawImage(
-            armor,
-            playerCutX,
-            playerCutY,
-            playerWidth,
-            playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 120,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-          canvas.drawImage(
-            artifact,
-            playerCutX,
-            playerCutY,
-            playerWidth,
-            playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 120,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-        }
-        else if (player.anim === "idleRight" && player.lastLooked === "left") {
-          frameCurrentPlayer = frameCurrentPlayer % 4;
-          playerCutX = frameCurrentPlayer * playerWidth;
-          canvas.drawImage(
-            armor,
-            playerCutX,
-            playerCutY + 24,
-            playerWidth,
-            playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 120,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-          canvas.drawImage(
-            artifact,
-            playerCutX,
-            playerCutY + 24,
-            playerWidth,
-            playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 120,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-        }
-        else if (player.anim === "runRight") {
-          frameCurrentPlayer = frameCurrentPlayer % 6;
-          playerCutX = frameCurrentPlayer * playerWidth;
-          canvas.drawImage(
-            armor,
-            playerCutX,
-            playerCutY + 48,
-            playerWidth,
-            playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 120,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-          canvas.drawImage(
-            artifact,
-            playerCutX,
-            playerCutY + 48,
-            playerWidth,
-            playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 120,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-        }
-        else if (player.anim === "runLeft") {
-          frameCurrentPlayer = frameCurrentPlayer % 6;
-          playerCutX = frameCurrentPlayer * playerWidth;
-          canvas.drawImage(
-            armor,
-            playerCutX,
-            playerCutY + 72,
-            playerWidth,
-            playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 120,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-          canvas.drawImage(
-            artifact,
-            playerCutX,
-            playerCutY + 72,
-            playerWidth,
-            playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 120,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-        }
-      } else {
-        if (player.anim === "idleRight" && player.lastLooked === "right") {
-          frameCurrentPlayer = frameCurrentPlayer % 4;
-
-          playerCutX = frameCurrentPlayer * playerWidth;
-          canvas.drawImage(
-            armor,
-            playerCutX,
-            playerCutY,
-            playerWidth,
-            playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 120,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-          canvas.drawImage(
-            artifact,
-            playerCutX,
-            playerCutY,
-            playerWidth,
-            playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 120,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-        }
-        else if (player.anim === "idleRight" && player.lastLooked === "left") {
-          frameCurrentPlayer = frameCurrentPlayer % 4;
-          playerCutX = frameCurrentPlayer * playerWidth;
-          canvas.drawImage(
-            armor,
-            playerCutX,
-            playerCutY + 24,
-            playerWidth,
-            playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 120,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-          canvas.drawImage(
-            artifact,
-            playerCutX,
-            playerCutY + 24,
-            playerWidth,
-            playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 120,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-        }
-        else if (player.anim === "runRight") {
-          frameCurrentPlayer = frameCurrentPlayer % 6;
-          playerCutX = frameCurrentPlayer * playerWidth;
-          canvas.drawImage(
-            armor,
-            playerCutX,
-            playerCutY + 48,
-            playerWidth,
-            playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 120,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-          canvas.drawImage(
-            artifact,
-            playerCutX,
-            playerCutY + 48,
-            playerWidth,
-            playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 120,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-        }
-        else if (player.anim === "runLeft") {
-          frameCurrentPlayer = frameCurrentPlayer % 6;
-          playerCutX = frameCurrentPlayer * playerWidth;
-          canvas.drawImage(
-            armor,
-            playerCutX,
-            playerCutY + 72,
-            playerWidth,
-            playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 120,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-          canvas.drawImage(
-            artifact,
-            playerCutX,
-            playerCutY + 72,
-            playerWidth,
-            playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 120,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-        }
-    }
-      //Movement <
-
-      // Weapon >
-      if (player.weapon[0]) {
-
-        if (player.username === myPlayer.username) {
-          // console.log(player.weapon[0])
-          canvas.save(); // Save the current canvas state
-          canvas.translate(playerX - cameraX +18 - recoil, playerY - cameraY +70); // Translate to the player's position
-          canvas.rotate(angleMouse); // Rotate based on the mouse angle
-          if (player.weapon[0].name === "solarStaffCommon") {
-            canvas.drawImage(solarStaffCommon ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
-          }
-          else if (player.weapon[0].name === "arcaneStaffCommon") {
-            canvas.drawImage(arcaneStaffCommon ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
-          }
-          else if (player.weapon[0].name === "nuclearStaffCommon") {
-            canvas.drawImage(nuclearStaffCommon ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
-          }
-        } else {
-          canvas.save(); // Save the current canvas state
-          canvas.translate(player.x - cameraX +18, player.y - cameraY +50); // Translate to the player's position
-          canvas.rotate(player.weaponAngle); // Rotate based on the mouse angle
-          console.log(player.weapon[0])
-          if (player.weapon[0].name === "solarStaffCommon") {
-            canvas.drawImage(solarStaffCommon ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
-          }
-          else if (player.weapon[0].name === "arcaneStaffCommon") {
-            canvas.drawImage(arcaneStaffCommon ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
-          }
-          else if (player.weapon[0].name === "nuclearStaffCommon") {
-            canvas.drawImage(nuclearStaffCommon ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
-          }
-         }
-  
-        }
-        canvas.restore(); // Restore the canvas state to what it was before translation and rotation
-      // Weapon <
+     
 
       //Chat
       if (player.chatMessage !== "none") {
@@ -4519,11 +4714,11 @@ for (const projectile of projectilesClient) {
                 
                 if (randomNumber === 1) {
 
-                  particles.push({ x: 1, y: 1, size: size, color: '#6d64b6', speed: speed, angle: angle, initalX: particleX, intialY: particleY });
+                  particles.push({ x: 1, y: 1, size: size, color: '#6d64b6', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partSlime"].speedDec, sizeDecrease: particlesSystem["partSlime"].sizeDec, name: particlesSystem["partSlime"].name });
                         
                 } else {
           
-                  particles.push({ x: 1, y: 1, size: size, color: '#afa6ff', speed: speed, angle: angle, initalX: particleX, intialY: particleY });
+                  particles.push({ x: 1, y: 1, size: size, color: '#afa6ff', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partSlime"].speedDec, sizeDecrease: particlesSystem["partSlime"].sizeDec, name: particlesSystem["partSlime"].name });
                 }
           
               }
@@ -4553,7 +4748,7 @@ for (const projectile of projectilesClient) {
                     
 
                     for (let i = 0; i < 3; i++) {
-                      const angle = angleMouse + (Math.random() * 0.5 * 2 - 0.2);; // Random angle
+                      const angle = angleMouse + (Math.random() * 0.5 * 2 - 0.2); // Random angle
                       const speed = Math.floor(Math.random() * (20 - 8 + 1)) + 13;; // Random speed (adjust as needed)
                       const size = 15; // Random size between 3 and 8
                       const particleX = enemy.x;
@@ -4562,12 +4757,12 @@ for (const projectile of projectilesClient) {
                       const randomNumber = Math.floor(Math.random() * 2) + 1;
                       
                       if (randomNumber === 1) {
-  
-                          particles.push({ x: 1, y: 1, size: size, color: '#6d64b6', speed: speed, angle: angle, initalX: particleX, intialY: particleY });
-                        
+
+                        particles.push({ x: 1, y: 1, size: size, color: '#6d64b6', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partSlime"].speedDec, sizeDecrease: particlesSystem["partSlime"].sizeDec, name: particlesSystem["partSlime"].name });
+                              
                       } else {
                 
-                        particles.push({ x: 1, y: 1, size: size, color: '#afa6ff', speed: speed, angle: angle, initalX: particleX, intialY: particleY });
+                        particles.push({ x: 1, y: 1, size: size, color: '#afa6ff', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partSlime"].speedDec, sizeDecrease: particlesSystem["partSlime"].sizeDec, name: particlesSystem["partSlime"].name });
                       }
                 
                     }
@@ -4675,41 +4870,7 @@ for (const projectile of projectilesClient) {
     canvas.fillRect(selectedXcoord - cameraShakeX - cameraX, selectedYcoord - cameraShakeY - cameraY, widthCoord, heightCoord);
   }
 
-  //Username
-  for (const player of players) {
-    if (player.room === myPlayer.room) {
-      if (player.username === myPlayer.username) {
-        canvas.drawImage(nameBubbleGreen, playerX - cameraX -40, playerY- cameraY -51, 100,50)
-    
-        canvas.beginPath();
-        canvas.font = "bolder 14px Arial";
-        canvas.textAlign = "center";
-        canvas.fillStyle = "black";
-        canvas.fillText(player.username, playerX - cameraX +10, playerY - cameraY -10);
-    
-        canvas.beginPath();
-        canvas.font = "bolder 10px Arial";
-        canvas.textAlign = "center";
-        canvas.fillStyle = "black";
-        canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)) , playerX - cameraX + 10, playerY - cameraY - 32.5);
-      } else {
-        canvas.drawImage(nameBubbleGreen, player.x - cameraX -40, player.y - cameraY -51, 100,50)
-    
-        canvas.beginPath();
-        canvas.font = "bolder 14px Arial";
-        canvas.textAlign = "center";
-        canvas.fillStyle = "black";
-        canvas.fillText(player.username, player.x - cameraX +10, player.y - cameraY -10);
-    
-    
-        canvas.beginPath();
-        canvas.font = "bolder 10px Arial";
-        canvas.textAlign = "center";
-        canvas.fillStyle = "black";
-        canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)), playerX - cameraX + 10, playerY - cameraY - 32.5);
-      }
-    }
-  }
+ 
 
 
 
@@ -4807,7 +4968,7 @@ function islandOneArcaneLoop() {
       
       if (randomNumber === 1) {
         if (myPlayer?.weapon[0]?.name === "solarStaffCommon") {
-          particles.push({ x: 1, y: 1, size: size, color: 'red', speed: speed, angle: angle, initalX: particleX, intialY: particleY });
+          particles.push({ x: 1, y: 1, size: size, color: 'red', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: 0.1, sizeDecrease: 0.2 });
         }
         else if (myPlayer?.weapon[0]?.name === "arcaneStaffCommon") {
           particles.push({ x: 1, y: 1, size: size, color: 'purple', speed: speed, angle: angle, initalX: particleX, intialY: particleY });
