@@ -106,7 +106,7 @@ function tick() {
             }
         }
 
-        io.to(player.room).emit("player", player);
+        io.emit("player", player);
     }
 
     // for (const enemy of enemies) {
@@ -607,6 +607,7 @@ async function main() {
                 for (const player of players) {
                     if (player.id === socket.id) {
                         player.room = room
+                        myPlayer[socket.id] = player;    
                         socket.join(room);
                   }
                 }   
@@ -1194,7 +1195,9 @@ async function main() {
         });
 
         socket.on("disconnect", () => {
+            playerToDelete = players.find((player) => player.id !== socket.id);
             players = players.filter((player) => player.id !== socket.id);
+            io.emit('disconnectedPlayer', playerToDelete);
         })
     });
     

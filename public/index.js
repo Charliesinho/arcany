@@ -2032,6 +2032,12 @@ socket.on("loginAttempt", (msg) => {
   }
 });
 
+socket.on("disconnectedPlayer", (playerDisconnected) => {
+
+  players = players.filter((player) => player.id === playerDisconnected.id);
+
+});
+
 const inputs = {
   up: false,
   down: false,
@@ -3359,6 +3365,7 @@ function transitionArcane () {
     const dynamicFunctionName = currentSelectedMap + "Loop";   
     setTimeout(() => {
       changeMap(dynamicFunctionName)
+      socket.emit("changeRoom", currentSelectedMap);
     }, 1000);   
     setTimeout(() => {
       glitchOverlay.style.display = "none"
@@ -3383,6 +3390,7 @@ function transitionLiquid() {
     const dynamicFunctionName = currentSelectedMap + "Loop";    
     setTimeout(() => {
       changeMap(dynamicFunctionName);
+      socket.emit("changeRoom", currentSelectedMap);
     }, 1800);   
     
     setTimeout(() => {
@@ -4165,7 +4173,7 @@ function drawLocalPlayer () {
       let armor = drawPlayerArmor(player);
       let artifact = drawPlayerArtifact(player);
       if (animPlayer === "idleRight" && player.lastLooked === "right") {
-      frameCurrentPlayer = frameCurrentPlayer % 4;
+      frameCurrentPlayer = frameCurrentPlayer % 6;
   
       playerCutX = frameCurrentPlayer * playerWidth;
 
@@ -4193,7 +4201,7 @@ function drawLocalPlayer () {
       );
       }
       else if (animPlayer === "idleRight" && player.lastLooked === "left") {
-        frameCurrentPlayer = frameCurrentPlayer % 4;
+        frameCurrentPlayer = frameCurrentPlayer % 6;
         playerCutX = frameCurrentPlayer * playerWidth;
         canvas.drawImage(
           armor,
@@ -4278,6 +4286,7 @@ function drawLocalPlayer () {
 function drawOnlinePlayers () {
   initializeSmoothOnlinePlayers()
   for (const player of players) {
+    // console.log(player.room, myPlayer.room)
     if (player.username !== myPlayer.username && player.room === myPlayer.room) {
       let smoothPlayer = Object.values(smoothPlayers).find(Splayer => Splayer.username === player.username)
       updateSmoothOnlinePlayerPosition(smoothPlayer)
@@ -4286,7 +4295,7 @@ function drawOnlinePlayers () {
       let armor = drawPlayerArmor(player);
       let artifact = drawPlayerArtifact(player);
       if (player.anim === "idleRight" && player.lastLooked === "right") {
-      frameCurrentPlayer = frameCurrentPlayer % 4;
+      frameCurrentPlayer = frameCurrentPlayer % 6;
       playerCutX = frameCurrentPlayer * playerWidth;
 
       canvas.drawImage(
@@ -4313,7 +4322,7 @@ function drawOnlinePlayers () {
       );
       }
       else if (player.anim === "idleRight" && player.lastLooked === "left") {
-        frameCurrentPlayer = frameCurrentPlayer % 4;
+        frameCurrentPlayer = frameCurrentPlayer % 6;
         playerCutX = frameCurrentPlayer * playerWidth;
         canvas.drawImage(
           armor,
@@ -4625,7 +4634,7 @@ function islandOneLoop() {
   drawObjectsBehind()
   shootingParticles()
   dashParticles()
-  playerTrailParticles()
+  // playerTrailParticles()
   particlesActor()
   playerCollision()
 
