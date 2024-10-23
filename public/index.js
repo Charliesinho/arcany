@@ -1,7 +1,7 @@
 //Change this to push >
 
-// const socket = io(`ws://localhost:5000`);
-const socket = io(`https://arcanyGame.up.railway.app/`);
+const socket = io(`ws://localhost:5000`);
+// const socket = io(`https://arcanyGame.up.railway.app/`);
 
 //Change this to push <
 
@@ -2507,10 +2507,10 @@ function spawnSlime() {
     speed: 0.5,
     spriteSheetAmt: 4,
     type: "slime",
-    x: 3552,
-    y: 3594,
-    originX: 3552,
-    originY: 3694,
+    x: 2374,
+    y: 3145,
+    originX: 2374,
+    originY: 3145,
     nextTarget: slimeGetRandomCoords(),
     nextTargetCount: Math.floor(Math.random() * 100) + 50,
     enabled: true,
@@ -3456,8 +3456,8 @@ let mapsInfo = {
     backgroundImage: islandOneMap,
     foregroundImage: islandOneMapFront,
     playerPos: {
-      x: 0,
-      y: 0
+      x: 2852,
+      y: 3798
     },
     colliders: [],
   },
