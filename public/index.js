@@ -1,7 +1,7 @@
 //Change this to push >
 
-// const socket = io(`ws://localhost:5000`);
-const socket = io(`https://arcanyGame.up.railway.app/`);
+const socket = io(`ws://localhost:5000`);
+// const socket = io(`https://arcanyGame.up.railway.app/`);
 
 //Change this to push <
 
@@ -2108,11 +2108,13 @@ window.addEventListener("keydown", (e) => {
     if (e.key === "w" || e.key === "z" ) {
       footsteps.play();
       footsteps.loop = true;
+      animPlayer = "moveUp"
   
       movingUp = true;
     } else if (e.key === "s") {
       footsteps.play();
       footsteps.loop = true;
+      animPlayer = "moveDown"
   
       movingDown = true;
     } else if (e.key === "d") {
@@ -3954,7 +3956,7 @@ function initializeSmoothOnlinePlayers() {
 
 function updateSmoothOnlinePlayerPosition(smoothPlayer) {
   for (const player of players) {
-    const speed = Math.abs(smoothPlayer.smoothX - player.x) < 200 ? 4 : 10; 
+    const speed = Math.abs(smoothPlayer.smoothX - player.x) < 200 ? 2 : 10; 
     if (player && player.username === smoothPlayer.username && player.username !== myPlayer.username) {
       if (Math.abs(smoothPlayer.smoothX - player.x) > 10) {
         smoothPlayer.smoothX += smoothPlayer.smoothX < player.x ? speed : -speed;
@@ -4162,7 +4164,6 @@ function drawColliders () {
 function drawLocalPlayer () {
   for (const player of players) {
     if (player.username === myPlayer.username && player.room === myPlayer.room) {
-      drawUsernameLocal(player)
       let armor = drawPlayerArmor(player);
       let artifact = drawPlayerArtifact(player);
       if (animPlayer === "idleRight" && player.lastLooked === "right") {
@@ -4225,7 +4226,7 @@ function drawLocalPlayer () {
         canvas.drawImage(
           armor,
           playerCutX,
-          playerCutY + 48,
+          playerCutY + 47.5,
           playerWidth,
           playerHeight,
           playerX - cameraX + 65,
@@ -4236,7 +4237,7 @@ function drawLocalPlayer () {
         canvas.drawImage(
           artifact,
           playerCutX,
-          playerCutY + 48,
+          playerCutY + 47.5,
           playerWidth,
           playerHeight,
           playerX - cameraX + 65,
@@ -4255,7 +4256,7 @@ function drawLocalPlayer () {
           playerWidth,
           playerHeight,
           playerX - cameraX + 65,
-          playerY - cameraY + 120,
+          playerY - cameraY + 125,
           playerWidth - playerZoomX,
           playerHeight - playerZoomY,
         );
@@ -4266,12 +4267,67 @@ function drawLocalPlayer () {
           playerWidth,
           playerHeight,
           playerX - cameraX + 65,
-          playerY - cameraY + 120,
+          playerY - cameraY + 125,
           playerWidth - playerZoomX,
           playerHeight - playerZoomY,
         );
       }
+      else if (animPlayer === "moveUp" || animPlayer === "moveDown") {
+        frameCurrentPlayer = frameCurrentPlayer % 6;
+        playerCutX = frameCurrentPlayer * playerWidth;
+      
+        if (player.lastLooked === "right") {
+          // Play running animation as if moving right
+          canvas.drawImage(
+            armor,
+            playerCutX,
+            playerCutY + 47.5, // Same as runRight
+            playerWidth,
+            playerHeight,
+            playerX - cameraX + 65,
+            playerY - cameraY + 120,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+          canvas.drawImage(
+            artifact,
+            playerCutX,
+            playerCutY + 47.5, // Same as runRight
+            playerWidth,
+            playerHeight,
+            playerX - cameraX + 65,
+            playerY - cameraY + 120,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+        } 
+        else if (player.lastLooked === "left") {
+          // Play running animation as if moving left
+          canvas.drawImage(
+            armor,
+            playerCutX,
+            playerCutY + 72, // Same as runLeft
+            playerWidth,
+            playerHeight,
+            playerX - cameraX + 65,
+            playerY - cameraY + 125,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+          canvas.drawImage(
+            artifact,
+            playerCutX,
+            playerCutY + 72, // Same as runLeft
+            playerWidth,
+            playerHeight,
+            playerX - cameraX + 65,
+            playerY - cameraY + 125,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+      }}
       drawPlayerWeaponOut(player)
+      drawUsernameLocal(player)
     }
   }
 
@@ -4283,52 +4339,37 @@ function drawLocalPlayer () {
   }
 }
 
-function drawOnlinePlayers () {
+function drawOnlinePlayers (layer) {
   initializeSmoothOnlinePlayers()
   for (const player of players) {
     // console.log(player.room, myPlayer.room)
     if (player.username !== myPlayer.username && player.room === myPlayer.room) {
       let smoothPlayer = Object.values(smoothPlayers).find(Splayer => Splayer.username === player.username)
       updateSmoothOnlinePlayerPosition(smoothPlayer)
-      drawPlayerWeaponSheated(player)
-      drawUsernameOnline(player, smoothPlayer)
 
       let armor = drawPlayerArmor(player);
       let artifact = drawPlayerArtifact(player);
-      if (player.anim === "idleRight" && player.lastLooked === "right") {
-      frameCurrentPlayer = frameCurrentPlayer % 6;
-      playerCutX = frameCurrentPlayer * playerWidth;
 
-      canvas.drawImage(
-        armor,
-        playerCutX,
-        playerCutY,
-        playerWidth,
-        playerHeight,
-        smoothPlayer.smoothX - cameraX + 65,
-        smoothPlayer.smoothY - cameraY + 120,
-        playerWidth - playerZoomX,
-        playerHeight - playerZoomY,
-      );
-      canvas.drawImage(
-        artifact,
-        playerCutX,
-        playerCutY,
-        playerWidth,
-        playerHeight,
-        smoothPlayer.smoothX - cameraX + 65,
-        smoothPlayer.smoothY - cameraY + 120,
-        playerWidth - playerZoomX,
-        playerHeight - playerZoomY,
-      );
+      if (layer === "back" && player.y < playerY) {
+        drawPlayerWeaponSheated(player)
+        drawPlayerOnline()
       }
-      else if (player.anim === "idleRight" && player.lastLooked === "left") {
+      else if (layer === "front" && player.y >= playerY) {
+        drawPlayerWeaponSheated(player)
+        drawPlayerOnline()
+      }
+
+      drawUsernameOnline(player, smoothPlayer)
+
+      function drawPlayerOnline () {
+        if (player.anim === "idleRight" && player.lastLooked === "right") {
         frameCurrentPlayer = frameCurrentPlayer % 6;
         playerCutX = frameCurrentPlayer * playerWidth;
+  
         canvas.drawImage(
           armor,
           playerCutX,
-          playerCutY + 24,
+          playerCutY,
           playerWidth,
           playerHeight,
           smoothPlayer.smoothX - cameraX + 65,
@@ -4339,7 +4380,7 @@ function drawOnlinePlayers () {
         canvas.drawImage(
           artifact,
           playerCutX,
-          playerCutY + 24,
+          playerCutY,
           playerWidth,
           playerHeight,
           smoothPlayer.smoothX - cameraX + 65,
@@ -4347,58 +4388,139 @@ function drawOnlinePlayers () {
           playerWidth - playerZoomX,
           playerHeight - playerZoomY,
         );
-      }
-      else if (player.anim === "runRight") {
-        frameCurrentPlayer = frameCurrentPlayer % 6;
-        playerCutX = frameCurrentPlayer * playerWidth;
-        canvas.drawImage(
-          armor,
-          playerCutX,
-          playerCutY + 48,
-          playerWidth,
-          playerHeight,
-          smoothPlayer.smoothX - cameraX + 65,
-          smoothPlayer.smoothY - cameraY + 120,
-          playerWidth - playerZoomX,
-          playerHeight - playerZoomY,
-        );
-        canvas.drawImage(
-          artifact,
-          playerCutX,
-          playerCutY + 48,
-          playerWidth,
-          playerHeight,
-          smoothPlayer.smoothX - cameraX + 65,
-          smoothPlayer.smoothY - cameraY + 120,
-          playerWidth - playerZoomX,
-          playerHeight - playerZoomY,
-        );
-      }
-      else if (player.anim === "runLeft") {
-        frameCurrentPlayer = frameCurrentPlayer % 6;
-        playerCutX = frameCurrentPlayer * playerWidth;
-        canvas.drawImage(
-          armor,
-          playerCutX,
-          playerCutY + 72,
-          playerWidth,
-          playerHeight,
-          smoothPlayer.smoothX - cameraX + 65,
-          smoothPlayer.smoothY - cameraY + 120,
-          playerWidth - playerZoomX,
-          playerHeight - playerZoomY,
-        );
-        canvas.drawImage(
-          artifact,
-          playerCutX,
-          playerCutY + 72,
-          playerWidth,
-          playerHeight,
-          smoothPlayer.smoothX - cameraX + 65,
-          smoothPlayer.smoothY - cameraY + 120,
-          playerWidth - playerZoomX,
-          playerHeight - playerZoomY,
-        );
+        }
+        else if (player.anim === "idleRight" && player.lastLooked === "left") {
+          frameCurrentPlayer = frameCurrentPlayer % 6;
+          playerCutX = frameCurrentPlayer * playerWidth;
+          canvas.drawImage(
+            armor,
+            playerCutX,
+            playerCutY + 24,
+            playerWidth,
+            playerHeight,
+            smoothPlayer.smoothX - cameraX + 65,
+            smoothPlayer.smoothY - cameraY + 120,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+          canvas.drawImage(
+            artifact,
+            playerCutX,
+            playerCutY + 24,
+            playerWidth,
+            playerHeight,
+            smoothPlayer.smoothX - cameraX + 65,
+            smoothPlayer.smoothY - cameraY + 120,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+        }
+        else if (player.anim === "runRight") {
+          frameCurrentPlayer = frameCurrentPlayer % 6;
+          playerCutX = frameCurrentPlayer * playerWidth;
+          canvas.drawImage(
+            armor,
+            playerCutX,
+            playerCutY + 47.5,
+            playerWidth,
+            playerHeight,
+            smoothPlayer.smoothX - cameraX + 65,
+            smoothPlayer.smoothY - cameraY + 120,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+          canvas.drawImage(
+            artifact,
+            playerCutX,
+            playerCutY + 47.5,
+            playerWidth,
+            playerHeight,
+            smoothPlayer.smoothX - cameraX + 65,
+            smoothPlayer.smoothY - cameraY + 120,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+        }
+        else if (player.anim === "runLeft") {
+          frameCurrentPlayer = frameCurrentPlayer % 6;
+          playerCutX = frameCurrentPlayer * playerWidth;
+          canvas.drawImage(
+            armor,
+            playerCutX,
+            playerCutY + 72,
+            playerWidth,
+            playerHeight,
+            smoothPlayer.smoothX - cameraX + 65,
+            smoothPlayer.smoothY - cameraY + 120,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+          canvas.drawImage(
+            artifact,
+            playerCutX,
+            playerCutY + 72,
+            playerWidth,
+            playerHeight,
+            smoothPlayer.smoothX - cameraX + 65,
+            smoothPlayer.smoothY - cameraY + 120,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+        }
+        else if (player.anim === "moveUp" || player.anim === "moveDown") {
+          frameCurrentPlayer = frameCurrentPlayer % 6;
+          playerCutX = frameCurrentPlayer * playerWidth;
+        
+          if (player.lastLooked === "right") {
+            // Play running animation as if moving right
+            canvas.drawImage(
+              armor,
+              playerCutX,
+              playerCutY + 47.5, // Same as runRight
+              playerWidth,
+              playerHeight,
+              smoothPlayer.smoothX - cameraX + 65,
+              smoothPlayer.smoothY - cameraY + 120,
+              playerWidth - playerZoomX,
+              playerHeight - playerZoomY,
+            );
+            canvas.drawImage(
+              artifact,
+              playerCutX,
+              playerCutY + 47.5, // Same as runRight
+              playerWidth,
+              playerHeight,
+              smoothPlayer.smoothX - cameraX + 65,
+              smoothPlayer.smoothY - cameraY + 120,
+              playerWidth - playerZoomX,
+              playerHeight - playerZoomY,
+            );
+          } 
+          else if (player.lastLooked === "left") {
+            // Play running animation as if moving left
+            canvas.drawImage(
+              armor,
+              playerCutX,
+              playerCutY + 72, // Same as runLeft
+              playerWidth,
+              playerHeight,
+              smoothPlayer.smoothX - cameraX + 65,
+              smoothPlayer.smoothY - cameraY + 125,
+              playerWidth - playerZoomX,
+              playerHeight - playerZoomY,
+            );
+            canvas.drawImage(
+              artifact,
+              playerCutX,
+              playerCutY + 72, // Same as runLeft
+              playerWidth,
+              playerHeight,
+              smoothPlayer.smoothX - cameraX + 65,
+              smoothPlayer.smoothY - cameraY + 125,
+              playerWidth - playerZoomX,
+              playerHeight - playerZoomY,
+            );
+        }}
       }
     }
   }
@@ -4469,38 +4591,38 @@ function drawPlayerWeaponSheated(player) {
 }
 
 function drawUsernameOnline (player, smoothPlayer) {
-  canvas.drawImage(nameBubbleGreen, smoothPlayer.smoothX - cameraX -40, smoothPlayer.smoothY - cameraY -51, 100,50)
+  canvas.drawImage(nameBubbleGreen, smoothPlayer.smoothX - cameraX -40, smoothPlayer.smoothY - cameraY -48, 100,50)
   canvas.beginPath();
-  canvas.font = "bolder 14px Arial";
+  canvas.font = "bolder 16px Pixelify Sans";
   canvas.textAlign = "center";
   canvas.fillStyle = "black";
   canvas.fillText(player.username, smoothPlayer.smoothX - cameraX +10, smoothPlayer.smoothY  - cameraY -10);
   canvas.beginPath();
-  canvas.font = "bolder 10px Arial";
+  canvas.font = "bolder 12px Pixelify Sans";
   canvas.textAlign = "center";
-  canvas.fillStyle = "black";
-  canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)) , smoothPlayer.smoothX - cameraX + 10, smoothPlayer.smoothY  - cameraY - 32.5);
+  canvas.fillStyle = "white";
+  canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)) , smoothPlayer.smoothX - cameraX + 10, smoothPlayer.smoothY  - cameraY - 30.5);
 }
 
 function drawUsernameLocal (player) {
-  canvas.drawImage(nameBubbleGreen, playerX - cameraX -40, playerY - cameraY -51, 100,50)
+  canvas.drawImage(nameBubbleGreen, playerX - cameraX -40, playerY - cameraY -46, 100,50)
   canvas.beginPath();
-  canvas.font = "bolder 14px Arial";
+  canvas.font = "bolder 16px Pixelify Sans";
   canvas.textAlign = "center";
   canvas.fillStyle = "black";
   canvas.fillText(player.username, playerX - cameraX +10, playerY  - cameraY -10);
   canvas.beginPath();
-  canvas.font = "bolder 10px Arial";
+  canvas.font = "bolder 12px Pixelify Sans";
   canvas.textAlign = "center";
-  canvas.fillStyle = "black";
-  canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)) , playerX - cameraX + 10, playerY  - cameraY - 32.5);
+  canvas.fillStyle = "white";
+  canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)) , playerX - cameraX + 10, playerY  - cameraY - 30.5);
 }
 
 function drawChat () {
   for (const player of players) {
     if (player.room === myPlayer.room && player.username === myPlayer.username) {
       if (player.chatMessage !== "none") {
-        canvas.drawImage(chatBubble, playerX - cameraX -85, playerY - cameraY -110, 200, 60)
+        canvas.drawImage(chatBubble, playerX - cameraX -90, playerY - cameraY -115, 200, 60)
         canvas.beginPath();
         canvas.font = "bolder 16px Pixelify Sans";
         canvas.textAlign = "center";
@@ -4511,7 +4633,7 @@ function drawChat () {
     else if (player.room === myPlayer.room) {
       if (player.chatMessage !== "none") {
         let smoothPlayer = Object.values(smoothPlayers).find(Splayer => Splayer.username === player.username)
-        canvas.drawImage(chatBubble, smoothPlayer.smoothX - cameraX -85, smoothPlayer.smoothY - cameraY -110, 200, 60)
+        canvas.drawImage(chatBubble, smoothPlayer.smoothX - cameraX -85, smoothPlayer.smoothY - cameraY -115, 200, 60)
         canvas.beginPath();
         canvas.font = "bolder 16px Pixelify Sans";
         canvas.textAlign = "center";
@@ -4885,10 +5007,11 @@ function islandOneLoop() {
 
   // Player settings
   playerCollision()
-  drawLocalPlayer()
-  drawOnlinePlayers()
   drawChat()
   drawLocalBullets()
+  drawOnlinePlayers("back")
+  drawLocalPlayer()
+  drawOnlinePlayers("front")
 
 
   // Enemy settings
