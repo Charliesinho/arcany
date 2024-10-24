@@ -1174,7 +1174,7 @@ async function main() {
             
             for (const player of players) {
                 if (player.id === socket.id) {
-                    player.chatTimer = 5000;                    
+                    player.chatTimer = 100;                    
                 }
             }         
         });
