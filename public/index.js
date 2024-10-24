@@ -1,7 +1,7 @@
 //Change this to push >
 
-// const socket = io(`ws://localhost:5000`);
-const socket = io(`https://arcanyGame.up.railway.app/`);
+const socket = io(`ws://localhost:5000`);
+// const socket = io(`https://arcanyGame.up.railway.app/`);
 
 //Change this to push <
 
@@ -3459,7 +3459,378 @@ let mapsInfo = {
       x: 2852,
       y: 3798
     },
-    colliders: [],
+    colliders: [
+      {
+        "type": "wall",
+        "x": 2230,
+        "y": 2145,
+        "width": 201,
+        "height": 121,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 2119,
+        "y": 1935,
+        "width": 192,
+        "height": 165,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 1981,
+        "y": 1868,
+        "width": 161,
+        "height": 110,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 1773,
+        "y": 1745,
+        "width": 592,
+        "height": 135,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 1129,
+        "y": 1767,
+        "width": 489,
+        "height": 163,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 1203,
+        "y": 1895,
+        "width": 218,
+        "height": 115,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 1227,
+        "y": 1987,
+        "width": 63,
+        "height": 59,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 1502,
+        "y": 1666,
+        "width": 363,
+        "height": 217,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 1035,
+        "y": 2138,
+        "width": 68,
+        "height": 87,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 825,
+        "y": 2105,
+        "width": 210,
+        "height": 147,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 864,
+        "y": 1971,
+        "width": 340,
+        "height": 183,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 841,
+        "y": 2349,
+        "width": 72,
+        "height": -144,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 845,
+        "y": 2350,
+        "width": 73,
+        "height": 89,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 932,
+        "y": 2582,
+        "width": 68,
+        "height": 96,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 1001,
+        "y": 2872,
+        "width": 53,
+        "height": 97,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 952,
+        "y": 2972,
+        "width": 233,
+        "height": 185,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 849,
+        "y": 2635,
+        "width": 152,
+        "height": 164,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 939,
+        "y": 2753,
+        "width": 109,
+        "height": 255,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 868,
+        "y": 2444,
+        "width": 106,
+        "height": 141,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 808,
+        "y": 2187,
+        "width": 92,
+        "height": 181,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 1187,
+        "y": 3022,
+        "width": 84,
+        "height": 61,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 1169,
+        "y": 3033,
+        "width": 124,
+        "height": 315,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 1272,
+        "y": 3196,
+        "width": 209,
+        "height": 175,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 1669,
+        "y": 3461,
+        "width": 217,
+        "height": 238,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 2022,
+        "y": 3688,
+        "width": 412,
+        "height": 260,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 2318,
+        "y": 3866,
+        "width": 180,
+        "height": 271,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 2399,
+        "y": 4123,
+        "width": 669,
+        "height": 164,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 1457.5,
+        "y": 3319,
+        "width": 126,
+        "height": 156,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 1542.5,
+        "y": 3368,
+        "width": 135,
+        "height": 170,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 1870.5,
+        "y": 3582,
+        "width": 156,
+        "height": 203,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 1813.5,
+        "y": 2942,
+        "width": 62,
+        "height": 69,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 1946.5,
+        "y": 2852,
+        "width": 86,
+        "height": 72,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 1652.5,
+        "y": 3003,
+        "width": 80,
+        "height": 76,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 2154.5,
+        "y": 2804,
+        "width": 86,
+        "height": 69,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 2586.5,
+        "y": 2783,
+        "width": 43,
+        "height": 69,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 2714.5,
+        "y": 2573,
+        "width": 103,
+        "height": 236,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 2425.5,
+        "y": 2701,
+        "width": 68,
+        "height": 104,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 2413.5,
+        "y": 2458,
+        "width": 172,
+        "height": 106,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 2647.5,
+        "y": 2407,
+        "width": 119,
+        "height": 113,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 2672.5,
+        "y": 2492,
+        "width": 98,
+        "height": 83,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 2509.5,
+        "y": 2361,
+        "width": 198,
+        "height": 104,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 2048.5,
+        "y": 2665,
+        "width": 77,
+        "height": 105,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 2156.5,
+        "y": 2558,
+        "width": 50,
+        "height": 113,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 2183.5,
+        "y": 2501,
+        "width": 202,
+        "height": 148,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 2312.5,
+        "y": 2506,
+        "width": 135,
+        "height": 109,
+        "color": "rgb(0, 0, 0, 0.5)"
+      },
+      {
+        "type": "wall",
+        "x": 2193.5,
+        "y": 2634,
+        "width": 82,
+        "height": 179,
+        "color": "rgb(0, 0, 0, 0.5)"
+      }
+    
+    
+    ],
   },
   islandOneArcane: {
     areaSounds: arcaneSoundtrack,
@@ -4626,6 +4997,9 @@ function playerTrailParticles () {
 // Particle system <
 
 
+
+
+
 function islandOneLoop() {
 
   currentLand = "islandOne";
@@ -4901,6 +5275,7 @@ for (const projectile of projectilesClient) {
   }
 
 }
+
 function islandOneArcaneLoop() {
   // canvas.clearRect(0, 0, canvasLobby.width, canvasLobby.height);
   canvas.clearRect(0, 0, 4500, 4500);
@@ -5734,6 +6109,7 @@ for (const projectile of projectilesClient) {
   }
 
 }
+
 function lobbyMapLoop() {
   // canvas.clearRect(0, 0, canvasLobby.width, canvasLobby.height);
   canvas.clearRect(0, 0, 4500, 4500);
@@ -6568,7 +6944,6 @@ for (const projectile of projectilesClient) {
 
 }
 
-//Island One Map Canvas <
 
 
 
