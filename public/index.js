@@ -2151,16 +2151,16 @@ window.addEventListener("keydown", (e) => {
   }
 
   // Testing >
-  if (e.key === "f") {
-    transitionLiquid()
-  }
-  if (e.key === "g") {
-    if (!cutscene) {
-      cutscene = true
-    } else {
-      cutscene = false;
-    }
-  }
+  // if (e.key === "f") {
+  //   transitionLiquid()
+  // }
+  // if (e.key === "g") {
+  //   if (!cutscene) {
+  //     cutscene = true
+  //   } else {
+  //     cutscene = false;
+  //   }
+  // }
  
 
   //Fishing Minigame >
