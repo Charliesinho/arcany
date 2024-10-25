@@ -1496,7 +1496,7 @@ socket.on("player", (serverPlayer) => {
   // players = serverPlayers;
   myPlayer = players.find((player) => player.id === socket.id);
 
-  players = players.filter((player) => player.room && myPlayer.room && player.room  === myPlayer.room);
+  players = players.filter((player) => player.room && myPlayer && myPlayer.room && player.room === myPlayer.room);
 
   if (myPlayer.health === 3) {
     healthImage.src = "./fullHearts.png";
