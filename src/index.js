@@ -242,7 +242,7 @@ async function main() {
     });  
 
     io.on('connect', (socket) => {
-        socket.join("baseMap");
+        socket.join("lobby");
         console.log("socket", socket.id)
 
         inputsMap[socket.id] = {
