@@ -9,20 +9,20 @@ window.onload = async function() {
   window.scrollTo(0, 0);
 };
 
-const mapLobby = new Image();
-mapLobby.src = "baseMap.png";
+const lobbyMap = new Image();
+lobbyMap.src = "./islands/lobby.png";
+
+const lobbyMapFront = new Image();
+lobbyMapFront.src = "./islands/lobbyFront.png";
 
 const islandOneMap = new Image();
 islandOneMap.src = "./islands/islandOne.png";
 
-const islandOneMapArcane = new Image();
-islandOneMapArcane.src = "./islands/islandOneArcane.png";
-
-const lobbyMap = new Image();
-lobbyMap.src = "./islands/lobby.png";
-
 const islandOneMapFront = new Image();
 islandOneMapFront.src = "./islands/islandOneFront.png";
+
+const islandOneMapArcane = new Image();
+islandOneMapArcane.src = "./islands/islandOneArcane.png";
 
 const islandOneMapArcaneFront = new Image();
 islandOneMapArcaneFront.src = "./islands/islandOneArcaneFront.png";
@@ -1998,7 +1998,7 @@ socket.on("loginAttempt", (msg) => {
     audioIntro.pause();
     loggedIn.play();
     // intervalCanvasBase = setInterval(lobbyLoop, 16.67); //Initial canvas
-    intervalCanvasBase = setInterval(islandOneLoop, 16.67); //Initial canvas
+    intervalCanvasBase = setInterval(lobbyLoop, 16.67); //Initial canvas
     console.log("logged in")
 
     loginScreen.classList.add('downLogIn');
@@ -4592,6 +4592,17 @@ let mapsInfo = {
     ],
   },
 
+  lobby: {
+    areaSounds: lobbySoundtrack,
+    backgroundImage: lobbyMap,
+    foregroundImage: lobbyMapFront,
+    playerPos: {
+      x: 2130,
+      y: 785
+    },
+    colliders: [],
+  },
+
 };
 
 let selectedXcoord = 0;
@@ -5854,7 +5865,7 @@ function drawMap (layer) {
   if (layer === "back") {
     canvas.drawImage(mapsInfo[currentLand].backgroundImage, cameraShakeX - cameraX, cameraShakeY - cameraY, 4500, 4500);
   } else {
-    canvas.drawImage(islandOneMapFront, cameraShakeX - cameraX, cameraShakeY - cameraY, 4500, 4500);
+    canvas.drawImage(mapsInfo[currentLand].foregroundImage, cameraShakeX - cameraX, cameraShakeY - cameraY, 4500, 4500);
   }
 }
 
@@ -6025,6 +6036,52 @@ function islandOneLoop() {
 
   // Enemy settings
   drawSlimeEnemy()
+
+
+  // Foreground map Image and objects
+  drawMap("front")
+  drawObjects("front")
+
+
+  // Dev Colliders
+  drawDevWallsPlacement()
+  drawColliders()
+
+}
+
+function lobbyLoop() {
+
+
+  // Map name        ↓
+  currentLand = "lobby";
+
+
+  // Map setup ( Mandatory )
+  mapSetup();
+
+
+  // Background map Image and objects
+  drawMap("back")
+  drawObjects("back")
+
+
+  // Particle settings
+  particlesActor()
+  // // shootingParticles()
+  dashParticles()
+  // // playerTrailParticles()
+
+
+  // Player settings
+  playerCollision()
+  drawLocalPlayer()
+  drawOnlinePlayers()
+  drawChat()
+  // // drawLocalBullets()
+
+
+  // Enemy settings
+  // // drawSlimeEnemy()
 
 
   // Foreground map Image and objects
