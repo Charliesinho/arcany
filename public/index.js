@@ -1,7 +1,7 @@
 //Change this to push >
 
-const socket = io(`ws://localhost:5000`);
-// const socket = io(`https://arcanyGame.up.railway.app/`);
+// const socket = io(`ws://localhost:5000`);
+const socket = io(`https://arcanyGame.up.railway.app/`);
 
 //Change this to push <
 
@@ -2108,11 +2108,13 @@ window.addEventListener("keydown", (e) => {
     if (e.key === "w" || e.key === "z" ) {
       footsteps.play();
       footsteps.loop = true;
+      animPlayer = "moveUp"
   
       movingUp = true;
     } else if (e.key === "s") {
       footsteps.play();
       footsteps.loop = true;
+      animPlayer = "moveDown"
   
       movingDown = true;
     } else if (e.key === "d") {
@@ -3467,7 +3469,7 @@ let mapsInfo = {
         "y": 3306,
         "width": 63,
         "height": 85,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3475,7 +3477,7 @@ let mapsInfo = {
         "y": 3051,
         "width": 87,
         "height": 104,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3483,7 +3485,7 @@ let mapsInfo = {
         "y": 3143,
         "width": 135,
         "height": 175,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3491,7 +3493,7 @@ let mapsInfo = {
         "y": 2903,
         "width": 101,
         "height": 122,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3499,7 +3501,7 @@ let mapsInfo = {
         "y": 2909,
         "width": 240,
         "height": 59,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3507,7 +3509,7 @@ let mapsInfo = {
         "y": 2950,
         "width": 96,
         "height": 59,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3515,7 +3517,7 @@ let mapsInfo = {
         "y": 3002,
         "width": 249,
         "height": 69,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3523,7 +3525,7 @@ let mapsInfo = {
         "y": 3048,
         "width": 59,
         "height": 57,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3531,7 +3533,7 @@ let mapsInfo = {
         "y": 2857,
         "width": 51,
         "height": 69,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3539,7 +3541,7 @@ let mapsInfo = {
         "y": 2867,
         "width": 66,
         "height": 67,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3547,7 +3549,7 @@ let mapsInfo = {
         "y": 2754,
         "width": 89,
         "height": 82,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3555,7 +3557,7 @@ let mapsInfo = {
         "y": 2750,
         "width": 148,
         "height": 62,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3563,7 +3565,7 @@ let mapsInfo = {
         "y": 2770,
         "width": 63,
         "height": 48,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3571,7 +3573,7 @@ let mapsInfo = {
         "y": 2836,
         "width": 142,
         "height": 91,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3579,7 +3581,7 @@ let mapsInfo = {
         "y": 2757,
         "width": 43,
         "height": 44,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3587,7 +3589,7 @@ let mapsInfo = {
         "y": 2789,
         "width": 29,
         "height": 85,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3595,7 +3597,7 @@ let mapsInfo = {
         "y": 2623,
         "width": 30,
         "height": 59,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3603,7 +3605,7 @@ let mapsInfo = {
         "y": 2867,
         "width": 212,
         "height": 78,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3611,7 +3613,7 @@ let mapsInfo = {
         "y": 2690,
         "width": 360,
         "height": 85,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3619,7 +3621,7 @@ let mapsInfo = {
         "y": 2752,
         "width": 129,
         "height": 133,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3627,7 +3629,7 @@ let mapsInfo = {
         "y": 2399,
         "width": 320,
         "height": 111,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3635,7 +3637,7 @@ let mapsInfo = {
         "y": 2348,
         "width": 140,
         "height": 120,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3643,7 +3645,7 @@ let mapsInfo = {
         "y": 2441,
         "width": 155,
         "height": 258,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3651,7 +3653,7 @@ let mapsInfo = {
         "y": 2587,
         "width": 77,
         "height": 78,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3659,7 +3661,7 @@ let mapsInfo = {
         "y": 2163,
         "width": 676,
         "height": 159,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3667,7 +3669,7 @@ let mapsInfo = {
         "y": 2307,
         "width": 112,
         "height": 96,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3675,7 +3677,7 @@ let mapsInfo = {
         "y": 2314,
         "width": 48,
         "height": 104,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3683,7 +3685,7 @@ let mapsInfo = {
         "y": 2557,
         "width": 42,
         "height": 99,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3691,7 +3693,7 @@ let mapsInfo = {
         "y": 2635,
         "width": 80,
         "height": 173,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3699,7 +3701,7 @@ let mapsInfo = {
         "y": 2517,
         "width": 68,
         "height": 82,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3707,7 +3709,7 @@ let mapsInfo = {
         "y": 2394,
         "width": 75,
         "height": 142,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3715,7 +3717,7 @@ let mapsInfo = {
         "y": 2801,
         "width": 46,
         "height": 54,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3723,7 +3725,7 @@ let mapsInfo = {
         "y": 2693,
         "width": 71,
         "height": 114,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3731,7 +3733,7 @@ let mapsInfo = {
         "y": 2605,
         "width": 71,
         "height": 80,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3739,7 +3741,7 @@ let mapsInfo = {
         "y": 2557,
         "width": 54,
         "height": 71,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3747,7 +3749,7 @@ let mapsInfo = {
         "y": 2791,
         "width": 68,
         "height": 55,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3755,7 +3757,7 @@ let mapsInfo = {
         "y": 3678.5,
         "width": 218,
         "height": 80,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3763,7 +3765,7 @@ let mapsInfo = {
         "y": 3722.5,
         "width": 196,
         "height": 102,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3771,7 +3773,7 @@ let mapsInfo = {
         "y": 3806.5,
         "width": 106,
         "height": 364,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3779,7 +3781,7 @@ let mapsInfo = {
         "y": 4070.5,
         "width": 90,
         "height": 96,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3787,7 +3789,7 @@ let mapsInfo = {
         "y": 4125.5,
         "width": 654,
         "height": 51,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3795,7 +3797,7 @@ let mapsInfo = {
         "y": 2518.5,
         "width": 58,
         "height": 151,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3803,7 +3805,7 @@ let mapsInfo = {
         "y": 2392.5,
         "width": 142,
         "height": 166,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3811,7 +3813,7 @@ let mapsInfo = {
         "y": 2795.5,
         "width": 52,
         "height": 70,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3819,7 +3821,7 @@ let mapsInfo = {
         "y": 2864.5,
         "width": 48,
         "height": 67,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3827,7 +3829,7 @@ let mapsInfo = {
         "y": 2950.5,
         "width": 55,
         "height": 64,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3835,7 +3837,7 @@ let mapsInfo = {
         "y": 3008.5,
         "width": 68,
         "height": 78,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3843,7 +3845,7 @@ let mapsInfo = {
         "y": 2689.5,
         "width": 63,
         "height": 78,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3851,7 +3853,7 @@ let mapsInfo = {
         "y": 2621.5,
         "width": 127,
         "height": 83,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3859,7 +3861,7 @@ let mapsInfo = {
         "y": 2698.5,
         "width": 640,
         "height": 68,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3867,7 +3869,7 @@ let mapsInfo = {
         "y": 2887.5,
         "width": 64,
         "height": 51,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3875,7 +3877,7 @@ let mapsInfo = {
         "y": 2686.5,
         "width": 93,
         "height": 206,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3883,7 +3885,7 @@ let mapsInfo = {
         "y": 2835.5,
         "width": 119,
         "height": 64,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3891,7 +3893,7 @@ let mapsInfo = {
         "y": 2569.5,
         "width": 63,
         "height": 136,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3899,7 +3901,7 @@ let mapsInfo = {
         "y": 2599.5,
         "width": 244,
         "height": 36,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3907,7 +3909,7 @@ let mapsInfo = {
         "y": 2624.5,
         "width": 65,
         "height": 76,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3915,7 +3917,7 @@ let mapsInfo = {
         "y": 2779.5,
         "width": 67,
         "height": 61,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3923,7 +3925,7 @@ let mapsInfo = {
         "y": 2465.5,
         "width": 80,
         "height": 81,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3931,7 +3933,7 @@ let mapsInfo = {
         "y": 2643.5,
         "width": 56,
         "height": 69,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3939,7 +3941,7 @@ let mapsInfo = {
         "y": 2653.5,
         "width": 77,
         "height": 73,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3947,7 +3949,7 @@ let mapsInfo = {
         "y": 2257.5,
         "width": 452,
         "height": 150,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3955,7 +3957,7 @@ let mapsInfo = {
         "y": 2097.5,
         "width": 85,
         "height": 81,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3963,7 +3965,7 @@ let mapsInfo = {
         "y": 2126.5,
         "width": 180,
         "height": 42,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3971,7 +3973,7 @@ let mapsInfo = {
         "y": 2151.5,
         "width": 69,
         "height": 118,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3979,7 +3981,7 @@ let mapsInfo = {
         "y": 1967.5,
         "width": 68,
         "height": 78,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3987,7 +3989,7 @@ let mapsInfo = {
         "y": 1872.5,
         "width": 420,
         "height": 105,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -3995,7 +3997,7 @@ let mapsInfo = {
         "y": 1965.5,
         "width": 39,
         "height": 168,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4003,7 +4005,7 @@ let mapsInfo = {
         "y": 1806.5,
         "width": 129,
         "height": 82,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4011,7 +4013,7 @@ let mapsInfo = {
         "y": 1855.5,
         "width": 81,
         "height": 74,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4019,7 +4021,7 @@ let mapsInfo = {
         "y": 1784.5,
         "width": 77,
         "height": 68,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4027,7 +4029,7 @@ let mapsInfo = {
         "y": 1732.5,
         "width": 255,
         "height": 21,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4035,7 +4037,7 @@ let mapsInfo = {
         "y": 1741.5,
         "width": 24,
         "height": 80,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4043,7 +4045,7 @@ let mapsInfo = {
         "y": 1642.5,
         "width": 74,
         "height": 16,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4051,7 +4053,7 @@ let mapsInfo = {
         "y": 1640.5,
         "width": 31,
         "height": 111,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4059,7 +4061,7 @@ let mapsInfo = {
         "y": 1756.5,
         "width": 245,
         "height": 44,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4067,7 +4069,7 @@ let mapsInfo = {
         "y": 1886.5,
         "width": 54,
         "height": 77,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4075,7 +4077,7 @@ let mapsInfo = {
         "y": 1912.5,
         "width": 56,
         "height": 77,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4083,7 +4085,7 @@ let mapsInfo = {
         "y": 1949.5,
         "width": 57,
         "height": 76,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4091,7 +4093,7 @@ let mapsInfo = {
         "y": 1898.5,
         "width": 82,
         "height": 60,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4099,7 +4101,7 @@ let mapsInfo = {
         "y": 1781.5,
         "width": 229,
         "height": 27,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4107,7 +4109,7 @@ let mapsInfo = {
         "y": 1898.5,
         "width": 179,
         "height": 22,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4115,7 +4117,7 @@ let mapsInfo = {
         "y": 1789.5,
         "width": 26,
         "height": 111,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4123,7 +4125,7 @@ let mapsInfo = {
         "y": 1907.5,
         "width": 60,
         "height": 306,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4131,7 +4133,7 @@ let mapsInfo = {
         "y": 2087.5,
         "width": 149,
         "height": 24,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4139,7 +4141,7 @@ let mapsInfo = {
         "y": 2350.5,
         "width": 63,
         "height": 95,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4147,7 +4149,7 @@ let mapsInfo = {
         "y": 2084.5,
         "width": 20,
         "height": 311,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4155,7 +4157,7 @@ let mapsInfo = {
         "y": 2583.5,
         "width": 71,
         "height": 68,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4163,7 +4165,7 @@ let mapsInfo = {
         "y": 2554.5,
         "width": 72,
         "height": 21,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4171,7 +4173,7 @@ let mapsInfo = {
         "y": 2418.5,
         "width": 136,
         "height": 18,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4179,7 +4181,7 @@ let mapsInfo = {
         "y": 2417.5,
         "width": 23,
         "height": 155,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4187,7 +4189,7 @@ let mapsInfo = {
         "y": 2546.5,
         "width": 39,
         "height": 266,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4195,7 +4197,7 @@ let mapsInfo = {
         "y": 2784.5,
         "width": 58,
         "height": 203,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4203,7 +4205,7 @@ let mapsInfo = {
         "y": 2928.5,
         "width": 94,
         "height": 144,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4211,7 +4213,7 @@ let mapsInfo = {
         "y": 2862.5,
         "width": 85,
         "height": 104,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4219,7 +4221,7 @@ let mapsInfo = {
         "y": 2931.5,
         "width": 98,
         "height": 21,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4227,7 +4229,7 @@ let mapsInfo = {
         "y": 2946.5,
         "width": 73,
         "height": 110,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4235,7 +4237,7 @@ let mapsInfo = {
         "y": 3057.5,
         "width": 79,
         "height": 187,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4243,7 +4245,7 @@ let mapsInfo = {
         "y": 3131.5,
         "width": 75,
         "height": 105,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4251,7 +4253,7 @@ let mapsInfo = {
         "y": 3118.5,
         "width": 191,
         "height": 24,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4259,7 +4261,7 @@ let mapsInfo = {
         "y": 3188.5,
         "width": 60,
         "height": 95,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4267,7 +4269,7 @@ let mapsInfo = {
         "y": 3183.5,
         "width": 124,
         "height": 37,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4275,7 +4277,7 @@ let mapsInfo = {
         "y": 3266.5,
         "width": 27,
         "height": 182,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4283,7 +4285,7 @@ let mapsInfo = {
         "y": 3379.5,
         "width": 88,
         "height": 65,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4291,7 +4293,7 @@ let mapsInfo = {
         "y": 3228.5,
         "width": 77,
         "height": 105,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4299,7 +4301,7 @@ let mapsInfo = {
         "y": 1594.5,
         "width": 247,
         "height": 66,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4307,7 +4309,7 @@ let mapsInfo = {
         "y": 1641.5,
         "width": 41,
         "height": 151,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4315,7 +4317,7 @@ let mapsInfo = {
         "y": 3496.5,
         "width": 87,
         "height": 127,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4323,7 +4325,7 @@ let mapsInfo = {
         "y": 3589.5,
         "width": 83,
         "height": 125,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4331,7 +4333,7 @@ let mapsInfo = {
         "y": 3681.5,
         "width": 65,
         "height": 99,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4339,7 +4341,7 @@ let mapsInfo = {
         "y": 3433.5,
         "width": 17,
         "height": 61,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4347,7 +4349,7 @@ let mapsInfo = {
         "y": 3479.5,
         "width": 311,
         "height": 22,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4355,7 +4357,7 @@ let mapsInfo = {
         "y": 3380.5,
         "width": 75,
         "height": 250,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4363,7 +4365,7 @@ let mapsInfo = {
         "y": 3601.5,
         "width": 139,
         "height": 18,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4371,7 +4373,7 @@ let mapsInfo = {
         "y": 3607.5,
         "width": 30,
         "height": 85,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4379,7 +4381,7 @@ let mapsInfo = {
         "y": 3671.5,
         "width": 135,
         "height": 24,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4387,7 +4389,7 @@ let mapsInfo = {
         "y": 3693.5,
         "width": 12,
         "height": 72,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4395,7 +4397,7 @@ let mapsInfo = {
         "y": 3753.5,
         "width": 141,
         "height": 20,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4403,7 +4405,7 @@ let mapsInfo = {
         "y": 3766.5,
         "width": 18,
         "height": 69,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4411,7 +4413,7 @@ let mapsInfo = {
         "y": 3823.5,
         "width": 155,
         "height": 20,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4419,7 +4421,7 @@ let mapsInfo = {
         "y": 3712.5,
         "width": 88,
         "height": 119,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4427,7 +4429,7 @@ let mapsInfo = {
         "y": 3806.5,
         "width": 20,
         "height": 174,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4435,7 +4437,7 @@ let mapsInfo = {
         "y": 3960.5,
         "width": 69,
         "height": 121,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4443,7 +4445,7 @@ let mapsInfo = {
         "y": 4048.5,
         "width": 64,
         "height": 95,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4451,7 +4453,7 @@ let mapsInfo = {
         "y": 3016.5,
         "width": 109,
         "height": 46,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4459,7 +4461,7 @@ let mapsInfo = {
         "y": 3050.5,
         "width": 138,
         "height": 45,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4467,7 +4469,7 @@ let mapsInfo = {
         "y": 3106.5,
         "width": 66,
         "height": 48,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4475,7 +4477,7 @@ let mapsInfo = {
         "y": 3130.5,
         "width": 62,
         "height": 38,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4483,7 +4485,7 @@ let mapsInfo = {
         "y": 3020.5,
         "width": 64,
         "height": 64,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4491,7 +4493,7 @@ let mapsInfo = {
         "y": 3075.5,
         "width": 100,
         "height": 47,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4499,7 +4501,7 @@ let mapsInfo = {
         "y": 3014.5,
         "width": 174,
         "height": 25,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4507,7 +4509,7 @@ let mapsInfo = {
         "y": 2961.5,
         "width": 54,
         "height": 74,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4515,7 +4517,7 @@ let mapsInfo = {
         "y": 3082.5,
         "width": 92,
         "height": 42,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4523,7 +4525,7 @@ let mapsInfo = {
         "y": 2950.5,
         "width": 23,
         "height": 44,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4531,7 +4533,7 @@ let mapsInfo = {
         "y": 3389.5,
         "width": 111,
         "height": 44,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4539,7 +4541,7 @@ let mapsInfo = {
         "y": 3368.5,
         "width": 53,
         "height": 28,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4547,7 +4549,7 @@ let mapsInfo = {
         "y": 3625.5,
         "width": 70,
         "height": 114,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4555,7 +4557,7 @@ let mapsInfo = {
         "y": 3709.5,
         "width": 263,
         "height": 28,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4563,7 +4565,7 @@ let mapsInfo = {
         "y": 3638.5,
         "width": 93,
         "height": 93,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4571,7 +4573,7 @@ let mapsInfo = {
         "y": 3719.5,
         "width": 172,
         "height": 21,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4579,7 +4581,7 @@ let mapsInfo = {
         "y": 3360.5,
         "width": 58,
         "height": 375,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       },
       {
         "type": "wall",
@@ -4587,8 +4589,9 @@ let mapsInfo = {
         "y": 3307.5,
         "width": 67,
         "height": 82,
-        "color": "rgb(0, 0, 0, 0.5)"
+        "color": "rgb(0, 0, 0, 0)"
       }
+    
     ],
   },
 
@@ -5094,7 +5097,7 @@ function initializeSmoothOnlinePlayers() {
 
 function updateSmoothOnlinePlayerPosition(smoothPlayer) {
   for (const player of players) {
-    const speed = Math.abs(smoothPlayer.smoothX - player.x) < 200 ? 4 : 10; 
+    const speed = Math.abs(smoothPlayer.smoothX - player.x) < 200 ? 2 : 10; 
     if (player && player.username === smoothPlayer.username && player.username !== myPlayer.username) {
       if (Math.abs(smoothPlayer.smoothX - player.x) > 10) {
         smoothPlayer.smoothX += smoothPlayer.smoothX < player.x ? speed : -speed;
@@ -5302,7 +5305,6 @@ function drawColliders () {
 function drawLocalPlayer () {
   for (const player of players) {
     if (player.username === myPlayer.username && player.room === myPlayer.room) {
-      drawUsernameLocal(player)
       let armor = drawPlayerArmor(player);
       let artifact = drawPlayerArtifact(player);
       if (animPlayer === "idleRight" && player.lastLooked === "right") {
@@ -5365,7 +5367,7 @@ function drawLocalPlayer () {
         canvas.drawImage(
           armor,
           playerCutX,
-          playerCutY + 48,
+          playerCutY + 47.5,
           playerWidth,
           playerHeight,
           playerX - cameraX + 65,
@@ -5376,7 +5378,7 @@ function drawLocalPlayer () {
         canvas.drawImage(
           artifact,
           playerCutX,
-          playerCutY + 48,
+          playerCutY + 47.5,
           playerWidth,
           playerHeight,
           playerX - cameraX + 65,
@@ -5395,7 +5397,7 @@ function drawLocalPlayer () {
           playerWidth,
           playerHeight,
           playerX - cameraX + 65,
-          playerY - cameraY + 120,
+          playerY - cameraY + 125,
           playerWidth - playerZoomX,
           playerHeight - playerZoomY,
         );
@@ -5406,12 +5408,67 @@ function drawLocalPlayer () {
           playerWidth,
           playerHeight,
           playerX - cameraX + 65,
-          playerY - cameraY + 120,
+          playerY - cameraY + 125,
           playerWidth - playerZoomX,
           playerHeight - playerZoomY,
         );
       }
+      else if (animPlayer === "moveUp" || animPlayer === "moveDown") {
+        frameCurrentPlayer = frameCurrentPlayer % 6;
+        playerCutX = frameCurrentPlayer * playerWidth;
+      
+        if (player.lastLooked === "right") {
+          // Play running animation as if moving right
+          canvas.drawImage(
+            armor,
+            playerCutX,
+            playerCutY + 47.5, // Same as runRight
+            playerWidth,
+            playerHeight,
+            playerX - cameraX + 65,
+            playerY - cameraY + 120,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+          canvas.drawImage(
+            artifact,
+            playerCutX,
+            playerCutY + 47.5, // Same as runRight
+            playerWidth,
+            playerHeight,
+            playerX - cameraX + 65,
+            playerY - cameraY + 120,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+        } 
+        else if (player.lastLooked === "left") {
+          // Play running animation as if moving left
+          canvas.drawImage(
+            armor,
+            playerCutX,
+            playerCutY + 72, // Same as runLeft
+            playerWidth,
+            playerHeight,
+            playerX - cameraX + 65,
+            playerY - cameraY + 125,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+          canvas.drawImage(
+            artifact,
+            playerCutX,
+            playerCutY + 72, // Same as runLeft
+            playerWidth,
+            playerHeight,
+            playerX - cameraX + 65,
+            playerY - cameraY + 125,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+      }}
       drawPlayerWeaponOut(player)
+      drawUsernameLocal(player)
     }
   }
 
@@ -5423,52 +5480,37 @@ function drawLocalPlayer () {
   }
 }
 
-function drawOnlinePlayers () {
+function drawOnlinePlayers (layer) {
   initializeSmoothOnlinePlayers()
   for (const player of players) {
     // console.log(player.room, myPlayer.room)
     if (player.username !== myPlayer.username && player.room === myPlayer.room) {
       let smoothPlayer = Object.values(smoothPlayers).find(Splayer => Splayer.username === player.username)
       updateSmoothOnlinePlayerPosition(smoothPlayer)
-      drawPlayerWeaponSheated(player)
-      drawUsernameOnline(player, smoothPlayer)
 
       let armor = drawPlayerArmor(player);
       let artifact = drawPlayerArtifact(player);
-      if (player.anim === "idleRight" && player.lastLooked === "right") {
-      frameCurrentPlayer = frameCurrentPlayer % 6;
-      playerCutX = frameCurrentPlayer * playerWidth;
 
-      canvas.drawImage(
-        armor,
-        playerCutX,
-        playerCutY,
-        playerWidth,
-        playerHeight,
-        smoothPlayer.smoothX - cameraX + 65,
-        smoothPlayer.smoothY - cameraY + 120,
-        playerWidth - playerZoomX,
-        playerHeight - playerZoomY,
-      );
-      canvas.drawImage(
-        artifact,
-        playerCutX,
-        playerCutY,
-        playerWidth,
-        playerHeight,
-        smoothPlayer.smoothX - cameraX + 65,
-        smoothPlayer.smoothY - cameraY + 120,
-        playerWidth - playerZoomX,
-        playerHeight - playerZoomY,
-      );
+      if (layer === "back" && player.y < playerY) {
+        drawPlayerWeaponSheated(player)
+        drawPlayerOnline()
       }
-      else if (player.anim === "idleRight" && player.lastLooked === "left") {
+      else if (layer === "front" && player.y >= playerY) {
+        drawPlayerWeaponSheated(player)
+        drawPlayerOnline()
+      }
+
+      drawUsernameOnline(player, smoothPlayer)
+
+      function drawPlayerOnline () {
+        if (player.anim === "idleRight" && player.lastLooked === "right") {
         frameCurrentPlayer = frameCurrentPlayer % 6;
         playerCutX = frameCurrentPlayer * playerWidth;
+  
         canvas.drawImage(
           armor,
           playerCutX,
-          playerCutY + 24,
+          playerCutY,
           playerWidth,
           playerHeight,
           smoothPlayer.smoothX - cameraX + 65,
@@ -5479,7 +5521,7 @@ function drawOnlinePlayers () {
         canvas.drawImage(
           artifact,
           playerCutX,
-          playerCutY + 24,
+          playerCutY,
           playerWidth,
           playerHeight,
           smoothPlayer.smoothX - cameraX + 65,
@@ -5487,58 +5529,139 @@ function drawOnlinePlayers () {
           playerWidth - playerZoomX,
           playerHeight - playerZoomY,
         );
-      }
-      else if (player.anim === "runRight") {
-        frameCurrentPlayer = frameCurrentPlayer % 6;
-        playerCutX = frameCurrentPlayer * playerWidth;
-        canvas.drawImage(
-          armor,
-          playerCutX,
-          playerCutY + 48,
-          playerWidth,
-          playerHeight,
-          smoothPlayer.smoothX - cameraX + 65,
-          smoothPlayer.smoothY - cameraY + 120,
-          playerWidth - playerZoomX,
-          playerHeight - playerZoomY,
-        );
-        canvas.drawImage(
-          artifact,
-          playerCutX,
-          playerCutY + 48,
-          playerWidth,
-          playerHeight,
-          smoothPlayer.smoothX - cameraX + 65,
-          smoothPlayer.smoothY - cameraY + 120,
-          playerWidth - playerZoomX,
-          playerHeight - playerZoomY,
-        );
-      }
-      else if (player.anim === "runLeft") {
-        frameCurrentPlayer = frameCurrentPlayer % 6;
-        playerCutX = frameCurrentPlayer * playerWidth;
-        canvas.drawImage(
-          armor,
-          playerCutX,
-          playerCutY + 72,
-          playerWidth,
-          playerHeight,
-          smoothPlayer.smoothX - cameraX + 65,
-          smoothPlayer.smoothY - cameraY + 120,
-          playerWidth - playerZoomX,
-          playerHeight - playerZoomY,
-        );
-        canvas.drawImage(
-          artifact,
-          playerCutX,
-          playerCutY + 72,
-          playerWidth,
-          playerHeight,
-          smoothPlayer.smoothX - cameraX + 65,
-          smoothPlayer.smoothY - cameraY + 120,
-          playerWidth - playerZoomX,
-          playerHeight - playerZoomY,
-        );
+        }
+        else if (player.anim === "idleRight" && player.lastLooked === "left") {
+          frameCurrentPlayer = frameCurrentPlayer % 6;
+          playerCutX = frameCurrentPlayer * playerWidth;
+          canvas.drawImage(
+            armor,
+            playerCutX,
+            playerCutY + 24,
+            playerWidth,
+            playerHeight,
+            smoothPlayer.smoothX - cameraX + 65,
+            smoothPlayer.smoothY - cameraY + 120,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+          canvas.drawImage(
+            artifact,
+            playerCutX,
+            playerCutY + 24,
+            playerWidth,
+            playerHeight,
+            smoothPlayer.smoothX - cameraX + 65,
+            smoothPlayer.smoothY - cameraY + 120,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+        }
+        else if (player.anim === "runRight") {
+          frameCurrentPlayer = frameCurrentPlayer % 6;
+          playerCutX = frameCurrentPlayer * playerWidth;
+          canvas.drawImage(
+            armor,
+            playerCutX,
+            playerCutY + 47.5,
+            playerWidth,
+            playerHeight,
+            smoothPlayer.smoothX - cameraX + 65,
+            smoothPlayer.smoothY - cameraY + 120,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+          canvas.drawImage(
+            artifact,
+            playerCutX,
+            playerCutY + 47.5,
+            playerWidth,
+            playerHeight,
+            smoothPlayer.smoothX - cameraX + 65,
+            smoothPlayer.smoothY - cameraY + 120,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+        }
+        else if (player.anim === "runLeft") {
+          frameCurrentPlayer = frameCurrentPlayer % 6;
+          playerCutX = frameCurrentPlayer * playerWidth;
+          canvas.drawImage(
+            armor,
+            playerCutX,
+            playerCutY + 72,
+            playerWidth,
+            playerHeight,
+            smoothPlayer.smoothX - cameraX + 65,
+            smoothPlayer.smoothY - cameraY + 120,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+          canvas.drawImage(
+            artifact,
+            playerCutX,
+            playerCutY + 72,
+            playerWidth,
+            playerHeight,
+            smoothPlayer.smoothX - cameraX + 65,
+            smoothPlayer.smoothY - cameraY + 120,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+        }
+        else if (player.anim === "moveUp" || player.anim === "moveDown") {
+          frameCurrentPlayer = frameCurrentPlayer % 6;
+          playerCutX = frameCurrentPlayer * playerWidth;
+        
+          if (player.lastLooked === "right") {
+            // Play running animation as if moving right
+            canvas.drawImage(
+              armor,
+              playerCutX,
+              playerCutY + 47.5, // Same as runRight
+              playerWidth,
+              playerHeight,
+              smoothPlayer.smoothX - cameraX + 65,
+              smoothPlayer.smoothY - cameraY + 120,
+              playerWidth - playerZoomX,
+              playerHeight - playerZoomY,
+            );
+            canvas.drawImage(
+              artifact,
+              playerCutX,
+              playerCutY + 47.5, // Same as runRight
+              playerWidth,
+              playerHeight,
+              smoothPlayer.smoothX - cameraX + 65,
+              smoothPlayer.smoothY - cameraY + 120,
+              playerWidth - playerZoomX,
+              playerHeight - playerZoomY,
+            );
+          } 
+          else if (player.lastLooked === "left") {
+            // Play running animation as if moving left
+            canvas.drawImage(
+              armor,
+              playerCutX,
+              playerCutY + 72, // Same as runLeft
+              playerWidth,
+              playerHeight,
+              smoothPlayer.smoothX - cameraX + 65,
+              smoothPlayer.smoothY - cameraY + 125,
+              playerWidth - playerZoomX,
+              playerHeight - playerZoomY,
+            );
+            canvas.drawImage(
+              artifact,
+              playerCutX,
+              playerCutY + 72, // Same as runLeft
+              playerWidth,
+              playerHeight,
+              smoothPlayer.smoothX - cameraX + 65,
+              smoothPlayer.smoothY - cameraY + 125,
+              playerWidth - playerZoomX,
+              playerHeight - playerZoomY,
+            );
+        }}
       }
     }
   }
@@ -5609,38 +5732,38 @@ function drawPlayerWeaponSheated(player) {
 }
 
 function drawUsernameOnline (player, smoothPlayer) {
-  canvas.drawImage(nameBubbleGreen, smoothPlayer.smoothX - cameraX -40, smoothPlayer.smoothY - cameraY -51, 100,50)
+  canvas.drawImage(nameBubbleGreen, smoothPlayer.smoothX - cameraX -40, smoothPlayer.smoothY - cameraY -48, 100,50)
   canvas.beginPath();
-  canvas.font = "bolder 14px Arial";
+  canvas.font = "bolder 16px Pixelify Sans";
   canvas.textAlign = "center";
   canvas.fillStyle = "black";
   canvas.fillText(player.username, smoothPlayer.smoothX - cameraX +10, smoothPlayer.smoothY  - cameraY -10);
   canvas.beginPath();
-  canvas.font = "bolder 10px Arial";
+  canvas.font = "bolder 12px Pixelify Sans";
   canvas.textAlign = "center";
-  canvas.fillStyle = "black";
-  canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)) , smoothPlayer.smoothX - cameraX + 10, smoothPlayer.smoothY  - cameraY - 32.5);
+  canvas.fillStyle = "white";
+  canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)) , smoothPlayer.smoothX - cameraX + 10, smoothPlayer.smoothY  - cameraY - 30.5);
 }
 
 function drawUsernameLocal (player) {
-  canvas.drawImage(nameBubbleGreen, playerX - cameraX -40, playerY - cameraY -51, 100,50)
+  canvas.drawImage(nameBubbleGreen, playerX - cameraX -40, playerY - cameraY -46, 100,50)
   canvas.beginPath();
-  canvas.font = "bolder 14px Arial";
+  canvas.font = "bolder 16px Pixelify Sans";
   canvas.textAlign = "center";
   canvas.fillStyle = "black";
   canvas.fillText(player.username, playerX - cameraX +10, playerY  - cameraY -10);
   canvas.beginPath();
-  canvas.font = "bolder 10px Arial";
+  canvas.font = "bolder 12px Pixelify Sans";
   canvas.textAlign = "center";
-  canvas.fillStyle = "black";
-  canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)) , playerX - cameraX + 10, playerY  - cameraY - 32.5);
+  canvas.fillStyle = "white";
+  canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)) , playerX - cameraX + 10, playerY  - cameraY - 30.5);
 }
 
 function drawChat () {
   for (const player of players) {
     if (player.room === myPlayer.room && player.username === myPlayer.username) {
       if (player.chatMessage !== "none") {
-        canvas.drawImage(chatBubble, playerX - cameraX -85, playerY - cameraY -110, 200, 60)
+        canvas.drawImage(chatBubble, playerX - cameraX -90, playerY - cameraY -115, 200, 60)
         canvas.beginPath();
         canvas.font = "bolder 16px Pixelify Sans";
         canvas.textAlign = "center";
@@ -5651,7 +5774,7 @@ function drawChat () {
     else if (player.room === myPlayer.room) {
       if (player.chatMessage !== "none") {
         let smoothPlayer = Object.values(smoothPlayers).find(Splayer => Splayer.username === player.username)
-        canvas.drawImage(chatBubble, smoothPlayer.smoothX - cameraX -85, smoothPlayer.smoothY - cameraY -110, 200, 60)
+        canvas.drawImage(chatBubble, smoothPlayer.smoothX - cameraX -85, smoothPlayer.smoothY - cameraY -115, 200, 60)
         canvas.beginPath();
         canvas.font = "bolder 16px Pixelify Sans";
         canvas.textAlign = "center";
@@ -6028,10 +6151,11 @@ function islandOneLoop() {
 
   // Player settings
   playerCollision()
-  drawLocalPlayer()
-  drawOnlinePlayers()
   drawChat()
   drawLocalBullets()
+  drawOnlinePlayers("back")
+  drawLocalPlayer()
+  drawOnlinePlayers("front")
 
 
   // Enemy settings
