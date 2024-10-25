@@ -3462,7 +3462,8 @@ let mapsInfo = {
       x: 2852,
       y: 3798
     },
-    colliders: [
+    colliders: 
+    [
       {
         "type": "wall",
         "x": 3804,
@@ -4590,8 +4591,17 @@ let mapsInfo = {
         "width": 67,
         "height": 82,
         "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "transition",
+        "format": "liquid",
+        "destination": "lobby",
+        "x": 2552,
+        "y": 3817.5,
+        "width": 400,
+        "height": 165,
+        "color": "rgb(0, 0, 0, 0)"
       }
-    
     ],
   },
 
