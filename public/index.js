@@ -7850,6 +7850,8 @@ function drawOnlinePlayers (layer) {
         drawPlayerOnline()
       }
 
+      
+
       function drawPlayerOnline () {
         if (player.anim === "idleRight" && player.lastLooked === "right") {
         frameCurrentPlayer = frameCurrentPlayer % 6;
@@ -8559,8 +8561,9 @@ function lobbyLoop() {
 
   // Player settings
   playerCollision()
+  drawOnlinePlayers("back")
   drawLocalPlayer()
-  drawOnlinePlayers()
+  drawOnlinePlayers("front")
   drawChat()
   // // drawLocalBullets()
 
