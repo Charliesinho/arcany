@@ -1,7 +1,7 @@
 //Change this to push >
 
-// const socket = io(`ws://localhost:5000`);
-const socket = io(`https://arcanyGame.up.railway.app/`);
+const socket = io(`ws://localhost:5000`);
+// const socket = io(`https://arcanyGame.up.railway.app/`);
 
 //Change this to push <
 
@@ -5730,7 +5730,7 @@ function drawUsernameOnline (player, smoothPlayer) {
   canvas.beginPath();
   canvas.font = "bolder 12px Pixelify Sans";
   canvas.textAlign = "center";
-  canvas.fillStyle = "white";
+  canvas.fillStyle = "black";
   canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)) , smoothPlayer.smoothX - cameraX + 10, smoothPlayer.smoothY  - cameraY - 30.5);
 }
 
@@ -5744,7 +5744,7 @@ function drawUsernameLocal (player) {
   canvas.beginPath();
   canvas.font = "bolder 12px Pixelify Sans";
   canvas.textAlign = "center";
-  canvas.fillStyle = "white";
+  canvas.fillStyle = "black";
   canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)) , playerX - cameraX + 10, playerY  - cameraY - 30.5);
 }
 
