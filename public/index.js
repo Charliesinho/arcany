@@ -1483,7 +1483,9 @@ let combatLevelSimple = 0;
 
 socket.on("player", (serverPlayer) => {
 
+  
   const index = players.findIndex((player) => player.id === serverPlayer.id);
+
   if (index !== -1) {
     // If the player already exists, update its data
     players[index] = serverPlayer;
@@ -1494,7 +1496,7 @@ socket.on("player", (serverPlayer) => {
   // players = serverPlayers;
   myPlayer = players.find((player) => player.id === socket.id);
 
-  players = players.filter((player) => player.room === myPlayer.room);
+  players = players.filter((player) => player.room && player.room  === myPlayer.room);
 
   if (myPlayer.health === 3) {
     healthImage.src = "./fullHearts.png";
@@ -8513,21 +8515,21 @@ function islandOneLoop() {
 
   // Player settings
   playerCollision()
-  drawChat()
   drawLocalBullets()
   drawOnlinePlayers("back")
   drawLocalPlayer()
   drawOnlinePlayers("front")
-
-
+  
+  
   // Enemy settings
   drawSlimeEnemy()
-
-
+  
+  
   // Foreground map Image and objects
   drawMap("front")
   drawObjects("front")
   drawUsername()
+  drawChat()
 
 
   // Dev Colliders
@@ -8564,18 +8566,18 @@ function lobbyLoop() {
   drawOnlinePlayers("back")
   drawLocalPlayer()
   drawOnlinePlayers("front")
-  drawChat()
   // // drawLocalBullets()
-
-
+  
+  
   // Enemy settings
   // // drawSlimeEnemy()
-
-
+  
+  
   // Foreground map Image and objects
   drawMap("front")
   drawObjects("front")
   drawUsername()
+  drawChat()
 
 
   // Dev Colliders
