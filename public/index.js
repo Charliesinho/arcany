@@ -1498,6 +1498,10 @@ socket.on("player", (serverPlayer) => {
 
   players = players.filter((player) => player.room && myPlayer && myPlayer.room && player.room === myPlayer.room);
 
+  if (!myPlayer) {
+    return;
+  }
+
   if (myPlayer.health === 3) {
     healthImage.src = "./fullHearts.png";
   } else if (myPlayer.health === 2) {
