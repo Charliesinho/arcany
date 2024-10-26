@@ -1502,6 +1502,8 @@ socket.on("player", (serverPlayer) => {
     return;
   }
 
+  console.log(myPlayer.room)
+
   if (myPlayer.health === 3) {
     healthImage.src = "./fullHearts.png";
   } else if (myPlayer.health === 2) {
