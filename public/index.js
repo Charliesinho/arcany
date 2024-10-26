@@ -2106,27 +2106,27 @@ window.addEventListener("keydown", (e) => {
   questHub.style.display = "none"
 
   if (!noMovement) {
-
-    if (e.key === "w" || e.key === "z" ) {
+    let keyCheck = e?.key?.toLowerCase()
+    if (keyCheck === "w" || keyCheck === "z" ) {
       footsteps.play();
       footsteps.loop = true;
       animPlayer = "moveUp"
   
       movingUp = true;
-    } else if (e.key === "s") {
+    } else if (keyCheck === "s") {
       footsteps.play();
       footsteps.loop = true;
       animPlayer = "moveDown"
   
       movingDown = true;
-    } else if (e.key === "d") {
+    } else if (keyCheck === "d") {
       footsteps.play();
       footsteps.loop = true;
       animPlayer = "runRight";
       lastLookPlayer = "right";
   
       movingRight = true;
-    } else if (e.key === "a" || e.key === "q") {
+    } else if (keyCheck === "a" || keyCheck === "q") {
       footsteps.play();
       footsteps.loop = true;
       animPlayer = "runLeft";
@@ -2286,13 +2286,14 @@ window.addEventListener("keydown", (e) => {
 });
 
 window.addEventListener("keyup", (e) => {
-  if (e.key === "w" || e.key === "z") {
+  let keyCheck = e?.key?.toLowerCase()
+  if (keyCheck === "w" || keyCheck === "z") {
     movingUp = false;
-  } else if (e.key === "s") {
+  } else if (keyCheck === "s") {
     movingDown = false;
-  } else if (e.key === "d") {
+  } else if (keyCheck === "d") {
     movingRight = false;
-  } else if (e.key === "a" || e.key === "q") {
+  } else if (keyCheck === "a" || keyCheck === "q") {
     // inputs["left"] = false;
     movingLeft = false;
   }
