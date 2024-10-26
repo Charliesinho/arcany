@@ -8093,12 +8093,12 @@ function drawPlayerWeaponSheated(player) {
 function drawUsernameOnline (player, smoothPlayer) {
   canvas.drawImage(nameBubbleGreen, smoothPlayer.smoothX - cameraX -40, smoothPlayer.smoothY - cameraY -48, 100,50)
   canvas.beginPath();
-  canvas.font = "bolder 16px Pixelify Sans";
+  canvas.font = "bolder 16px Tiny5";
   canvas.textAlign = "center";
   canvas.fillStyle = "black";
   canvas.fillText(player.username, smoothPlayer.smoothX - cameraX +10, smoothPlayer.smoothY  - cameraY -10);
   canvas.beginPath();
-  canvas.font = "bolder 12px Pixelify Sans";
+  canvas.font = "bolder 12px Tiny5";
   canvas.textAlign = "center";
   canvas.fillStyle = "black";
   canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)) , smoothPlayer.smoothX - cameraX + 10, smoothPlayer.smoothY  - cameraY - 30.5);
@@ -8107,12 +8107,12 @@ function drawUsernameOnline (player, smoothPlayer) {
 function drawUsernameLocal (player) {
   canvas.drawImage(nameBubbleGreen, playerX - cameraX -40, playerY - cameraY -46, 100,50)
   canvas.beginPath();
-  canvas.font = "bolder 16px Pixelify Sans";
+  canvas.font = "bolder 16px Tiny5";
   canvas.textAlign = "center";
   canvas.fillStyle = "black";
   canvas.fillText(player.username, playerX - cameraX +10, playerY  - cameraY -10);
   canvas.beginPath();
-  canvas.font = "bolder 12px Pixelify Sans";
+  canvas.font = "bolder 12px Tiny5";
   canvas.textAlign = "center";
   canvas.fillStyle = "black";
   canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)) , playerX - cameraX + 10, playerY  - cameraY - 30.5);
@@ -8136,7 +8136,7 @@ function drawChat () {
       if (player.chatMessage !== "none") {
         canvas.drawImage(chatBubble, playerX - cameraX -90, playerY - cameraY -115, 200, 60)
         canvas.beginPath();
-        canvas.font = "bolder 16px Pixelify Sans";
+        canvas.font = "bolder 16px Tiny5";
         canvas.textAlign = "center";
         canvas.fillStyle = "black";
         canvas.fillText(player.chatMessage, playerX - cameraX +15, playerY - cameraY -90);
@@ -8147,7 +8147,7 @@ function drawChat () {
         let smoothPlayer = Object.values(smoothPlayers).find(Splayer => Splayer.username === player.username)
         canvas.drawImage(chatBubble, smoothPlayer.smoothX - cameraX -85, smoothPlayer.smoothY - cameraY -115, 200, 60)
         canvas.beginPath();
-        canvas.font = "bolder 16px Pixelify Sans";
+        canvas.font = "bolder 16px Tiny5";
         canvas.textAlign = "center";
         canvas.fillStyle = "black";
         canvas.fillText(player.chatMessage, smoothPlayer.smoothX - cameraX +15, smoothPlayer.smoothY - cameraY -90);
