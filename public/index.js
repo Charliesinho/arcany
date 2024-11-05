@@ -1,7 +1,7 @@
 //Change this to push >
 
-// const socket = io(`ws://localhost:5000`);
-const socket = io(`https://arcanyGame.up.railway.app/`);
+const socket = io(`ws://localhost:5000`);
+// const socket = io(`https://arcanyGame.up.railway.app/`);
 
 //Change this to push <
 
@@ -199,7 +199,7 @@ metalPan.volume = 0.2;
 
 
 const canvasLobby = document.getElementById("canvas-lobby");
-const widthMinus20vw = window.innerWidth - 290;
+const widthMinus20vw = window.innerWidth;
 canvasLobby.width = widthMinus20vw;
 canvasLobby.height = window.innerHeight;
 
@@ -217,6 +217,14 @@ const chatInput = document.getElementById("chatInput");
 let blockMovement = true;
 socket.emit("blockMovement", blockMovement);
 
+//Labguage Button >
+const en = document.getElementById("en");
+const sp = document.getElementById("sp");
+const fr = document.getElementById("fr");
+const pt = document.getElementById("pt");
+//Labguage Button <
+
+const menuUiButtonOpener = document.getElementById("uiButtonOpener");
 const menuUi = document.getElementById("ui");
 menuUi.style.width = window.innerWidth;
 menuUi.style.height = window.innerHeight;
@@ -338,6 +346,28 @@ const artifactInventory = {
 }
 
 const catchGif = document.getElementById("catchGif");
+
+//Ui interaction >
+let uiInventoryOpen = false;
+
+menuUiButtonOpener.addEventListener("click", function(){
+  if (!uiInventoryOpen) {
+    menuUiButtonOpener.style.transform = "none";
+    menuUiButtonOpener.style.right = "370px"
+    menuUi.style.right = "0px"
+    uiInventoryOpen = true;
+
+  } else {
+    menuUiButtonOpener.style.transform = "rotate(180deg)";
+    menuUiButtonOpener.style.right = "5px"
+    menuUi.style.right = "-400px"
+    uiInventoryOpen = false;
+  }
+
+});
+
+//Ui interaction <
+
 
 //Mouse cursor >
 
@@ -1935,6 +1965,77 @@ socket.on("player", (serverPlayer) => {
 
 });
 
+//Language Setting <
+
+  let openerLanguages = {
+    "english": "I understand this is an early alpha version, and nothing can be recorded or shared. You can now choose your langague",
+    "spanish": "Entiendo que esta es una versión alfa temprana y que no se puede grabar ni compartir nada. Ahora puede elegir su idioma.",
+    "french": "Je comprends qu'il s'agit d'une version alpha et que rien ne peut être enregistré ou partagé. Vous pouvez maintenant choisir votre langue.",
+    "portuguese": "Entendo que esta é uma versão alfa inicial e que nada pode ser gravado ou compartilhado. Agora você pode escolher seu idioma.",
+  }
+
+  let selectedLanguage = "fr"
+
+  en.addEventListener('click', function() {
+    openerScreenButton.innerHTML= openerLanguages.english
+    en.innerHTML = "English"
+    sp.innerHTML = "Spanish"
+    fr.innerHTML = "French"
+    pt.innerHTML = "Portuguese"
+  
+    selectedLanguage = "en"
+
+    en.style.background = "rgb(171, 255, 93)"
+    sp.style.background = "white"
+    fr.style.background = "white"
+    pt.style.background = "white"
+
+  })
+  sp.addEventListener('click', function() {
+    openerScreenButton.innerHTML= openerLanguages.spanish
+    en.innerHTML = "Inglés"
+    sp.innerHTML = "Español"
+    fr.innerHTML = "Francés"
+    pt.innerHTML = "Portugués"
+
+    selectedLanguage = "sp"
+
+    en.style.background = "white"
+    sp.style.background = "rgb(171, 255, 93)"
+    fr.style.background = "white"
+    pt.style.background = "white"
+  })
+  fr.addEventListener('click', function() {
+    openerScreenButton.innerHTML= openerLanguages.french
+    en.innerHTML = "Anglais"
+    sp.innerHTML = "Espagnol"
+    fr.innerHTML = "Francais"
+    pt.innerHTML = "Portuguais"
+
+    selectedLanguage = "fr"
+
+    en.style.background = "white"
+    sp.style.background = "white"
+    fr.style.background = "rgb(171, 255, 93)"
+    pt.style.background = "white"
+  })
+  pt.addEventListener('click', function() {
+    openerScreenButton.innerHTML= openerLanguages.portuguese
+    en.innerHTML = "Inglês"
+    sp.innerHTML = "Espanhol"
+    fr.innerHTML = "Francês"
+    pt.innerHTML = "Português"
+
+    selectedLanguage = "pt"
+
+    en.style.background = "white"
+    sp.style.background = "white"
+    fr.style.background = "white"
+    pt.style.background = "rgb(171, 255, 93)"
+  })
+
+//Language Setting >
+
 //Main Player Function <
 
 socket.on("enemies", (serverEnemies) => {
@@ -2005,7 +2106,9 @@ socket.on("loginAttempt", (msg) => {
     chatInput.style.display = "block";
     playerInfoCorner.style.display = "block";
     inventoryWindow.style.visibility = "visible";
-    menuUi.style.display = "flex"
+    menuUi.style.display = "flex";
+    menuUiButtonOpener.style.display = "flex"
+
 
     setTimeout(() => {
       loginBox.style.display = "none";

@@ -47,14 +47,16 @@ body {
     z-index: 10;
 
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 40px;
 }
 
 #openerScreen-button {
     line-height: 25px;
-    height: 90px;
-    width: 400px;
+    height: 100px;
+    width: 430px;
     color: #ffffff;
     font-size: 15px;
     font-weight: bolder;
@@ -69,13 +71,37 @@ body {
 
 #openerScreen-button:hover {
     
-    border: solid 1px rgb(187, 255, 114);
+    border: none;
     background-color: rgb(171, 255, 93);
     border-radius: 5px;
     box-shadow: 0 0px rgb(255, 255, 255);
     color: #252525;
 
     top: 10px;
+}
+
+#languageSetting{
+    display: flex;
+    width: 385px;
+    justify-content: space-between;
+    position: relative;
+}
+
+.languageSetting-button{
+    text-align: center;
+    width: 90px;
+    height: 25px;
+    border: 2px solid white;
+    border-radius: 3px;
+    background-color: white;
+    border-style: none;
+    transition: all .2s ease;
+}
+.languageSetting-button:hover{
+    background-color: rgb(171, 255, 93);
+    border: 2px solid rgb(171, 255, 93);
+    border-style: none;
+    color: black;
 }
 
 .animIntro {
@@ -103,7 +129,7 @@ body {
 
 #canvas-lobby {
     height: calc(100vh - 0px);
-    width: calc(100vw - 400px);
+    width: calc(100vw);
     image-rendering: pixelated;
 }
 
@@ -120,8 +146,23 @@ body {
     bottom: -15px;
     left: 0;
 }
-
+#uiButtonOpener{
+    width: 50px;
+    height: 50px;
+    display: none;
+    position: absolute;
+    border-radius: 50%;
+    border: 3px solid black;
+    z-index: 3;
+    top: 5px;
+    right: 5px;
+    transform: rotate(180deg);
+    background: url(./Textures/uiback.gif);
+    transition: all 0.5s ease;
+    
+}
 #ui {
+    display: none;
     background: url(./Textures/uiback.gif);
     height: calc(100vh);
     width: 100vw;
@@ -133,9 +174,8 @@ body {
     border-left: solid 3px rgb(26, 26, 26);
     position: absolute;
     top: 0;
-    right: 0;
+    right: -400px;
     z-index: 2;
-    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
@@ -144,12 +184,12 @@ body {
     border-radius: 0px 0 0 0px;
     /* box-shadow: -10px 0 10px rgba(0, 0, 0, 0.412); */
     overflow-x: hidden;
-    transition: all 1s ease;
+    transition: all 0.5s ease;
 }
 
 #ui::-webkit-scrollbar {
     display: none;
-  }
+}
 
 #uiDev {
     position: absolute;
