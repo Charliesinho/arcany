@@ -218,7 +218,7 @@ function tick() {
 
     // io.to("islandOne").emit("enemies", enemies);
     // io.to("baseMap1").emit('players', players);
-    io.to("baseMap").emit("projectiles", projectiles);
+    // io.to("baseMap").emit("projectiles", projectiles);
 }
 
 setInterval(tick, 600);
@@ -267,7 +267,7 @@ async function main() {
             username: "none",
             x: 2880,
             y: 3568,
-            room: "baseMap",
+            room: "lobby",
 
             health: 3,
             fishingLevel: 0,

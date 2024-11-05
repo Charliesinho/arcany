@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=Tiny5&display=swap');
 
 :root {
     --backgroundObjects: rgb(48, 37, 37);
@@ -11,7 +11,7 @@
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* Internet Explorer/Edge */
     cursor: none;
-    font-family: "Pixelify Sans", sans-serif !important;
+    font-family: "Tiny5", sans-serif !important;
   }
   
 
@@ -392,7 +392,7 @@ body {
     background-size: cover;
     border-top: solid 3px rgb(22, 22, 22);
     border-radius: 0px;
-    /* width: 99%; */
+    width: 400px;
     height: 300px;
     padding: 40px 0px !important;
     margin-top: 0px;
@@ -541,7 +541,7 @@ body {
 }
 
 .soulSlot {
-    border: solid 2px white;
+    /* border: solid 2px white; */
     
 }
 

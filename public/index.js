@@ -1513,7 +1513,9 @@ let combatLevelSimple = 0;
 
 socket.on("player", (serverPlayer) => {
 
+  
   const index = players.findIndex((player) => player.id === serverPlayer.id);
+
   if (index !== -1) {
     // If the player already exists, update its data
     players[index] = serverPlayer;
@@ -1524,7 +1526,13 @@ socket.on("player", (serverPlayer) => {
   // players = serverPlayers;
   myPlayer = players.find((player) => player.id === socket.id);
 
-  players = players.filter((player) => player.room === myPlayer.room);
+  players = players.filter((player) => player.room && myPlayer && myPlayer.room && player.room === myPlayer.room);
+
+  if (!myPlayer) {
+    return;
+  }
+
+  console.log(myPlayer.room)
 
   if (myPlayer.health === 3) {
     healthImage.src = "./fullHearts.png";
@@ -2207,27 +2215,27 @@ window.addEventListener("keydown", (e) => {
   questHub.style.display = "none"
 
   if (!noMovement) {
-
-    if (e.key === "w" || e.key === "z" ) {
+    let keyCheck = e?.key?.toLowerCase()
+    if (keyCheck === "w" || keyCheck === "z" ) {
       footsteps.play();
       footsteps.loop = true;
       animPlayer = "moveUp"
   
       movingUp = true;
-    } else if (e.key === "s") {
+    } else if (keyCheck === "s") {
       footsteps.play();
       footsteps.loop = true;
       animPlayer = "moveDown"
   
       movingDown = true;
-    } else if (e.key === "d") {
+    } else if (keyCheck === "d") {
       footsteps.play();
       footsteps.loop = true;
       animPlayer = "runRight";
       lastLookPlayer = "right";
   
       movingRight = true;
-    } else if (e.key === "a" || e.key === "q") {
+    } else if (keyCheck === "a" || keyCheck === "q") {
       footsteps.play();
       footsteps.loop = true;
       animPlayer = "runLeft";
@@ -2254,16 +2262,16 @@ window.addEventListener("keydown", (e) => {
   }
 
   // Testing >
-  if (e.key === "f") {
-    transitionLiquid()
-  }
-  if (e.key === "g") {
-    if (!cutscene) {
-      cutscene = true
-    } else {
-      cutscene = false;
-    }
-  }
+  // if (e.key === "f") {
+  //   transitionLiquid()
+  // }
+  // if (e.key === "g") {
+  //   if (!cutscene) {
+  //     cutscene = true
+  //   } else {
+  //     cutscene = false;
+  //   }
+  // }
  
 
   //Fishing Minigame >
@@ -2387,13 +2395,14 @@ window.addEventListener("keydown", (e) => {
 });
 
 window.addEventListener("keyup", (e) => {
-  if (e.key === "w" || e.key === "z") {
+  let keyCheck = e?.key?.toLowerCase()
+  if (keyCheck === "w" || keyCheck === "z") {
     movingUp = false;
-  } else if (e.key === "s") {
+  } else if (keyCheck === "s") {
     movingDown = false;
-  } else if (e.key === "d") {
+  } else if (keyCheck === "d") {
     movingRight = false;
-  } else if (e.key === "a" || e.key === "q") {
+  } else if (keyCheck === "a" || keyCheck === "q") {
     // inputs["left"] = false;
     movingLeft = false;
   }
@@ -3565,7 +3574,8 @@ let mapsInfo = {
       x: 2852,
       y: 3798
     },
-    colliders: [
+    colliders: 
+    [
       {
         "type": "wall",
         "x": 3804,
@@ -4693,8 +4703,17 @@ let mapsInfo = {
         "width": 67,
         "height": 82,
         "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "transition",
+        "format": "liquid",
+        "destination": "lobby",
+        "x": 2552,
+        "y": 3817.5,
+        "width": 400,
+        "height": 165,
+        "color": "rgb(0, 0, 0, 0)"
       }
-    
     ],
   },
 
@@ -4706,7 +4725,8 @@ let mapsInfo = {
       x: 2130,
       y: 785
     },
-    colliders: [
+    colliders: 
+    [
       {
         "type": "wall",
         "x": 325,
@@ -5853,174 +5873,6 @@ let mapsInfo = {
       },
       {
         "type": "wall",
-        "x": 1203,
-        "y": 2071.5,
-        "width": 175,
-        "height": 34,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1363,
-        "y": 2054.5,
-        "width": 67,
-        "height": 22,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1416,
-        "y": 1996.5,
-        "width": 21,
-        "height": 62,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1430,
-        "y": 2027.5,
-        "width": 67,
-        "height": 20,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1483,
-        "y": 1962.5,
-        "width": 32,
-        "height": 73,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1502,
-        "y": 1989.5,
-        "width": 48,
-        "height": 19,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1549,
-        "y": 1963.5,
-        "width": 37,
-        "height": 58,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1503,
-        "y": 1912.5,
-        "width": 48,
-        "height": 62,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1378,
-        "y": 1888.5,
-        "width": 129,
-        "height": 34,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1249,
-        "y": 1858.5,
-        "width": 94,
-        "height": 24,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1316,
-        "y": 1875.5,
-        "width": 44,
-        "height": 54,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1345,
-        "y": 1892.5,
-        "width": 45,
-        "height": 16,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1202,
-        "y": 1871.5,
-        "width": 58,
-        "height": 22,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1138,
-        "y": 1887.5,
-        "width": 81,
-        "height": 28,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1080,
-        "y": 1909.5,
-        "width": 87,
-        "height": 16,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1012,
-        "y": 1969.5,
-        "width": 68,
-        "height": 32,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1057,
-        "y": 1920.5,
-        "width": 33,
-        "height": 59,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1021,
-        "y": 1987.5,
-        "width": 51,
-        "height": 53,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1048,
-        "y": 2014.5,
-        "width": 105,
-        "height": 28,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1126,
-        "y": 2028.5,
-        "width": 62,
-        "height": 33,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1152,
-        "y": 2044.5,
-        "width": 64,
-        "height": 30,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
         "x": -181,
         "y": 3152.5,
         "width": 114,
@@ -7100,8 +6952,121 @@ let mapsInfo = {
         "width": 460,
         "height": 135,
         "color": "rgb(153, 102, 51, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1251.5,
+        "y": 2056.5,
+        "width": 195,
+        "height": 42,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1400.5,
+        "y": 2041.5,
+        "width": 71,
+        "height": 29,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1446.5,
+        "y": 2020.5,
+        "width": 132,
+        "height": 24,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1548.5,
+        "y": 2007.5,
+        "width": 55,
+        "height": 14,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1576.5,
+        "y": 1978.5,
+        "width": 57,
+        "height": 29,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1573.5,
+        "y": 1928.5,
+        "width": 62,
+        "height": 62,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1113.5,
+        "y": 1911.5,
+        "width": 144,
+        "height": 23,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1259.5,
+        "y": 1874.5,
+        "width": 195,
+        "height": 38,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1455.5,
+        "y": 1919.5,
+        "width": 129,
+        "height": 29,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1072.5,
+        "y": 1942.5,
+        "width": 54,
+        "height": 66,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1113.5,
+        "y": 1895.5,
+        "width": 145,
+        "height": 35,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1455.5,
+        "y": 1914.5,
+        "width": 132,
+        "height": 32,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1458.5,
+        "y": 1892.5,
+        "width": 129,
+        "height": 51,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1121.5,
+        "y": 2013.5,
+        "width": 172,
+        "height": 42,
+        "color": "rgb(0, 0, 0, 0)"
       }
-    ],
+    
+    ]
   },
 
 };
@@ -7966,7 +7931,6 @@ function drawLocalPlayer () {
           );
       }}
       drawPlayerWeaponOut(player)
-      drawUsernameLocal(player)
     }
   }
 
@@ -7998,7 +7962,7 @@ function drawOnlinePlayers (layer) {
         drawPlayerOnline()
       }
 
-      drawUsernameOnline(player, smoothPlayer)
+      
 
       function drawPlayerOnline () {
         if (player.anim === "idleRight" && player.lastLooked === "right") {
@@ -8232,29 +8196,41 @@ function drawPlayerWeaponSheated(player) {
 function drawUsernameOnline (player, smoothPlayer) {
   canvas.drawImage(nameBubbleGreen, smoothPlayer.smoothX - cameraX -40, smoothPlayer.smoothY - cameraY -48, 100,50)
   canvas.beginPath();
-  canvas.font = "bolder 16px Pixelify Sans";
+  canvas.font = "bolder 16px Tiny5";
   canvas.textAlign = "center";
   canvas.fillStyle = "black";
   canvas.fillText(player.username, smoothPlayer.smoothX - cameraX +10, smoothPlayer.smoothY  - cameraY -10);
   canvas.beginPath();
-  canvas.font = "bolder 12px Pixelify Sans";
+  canvas.font = "bolder 12px Tiny5";
   canvas.textAlign = "center";
-  canvas.fillStyle = "white";
+  canvas.fillStyle = "black";
   canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)) , smoothPlayer.smoothX - cameraX + 10, smoothPlayer.smoothY  - cameraY - 30.5);
 }
 
 function drawUsernameLocal (player) {
   canvas.drawImage(nameBubbleGreen, playerX - cameraX -40, playerY - cameraY -46, 100,50)
   canvas.beginPath();
-  canvas.font = "bolder 16px Pixelify Sans";
+  canvas.font = "bolder 16px Tiny5";
   canvas.textAlign = "center";
   canvas.fillStyle = "black";
   canvas.fillText(player.username, playerX - cameraX +10, playerY  - cameraY -10);
   canvas.beginPath();
-  canvas.font = "bolder 12px Pixelify Sans";
+  canvas.font = "bolder 12px Tiny5";
   canvas.textAlign = "center";
-  canvas.fillStyle = "white";
+  canvas.fillStyle = "black";
   canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)) , playerX - cameraX + 10, playerY  - cameraY - 30.5);
+}
+
+function drawUsername () {
+  for (const player of players) {
+    if (player.username !== myPlayer.username && player.room === myPlayer.room) {
+      let smoothPlayer = Object.values(smoothPlayers).find(Splayer => Splayer.username === player.username)
+      drawUsernameOnline(player, smoothPlayer)
+    }
+    else {
+      drawUsernameLocal(player)
+    }
+  }
 }
 
 function drawChat () {
@@ -8263,7 +8239,7 @@ function drawChat () {
       if (player.chatMessage !== "none") {
         canvas.drawImage(chatBubble, playerX - cameraX -90, playerY - cameraY -115, 200, 60)
         canvas.beginPath();
-        canvas.font = "bolder 16px Pixelify Sans";
+        canvas.font = "bolder 16px Tiny5";
         canvas.textAlign = "center";
         canvas.fillStyle = "black";
         canvas.fillText(player.chatMessage, playerX - cameraX +15, playerY - cameraY -90);
@@ -8274,7 +8250,7 @@ function drawChat () {
         let smoothPlayer = Object.values(smoothPlayers).find(Splayer => Splayer.username === player.username)
         canvas.drawImage(chatBubble, smoothPlayer.smoothX - cameraX -85, smoothPlayer.smoothY - cameraY -115, 200, 60)
         canvas.beginPath();
-        canvas.font = "bolder 16px Pixelify Sans";
+        canvas.font = "bolder 16px Tiny5";
         canvas.textAlign = "center";
         canvas.fillStyle = "black";
         canvas.fillText(player.chatMessage, smoothPlayer.smoothX - cameraX +15, smoothPlayer.smoothY - cameraY -90);
@@ -8649,20 +8625,21 @@ function islandOneLoop() {
 
   // Player settings
   playerCollision()
-  drawChat()
   drawLocalBullets()
   drawOnlinePlayers("back")
   drawLocalPlayer()
   drawOnlinePlayers("front")
-
-
+  
+  
   // Enemy settings
   drawSlimeEnemy()
-
-
+  
+  
   // Foreground map Image and objects
   drawMap("front")
   drawObjects("front")
+  drawUsername()
+  drawChat()
 
 
   // Dev Colliders
@@ -8696,19 +8673,21 @@ function lobbyLoop() {
 
   // Player settings
   playerCollision()
+  drawOnlinePlayers("back")
   drawLocalPlayer()
-  drawOnlinePlayers()
-  drawChat()
+  drawOnlinePlayers("front")
   // // drawLocalBullets()
-
-
+  
+  
   // Enemy settings
   // // drawSlimeEnemy()
-
-
+  
+  
   // Foreground map Image and objects
   drawMap("front")
   drawObjects("front")
+  drawUsername()
+  drawChat()
 
 
   // Dev Colliders
