@@ -322,14 +322,14 @@ const liquidTransition = document.getElementById('liquidTransition');
 
 const exploreMap = document.getElementById("exploreMap");
 const uiTop = document.getElementById("uiTop");
-const playerInfoCorner = document.getElementById("playerInfoCorner");
+const playerHeartAndCoins = document.getElementById("playerHeartAndCoins");
+const playerHeart = document.getElementById("playerHeart");
 const loginBox = document.getElementById("login");
 const loginArt = document.getElementById("loginArt");
 const usernameInput = document.getElementById("usernameInput");
 const passwordInput = document.getElementById("passwordInput");
 const loginButton = document.getElementById("loginButton");
 const createButton = document.getElementById("createButton");
-const healthImage = document.getElementById("hearts");
 const fishingBar = document.getElementById("fishingBar");
 const fishingGame = document.getElementById("fishingMinigame");
 const uiProfileCurrentClothing = document.getElementById("uiProfileCurrentClothing");
@@ -544,7 +544,7 @@ let shootingBlock = true;
 let myPlayer;
 
 chatInput.style.display = "none";
-playerInfoCorner.style.display = "none";
+playerHeartAndCoins.style.display = "none";
 fishingGame.style.display = "none";
 uiProfileCurrentClothing.style.visibility = "hidden";
 
@@ -1660,9 +1660,38 @@ let newCombatLevel = 0;
 let changeCombatLevel = true;
 let combatLevelSimple = 0;
 
+let maxHealth = 6;
+let currentHealth = 6;
+
+function health() {
+  playerHeart.innerHTML="";
+  let newCurrentHealth = currentHealth
+  if(currentHealth % 2 !== 0){
+    newCurrentHealth = currentHealth - 1
+  }
+
+  for (let i = 0; i < (newCurrentHealth / 2); i++){
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    playerHeart.appendChild(heart);
+
+    if (currentHealth % 2 !== 0 && i === (newCurrentHealth / 2) - 1){
+      const halfHeart = document.createElement("div");
+      halfHeart.classList.add("halfHeart");
+      playerHeart.appendChild(halfHeart);
+    }
+
+  }
+
+  for (let i = 0; i < ((maxHealth - (newCurrentHealth + 2)) / 2); i++){
+    const heart = document.createElement("div");
+    heart.classList.add("emptyHeart");
+    playerHeart.appendChild(heart)
+  }
+}
+
 socket.on("player", (serverPlayer) => {
 
-  
   const index = players.findIndex((player) => player.id === serverPlayer.id);
 
   if (index !== -1) {
@@ -1683,13 +1712,15 @@ socket.on("player", (serverPlayer) => {
 
   console.log(myPlayer.room)
 
-  if (myPlayer.health === 3) {
-    healthImage.src = "./fullHearts.png";
-  } else if (myPlayer.health === 2) {
-    healthImage.src = "./halfHearts.png";
-  } else if (myPlayer.health === 1) {
-    healthImage.src = "./emptyHearts.png";
-  }
+  health()
+
+  // if (myPlayer.health === 3) {
+  //   healthImage.src = "./fullHearts.png";
+  // } else if (myPlayer.health === 2) {
+  //   healthImage.src = "./halfHearts.png";
+  // } else if (myPlayer.health === 1) {
+  //   healthImage.src = "./emptyHearts.png";
+  // }
 
   playerCoinsAmount.innerHTML = myPlayer.currency
   // console.log(myPlayer)
@@ -2256,7 +2287,7 @@ socket.on("loginAttempt", (msg) => {
 
     loginScreen.classList.add('downLogIn');
     chatInput.style.display = "block";
-    playerInfoCorner.style.display = "block";
+    playerHeartAndCoins.style.display = "block";
     uiProfileCurrentClothing.style.visibility = "visible";
     menuUi.style.display = "flex";
     uiButtonParent.style.display = "flex";

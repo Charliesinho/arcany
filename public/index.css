@@ -156,6 +156,34 @@ body {
     left: 0;
 }
 
+/* playerHeartAndCoins */
+#playerHeart{
+    display: flex;
+    position: absolute;
+    top: 25px;
+    left: 50%;
+    gap: 5px;
+    transform: translate(-50%, -0%);
+}
+.heart {
+    width: 32px;
+    height: 30px;
+    background-image: url('./icons/uiIcon/fullHeart.png');
+    background-size: cover;
+}
+.halfHeart{
+    width: 32px;
+    height: 30px;
+    background-image: url('./icons/uiIcon/halfHeart.png');
+    background-size: cover;
+}
+.emptyHeart {
+    width: 32px;
+    height: 30px;
+    background-image: url('./icons/uiIcon/emptyHeart.png'); 
+    background-size: cover;
+}
+
 /* UI LABEL ORGANISATION */
 #uiButtonParent{
     position: absolute;
@@ -816,7 +844,7 @@ body {
     color: white;
 }
 
-#playerInfo {
+#playerHeart {
 
 }
 
