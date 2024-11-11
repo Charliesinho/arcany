@@ -217,21 +217,37 @@ const chatInput = document.getElementById("chatInput");
 let blockMovement = true;
 socket.emit("blockMovement", blockMovement);
 
-//Labguage Button >
+//Labguage Button <
 const en = document.getElementById("en");
 const sp = document.getElementById("sp");
 const fr = document.getElementById("fr");
 const pt = document.getElementById("pt");
-//Labguage Button <
+//Labguage Button > //
 
-const menuUiButtonOpener = document.getElementById("uiButtonOpener");
+// UI >
 const menuUi = document.getElementById("ui");
-menuUi.style.width = window.innerWidth;
-menuUi.style.height = window.innerHeight;
-const soulImg = document.getElementById("soulImg");
+const menuUiProfile = document.getElementById("uiProfile");
+const menuUiInventory = document.getElementById("uiInventory");
+const menuUiSoulCollection = document.getElementById("uiSoulCollection");
+const menuUiQuest = document.getElementById("uiQuest");
+const menuUiBooks = document.getElementById("uiBooks");
+
+const uiButtonParent = document.getElementById("uiButtonParent")
+const menuUiButtonOpener = document.getElementById("uiButtonOpener");
+const menuUiButtonProfile = document.getElementById("uiButtonProfile");
+const menuUiButtonInventory = document.getElementById("uiButtonInventory");
+const menuUiButtonSoulCollection = document.getElementById("uiButtonSoulCollection");
+const menuUiButtonQuest = document.getElementById("uiButtonQuest");
+const menuUiButtonBooks = document.getElementById("uiButtonBooks");
+
+
+menuUiProfile.style.width = window.innerWidth;
+menuUiProfile.style.height = window.innerHeight;
+//UI <
+
+const uiSkinsImg = document.getElementById("uiSkinsImg");
 const circleCharacter = document.getElementById("circleCharacter");
 const mountainsUi = document.getElementById("mountainsUi");
-const usernameMenu = document.getElementById("usernameMenu");
 
 const openerScreenButton = document.getElementById("openerScreen-button");
 const openerScreen = document.getElementById("openerScreen");
@@ -248,7 +264,7 @@ const islandExploreMinigame = document.getElementById("islandExploreMinigame");
 const body = document.getElementById("body");
 const fishingLevel = document.getElementById("fishingLevel");
 const cookingLevel = document.getElementById("cookingLevel");
-const exploringLevel = document.getElementById("exploringLevel");
+const enchantingLevel = document.getElementById("enchantingLevel");
 const combatLevel = document.getElementById("combatLevel");
 const obtainedItem = document.querySelector("#obtainedItem");
 const levelUp = document.querySelector(".levelUp");
@@ -316,7 +332,7 @@ const createButton = document.getElementById("createButton");
 const healthImage = document.getElementById("hearts");
 const fishingBar = document.getElementById("fishingBar");
 const fishingGame = document.getElementById("fishingMinigame");
-const inventoryWindow = document.getElementById("inventoryWindow");
+const uiProfileCurrentClothing = document.getElementById("uiProfileCurrentClothing");
 const playerCoinsAmount = document.getElementById("playerCoinsAmount");
 const inventorySlots = {
  inventorySlot0: document.querySelector(".inventorySlot0"),
@@ -348,24 +364,157 @@ const artifactInventory = {
 const catchGif = document.getElementById("catchGif");
 
 //Ui interaction >
+let uiIsClose = true
+let uiProfileOpen = true;
 let uiInventoryOpen = false;
+let uiSoulCollectionOpen = false;
+let uiQuestOpen = false;
+let uiBooksOpen = false;
+
+function openIvn () {
+  if (uiIsClose){
+    menuUi.style.right = "0";
+    uiButtonParent.style.right = "0";
+    menuUiButtonOpener.style.right = "400px"
+    uiIsClose = false
+    
+    if (uiProfileOpen){
+      menuUiButtonProfile.style.zIndex = "2"
+    } else if (uiInventoryOpen){
+      menuUiButtonInventory.style.zIndex = "2"
+    } else if (uiSoulCollectionOpen){
+      menuUiButtonSoulCollection.style.zIndex = "2"
+    } else if (uiQuestOpen){
+      menuUiButtonQuest.style.zIndex = "2"
+    }else if (uiBooksOpen){
+      menuUiButtonBooks.style.zIndex = "2"
+    }
+  
+   } else {
+    menuUi.style.right = "-415px";
+    uiButtonParent.style.right = "-480px";
+    menuUiButtonOpener.style.right = "465px"
+    uiIsClose = true
+    menuUiButtonProfile.style.zIndex = "1"
+    menuUiButtonInventory.style.zIndex = "1"
+    menuUiButtonSoulCollection.style.zIndex = "1"
+    menuUiButtonQuest.style.zIndex = "1"
+    menuUiButtonBooks.style.zIndex = "1"
+   }
+}
 
 menuUiButtonOpener.addEventListener("click", function(){
-  if (!uiInventoryOpen) {
-    menuUiButtonOpener.style.transform = "none";
-    menuUiButtonOpener.style.right = "370px"
-    menuUi.style.right = "0px"
-    uiInventoryOpen = true;
-
-  } else {
-    menuUiButtonOpener.style.transform = "rotate(180deg)";
-    menuUiButtonOpener.style.right = "5px"
-    menuUi.style.right = "-400px"
-    uiInventoryOpen = false;
-  }
-
+  openIvn()
 });
 
+menuUiButtonProfile.addEventListener("click", function(){
+  if(!uiProfileOpen){
+    uiProfileOpen = true
+    uiInventoryOpen = false
+    uiSoulCollectionOpen = false
+    uiQuestOpen = false;
+    uiBooksOpen = false;
+    
+    menuUiProfile.style.display = "flex"
+    menuUiInventory.style.display = "none"
+    menuUiSoulCollection.style.display = "none"
+    menuUiQuest.style.display = "none"
+    menuUiBooks.style.display = "none"
+
+    menuUiButtonProfile.style.zIndex = "2"
+    menuUiButtonInventory.style.zIndex = "1"
+    menuUiButtonSoulCollection.style.zIndex = "1"
+    menuUiButtonQuest.style.zIndex = "1"
+    menuUiButtonBooks.style.zIndex = "1"
+  }
+})
+
+menuUiButtonInventory.addEventListener("click", function(){
+  if(!uiInventoryOpen){
+    uiInventoryOpen = true
+    uiProfileOpen = false
+    uiSoulCollectionOpen = false
+    uiQuestOpen = false;
+    uiBooksOpen = false;
+
+    menuUiInventory.style.display = "flex"
+    menuUiProfile.style.display = "none"
+    menuUiSoulCollection.style.display = "none"
+    menuUiQuest.style.display = "none"
+    menuUiBooks.style.display = "none"
+
+    menuUiButtonInventory.style.zIndex = "2"
+    menuUiButtonProfile.style.zIndex = "1"
+    menuUiButtonSoulCollection.style.zIndex = "1"
+    menuUiButtonQuest.style.zIndex = "1"
+    menuUiButtonBooks.style.zIndex = "1"
+  }
+})
+
+menuUiButtonSoulCollection.addEventListener("click", function(){
+  if(!uiSoulCollectionOpen){
+    uiSoulCollectionOpen = true;
+    uiProfileOpen = false;
+    uiInventoryOpen = false;
+    uiQuestOpen = false;
+    uiBooksOpen = false;
+
+    menuUiSoulCollection.style.display = "flex";
+    menuUiProfile.style.display = "none";
+    menuUiInventory.style.display = "none";
+    menuUiQuest.style.display = "none";
+    menuUiBooks.style.display = "none";
+
+    menuUiButtonInventory.style.zIndex = "1";
+    menuUiButtonProfile.style.zIndex = "1";
+    menuUiButtonSoulCollection.style.zIndex = "2";
+    menuUiButtonQuest.style.zIndex = "1";
+    menuUiButtonBooks.style.zIndex = "1";
+
+  }
+})
+
+menuUiButtonQuest.addEventListener("click", function(){
+  if(!uiQuestOpen){
+    uiSoulCollectionOpen = false;
+    uiProfileOpen = false;
+    uiInventoryOpen = false;
+    uiQuestOpen = true;
+    uiBooksOpen = false;
+
+    menuUiSoulCollection.style.display = "none";
+    menuUiProfile.style.display = "none";
+    menuUiInventory.style.display = "none";
+    menuUiQuest.style.display = "flex";
+    menuUiBooks.style.display = "none";
+
+    menuUiButtonInventory.style.zIndex = "1";
+    menuUiButtonProfile.style.zIndex = "1";
+    menuUiButtonSoulCollection.style.zIndex = "1";
+    menuUiButtonQuest.style.zIndex = "2"
+    menuUiButtonBooks.style.zIndex = "1"
+  }
+})
+
+menuUiButtonBooks.addEventListener("click", function(){
+  uiSoulCollectionOpen = false;
+    uiProfileOpen = false;
+    uiInventoryOpen = false;
+    uiQuestOpen = false;
+    uiBooksOpen = true;
+
+    menuUiSoulCollection.style.display = "none";
+    menuUiProfile.style.display = "none";
+    menuUiInventory.style.display = "none";
+    menuUiQuest.style.display = "none";
+    menuUiBooks.style.display = "flex";
+
+    menuUiButtonInventory.style.zIndex = "1";
+    menuUiButtonProfile.style.zIndex = "1";
+    menuUiButtonSoulCollection.style.zIndex = "1";
+    menuUiButtonQuest.style.zIndex = "1"
+    menuUiButtonBooks.style.zIndex = "2"
+})
 //Ui interaction <
 
 
@@ -397,7 +546,7 @@ let myPlayer;
 chatInput.style.display = "none";
 playerInfoCorner.style.display = "none";
 fishingGame.style.display = "none";
-inventoryWindow.style.visibility = "hidden";
+uiProfileCurrentClothing.style.visibility = "hidden";
 
 function handleLogin(action) {
 
@@ -1488,7 +1637,7 @@ shopItem4.addEventListener("mousedown", (e) => {
 
 let generalLevel = 0;
 let generalLevelCooking = 0;
-let generalLevelExploring = 0;
+let generalLevelEnchanting = 0;
 let generalLevelCombat= 0;
 
 let oldFishingLevel = 0;
@@ -1501,10 +1650,10 @@ let newCookingLevel = 0;
 let changeCookingLevel = true;
 let cookingLevelSimple = 0;
 
-let oldExploringLevel = 0;
-let newExploringLevel = 0;
-let changeExploringLevel = true;
-let exploringLevelSimple = 0;
+let oldEnchantingLevel = 0;
+let newEnchantingLevel = 0;
+let changeEnchantingLevel = true;
+let enchantingLevelSimple = 0;
 
 let oldCombatLevel = 0;
 let newCombatLevel = 0;
@@ -1542,7 +1691,6 @@ socket.on("player", (serverPlayer) => {
     healthImage.src = "./emptyHearts.png";
   }
 
-  // usernameMenu.innerHTML = myPlayer.username;
   playerCoinsAmount.innerHTML = myPlayer.currency
   // console.log(myPlayer)
 
@@ -1620,55 +1768,55 @@ socket.on("player", (serverPlayer) => {
  
    // Combat level <
 
-  // Exploring level >
+  // Enchanting level >
 
-  let exploringLevelNum = Math.trunc(myPlayer.exploringLevel / 1000);
+  let enchantingLevelNum = Math.trunc(myPlayer.enchantingLevel / 1000);
 
-  if (changeExploringLevel === true && myPlayer.exploringLevel !== 0) {
-    if (exploringLevelNum < 1) {
-      newExploringLevel = 1;
+  if (changeEnchantingLevel === true && myPlayer.enchantingLevel !== 0) {
+    if (enchantingLevelNum < 1) {
+      newEnchantingLevel = 1;
     }
-    else if (exploringLevelNum < 3) {
-      newExploringLevel = 2;
+    else if (enchantingLevelNum < 3) {
+      newEnchantingLevel = 2;
     }
-    else if (exploringLevelNum < 6) {
-      newExploringLevel = 3;
+    else if (enchantingLevelNum < 6) {
+      newEnchantingLevel = 3;
     }
-    else if (exploringLevelNum < 12) {
-      newExploringLevel = 4;
+    else if (enchantingLevelNum < 12) {
+      newEnchantingLevel = 4;
     }
     else {
-      newExploringLevel = 5;
+      newEnchantingLevel = 5;
     }
 
-    changeExploringLevel = false;
+    changeEnchantingLevel = false;
   }
 
-  if (exploringLevelNum < 1) {
-   exploringLevel.innerHTML = "1";
-   exploringLevelSimple = 1;
+  if (enchantingLevelNum < 1) {
+   enchantingLevel.innerHTML = "LVL 1";
+   enchantingLevelSimple = 1;
   }
-  else if (exploringLevelNum < 3) {
-   exploringLevel.innerHTML = "2";
-   exploringLevelSimple = 2;
+  else if (enchantingLevelNum < 3) {
+   enchantingLevel.innerHTML = "LVL 2";
+   enchantingLevelSimple = 2;
   }
-  else if (exploringLevelNum < 6) {
-   exploringLevel.innerHTML = "3";
-   exploringLevelSimple = 3;
+  else if (enchantingLevelNum < 6) {
+   enchantingLevel.innerHTML = "LVL 3";
+   enchantingLevelSimple = 3;
   }
-  else if (exploringLevelNum < 12) {
-   exploringLevel.innerHTML = "4";
-   exploringLevelSimple = 4;
+  else if (enchantingLevelNum < 12) {
+   enchantingLevel.innerHTML = "LVL 4";
+   enchantingLevelSimple = 4;
   }
   else {
-   exploringLevel.innerHTML = "5";
-   exploringLevelSimple = 5;
-   exploringLevel.style.color = "white"
-   exploringLevel.style.textShadow = "0 0 3px white"
+   enchantingLevel.innerHTML = "LVL 5";
+   enchantingLevelSimple = 5;
+   enchantingLevel.style.color = "white"
+   enchantingLevel.style.textShadow = "0 0 3px white"
   }
 
-  if (exploringLevelSimple > newExploringLevel && myPlayer.exploringLevel !== 0) {
-    changeExploringLevel = true;
+  if (enchantingLevelSimple > newEnchantingLevel && myPlayer.enchantingLevel !== 0) {
+    changeEnchantingLevel = true;
     levelUp.src = "./Textures/levellUpExploring.png"
     levelUp.classList.add('fadeInAnim');
     levelUpCircle.classList.add('rotateAnim');
@@ -1684,9 +1832,9 @@ socket.on("player", (serverPlayer) => {
     }, 5000);
   }
 
-  generalLevelExploring = exploringLevelSimple;
+  generalLevelEnchanting = enchantingLevelSimple;
 
-  // Exploring level <
+  // Enchanting level <
 
   // Cooking level >
 
@@ -1713,23 +1861,23 @@ socket.on("player", (serverPlayer) => {
   }
 
   if (cookingLevelNum < 1) {
-    cookingLevel.innerHTML = "1";
+    cookingLevel.innerHTML = "LVL 1";
     cookingLevelSimple = 1;
   }
   else if (cookingLevelNum < 3) {
-    cookingLevel.innerHTML = "2";
+    cookingLevel.innerHTML = "LVL 2";
     cookingLevelSimple = 2;
   }
   else if (cookingLevelNum < 6) {
-    cookingLevel.innerHTML = "3";
+    cookingLevel.innerHTML = "LVL 3";
     cookingLevelSimple = 3;
   }
   else if (cookingLevelNum < 12) {
-    cookingLevel.innerHTML = "4";
+    cookingLevel.innerHTML = "LVL 4";
     cookingLevelSimple = 4;
   }
   else {
-    cookingLevel.innerHTML = "5";
+    cookingLevel.innerHTML = "LVL 5";
     cookingLevelSimple = 5;
     cookingLevel.style.color = "white"
     cookingLevel.style.textShadow = "0 0 3px white"
@@ -1781,23 +1929,23 @@ socket.on("player", (serverPlayer) => {
   }
 
   if (fishingLevelNum < 1) {
-    fishingLevel.innerHTML = "1";
+    fishingLevel.innerHTML = "LVL 1";
     fishingLevelSimple = 1;
   }
   else if (fishingLevelNum < 3) {
-    fishingLevel.innerHTML = "2";
+    fishingLevel.innerHTML = "LVL 2";
     fishingLevelSimple = 2;
   }
   else if (fishingLevelNum < 6) {
-    fishingLevel.innerHTML = "3";
+    fishingLevel.innerHTML = "LVL 3";
     fishingLevelSimple = 3;
   }
   else if (fishingLevelNum < 12) {
-    fishingLevel.innerHTML = "4";
+    fishingLevel.innerHTML = "LVL 4";
     fishingLevelSimple = 4;
   }
   else {
-    fishingLevel.innerHTML = "5";
+    fishingLevel.innerHTML = "LVL 5";
     fishingLevelSimple = 5;
     fishingLevel.style.color = "white"
     fishingLevel.style.textShadow = "0 0 3px white"
@@ -1844,26 +1992,22 @@ socket.on("player", (serverPlayer) => {
         equippedItems[`soul`].style.backgroundSize = 'cover';
 
         if (item.name === "warrior") {
-          soulImg.src = "./souls/basicWarrior.png";
+          uiSkinsImg.src = "./ui/uiSkins/uiFrogSkin.png";
           // mountainsUi.style.background = "url(\"./soulsEnviroments/mountains.png\")"
           // mountainsUi.style.filter = "blur(2px)";
           // mountainsUi.style.backgroundPosition = "center";
-          // menuUi.style.background = "linear-gradient(hsl(184, 100%, 87%) 0%, rgb(209, 175, 147) 100%)";
+          // menuUiProfile.style.background = "linear-gradient(hsl(184, 100%, 87%) 0%, rgb(209, 175, 147) 100%)";
           // circleCharacter.style.background = ""
-          // usernameMenu.style.color = "";
-          // usernameMenu.style.textShadow = "";
         }
       }
     } else {
-      soulImg.src = "./souls/souless.png"
+      uiSkinsImg.src = "./ui/uiSkins/uiHumanSkin.png"
       // mountainsUi.style.background = "url(\"./soulsEnviroments/desert.png\")"
       // mountainsUi.style.filter = "blur(2px) saturate(.3)";
       // mountainsUi.style.backgroundPosition = "bottom";
       // mountainsUi.style.backgroundRepeat = "no-repeat";
-      // menuUi.style.background = "linear-gradient(hsl(0, 0%, 100%) 0%, rgb(154, 126, 109) 100%)";
+      // menuUiProfile.style.background = "linear-gradient(hsl(0, 0%, 100%) 0%, rgb(154, 126, 109) 100%)";
       // circleCharacter.style.background = "linear-gradient(rgb(255, 111, 111) 0%, #ff1515 100%)";
-      // usernameMenu.style.color = "rgb(255, 255, 255)";
-      // usernameMenu.style.textShadow = "0 0 10px rgb(255, 255, 255)";
     }
 
   if (myPlayer.artifacts.length) {
@@ -2113,9 +2257,11 @@ socket.on("loginAttempt", (msg) => {
     loginScreen.classList.add('downLogIn');
     chatInput.style.display = "block";
     playerInfoCorner.style.display = "block";
-    inventoryWindow.style.visibility = "visible";
+    uiProfileCurrentClothing.style.visibility = "visible";
     menuUi.style.display = "flex";
-    menuUiButtonOpener.style.display = "flex"
+    uiButtonParent.style.display = "flex";
+    menuUiProfile.style.display = "flex"
+    
 
 
     setTimeout(() => {
@@ -2272,6 +2418,10 @@ window.addEventListener("keydown", (e) => {
   //     cutscene = false;
   //   }
   // }
+
+  if (e?.key?.toLowerCase() === "i"){
+    openIvn()
+  }
  
 
   //Fishing Minigame >

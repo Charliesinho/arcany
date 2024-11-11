@@ -16,25 +16,12 @@
       <div id="languageSetting">
         <button id="en" class="pointerActivator languageSetting-button">English</button>
         <button id="sp" class="pointerActivator languageSetting-button">Spanish</button>
-        <button id="fr" class="pointerActivator languageSetting-button">Frensh</button>
-        <button id="pt" class="pointerActivator languageSetting-button">Portugese</button>
+        <button id="fr" class="pointerActivator languageSetting-button">French</button>
+        <button id="pt" class="pointerActivator languageSetting-button">Portuguese</button>
       </div>
     </div>
 
     <div class="custom-cursor"></div>
-
-    <div id="inventoryWindow" class="equipmentWindow">     
-      <div class="inventorySlotBG">
-        <div class="pointerActivator inventoryItem equipmentItem weaponEquipped"></div>
-      </div>   
-      <div class="inventorySlotBG">         
-        <div class="pointerActivator inventoryItem equipmentItem soulEquipped"></div>
-      </div> 
-      <div class="inventorySlotBG">
-        <div class="pointerActivator inventoryItem equipmentItem artifactEquipped"></div>
-      </div> 
-      <img src="./icons/cards.png" class="pointerActivator cardsIcon" />
-    </div>
     
     <div id="uiDev" style="display: none;">
       <button id="placeWalls" class="buttonDev pointerActivator">🧱</button>
@@ -62,35 +49,100 @@
       <button id="showWalls" class="buttonDev pointerActivator">👁️</button>
       <button id="exportWalls" class="buttonDev pointerActivator">📤</button>
     </div>
+    <img src="./icons/cards.png" class="pointerActivator cardsIcon" />
+    <div id="uiButtonParent">
 
-    <div id="uiButtonOpener" class="pointerActivator">
-       <img src="./icons/pixelArrowUiButton.png">
-    </div>
-    <div id="ui">
-
-      <div><div id="uiTop"></div></div>
-      <div><img id="skillsUi" src="./inventory/skills.png" /></div>
-      <div id="skillLevels">
-        <p id="fishingLevel"></p>
-        <p id="cookingLevel"></p>
-        <p id="exploringLevel"></p>
-        <p id="combatLevel">0</p>
+      <img id="uiButtonOpener" class="pointerActivator uiLabel" src="./icons/uiIcon/uiOpener.png">
+      <div class="uiButtonChild">
+          <img id="uiButtonProfile" class="pointerActivator uiLabel" src="./icons/uiIcon/uiProfile.png">
+          <img id="uiButtonInventory" class="pointerActivator uiLabel" src="./icons/uiIcon/uiBackpack.png">
+          <img id="uiButtonSoulCollection" class="pointerActivator uiLabel" src="./icons/uiIcon/uiSoul.png">
       </div>
-      <!-- <h1 id="usernameMenu"></h1>
-      <div><div id="circleCharacter"></div></div> -->
-      <img id="soulImg" src="./souls/souless.png"></img>
-      <!-- <div><div id="mountainsUi"></div></div> -->
+
+      <div class="uiButtonChild">
+          <img id="uiButtonQuest" class="pointerActivator uiLabel" src="./icons/uiIcon/uiQuest.png">
+          <img id="uiButtonBooks" class="pointerActivator uiLabel" src="./icons/uiIcon/uiBooks.png">
+      </div>
+
+    </div>
+  <div id="ui">
+
+    <div id="uiProfile">
       
-      <div class="inventoriesParent">
-        <div class="inventorySwitch">
+      <div id="uiProfileUserName">
+        <img id="uiProfileRank" src="./ui/Rank/rankOne.png">
+        <div id="uiProfileUsernameAndLevel">
+          <p class="textTitle">Melina</p>
+          <p class="textStandard">LVL 1</p>
+        </div>
+      </div>
+
+      <div id="uiProfileSkillAndAppearance">
+        <div id="skillLevels">
+
+          <div class="individualSkill">
+            <p class="individualSkillNum" id="fishingLevel">LVL 1</p>
+            <img class="individualSkillImg" src="./ui/LVLicon/iconLVLFishing.png">
+          </div>
+
+          <div class="individualSkill">
+            <p class="individualSkillNum" id="cookingLevel">LVL 2</p>
+            <img class="individualSkillImg" src="./ui/LVLicon/iconLVLCooking.png">
+          </div>
+
+          <div class="individualSkill">
+            <p class="individualSkillNum" id="craftingLevel">LVL 1</p>
+            <img class="individualSkillImg" src="./ui/LVLicon/iconLVLCrafting.png">
+          </div>
+
+          <div class="individualSkill">
+            <p class="individualSkillNum" id="combatLevel">LVL 2</p>
+            <img class="individualSkillImg" src="./ui/LVLicon/iconLVLCombat.png">
+          </div>
+
+          <div class="individualSkill">
+            <p class="individualSkillNum" id="enchantingLevel">LVL 2</p>
+            <img class="individualSkillImg" src="./ui/LVLicon/iconLVLEnchanting.png">
+          </div>
+
+        </div>
+        <img id="uiSkinsImg">
+      </div>
+
+      <div id="uiProfileCurrentClothing" >   
+          <div class="inventorySlotBG">
+            <div class="pointerActivator inventoryItem equipmentItem weaponEquipped"></div>
+          </div>   
+          <div class="inventorySlotBG">         
+            <div class="pointerActivator inventoryItem equipmentItem soulEquipped"></div>
+          </div> 
+          <div class="inventorySlotBG">
+            <div class="pointerActivator inventoryItem equipmentItem artifactEquipped"></div>
+          </div> 
+      </div>
+
+      <p id="uiProfileCurrentStrengthInformation">This is some explanation for the three boxes on top. Depending on which you select you have a diferent text.</p>
+      
+    </div>
+
+    <div id="uiInventory">
+      <div class="inventorySlotBG">
+        <div class="pointerActivator inventoryItem equipmentItem artifactEquipped"></div>
+      </div> 
+      <div class="inventorySlotBG">
+        <div class="pointerActivator inventoryItem equipmentItem artifactEquipped"></div>
+      </div> 
+      <div class="inventorySlotBG">
+        <div class="pointerActivator inventoryItem equipmentItem artifactEquipped"></div>
+      </div> 
+        
           <button class="pointerActivator switchButton inventorySwicther"></button>
           <button class="pointerActivator switchButton soulsSwitcher"></button>
           <button class="pointerActivator switchButton capeSwitcher"></button>
           <button class="pointerActivator switchButton booksSwitcher"></button>
           <button class="pointerActivator switchButton deleteButton"></button>
-        </div>
-  
-        <div id="inventoryWindow" class="inventoryShadow inventoryHide">
+
+        <div id="uiProfileCurrentClothing" class="inventoryShadow inventoryHide">
           <img src="./backpack.png" id="backpackImage"/>
           <div class="inventorySlotBG">
             <div class="pointerActivator inventoryItem inventorySlot0"></div>
@@ -121,13 +173,13 @@
           </div>
         </div>
   
-        <div id="inventoryWindow" class="inventoryShadow soulsHide">       
+        <div id="uiProfileCurrentClothing" class="inventoryShadow soulsHide">       
           <div class="inventorySlotBG">
             <div class="pointerActivator inventoryItem soulSlot soul1"></div>
           </div> 
         </div>
   
-        <div id="inventoryWindow" class="capeHide">       
+        <div id="uiProfileCurrentClothing" class="capeHide">       
           <div class="inventorySlotBG">
             <div class="pointerActivator inventoryItem capeSlot cape1"></div>
           </div> 
@@ -135,9 +187,19 @@
             <div class="pointerActivator inventoryItem capeSlot cape2"></div>
           </div>
         </div>
-      </div>
     </div>
-    <div>
+
+    <div id="uiSoulCollection">
+    </div>
+
+    <div id="uiQuest">
+    </div>
+
+    <div id="uiBooks">
+    </div>
+  </div>
+
+
       <form id="chat">
         <input
           type="text"

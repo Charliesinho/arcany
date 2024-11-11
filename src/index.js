@@ -61,7 +61,7 @@ function tick() {
 
                 player.fishingLevel = clientPlayer.fishing;
                 player.cookingLevel = clientPlayer.cooking;
-                player.exploringLevel = clientPlayer.explore;
+                player.enchantingLevel = clientPlayer.explore;
                 player.combatLevel = clientPlayer.combat;
                 player.questsOngoing = clientPlayer.questsOngoing;
                 player.questsCompleted = clientPlayer.questsCompleted;
@@ -272,7 +272,7 @@ async function main() {
             health: 3,
             fishingLevel: 0,
             cookingLevel: 0,
-            exploringLevel: 0,
+            enchantingLevel: 0,
             combatLevel: 0,
             questsOngoing: [],
             questsCompleted: [],
