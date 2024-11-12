@@ -747,59 +747,13 @@ async function main() {
               expObtained()
         });
 
-        socket.on("questStart", (item) => {
+        socket.on("questStarted", (quest) => {
 
             async function expObtained() {
                 const player = await Player.findOne({socket: socket.id}).exec(); 
-                let quest;
+                  
 
-                if (item === "slime") {
-                    quest = [
-                        {
-                        name: "SlimyProblem",
-                        stepName: "First the little ones",
-                        step: 1,
-                        obj: 10,
-                        completed: false,
-                        started: true,
-                        reward: {
-                            type: "coins",
-                            item: 5
-                        }
-                        },
-                        {
-                        name: "SlimyProblem",
-                        stepName: "Cook some fish",
-                        step: 2,
-                        obj: 5,
-                        completed: false,
-                        started: false,
-                        reward: {
-                            type: "item",
-                            item: {
-                                type: "questItem",
-                                name: "slimePoison",
-                                value: 20,
-                                image: "./inventory/slimePotion.png",
-                            }
-                        }
-                        },
-                        {
-                        name: "SlimyProblem",
-                        stepName: "Kings sink too",
-                        step: 3,
-                        obj: 1,
-                        completed: false,
-                        started: false,
-                        reward: {
-                            type: "coins",
-                            item: 20
-                        }
-                        }
-                    ]
-                }    
-
-                let questAlreadyThere = player.questsOngoing.some(questItem => questItem[0].name === quest[0].name)
+                let questAlreadyThere = player.questsOngoing.some(questItem => questItem.title === quest.title)
 
                 if (questAlreadyThere === true) {
                     return;
@@ -813,8 +767,7 @@ async function main() {
 
                 myPlayer[socket.id] = player;
 
-                io.to(socket.id).emit("questStarted", quest);
-                    
+                // io.to(socket.id).emit("questStarted", quest);
               };
               expObtained()
         });

@@ -4,10 +4,12 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-COMPATIBLE" content="IE=edge" />
     <meta name="viewport" content="width=Device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/gh/bevacqua/dragula@3.7.3/dist/dragula.min.js"></script>
     <link rel="stylesheet" href="./index.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bevacqua/dragula@3.7.3/dist/dragula.min.css">
     <title>Arcany</title>
   </head>
-  <body id="body">
+  <body id="body" onload="initDraggables">
     <div id="openerScreen">
       <button id="openerScreen-button" class="pointerActivator">
         I understand this is an early alpha version, and nothing 
@@ -105,34 +107,34 @@
           <button class="pointerActivator switchButton deleteButton"></button>
         </div>
   
-        <div id="inventoryWindow" class="inventoryShadow inventoryHide">
+        <div id="inventoryWindow" class="inventoryShadow inventoryHide dragParent">
           <img src="./backpack.png" id="backpackImage"/>
           <div class="inventorySlotBG">
-            <div class="pointerActivator inventoryItem inventorySlot0"></div>
+            <img class="pointerActivator inventoryItem inventorySlot0"></img>
           </div>
           <div class="inventorySlotBG">          
-            <div class="pointerActivator inventoryItem inventorySlot1"></div>
+            <img class="pointerActivator inventoryItem inventorySlot1"></img>
           </div>
           <div class="inventorySlotBG">          
-            <div class="pointerActivator inventoryItem inventorySlot2"></div>
+            <img class="pointerActivator inventoryItem inventorySlot2"></img>
           </div>
           <div class="inventorySlotBG">          
-            <div class="pointerActivator inventoryItem inventorySlot3"></div>
+            <img class="pointerActivator inventoryItem inventorySlot3"></img>
           </div>
           <div class="inventorySlotBG">          
-            <div class="pointerActivator inventoryItem inventorySlot4"></div>
+            <img class="pointerActivator inventoryItem inventorySlot4"></img>
           </div>
           <div class="inventorySlotBG">          
-            <div class="pointerActivator inventoryItem inventorySlot5"></div>
+            <img class="pointerActivator inventoryItem inventorySlot5"></img>
           </div>
           <div class="inventorySlotBG">          
-            <div class="pointerActivator inventoryItem inventorySlot6"></div>
+            <img class="pointerActivator inventoryItem inventorySlot6"></img>
           </div>
           <div class="inventorySlotBG">          
-            <div class="pointerActivator inventoryItem inventorySlot7"></div>
+            <img class="pointerActivator inventoryItem inventorySlot7"></img>
           </div>
           <div class="inventorySlotBG">          
-            <div class="pointerActivator inventoryItem inventorySlot8"></div>
+            <img class="pointerActivator inventoryItem inventorySlot8"></img>
           </div>
         </div>
   

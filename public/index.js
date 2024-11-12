@@ -1148,7 +1148,7 @@ function interactInventory(item, index) {
 
     if (cookingContainer.style.display == "block" && currentlyCooking === false) {
 
-      if (inventorySlots[`inventorySlot${index}`].style.background !== "none") {
+      if (inventorySlots[`inventorySlot${index}`].src !== "") {
         if(consumeAvailable === true && deleting === false) {
 
           if (item.type === "questItem" || item.type === "food") {
@@ -1513,6 +1513,14 @@ let newCombatLevel = 0;
 let changeCombatLevel = true;
 let combatLevelSimple = 0;
 
+function initDraggables() {
+  dragula([document.querySelector(".dragParent")])
+}
+
+setTimeout(() => {
+  initDraggables()
+}, 1000);
+
 socket.on("player", (serverPlayer) => {
 
   
@@ -1534,8 +1542,6 @@ socket.on("player", (serverPlayer) => {
     return;
   }
 
-  console.log(myPlayer.room)
-
   if (myPlayer.health === 3) {
     healthImage.src = "./fullHearts.png";
   } else if (myPlayer.health === 2) {
@@ -1549,9 +1555,7 @@ socket.on("player", (serverPlayer) => {
   // console.log(myPlayer)
 
   //Adapt shop to player >
-    if (myPlayer.questsOngoing.some(questItem => questItem[0].name === "SlimyProblem") && shopItem5 && myPlayer.room === "baseMap") {
-      shopItem5.parentNode?.removeChild(shopItem5)
-    }
+  
   //Adapt shop to player <
 
    // Combat level >
@@ -1938,14 +1942,10 @@ socket.on("player", (serverPlayer) => {
 
 
         if (myPlayer.inventory[i]) {
-          inventorySlots[`inventorySlot${i}`].style.background = `url(${myPlayer.inventory[i].image})`;
+          inventorySlots[`inventorySlot${i}`].src = myPlayer.inventory[i].image;
         } else {
-          inventorySlots[`inventorySlot${i}`].style.background = `none`;
+          inventorySlots[`inventorySlot${i}`].src = "";
         }
-
-          inventorySlots[`inventorySlot${i}`].style.backgroundSize = '70px';
-          inventorySlots[`inventorySlot${i}`].style.backgroundPosition = 'center';
-          inventorySlots[`inventorySlot${i}`].style.backgroundRepeat = 'no-repeat';
 
           function deleteInventoryReference () {
             deleteInventory(myPlayer.inventory[i], i);
@@ -1961,16 +1961,6 @@ socket.on("player", (serverPlayer) => {
             });
           }
       };
-    } else {
-      inventorySlots[`inventorySlot0`].style.background = `none`;
-      inventorySlots[`inventorySlot1`].style.background = `none`;
-      inventorySlots[`inventorySlot2`].style.background = `none`;
-      inventorySlots[`inventorySlot3`].style.background = `none`;
-      inventorySlots[`inventorySlot4`].style.background = `none`;
-      inventorySlots[`inventorySlot5`].style.background = `none`;
-      inventorySlots[`inventorySlot6`].style.background = `none`;
-      inventorySlots[`inventorySlot7`].style.background = `none`;
-      inventorySlots[`inventorySlot8`].style.background = `none`;
     }
 
 });
@@ -2060,13 +2050,6 @@ socket.on("obtained", (item) => {
   console.log("OBTAINED", item)
   const image = item.image;
   obtainedAnim(image);
-
-  //Quest progress >
-    if (myPlayer.questsOngoing.some(questItem => questItem[0].name === "SlimyProblem" && item.name === "sardin")) {
-      let questItem = myPlayer.questsOngoing.find(questItem => questItem[0].name === "SlimyProblem");
-      progressQuestCounter(questItem, 2);
-    }
-  //Quest progress <
 
 });
 
@@ -2720,57 +2703,65 @@ var containerChat = document.querySelector('.container');
 var textSpeed = 50;
 let currentDialogTitle = ""
 var currentDialog = [];  // This will hold the current dialog to display
+let currentDialogParent = {};
 var currentDialogIndex = 0;  // Keeps track of which paragraph we're on
 var loopLen = 0;  // Character loop index
 var isTyping = false;  // Flag to prevent advancing while typing
 
 let dialogBoxes = {
-    dialog1: {
-		dialogName: "questOne",
+    "fishing Quest": {
+		dialogName: "quest",
 		questRequirements: [],
-		type: "quest",
-			questCard: "",
-			questCardComp: "",
-			rewardText: "Congrats!",
-			rewardType: "coins",
-			rewardItem: 30,
-			completionType: "fetch",
-			completionItem: "Fish",
+		type: "counter",
+
+    questName: "Fishing quest",
+    questCard: "",
+    rewardType: "coins",
+    rewardItem: 10,
+    completionItem: "fish",
+    completionAmount: 5,
+    
 		dialogText:
 		[
-			{
-				NPC: "Mr. Nipples",
-				text: "Hello Kid!",
+      {
+        NPC: "Quest giver",
+				text: "Hello Kid! Oh you are looking for a task? Well I can give you some money just for your efforts, go fish 5 fish and bring them back to me.",
 			},
 			{
-				NPC: "Melina",
-				text: "Who are you?",
-			},
-			{
-				NPC: "Mr. Nipples",
-				text: "Fuck you hahaha",
-			},
-			{
-				NPC: "Mr. Nipples",
-				text: "You know nothing!",
-			},
-			{
-				NPC: "Melina",
-				text: "WHAT?????",
+        NPC: myPlayer ? myPlayer.username : "User",
+				text: "Alright that sounds simple enough!",
 			},
 		],
+
+    progressText:
+    [
+      {
+        NPC: "Quest giver",
+        text: "So? I am waiting on those fish!",
+      },
+      {
+        NPC: "Quest giver",
+        text: "Do you have them?",
+        check: true,
+      },
+    ],
+
+    rewardText:
+    [
+      {
+        NPC: "Quest giver",
+        text: "Really nice job! Here is some cash.",
+      },
+      {
+        NPC: myPlayer ? myPlayer.username : "User",
+        text: "Thank you!",
+      },
+    ],
 	},
     dialogTest: {
 		dialogName: "dialogTest",
 		questRequirements: [],
 		type: "dialog",
-			questCard: "",
-			questCardComp: "",
-			rewardText: "Congrats!",
-			rewardType: "coins",
-			rewardItem: 30,
-			completionType: "fetch",
-			completionItem: "Fish",
 		dialogText:
 		[
 			{
@@ -2783,7 +2774,8 @@ let dialogBoxes = {
 			},
 			{
 				NPC: "Mr. Ass",
-				text: "Fuck you hahaha",
+				text: "go fish around there!",
+        cutscene: [1200, 1000]
 			},
 			{
 				NPC: "Mr. Ass",
@@ -2806,7 +2798,19 @@ function displayDialogParagraph() {
         textBlock.innerHTML = "";  // Clear the text block before starting
         loopLen = 0;
         isTyping = true;  // Set typing flag
-        typeText(entry);
+        if (currentDialog[currentDialogIndex].check) {
+          typeText(entry);
+        } else {
+          typeText(entry);
+        }
+
+        if (currentDialog[currentDialogIndex].cutscene) {
+          cutscene = true;
+          secondaryCameraX = currentDialog[currentDialogIndex].cutscene[0]
+          secondaryCameraY = currentDialog[currentDialogIndex].cutscene[1]
+        } else {
+          cutscene = false;
+        }
     }
 }
 
@@ -2834,10 +2838,25 @@ document.addEventListener('keyup', function(event) {
         currentDialogIndex++;  // Move to the next paragraph
         if (currentDialogIndex < currentDialog.length) {
             displayDialogParagraph();  // Display the next paragraph
-        } else {
-            // Dialog finished, you can reset or do something else
-            console.log("Dialog finished");
-            containerChat.style.display = "none";
+        } else if (dialogOpened) {
+          dialogOpened = false;
+          containerChat.style.display = "none";
+          console.log("Dialog finished", currentDialogParent.dialogName);
+
+          if (currentDialogParent.dialogName = "quest") {
+            
+            const questToSend = {
+              title: currentDialogParent.questName,
+              type: currentDialogParent.type,
+              requirements: currentDialogParent.requirements,
+              completionItem: currentDialogParent.completionItem,
+              completionAmount: currentDialogParent.completionAmount,
+              rewardType: currentDialogParent.rewardType,
+              rewardItem: currentDialogParent.rewardItem,
+            }
+
+            socket.emit("questStarted", questToSend);
+          }
         }
     }
 });
@@ -2845,9 +2864,17 @@ document.addEventListener('keyup', function(event) {
 // Function to start a specific dialog
 function startDialog(dialogKey) {
     if (dialogBoxes[dialogKey]) {
-        currentDialog = dialogBoxes[dialogKey].dialogText;  // Set the current dialog
-        currentDialogIndex = 0;  // Reset to the first paragraph
-        displayDialogParagraph();  // Start displaying the dialog
+      console.log(dialogBoxes[dialogKey]);
+      currentDialogParent =  dialogBoxes[dialogKey]
+      if ((dialogBoxes[dialogKey].questName && !myPlayer.questsOngoing.some(obj => obj.title === dialogBoxes[dialogKey].questName)) || !dialogBoxes[dialogKey].questName) {
+        currentDialog = dialogBoxes[dialogKey].dialogText;
+      } 
+      else if (dialogBoxes[dialogKey].questName && myPlayer.questsOngoing.some(obj => obj.title === dialogBoxes[dialogKey].questName)) {
+        console.log(dialogBoxes[dialogKey].questName)
+        currentDialog = dialogBoxes[dialogKey].progressText;
+      }
+      currentDialogIndex = 0;
+      displayDialogParagraph();
     } else {
         console.error("Dialog not found: " + dialogKey);
     }
@@ -7213,7 +7240,6 @@ function drawColliders () {
         if (isColliding(playerCollider, { x: adjustedX, y: adjustedY, width: wallX.width, height: wallX.height })) {
           if (wall.type === "dialog") {
             dialogCounter++
-            console.log(dialogCounter)
           }
         }
       })
@@ -7290,6 +7316,7 @@ function drawColliders () {
         if (wall.type === "dialog" && dialogCounter === 0) {
           dialogOpened = false;
           containerChat.style.display = "none";
+          cutscene = false;
         }
         if (wall.type === "cook") {
           grassOpenCooking = false;
