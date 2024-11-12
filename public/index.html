@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="./index.css" />
     <title>Arcany</title>
   </head>
-  <body id="body">
+  <body id="body" >
     <div id="openerScreen">
       <button id="openerScreen-button" class="pointerActivator">
         I understand this is an early alpha version, and nothing 
@@ -50,29 +50,34 @@
       <button id="exportWalls" class="buttonDev pointerActivator">📤</button>
     </div>
 
-    <img src="./icons/cards.png" class="pointerActivator cardsIcon" />
+    <img src="./icons/cards.png" class="pointerActivator cardsIcon"  />
 
     <div id="uiButtonParent">
 
-      <img id="uiButtonOpener" class="pointerActivator uiLabel" src="./icons/uiIcon/uiOpener.png">
+      <img id="uiButtonOpener" class="pointerActivator uiLabel" src="./icons/uiIcon/uiOpener.png" >
       <div class="uiButtonChild">
-          <img id="uiButtonProfile" class="pointerActivator uiLabel" src="./icons/uiIcon/uiProfile.png">
-          <img id="uiButtonInventory" class="pointerActivator uiLabel" src="./icons/uiIcon/uiBackpack.png">
-          <img id="uiButtonSoulCollection" class="pointerActivator uiLabel" src="./icons/uiIcon/uiSoul.png">
+          <img id="uiButtonProfile" class="pointerActivator uiLabel" src="./icons/uiIcon/uiProfile.png" >
+          <img id="uiButtonInventory" class="pointerActivator uiLabel" src="./icons/uiIcon/uiBackpack.png" >
+          <img id="uiButtonSoulCollection" class="pointerActivator uiLabel" src="./icons/uiIcon/uiSoul.png" >
       </div>
 
       <div class="uiButtonChild">
-          <img id="uiButtonQuest" class="pointerActivator uiLabel" src="./icons/uiIcon/uiQuest.png">
-          <img id="uiButtonBooks" class="pointerActivator uiLabel" src="./icons/uiIcon/uiBooks.png">
+          <img id="uiButtonQuest" class="pointerActivator uiLabel" src="./icons/uiIcon/uiQuest.png" >
+          <img id="uiButtonBooks" class="pointerActivator uiLabel" src="./icons/uiIcon/uiBooks.png" >
       </div>
 
     </div>
   <div id="ui">
 
     <div id="uiProfile">
+
+      <div id="CoinsAmountParent">
+        <p id="playerCoinsAmount">0</p>
+        <img id="coinPng" src="./icons/uiIcon/coins.gif" >
+      </div>
       
       <div id="uiProfileUserName">
-        <img id="uiProfileRank" src="./ui/Rank/rankOne.png">
+        <img id="uiProfileRank" src="./ui/Rank/rankOne.png" >
         <div id="uiProfileUsernameAndLevel">
           <p class="textTitle">Melina</p>
           <p class="textStandard">LVL 1</p>
@@ -201,12 +206,11 @@
     </div>
   </div>
 
-  <div id="playerHeartAndCoins">
+  <div id="playerHeartParent">
     <div id="playerHeart">
       
     </div>
       
-      <p id="playerCoinsAmount">0</p>
   </div>
 
 

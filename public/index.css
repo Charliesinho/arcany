@@ -22,6 +22,7 @@
     -ms-user-select: none; /* Internet Explorer/Edge */
     cursor: none;
     font-family: "Tiny5", sans-serif !important;
+    -webkit-user-drag: none;
   }
   
 body {
@@ -156,7 +157,7 @@ body {
     left: 0;
 }
 
-/* playerHeartAndCoins */
+/* playerHeartParent */
 #playerHeart{
     display: flex;
     position: absolute;
@@ -265,6 +266,21 @@ body {
     display: flex;
     flex-direction: column;
 }
+#CoinsAmountParent{
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    gap: 15px;
+    right: 50px;
+    top: 50px;
+}
+#playerCoinsAmount {
+    font-size: 30px;
+}
+#coinPng{
+    width: 30px;
+}
+
 #uiProfileSkillAndAppearance{
     height: 360px;
     width: 100%;
@@ -829,19 +845,6 @@ body {
     top: 10px;
     transform: translate(52%, 130%);
     
-}
-
-#playerCoinsAmount {
-    font-family: 'Franklin Gothic Medium';
-    font-weight: bolder;
-    font-size: 20px;
-    height: auto;
-    position: absolute;
-    left: 100px;
-    top: 102px;
-    /* transform: translate(52%, 130%); */
-    width: 100px;
-    color: white;
 }
 
 #playerHeart {

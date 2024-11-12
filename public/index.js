@@ -322,7 +322,7 @@ const liquidTransition = document.getElementById('liquidTransition');
 
 const exploreMap = document.getElementById("exploreMap");
 const uiTop = document.getElementById("uiTop");
-const playerHeartAndCoins = document.getElementById("playerHeartAndCoins");
+const playerHeartParent = document.getElementById("playerHeartParent");
 const playerHeart = document.getElementById("playerHeart");
 const loginBox = document.getElementById("login");
 const loginArt = document.getElementById("loginArt");
@@ -544,7 +544,7 @@ let shootingBlock = true;
 let myPlayer;
 
 chatInput.style.display = "none";
-playerHeartAndCoins.style.display = "none";
+playerHeartParent.style.display = "none";
 fishingGame.style.display = "none";
 uiProfileCurrentClothing.style.visibility = "hidden";
 
@@ -2287,7 +2287,7 @@ socket.on("loginAttempt", (msg) => {
 
     loginScreen.classList.add('downLogIn');
     chatInput.style.display = "block";
-    playerHeartAndCoins.style.display = "block";
+    playerHeartParent.style.display = "block";
     uiProfileCurrentClothing.style.visibility = "visible";
     menuUi.style.display = "flex";
     uiButtonParent.style.display = "flex";
