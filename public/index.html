@@ -18,39 +18,12 @@
       <div id="languageSetting">
         <button id="en" class="pointerActivator languageSetting-button">English</button>
         <button id="sp" class="pointerActivator languageSetting-button">Spanish</button>
-        <button id="fr" class="pointerActivator languageSetting-button">Frensh</button>
-        <button id="pt" class="pointerActivator languageSetting-button">Portugese</button>
+        <button id="fr" class="pointerActivator languageSetting-button">French</button>
+        <button id="pt" class="pointerActivator languageSetting-button">Portuguese</button>
       </div>
     </div>
 
     <div class="custom-cursor"></div>
-
-    <div id="inventoryWindow" class="equipmentWindow">     
-      <div class="inventorySlotBG">
-        <div class="pointerActivator inventoryItem equipmentItem weaponEquipped"></div>
-      </div>   
-      <div class="inventorySlotBG">         
-        <div class="pointerActivator inventoryItem equipmentItem soulEquipped"></div>
-      </div> 
-      <div class="inventorySlotBG">
-        <div class="pointerActivator inventoryItem equipmentItem artifactEquipped"></div>
-      </div> 
-      <img src="./icons/cards.png" class="pointerActivator cardsIcon" />
-    </div>
-
-    <div class="container">
-      <div class="char-img"></div>
-      <div>
-        <div class="name-wrap">
-          <span class="char-name"></span>
-        </div>
-        <div class="text-wrap">
-          <p class="text-block"></p>
-        </div>
-      </div>
-    </div>
-    
-    <button class="starquest" style="display: none;">start quest</button>
     
     <div id="uiDev" style="display: flex;">
       <button id="placeWalls" class="buttonDev pointerActivator">🧱</button>
@@ -80,71 +53,138 @@
       <button id="exportWalls" class="buttonDev pointerActivator">📤</button>
     </div>
 
-    <div id="uiButtonOpener" class="pointerActivator">
-       <img src="./icons/pixelArrowUiButton.png">
-    </div>
-    <div id="ui">
+    <img src="./icons/cards.png" class="pointerActivator cardsIcon"  />
 
-      <div><div id="uiTop"></div></div>
-      <div><img id="skillsUi" src="./inventory/skills.png" /></div>
-      <div id="skillLevels">
-        <p id="fishingLevel"></p>
-        <p id="cookingLevel"></p>
-        <p id="exploringLevel"></p>
-        <p id="combatLevel">0</p>
+    <div id="uiButtonParent">
+
+      <img id="uiButtonOpener" class="pointerActivator uiLabel" src="./icons/uiIcon/uiOpener.png" >
+      <div class="uiButtonChild">
+          <img id="uiButtonProfile" class="pointerActivator uiLabel" src="./icons/uiIcon/uiProfile.png" >
+          <img id="uiButtonInventory" class="pointerActivator uiLabel" src="./icons/uiIcon/uiBackpack.png" >
+          <img id="uiButtonSoulCollection" class="pointerActivator uiLabel" src="./icons/uiIcon/uiSoul.png" >
       </div>
-      <!-- <h1 id="usernameMenu"></h1>
-      <div><div id="circleCharacter"></div></div> -->
-      <img id="soulImg" src="./souls/souless.png"></img>
-      <!-- <div><div id="mountainsUi"></div></div> -->
+
+      <div class="uiButtonChild">
+          <img id="uiButtonQuest" class="pointerActivator uiLabel" src="./icons/uiIcon/uiQuest.png" >
+          <img id="uiButtonBooks" class="pointerActivator uiLabel" src="./icons/uiIcon/uiBooks.png" >
+      </div>
+
+    </div>
+  <div id="ui">
+
+    <div id="uiProfile">
+
+      <div id="CoinsAmountParent">
+        <p id="playerCoinsAmount">0</p>
+        <img id="coinPng" src="./icons/uiIcon/coins.gif" >
+      </div>
       
-      <div class="inventoriesParent">
-        <div class="inventorySwitch">
-          <button class="pointerActivator switchButton inventorySwicther"></button>
-          <button class="pointerActivator switchButton soulsSwitcher"></button>
-          <button class="pointerActivator switchButton capeSwitcher"></button>
-          <button class="pointerActivator switchButton booksSwitcher"></button>
-          <button class="pointerActivator switchButton deleteButton"></button>
+      <div id="uiProfileUserName">
+        <img id="uiProfileRank" src="./ui/Rank/rankOne.png" >
+        <div id="uiProfileUsernameAndLevel">
+          <p class="textTitle">Melina</p>
+          <p class="textStandard">LVL 1</p>
         </div>
-  
-        <div id="inventoryWindow" class="inventoryShadow inventoryHide dragParent">
-          <img src="./backpack.png" id="backpackImage"/>
+      </div>
+
+      <div id="uiProfileSkillAndAppearance">
+        <div id="skillLevels">
+
+          <div class="individualSkill">
+            <p class="individualSkillNum" id="fishingLevel">LVL 1</p>
+            <img class="individualSkillImg" src="./ui/LVLicon/iconLVLFishing.png">
+          </div>
+
+          <div class="individualSkill">
+            <p class="individualSkillNum" id="cookingLevel">LVL 2</p>
+            <img class="individualSkillImg" src="./ui/LVLicon/iconLVLCooking.png">
+          </div>
+
+          <div class="individualSkill">
+            <p class="individualSkillNum" id="craftingLevel">LVL 1</p>
+            <img class="individualSkillImg" src="./ui/LVLicon/iconLVLCrafting.png">
+          </div>
+
+          <div class="individualSkill">
+            <p class="individualSkillNum" id="combatLevel">LVL 2</p>
+            <img class="individualSkillImg" src="./ui/LVLicon/iconLVLCombat.png">
+          </div>
+
+          <div class="individualSkill">
+            <p class="individualSkillNum" id="enchantingLevel">LVL 2</p>
+            <img class="individualSkillImg" src="./ui/LVLicon/iconLVLEnchanting.png">
+          </div>
+
+        </div>
+        <img id="uiSkinsImg">
+      </div>
+
+      <div id="uiProfileCurrentClothing" >   
           <div class="inventorySlotBG">
-            <img class="pointerActivator inventoryItem inventorySlot0"></img>
-          </div>
-          <div class="inventorySlotBG">          
-            <img class="pointerActivator inventoryItem inventorySlot1"></img>
-          </div>
-          <div class="inventorySlotBG">          
-            <img class="pointerActivator inventoryItem inventorySlot2"></img>
-          </div>
-          <div class="inventorySlotBG">          
-            <img class="pointerActivator inventoryItem inventorySlot3"></img>
-          </div>
-          <div class="inventorySlotBG">          
-            <img class="pointerActivator inventoryItem inventorySlot4"></img>
-          </div>
-          <div class="inventorySlotBG">          
-            <img class="pointerActivator inventoryItem inventorySlot5"></img>
-          </div>
-          <div class="inventorySlotBG">          
-            <img class="pointerActivator inventoryItem inventorySlot6"></img>
-          </div>
-          <div class="inventorySlotBG">          
-            <img class="pointerActivator inventoryItem inventorySlot7"></img>
-          </div>
-          <div class="inventorySlotBG">          
-            <img class="pointerActivator inventoryItem inventorySlot8"></img>
-          </div>
-        </div>
+            <div class="pointerActivator inventoryItem equipmentItem weaponEquipped"></div>
+          </div>   
+          <div class="inventorySlotBG">         
+            <div class="pointerActivator inventoryItem equipmentItem soulEquipped"></div>
+          </div> 
+          <div class="inventorySlotBG">
+            <div class="pointerActivator inventoryItem equipmentItem artifactEquipped"></div>
+          </div> 
+      </div>
+
+      <p id="uiProfileCurrentStrengthInformation">This is some explanation for the three boxes on top. Depending on which you select you have a diferent text.</p>
+      
+    </div>
+
+    <div id="uiInventory">
+
+      <div id="uiProfileCurrentClothing" class="inventoryShadow inventoryHide dragParent">
+
+      <!-- <div class="inventorySlotBG">
+        <div class="pointerActivator inventoryItem equipmentItem artifactEquipped"></div>
+      </div> 
+      <div class="inventorySlotBG">
+        <div class="pointerActivator inventoryItem equipmentItem artifactEquipped"></div>
+      </div> 
+      <div class="inventorySlotBG">
+        <div class="pointerActivator inventoryItem equipmentItem artifactEquipped"></div>
+      </div>  -->
+      <div class="inventorySlotBG">
+        <img class="pointerActivator inventoryItem inventorySlot0"></img>
+      </div>
+      <div class="inventorySlotBG">          
+        <img class="pointerActivator inventoryItem inventorySlot1"></img>
+      </div>
+      <div class="inventorySlotBG">          
+        <img class="pointerActivator inventoryItem inventorySlot2"></img>
+      </div>
+      <div class="inventorySlotBG">          
+        <img class="pointerActivator inventoryItem inventorySlot3"></img>
+      </div>
+      <div class="inventorySlotBG">          
+        <img class="pointerActivator inventoryItem inventorySlot4"></img>
+      </div>
+      <div class="inventorySlotBG">          
+        <img class="pointerActivator inventoryItem inventorySlot5"></img>
+      </div>
+      <div class="inventorySlotBG">          
+        <img class="pointerActivator inventoryItem inventorySlot6"></img>
+      </div>
+      <div class="inventorySlotBG">          
+        <img class="pointerActivator inventoryItem inventorySlot7"></img>
+      </div>
+      <div class="inventorySlotBG">          
+        <img class="pointerActivator inventoryItem inventorySlot8"></img>
+      </div>
+
+    </div>
   
-        <div id="inventoryWindow" class="inventoryShadow soulsHide">       
+        <div id="uiProfileCurrentClothing" class="inventoryShadow soulsHide">       
           <div class="inventorySlotBG">
             <div class="pointerActivator inventoryItem soulSlot soul1"></div>
           </div> 
         </div>
   
-        <div id="inventoryWindow" class="capeHide">       
+        <div id="uiProfileCurrentClothing" class="capeHide">       
           <div class="inventorySlotBG">
             <div class="pointerActivator inventoryItem capeSlot cape1"></div>
           </div> 
@@ -152,9 +192,26 @@
             <div class="pointerActivator inventoryItem capeSlot cape2"></div>
           </div>
         </div>
-      </div>
     </div>
-    <div>
+
+    <div id="uiSoulCollection">
+    </div>
+
+    <div id="uiQuest">
+    </div>
+
+    <div id="uiBooks">
+    </div>
+  </div>
+
+  <div id="playerHeartParent">
+    <div id="playerHeart">
+      
+    </div>
+      
+  </div>
+
+
       <form id="chat">
         <input
           type="text"
@@ -194,16 +251,6 @@
         </form>
       </div>
 
-      <div id="playerInfoCorner">
-        <div id="profilePicture"></div>
-        <div id="badge"></div>
-        <div id="playerInfo">
-          <img id="hearts" src="./fullHearts.png"/>
-          <!-- <img src="./cursors/GoldCoin.png" id="playerCoins" /> -->
-          <p id="playerCoinsAmount">0</p>
-        </div>
-      </div>
-
       <div id="obtainedItem" class=""></div>
       <img id="catchGif" class="" src="./Fishing/catch.gif"/>
 
@@ -216,6 +263,18 @@
         <div class="levelUpParent">
           <img src="./Textures/levellUp.png" class="levelUp" />
           <img src="./Textures/levelUpCircle.png" class="levelUp levelUpCircle" />
+        </div>
+
+        <div class="container">
+          <div class="char-img"></div>
+          <div>
+            <div class="name-wrap">
+              <span class="char-name"></span>
+            </div>
+            <div class="text-wrap">
+              <p class="text-block"></p>
+            </div>
+          </div>
         </div>
 
         <div id="exploreMap">
@@ -285,6 +344,36 @@
 
       <div class="glitchOverlay"></div>
       <div class="liquidOverlay"></div>
+
+      <div class="questInfo">
+        <div>
+          <div class="questHeader">
+            <h1 class="questTitle"></h1>
+            <h1 class="questClose pointerActivator"></h1>
+          </div>
+          <div class="questDescription"></div>
+        </div>
+
+        <div>
+          <p class="questEndTitle">Reward & Progress</p>
+          <div class="questEnd">
+
+            <div>
+              <div class="questRewardItem">
+                <img class="questEndItem" src=""/>
+              </div>
+              <p class="questReward"></p>
+            </div>
+
+            <div>
+              <div class="questProgress">
+                <div class="questProgressChild"></div>
+              </div>
+              <p class="questProgressItems"></p>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div class="questHub">
         <div class="questItems">

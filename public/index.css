@@ -1,8 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=Tiny5&display=swap');
-
+.textTitle{
+    font-size: 25px;
+    font-weight: 600;
+}
+.textStandard{
+    font-size: 15px;
+    font-weight: 400;
+}
 :root {
     --backgroundObjects: rgb(48, 37, 37);
     --backgroundObjectsBorder: rgb(44, 40, 39);
+  }
+  p{
+    margin: 0px;
   }
 
 * {
@@ -12,9 +22,9 @@
     -ms-user-select: none; /* Internet Explorer/Edge */
     cursor: none;
     font-family: "Tiny5", sans-serif !important;
+    -webkit-user-drag: none;
   }
   
-
 body {
     margin: 0;
     width: 100vw;
@@ -146,51 +156,234 @@ body {
     bottom: -15px;
     left: 0;
 }
-#uiButtonOpener{
-    width: 50px;
-    height: 50px;
-    display: none;
+
+/* playerHeartParent */
+#playerHeart{
+    display: flex;
     position: absolute;
-    border-radius: 50%;
-    border: 3px solid black;
-    z-index: 3;
-    top: 5px;
-    right: 5px;
-    transform: rotate(180deg);
-    background: url(./Textures/uiback.gif);
-    transition: all 0.5s ease;
-    
+    top: 25px;
+    left: 50%;
+    gap: 5px;
+    transform: translate(-50%, -0%);
 }
-#ui {
+.heart {
+    width: 32px;
+    height: 30px;
+    background-image: url('./icons/uiIcon/fullHeart.png');
+    background-size: cover;
+}
+.halfHeart{
+    width: 32px;
+    height: 30px;
+    background-image: url('./icons/uiIcon/halfHeart.png');
+    background-size: cover;
+}
+.emptyHeart {
+    width: 32px;
+    height: 30px;
+    background-image: url('./icons/uiIcon/emptyHeart.png'); 
+    background-size: cover;
+}
+
+/* UI LABEL ORGANISATION */
+#uiButtonParent{
+    position: absolute;
+    right: -480px;
+    width: 480px;
+    height: calc(100vh - 50px);
     display: none;
-    background: url(./Textures/uiback.gif);
+    flex-direction: column;
+    padding: 50px 0px;
+    justify-content: space-between;
+    background-color: transparent;
+    transition: all 0.5s ease;
+}
+.uiButtonChild{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 15px;
+    padding: 30px 0px;
+}
+.uiLabel{
+    width: 80px;
+}
+#uiButtonOpener{
+    position: absolute;
+    top: 15px;
+    right: 465px;
+    transition: all 0.5s ease;
+}
+/* UI LABEL ORGANISATION */
+#ui{
+    display: none;
+    background: url(./ui/uiBackground.png);
+    background-size: contain;
     height: calc(100vh);
     width: 100vw;
-    max-width: 400px;
+    max-width: 415px;
     min-width: 400px;
     overflow: hidden;
     /* border-bottom: solid 20px var(--backgroundObjects); */
     /* border-right: solid 20px var(--backgroundObjects); */
-    border-left: solid 3px rgb(26, 26, 26);
+    /* border-left: solid 3px rgb(26, 26, 26); */
     position: absolute;
     top: 0;
-    right: -400px;
-    z-index: 2;
+    right: -415px;
+    z-index: 1;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    outline: none 8px var(--backgroundObjects);
-    outline-offset: -8px;
-    border-radius: 0px 0 0 0px;
+    /* outline: none 8px var(--backgroundObjects); */
+    /* outline-offset: -8px; */
+    /* border-radius: 0px 0 0 0px; */
     /* box-shadow: -10px 0 10px rgba(0, 0, 0, 0.412); */
     overflow-x: hidden;
     transition: all 0.5s ease;
 }
-
-#ui::-webkit-scrollbar {
+/* PROFILE <*/
+#uiProfile {
+    display: none;
+    width: calc(100% - 80px);
+    height: calc(100% - 90px);
+    justify-content: flex-start;
+    gap: 20px;
+    flex-direction: column;
+    padding: 45px 40px;
+}
+#uiProfile::-webkit-scrollbar {
     display: none;
 }
+#uiProfileUserName{
+    display: flex;
+    gap: 20px;
+}
+#uiProfileRank{
+    display: flex;
+    width: 20%;
+}
+#uiProfileUsernameAndLevel{
+    display: flex;
+    flex-direction: column;
+}
+#CoinsAmountParent{
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    gap: 15px;
+    right: 50px;
+    top: 50px;
+}
+#playerCoinsAmount {
+    font-size: 30px;
+}
+#coinPng{
+    width: 30px;
+}
 
+#uiProfileSkillAndAppearance{
+    height: 360px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 30px;
+    align-items: center;
+}
+#skillLevels{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    
+}
+.individualSkill{
+    position: relative;
+    
+}
+.individualSkillNum{
+    position: absolute;
+    right: 0px;
+    top: 7px;
+}
+.individualSkillImg{
+    width: 130px;
+}
+#uiSkinsImg {
+    position: relative;
+    height: 340px;
+    top: 10px;
+}
+#uiProfileCurrentClothing{
+    width: 100%;
+    margin: 40px 0px 25px 0px;
+    display: flex;
+    justify-content: center;
+    gap: 13px;
+    flex-wrap: wrap;
+}
+.inventorySlotBG {
+    width: 80px;
+    height: 80px;
+    background: url(./ui/uiInventoryBackground.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    box-shadow: 0px 2px #1C140E;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    top: 0;
+    transition: all .2s ease;
+}
+
+.inventorySlotBG:hover {
+    top: 2px;
+    box-shadow: 0px 0px #1C140E;
+}
+
+#uiProfileCurrentStrengthInformation{
+    height: 120px;
+    display: flex;
+    text-align: justify;
+    justify-self: center;
+    width: calc(100% - 20px);
+    padding: 0 10px;
+}
+/* PROFILE >*/
+
+/* INVENTORY < */
+#uiInventory{
+    display: none;
+    width: calc(100% - 80px);
+    height: calc(100% - 90px);
+    padding: 45px 40px;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+}
+
+/* INVENTORY > */
+#uiSoulCollection{
+    display: none;
+    width: calc(100% - 80px);
+    height: calc(100% - 90px);
+    padding: 45px 40px;
+}
+#uiQuest{
+    display: none;
+    width: calc(100% - 80px);
+    height: calc(100% - 90px);
+    padding: 45px 40px;
+}
+#uiBooks{
+    display: none;
+    width: calc(100% - 80px);
+    height: calc(100% - 90px);
+    padding: 45px 40px;
+    background-color: #000;
+}
+
+/* UI DEVELOPPER ORGANISATION */
 #uiDev {
     position: absolute;
     left: 0;
@@ -299,49 +492,6 @@ body {
     
 }
 
-#skillsUi {
-    width: 250px;
-    margin-bottom: -110px;
-    position: relative;
-    top: -18px;
-    z-index: 1;
-}
-
-#skillLevels {
-    width: 235px;
-
-    display: flex;
-    justify-content: space-evenly;
-    gap: 28px;
-
-    font-size: 18px;
-    font-weight: bold;
-    font-family: Arial, Helvetica, sans-serif;
-    color: rgb(70, 70, 70);
-    text-shadow: 0 0 2px rgb(175, 175, 175);
-
-    position: relative;
-    z-index: 2;
-    top: 15px;
-}
-
-#usernameMenu {
-    font-size: 90px;
-    width: 100vw;
-    text-align: center;
-    font-family: sans-serif;
-    font-weight: bolder;
-    color: rgb(194, 83, 77);
-    margin-bottom: -150px;
-    margin-top: 30px;
-    position: relative;
-    top: 0;
-    text-shadow: 0 0 10px rgb(194, 83, 77) ;
-    z-index: 1;
-
-    animation: upAndDown 4s ease infinite;
-}
-
 @keyframes upAndDown {
     0% {
         top: -10px
@@ -368,15 +518,6 @@ body {
     outline-offset: 20px;
 }
 
-#soulImg {
-    margin-top: 0px;
-    position: relative;
-    z-index: 1;
-    filter: saturate(1.3);
-    opacity: 1;
-    height: 330px;
-}
-
 #mountainsUi {
     margin-top: -330px;
     margin-bottom: -100px;
@@ -389,33 +530,6 @@ body {
     background: url("./soulsEnviroments/desert.png");
     background-position: bottom;
     background-repeat: no-repeat;
-}
-
-#inventoryWindow {
-    position: relative;
-    bottom: 0px;
-    left: 0;
-    /* display: flex; */
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    background: #c18569;
-    background-repeat: no-repeat;
-    background-size: cover;
-    border-top: solid 3px rgb(22, 22, 22);
-    border-radius: 0px;
-    width: 400px;
-    height: 300px;
-    padding: 40px 0px !important;
-    margin-top: 0px;
-}
-
-.inventorySlotBG {
-    background: url("./Textures/InventorySlotBackground.png");
-    background-size: contain;
-    background-repeat: none;
-    padding: 5px;
 }
 
 #backpackImage {
@@ -431,31 +545,14 @@ body {
     position: relative;
     top: 0;
     left: 0;
-
-    width: 80px;
-    height: 80px;
-    /* background: url("./inventory/commonFrog.png"); */
-    background-repeat: no-repeat;
-    background-size: cover;
-
-    
-
-    /* border-radius: 10px; */
-    border: none;
-    border: solid 2px rgba(255, 255, 255, 0);
-    
-    /* box-shadow: 5px 5px rgba(0, 0, 0, 0.192); */
-
-    /* background-color: rgba(64, 45, 29, 0); */
-
+    width: 65px;
+    height: 65px;
     transition: all .2s ease-out;
-    
 }
 
 .inventoryItem:hover {
     
     filter: brightness(1.5);
-    top: -5px;
     
 }
 
@@ -511,25 +608,6 @@ body {
 
 .deleteButton {
     background: url("./Textures/tabDel.png");
-}
-
-.equipmentWindow {
-    margin-top: 0px;
-    padding: 0px 0px !important;
-    background-color: transparent !important;
-    background: transparent !important;
-    
-    border-radius: none !important;
-    border: none !important;
-    height: 80px !important;
-    width: calc(100vw - 370px) !important;
-    position: absolute !important;
-    left: 0vw !important;
-    bottom: 5vh !important;
-    z-index: 10 !important;
-    display: flex !important;
-    align-items: flex-end !important;
-    margin-left: 20px;
 }
 
 .equipmentItem {
@@ -797,20 +875,7 @@ body {
     
 }
 
-#playerCoinsAmount {
-    font-family: 'Franklin Gothic Medium';
-    font-weight: bolder;
-    font-size: 20px;
-    height: auto;
-    position: absolute;
-    left: 100px;
-    top: 102px;
-    /* transform: translate(52%, 130%); */
-    width: 100px;
-    color: white;
-}
-
-#playerInfo {
+#playerHeart {
 
 }
 
@@ -1094,12 +1159,13 @@ body {
     background-position: center;
     display: none;
 }
+
 .liquidOverlay {
     position: absolute;
     top: 0px !important;
     z-index: 20;
     opacity: 1;
-    width: calc(100vw - 330px - 75px);
+    width: calc(100vw);
     height: calc(100vh - 5px);
     border: solid 2px rgb(0, 0, 0);
     box-shadow: 0px 5px rgb(0, 0, 0), 0 0 20px rgba(0, 0, 0, 0.464);
@@ -1429,7 +1495,7 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    width: calc(100vw - 330px - 63px);
+    width: calc(100vw);
     height: calc(100vh - 0px);
 
     background: transparent;
@@ -1773,4 +1839,123 @@ body {
 	background: black;
 	background-size: contain !important;
     display: none;
+}
+
+.questCardImage {
+    width: 70px;
+    height: 90px;
+    position: relative;
+    top: 0;
+    transform: rotateX(0deg) rotateY(0deg);
+    transition: all .2s ease;
+}
+
+.questCardImage:hover {
+    width: 70px;
+    height: 90px;
+    transform: rotateX(10deg) rotateY(20deg);
+}
+
+.questInfo {
+    width: 602px;
+    height: 470px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 30px 30px;
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    background: url(./Textures/questBack.png);
+    background-size: cover;
+}
+
+.questTitle {
+    margin: 0;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 20%);
+}
+
+.questClose {
+    margin-top: 0;
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    padding: 20px 20px;
+}
+
+.questClose:hover {
+    color: rgb(255, 155, 155);
+}
+
+.questDescription {
+    font-size: 18px;
+    margin: 100px 0 0 0px;
+    color: #653d3d;
+    text-align: center;
+}
+
+.questEnd {
+    display: flex;
+    gap: 20px;
+}
+
+.questProgress {
+    width: 483px;
+    background: #d5c9ab;
+    border: solid 6px black;
+    height: 75px;
+    /* border-radius: 10px; */
+    overflow: hidden;
+    position: relative;
+}
+
+.questProgressChild {
+  position: absolute;
+  left: 0;
+  height: 100%;
+  width: 2%;
+  background-color: #74bb3b;
+    border-right: solid 6px black;
+}
+
+.questProgressItems {
+    font-size: 18px;
+    margin-top: 5px;
+    color: #653d3d;
+}
+
+.questHeader {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.questEndTitle {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.questReward {
+    font-size: 18px;
+    margin-top: 5px;
+    color: #653d3d;
+}
+
+.questRewardItem {
+    width: 75px;
+    height: 75px;
+    background: #d5c9ab;
+    /* background-size: contain; */
+    /* background-repeat: no-repeat; */
+    /* box-shadow: 0px 2px #1C140E; */
+    border: solid 6px black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    top: 0;
+    transition: all .2s ease;
 }
