@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dragula": "^3.7.3",
     "express": "^4.18.2",
     "mongodb": "^5.8.1",
     "mongoose": "^7.4.5",

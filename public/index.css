@@ -319,14 +319,28 @@ body {
     display: flex;
     justify-content: center;
     gap: 13px;
+    flex-wrap: wrap;
 }
 .inventorySlotBG {
     width: 80px;
+    height: 80px;
     background: url(./ui/uiInventoryBackground.png);
     background-size: contain;
     background-repeat: no-repeat;
     box-shadow: 0px 2px #1C140E;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    top: 0;
+    transition: all .2s ease;
 }
+
+.inventorySlotBG:hover {
+    top: 2px;
+    box-shadow: 0px 0px #1C140E;
+}
+
 #uiProfileCurrentStrengthInformation{
     height: 120px;
     display: flex;
@@ -343,6 +357,9 @@ body {
     width: calc(100% - 80px);
     height: calc(100% - 90px);
     padding: 45px 40px;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
 }
 
 /* INVENTORY > */
@@ -409,7 +426,20 @@ body {
     background-color: rgb(30 26 37);
     left: 70px;
     padding: 10px;
-    top: 560px;
+    bottom: 20px;
+    color: white;
+    font-size: 20px;
+    -webkit-font-smoothing: none;
+    display: none;
+    width: 180px;
+}
+
+#dialogsDev {
+    position: absolute;
+    background-color: rgb(30 26 37);
+    left: 70px;
+    padding: 10px;
+    bottom: 20px;
     color: white;
     font-size: 20px;
     -webkit-font-smoothing: none;
@@ -515,16 +545,14 @@ body {
     position: relative;
     top: 0;
     left: 0;
-    width: 80px;
-    height: 80px;
-
+    width: 65px;
+    height: 65px;
     transition: all .2s ease-out;
 }
 
 .inventoryItem:hover {
     
     filter: brightness(1.5);
-    top: -5px;
     
 }
 
@@ -1131,12 +1159,13 @@ body {
     background-position: center;
     display: none;
 }
+
 .liquidOverlay {
     position: absolute;
     top: 0px !important;
     z-index: 20;
     opacity: 1;
-    width: calc(100vw - 330px - 75px);
+    width: calc(100vw);
     height: calc(100vh - 5px);
     border: solid 2px rgb(0, 0, 0);
     box-shadow: 0px 5px rgb(0, 0, 0), 0 0 20px rgba(0, 0, 0, 0.464);
@@ -1466,7 +1495,7 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    width: calc(100vw - 330px - 63px);
+    width: calc(100vw);
     height: calc(100vh - 0px);
 
     background: transparent;
@@ -1733,3 +1762,200 @@ body {
     }
 }
 
+.container {
+	margin: 0 auto;
+    display: none;
+    flex-direction: row;
+    width: 534px;
+    align-items: flex-end;
+    position: absolute;
+    opacity: 0;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, -90%);
+    z-index: 3;
+    background: url("./Textures/dialogBack.png");
+    background-size: contain;
+    animation: opacityUp .3s ease forwards;
+}
+
+.name-wrap,
+.text-wrap {
+	/* background-color: rgba(0, 0, 0, 1); */
+	/* text-shadow: 2px 2px 0 rgba(0, 0, 0, .80); */
+	color: #000000;
+}
+
+.name-wrap {
+    display: inline-block;
+    padding: 7px 20px;
+    font-weight: bold;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 20%);
+    /* border: 2px solid #333; */
+    border-bottom: none;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.text-wrap {
+	position: relative;
+	padding: 15px;
+	/* border: 2px solid #333; */
+	height: 148px;
+	overflow: hidden;
+	width: 500px;
+}
+
+.text-block {
+    margin: 0;
+    font-size: 1.4em;
+    font-weight: 500;
+    padding: 5px 10px;
+    line-height: 1.4em;
+    height: 140px;
+    overflow: hidden;
+}
+
+.more-icon {
+	display: none;
+	position: absolute; 
+	bottom: 5px;
+	right: 25px;
+	animation-name: moreicon;
+	animation-duration: .8s;
+	animation-iteration-count: infinite;
+	animation-timing-function: ease-in-out;
+}
+
+.more-icon.active {
+	display: block;
+}
+
+.char-img {
+	width: 194px;
+	height: 194px;
+	background: black;
+	background-size: contain !important;
+    display: none;
+}
+
+.questCardImage {
+    width: 70px;
+    height: 90px;
+    position: relative;
+    top: 0;
+    transform: rotateX(0deg) rotateY(0deg);
+    transition: all .2s ease;
+}
+
+.questCardImage:hover {
+    width: 70px;
+    height: 90px;
+    transform: rotateX(10deg) rotateY(20deg);
+}
+
+.questInfo {
+    width: 602px;
+    height: 470px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 30px 30px;
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    background: url(./Textures/questBack.png);
+    background-size: cover;
+}
+
+.questTitle {
+    margin: 0;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 20%);
+}
+
+.questClose {
+    margin-top: 0;
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    padding: 20px 20px;
+}
+
+.questClose:hover {
+    color: rgb(255, 155, 155);
+}
+
+.questDescription {
+    font-size: 18px;
+    margin: 100px 0 0 0px;
+    color: #653d3d;
+    text-align: center;
+}
+
+.questEnd {
+    display: flex;
+    gap: 20px;
+}
+
+.questProgress {
+    width: 483px;
+    background: #d5c9ab;
+    border: solid 6px black;
+    height: 75px;
+    /* border-radius: 10px; */
+    overflow: hidden;
+    position: relative;
+}
+
+.questProgressChild {
+  position: absolute;
+  left: 0;
+  height: 100%;
+  width: 2%;
+  background-color: #74bb3b;
+    border-right: solid 6px black;
+}
+
+.questProgressItems {
+    font-size: 18px;
+    margin-top: 5px;
+    color: #653d3d;
+}
+
+.questHeader {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.questEndTitle {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.questReward {
+    font-size: 18px;
+    margin-top: 5px;
+    color: #653d3d;
+}
+
+.questRewardItem {
+    width: 75px;
+    height: 75px;
+    background: #d5c9ab;
+    /* background-size: contain; */
+    /* background-repeat: no-repeat; */
+    /* box-shadow: 0px 2px #1C140E; */
+    border: solid 6px black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    top: 0;
+    transition: all .2s ease;
+}

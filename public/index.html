@@ -4,10 +4,12 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-COMPATIBLE" content="IE=edge" />
     <meta name="viewport" content="width=Device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/gh/bevacqua/dragula@3.7.3/dist/dragula.min.js"></script>
     <link rel="stylesheet" href="./index.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bevacqua/dragula@3.7.3/dist/dragula.min.css">
     <title>Arcany</title>
   </head>
-  <body id="body" >
+  <body id="body" onload="initDraggables">
     <div id="openerScreen">
       <button id="openerScreen-button" class="pointerActivator">
         I understand this is an early alpha version, and nothing 
@@ -23,7 +25,7 @@
 
     <div class="custom-cursor"></div>
     
-    <div id="uiDev" style="display: none;">
+    <div id="uiDev" style="display: flex;">
       <button id="placeWalls" class="buttonDev pointerActivator">🧱</button>
       <button id="placeFishingArea" class="buttonDev pointerActivator">🐟</button>
       <button id="placeCraftingArea" class="buttonDev pointerActivator">🛠️</button>
@@ -43,6 +45,7 @@
       </div>
       <br></br>
       <div id="roomsDev"></div>
+      <div id="dialogsDev"></div>
       <button id="placeDialog" class="buttonDev pointerActivator">🗯️</button>
       <button id="placeQuest" class="buttonDev pointerActivator">🧭</button>
       <button id="deleteWalls" class="buttonDev pointerActivator">❌</button>
@@ -133,52 +136,47 @@
     </div>
 
     <div id="uiInventory">
-      <div class="inventorySlotBG">
-        <div class="pointerActivator inventoryItem equipmentItem artifactEquipped"></div>
-      </div> 
-      <div class="inventorySlotBG">
-        <div class="pointerActivator inventoryItem equipmentItem artifactEquipped"></div>
-      </div> 
-      <div class="inventorySlotBG">
-        <div class="pointerActivator inventoryItem equipmentItem artifactEquipped"></div>
-      </div> 
-        
-          <button class="pointerActivator switchButton inventorySwicther"></button>
-          <button class="pointerActivator switchButton soulsSwitcher"></button>
-          <button class="pointerActivator switchButton capeSwitcher"></button>
-          <button class="pointerActivator switchButton booksSwitcher"></button>
-          <button class="pointerActivator switchButton deleteButton"></button>
 
-        <div id="uiProfileCurrentClothing" class="inventoryShadow inventoryHide">
-          <img src="./backpack.png" id="backpackImage"/>
-          <div class="inventorySlotBG">
-            <div class="pointerActivator inventoryItem inventorySlot0"></div>
-          </div>
-          <div class="inventorySlotBG">          
-            <div class="pointerActivator inventoryItem inventorySlot1"></div>
-          </div>
-          <div class="inventorySlotBG">          
-            <div class="pointerActivator inventoryItem inventorySlot2"></div>
-          </div>
-          <div class="inventorySlotBG">          
-            <div class="pointerActivator inventoryItem inventorySlot3"></div>
-          </div>
-          <div class="inventorySlotBG">          
-            <div class="pointerActivator inventoryItem inventorySlot4"></div>
-          </div>
-          <div class="inventorySlotBG">          
-            <div class="pointerActivator inventoryItem inventorySlot5"></div>
-          </div>
-          <div class="inventorySlotBG">          
-            <div class="pointerActivator inventoryItem inventorySlot6"></div>
-          </div>
-          <div class="inventorySlotBG">          
-            <div class="pointerActivator inventoryItem inventorySlot7"></div>
-          </div>
-          <div class="inventorySlotBG">          
-            <div class="pointerActivator inventoryItem inventorySlot8"></div>
-          </div>
-        </div>
+      <div id="uiProfileCurrentClothing" class="inventoryShadow inventoryHide dragParent">
+
+      <!-- <div class="inventorySlotBG">
+        <div class="pointerActivator inventoryItem equipmentItem artifactEquipped"></div>
+      </div> 
+      <div class="inventorySlotBG">
+        <div class="pointerActivator inventoryItem equipmentItem artifactEquipped"></div>
+      </div> 
+      <div class="inventorySlotBG">
+        <div class="pointerActivator inventoryItem equipmentItem artifactEquipped"></div>
+      </div>  -->
+      <div class="inventorySlotBG">
+        <img class="pointerActivator inventoryItem inventorySlot0"></img>
+      </div>
+      <div class="inventorySlotBG">          
+        <img class="pointerActivator inventoryItem inventorySlot1"></img>
+      </div>
+      <div class="inventorySlotBG">          
+        <img class="pointerActivator inventoryItem inventorySlot2"></img>
+      </div>
+      <div class="inventorySlotBG">          
+        <img class="pointerActivator inventoryItem inventorySlot3"></img>
+      </div>
+      <div class="inventorySlotBG">          
+        <img class="pointerActivator inventoryItem inventorySlot4"></img>
+      </div>
+      <div class="inventorySlotBG">          
+        <img class="pointerActivator inventoryItem inventorySlot5"></img>
+      </div>
+      <div class="inventorySlotBG">          
+        <img class="pointerActivator inventoryItem inventorySlot6"></img>
+      </div>
+      <div class="inventorySlotBG">          
+        <img class="pointerActivator inventoryItem inventorySlot7"></img>
+      </div>
+      <div class="inventorySlotBG">          
+        <img class="pointerActivator inventoryItem inventorySlot8"></img>
+      </div>
+
+    </div>
   
         <div id="uiProfileCurrentClothing" class="inventoryShadow soulsHide">       
           <div class="inventorySlotBG">
@@ -267,6 +265,18 @@
           <img src="./Textures/levelUpCircle.png" class="levelUp levelUpCircle" />
         </div>
 
+        <div class="container">
+          <div class="char-img"></div>
+          <div>
+            <div class="name-wrap">
+              <span class="char-name"></span>
+            </div>
+            <div class="text-wrap">
+              <p class="text-block"></p>
+            </div>
+          </div>
+        </div>
+
         <div id="exploreMap">
           <img class="exploreMapImage" src="./beachMap.png"></img>
           <div class="exploreMapIsland1 pointerActivator"></div>
@@ -334,6 +344,36 @@
 
       <div class="glitchOverlay"></div>
       <div class="liquidOverlay"></div>
+
+      <div class="questInfo">
+        <div>
+          <div class="questHeader">
+            <h1 class="questTitle"></h1>
+            <h1 class="questClose pointerActivator"></h1>
+          </div>
+          <div class="questDescription"></div>
+        </div>
+
+        <div>
+          <p class="questEndTitle">Reward & Progress</p>
+          <div class="questEnd">
+
+            <div>
+              <div class="questRewardItem">
+                <img class="questEndItem" src=""/>
+              </div>
+              <p class="questReward"></p>
+            </div>
+
+            <div>
+              <div class="questProgress">
+                <div class="questProgressChild"></div>
+              </div>
+              <p class="questProgressItems"></p>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div class="questHub">
         <div class="questItems">

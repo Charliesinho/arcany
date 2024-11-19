@@ -307,6 +307,8 @@ const rockExploreMinigame = document.querySelector(".rockExploreMinigame");
 const questHubIcon = document.querySelector(".cardsIcon");
 const questHub = document.querySelector(".questHub");
 
+const questClose = document.querySelector(".questClose");
+
 const placeWalls = document.getElementById("placeWalls");
 const deleteWalls = document.getElementById("deleteWalls");
 const showWalls = document.getElementById("showWalls");
@@ -317,8 +319,10 @@ const placeCookingArea = document.getElementById("placeCookingArea");
 const placeChest = document.getElementById("placeChest");
 const placeTransition = document.getElementById("placeTransition");
 const roomsDiv = document.getElementById('roomsDev');
+const dialogsDiv = document.getElementById('dialogsDev');
 const arcaneTransition = document.getElementById('arcaneTransition');
 const liquidTransition = document.getElementById('liquidTransition');
+const placeDialog = document.getElementById('placeDialog');
 
 const exploreMap = document.getElementById("exploreMap");
 const uiTop = document.getElementById("uiTop");
@@ -825,64 +829,6 @@ let deleting = false;
 
 //Switch inventories >
 
-const inventorySwitcher = document.querySelector(".inventorySwicther")
-const soulsSwitcher = document.querySelector(".soulsSwitcher")
-const capeSwitcher = document.querySelector(".capeSwitcher")
-
-const inventoryWindowShow = document.querySelector(".inventoryHide")
-inventoryWindowShow.style.display = "flex"
-
-const soulsWindowShow = document.querySelector(".soulsHide")
-soulsWindowShow.style.display = "none";
-
-const capeWindowShow = document.querySelector(".capeHide")
-capeWindowShow.style.display = "none";
-
-const deleteButton = document.querySelector(".deleteButton")
-
-inventorySwitcher.addEventListener("click", function () {
-  audioClick.play();
-  inventoryWindowShow.style.display = "flex";
-  soulsWindowShow.style.display = "none";
-  capeWindowShow.style.display = "none";
-})
-
-soulsSwitcher.addEventListener("click", function () {
-  audioClick.play();
-  inventoryWindowShow.style.display = "none";
-  soulsWindowShow.style.display = "flex";
-  capeWindowShow.style.display = "none";
-
-  deleting = false;
-  // inventoryWindowShow.style.background = "var(--backgroundObjects)";
-  // deleteButton.style.background = "rgb(255, 110, 110)";
-})
-
-capeSwitcher.addEventListener("click", function () {
-  audioClick.play();
-  inventoryWindowShow.style.display = "none";
-  soulsWindowShow.style.display = "none";
-  capeWindowShow.style.display = "flex";
-
-  deleting = false;
-  // inventoryWindowShow.style.background = "var(--backgroundObjects)";
-  // deleteButton.style.background = "rgb(255, 110, 110)";
-})
-
-deleteButton.addEventListener("click", function () {
-  audioClick.play();
-  if (deleting && inventoryWindowShow.style.display === "flex") {
-    deleting = false;
-    // inventoryWindowShow.style.background = "var(--backgroundObjects)";
-    // deleteButton.style.background = "rgb(255, 110, 110)";
-  }
-
-  else if (deleting === false && inventoryWindowShow.style.display === "flex") {
-    deleting = true;
-    // inventoryWindowShow.style.background = "rgb(255, 72, 121)";
-    // deleteButton.style.background = "rgb(255, 72, 121)";
-  }
-})
 
 //Switch inventories <
 
@@ -1295,7 +1241,7 @@ function interactInventory(item, index) {
 
     if (cookingContainer.style.display == "block" && currentlyCooking === false) {
 
-      if (inventorySlots[`inventorySlot${index}`].style.background !== "none") {
+      if (inventorySlots[`inventorySlot${index}`].src !== "") {
         if(consumeAvailable === true && deleting === false) {
 
           if (item.type === "questItem" || item.type === "food") {
@@ -1393,7 +1339,7 @@ function interactInventory(item, index) {
     }
     else if (shop.style.display !== "flex") {
 
-      if (inventorySlots[`inventorySlot${index}`].style.background !== "none") {
+      if (inventorySlots[`inventorySlot${index}`].src !== "data:,") {
         if(consumeAvailable === true && deleting === false) {
 
           consumeAvailable = false;
@@ -1409,7 +1355,7 @@ function interactInventory(item, index) {
             type: item.type,
             value: item.value
           }
-          inventorySlots[`inventorySlot${index}`].style.background = `none`;
+          inventorySlots[`inventorySlot${index}`].src = `data:,`;
           inventorySlots[`inventorySlot${index}`].removeEventListener("mousedown", (e) => interactInventory(item, index));
 
           if(item.type === "food") {
@@ -1425,7 +1371,7 @@ function interactInventory(item, index) {
     }
     else {
 
-      if (inventorySlots[`inventorySlot${index}`].style.background !== "none") {
+      if (inventorySlots[`inventorySlot${index}`].src !== "data:,") {
         if(consumeAvailable === true && deleting === false) {
 
           consumeAvailable = false;
@@ -1443,7 +1389,7 @@ function interactInventory(item, index) {
             type: item.type,
             value: item.value
           }
-          inventorySlots[`inventorySlot${index}`].style.background = `none`;
+          inventorySlots[`inventorySlot${index}`].src = `data:,`;
           inventorySlots[`inventorySlot${index}`].removeEventListener("mousedown", (e) => interactInventory(item, index));
 
           if(item.type === "food") {
@@ -1660,6 +1606,14 @@ let newCombatLevel = 0;
 let changeCombatLevel = true;
 let combatLevelSimple = 0;
 
+function initDraggables() {
+  dragula([document.querySelector(".dragParent"), document.querySelector(".dragParent1")])
+}
+
+setTimeout(() => {
+  initDraggables()
+}, 1000);
+
 let maxHealth = 6;
 let currentHealth = 6;
 
@@ -1690,6 +1644,82 @@ function health() {
   }
 }
 
+function updateQuestUI() {
+  // Select the #uiQuest div
+  const uiQuestDiv = document.getElementById("uiQuest");
+
+  // Get a list of quest titles currently in myPlayer.questsOngoing
+  const ongoingQuestTitles = myPlayer.questsOngoing
+    .filter(quest => quest.title)          // Filter only quests that have a title
+    .map(quest => quest.title);            // Map to an array of titles
+
+  // Remove any images in #uiQuest that are not in ongoingQuestTitles
+  Array.from(uiQuestDiv.querySelectorAll("img[data-title]")).forEach(img => {
+    const title = img.getAttribute("data-title");
+    if (!ongoingQuestTitles.includes(title)) {
+      img.remove();
+    }
+  });
+
+  // Add images for quests that are in myPlayer.questsOngoing but not yet in #uiQuest
+  myPlayer.questsOngoing.forEach(currentQuest => {
+    if (!currentQuest.title) return;       // Skip if no title
+
+    // Check if an image for this quest already exists
+    const existingQuestImage = uiQuestDiv.querySelector(`img[data-title="${currentQuest.title}"]`);
+    if (existingQuestImage) return;
+
+    // Create and append a new img element for the quest
+    const questImage = document.createElement("img");
+    questImage.src = currentQuest.questCard;
+    questImage.alt = currentQuest.title;
+    questImage.setAttribute("data-title", currentQuest.title);
+    questImage.classList.add("questCardImage");
+    questImage.classList.add("pointerActivator");
+
+    questImage.addEventListener("click", () => {
+      const quest = myPlayer.questsOngoing.find(q => q.title === currentQuest.title);
+
+      if (quest) {
+        updateQuestInfo(quest);
+        const questUi = document.querySelector(".questInfo");
+        questUi.style.display = "flex";
+        openIvn()
+      }
+    });
+
+    uiQuestDiv.appendChild(questImage);
+  });
+}
+
+function updateQuestInfo(quest) {
+  const questUi = document.querySelector(".questInfo");
+  const questTitle = document.querySelector(".questTitle");
+  const questDescription = document.querySelector(".questDescription");
+  const questEndItem = document.querySelector(".questEndItem");
+  const questProgressChild = document.querySelector(".questProgressChild");
+  const questProgressItems = document.querySelector(".questProgressItems");
+  const questReward = document.querySelector(".questReward");
+
+  questTitle.innerHTML = quest.title;
+  questDescription.innerHTML = quest.questDescription;
+  questEndItem.src = `./inventory/${quest.rewardType}.png`
+
+  let itemAmount = myPlayer.inventory.filter((item) => item.type === quest.completionItem).length;
+  questProgressItems.innerHTML = itemAmount + " / " + quest.completionAmount + " " + quest.completionItem
+
+  questProgressChild.style.width = (itemAmount / quest.completionAmount) * 100 + "%";
+
+  questReward.innerHTML = "x" + quest.rewardItem + " " + quest.rewardType
+}
+
+questClose.addEventListener("click", () => {
+  const questUi = document.querySelector(".questInfo");
+  questUi.style.display = "none";
+})
+
+
+
 socket.on("player", (serverPlayer) => {
 
   const index = players.findIndex((player) => player.id === serverPlayer.id);
@@ -1710,25 +1740,14 @@ socket.on("player", (serverPlayer) => {
     return;
   }
 
-  console.log(myPlayer.room)
-
   health()
-
-  // if (myPlayer.health === 3) {
-  //   healthImage.src = "./fullHearts.png";
-  // } else if (myPlayer.health === 2) {
-  //   healthImage.src = "./halfHearts.png";
-  // } else if (myPlayer.health === 1) {
-  //   healthImage.src = "./emptyHearts.png";
-  // }
+  updateQuestUI()
 
   playerCoinsAmount.innerHTML = myPlayer.currency
   // console.log(myPlayer)
 
   //Adapt shop to player >
-    if (myPlayer.questsOngoing.some(questItem => questItem[0].name === "SlimyProblem") && shopItem5 && myPlayer.room === "baseMap") {
-      shopItem5.parentNode?.removeChild(shopItem5)
-    }
+  
   //Adapt shop to player <
 
    // Combat level >
@@ -2111,14 +2130,10 @@ socket.on("player", (serverPlayer) => {
 
 
         if (myPlayer.inventory[i]) {
-          inventorySlots[`inventorySlot${i}`].style.background = `url(${myPlayer.inventory[i].image})`;
+          inventorySlots[`inventorySlot${i}`].src = myPlayer.inventory[i].image;
         } else {
-          inventorySlots[`inventorySlot${i}`].style.background = `none`;
+          inventorySlots[`inventorySlot${i}`].src="data:image/svg+xml;charset=utf8,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%3E%3C/svg%3E";
         }
-
-          inventorySlots[`inventorySlot${i}`].style.backgroundSize = '70px';
-          inventorySlots[`inventorySlot${i}`].style.backgroundPosition = 'center';
-          inventorySlots[`inventorySlot${i}`].style.backgroundRepeat = 'no-repeat';
 
           function deleteInventoryReference () {
             deleteInventory(myPlayer.inventory[i], i);
@@ -2134,16 +2149,6 @@ socket.on("player", (serverPlayer) => {
             });
           }
       };
-    } else {
-      inventorySlots[`inventorySlot0`].style.background = `none`;
-      inventorySlots[`inventorySlot1`].style.background = `none`;
-      inventorySlots[`inventorySlot2`].style.background = `none`;
-      inventorySlots[`inventorySlot3`].style.background = `none`;
-      inventorySlots[`inventorySlot4`].style.background = `none`;
-      inventorySlots[`inventorySlot5`].style.background = `none`;
-      inventorySlots[`inventorySlot6`].style.background = `none`;
-      inventorySlots[`inventorySlot7`].style.background = `none`;
-      inventorySlots[`inventorySlot8`].style.background = `none`;
     }
 
 });
@@ -2233,13 +2238,6 @@ socket.on("obtained", (item) => {
   console.log("OBTAINED", item)
   const image = item.image;
   obtainedAnim(image);
-
-  //Quest progress >
-    if (myPlayer.questsOngoing.some(questItem => questItem[0].name === "SlimyProblem" && item.name === "sardin")) {
-      let questItem = myPlayer.questsOngoing.find(questItem => questItem[0].name === "SlimyProblem");
-      progressQuestCounter(questItem, 2);
-    }
-  //Quest progress <
 
 });
 
@@ -2353,6 +2351,9 @@ let IslandChestOpened = false;
 let grassCookingAvailable = false;
 let grassOpenCooking = false;
 let currentlyCooking = false;
+
+let dialogAvailable = false;
+let dialogOpened = false;
 
 let grassCraftingAvailable = false;
 let grassOpenCrafting = false;
@@ -2534,6 +2535,17 @@ window.addEventListener("keydown", (e) => {
 
   //Shop grasslands open <
 
+  //Dialog grasslands open >
+
+  if(e.key === "e" && dialogAvailable & !dialogOpened) {
+    dialogOpened = true;
+    startDialog(currentDialogTitle);
+  } else if (e.key === "e" && dialogAvailable & dialogOpened) {
+    dialogOpened = false;
+  }
+
+  //Dialog grasslands open <
+  
   //Cooking grasslands open >
 
   if(e.key === "e" && grassCookingAvailable & !grassOpenCooking) {
@@ -2874,754 +2886,254 @@ function drawOnTop (img, x, y, width, height, cx, cy) {
 }
 //Drawing order <
 
-//Base Map Canvas >
+// Chat System >
 
-function lobbyLoop() {
-  // canvas.clearRect(0, 0, canvasLobby.width, canvasLobby.height);
-  canvas.clearRect(0, 0, 4500, 4500);
-  canvas.imageSmoothingEnabled = false;
+var blockChar = document.querySelector('.char-name');
+var textBlock = document.querySelector('.text-block');
+var starquest = document.querySelector('.starquest');
+var charimg = document.querySelector('.char-img');
+var containerChat = document.querySelector('.container');
 
-  let cameraX = 0;
-  let cameraY = 0;
-  if (myPlayer) {
-    cameraX = playerX - canvasLobby.width / 2 + 10;
-    cameraY = playerY - canvasLobby.height / 2 + 50;
-  }
+var textSpeed = 50;
+let currentDialogTitle = ""
+var currentDialog = [];  // This will hold the current dialog to display
+let currentDialogParent = {};
+var currentDialogIndex = 0;  // Keeps track of which paragraph we're on
+var loopLen = 0;  // Character loop index
+var isTyping = false;  // Flag to prevent advancing while typing
 
+let dialogBoxes = {
+    "fishing Quest": {
+		dialogName: "quest",
+		questRequirements: [],
+		type: "counter",
 
-  // canvas.drawImage(mapLobby, cameraShakeX - cameraX, cameraShakeY - cameraY, 4500, 4500);
-
-  //Map Animation >
-
-  frameCurrentMap = frameCurrentMap % 4;
-  mapCutX = frameCurrentMap * 1000;
-
-  canvas.drawImage(
-    mapLobby,
-    mapCutX,
-    mapCutY,
-    1000,
-    1000,
-    cameraShakeX - cameraX,
-    cameraShakeY - cameraY,
-    4500,
-    4500,
-  );
-
-  mapFramesDrawn++;
-
-  if (mapFramesDrawn >= 10) {
-    frameCurrentMap++;
-    mapFramesDrawn = 0;
-  }
-
-  //Map Animation <
-
-  particles.forEach(particle => {
-    canvas.beginPath();
-    canvas.fillStyle = particle.color;
-    canvas.fillRect(particle.initalX + particle.x - cameraX - 10, particle.intialY + particle.y - cameraY + 50, particle.size, particle.size);
-
-    // Move particles
-    particle.x += Math.cos(particle.angle) * particle.speed;
-    particle.y += Math.sin(particle.angle) * particle.speed;
-
-    // Decrease size over time
-    particle.size -= 0.5;
-    particle.speed -= 0.02 * particle.speed
-  });
-
-  particles = particles.filter(particle => particle.size > 0 );
-  
-
-  //Local Actions >
-
-  if (myPlayer) {
-
-    for (const projectile of projectilesClient) {
-      projectile.x += Math.cos(projectile.angle || projectile.bullet1 || projectile.bullet2) * 35;
-      projectile.y += Math.sin(projectile.angle || projectile.bullet1 || projectile.bullet2) * 35;
-    }
-
-    //Player Movement >
-    if (movingLeft && allowedMoveUpLeft) {
-      inputs["left"] = true;
-      playerX -= 4;
-    } else {
-      inputs["left"] = false;
-    }
-    if (movingRight && allowedMoveUpRight) {
-      inputs["right"] = true;
-      playerX += 4;
-    } else {
-      inputs["right"] = false;
-    }
-    if (movingUp && allowedMoveUpUp) {
-      inputs["up"] = true;
-      playerY -= 4;
-    } else {
-      inputs["up"] = false;
-    }
-    if (movingDown && allowedMoveUpDown) {
-      inputs["down"] = true;
-      playerY += 4;
-    } else {
-      inputs["down"] = false;
-    }
-
-    if (movingDown || movingUp || movingLeft || movingRight) {
-      for (let i = 0; i < 1; i++) {
-        const speed = Math.floor(Math.random() * (2 - 1 + 1)) + 1;; // Random speed (adjust as needed)
-        const size = 20; // Random size between 3 and 8
-        const particleX = myPlayer.x;
-        const particleY = myPlayer.y + 30;
-  
-        const randomNumber = Math.floor(Math.random() * 2) + 1;
-        
-        if (randomNumber === 1) {
-          
-          particles.push({ x: 1, y: 1, size: size, color: 'white', speed: speed, angle: -190, initalX: particleX, intialY: particleY });
-          
-        }
-  
-      }
-    }
-
-    //Player Movement <
-
-    //Player Collision >
-    let playerColminX = playerX - cameraX - 30;
-    let playerColminY = playerY - cameraY + 50;
-    let playerColLengthX = playerWidth + 50;
-    let playerColLengthY = playerHeight + 22;
-    canvas.beginPath();
-    canvas.fillStyle = "rgb(255, 0, 13, 0.0)"; //Change the last value to 0.3 to make it visible
-    canvas.fillRect(playerColminX, playerColminY, playerColLengthX, playerColLengthY);
-    //Player Collision <
-
-
-    //Player Location >
-    // console.log(myPlayer.x, myPlayer.y)
-    //Player Location <
-
-    //Grasslands walls >
-    let wallsVisibility = 0.0;
-
-    //Shop Grasslands activator >
-    const grasslandsShopx = 2980 - cameraShakeX - cameraX;
-    const grasslandsShopY = 3090 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(255, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grasslandsShopx, grasslandsShopY, 200, 300);
-
-    if (playerColminX + playerColLengthX > grasslandsShopx && playerColminY + playerColLengthY > grasslandsShopY && playerColminY < grasslandsShopY + 300 && playerColminX < grasslandsShopx + 200) {
-      if (grassOpenShop &&  shop.style.display !== "flex") {
-        shop.style.display = "flex";
-        shop.style.top = "20px";
-        grasslandsEnviroment.pause();
-        shopSong.play();
-      } else if (!grassOpenShop) {
-        shop.style.display = "none";
-        shopSong.pause();
-        shopSong.currentTime = 0;
-        grasslandsEnviroment.play();
-      }
-      grassShopAvailable = true;
-    } else {
-      grassShopAvailable = false;
-      grassOpenShop = false;
-      shop.style.display = "none";
-      grasslandsEnviroment.play();
-      shopSong.pause();
-      shopSong.currentTime = 0;
-    }
-
-    if (fishingLevelSimple >= 5) {
-      shopItem3.src = "./cardsShop/shopMellyCape.png"
-    }
-    //Shop Grasslands activator <
-
-    //Cooking Grasslands activator >
-    const grasslandsCookingx = 2300 - cameraShakeX - cameraX;
-    const grasslandsCookingY = 3000 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(255, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grasslandsCookingx, grasslandsCookingY, 200, 300);
-
-    if (playerColminX + playerColLengthX > grasslandsCookingx && playerColminY + playerColLengthY > grasslandsCookingY && playerColminY < grasslandsCookingY + 300 && playerColminX < grasslandsCookingx + 200) {
-      if (grassOpenCooking) {
-        cookingContainer.style.display = "block";
-      } else {
-        cookingContainer.style.display = "none";
-      }
-      grassCookingAvailable = true;
-    } else {
-      grassCookingAvailable = false;
-      grassOpenCooking = false;
-      cookingPot.style.opacity = "0";
-    }
-    //Cooking Grasslands activator <
+    questName: "Fishing quest",
+    questDecription: "Melina said that if I bring her five fish of any type then she will give me a reward",
+    questCard: "./Cards/fish.png",
+    rewardType: "coins",
+    rewardItem: 10,
+    completionItem: "fish",
+    completionAmount: 5,
     
-    //Crafting Grasslands activator >
-    const grasslandsCraftingx = 2600 - cameraShakeX - cameraX;
-    const grasslandsCraftingY = 3000 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(255, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grasslandsCraftingx, grasslandsCraftingY, 200, 300);
+		dialogText:
+		[
+      {
+        NPC: "Quest giver",
+				text: "Hello Kid! Oh you are looking for a task? Well I can give you some money just for your efforts, go fish 5 fish and bring them back to me.",
+			},
+			{
+        NPC: myPlayer ? myPlayer.username : "User",
+				text: "Alright that sounds simple enough!",
+			},
+		],
 
-    if (playerColminX + playerColLengthX > grasslandsCraftingx && playerColminY + playerColLengthY > grasslandsCraftingY && playerColminY < grasslandsCraftingY + 300 && playerColminX < grasslandsCraftingx + 200) {
-      if (grassOpenCrafting) {
-        craftingContainer.style.display = "block";
-      } else {
-        craftingContainer.style.display = "none";
-      }
-      grassCraftingAvailable = true;
-    } else {
-      grassCraftingAvailable = false;
-      grassOpenCrafting = false;
-    }
-    //Crafting Grasslands activator <
+    progressText:
+    [
+      {
+        NPC: "Quest giver",
+        text: "So? I am waiting on those fish!",
+      },
+      {
+        NPC: "Quest giver",
+        text: "Do you have them?",
+        check: true,
+      },
+    ],
 
-    //Explore Grasslands activator >
-    const grasslandsExplorex = 2000 - cameraShakeX - cameraX;
-    const grasslandsExploreY = 3300 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(0, 255, 0, ${wallsVisibility})`;
-    canvas.fillRect(grasslandsExplorex, grasslandsExploreY, 200, 300);
+    rewardText:
+    [
+      {
+        NPC: "Quest giver",
+        text: "Really nice job! Here is some cash.",
+      },
+      {
+        NPC: myPlayer ? myPlayer.username : "User",
+        text: "Thank you!",
+      },
+    ],
+	},
 
-    if (playerColminX + playerColLengthX > grasslandsExplorex && playerColminY + playerColLengthY > grasslandsExploreY && playerColminY < grasslandsExploreY + 300 && playerColminX < grasslandsExplorex + 200) {
-      if (grassOpenExplore) {
-        exploreMap.style.visibility = "visible";
-      } else {
-        exploreMap.style.visibility = "hidden";
-      }
-      grassExploreAvailable = true;
-    } else {
-      grassExploreAvailable = false;
-      grassOpenExplore = false;
-      exploreMap.style.visibility = "hidden";
-    }
-    //Explore Grasslands activator <
+    dialogTest: {
+		dialogName: "dialog",
+		questRequirements: [],
+		type: "dialog",
+		dialogText:
+		[
+			{
+				NPC: "Mr. Ass",
+				text: "Hello Kid!",
+			},
+			{
+				NPC: "Melina",
+				text: "Who are you?",
+			},
+			{
+				NPC: "Mr. Ass",
+				text: "go fish around there!",
+        cutscene: [1200, 1000]
+			},
+			{
+				NPC: "Mr. Ass",
+				text: "You know nothing!",
+			},
+			{
+				NPC: "Melina",
+				text: "WHAT?????",
+			},
+		],
+	},
+};
 
-    //Leftwall of island
-    const grassLeftWallX = 2130 - cameraShakeX - cameraX;
-    const grassLeftWallY = 3100 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grassLeftWallX, grassLeftWallY, -20, 600);
-
-    //Wall right of the dock
-    const grassRightWallX1 = 3500 - cameraShakeX - cameraX;
-    const grassRightWallY1 = 3100 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grassRightWallX1, grassRightWallY1, 20, 600);
-
-    //Wall right top of the island
-    const grassRightWallX2 = 3280 - cameraShakeX - cameraX;
-    const grassRightWallY2 = 3040 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grassRightWallX2, grassRightWallY2, 20, 300);
-
-    //Wall right down of the island
-    const grassRightWallX3 = 3280 - cameraShakeX - cameraX;
-    const grassRightWallY3 = 3460 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grassRightWallX3, grassRightWallY3, 20, 300);
-
-    //Walls of the shop
-    const grassRightWallX4 = 2980 - cameraShakeX - cameraX;
-    const grassRightWallY4 = 3010 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grassRightWallX4, grassRightWallY4, 200, 300);
-
-    //Wall bottom of the island
-    const grassRightWallX5 = 1580 - cameraShakeX - cameraX;
-    const grassRightWallY5 = 3600 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grassRightWallX5, grassRightWallY5, 2200, 20);
-
-    //Wall top of the island
-    const grassRightWallX6 = 2630 - cameraShakeX - cameraX;
-    const grassRightWallY6 = 3230 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grassRightWallX6, grassRightWallY6, 800, 20);
-
-    //Wall top of the island
-    const grassRightWallX7 = 1980 - cameraShakeX - cameraX;
-    const grassRightWallY7 = 3230 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grassRightWallX7, grassRightWallY7, 1200, 20);
-
-    //Wall top of the dock
-    const grassRightWallX8 = 3280 - cameraShakeX - cameraX;
-    const grassRightWallY8 = 3320 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grassRightWallX8, grassRightWallY8, 800, 20);
-
-    //Wall down of the dock
-    const grassRightWallX9 = 3280 - cameraShakeX - cameraX;
-    const grassRightWallY9 = 3460 - cameraShakeY - cameraY;
-    canvas.beginPath();
-    canvas.fillStyle = `rgb(0, 0, 0, ${wallsVisibility})`;
-    canvas.fillRect(grassRightWallX9, grassRightWallY9, 800, 20);
-
-    //Blockers Right
-    if (
-      playerColminX + playerColLengthX > grassRightWallX1 && playerColminY > grassRightWallY1 && playerColminY < grassRightWallY1 + 600 && playerColminX < grassRightWallX1 + 20
-      ||
-      playerColminX + playerColLengthX > grassRightWallX2 && playerColminY > grassRightWallY2 && playerColminY < grassRightWallY2 + 300 && playerColminX < grassRightWallX2 + 20
-      ||
-      playerColminX + playerColLengthX > grassRightWallX3 && playerColminY > grassRightWallY3 && playerColminY < grassRightWallY3 + 300 && playerColminX < grassRightWallX3 + 20
-      ||
-      playerColminX + playerColLengthX > grassRightWallX4 && playerColminY > grassRightWallY4 && playerColminY < grassRightWallY4 + 300 && playerColminX < grassRightWallX4 + 20
-
-      ) {
-      allowedMoveUpRight = false;
-    } else {
-      allowedMoveUpRight = true;
-    }
-
-    //Blockers left
-    if (
-      playerColminX < grassLeftWallX && playerColminY > grassLeftWallY && playerColminY < grassLeftWallY + 600 && playerColminX > grassLeftWallX - 20
-      ||
-      playerColminX < grassRightWallX4 + 200 && playerColminY > grassRightWallY4 && playerColminY < grassRightWallY4 + 300 && playerColminX > grassRightWallX4
-      ) {
-      allowedMoveUpLeft = false;
-    } else {
-      allowedMoveUpLeft = true;
-    }
-
-    //Blockers top
-    if (
-      playerColminX + playerColLengthX > grassRightWallX4 && playerColminY > grassRightWallY4 && playerColminY < grassRightWallY4 + 300 && playerColminX < grassRightWallX4 + 200
-      ||
-      playerColminX + playerColLengthX > grassRightWallX6 && playerColminY + playerColLengthY > grassRightWallY6 && playerColminY < grassRightWallY6 + 20 && playerColminX < grassRightWallX6 + 800
-      ||
-      playerColminX + playerColLengthX > grassRightWallX7 && playerColminY + playerColLengthY > grassRightWallY7 && playerColminY < grassRightWallY7 + 20 && playerColminX < grassRightWallX7 + 800
-      ||
-      playerColminX + playerColLengthX > grassRightWallX8 && playerColminY + playerColLengthY > grassRightWallY8 && playerColminY < grassRightWallY8 + 20 && playerColminX < grassRightWallX8 + 800
-      ) {
-      allowedMoveUpUp = false;
-    } else {
-      allowedMoveUpUp = true;
-    }
-
-    //Blockers down
-    if (
-      playerColminX + playerColLengthX > grassRightWallX5 && playerColminY + playerColLengthY > grassRightWallY5 && playerColminY < grassRightWallY5 + 20 && playerColminX < grassRightWallX5 + 2200
-      ||
-      playerColminX + playerColLengthX > grassRightWallX9 && playerColminY + playerColLengthY > grassRightWallY9 && playerColminY < grassRightWallY9 + 20 && playerColminX < grassRightWallX9 + 800
-      ) {
-      allowedMoveUpDown = false;
-    } else {
-      allowedMoveUpDown = true;
-    }
-
-    //GrassLands walls <
-
-    //Fishing Area >
-    fishingArea.minX = 3350 - cameraShakeX - cameraX;
-    fishingArea.minY = 3380 - cameraShakeY - cameraY;
-    fishingArea.maxX = 250;
-    fishingArea.maxY = 100;
-    canvas.beginPath();
-    canvas.fillStyle = "rgb(0, 89, 255, 0.0)"; //Change the last value to 0.3 to male it visible
-    canvas.fillRect(fishingArea.minX, fishingArea.minY, fishingArea.maxX, fishingArea.maxY);
-
-    if (playerColminX > fishingArea.minX &&
-      playerColLengthX + playerColLengthX < fishingArea.minX + fishingArea.maxY + 200 &&
-      playerColminY > fishingArea.minY &&
-      playerColLengthY + playerColLengthY < fishingArea.minY + fishingArea.maxY - 350) {
-        fishAvailable = true;
-      } else {
-        fishAvailable = false;
-      };
-    //Fishing Area <
-    }
-
-  //Local Actions <
-
-  for (const player of players) {
-    if (player.room === myPlayer.room) {
-
-      // Weapon >
-     if (player.weapon[0]) {
-
-      if (player.username === myPlayer.username) {
-        // console.log(player.weapon[0])
-        canvas.save(); // Save the current canvas state
-        canvas.translate(playerX - cameraX, playerY - cameraY +90); // Translate to the player's position
-        canvas.rotate(-190); // Rotate based on the mouse angle
-        if (player.weapon[0].name === "solarStaffCommon") {
-          canvas.drawImage(solarStaffCommon ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
-        }
-        else if (player.weapon[0].name === "arcaneStaffCommon") {
-          canvas.drawImage(arcaneStaffCommon ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
-        }
-        else if (player.weapon[0].name === "nuclearStaffCommon") {
-          canvas.drawImage(nuclearStaffCommon ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
-        }
-      } else {
-        canvas.save(); // Save the current canvas state
-        canvas.translate(player.x - cameraX +18, player.y - cameraY +50); // Translate to the player's position
-        canvas.rotate(player.weaponAngle); // Rotate based on the mouse angle
-        console.log(player.weapon[0])
-        if (player.weapon[0].name === "solarStaffCommon") {
-          canvas.drawImage(solarStaffCommon ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
-        }
-        else if (player.weapon[0].name === "arcaneStaffCommon") {
-          canvas.drawImage(arcaneStaffCommon ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
-        }
-        else if (player.weapon[0].name === "nuclearStaffCommon") {
-          canvas.drawImage(nuclearStaffCommon ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
-        }
-       }
-
-      }
-      canvas.restore(); // Restore the canvas state to what it was before translation and rotation
-      // Weapon <
-
-
-      //Armor >
-      let armor = character;
-
-      if (player.armor[0]) {
-        if (player.armor[0].name === "warrior") {
-          armor = frogWarriorSkin;
+// Function to display one paragraph from the dialog
+function displayDialogParagraph() {
+    if (currentDialogIndex < currentDialog.length) {
+		blockChar.innerHTML = currentDialog[currentDialogIndex].NPC;
+		charimg.style.background = `url("${currentDialog[currentDialogIndex].image}")`
+        let entry = currentDialog[currentDialogIndex].text;
+        textBlock.innerHTML = "";  // Clear the text block before starting
+        loopLen = 0;
+        isTyping = true;  // Set typing flag
+        if (currentDialog[currentDialogIndex].check) {
+          typeText(entry);
         } else {
-          armor = character;
+          typeText(entry);
         }
-      }
-      //Armor <
 
-      //Cape >
-      let artifact = transparentCape;
-
-      if (player.artifact[0]) {
-        if (player.artifact[0].name === "rags") {
-          artifact = cape;
-        } else if (player.artifact[0].name === "fisherman") {
-          artifact = fishermanCape;
+        if (currentDialog[currentDialogIndex].cutscene) {
+          cutscene = true;
+          secondaryCameraX = currentDialog[currentDialogIndex].cutscene[0]
+          secondaryCameraY = currentDialog[currentDialogIndex].cutscene[1]
         } else {
-          artifact = transparentCape;
-        }
-      }
-      //Cape <
-
-      //Movement >
-      if (player.username === myPlayer.username) {
-        playerWidth = character.width / 6
-        playerHeight = character.height / 4;
-
-        if (player.anim === "idleRight" && player.lastLooked === "right") {
-          frameCurrentPlayer = frameCurrentPlayer % 4;
-
-          playerCutX = frameCurrentPlayer * playerWidth;
-          canvas.drawImage(
-            armor,
-            playerCutX,
-            playerCutY,
-            playerWidth,
-            playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 120,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-          canvas.drawImage(
-            artifact,
-            playerCutX,
-            playerCutY,
-            playerWidth,
-            playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 120,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-        }
-        else if (player.anim === "idleRight" && player.lastLooked === "left") {
-          frameCurrentPlayer = frameCurrentPlayer % 4;
-          playerCutX = frameCurrentPlayer * playerWidth;
-          canvas.drawImage(
-            armor,
-            playerCutX,
-            playerCutY + 24,
-            playerWidth,
-            playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 120,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-          canvas.drawImage(
-            artifact,
-            playerCutX,
-            playerCutY + 24,
-            playerWidth,
-            playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 120,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-        }
-        else if (player.anim === "runRight") {
-          frameCurrentPlayer = frameCurrentPlayer % 6;
-          playerCutX = frameCurrentPlayer * playerWidth;
-          canvas.drawImage(
-            armor,
-            playerCutX,
-            playerCutY + 48,
-            playerWidth,
-            playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 120,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-          canvas.drawImage(
-            artifact,
-            playerCutX,
-            playerCutY + 48,
-            playerWidth,
-            playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 120,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-        }
-        else if (player.anim === "runLeft") {
-          frameCurrentPlayer = frameCurrentPlayer % 6;
-          playerCutX = frameCurrentPlayer * playerWidth;
-          canvas.drawImage(
-            armor,
-            playerCutX,
-            playerCutY + 72,
-            playerWidth,
-            playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 120,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-          canvas.drawImage(
-            artifact,
-            playerCutX,
-            playerCutY + 72,
-            playerWidth,
-            playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 120,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-        }
-      } else {
-        if (player.anim === "idleRight" && player.lastLooked === "right") {
-          frameCurrentPlayer = frameCurrentPlayer % 4;
-
-          playerCutX = frameCurrentPlayer * playerWidth;
-          canvas.drawImage(
-            armor,
-            playerCutX,
-            playerCutY,
-            playerWidth,
-            playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 120,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-          canvas.drawImage(
-            artifact,
-            playerCutX,
-            playerCutY,
-            playerWidth,
-            playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 120,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-        }
-        else if (player.anim === "idleRight" && player.lastLooked === "left") {
-          frameCurrentPlayer = frameCurrentPlayer % 4;
-          playerCutX = frameCurrentPlayer * playerWidth;
-          canvas.drawImage(
-            armor,
-            playerCutX,
-            playerCutY + 24,
-            playerWidth,
-            playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 120,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-          canvas.drawImage(
-            artifact,
-            playerCutX,
-            playerCutY + 24,
-            playerWidth,
-            playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 120,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-        }
-        else if (player.anim === "runRight") {
-          frameCurrentPlayer = frameCurrentPlayer % 6;
-          playerCutX = frameCurrentPlayer * playerWidth;
-          canvas.drawImage(
-            armor,
-            playerCutX,
-            playerCutY + 48,
-            playerWidth,
-            playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 120,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-          canvas.drawImage(
-            artifact,
-            playerCutX,
-            playerCutY + 48,
-            playerWidth,
-            playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 120,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-        }
-        else if (player.anim === "runLeft") {
-          frameCurrentPlayer = frameCurrentPlayer % 6;
-          playerCutX = frameCurrentPlayer * playerWidth;
-          canvas.drawImage(
-            armor,
-            playerCutX,
-            playerCutY + 72,
-            playerWidth,
-            playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 120,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-          canvas.drawImage(
-            artifact,
-            playerCutX,
-            playerCutY + 72,
-            playerWidth,
-            playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 120,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
+          cutscene = false;
         }
     }
-      //Movement <
-
-      //Chat
-      if (player.chatMessage !== "none") {
-          canvas.drawImage(chatBubble, player.x - cameraX -85, player.y - cameraY -120, 200, 60)
-
-          canvas.beginPath();
-          canvas.font = "bolder 14px Arial";
-          canvas.textAlign = "center";
-          canvas.fillStyle = "gray";
-          canvas.fillText(player.chatMessage, player.x - cameraX +15, player.y - cameraY -90);
-      }
-      //Chat
-
-      //Username
-      if (player.username === myPlayer.username) {
-        canvas.drawImage(nameBubbleGreen, playerX - cameraX -40, playerY- cameraY -61, 100,50)
-
-        canvas.beginPath();
-        canvas.font = "bolder 14px Arial";
-        canvas.textAlign = "center";
-        canvas.fillStyle = "black";
-        canvas.fillText(player.username, playerX - cameraX +10, playerY - cameraY -20);
-
-        canvas.beginPath();
-        canvas.font = "bolder 10px Arial";
-        canvas.textAlign = "center";
-        canvas.fillStyle = "black";
-        canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)) , playerX - cameraX + 10, playerY - cameraY - 42.5);
-      } else {
-        canvas.drawImage(nameBubbleGreen, player.x - cameraX -40, player.y - cameraY -61, 100,50)
-
-        canvas.beginPath();
-        canvas.font = "bolder 14px Arial";
-        canvas.textAlign = "center";
-        canvas.fillStyle = "black";
-        canvas.fillText(player.username, player.x - cameraX +10, player.y - cameraY -20);
-
-
-        canvas.beginPath();
-        canvas.font = "bolder 10px Arial";
-        canvas.textAlign = "center";
-        canvas.fillStyle = "black";
-        canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)), playerX - cameraX + 10, playerY - cameraY - 42.5);
-      }
-      //Username
-
-    }
-
 }
 
-  for (const projectile of projectilesClient) {
-    if (myPlayer?.weapon[0]?.name === "solarStaffCommon") {
-      canvas.drawImage(bulletStick, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
-    }
-    if (myPlayer?.weapon[0]?.name === "arcaneStaffCommon") {
-      canvas.drawImage(bulletStickBlue, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
-    }
-  }
-
-  playerFramesDrawn++;
-  if (playerFramesDrawn >= 6) {
-    frameCurrentPlayer++;
-    playerFramesDrawn = 0;
-  }
-
-  enemyAnimDelay--
-  if (enemyAnimDelay <= 0)
-  {
-    enemyFramesDrawn++
-    if (enemyFramesDrawn >= framesEnemyTotal) {
-      frameCurrentEnemy++;
-      enemyFramesDrawn = 0;
-    }
-    enemyAnimDelay = 2;
-  }
-
+// Function to type text one letter at a time
+function typeText(entry) {
+    setTimeout(function() {
+        textBlock.innerHTML += entry[loopLen];
+        loopLen++;
+        if (loopLen < entry.length) {
+            typeText(entry);  // Continue typing if not finished
+            if (dialogOpened) {
+              const dialogsound = new Audio("./audios/dialogsound.wav");
+              dialogsound.loop = false;
+              dialogsound.play()
+            }
+        } else {
+            isTyping = false;  // Typing is done
+        }
+    }, textSpeed);
 }
 
-//Base Map Canvas <
+// Spacebar release advances to the next dialog if typing is done
+document.addEventListener('keyup', function(event) {
+    if (event.keyCode === 32 && !isTyping) {  // Only advance if not typing
+        currentDialogIndex++;  // Move to the next paragraph
+        if (currentDialogIndex < currentDialog.length) {
+            displayDialogParagraph();  // Display the next paragraph
+        } else if (dialogOpened) {
+          dialogOpened = false;
+          containerChat.style.display = "none";
+          console.log("Dialog finished", currentDialogParent.dialogName);
+
+          if (currentDialogParent.dialogName === "quest") {
+            
+            if (!myPlayer.questsOngoing.some(quest => quest.title === currentDialogParent.questName) && finishingQuest === false) {
+              const questToSend = {
+                title: currentDialogParent.questName,
+                type: currentDialogParent.type,
+                requirements: currentDialogParent.requirements,
+                completionItem: currentDialogParent.completionItem,
+                completionAmount: currentDialogParent.completionAmount,
+                rewardType: currentDialogParent.rewardType,
+                rewardItem: currentDialogParent.rewardItem,
+                questCard: currentDialogParent.questCard,
+                questDescription: currentDialogParent.questDecription,
+              }
+  
+              socket.emit("questStarted", questToSend);
+            }
+
+            finishingQuest = false; 
+            let indexToDeliver = [];
+  
+            for (const item of myPlayer.inventory) {
+              if (item.type === currentDialogParent.completionItem) {
+                indexToDeliver.push(myPlayer.inventory.indexOf(item))
+              }
+            }
+  
+            if (indexToDeliver.length >= currentDialogParent.completionAmount) {
+              let indexToDeliverMod = indexToDeliver.splice(0, currentDialogParent.completionAmount)
+              let questCompleted = {
+                name: currentDialogParent.questName,
+                rewardType: currentDialogParent.rewardType,
+                rewardAmount: currentDialogParent.rewardItem
+              }
+  
+              socket.emit("toDelete", indexToDeliverMod);
+              socket.emit("questFinished", questCompleted);
+            }
+            
+            
+          }
+
+          
+        }
+    }
+});
+
+let finishingQuest = false;
+
+socket.on("questFinishedDialog", (quest) => {
+  finishingQuest = true;
+  obtainedAnim(dialogBoxes[currentDialogTitle].questCard)
+  currentDialog = dialogBoxes[currentDialogTitle].rewardText;
+  currentDialogIndex = 0;
+  dialogOpened = true;
+  displayDialogParagraph();
+})
+
+// Function to start a specific dialog
+function startDialog(dialogKey) {
+    if (dialogBoxes[dialogKey]) {
+      console.log(dialogBoxes[dialogKey]);
+      currentDialogParent =  dialogBoxes[dialogKey]
+      if ((dialogBoxes[dialogKey].questName && !myPlayer.questsOngoing.some(obj => obj.title === dialogBoxes[dialogKey].questName)) || !dialogBoxes[dialogKey].questName) {
+        currentDialog = dialogBoxes[dialogKey].dialogText;
+      } 
+      else if (dialogBoxes[dialogKey].questName && myPlayer.questsOngoing.some(obj => obj.title === dialogBoxes[dialogKey].questName)) {
+        console.log(dialogBoxes[dialogKey].questName)
+        currentDialog = dialogBoxes[dialogKey].progressText;
+      }
+      currentDialogIndex = 0;
+      displayDialogParagraph();
+    } else {
+        console.error("Dialog not found: " + dialogKey);
+    }
+}
+
+// Increase text print speed on spacebar press (keydown)
+document.addEventListener('keydown', function(event) {
+    if (event.keyCode === 32) {
+        textSpeed = 5;  // Increase speed
+    }
+});
+
+// Reset text print speed on spacebar release (keyup)
+document.addEventListener('keyup', function(event) {
+    if (event.keyCode === 32) {
+        textSpeed = 50;  // Reset speed
+    }
+});
+
+// Chat System <
+
 
 let particles = [];
-
-//Island One Map Canvas >
-
-
-
-
 
 // Transitions >
 let transitionType = "arcane"
@@ -3744,6 +3256,7 @@ function lobbySoundtrack () {
 // Developer UI >
 
 let currentLand= "none";
+console.log("current land: ", currentLand)
 
 let mapsInfo = {
 
@@ -7450,6 +6963,29 @@ canvasLobby.addEventListener('click', function(event) {
     })
     currentlyPlacingWall = false;
   }
+  
+  else if (!currentlyPlacingWall && currentDevAction === "dialog" && currentSelectedWall === null) {
+    selectedXcoord = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
+    selectedYcoord = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    currentlyPlacingWall = true;
+  }
+  else if (currentSelectedWall === null && currentlyPlacingWall && currentDevAction === "dialog") {
+    const x = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
+    const y = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    const newWidth = x - selectedXcoord;
+    const newHeight = y - selectedYcoord;
+    
+    mapsInfo[currentLand].colliders.push({
+      type: "dialog",
+      name: currentDialogTitle,
+      x: selectedXcoord,
+      y: selectedYcoord,
+      width: newWidth,
+      height: newHeight,
+      color: `rgb(179, 255, 213, ${wallsVisibility})`
+    })
+    currentlyPlacingWall = false;
+  }
    
 });
 
@@ -7457,8 +6993,10 @@ placeWalls.addEventListener("click", function() {
  if (currentDevAction !== "wall") {
   currentDevAction = "wall";
   roomsDiv.style.display = "none"
+  dialogsDiv.style.display = "none"
   deleteWalls.style.backgroundColor = "black"
   placeFishingArea.style.backgroundColor = "black"
+  placeDialog.style.backgroundColor = "black"
   placeCookingArea.style.backgroundColor = "black"
   placeCraftingArea.style.backgroundColor = "black"
   placeChest.style.backgroundColor = "black"
@@ -7474,7 +7012,9 @@ deleteWalls.addEventListener("click", function() {
   if (currentDevAction !== "delete") {
     currentDevAction = "delete";
     roomsDiv.style.display = "none"
+    dialogsDiv.style.display = "none"
     placeWalls.style.backgroundColor = "black"
+    placeDialog.style.backgroundColor = "black"
     placeFishingArea.style.backgroundColor = "black"
     placeCookingArea.style.backgroundColor = "black"
     placeCraftingArea.style.backgroundColor = "black"
@@ -7491,7 +7031,9 @@ placeFishingArea.addEventListener("click", function() {
   if (currentDevAction !== "fish") {
     currentDevAction = "fish";
     roomsDiv.style.display = "none"
+    dialogsDiv.style.display = "none"
     deleteWalls.style.backgroundColor = "black"
+    placeDialog.style.backgroundColor = "black"
     placeWalls.style.backgroundColor = "black"
     placeCookingArea.style.backgroundColor = "black"
     placeCraftingArea.style.backgroundColor = "black"
@@ -7508,7 +7050,9 @@ placeCookingArea.addEventListener("click", function() {
 if (currentDevAction !== "cook") {
   currentDevAction = "cook";
   roomsDiv.style.display = "none"
+  dialogsDiv.style.display = "none"
   deleteWalls.style.backgroundColor = "black"
+  placeDialog.style.backgroundColor = "black"
   placeWalls.style.backgroundColor = "black"
   placeFishingArea.style.backgroundColor = "black"
   placeCraftingArea.style.backgroundColor = "black"
@@ -7525,7 +7069,9 @@ placeCraftingArea.addEventListener("click", function() {
 if (currentDevAction !== "craft") {
   currentDevAction = "craft";
   roomsDiv.style.display = "none"
+  dialogsDiv.style.display = "none"
   deleteWalls.style.backgroundColor = "black"
+  placeDialog.style.backgroundColor = "black"
   placeWalls.style.backgroundColor = "black"
   placeFishingArea.style.backgroundColor = "black"
   placeCookingArea.style.backgroundColor = "black"
@@ -7542,7 +7088,9 @@ placeTransition.addEventListener("click", function() {
 if (currentDevAction !== "transition") {
   currentDevAction = "transition";
   roomsDiv.style.display = "block"
+  dialogsDiv.style.display = "none"
   deleteWalls.style.backgroundColor = "black"
+  placeDialog.style.backgroundColor = "black"
   placeWalls.style.backgroundColor = "black"
   placeFishingArea.style.backgroundColor = "black"
   placeCookingArea.style.backgroundColor = "black"
@@ -7561,6 +7109,8 @@ if (currentDevAction !== "chest") {
   currentDevAction = "chest";
   roomsDiv.style.display = "none"
   deleteWalls.style.backgroundColor = "black"
+  dialogsDiv.style.display = "none"
+  placeDialog.style.backgroundColor = "black"
   placeWalls.style.backgroundColor = "black"
   placeFishingArea.style.backgroundColor = "black"
   placeCookingArea.style.backgroundColor = "black"
@@ -7602,6 +7152,25 @@ placeChestGem.addEventListener("click", function() {
   }
 });
 
+placeDialog.addEventListener("click", function() {
+  if (currentDevAction !== "dialog") {
+    currentDevAction = "dialog";
+    roomsDiv.style.display = "none"
+    dialogsDiv.style.display = "block"
+    deleteWalls.style.backgroundColor = "black"
+    placeWalls.style.backgroundColor = "black"
+    placeFishingArea.style.backgroundColor = "black"
+    placeCookingArea.style.backgroundColor = "black"
+    placeChest.style.backgroundColor = "black"
+    placeTransition.style.backgroundColor = "black"
+    placeCraftingArea.style.backgroundColor = "black"
+    placeDialog.style.backgroundColor = "rgba(170, 233, 170, 1)"
+  } else {
+    currentDevAction = "none";
+    placeDialog.style.backgroundColor = "black"
+  }
+});
+
 showWalls.addEventListener("click", function() {
 if (wallsVisibility === 0) {
   wallsVisibility = 0.5;
@@ -7623,6 +7192,8 @@ mapsInfo[currentLand].colliders.forEach(wall => {
     wall.color = `rgb(255, 255, 204, ${wallsVisibility})`
   } else if (wall.type === "transition") {
     wall.color = `rgb(204, 0, 204, ${wallsVisibility})`
+  } else if (wall.type === "dialog") {
+    wall.color = `rgb(179, 255, 213, ${wallsVisibility})`
   }
 })
 });
@@ -7672,6 +7243,28 @@ function addMapsInfoToDiv() {
       });
 
       roomsDiv.appendChild(pElement);
+    }
+  }
+  
+  for (const key in dialogBoxes) {
+    if (dialogBoxes.hasOwnProperty(key)) {
+      const pElement = document.createElement('p');
+      
+      pElement.innerHTML = key;
+      pElement.classList.add('roomsDev-item');
+
+      pElement.addEventListener('click', () => {
+        currentDialogTitle = key;
+
+        pElement.classList.add('textjump');
+        pElement.innerHTML = "Selected!";
+        setTimeout(() => {
+          pElement.classList.remove('textjump');
+          pElement.innerHTML = key;
+        }, 1000);
+      });
+
+      dialogsDiv.appendChild(pElement);
     }
   }
 }
@@ -7852,6 +7445,8 @@ function drawColliders () {
     allowedMoveUpLeft = true;
     allowedMoveUpUp = true;
     allowedMoveUpDown = true;
+
+    
     
     mapsInfo[currentLand].colliders.forEach(wall => {
       const adjustedX = wall.x - cameraShakeX - cameraX;
@@ -7867,6 +7462,18 @@ function drawColliders () {
         height: playerColLengthY
       }
 
+      let dialogCounter = 0;
+
+      mapsInfo[currentLand].colliders.forEach(wallX => {
+        const adjustedX = wallX.x - cameraShakeX - cameraX;
+        const adjustedY = wallX.y - cameraShakeY - cameraY;
+        
+        if (isColliding(playerCollider, { x: adjustedX, y: adjustedY, width: wallX.width, height: wallX.height })) {
+          if (wall.type === "dialog") {
+            dialogCounter++
+          }
+        }
+      })
       
       if (isColliding(playerCollider, { x: adjustedX, y: adjustedY, width: wall.width, height: wall.height })) {
         const playerCenterX = playerCollider.x + playerCollider.width / 2;
@@ -7899,6 +7506,15 @@ function drawColliders () {
           currentSelectedMap = wall.destination
           transition(wall.format)
         }
+        else if (wall.type === "dialog") {
+          dialogAvailable = true;
+          currentDialogTitle = wall.name;
+          if (dialogOpened) {
+            containerChat.style.display = "flex";
+          } else {
+            containerChat.style.display = "none";
+          }
+        }
         else if (wall.type === "cook") {
           grassCookingAvailable = true;
           if (grassOpenCooking) {
@@ -7928,6 +7544,11 @@ function drawColliders () {
         }
       }
       else {
+        if (wall.type === "dialog" && dialogCounter === 0) {
+          dialogOpened = false;
+          containerChat.style.display = "none";
+          cutscene = false;
+        }
         if (wall.type === "cook") {
           grassOpenCooking = false;
           cookingContainer.style.display = "none";
