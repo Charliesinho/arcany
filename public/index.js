@@ -8281,6 +8281,18 @@ function drawMap (layer) {
 // Map functions <
 
 
+// Enemy functions >
+
+
+
+function drawEnemy () {
+  canvas.fillStyle = `rgba(210, 45, 45, 0.5)`;
+  canvas.fillRect(selectedXcoord - cameraShakeX - cameraX, selectedYcoord - cameraShakeY - cameraY, widthCoord, heightCoord);
+}
+
+// Enemy functions <
+
+
 
 
 // Particle system >
@@ -8504,7 +8516,7 @@ function lobbyLoop() {
 
   // Dev Colliders
   drawDevWallsPlacement()
-  drawColliders()
+  // drawColliders()
 
 }
 
@@ -8550,9 +8562,9 @@ function lobbyCombatAreaLoop() {
   drawChat()
 
 
-  // Dev Colliders
-  drawDevWallsPlacement()
-  drawColliders()
+// Dev Colliders
+drawDevWallsPlacement()
+drawColliders()
 
 }
 
