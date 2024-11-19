@@ -6763,6 +6763,16 @@ let mapsInfo = {
     ]
   },
 
+  lobbyCombatArea: {
+    areaSounds: lobbySoundtrack,
+    backgroundImage: lobbyMap,
+    foregroundImage: lobbyMapFront,
+    playerPos: {
+      x: 2130,
+      y: 785
+    },
+    colliders: []
+  }
 };
 
 let selectedXcoord = 0;
@@ -8479,6 +8489,54 @@ function lobbyLoop() {
   drawLocalPlayer()
   drawOnlinePlayers("front")
   // // drawLocalBullets()
+  
+  
+  // Enemy settings
+  // // drawSlimeEnemy()
+  
+  
+  // Foreground map Image and objects
+  drawMap("front")
+  drawObjects("front")
+  drawUsername()
+  drawChat()
+
+
+  // Dev Colliders
+  drawDevWallsPlacement()
+  drawColliders()
+
+}
+
+function lobbyCombatAreaLoop() {
+
+
+  // Map name        ↓
+  currentLand = "lobbyCombatArea";
+
+
+  // Map setup ( Mandatory )
+  mapSetup();
+
+
+  // Background map Image and objects
+  drawMap("back")
+  drawObjects("back")
+
+
+  // Particle settings
+  particlesActor()
+  shootingParticles()
+  dashParticles()
+  // // playerTrailParticles()
+
+
+  // Player settings
+  playerCollision()
+  drawOnlinePlayers("back")
+  drawLocalPlayer()
+  drawOnlinePlayers("front")
+  drawLocalBullets()
   
   
   // Enemy settings
