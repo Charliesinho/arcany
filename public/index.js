@@ -27,6 +27,16 @@ islandOneMapArcane.src = "./islands/islandOneArcane.png";
 const islandOneMapArcaneFront = new Image();
 islandOneMapArcaneFront.src = "./islands/islandOneArcaneFront.png";
 
+const lobbyCombatArea = new Image();
+lobbyCombatArea.src = "./islands/lobbyCombatArea.png";
+
+const lobbyCombatAreaFront = new Image();
+lobbyCombatAreaFront.src = "./islands/lobbyCombatAreaFront.png";
+
+
+
+
+
 const character = new Image();
 character.src = "./skins/player.png";
 
@@ -2938,6 +2948,8 @@ var loopLen = 0;  // Character loop index
 var isTyping = false;  // Flag to prevent advancing while typing
 
 let dialogBoxes = {
+
+  
     "fishing Quest": {
 		dialogName: "quest",
 		questRequirements: [],
@@ -2989,35 +3001,91 @@ let dialogBoxes = {
     ],
 	},
 
-    dialogTest: {
-		dialogName: "dialog",
+
+
+  dialogCastelDoor: {
+		dialogName: "dialogCastelDoor",
 		questRequirements: [],
 		type: "dialog",
 		dialogText:
-		[
-			{
-				NPC: "Mr. Ass",
-				text: "Hello Kid!",
-			},
-			{
-				NPC: "Melina",
-				text: "Who are you?",
-			},
-			{
-				NPC: "Mr. Ass",
-				text: "go fish around there!",
-        cutscene: [1200, 1000]
-			},
-			{
-				NPC: "Mr. Ass",
-				text: "You know nothing!",
-			},
-			{
-				NPC: "Melina",
-				text: "WHAT?????",
+		[{
+				NPC: myPlayer ? myPlayer.username : "User",
+				text: "This door seems to be locked, I need to find a way to open it.",
 			},
 		],
 	},
+
+  dialogFishingPole: {
+		dialogName: "dialogFishingPole",
+		questRequirements: [],
+		type: "dialog",
+		dialogText:
+		[{
+				NPC: "Sign",
+				text: "You will find all kinds of fish species here. Get close to the water and press 'E' to fish.",
+			},
+		],
+	},
+
+  dialogCombatAreaPole: {
+		dialogName: "dialogCombatAreaPole",
+		questRequirements: [],
+		type: "dialog",
+		dialogText:
+		[{
+				NPC: "Sign",
+				text: "You are entering a combat zone. All kinds of monsters are present, so stay alert.",
+			},
+		],
+	},
+
+  dialogWayPoint: {
+    dialogName: "dialogWayPoint",
+		questRequirements: [],
+		type: "dialog",
+		dialogText:
+		[{
+      NPC: "Mel",
+      text: "It seems like I came from here. What is this... a crystal? Why does it look so strange?",
+    },
+  ],
+},
+
+  dialogCoffeeMachine: {
+  dialogName: "dialogCoffeeMachine",
+  questRequirements: [],
+  type: "dialog",
+  dialogText:
+  [{
+      NPC: "Coffee Machine",
+      text: "Apologies! Out of beans. Maintenance required.",
+    },
+  ],
+},
+
+  dialogCristalPortal: {
+  dialogName: "dialogCristalPortal",
+  questRequirements: [],
+  type: "dialog",
+  dialogText:
+  [{
+      NPC: "Mel",
+      text: "What a strange crystal... What could it be for?",
+    },
+  ],
+},
+  dialogSlimeBoxes: {
+  dialogName: "dialogSlimeBoxes",
+  questRequirements: [],
+  type: "dialog",
+  dialogText:
+  [{
+      NPC: "Mel",
+      text: "What a strange texture...",
+    },
+  ],
+},
+
 };
 
 // Function to display one paragraph from the dialog
@@ -4442,6 +4510,33 @@ let mapsInfo = {
         "width": 400,
         "height": 165,
         "color": "rgb(0, 0, 0, 0)"
+      }, 
+      {
+        "type": "dialog",
+        "name": "dialogSlimeBoxes",
+        "x": 1984,
+        "y": 2911.5,
+        "width": 361,
+        "height": 282,
+        "color": "rgb(179, 255, 213, 0)"
+      },
+      {
+        "type": "dialog",
+        "name": "dialogCoffeeMachine",
+        "x": 3493,
+        "y": 2913.5,
+        "width": 229,
+        "height": 242,
+        "color": "rgb(179, 255, 213, 0)"
+      },
+      {
+        "type": "dialog",
+        "name": "dialogCristalPortal",
+        "x": 2508,
+        "y": 2684.5,
+        "width": 212,
+        "height": 227,
+        "color": "rgb(179, 255, 213, 0)"
       }
     ],
   },
@@ -4454,72 +4549,7 @@ let mapsInfo = {
       x: 2130,
       y: 785
     },
-    colliders: 
-    [
-      {
-        "type": "wall",
-        "x": 325,
-        "y": 3630.5,
-        "width": 150,
-        "height": 41,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 376,
-        "y": 3426.5,
-        "width": 56,
-        "height": 225,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 405,
-        "y": 3408.5,
-        "width": 193,
-        "height": 35,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 569,
-        "y": 3322.5,
-        "width": 35,
-        "height": 104,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 594,
-        "y": 3181.5,
-        "width": 53,
-        "height": 88,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 541,
-        "y": 3249.5,
-        "width": 63,
-        "height": 92,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 623,
-        "y": 3152.5,
-        "width": 157,
-        "height": 35,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 721,
-        "y": 3048.5,
-        "width": 24,
-        "height": 116,
-        "color": "rgb(0, 0, 0, 0)"
-      },
+    colliders: [
       {
         "type": "wall",
         "x": 951,
@@ -5794,158 +5824,6 @@ let mapsInfo = {
       },
       {
         "type": "wall",
-        "x": 2794,
-        "y": 1842.5,
-        "width": 134,
-        "height": 64,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 2883,
-        "y": 1882.5,
-        "width": 188,
-        "height": 55,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 3013,
-        "y": 1909.5,
-        "width": 202,
-        "height": 57,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 3170,
-        "y": 1954.5,
-        "width": 317,
-        "height": 55,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 3432,
-        "y": 1995.5,
-        "width": 190,
-        "height": 50,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 3581,
-        "y": 2042.5,
-        "width": 92,
-        "height": 53,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 3629,
-        "y": 2081.5,
-        "width": 116,
-        "height": 39,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 3695,
-        "y": 2113.5,
-        "width": 103,
-        "height": 35,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 3775,
-        "y": 2132.5,
-        "width": 39,
-        "height": 65,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 3793,
-        "y": 2176.5,
-        "width": 109,
-        "height": 34,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 3873,
-        "y": 2200.5,
-        "width": 34,
-        "height": 59,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 3894,
-        "y": 2245.5,
-        "width": 60,
-        "height": 28,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 3931,
-        "y": 2264.5,
-        "width": 40,
-        "height": 76,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 3946,
-        "y": 2308.5,
-        "width": 76,
-        "height": 46,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 3991,
-        "y": 2337.5,
-        "width": 34,
-        "height": 94,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 4013,
-        "y": 2410.5,
-        "width": 59,
-        "height": 31,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 4045,
-        "y": 2426.5,
-        "width": 43,
-        "height": 132,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 4076,
-        "y": 2514.5,
-        "width": 39,
-        "height": 95,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 4109,
-        "y": 2585.5,
-        "width": 100,
-        "height": 70,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
         "x": 4146,
         "y": 920.5,
         "width": 86,
@@ -6793,8 +6671,1723 @@ let mapsInfo = {
         "width": 172,
         "height": 42,
         "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3052,
+        "y": 1812.5,
+        "width": 465,
+        "height": 35,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3485,
+        "y": 1791.5,
+        "width": 172,
+        "height": 40,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3601,
+        "y": 1753.5,
+        "width": 330,
+        "height": 50,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3925,
+        "y": 1772.5,
+        "width": 52,
+        "height": 34,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3709,
+        "y": 1740.5,
+        "width": 186,
+        "height": 35,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3953,
+        "y": 1788.5,
+        "width": 58,
+        "height": 25,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3928,
+        "y": 1789.5,
+        "width": 82,
+        "height": 258,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3989,
+        "y": 1809.5,
+        "width": 84,
+        "height": 35,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3996,
+        "y": 1834.5,
+        "width": 125,
+        "height": 32,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 4075,
+        "y": 1858.5,
+        "width": 134,
+        "height": 29,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2785,
+        "y": 1823.5,
+        "width": 291,
+        "height": 39,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 4166,
+        "y": 1630.5,
+        "width": 59,
+        "height": 22,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 4064,
+        "y": 1575.5,
+        "width": 169,
+        "height": 60,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 4003,
+        "y": 1542.5,
+        "width": 69,
+        "height": 92,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 4009,
+        "y": 1377.5,
+        "width": 39,
+        "height": 176,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 4028,
+        "y": 1303.5,
+        "width": 33,
+        "height": 113,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 4052,
+        "y": 1188.5,
+        "width": 54,
+        "height": 156,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 4038,
+        "y": 1069.5,
+        "width": 49,
+        "height": 140,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 4052,
+        "y": 987.5,
+        "width": 42,
+        "height": 114,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3971,
+        "y": 911.5,
+        "width": 41,
+        "height": 102,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3998,
+        "y": 970.5,
+        "width": 70,
+        "height": 67,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3943,
+        "y": 752.5,
+        "width": 37,
+        "height": 202,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3901,
+        "y": 749.5,
+        "width": 60,
+        "height": 146,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3840,
+        "y": 766.5,
+        "width": 44,
+        "height": 108,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "transition",
+        "format": "liquid",
+        "destination": "lobbyCombatArea",
+        "x": 4123,
+        "y": 1608.5,
+        "width": 65,
+        "height": 262,
+        "color": "rgb(204, 0, 204, 0)"
+      },
+      {
+        "type": "dialog",
+        "name": "dialogCombatAreaPole",
+        "x": 3886,
+        "y": 1406.5,
+        "width": 150,
+        "height": 402,
+        "color": "rgb(179, 255, 213, 0)"
+      },
+      {
+        "type": "dialog",
+        "name": "dialogFishingPole",
+        "x": 2337,
+        "y": 2184.5,
+        "width": 237,
+        "height": 247,
+        "color": "rgb(179, 255, 213, 0)"
+      },
+      {
+        "type": "dialog",
+        "name": "dialogCastelDoor",
+        "x": 1000,
+        "y": 419.5,
+        "width": 544,
+        "height": 265,
+        "color": "rgb(179, 255, 213, 0)"
+      },
+      {
+        "type": "dialog",
+        "name": "dialogWayPoint",
+        "x": 1886,
+        "y": 621.5,
+        "width": 211,
+        "height": 142,
+        "color": "rgb(179, 255, 213, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 817,
+        "y": 1385.5,
+        "width": 540,
+        "height": 26,
+        "color": "rgb(0, 0, 0, 0)"
       }
-    
+    ],
+  },
+
+  lobbyCombatArea: {
+    areaSounds: lobbySoundtrack,
+    backgroundImage: lobbyCombatArea,
+    foregroundImage: lobbyCombatAreaFront,
+    playerPos: {
+      x: 200,
+      y: 1800,
+    },
+    colliders: [
+      {
+        "type": "wall",
+        "x": 347,
+        "y": 669.5,
+        "width": 45,
+        "height": 97,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 578,
+        "y": 516.5,
+        "width": 60,
+        "height": 97,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -132,
+        "y": 228.5,
+        "width": 764,
+        "height": 152,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 149,
+        "y": 424.5,
+        "width": 56,
+        "height": 89,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 329,
+        "y": 483.5,
+        "width": 67,
+        "height": 88,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 520,
+        "y": 404.5,
+        "width": 58,
+        "height": 86,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 711,
+        "y": 329.5,
+        "width": 46,
+        "height": 90,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 790,
+        "y": 410.5,
+        "width": 50,
+        "height": 97,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 973,
+        "y": 426.5,
+        "width": 66,
+        "height": 106,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 606,
+        "y": 164.5,
+        "width": 401,
+        "height": 96,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 915,
+        "y": 235.5,
+        "width": 44,
+        "height": 143,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 974,
+        "y": 81.5,
+        "width": 1210,
+        "height": 114,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1083,
+        "y": 182.5,
+        "width": 47,
+        "height": 129,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1167,
+        "y": 312.5,
+        "width": 43,
+        "height": 109,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1178,
+        "y": 500.5,
+        "width": 68,
+        "height": 100,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1247,
+        "y": 151.5,
+        "width": 52,
+        "height": 113,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1352,
+        "y": 387.5,
+        "width": 56,
+        "height": 106,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1495,
+        "y": 461.5,
+        "width": 68,
+        "height": 116,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1398,
+        "y": 147.5,
+        "width": 65,
+        "height": 81,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1504,
+        "y": 223.5,
+        "width": 52,
+        "height": 113,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1648,
+        "y": 335.5,
+        "width": 50,
+        "height": 108,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1770,
+        "y": 286.5,
+        "width": 58,
+        "height": 93,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1908,
+        "y": 391.5,
+        "width": 52,
+        "height": 98,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1993,
+        "y": 275.5,
+        "width": 47,
+        "height": 105,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2169,
+        "y": 307.5,
+        "width": 45,
+        "height": 105,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2241,
+        "y": 474.5,
+        "width": 51,
+        "height": 107,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2290,
+        "y": 296.5,
+        "width": 63,
+        "height": 113,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2423,
+        "y": 385.5,
+        "width": 67,
+        "height": 115,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2511,
+        "y": 170.5,
+        "width": 77,
+        "height": 119,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2655,
+        "y": 270.5,
+        "width": 68,
+        "height": 103,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2784,
+        "y": 407.5,
+        "width": 68,
+        "height": 96,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2165,
+        "y": 39.5,
+        "width": 390,
+        "height": 150,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2511,
+        "y": -44.5,
+        "width": 1089,
+        "height": 149,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2823,
+        "y": 179.5,
+        "width": 43,
+        "height": 103,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2930,
+        "y": 293.5,
+        "width": 55,
+        "height": 107,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3087,
+        "y": 212.5,
+        "width": 54,
+        "height": 108,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3190,
+        "y": 325.5,
+        "width": 66,
+        "height": 112,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3224,
+        "y": 148.5,
+        "width": 54,
+        "height": 117,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3353,
+        "y": 446.5,
+        "width": 27,
+        "height": 87,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3488,
+        "y": 418.5,
+        "width": 60,
+        "height": 107,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3485,
+        "y": 32.5,
+        "width": 68,
+        "height": 272,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3523,
+        "y": 221.5,
+        "width": 266,
+        "height": 58,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3636,
+        "y": 254.5,
+        "width": 47,
+        "height": 155,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3643,
+        "y": 385.5,
+        "width": 450,
+        "height": 31,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3552,
+        "y": 596.5,
+        "width": 48,
+        "height": 93,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3676,
+        "y": 524.5,
+        "width": 46,
+        "height": 136,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3363,
+        "y": 633.5,
+        "width": 59,
+        "height": 116,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3786,
+        "y": 388.5,
+        "width": 55,
+        "height": 551,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3666,
+        "y": 795.5,
+        "width": 61,
+        "height": 100,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3521,
+        "y": 881.5,
+        "width": 71,
+        "height": 93,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3715,
+        "y": 1019.5,
+        "width": 42,
+        "height": 102,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3818,
+        "y": 883.5,
+        "width": 155,
+        "height": 57,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3931,
+        "y": 900.5,
+        "width": 55,
+        "height": 300,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3800,
+        "y": 1168.5,
+        "width": 61,
+        "height": 106,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3650,
+        "y": 1257.5,
+        "width": 74,
+        "height": 106,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3572,
+        "y": 1487.5,
+        "width": 50,
+        "height": 88,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3972,
+        "y": 1146.5,
+        "width": 123,
+        "height": 46,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 4059,
+        "y": 1169.5,
+        "width": 73,
+        "height": 559,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3879,
+        "y": 1351.5,
+        "width": 34,
+        "height": 119,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3775,
+        "y": 1607.5,
+        "width": 45,
+        "height": 112,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3618,
+        "y": 1705.5,
+        "width": 65,
+        "height": 112,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3531,
+        "y": 1879.5,
+        "width": 51,
+        "height": 108,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3616,
+        "y": 2069.5,
+        "width": 70,
+        "height": 117,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3731,
+        "y": 1995.5,
+        "width": 68,
+        "height": 104,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3798,
+        "y": 1909.5,
+        "width": 47,
+        "height": 95,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3884,
+        "y": 1694.5,
+        "width": 42,
+        "height": 100,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 4048,
+        "y": 1684.5,
+        "width": 49,
+        "height": 560,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3966,
+        "y": 1936.5,
+        "width": 106,
+        "height": 52,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3875,
+        "y": 2076.5,
+        "width": 72,
+        "height": 241,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3787,
+        "y": 2286.5,
+        "width": 62,
+        "height": 116,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3560,
+        "y": 2324.5,
+        "width": 51,
+        "height": 119,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3729,
+        "y": 2438.5,
+        "width": 54,
+        "height": 116,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3668,
+        "y": 2643.5,
+        "width": 54,
+        "height": 126,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3831,
+        "y": 2711.5,
+        "width": 68,
+        "height": 123,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3905,
+        "y": 2867.5,
+        "width": 67,
+        "height": 117,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3877,
+        "y": 2548.5,
+        "width": 66,
+        "height": 125,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 4052,
+        "y": 2202.5,
+        "width": 46,
+        "height": 560,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3990,
+        "y": 2720.5,
+        "width": 111,
+        "height": 306,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3850,
+        "y": 3127.5,
+        "width": 54,
+        "height": 114,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3614,
+        "y": 3196.5,
+        "width": 72,
+        "height": 120,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3898,
+        "y": 3357.5,
+        "width": 56,
+        "height": 107,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3720,
+        "y": 3391.5,
+        "width": 53,
+        "height": 129,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 4055,
+        "y": 2953.5,
+        "width": 75,
+        "height": 642,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3875,
+        "y": 3537.5,
+        "width": 231,
+        "height": 66,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3562,
+        "y": 3569.5,
+        "width": 362,
+        "height": 90,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3508,
+        "y": 3480.5,
+        "width": 73,
+        "height": 142,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3350,
+        "y": 3478.5,
+        "width": 46,
+        "height": 115,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3182,
+        "y": 3613.5,
+        "width": 37,
+        "height": 108,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2856,
+        "y": 3573.5,
+        "width": 60,
+        "height": 117,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3243,
+        "y": 3792.5,
+        "width": 51,
+        "height": 123,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3262,
+        "y": 3865.5,
+        "width": 421,
+        "height": 47,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3461,
+        "y": 3736.5,
+        "width": 55,
+        "height": 159,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3568,
+        "y": 3635.5,
+        "width": 57,
+        "height": 231,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3134,
+        "y": 3862.5,
+        "width": 150,
+        "height": 53,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2869,
+        "y": 3822.5,
+        "width": 66,
+        "height": 134,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2858,
+        "y": 3925.5,
+        "width": 390,
+        "height": 51,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3067,
+        "y": 3774.5,
+        "width": 74,
+        "height": 179,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1991,
+        "y": 3901.5,
+        "width": 914,
+        "height": 67,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2726,
+        "y": 3835.5,
+        "width": 46,
+        "height": 94,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2665,
+        "y": 3732.5,
+        "width": 54,
+        "height": 120,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2373,
+        "y": 3826.5,
+        "width": 43,
+        "height": 105,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2464,
+        "y": 3739.5,
+        "width": 56,
+        "height": 105,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2385,
+        "y": 3584.5,
+        "width": 76,
+        "height": 126,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2248,
+        "y": 3702.5,
+        "width": 86,
+        "height": 141,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2116,
+        "y": 3670.5,
+        "width": 61,
+        "height": 116,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2063,
+        "y": 3801.5,
+        "width": 51,
+        "height": 126,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1852,
+        "y": 3878.5,
+        "width": 62,
+        "height": 127,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1947,
+        "y": 3752.5,
+        "width": 43,
+        "height": 117,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 864,
+        "y": 3891.5,
+        "width": 1164,
+        "height": 42,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1217,
+        "y": 3814.5,
+        "width": 48,
+        "height": 103,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1124,
+        "y": 3767.5,
+        "width": 37,
+        "height": 91,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1309,
+        "y": 3751.5,
+        "width": 40,
+        "height": 102,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1492,
+        "y": 3835.5,
+        "width": 53,
+        "height": 76,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 884,
+        "y": 3679.5,
+        "width": 67,
+        "height": 110,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 318,
+        "y": 3874.5,
+        "width": 582,
+        "height": 50,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 773,
+        "y": 3759.5,
+        "width": 44,
+        "height": 133,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 686,
+        "y": 3628.5,
+        "width": 56,
+        "height": 122,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 559,
+        "y": 3706.5,
+        "width": 59,
+        "height": 112,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 426,
+        "y": 3768.5,
+        "width": 43,
+        "height": 121,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 494,
+        "y": 3529.5,
+        "width": 41,
+        "height": 140,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 627,
+        "y": 3459.5,
+        "width": 46,
+        "height": 123,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 812,
+        "y": 3503.5,
+        "width": 57,
+        "height": 133,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 302,
+        "y": 3407.5,
+        "width": 76,
+        "height": 130,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 205,
+        "y": 3477.5,
+        "width": 48,
+        "height": 112,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 194,
+        "y": 3687.5,
+        "width": 56,
+        "height": 121,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 59,
+        "y": 3703.5,
+        "width": 38,
+        "height": 120,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 364,
+        "y": 3605.5,
+        "width": 38,
+        "height": 125,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 209,
+        "y": 3783.5,
+        "width": 132,
+        "height": 131,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 71,
+        "y": 3729.5,
+        "width": 153,
+        "height": 42,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -3,
+        "y": 3324.5,
+        "width": 96,
+        "height": 430,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 152,
+        "y": 3319.5,
+        "width": 64,
+        "height": 118,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 245,
+        "y": 3118.5,
+        "width": 77,
+        "height": 116,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 369,
+        "y": 2926.5,
+        "width": 66,
+        "height": 142,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -9,
+        "y": 3121.5,
+        "width": 71,
+        "height": 122,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 76,
+        "y": 2948.5,
+        "width": 88,
+        "height": 143,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -188,
+        "y": 3351.5,
+        "width": 236,
+        "height": 42,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -126,
+        "y": 3009.5,
+        "width": 43,
+        "height": 411,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 174,
+        "y": 2772.5,
+        "width": 77,
+        "height": 132,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 73,
+        "y": 2676.5,
+        "width": 53,
+        "height": 118,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -69,
+        "y": 2872.5,
+        "width": 66,
+        "height": 159,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -122,
+        "y": 2984.5,
+        "width": 81,
+        "height": 51,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -228,
+        "y": 2747.5,
+        "width": 71,
+        "height": 180,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -181,
+        "y": 2879.5,
+        "width": 141,
+        "height": 44,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -72,
+        "y": 2626.5,
+        "width": 46,
+        "height": 153,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -164,
+        "y": 2681.5,
+        "width": 110,
+        "height": 79,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 6,
+        "y": 2448.5,
+        "width": 51,
+        "height": 151,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -81,
+        "y": 2551.5,
+        "width": 101,
+        "height": 88,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 203,
+        "y": 2542.5,
+        "width": 61,
+        "height": 107,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -112,
+        "y": 2266.5,
+        "width": 79,
+        "height": 131,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -120,
+        "y": 2242.5,
+        "width": 86,
+        "height": 331,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -180,
+        "y": 2090.5,
+        "width": 48,
+        "height": 181,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -228,
+        "y": 2234.5,
+        "width": 144,
+        "height": 55,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -300,
+        "y": 2031.5,
+        "width": 143,
+        "height": 79,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -353,
+        "y": 1120.5,
+        "width": 89,
+        "height": 958,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -199,
+        "y": 1255.5,
+        "width": 59,
+        "height": 105,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 43,
+        "y": 1073.5,
+        "width": 75,
+        "height": 107,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1499,
+        "y": 847.5,
+        "width": 462,
+        "height": 87,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1019,
+        "y": 939.5,
+        "width": 62,
+        "height": 110,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 948,
+        "y": 965.5,
+        "width": 75,
+        "height": 98,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 864,
+        "y": 979.5,
+        "width": 96,
+        "height": 102,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 776,
+        "y": 1019.5,
+        "width": 107,
+        "height": 75,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 682,
+        "y": 1044.5,
+        "width": 105,
+        "height": 124,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 536,
+        "y": 1052.5,
+        "width": 156,
+        "height": 132,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2184,
+        "y": 875.5,
+        "width": 90,
+        "height": 65,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2198,
+        "y": 932.5,
+        "width": 66,
+        "height": 43,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2249,
+        "y": 897.5,
+        "width": 178,
+        "height": 58,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2389,
+        "y": 924.5,
+        "width": 96,
+        "height": 50,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2430,
+        "y": 966.5,
+        "width": 136,
+        "height": 53,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2514,
+        "y": 1003.5,
+        "width": 208,
+        "height": 55,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2658,
+        "y": 1038.5,
+        "width": 293,
+        "height": 60,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3044,
+        "y": 1077.5,
+        "width": 66,
+        "height": 30,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3091,
+        "y": 1096.5,
+        "width": 108,
+        "height": 34,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3058,
+        "y": 1098.5,
+        "width": 121,
+        "height": 104,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2905,
+        "y": 855.5,
+        "width": 93,
+        "height": 121,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1498,
+        "y": 1880.5,
+        "width": 485,
+        "height": 74,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1911,
+        "y": 1848.5,
+        "width": 99,
+        "height": 48,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1651,
+        "y": 1840.5,
+        "width": 361,
+        "height": 57,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1565,
+        "y": 1925.5,
+        "width": 56,
+        "height": 61,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1508,
+        "y": 1849.5,
+        "width": 60,
+        "height": 35,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2545,
+        "y": 1025.5,
+        "width": 169,
+        "height": 80,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2641,
+        "y": 1078.5,
+        "width": 249,
+        "height": 81,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "transition",
+        "format": "liquid",
+        "destination": "lobby",
+        "x": -303,
+        "y": 1372.5,
+        "width": 203,
+        "height": 639,
+        "color": "rgb(204, 0, 204, 0)"
+      }
     ],
     enemies: [
       {
@@ -6810,8 +8403,8 @@ let mapsInfo = {
         speedX: 5,
         speedY: 5,
         spawn: {
-          x: 2130,
-          y: 985
+          x: 764,
+          y: 692
         },
         w: 100,
         h: 100,
@@ -6824,8 +8417,8 @@ let mapsInfo = {
         angle: 0,
         maxHealth: 10,
         baseSpawn: {
-          x: 2130,
-          y: 985
+          x: 764,
+          y: 692
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
@@ -6843,8 +8436,8 @@ let mapsInfo = {
         speedX: 5,
         speedY: 5,
         spawn: {
-          x: 2130,
-          y: 1085
+          x: 3368,
+          y: 1094
         },
         w: 100,
         h: 100,
@@ -6857,24 +8450,79 @@ let mapsInfo = {
         angle: 0,
         maxHealth: 10,
         baseSpawn: {
-          x: 2130,
-          y: 1085
+          x: 3368,
+          y: 1094
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "treeSimpleEnemy",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 5,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 1832,
+          y: 573
+        },
+        w: 100,
+        h: 100,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, attackState, attackCircleState],
+        damaged: 0,
+        health: 10,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1832,
+          y: 573
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "treeSimpleEnemy",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 5,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 3052,
+          y: 579
+        },
+        w: 100,
+        h: 100,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, attackState, attackCircleState],
+        damaged: 0,
+        health: 10,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 3052,
+          y: 579
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
       },
     ]
-  },
-
-  lobbyCombatArea: {
-    areaSounds: lobbySoundtrack,
-    backgroundImage: lobbyMap,
-    foregroundImage: lobbyMapFront,
-    playerPos: {
-      x: 2130,
-      y: 785
-    },
-    colliders: []
   }
 };
 
@@ -9073,7 +10721,6 @@ function lobbyLoop() {
 
 
   // Player settings
-  drawEnemy()
   playerCollision()
   drawOnlinePlayers("back")
   drawLocalPlayer()
@@ -9119,9 +10766,11 @@ function lobbyCombatAreaLoop() {
   shootingParticles()
   dashParticles()
   // // playerTrailParticles()
+  
 
 
   // Player settings
+  drawEnemy()
   playerCollision()
   drawOnlinePlayers("back")
   drawLocalPlayer()
@@ -9140,9 +10789,9 @@ function lobbyCombatAreaLoop() {
   drawChat()
 
 
-// Dev Colliders
-drawDevWallsPlacement()
-drawColliders()
+  // Dev Colliders
+  drawDevWallsPlacement()
+  drawColliders("player", "", "", "", "")
 
 }
 
