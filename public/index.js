@@ -45,12 +45,18 @@ transparentCape.src = "./capes/transparent.png";
 const slime = new Image();
 slime.src = "slime.png";
 
+const treeSimpleEnemy = new Image();
+treeSimpleEnemy.src = "./enemies/treeSimpleEnemy.png";
+
+let enemiesImages = {
+  treeSimpleEnemy: treeSimpleEnemy,
+};
+
 const slimeDMG = new Image();
 slimeDMG.src = "slimeDMG.png";
 
 const WeaponStick = new Image();
 WeaponStick.src = "stick.png";
-
 
 const arcaneStaffCommon = new Image();
 arcaneStaffCommon.src = "arcaneStaffCommon.png";
@@ -1618,31 +1624,47 @@ let maxHealth = 6;
 let currentHealth = 6;
 
 function health() {
-  playerHeart.innerHTML="";
-  let newCurrentHealth = currentHealth
-  if(currentHealth % 2 !== 0){
-    newCurrentHealth = currentHealth - 1
-  }
+  if (currentHealth <= 0) currentHealth = maxHealth
 
-  for (let i = 0; i < (newCurrentHealth / 2); i++){
+  const parentDiv = playerHeart; // Parent div where the hearts are displayed
+  const previousHealth = playerHeart.dataset.previousHealth || currentHealth;
+  let healthChanged = currentHealth < previousHealth;
+  
+  playerHeart.dataset.previousHealth = currentHealth; // Store the current health for future comparison
+
+  playerHeart.innerHTML = "";
+  let fullHearts = Math.floor(currentHealth / 2);
+  let halfHeart = currentHealth % 2 !== 0 ? 1 : 0;
+  let emptyHearts = Math.floor((maxHealth - currentHealth) / 2);
+
+  for (let i = 0; i < fullHearts; i++) {
     const heart = document.createElement("div");
     heart.classList.add("heart");
     playerHeart.appendChild(heart);
-
-    if (currentHealth % 2 !== 0 && i === (newCurrentHealth / 2) - 1){
-      const halfHeart = document.createElement("div");
-      halfHeart.classList.add("halfHeart");
-      playerHeart.appendChild(halfHeart);
-    }
-
   }
 
-  for (let i = 0; i < ((maxHealth - (newCurrentHealth + 2)) / 2); i++){
+  if (halfHeart === 1) {
+    const halfHeartDiv = document.createElement("div");
+    halfHeartDiv.classList.add("halfHeart");
+    playerHeart.appendChild(halfHeartDiv);
+  }
+
+  for (let i = 0; i < emptyHearts; i++) {
     const heart = document.createElement("div");
     heart.classList.add("emptyHeart");
-    playerHeart.appendChild(heart)
+    playerHeart.appendChild(heart);
+  }
+
+  if (healthChanged) {
+    parentDiv.classList.add("shake"); // Add the shaking class if health decreased
+
+    setTimeout(() => {
+      parentDiv.classList.remove("shake"); // Remove the shaking class after 1 second
+    }, 1000);
   }
 }
+
+
 
 function updateQuestUI() {
   // Select the #uiQuest div
@@ -2376,9 +2398,14 @@ let movingRight = false;
 let playerX = 2880;
 let playerY = 3568;
 
+let localPlayerDamaged = 0;
+let localPlayerDamageAngle = 0;
+
 let playerLocation = [playerX, playerY];
 
 let noMovement = false;
+let dashing = false;
+let dashingAllowed = false;
 
 let wallsVisibility = 0;
 
@@ -2420,15 +2447,23 @@ window.addEventListener("keydown", (e) => {
       lastLookPlayer = "left";
   
       movingLeft = true;
-    } else if (e.code === "Space" && playerSpeed < 6) {
+    } else if (e.code === "Space" && !dashingAllowed) {
+      let oldPlayerSpeed = playerSpeed
       playerSpeed = 30
+      dashing = true;
+      dashingAllowed = true
 
       const interval = setInterval(() => {
         playerSpeed -= 10;
 
-        if (playerSpeed < 4) {
-          playerSpeed = 4;
+        if (playerSpeed < oldPlayerSpeed) {
+          playerSpeed = oldPlayerSpeed;
           clearInterval(interval)
+          dashing = false;
+          
+          setTimeout(() => {
+            dashingAllowed = false
+          }, 1000);
         }
       }, 50);
     }
@@ -2636,7 +2671,7 @@ canvasLobby.addEventListener("mousedown", (e) => {
               angle,
               x: playerX + 20,
               y: playerY + 50,
-              timeLeft: 200,
+              timeLeft: 20,
               playerId: socket.id,
             }) 
 
@@ -2662,7 +2697,7 @@ canvasLobby.addEventListener("mousedown", (e) => {
               angle,
               x: playerX + 20,
               y: playerY + 50,
-              timeLeft: 200,
+              timeLeft: 100,
               playerId: socket.id,
             }) 
 
@@ -6760,6 +6795,74 @@ let mapsInfo = {
         "color": "rgb(0, 0, 0, 0)"
       }
     
+    ],
+    enemies: [
+      {
+        name: "treeSimpleEnemy",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 5,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 2130,
+          y: 985
+        },
+        w: 100,
+        h: 100,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, attackState, attackCircleState],
+        damaged: 0,
+        health: 10,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 2130,
+          y: 985
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "treeSimpleEnemy",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 5,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 2130,
+          y: 1085
+        },
+        w: 100,
+        h: 100,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, attackState, attackCircleState],
+        damaged: 0,
+        health: 10,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 2130,
+          y: 1085
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
     ]
   },
 
@@ -7391,8 +7494,8 @@ function mapSetup () {
     }
 
     for (const projectile of projectilesClient) {
-      projectile.x += Math.cos(projectile.angle || projectile.bullet1 || projectile.bullet2) * 35;
-      projectile.y += Math.sin(projectile.angle || projectile.bullet1 || projectile.bullet2) * 35;
+      projectile.x += Math.cos(projectile.angle || projectile.bullet1 || projectile.bullet2) * (projectile.speed ? projectile.speed : 35);
+      projectile.y += Math.sin(projectile.angle || projectile.bullet1 || projectile.bullet2) * (projectile.speed ? projectile.speed : 35);
     }
 
     drawColliders()
@@ -7450,27 +7553,30 @@ function playerCollision () {
   canvas.fillRect(playerColminX, playerColminY, playerColLengthX, playerColLengthY);
 }
 
-function drawColliders () {
-    allowedMoveUpRight = true;
-    allowedMoveUpLeft = true;
-    allowedMoveUpUp = true;
-    allowedMoveUpDown = true;
+function drawColliders (type, x, y, w, h) {
+    
+    let colliderToCheck = {};
+    
+    if (type === "player") {
+      allowedMoveUpRight = true;
+      allowedMoveUpLeft = true;
+      allowedMoveUpUp = true;
+      allowedMoveUpDown = true;
+    
+      colliderToCheck = {
+        x: playerColminX,
+        y: playerColminY,
+        width: playerColLengthX,
+        height: playerColLengthY
+      }
 
-    
-    
-    mapsInfo[currentLand].colliders.forEach(wall => {
+      mapsInfo[currentLand].colliders.forEach(wall => {
       const adjustedX = wall.x - cameraShakeX - cameraX;
       const adjustedY = wall.y - cameraShakeY - cameraY;
 
       canvas.fillStyle = wall.color;
       canvas.fillRect(adjustedX, adjustedY, wall.width, wall.height);
 
-      const playerCollider = {
-        x: playerColminX,
-        y: playerColminY,
-        width: playerColLengthX,
-        height: playerColLengthY
-      }
 
       let dialogCounter = 0;
 
@@ -7478,21 +7584,22 @@ function drawColliders () {
         const adjustedX = wallX.x - cameraShakeX - cameraX;
         const adjustedY = wallX.y - cameraShakeY - cameraY;
         
-        if (isColliding(playerCollider, { x: adjustedX, y: adjustedY, width: wallX.width, height: wallX.height })) {
+        if (isColliding(colliderToCheck, { x: adjustedX, y: adjustedY, width: wallX.width, height: wallX.height })) {
           if (wall.type === "dialog") {
             dialogCounter++
           }
         }
       })
       
-      if (isColliding(playerCollider, { x: adjustedX, y: adjustedY, width: wall.width, height: wall.height })) {
-        const playerCenterX = playerCollider.x + playerCollider.width / 2;
-        const playerCenterY = playerCollider.y + playerCollider.height / 2;
+      if (isColliding(colliderToCheck, { x: adjustedX, y: adjustedY, width: wall.width, height: wall.height })) {
+
+        const playerCenterX = colliderToCheck.x + colliderToCheck.width / 2;
+        const playerCenterY = colliderToCheck.y + colliderToCheck.height / 2;
         const wallCenterX = adjustedX + wall.width / 2;
         const wallCenterY = adjustedY + wall.height / 2;
 
-        const overlapX = (playerCollider.width / 2 + wall.width / 2) - Math.abs(playerCenterX - wallCenterX);
-        const overlapY = (playerCollider.height / 2 + wall.height / 2) - Math.abs(playerCenterY - wallCenterY);
+        const overlapX = (colliderToCheck.width / 2 + wall.width / 2) - Math.abs(playerCenterX - wallCenterX);
+        const overlapY = (colliderToCheck.height / 2 + wall.height / 2) - Math.abs(playerCenterY - wallCenterY);
 
         if (wall.type === "wall") {
           if (overlapX < overlapY) {
@@ -7575,6 +7682,77 @@ function drawColliders () {
       }
     
     })
+    } 
+    else if (type === "bullet") {
+      colliderToCheck = {
+        x: x - cameraShakeX - cameraX - 150,
+        y: y - cameraShakeY - cameraY - 190,
+        width: w,
+        height: h
+      }
+
+      let colliding = false;
+
+      canvas.fillRect(colliderToCheck.x, colliderToCheck.y, colliderToCheck.width, colliderToCheck.height);
+
+      mapsInfo[currentLand].colliders.forEach(wallX => {
+        const adjustedX = wallX.x - cameraShakeX - cameraX;
+        const adjustedY = wallX.y - cameraShakeY - cameraY;
+        
+        if (isColliding(colliderToCheck, { x: adjustedX, y: adjustedY, width: wallX.width, height: wallX.height }) && wallX.type === "wall") {
+          colliding = true
+        }
+      })
+
+      return colliding;
+    }
+    else if (type === "enemy") {
+      colliderToCheck = {
+        x: x - cameraShakeX - cameraX,
+        y: y - cameraShakeY - cameraY,
+        width: w,
+        height: h
+      }
+
+      canvas.fillRect(colliderToCheck.x, colliderToCheck.y, colliderToCheck.width, colliderToCheck.height);
+
+      let collidingX = "free";
+      let collidingY = "free";
+
+      mapsInfo[currentLand].colliders.forEach(wallX => {
+        const adjustedX = wallX.x - cameraShakeX - cameraX;
+        const adjustedY = wallX.y - cameraShakeY - cameraY;
+        const playerCenterX = colliderToCheck.x + colliderToCheck.width / 2;
+        const playerCenterY = colliderToCheck.y + colliderToCheck.height / 2;
+        const wallCenterX = adjustedX + wallX.width / 2;
+        const wallCenterY = adjustedY + wallX.height / 2;
+
+        const overlapX = (colliderToCheck.width / 2 + wallX.width / 2) - Math.abs(playerCenterX - wallCenterX);
+        const overlapY = (colliderToCheck.height / 2 + wallX.height / 2) - Math.abs(playerCenterY - wallCenterY);
+        
+        if (isColliding(colliderToCheck, { x: adjustedX, y: adjustedY, width: wallX.width, height: wallX.height })) {
+          if (wallX.type === "wall") {
+            if (overlapX < overlapY) {
+                if (playerCenterX < wallCenterX) {
+                  collidingX = "right"; 
+                } else {
+                  collidingX = "left";
+                }         
+            } else {
+                if (playerCenterY < wallCenterY) {
+                  collidingY = "down";
+                } else {
+                  collidingY = "up";
+                }
+            }
+          }
+        }
+      })
+
+      return [collidingX, collidingY];
+    }
+    
+    
 }
 
 function drawLocalPlayer () {
@@ -8073,11 +8251,31 @@ function drawChat () {
 
 function drawLocalBullets () {
   for (const projectile of projectilesClient) {
-    if (myPlayer?.weapon[0]?.name === "solarStaffCommon") {
-      canvas.drawImage(bulletStick, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
+    projectile.timeLeft--
+
+    let wallCollision = drawColliders("bullet", projectile.x, projectile.y, 40, 40)
+    if (wallCollision) {
+      projectile.timeLeft = projectile.timeLeft > 1 ? 1 : projectile.timeLeft;
     }
-    if (myPlayer?.weapon[0]?.name === "arcaneStaffCommon") {
-      canvas.drawImage(bulletStickBlue, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
+
+    if (projectile.enemy) {
+      canvas.drawImage(bulletStick, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
+      push360Particles("yellow", 1, projectile.x + 20, projectile.y - 50)
+    } 
+    else {
+      if (myPlayer?.weapon[0]?.name === "solarStaffCommon") {
+        canvas.drawImage(bulletStick, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
+        push360Particles("red", 1, projectile.x + 20, projectile.y - 50)
+      }
+      if (myPlayer?.weapon[0]?.name === "arcaneStaffCommon") {
+        canvas.drawImage(bulletStickBlue, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
+        push360Particles("purple", 1, projectile.x + 20, projectile.y - 50)
+      }
+    }
+
+    if (projectile.timeLeft < 0) {
+      projectilesClient.splice(projectilesClient.indexOf(projectile), 1)
+      push360Particles("white", 5, projectile.x + 20, projectile.y - 50)
     }
   }
 }
@@ -8094,11 +8292,6 @@ function drawSlimeEnemy () {
         spawnSlime()
         socket.emit("enemyKilled", "slime");
         enemiesClient.splice(enemiesClient.indexOf(enemy), 1)
-
-        if (myPlayer.questsOngoing.some(questItem => questItem[0].name === "SlimyProblem")) {
-          let questItem = myPlayer.questsOngoing.find(questItem => questItem[0].name === "SlimyProblem");
-          progressQuestCounter(questItem, 1)
-        }
 
         for (let i = 0; i < 20; i++) {
           const angle = angleMouse + (Math.random() * 0.5 * 2 - 0.2) ;; // Random angle
@@ -8286,8 +8479,358 @@ function drawMap (layer) {
 
 
 function drawEnemy () {
-  canvas.fillStyle = `rgba(210, 45, 45, 0.5)`;
-  canvas.fillRect(selectedXcoord - cameraShakeX - cameraX, selectedYcoord - cameraShakeY - cameraY, widthCoord, heightCoord);
+  mapsInfo[currentLand].enemies.forEach(enemy => {
+
+    enemy.imgch = 
+    enemy.currentStateName === "dmg"
+    ? enemy.imgh * 8 :
+    enemy.currentStateName === "move" 
+    ? enemy.imgh * 3 :
+    enemy.currentStateName === "attack1" 
+    ? enemy.imgh * 0 :
+    enemy.currentStateName === "attack2" 
+    ? enemy.imgh * 1 :
+    enemy.imgh * 2;
+
+    console.log(enemy.currentStateName)
+
+    // canvas.fillRect(enemy.spawn.x - cameraShakeX - cameraX, enemy.spawn.y - cameraShakeY - cameraY, enemy.w, enemy.h);
+    enemy.framesTimer--
+    
+    if (enemy.framesTimer <= 0) {
+      enemy.framesTimer = 5;
+    }
+    
+    if (enemy.framesTimer === 2) {
+      enemy.frames++
+      if (enemy.frames > 5) {
+        enemy.frames = 0
+      }
+    }
+
+    canvas.drawImage(
+      enemiesImages[enemy.name],
+      enemy.imgcw * enemy.frames,
+      enemy.imgch,
+      enemy.imgw,
+      enemy.imgh,
+      enemy.spawn.x - cameraX - cameraShakeX,
+      enemy.spawn.y - cameraY - cameraShakeX,
+      enemy.w * 1.5,
+      enemy.h * 1.5,
+    );
+
+    if (
+      (enemy.spawn.x - cameraX) - (playerX - cameraX) + 200 > -1000 && (enemy.spawn.y - cameraY) - (playerY - cameraY) + 120 > -1000
+      &&
+      (enemy.spawn.x - cameraX) - (playerX - cameraX) + 200 < 1000 && (enemy.spawn.y - cameraY) - (playerY - cameraY) + 120 < 1000
+    ) {
+      handleEnemyState(enemy)
+    }
+
+    checkEnemyCombat(enemy)
+
+  }) 
+}
+
+function checkEnemyCombat (enemy) {
+  if (enemy.damaged > 0) {
+    enemy.damaged--
+
+    enemy.currentStateName = "dmg"
+
+    enemy.spawn.x += Math.cos(enemy.angle) * enemy.damaged ;
+    enemy.spawn.y += Math.sin(enemy.angle) * enemy.damaged;
+  } else {
+    if (enemy.currentStateName === "dmg") {
+      enemy.currentStateName = "idle"
+    }
+  }
+
+  if (enemy.health <= 0) {
+    enemyDeathParticles(enemy)
+    enemy.attackInterval = true;
+    attackCircleState(enemy)
+    // enemy.currentStateName = "idle"
+    mapsInfo[currentLand].enemies.splice(mapsInfo[currentLand].enemies.indexOf(enemy), 1)
+    enemy.spawn.x = -1000;
+    enemy.spawn.y = -1000;
+    setTimeout(() => {
+      enemy.spawn.x = enemy.baseSpawn.x;
+      enemy.spawn.y = enemy.baseSpawn.y;
+      enemy.health = enemy.maxHealth
+      mapsInfo[currentLand].enemies.push(enemy)
+    }, enemy.spawnTimer);
+  }
+
+  if (localPlayerDamaged > 0) {
+    localPlayerDamaged--
+
+    playerX += Math.cos(localPlayerDamageAngle) * localPlayerDamaged ;
+    playerY += Math.sin(localPlayerDamageAngle) * localPlayerDamaged;
+
+  }
+
+  for (const projectile of projectilesClient) {
+
+    if (projectile.x - 150 > enemy.spawn.x && projectile.x - 150 < enemy.spawn.x + enemy.w 
+      && projectile.y - 190 > enemy.spawn.y && projectile.y - 190 < enemy.spawn.y + enemy.h 
+      && enemy.damaged === 0 
+      && !projectile.enemy
+      && myPlayer?.weapon[0]?.name === "arcaneStaffCommon") {
+
+      enemy.damaged = 10;
+      enemy.angle = projectile.angle || projectile.bullet1 || projectile.bullet2;
+      projectile.timeLeft = projectile.timeLeft > 1 ? 1 : projectile.timeLeft;
+      enemy.health = enemy.health - 1
+
+      if (enemy.health > 0) {
+        enemyHitAudio.play()
+      } else {
+        splatAudio.play()
+      }
+    }
+
+    const projectileCenterX = projectile.x - 150 - cameraShakeX - cameraX + 20;
+    const projectileCenterY = projectile.y - 190 - cameraShakeY - cameraY + 20;
+    
+    if (
+      projectileCenterX >= playerColminX &&
+      projectileCenterX <= playerColminX + playerColLengthX &&
+      projectileCenterY >= playerColminY &&
+      projectileCenterY <= playerColminY + playerColLengthY &&
+      projectile.enemy &&
+      localPlayerDamaged === 0
+      && !dashing
+    ) {
+
+      localPlayerDamageAngle = projectile.angle || projectile.bullet1 || projectile.bullet2;
+      projectile.timeLeft = projectile.timeLeft > 1 ? 1 : projectile.timeLeft;
+      localPlayerDamaged = 10
+      currentHealth--
+
+      // console.log(currentHealth, maxHealth)
+
+      cameraShake()
+    }
+  }
+}
+
+function handleEnemyState(enemy) {
+  if (enemy.stateTimer) return;
+
+  
+  enemy.stateTimer = setTimeout(() => {
+    enemy.frames = 0;
+    enemy.stateTimer = null;
+    const states = enemy.states;
+    const chosenState = states[Math.floor(Math.random() * states.length)];
+    executeStateForDuration(enemy, chosenState, enemy.enemyStateInt);
+  }, enemy.enemyStateInt);
+}
+
+function executeStateForDuration(enemy, stateFunction, duration) {
+  const interval = 50;
+  const repetitions = duration / interval;
+  let counter = 0;
+
+  const intervalId = setInterval(() => {
+    stateFunction(enemy);
+    if (counter >= repetitions || !mapsInfo[currentLand].enemies.includes(enemy)) {
+      clearInterval(intervalId)
+      enemy.currentStateName = "idle"
+    };
+    counter++;
+  }, interval);
+}
+
+function moveState(enemy) {
+  // console.log(enemy.currentStateName)
+  if (enemy.currentStateName === "idle") {
+    enemy.currentStateName = "move";
+  }
+
+  const colliders = drawColliders("enemy", enemy.spawn.x, enemy.spawn.y, enemy.w, enemy.h);
+
+  if (!enemy.commitTimer) {
+    enemy.commitTimer = null;
+  }
+
+  if (!enemy.committedDirection) {
+    enemy.committedDirection = null;
+  }
+
+  const chooseDirection = (primary, fallback1, fallback2) => {
+    if (!colliders.includes(primary)) {
+      enemy.committedDirection = primary; 
+      startCommitmentTimer(enemy); 
+      return primary;
+    } else if (!colliders.includes(fallback1)) {
+      enemy.committedDirection = fallback1; 
+      startCommitmentTimer(enemy); 
+      return fallback1;
+    } else if (!colliders.includes(fallback2)) {
+      enemy.committedDirection = fallback2; 
+      startCommitmentTimer(enemy); 
+      return fallback2;
+    }
+    return null;
+  };
+
+  // Handle committed direction
+  if (enemy.committedDirection) {
+    if (colliders.includes(enemy.committedDirection)) {
+      enemy.committedDirection = null;
+    } else {
+     
+      switch (enemy.committedDirection) {
+        case "up":
+          enemy.spawn.y -= enemy.speedY;
+          return;
+        case "down":
+          enemy.spawn.y += enemy.speedY;
+          return;
+        case "left":
+          enemy.spawn.x -= enemy.speedX;
+          return;
+        case "right":
+          enemy.spawn.x += enemy.speedX;
+          return;
+      }
+    }
+  }
+
+  // Decide movement when no commitment
+  if (colliders.includes("up") && enemy.spawn.y > playerY - 120) {
+    const direction = chooseDirection(
+      playerX < enemy.spawn.x ? "left" : "right",
+      "left",
+      "right"
+    );
+    if (direction === "left") enemy.spawn.x -= enemy.speedX;
+    if (direction === "right") enemy.spawn.x += enemy.speedX;
+  } else if (colliders.includes("down") && enemy.spawn.y < playerY - 120) {
+    const direction = chooseDirection(
+      playerX < enemy.spawn.x ? "left" : "right",
+      "left",
+      "right"
+    );
+    if (direction === "left") enemy.spawn.x -= enemy.speedX;
+    if (direction === "right") enemy.spawn.x += enemy.speedX;
+  } else if (colliders.includes("left") && enemy.spawn.x > playerX - 200) {
+    const direction = chooseDirection(
+      playerY < enemy.spawn.y ? "up" : "down",
+      "up",
+      "down"
+    );
+    if (direction === "up") enemy.spawn.y -= enemy.speedY;
+    if (direction === "down") enemy.spawn.y += enemy.speedY;
+  } else if (colliders.includes("right") && enemy.spawn.x < playerX - 200) {
+    const direction = chooseDirection(
+      playerY < enemy.spawn.y ? "up" : "down",
+      "up",
+      "down"
+    );
+    if (direction === "up") enemy.spawn.y -= enemy.speedY;
+    if (direction === "down") enemy.spawn.y += enemy.speedY;
+  } else {
+    // No collision or already bypassing, continue normal movement
+    if (enemy.spawn.x > playerX - 200) enemy.spawn.x -= enemy.speedX;
+    if (enemy.spawn.x < playerX - 200) enemy.spawn.x += enemy.speedX;
+    if (enemy.spawn.y > playerY - 120) enemy.spawn.y -= enemy.speedY;
+    if (enemy.spawn.y < playerY - 120) enemy.spawn.y += enemy.speedY;
+  }
+
+  resolveEnemyCollisions(enemy);
+}
+
+function startCommitmentTimer(enemy) {
+  if (enemy.commitTimer) clearTimeout(enemy.commitTimer); // Reset existing timer if active
+  enemy.commitTimer = setTimeout(() => {
+    enemy.committedDirection = null; // Clear commitment after 3 seconds
+    enemy.commitTimer = null; // Reset timer reference
+  }, 2000);
+}
+
+function attackState(enemy) {
+  if (enemy.currentStateName === "idle") {
+    enemy.currentStateName = "attack1";
+  }
+  
+  if (enemy.attackInterval) {
+
+  let bulletAngle = getAngleBetweenPlayerAndEnemy(enemy);
+  enemy.attackInterval = false;
+
+  setTimeout(() => {
+    enemy.attackInterval = true;
+  }, 300);
+
+    projectilesClient.push({
+      angle: bulletAngle,
+      x: enemy.spawn.x + 200,
+      y: enemy.spawn.y + 200,
+      speed: 5,
+      timeLeft: 100,
+      playerId: socket.id,
+      enemy: true
+    }) 
+  }
+}
+
+function attackCircleState(enemy) {
+  if (enemy.currentStateName === "idle") {
+    enemy.currentStateName = "attack2";
+  }
+  
+  if (enemy.attackInterval) {
+    enemy.attackInterval = false;
+
+    const totalBullets = 50; // Total bullets forming the circle
+    const angleIncrement = (2 * Math.PI) / totalBullets; // Full circle divided into 20 parts
+
+    setTimeout(() => {
+      for (let i = 0; i < totalBullets; i++) {
+        const bulletAngle = i * angleIncrement; // Calculate angle for each bullet
+        projectilesClient.push({
+          angle: bulletAngle,
+          x: enemy.spawn.x + 200 + Math.cos(bulletAngle) * 20, // Offset to create a circular spawn
+          y: enemy.spawn.y + 200 + Math.sin(bulletAngle) * 20,
+          speed: 5,
+          timeLeft: 200,
+          playerId: socket.id,
+          enemy: true,
+        });
+      }
+    }, 500);
+
+
+    setTimeout(() => {
+      enemy.attackInterval = true;
+    }, 3000);
+  }
+}
+
+
+function resolveEnemyCollisions(enemy) {
+  mapsInfo[currentLand].enemies.forEach(otherEnemy => {
+    if (otherEnemy === enemy) return;
+    const dx = enemy.spawn.x - otherEnemy.spawn.x;
+    const dy = enemy.spawn.y - otherEnemy.spawn.y;
+    if (Math.abs(dx) < 100) enemy.spawn.x += dx > 0 ? enemy.speedX : -enemy.speedX;
+    if (Math.abs(dy) < 100) enemy.spawn.y += dy > 0 ? enemy.speedY : -enemy.speedY;
+  });
+}
+
+function updateAllEnemies() {
+  mapsInfo[currentLand].enemies.forEach(enemy => handleEnemyState(enemy));
+}
+
+function getAngleBetweenPlayerAndEnemy(enemy) {
+  const dx = playerX - enemy.spawn.x - 200;
+  const dy = playerY + 100 - enemy.spawn.y - 200;
+  const angle = Math.atan2(dy, dx); // Returns the angle in radians
+  return angle;
 }
 
 // Enemy functions <
@@ -8418,6 +8961,40 @@ function playerTrailParticles () {
   }
 }
 
+function push360Particles (color, amount, x, y) {
+  for (let i = 0; i < amount; i++) {
+    const speed = Math.floor(Math.random() * (1 - 1 + 8)) + 1;
+    const angleDegrees = Math.random() * 360;
+    const size = 15 ;
+    const particleX = x;
+    const particleY = y;
+    
+    particles.push({ x: 1, y: 1, size: size, color: color, speed: speed, angle: angleDegrees, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partWalk"].speedDec, sizeDecrease: particlesSystem["partWalk"].sizeDec, name: particlesSystem["partWalk"].name });   
+  }
+}
+
+function enemyDeathParticles (enemy) {
+  for (let i = 0; i < 20; i++) {
+    const angle = angleMouse + (Math.random() * 0.5 * 2 - 0.2) ;; // Random angle
+    const speed = Math.floor(Math.random() * (20 - 8 + 1)) + 5;; // Random speed (adjust as needed)
+    const size = 25; // Random size between 3 and 8
+    const particleX = enemy.spawn.x + 180;
+    const particleY = enemy.spawn.y + 190;
+
+    const randomNumber = Math.floor(Math.random() * 2) + 1;
+    
+    if (randomNumber === 1) {
+
+      particles.push({ x: 1, y: 1, size: size, color: '#6d64b6', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partSlime"].speedDec, sizeDecrease: particlesSystem["partSlime"].sizeDec, name: particlesSystem["partSlime"].name });
+            
+    } else {
+
+      particles.push({ x: 1, y: 1, size: size, color: '#afa6ff', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partSlime"].speedDec, sizeDecrease: particlesSystem["partSlime"].sizeDec, name: particlesSystem["partSlime"].name });
+    }
+
+  }
+}
+
 // Particle system <
 
 
@@ -8490,17 +9067,18 @@ function lobbyLoop() {
 
   // Particle settings
   particlesActor()
-  // // shootingParticles()
+  shootingParticles()
   dashParticles()
   // // playerTrailParticles()
 
 
   // Player settings
+  drawEnemy()
   playerCollision()
   drawOnlinePlayers("back")
   drawLocalPlayer()
   drawOnlinePlayers("front")
-  // // drawLocalBullets()
+  drawLocalBullets()
   
   
   // Enemy settings
@@ -8516,7 +9094,7 @@ function lobbyLoop() {
 
   // Dev Colliders
   drawDevWallsPlacement()
-  // drawColliders()
+  drawColliders("player", "", "", "", "")
 
 }
 

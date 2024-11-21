@@ -1959,3 +1959,31 @@ body {
     top: 0;
     transition: all .2s ease;
 }
+
+@keyframes shake {
+    0% { 
+        transform: translate(-50%, -0%) rotate(0deg);
+        gap: 5px; 
+    }
+    25% { 
+        transform: translate(-50%, -0%) rotate(10deg); 
+        gap: 1px;
+    }
+    50% { 
+        transform: translate(-50%, -0%) rotate(-10deg) ;
+        gap: 1px;
+    }
+    75% { 
+        transform: translate(-50%, -0%) rotate(10deg); 
+        gap: 1px;
+    }
+    100% { 
+        transform: translate(-50%, -0%) rotate(0deg);
+        gap: 5px;
+    }
+  }
+  
+  .shake {
+    animation: shake .2s ease;
+  }
+  
