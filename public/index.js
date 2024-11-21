@@ -33,6 +33,12 @@ lobbyCombatArea.src = "./islands/lobbyCombatArea.png";
 const lobbyCombatAreaFront = new Image();
 lobbyCombatAreaFront.src = "./islands/lobbyCombatAreaFront.png";
 
+const slimeForestPath = new Image();
+slimeForestPath.src = "./islands/slimeForestPath.png"
+
+const slimeForestPathFront = new Image();
+slimeForestPathFront.src = "./islands/slimeForestPathFront.png"
+
 
 
 
@@ -2949,7 +2955,7 @@ var isTyping = false;  // Flag to prevent advancing while typing
 
 let dialogBoxes = {
 
-  
+
     "fishing Quest": {
 		dialogName: "quest",
 		questRequirements: [],
@@ -3371,8 +3377,7 @@ let mapsInfo = {
       x: 2852,
       y: 3798
     },
-    colliders: 
-    [
+    colliders: [
       {
         "type": "wall",
         "x": 3804,
@@ -4502,16 +4507,6 @@ let mapsInfo = {
         "color": "rgb(0, 0, 0, 0)"
       },
       {
-        "type": "transition",
-        "format": "liquid",
-        "destination": "lobby",
-        "x": 2552,
-        "y": 3817.5,
-        "width": 400,
-        "height": 165,
-        "color": "rgb(0, 0, 0, 0)"
-      }, 
-      {
         "type": "dialog",
         "name": "dialogSlimeBoxes",
         "x": 1984,
@@ -4537,6 +4532,16 @@ let mapsInfo = {
         "width": 212,
         "height": 227,
         "color": "rgb(179, 255, 213, 0)"
+      },
+      {
+        "type": "transition",
+        "format": "liquid",
+        "destination": "slimeForestPath",
+        "x": 2455.5,
+        "y": 3908.5,
+        "width": 554,
+        "height": 94,
+        "color": "rgb(204, 0, 204, 0)"
       }
     ],
   },
@@ -6487,16 +6492,6 @@ let mapsInfo = {
         "color": "rgb(0, 0, 0, 0)"
       },
       {
-        "type": "transition",
-        "format": "liquid",
-        "destination": "islandOne",
-        "x": -20,
-        "y": 441.5,
-        "width": 584,
-        "height": 15,
-        "color": "rgb(204, 0, 204, 0)"
-      },
-      {
         "type": "fish",
         "x": 3053,
         "y": 2448.5,
@@ -6917,6 +6912,16 @@ let mapsInfo = {
         "width": 540,
         "height": 26,
         "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "transition",
+        "format": "liquid",
+        "destination": "slimeForestPath",
+        "x": -201.5,
+        "y": 336.5,
+        "width": 802,
+        "height": 174,
+        "color": "rgb(204, 0, 204, 0)"
       }
     ],
   },
@@ -8523,7 +8528,40 @@ let mapsInfo = {
         enemyStateInt: 2000,
       },
     ]
+  },
+
+  slimeForestPath: {
+    areaSounds: lobbySoundtrack,
+    backgroundImage: slimeForestPath,
+    foregroundImage: slimeForestPathFront,
+    playerPos: {
+      x: 1935,
+      y: 2750,
+    },
+    colliders: [
+      {
+        "type": "transition",
+        "format": "liquid",
+        "destination": "lobby",
+        "x": 1523.5,
+        "y": 2753.5,
+        "width": 548,
+        "height": 248,
+        "color": "rgb(204, 0, 204, 0)"
+      },
+      {
+        "type": "transition",
+        "format": "liquid",
+        "destination": "islandOne",
+        "x": 1289.5,
+        "y": 1320.5,
+        "width": 873,
+        "height": 125,
+        "color": "rgb(204, 0, 204, 0)"
+      }
+    ]
   }
+
 };
 
 let selectedXcoord = 0;
@@ -10792,6 +10830,54 @@ function lobbyCombatAreaLoop() {
   // Dev Colliders
   drawDevWallsPlacement()
   drawColliders("player", "", "", "", "")
+
+}
+
+function slimeForestPathLoop() {
+
+
+  // Map name        ↓
+  currentLand = "slimeForestPath";
+
+
+  // Map setup ( Mandatory )
+  mapSetup();
+
+
+  // Background map Image and objects
+  drawMap("back")
+  drawObjects("back")
+
+
+  // Particle settings
+  particlesActor()
+  //shootingParticles()
+  dashParticles()
+  // // playerTrailParticles()
+
+
+  // Player settings
+  playerCollision()
+  drawOnlinePlayers("back")
+  drawLocalPlayer()
+  drawOnlinePlayers("front")
+  drawLocalBullets()
+  
+  
+  // Enemy settings
+  // // drawSlimeEnemy()
+  
+  
+  // Foreground map Image and objects
+  drawMap("front")
+  drawObjects("front")
+  drawUsername()
+  drawChat()
+
+
+  // Dev Colliders
+  drawDevWallsPlacement()
+  drawColliders()
 
 }
 
