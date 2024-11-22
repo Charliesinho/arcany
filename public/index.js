@@ -102,7 +102,7 @@ const Structure1 = new Image();
 Structure1.src = "./structures/Structure1.png";
 
 const audioClick = new Audio("./audios/tapWood.wav");
-audioClick.volume = 1;
+audioClick.volume = 0.5;
 audioClick.loop = false;
 
 const oilFry = new Audio("./audios/oilFry.wav");
@@ -122,7 +122,6 @@ audioEquip.loop = false;
 
 const audioBuy = new Audio("./audios/buy.wav");
 audioBuy.loop = false;
-audioBuy.volume = 0.3;
 
 const audioSplash = new Audio("./audios/splash.mp3");
 audioSplash.loop = false;
@@ -133,10 +132,6 @@ audioSuccess.loop = false;
 const audioShootNature = new Audio("./audios/shootNature.wav");
 audioShootNature.loop = false;
 audioShootNature.volume = 0.3;
-
-const splatAudio = new Audio("./audios/splat.mp3");
-splatAudio.loop = false;
-splatAudio.volume = 0.3;
 
 const audioIntro = new Audio("./audios/introTune.wav");
 audioIntro.loop = true;
@@ -204,10 +199,6 @@ motorAudio.volume = 0.1;
 const footsteps = new Audio("./audios/footsteps.mp3");
 footsteps.loop = true;
 footsteps.volume = 0.3;
-
-const enemyHitAudio = new Audio("./audios/enemyHit.mp3");
-enemyHitAudio.loop = false;
-enemyHitAudio.volume = 0.3;
 
 const sizzle = new Audio("./audios/sizzle.wav");
 sizzle.loop = false;
@@ -6931,7 +6922,7 @@ let mapsInfo = {
     backgroundImage: lobbyCombatArea,
     foregroundImage: lobbyCombatAreaFront,
     playerPos: {
-      x: 200,
+      x: 300,
       y: 1800,
     },
     colliders: [
@@ -9163,13 +9154,30 @@ function mapSetup () {
 
     // Set cameras
     if (!cutscene) {
-      secondaryCameraX = playerX - canvasLobby.width / 2 + 10;
-      secondaryCameraY = playerY - canvasLobby.height / 2 + 50;
-      cameraFollow()
-    } else if (cutscene) {
-      secondaryCameraX = 800;
-      secondaryCameraY = 2000;
-      cameraFollow()
+    
+      if (
+        playerX - canvasLobby.width / 2 + 10 >= 0 && 
+        playerX + canvasLobby.width / 2 + 10 <= 4300
+      ) {
+        secondaryCameraX = playerX - canvasLobby.width / 2 + 10;
+      } else if (playerX - canvasLobby.width / 2 + 10 >= 0) {
+        secondaryCameraX = 4300 - canvasLobby.width;
+      } else {
+        secondaryCameraX = -200;
+      }
+
+      if (
+        playerY - canvasLobby.height / 2 + 50 >= 0 && 
+        playerY + canvasLobby.height / 2 + 50 <= 4300 
+      ) {
+        secondaryCameraY = playerY - canvasLobby.height / 2 + 50;
+      } else if (playerY - canvasLobby.height / 2 + 50 >= 0) {
+        secondaryCameraY = 4300 - canvasLobby.height;
+      } else {
+        secondaryCameraY = -200;
+      }
+      cameraFollow();
+      
     }
     
     // Set player position
@@ -10165,7 +10173,7 @@ function drawMap (layer) {
 
 
 function drawEnemy () {
-  mapsInfo[currentLand].enemies.forEach(enemy => {
+  mapsInfo[currentLand].enemies?.forEach(enemy => {
 
     enemy.imgch = 
     enemy.currentStateName === "dmg"
@@ -10265,14 +10273,20 @@ function checkEnemyCombat (enemy) {
       && !projectile.enemy
       && myPlayer?.weapon[0]?.name === "arcaneStaffCommon") {
 
-      enemy.damaged = 10;
+      enemy.damaged = 5;
       enemy.angle = projectile.angle || projectile.bullet1 || projectile.bullet2;
       projectile.timeLeft = projectile.timeLeft > 1 ? 1 : projectile.timeLeft;
       enemy.health = enemy.health - 1
 
       if (enemy.health > 0) {
+        const enemyHitAudio = new Audio("./audios/enemyHit.mp3");
+        enemyHitAudio.loop = false;
+        enemyHitAudio.volume = 0.3;
         enemyHitAudio.play()
       } else {
+        const splatAudio = new Audio("./audios/splat.mp3");
+        splatAudio.loop = false;
+        splatAudio.volume = 0.3;
         splatAudio.play()
       }
     }
@@ -10294,6 +10308,10 @@ function checkEnemyCombat (enemy) {
       projectile.timeLeft = projectile.timeLeft > 1 ? 1 : projectile.timeLeft;
       localPlayerDamaged = 10
       currentHealth--
+      const playerHurtHealth = new Audio("./audios/playerHurtHealth.wav");
+      playerHurtHealth.loop = false;
+      playerHurtHealth.volume = 0.3;
+      playerHurtHealth.play()
 
       // console.log(currentHealth, maxHealth)
 
@@ -10439,6 +10457,7 @@ function startCommitmentTimer(enemy) {
 }
 
 function attackState(enemy) {
+  
   if (enemy.currentStateName === "idle") {
     enemy.currentStateName = "attack1";
   }
@@ -10461,6 +10480,11 @@ function attackState(enemy) {
       playerId: socket.id,
       enemy: true
     }) 
+
+    const basicBulletTree = new Audio("./audios/basicBulletTree.wav");
+    basicBulletTree.loop = false;
+    basicBulletTree.volume = 0.5;
+    basicBulletTree.play()
   }
 }
 
@@ -10476,6 +10500,10 @@ function attackCircleState(enemy) {
     const angleIncrement = (2 * Math.PI) / totalBullets; // Full circle divided into 20 parts
 
     setTimeout(() => {
+      const basicBulletTree = new Audio("./audios/basicBulletTree.wav");
+      basicBulletTree.loop = false;
+      basicBulletTree.volume = 0.5;
+      basicBulletTree.play()
       for (let i = 0; i < totalBullets; i++) {
         const bulletAngle = i * angleIncrement; // Calculate angle for each bullet
         projectilesClient.push({
@@ -10711,6 +10739,7 @@ function islandOneLoop() {
 
 
   // Player settings
+  drawEnemy()
   playerCollision()
   drawLocalBullets()
   drawOnlinePlayers("back")
@@ -10719,7 +10748,7 @@ function islandOneLoop() {
   
   
   // Enemy settings
-  drawSlimeEnemy()
+
   
   
   // Foreground map Image and objects
@@ -10731,7 +10760,7 @@ function islandOneLoop() {
 
   // Dev Colliders
   drawDevWallsPlacement()
-  drawColliders()
+  drawColliders("player", "", "", "", "")
 
 }
 
@@ -10877,7 +10906,7 @@ function slimeForestPathLoop() {
 
   // Dev Colliders
   drawDevWallsPlacement()
-  drawColliders()
+  drawColliders("player", "", "", "", "")
 
 }
 
