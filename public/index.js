@@ -9224,6 +9224,17 @@ function cameraFollow () {
     if (cameraY < secondaryCameraY) cameraY = secondaryCameraY;
   }
 }
+
+window.addEventListener("wheel", event => {
+  const delta = Math.sign(event.deltaY);
+  if (delta === 1) {
+    canvasLobby.width *= 1.1;
+    canvasLobby.height *= 1.1;
+  } else {
+    canvasLobby.width *= 0.9;
+    canvasLobby.height *= 0.9;
+  }
+});
 // Camera <
 
 
