@@ -1,7 +1,7 @@
 //Change this to push >
 
-const socket = io(`ws://localhost:5000`);
-// const socket = io(`https://arcanyGame.up.railway.app/`);
+// const socket = io(`ws://localhost:5000`);
+const socket = io(`https://arcanyGame.up.railway.app/`);
 
 //Change this to push <
 
@@ -129,10 +129,6 @@ audioSplash.loop = false;
 const audioSuccess = new Audio("./audios/success.mp3");
 audioSuccess.loop = false;
 
-const audioShootNature = new Audio("./audios/shootNature.wav");
-audioShootNature.loop = false;
-audioShootNature.volume = 0.3;
-
 const audioIntro = new Audio("./audios/introTune.wav");
 audioIntro.loop = true;
 audioIntro.volume = 0.5;
@@ -159,6 +155,14 @@ grasslandsLoop1.volume = 0.0;
 
 const grasslandsEnviroment = new Audio("./audios/grasslandsEnviroment.mp3");
 grasslandsEnviroment.loop = true;
+
+const grassLandsSong = new Audio("./audios/grassLandsSong.mp3");
+grassLandsSong.loop = true;
+grassLandsSong.volume = 0.3;
+
+const lobbySong = new Audio("./audios/lobbySong.wav");
+lobbySong.loop = true;
+lobbySong.volume = 0.8;
 
 const levelUpAudio = new Audio("./audios/levelUp.mp3");
 levelUpAudio.loop = false;
@@ -2333,8 +2337,7 @@ socket.on("loginAttempt", (msg) => {
 
       shootingBlock = false;
 
-      grasslandsLoop1.play();
-      grasslandsEnviroment.play();
+      lobbySoundtrack()
 
     }, 2000);
 
@@ -2459,6 +2462,9 @@ window.addEventListener("keydown", (e) => {
       playerSpeed = 30
       dashing = true;
       dashingAllowed = true
+      const dash = new Audio("./audios/dash.wav");
+      dash.loop = false;
+      dash.play()
 
       const interval = setInterval(() => {
         playerSpeed -= 10;
@@ -2470,7 +2476,7 @@ window.addEventListener("keydown", (e) => {
           
           setTimeout(() => {
             dashingAllowed = false
-          }, 1000);
+          }, 200);
         }
       }, 50);
     }
@@ -2579,6 +2585,7 @@ window.addEventListener("keydown", (e) => {
 
   //Dialog grasslands open >
 
+  console.log(dialogAvailable)
   if(e.key === "e" && dialogAvailable & !dialogOpened) {
     dialogOpened = true;
     startDialog(currentDialogTitle);
@@ -2659,140 +2666,158 @@ window.addEventListener("keyup", (e) => {
 let projectilesClient = [];
 let recoil = 0;
 let shooting = false;
+let mouseLeftPressed = false;
+let shootInterval;
+
+function shootDefaultArcane () {
+  const angle = angleMouse
+  const audioShootNature = new Audio("./audios/shootNature.wav");
+  audioShootNature.loop = false;
+  audioShootNature.volume = 0.3;
+  audioShootNature.play()
+    // socket.emit("projectile", angle);
+    cameraShake();
+
+  projectilesClient.push({
+    angle,
+    x: playerX + 20,
+    y: playerY + 50,
+    timeLeft: 20,
+    playerId: socket.id,
+  }) 
+
+  shooting = true;
+
+  setTimeout(() => {
+    shooting = false;
+  }, 20);
+
+  const interval = setInterval(() => {
+      if (mainSkillCooldown > 10) {
+          mainSkillCooldown = 0;
+          recoil = 0
+          clearInterval(interval);
+      }
+      mainSkillCooldown++;
+      recoil += recoil > 9 ? 0 : 3;
+  }, 20);
+}
 
 canvasLobby.addEventListener("mousedown", (e) => {
-  if (shootingBlock === false) {
-    if (myPlayer.weapon[0]) {
-      if (mainSkillCooldown === 1 || mainSkillCooldown === 0) {
-        audioShootNature.play();
-          const angle = Math.atan2(
-            e.clientY - canvasLobby.height / 2,
-            e.clientX - canvasLobby.width / 2
-          );
-          // socket.emit("projectile", angle);
-          // cameraShake();
-
+  mouseLeftPressed = true;
+    if (shootingBlock === false) {
+      if (myPlayer.weapon[0]) {
+        if (mainSkillCooldown === 1 || mainSkillCooldown === 0) {  
           if (myPlayer?.weapon[0].name === "arcaneStaffCommon") {
-
-            projectilesClient.push({
-              angle,
-              x: playerX + 20,
-              y: playerY + 50,
-              timeLeft: 20,
-              playerId: socket.id,
-            }) 
-
-            shooting = true;
-
-            setTimeout(() => {
-              shooting = false;
-            }, 20);
+            shootDefaultArcane()
+            shootInterval = setInterval(() => {
+              if (mainSkillCooldown === 1 || mainSkillCooldown === 0) {
+                shootDefaultArcane()
+              }
+            }, 200)
+            }
+            else if (myPlayer?.weapon[0].name === "solarStaffCommon") {
   
-            const interval = setInterval(() => {
-                if (mainSkillCooldown > 2) {
-                    mainSkillCooldown = 0;
-                    recoil = 0
-                    clearInterval(interval);
-                }
-                mainSkillCooldown++;
-                recoil += 4
-            }, 20);
-          }
-          else if (myPlayer?.weapon[0].name === "solarStaffCommon") {
-
-            projectilesClient.push({
-              angle,
-              x: playerX + 20,
-              y: playerY + 50,
-              timeLeft: 100,
-              playerId: socket.id,
-            }) 
-
-            shooting = true;
-
-            setTimeout(() => {
-              shooting = false;
-            }, 20);
+              projectilesClient.push({
+                angle,
+                x: playerX + 20,
+                y: playerY + 50,
+                timeLeft: 100,
+                playerId: socket.id,
+              }) 
   
-            const interval = setInterval(() => {
-                if (mainSkillCooldown > 2) {
-                    mainSkillCooldown = 0;
-                    recoil = 0
-                    clearInterval(interval);
-                }
-                mainSkillCooldown++;
-                recoil += 4
-            }, 20);
-          }
-          else if (myPlayer?.weapon[0].name === "nuclearStaffCommon") {
-
-            projectilesClient.push({
-              angle,
-              x: playerX + 20,
-              y: playerY + 50,
-              timeLeft: 200,
-              playerId: socket.id,
-            }) 
-
-            shooting = true;
-
-            setTimeout(() => {
-              shooting = false;
-            }, 20);
+              shooting = true;
   
-            const interval = setInterval(() => {
-                if (mainSkillCooldown > 2) {
-                    mainSkillCooldown = 0;
-                    recoil = 0
-                    clearInterval(interval);
-                }
-                mainSkillCooldown++;
-                recoil += 4
-            }, 20);
-          }
-
-          else if (myPlayer?.weapon[0].name === "willowStick") {
-
-            const bullet1 = angle + 0.1
-            const bullet2 = angle - 0.1
-
-            projectilesClient.push({
-              bullet1,
-              x: playerX + 20,
-              y: playerY + 50,
-              timeLeft: 200,
-              playerId: socket.id,
-            }) 
-
-            projectilesClient.push({
-              bullet2,
-              x: playerX + 20,
-              y: playerY + 50,
-              timeLeft: 200,
-              playerId: socket.id,
-            }) 
-
-            shooting = true;
-
-            setTimeout(() => {
-              shooting = false;
-            }, 70);
+              setTimeout(() => {
+                shooting = false;
+              }, 20);
+    
+              const interval = setInterval(() => {
+                  if (mainSkillCooldown > 2) {
+                      mainSkillCooldown = 0;
+                      recoil = 0
+                      clearInterval(interval);
+                  }
+                  mainSkillCooldown++;
+                  recoil += 4
+              }, 20);
+            }
+            else if (myPlayer?.weapon[0].name === "nuclearStaffCommon") {
   
-            const interval = setInterval(() => {
-                if (mainSkillCooldown > 2) {
-                    mainSkillCooldown = 0;
-                    recoil = 0
-                    clearInterval(interval);
-                }
-                mainSkillCooldown++;
-                recoil += 8
-            }, 50);
-          }
-
+              projectilesClient.push({
+                angle,
+                x: playerX + 20,
+                y: playerY + 50,
+                timeLeft: 200,
+                playerId: socket.id,
+              }) 
+  
+              shooting = true;
+  
+              setTimeout(() => {
+                shooting = false;
+              }, 20);
+    
+              const interval = setInterval(() => {
+                  if (mainSkillCooldown > 2) {
+                      mainSkillCooldown = 0;
+                      recoil = 0
+                      clearInterval(interval);
+                  }
+                  mainSkillCooldown++;
+                  recoil += 4
+              }, 20);
+            }
+  
+            else if (myPlayer?.weapon[0].name === "willowStick") {
+  
+              const bullet1 = angle + 0.1
+              const bullet2 = angle - 0.1
+  
+              projectilesClient.push({
+                bullet1,
+                x: playerX + 20,
+                y: playerY + 50,
+                timeLeft: 200,
+                playerId: socket.id,
+              }) 
+  
+              projectilesClient.push({
+                bullet2,
+                x: playerX + 20,
+                y: playerY + 50,
+                timeLeft: 200,
+                playerId: socket.id,
+              }) 
+  
+              shooting = true;
+  
+              setTimeout(() => {
+                shooting = false;
+              }, 70);
+    
+              const interval = setInterval(() => {
+                  if (mainSkillCooldown > 2) {
+                      mainSkillCooldown = 0;
+                      recoil = 0
+                      clearInterval(interval);
+                  }
+                  mainSkillCooldown++;
+                  recoil += 8
+              }, 50);
+            }
+  
+        }
       }
     }
-  }
+    console.log(mouseLeftPressed)
+  
 });
+
+canvasLobby.addEventListener("mouseup", (e) => {
+  mouseLeftPressed = false;
+  clearInterval(shootInterval)
+})
 //Weapon shoot <
 
 //Weapon aim >
@@ -3331,11 +3356,23 @@ liquidTransition.addEventListener("click", function() {
 
 // Sounds >
 
-function stopAllSound () {
+function stopAllSound() {
   grasslandsLoop1.pause();
+  grasslandsLoop1.currentTime = 0;
+
   grasslandsEnviroment.pause();
-  ArcaneEnv.pause()
+  grasslandsEnviroment.currentTime = 0;
+
+  ArcaneEnv.pause();
+  ArcaneEnv.currentTime = 0;
+
+  lobbySong.pause();
+  lobbySong.currentTime = 0;
+
+  grassLandsSong.pause();
+  grassLandsSong.currentTime = 0;
 }
+
 
 function arcaneSoundtrack () {
   ArcaneEnv.play()
@@ -3344,6 +3381,14 @@ function arcaneSoundtrack () {
 function lobbySoundtrack () {
   grasslandsLoop1.play();
   grasslandsEnviroment.play();
+  console.log("playing lobby song")
+  lobbySong.play()
+}
+
+function grassLandsSoundtrack () {
+  grasslandsLoop1.play();
+  grasslandsEnviroment.play();
+  grassLandsSong.play()
 }
 
 // Sounds <
@@ -3361,7 +3406,7 @@ console.log("current land: ", currentLand)
 let mapsInfo = {
 
   islandOne: {
-    areaSounds: lobbySoundtrack,
+    areaSounds: grassLandsSoundtrack,
     backgroundImage: islandOneMap,
     foregroundImage: islandOneMapFront,
     playerPos: {
@@ -4535,6 +4580,7 @@ let mapsInfo = {
         "color": "rgb(204, 0, 204, 0)"
       }
     ],
+    enemies: [],
   },
 
   lobby: {
@@ -6915,10 +6961,11 @@ let mapsInfo = {
         "color": "rgb(204, 0, 204, 0)"
       }
     ],
+    enemies: [],
   },
 
   lobbyCombatArea: {
-    areaSounds: lobbySoundtrack,
+    areaSounds: grassLandsSoundtrack,
     backgroundImage: lobbyCombatArea,
     foregroundImage: lobbyCombatAreaFront,
     playerPos: {
@@ -8642,7 +8689,7 @@ let mapsInfo = {
   },
 
   slimeForestPath: {
-    areaSounds: lobbySoundtrack,
+    areaSounds: grassLandsSoundtrack,
     backgroundImage: slimeForestPath,
     foregroundImage: slimeForestPathFront,
     playerPos: {
@@ -8670,7 +8717,8 @@ let mapsInfo = {
         "height": 125,
         "color": "rgb(204, 0, 204, 0)"
       }
-    ]
+    ],
+    enemies: [],
   }
 
 };
@@ -9227,10 +9275,13 @@ function cameraFollow () {
 
 window.addEventListener("wheel", event => {
   const delta = Math.sign(event.deltaY);
-  if (delta === 1) {
+
+  if (delta === 1 && canvasLobby.height < 1000) {
     canvasLobby.width *= 1.1;
     canvasLobby.height *= 1.1;
-  } else {
+  } else if (delta === 1 && canvasLobby.height >= 1000) {
+
+  } else if (canvasLobby.height > 600) {
     canvasLobby.width *= 0.9;
     canvasLobby.height *= 0.9;
   }
@@ -9294,7 +9345,7 @@ function mapSetup () {
       } else if (playerX - canvasLobby.width / 2 + 10 >= 0) {
         secondaryCameraX = 4300 - canvasLobby.width;
       } else {
-        secondaryCameraX = -200;
+        secondaryCameraX = -100;
       }
 
       if (
@@ -9305,7 +9356,7 @@ function mapSetup () {
       } else if (playerY - canvasLobby.height / 2 + 50 >= 0) {
         secondaryCameraY = 4300 - canvasLobby.height;
       } else {
-        secondaryCameraY = -200;
+        secondaryCameraY = -100;
       }
       cameraFollow();
       
@@ -9490,6 +9541,7 @@ function drawColliders (type, x, y, w, h) {
           dialogOpened = false;
           containerChat.style.display = "none";
           cutscene = false;
+          dialogAvailable = false;
         }
         if (wall.type === "cook") {
           grassOpenCooking = false;
@@ -9596,8 +9648,8 @@ function drawLocalPlayer () {
         playerCutY,
         playerWidth,
         playerHeight,
-        playerX - cameraX + 65,
-        playerY - cameraY + 120,
+        playerX - cameraX + 65 - cameraShakeX - 150,
+        playerY - cameraY + 120 - cameraShakeY - 180,
         playerWidth - playerZoomX,
         playerHeight - playerZoomY,
       );
@@ -9607,8 +9659,8 @@ function drawLocalPlayer () {
         playerCutY,
         playerWidth,
         playerHeight,
-        playerX - cameraX + 65,
-        playerY - cameraY + 120,
+        playerX - cameraX + 65 - cameraShakeX - 150,
+        playerY - cameraY + 120 - cameraShakeY - 180,
         playerWidth - playerZoomX,
         playerHeight - playerZoomY,
       );
@@ -9622,8 +9674,8 @@ function drawLocalPlayer () {
           playerCutY + 24,
           playerWidth,
           playerHeight,
-          playerX - cameraX + 65,
-          playerY - cameraY + 120,
+          playerX - cameraX + 65 - cameraShakeX - 150,
+          playerY - cameraY + 120 - cameraShakeY - 180,
           playerWidth - playerZoomX,
           playerHeight - playerZoomY,
         );
@@ -9633,8 +9685,8 @@ function drawLocalPlayer () {
           playerCutY + 24,
           playerWidth,
           playerHeight,
-          playerX - cameraX + 65,
-          playerY - cameraY + 120,
+          playerX - cameraX + 65 - cameraShakeX - 150,
+          playerY - cameraY + 120 - cameraShakeY - 180,
           playerWidth - playerZoomX,
           playerHeight - playerZoomY,
         );
@@ -9648,8 +9700,8 @@ function drawLocalPlayer () {
           playerCutY + 47.5,
           playerWidth,
           playerHeight,
-          playerX - cameraX + 65,
-          playerY - cameraY + 120,
+          playerX - cameraX + 65 - cameraShakeX - 150,
+          playerY - cameraY + 120 - cameraShakeY - 180,
           playerWidth - playerZoomX,
           playerHeight - playerZoomY,
         );
@@ -9659,8 +9711,8 @@ function drawLocalPlayer () {
           playerCutY + 47.5,
           playerWidth,
           playerHeight,
-          playerX - cameraX + 65,
-          playerY - cameraY + 120,
+          playerX - cameraX + 65 - cameraShakeX - 150,
+          playerY - cameraY + 120 - cameraShakeY - 180,
           playerWidth - playerZoomX,
           playerHeight - playerZoomY,
         );
@@ -9674,8 +9726,8 @@ function drawLocalPlayer () {
           playerCutY + 72,
           playerWidth,
           playerHeight,
-          playerX - cameraX + 65,
-          playerY - cameraY + 125,
+          playerX - cameraX + 65 - cameraShakeX - 150,
+          playerY - cameraY + 125 - cameraShakeY - 180,
           playerWidth - playerZoomX,
           playerHeight - playerZoomY,
         );
@@ -9685,8 +9737,8 @@ function drawLocalPlayer () {
           playerCutY + 72,
           playerWidth,
           playerHeight,
-          playerX - cameraX + 65,
-          playerY - cameraY + 125,
+          playerX - cameraX + 65 - cameraShakeX - 150,
+          playerY - cameraY + 125 - cameraShakeY - 180,
           playerWidth - playerZoomX,
           playerHeight - playerZoomY,
         );
@@ -9703,8 +9755,8 @@ function drawLocalPlayer () {
             playerCutY + 47.5, // Same as runRight
             playerWidth,
             playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 120,
+            playerX - cameraX + 65 - cameraShakeX - 150,
+            playerY - cameraY + 120 - cameraShakeY - 180,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -9714,8 +9766,8 @@ function drawLocalPlayer () {
             playerCutY + 47.5, // Same as runRight
             playerWidth,
             playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 120,
+            playerX - cameraX + 65 - cameraShakeX - 150,
+            playerY - cameraY + 120 - cameraShakeY - 180,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -9728,8 +9780,8 @@ function drawLocalPlayer () {
             playerCutY + 72, // Same as runLeft
             playerWidth,
             playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 125,
+            playerX - cameraX + 65 - cameraShakeX - 150,
+            playerY - cameraY + 125 - cameraShakeY - 180,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -9739,8 +9791,8 @@ function drawLocalPlayer () {
             playerCutY + 72, // Same as runLeft
             playerWidth,
             playerHeight,
-            playerX - cameraX + 65,
-            playerY - cameraY + 125,
+            playerX - cameraX + 65 - cameraShakeX - 150,
+            playerY - cameraY + 125 - cameraShakeY - 180,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -9780,34 +9832,35 @@ function drawOnlinePlayers (layer) {
       
 
       function drawPlayerOnline () {
-        if (player.anim === "idleRight" && player.lastLooked === "right") {
-        frameCurrentPlayer = frameCurrentPlayer % 6;
-        playerCutX = frameCurrentPlayer * playerWidth;
-  
-        canvas.drawImage(
-          armor,
-          playerCutX,
-          playerCutY,
-          playerWidth,
-          playerHeight,
-          smoothPlayer.smoothX - cameraX + 65,
-          smoothPlayer.smoothY - cameraY + 120,
-          playerWidth - playerZoomX,
-          playerHeight - playerZoomY,
-        );
-        canvas.drawImage(
-          artifact,
-          playerCutX,
-          playerCutY,
-          playerWidth,
-          playerHeight,
-          smoothPlayer.smoothX - cameraX + 65,
-          smoothPlayer.smoothY - cameraY + 120,
-          playerWidth - playerZoomX,
-          playerHeight - playerZoomY,
-        );
+        if (animPlayer === "idleRight" && player.lastLooked === "right") {
+          frameCurrentPlayer = frameCurrentPlayer % 6;
+      
+          playerCutX = frameCurrentPlayer * playerWidth;
+    
+          canvas.drawImage(
+            armor,
+            playerCutX,
+            playerCutY,
+            playerWidth,
+            playerHeight,
+            playerX - cameraX + 65 - cameraShakeX - 150,
+            playerY - cameraY + 120 - cameraShakeY - 180,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+          canvas.drawImage(
+            artifact,
+            playerCutX,
+            playerCutY,
+            playerWidth,
+            playerHeight,
+            playerX - cameraX + 65 - cameraShakeX - 150,
+            playerY - cameraY + 120 - cameraShakeY - 180,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
         }
-        else if (player.anim === "idleRight" && player.lastLooked === "left") {
+        else if (animPlayer === "idleRight" && player.lastLooked === "left") {
           frameCurrentPlayer = frameCurrentPlayer % 6;
           playerCutX = frameCurrentPlayer * playerWidth;
           canvas.drawImage(
@@ -9816,8 +9869,8 @@ function drawOnlinePlayers (layer) {
             playerCutY + 24,
             playerWidth,
             playerHeight,
-            smoothPlayer.smoothX - cameraX + 65,
-            smoothPlayer.smoothY - cameraY + 120,
+            playerX - cameraX + 65 - cameraShakeX - 150,
+            playerY - cameraY + 120 - cameraShakeY - 180,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -9827,13 +9880,13 @@ function drawOnlinePlayers (layer) {
             playerCutY + 24,
             playerWidth,
             playerHeight,
-            smoothPlayer.smoothX - cameraX + 65,
-            smoothPlayer.smoothY - cameraY + 120,
+            playerX - cameraX + 65 - cameraShakeX - 150,
+            playerY - cameraY + 120 - cameraShakeY - 180,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
         }
-        else if (player.anim === "runRight") {
+        else if (animPlayer === "runRight") {
           frameCurrentPlayer = frameCurrentPlayer % 6;
           playerCutX = frameCurrentPlayer * playerWidth;
           canvas.drawImage(
@@ -9842,8 +9895,8 @@ function drawOnlinePlayers (layer) {
             playerCutY + 47.5,
             playerWidth,
             playerHeight,
-            smoothPlayer.smoothX - cameraX + 65,
-            smoothPlayer.smoothY - cameraY + 120,
+            playerX - cameraX + 65 - cameraShakeX - 150,
+            playerY - cameraY + 120 - cameraShakeY - 180,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -9853,13 +9906,13 @@ function drawOnlinePlayers (layer) {
             playerCutY + 47.5,
             playerWidth,
             playerHeight,
-            smoothPlayer.smoothX - cameraX + 65,
-            smoothPlayer.smoothY - cameraY + 120,
+            playerX - cameraX + 65 - cameraShakeX - 150,
+            playerY - cameraY + 120 - cameraShakeY - 180,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
         }
-        else if (player.anim === "runLeft") {
+        else if (animPlayer === "runLeft") {
           frameCurrentPlayer = frameCurrentPlayer % 6;
           playerCutX = frameCurrentPlayer * playerWidth;
           canvas.drawImage(
@@ -9868,8 +9921,8 @@ function drawOnlinePlayers (layer) {
             playerCutY + 72,
             playerWidth,
             playerHeight,
-            smoothPlayer.smoothX - cameraX + 65,
-            smoothPlayer.smoothY - cameraY + 120,
+            playerX - cameraX + 65 - cameraShakeX - 150,
+            playerY - cameraY + 125 - cameraShakeY - 180,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -9879,13 +9932,13 @@ function drawOnlinePlayers (layer) {
             playerCutY + 72,
             playerWidth,
             playerHeight,
-            smoothPlayer.smoothX - cameraX + 65,
-            smoothPlayer.smoothY - cameraY + 120,
+            playerX - cameraX + 65 - cameraShakeX - 150,
+            playerY - cameraY + 125 - cameraShakeY - 180,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
         }
-        else if (player.anim === "moveUp" || player.anim === "moveDown") {
+        else if (animPlayer === "moveUp" || animPlayer === "moveDown") {
           frameCurrentPlayer = frameCurrentPlayer % 6;
           playerCutX = frameCurrentPlayer * playerWidth;
         
@@ -9897,8 +9950,8 @@ function drawOnlinePlayers (layer) {
               playerCutY + 47.5, // Same as runRight
               playerWidth,
               playerHeight,
-              smoothPlayer.smoothX - cameraX + 65,
-              smoothPlayer.smoothY - cameraY + 120,
+              playerX - cameraX + 65 - cameraShakeX - 150,
+              playerY - cameraY + 120 - cameraShakeY - 180,
               playerWidth - playerZoomX,
               playerHeight - playerZoomY,
             );
@@ -9908,8 +9961,8 @@ function drawOnlinePlayers (layer) {
               playerCutY + 47.5, // Same as runRight
               playerWidth,
               playerHeight,
-              smoothPlayer.smoothX - cameraX + 65,
-              smoothPlayer.smoothY - cameraY + 120,
+              playerX - cameraX + 65 - cameraShakeX - 150,
+              playerY - cameraY + 120 - cameraShakeY - 180,
               playerWidth - playerZoomX,
               playerHeight - playerZoomY,
             );
@@ -9922,8 +9975,8 @@ function drawOnlinePlayers (layer) {
               playerCutY + 72, // Same as runLeft
               playerWidth,
               playerHeight,
-              smoothPlayer.smoothX - cameraX + 65,
-              smoothPlayer.smoothY - cameraY + 125,
+              playerX - cameraX + 65 - cameraShakeX - 150,
+              playerY - cameraY + 125 - cameraShakeY - 180,
               playerWidth - playerZoomX,
               playerHeight - playerZoomY,
             );
@@ -9933,8 +9986,8 @@ function drawOnlinePlayers (layer) {
               playerCutY + 72, // Same as runLeft
               playerWidth,
               playerHeight,
-              smoothPlayer.smoothX - cameraX + 65,
-              smoothPlayer.smoothY - cameraY + 125,
+              playerX - cameraX + 65 - cameraShakeX - 150,
+              playerY - cameraY + 125 - cameraShakeY - 180,
               playerWidth - playerZoomX,
               playerHeight - playerZoomY,
             );
@@ -9973,7 +10026,7 @@ function drawPlayerArtifact (player) {
 function drawPlayerWeaponOut (player) {
   if (player.weapon[0]) {
     canvas.save(); // Save the current canvas state
-    canvas.translate(playerX - cameraX +18 - recoil, playerY - cameraY +70); // Translate to the player's position
+    canvas.translate(playerX - cameraX - cameraShakeX - 150 +18 - recoil, playerY + cameraShakeY + 180 - cameraY +70); // Translate to the player's position
     canvas.rotate(angleMouse); // Rotate based on the mouse angle
     if (player.weapon[0].name === "solarStaffCommon") {
       canvas.drawImage(solarStaffCommon ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
@@ -10306,18 +10359,20 @@ function drawMap (layer) {
 function drawEnemy () {
   mapsInfo[currentLand].enemies?.forEach(enemy => {
 
+    let directionMultiplier = enemy.spawn.x - cameraX + 200 > playerX - cameraX ? 107 : 0;
+
     enemy.imgch = 
     enemy.currentStateName === "dmg"
     ? enemy.imgh * 8 :
     enemy.currentStateName === "move" 
-    ? enemy.imgh * 3 :
+    ? (enemy.imgh * 3) + directionMultiplier :
     enemy.currentStateName === "attack1" 
-    ? enemy.imgh * 0 :
+    ? (enemy.imgh * 0) + directionMultiplier :
     enemy.currentStateName === "attack2" 
-    ? enemy.imgh * 1 :
-    enemy.imgh * 2;
+    ? (enemy.imgh * 1) + directionMultiplier :
+    (enemy.imgh * 2) + directionMultiplier;
 
-    console.log(enemy.currentStateName)
+  
 
     // canvas.fillRect(enemy.spawn.x - cameraShakeX - cameraX, enemy.spawn.y - cameraShakeY - cameraY, enemy.w, enemy.h);
     enemy.framesTimer--
@@ -10351,6 +10406,7 @@ function drawEnemy () {
       (enemy.spawn.x - cameraX) - (playerX - cameraX) + 200 < 1000 && (enemy.spawn.y - cameraY) - (playerY - cameraY) + 120 < 1000
     ) {
       handleEnemyState(enemy)
+      console.log(enemy.spawn.x - cameraX, playerX - cameraX)
     }
 
     checkEnemyCombat(enemy)
