@@ -9832,7 +9832,7 @@ function drawOnlinePlayers (layer) {
       
 
       function drawPlayerOnline () {
-        if (animPlayer === "idleRight" && player.lastLooked === "right") {
+        if (player.anim === "idleRight" && player.lastLooked === "right") {
           frameCurrentPlayer = frameCurrentPlayer % 6;
       
           playerCutX = frameCurrentPlayer * playerWidth;
@@ -9860,7 +9860,7 @@ function drawOnlinePlayers (layer) {
             playerHeight - playerZoomY,
           );
         }
-        else if (animPlayer === "idleRight" && player.lastLooked === "left") {
+        else if (player.anim === "idleRight" && player.lastLooked === "left") {
           frameCurrentPlayer = frameCurrentPlayer % 6;
           playerCutX = frameCurrentPlayer * playerWidth;
           canvas.drawImage(
@@ -9886,7 +9886,7 @@ function drawOnlinePlayers (layer) {
             playerHeight - playerZoomY,
           );
         }
-        else if (animPlayer === "runRight") {
+        else if (player.anim === "runRight") {
           frameCurrentPlayer = frameCurrentPlayer % 6;
           playerCutX = frameCurrentPlayer * playerWidth;
           canvas.drawImage(
@@ -9912,7 +9912,7 @@ function drawOnlinePlayers (layer) {
             playerHeight - playerZoomY,
           );
         }
-        else if (animPlayer === "runLeft") {
+        else if (player.anim === "runLeft") {
           frameCurrentPlayer = frameCurrentPlayer % 6;
           playerCutX = frameCurrentPlayer * playerWidth;
           canvas.drawImage(
@@ -9938,7 +9938,7 @@ function drawOnlinePlayers (layer) {
             playerHeight - playerZoomY,
           );
         }
-        else if (animPlayer === "moveUp" || animPlayer === "moveDown") {
+        else if (player.anim === "moveUp" || player.anim === "moveDown") {
           frameCurrentPlayer = frameCurrentPlayer % 6;
           playerCutX = frameCurrentPlayer * playerWidth;
         
