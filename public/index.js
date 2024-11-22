@@ -6902,46 +6902,6 @@ let mapsInfo = {
     colliders: [
       {
         "type": "wall",
-        "x": 347,
-        "y": 669.5,
-        "width": 45,
-        "height": 97,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 578,
-        "y": 516.5,
-        "width": 60,
-        "height": 97,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": -132,
-        "y": 228.5,
-        "width": 764,
-        "height": 152,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 149,
-        "y": 424.5,
-        "width": 56,
-        "height": 89,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 329,
-        "y": 483.5,
-        "width": 67,
-        "height": 88,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
         "x": 520,
         "y": 404.5,
         "width": 58,
@@ -8357,6 +8317,166 @@ let mapsInfo = {
         "width": 203,
         "height": 639,
         "color": "rgb(204, 0, 204, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1159.5,
+        "y": 2765.5,
+        "width": 95,
+        "height": 48,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1267.5,
+        "y": 2995.5,
+        "width": 74,
+        "height": 38,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1319.5,
+        "y": 3018.5,
+        "width": 116,
+        "height": 53,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 578.5,
+        "y": 2756.5,
+        "width": 50,
+        "height": 87,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 558.5,
+        "y": 2749.5,
+        "width": 22,
+        "height": 51,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 597.5,
+        "y": 2834.5,
+        "width": 168,
+        "height": 38,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 669.5,
+        "y": 2858.5,
+        "width": 239,
+        "height": 73,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 804.5,
+        "y": 2912.5,
+        "width": 388,
+        "height": 60,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 941.5,
+        "y": 2951.5,
+        "width": 232,
+        "height": 69,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2663.5,
+        "y": 2854.5,
+        "width": 234,
+        "height": 78,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2860.5,
+        "y": 2831.5,
+        "width": 134,
+        "height": 35,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2965.5,
+        "y": 2791.5,
+        "width": 143,
+        "height": 52,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3100.5,
+        "y": 2768.5,
+        "width": 104,
+        "height": 33,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3079.5,
+        "y": 2758.5,
+        "width": 123,
+        "height": 66,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3160.5,
+        "y": 2725.5,
+        "width": 54,
+        "height": 55,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3038.5,
+        "y": 2766.5,
+        "width": 68,
+        "height": 40,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2929.5,
+        "y": 2807.5,
+        "width": 55,
+        "height": 40,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2803.5,
+        "y": 2827.5,
+        "width": 194,
+        "height": 40,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2911.5,
+        "y": 2810.5,
+        "width": 73,
+        "height": 32,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1686.5,
+        "y": 3027.5,
+        "width": 467,
+        "height": 100,
+        "color": "rgb(0, 0, 0, 0)"
       }
     ]
   },
