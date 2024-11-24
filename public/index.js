@@ -48,6 +48,12 @@ slimeForestPath.src = "./islands/slimeForestPath.png"
 const slimeForestPathFront = new Image();
 slimeForestPathFront.src = "./islands/slimeForestPathFront.png"
 
+const mushroomForest = new Image();
+mushroomForest.src = "./islands/mushroom.png"
+
+const mushroomForestFront = new Image();
+mushroomForestFront.src = "./islands/mushroomFront.png"
+
 
 
 
@@ -8783,9 +8789,40 @@ let mapsInfo = {
         "width": 873,
         "height": 125,
         "color": "rgb(204, 0, 204, 0)"
+      },
+      {
+        "type": "transition",
+        "format": "liquid",
+        "destination": "mushroomForest",
+        "x": 2694,
+        "y": 1903.5,
+        "width": 255,
+        "height": 446,
+        "color": "rgb(204, 0, 204, 0)"
       }
     ],
     enemies: [],
+  },
+
+  mushroomForest: {
+    areaSounds: lobbySoundtrack,
+    backgroundImage: mushroomForest,
+    foregroundImage: mushroomForestFront,
+    playerPos: {
+      x: 1935,
+      y: 2750,
+    },
+    colliders: [
+      {
+      "type": "transition",
+      "format": "liquid",
+      "destination": "slimeForestPath",
+      "x": 117,
+      "y": 1650.5,
+      "width": 284,
+      "height": 496,
+      "color": "rgb(204, 0, 204, 0)"
+    }]
   }
 
 };
@@ -11145,6 +11182,54 @@ function slimeForestPathLoop() {
 
   // Map name        ↓
   currentLand = "slimeForestPath";
+
+
+  // Map setup ( Mandatory )
+  mapSetup();
+
+
+  // Background map Image and objects
+  drawMap("back")
+  drawObjects("back")
+
+
+  // Particle settings
+  particlesActor()
+  //shootingParticles()
+  dashParticles()
+  // // playerTrailParticles()
+
+
+  // Player settings
+  playerCollision()
+  drawOnlinePlayers("back")
+  drawLocalPlayer()
+  drawOnlinePlayers("front")
+  drawLocalBullets()
+  
+  
+  // Enemy settings
+  // // drawSlimeEnemy()
+  
+  
+  // Foreground map Image and objects
+  drawMap("front")
+  drawObjects("front")
+  drawUsername()
+  drawChat()
+
+
+  // Dev Colliders
+  drawDevWallsPlacement()
+  drawColliders("player", "", "", "", "")
+
+}
+
+function mushroomForestLoop() {
+
+
+  // Map name        ↓
+  currentLand = "mushroomForest";
 
 
   // Map setup ( Mandatory )
