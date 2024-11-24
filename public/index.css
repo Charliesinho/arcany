@@ -143,6 +143,19 @@ body {
     image-rendering: pixelated;
 }
 
+#areaName {
+    position: absolute;
+    color: white;
+    left: 50%;
+    top: 20%;
+    transform: translate(-50%, -50%);
+    font-size: 100px;
+    text-decoration: underline;
+    text-shadow: 0 0 20px black;
+    opacity: 0;
+    pointer-events: none;
+}
+
 #navBar {
     width: 97.5vw;
     height: 100px;
@@ -647,32 +660,39 @@ body {
 #chat {
     position: absolute;
     z-index: 1;
-    bottom: 80px;
-    right: 10px;
+    bottom: 10px;
+    left: 10px;
     color: rgb(255, 255, 255);
-    display: flex;
+    /* display: flex; */
+    /* height: 300px; */
+    background: var(--backgroundObjects);
 }
 
 #chat input {
-    height: 30px;
-    width: 30px;
-
+    height: 20px;
+    width: 400px;
     border: none;
-    border-radius: 15px;
+    border-radius: 2px;
     outline: none 1px white;
     outline-offset: -5px;
     background: var(--backgroundObjects);
-    
     padding: 20px;
     color: rgb(255, 255, 255);
     font-size: 16px;
-    font-weight: bolder;
+    font-weight: 300;
 }
 
 #chat input::placeholder {
     color: rgb(255, 255, 255);
-    font-size: 20px;
-    text-align: center;
+    font-size: 16px;
+    font-weight: 300;
+}
+
+#chatHistory {
+    height: 150px;
+    width: 400px;
+    padding: 20px;
+    overflow: scroll;
 }
 
 #loginScreen {
@@ -1150,7 +1170,7 @@ body {
     top: 0px !important;
     z-index: 20;
     opacity: 1;
-    width: calc(100vw - 330px - 75px);
+    width: calc(100vw);
     height: calc(100vh - 5px);
     border: solid 2px rgb(0, 0, 0);
     box-shadow: 0px 5px rgb(0, 0, 0), 0 0 20px rgba(0, 0, 0, 0.464);

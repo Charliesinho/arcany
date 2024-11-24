@@ -5,9 +5,18 @@ const socket = io(`https://arcanyGame.up.railway.app/`);
 
 //Change this to push <
 
-window.onload = async function() {
-  window.scrollTo(0, 0);
-};
+setTimeout(() => {
+  let scrollInterval =setInterval(() => {
+    if (window.scrollY > 0) {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth' 
+      });
+    } else {
+      clearInterval(scrollInterval)
+    }
+  }, 20);
+}, 1000);
 
 const lobbyMap = new Image();
 lobbyMap.src = "./islands/lobby.png";
@@ -113,6 +122,10 @@ const cookingSong = new Audio("./audios/cookingSong.mp3");
 cookingSong.loop = true;
 cookingSong.volume = 0.3;
 
+const movezone = new Audio("./audios/movezone.wav");
+movezone.loop = false;
+movezone.volume = 1;
+
 const audioQuestObtained = new Audio("./audios/questObtained.wav");
 audioQuestObtained.volume = 0.4;
 audioQuestObtained.loop = false;
@@ -200,9 +213,9 @@ const motorAudio = new Audio("./audios/motor.flac");
 motorAudio.loop = true;
 motorAudio.volume = 0.1;
 
-const footsteps = new Audio("./audios/footsteps.mp3");
+const footsteps = new Audio("./audios/footsteps.wav");
 footsteps.loop = true;
-footsteps.volume = 0.3;
+footsteps.volume = 1;
 
 const sizzle = new Audio("./audios/sizzle.wav");
 sizzle.loop = false;
@@ -325,6 +338,8 @@ const questHubIcon = document.querySelector(".cardsIcon");
 const questHub = document.querySelector(".questHub");
 
 const questClose = document.querySelector(".questClose");
+
+const areaName = document.querySelector("#areaName");
 
 const placeWalls = document.getElementById("placeWalls");
 const deleteWalls = document.getElementById("deleteWalls");
@@ -794,13 +809,41 @@ function openChestIsland () {
 
 
 // Chat
+const recentMessages = new Map();
+
+function updateHistoryChat(value, sender) {
+    const targetDiv = document.getElementById("chatHistory");
+    if (!targetDiv) return;
+
+    const senderKey = sender === "myPlayer" ? myPlayer.username : sender.username;
+    const messageKey = `${senderKey}:${value}`;
+    const now = Date.now();
+
+    if (recentMessages.has(messageKey)) {
+        const lastAdded = recentMessages.get(messageKey);
+        if (now - lastAdded < 2000) return; // Ignore messages added within the last 2 seconds
+    }
+
+    recentMessages.set(messageKey, now); // Update the timestamp
+
+    const newParagraph = document.createElement("p");
+    newParagraph.textContent = senderKey + ": " + value;
+    newParagraph.classList.add("chatText");
+    targetDiv.appendChild(newParagraph);
+
+    // Cleanup old messages to prevent memory leak
+    setTimeout(() => recentMessages.delete(messageKey), 2000);
+}
+
 window.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
         e.preventDefault();
         if (chatInput === document.activeElement) {
             if (chatInput.value) {
                 const chatMessage = chatInput.value;
-                e.preventDefault();
+                e.preventDefault();  
+                updateHistoryChat(chatInput.value, "myPlayer")         
+
                 socket.emit("chatMessage", chatMessage);
                 chatInput.value = "";
                 chatInput.disabled = true;
@@ -1634,8 +1677,20 @@ setTimeout(() => {
 let maxHealth = 6;
 let currentHealth = 6;
 
+function playerDeath () {
+  mapsInfo["lobby"].playerPos= {
+    x: 300,
+    y: 1200,
+  }
+  
+  currentSelectedMap = "lobby"
+  transitionArcane()
+  currentHealth = maxHealth
+}
+
 function health() {
-  if (currentHealth <= 0) currentHealth = maxHealth
+
+  if (currentHealth <= 0) playerDeath()
 
   const parentDiv = playerHeart; // Parent div where the hearts are displayed
   const previousHealth = playerHeart.dataset.previousHealth || currentHealth;
@@ -2480,6 +2535,21 @@ window.addEventListener("keydown", (e) => {
         }
       }, 50);
     }
+
+    if (e?.key?.toLowerCase() === "i"){
+      openIvn()
+    }
+
+    //Dialog grasslands open >
+
+  if(e.key === "e" && dialogAvailable & !dialogOpened) {
+    dialogOpened = true;
+    startDialog(currentDialogTitle);
+  } else if (e.key === "e" && dialogAvailable & dialogOpened) {
+    dialogOpened = false;
+  }
+
+  //Dialog grasslands open <
   
     // socket.emit("inputs", inputs);
     socket.emit("animPlayer", animPlayer);
@@ -2498,10 +2568,6 @@ window.addEventListener("keydown", (e) => {
   //     cutscene = false;
   //   }
   // }
-
-  if (e?.key?.toLowerCase() === "i"){
-    openIvn()
-  }
  
 
   //Fishing Minigame >
@@ -2582,18 +2648,6 @@ window.addEventListener("keydown", (e) => {
   }
 
   //Shop grasslands open <
-
-  //Dialog grasslands open >
-
-  console.log(dialogAvailable)
-  if(e.key === "e" && dialogAvailable & !dialogOpened) {
-    dialogOpened = true;
-    startDialog(currentDialogTitle);
-  } else if (e.key === "e" && dialogAvailable & dialogOpened) {
-    dialogOpened = false;
-  }
-
-  //Dialog grasslands open <
   
   //Cooking grasslands open >
 
@@ -2810,7 +2864,6 @@ canvasLobby.addEventListener("mousedown", (e) => {
         }
       }
     }
-    console.log(mouseLeftPressed)
   
 });
 
@@ -2821,19 +2874,15 @@ canvasLobby.addEventListener("mouseup", (e) => {
 //Weapon shoot <
 
 //Weapon aim >
-window.addEventListener("mousemove", (e) => {
-    angleMouse = Math.atan2(
-      e.clientY - canvasLobby.height / 2,
-      e.clientX - canvasLobby.width / 2
-    );
-    // socket.emit("weaponAngle", angleMouse);
+let angleDifferenceX = 0;
+let angleDifferenceY = 0;
 
-    if (window.scrollY > 0) {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth' 
-      });
-    }
+window.addEventListener("mousemove", (e) => {
+  const rect = canvasLobby.getBoundingClientRect();
+  const centerX = rect.left + rect.width / 2 + angleDifferenceX;
+  const centerY = rect.top + rect.height / 2 + angleDifferenceY;
+
+  angleMouse = Math.atan2(e.clientY - centerY, e.clientX - centerX);
 });
 //Weapon aim <
 
@@ -3279,6 +3328,7 @@ function changeMap (dynamicFunctionName) {
     stopAllSound()
     mapsInfo[currentSelectedMap].areaSounds();
     intervalCanvasBase = setInterval(canvasFunction, 16.67);
+    if (mapsInfo[currentSelectedMap].areaName) areaNameDisplay(mapsInfo[currentSelectedMap].areaName)
     setTimeout(() => {
       transitionTimeout = false;
     }, 5000);
@@ -3307,6 +3357,7 @@ function transitionArcane () {
 function transitionLiquid() {
   if (transitionTimeout === false) {
     transitionTimeout = true;  
+    movezone.play()
     
     const gifUrl = "./Textures/liquidTransition.gif"; // Remove `url("")` from the string
     const newGifUrl = gifUrl + "?" + new Date().getTime(); // Append a timestamp to force reload
@@ -3388,7 +3439,19 @@ function lobbySoundtrack () {
 function grassLandsSoundtrack () {
   grasslandsLoop1.play();
   grasslandsEnviroment.play();
-  grassLandsSong.play()
+  // grassLandsSong.play()
+}
+
+function areaNameDisplay (name) {
+
+areaName.textContent = name;
+
+areaName.style.opacity = 1;
+areaName.style.transition = "opacity 1s ease"; 
+
+setTimeout(() => {
+    areaName.style.opacity = 0;
+}, 4000);
 }
 
 // Sounds <
@@ -3406,6 +3469,7 @@ console.log("current land: ", currentLand)
 let mapsInfo = {
 
   islandOne: {
+    areaName: null,
     areaSounds: grassLandsSoundtrack,
     backgroundImage: islandOneMap,
     foregroundImage: islandOneMapFront,
@@ -4584,6 +4648,7 @@ let mapsInfo = {
   },
 
   lobby: {
+    areaName: "CASTLESIDE TOWN",
     areaSounds: lobbySoundtrack,
     backgroundImage: lobbyMap,
     foregroundImage: lobbyMapFront,
@@ -6965,6 +7030,7 @@ let mapsInfo = {
   },
 
   lobbyCombatArea: {
+    areaName: "CRYSTAL FOREST",
     areaSounds: grassLandsSoundtrack,
     backgroundImage: lobbyCombatArea,
     foregroundImage: lobbyCombatAreaFront,
@@ -8689,6 +8755,7 @@ let mapsInfo = {
   },
 
   slimeForestPath: {
+    areaName: "SLIME FOREST",
     areaSounds: grassLandsSoundtrack,
     backgroundImage: slimeForestPath,
     foregroundImage: slimeForestPathFront,
@@ -9306,13 +9373,26 @@ function initializeSmoothOnlinePlayers() {
 
 function updateSmoothOnlinePlayerPosition(smoothPlayer) {
   for (const player of players) {
-    const speed = Math.abs(smoothPlayer.smoothX - player.x) < 200 ? 2 : 10; 
+    const speedX = Math.abs(smoothPlayer.smoothX - player.x) < 200
+      ? 2
+      : Math.abs(smoothPlayer.smoothX - player.x) > 400
+      ? 200
+      : 10;
+    
+    const speedY = Math.abs(smoothPlayer.smoothY - player.y) < 200
+      ? 2
+      : Math.abs(smoothPlayer.smoothY - player.y) > 400
+      ? 200
+      : 10;
+
+      console.log(speedX, speedY, Math.abs(smoothPlayer.smoothX - player.x), Math.abs(smoothPlayer.smoothY - player.y))
+    
     if (player && player.username === smoothPlayer.username && player.username !== myPlayer.username) {
       if (Math.abs(smoothPlayer.smoothX - player.x) > 10) {
-        smoothPlayer.smoothX += smoothPlayer.smoothX < player.x ? speed : -speed;
+        smoothPlayer.smoothX += smoothPlayer.smoothX < player.x ? speedX : -speedX;
       }
       if (Math.abs(smoothPlayer.smoothY - player.y) > 10) {
-        smoothPlayer.smoothY += smoothPlayer.smoothY < player.y ? speed : -speed;
+        smoothPlayer.smoothY += smoothPlayer.smoothY < player.y ? speedY : -speedY;
       }
     }
   }
@@ -9341,22 +9421,28 @@ function mapSetup () {
         playerX - canvasLobby.width / 2 + 10 >= 0 && 
         playerX + canvasLobby.width / 2 + 10 <= 4300
       ) {
+        angleDifferenceX = 0;
         secondaryCameraX = playerX - canvasLobby.width / 2 + 10;
       } else if (playerX - canvasLobby.width / 2 + 10 >= 0) {
         secondaryCameraX = 4300 - canvasLobby.width;
+        angleDifferenceX = (playerX - canvasLobby.width / 2 + 10) - (4300 - canvasLobby.width)
       } else {
         secondaryCameraX = -100;
+        angleDifferenceX = (playerX - canvasLobby.width / 2 + 10) - (-100)
       }
 
       if (
         playerY - canvasLobby.height / 2 + 50 >= 0 && 
         playerY + canvasLobby.height / 2 + 50 <= 4300 
       ) {
+        angleDifferenceY = 0;
         secondaryCameraY = playerY - canvasLobby.height / 2 + 50;
       } else if (playerY - canvasLobby.height / 2 + 50 >= 0) {
         secondaryCameraY = 4300 - canvasLobby.height;
+        angleDifferenceY = (playerY - canvasLobby.height / 2 + 10) - (4300 - canvasLobby.height)
       } else {
         secondaryCameraY = -100;
+        angleDifferenceY = (playerY - canvasLobby.height / 2 + 10) - (-100)
       }
       cameraFollow();
       
@@ -10122,6 +10208,12 @@ function drawChat () {
         canvas.textAlign = "center";
         canvas.fillStyle = "black";
         canvas.fillText(player.chatMessage, smoothPlayer.smoothX - cameraX +15, smoothPlayer.smoothY - cameraY -90);
+
+        console.log(player)
+
+        if (player.chatTimer === 80) {
+          updateHistoryChat(player.chatMessage, player)
+        }
       }
     }
   } 
@@ -10406,7 +10498,6 @@ function drawEnemy () {
       (enemy.spawn.x - cameraX) - (playerX - cameraX) + 200 < 1000 && (enemy.spawn.y - cameraY) - (playerY - cameraY) + 120 < 1000
     ) {
       handleEnemyState(enemy)
-      console.log(enemy.spawn.x - cameraX, playerX - cameraX)
     }
 
     checkEnemyCombat(enemy)
