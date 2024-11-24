@@ -24,6 +24,8 @@
     </div>
 
     <div class="custom-cursor"></div>
+
+    <p id="areaName">Default name</p>
     
     <div id="uiDev" style="display: flex;">
       <button id="placeWalls" class="buttonDev pointerActivator">🧱</button>
@@ -213,11 +215,12 @@
 
 
       <form id="chat">
+        <div id="chatHistory"></div>
         <input
           type="text"
           id="chatInput"
           name="chatInput"
-          placeholder="💬"
+          placeholder="Type here..."
           autocomplete="off"
           maxlength="20"
         />

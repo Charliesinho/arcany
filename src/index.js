@@ -970,7 +970,7 @@ async function main() {
                     
 
                     const loginAttempt = "success";
-                    // pushItem(arcaneStaffCommon, socket)
+                    pushItem(arcaneStaffCommon, socket)
 
                     // let item = {
                     //     type: "questItem",
