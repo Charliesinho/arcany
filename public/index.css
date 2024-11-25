@@ -157,7 +157,20 @@ body {
     white-space: nowrap;
     z-index: 99;
 }
-
+#timer{
+    display: none;
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    border: solid 2px white;
+    border-radius: 2px;
+    background-color: white;
+    width: 50px;
+    height: 25px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+}
 #navBar {
     width: 97.5vw;
     height: 100px;

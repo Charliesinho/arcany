@@ -350,6 +350,7 @@ const questHub = document.querySelector(".questHub");
 const questClose = document.querySelector(".questClose");
 
 const areaName = document.querySelector("#areaName");
+const timer = document.querySelector("#timer");
 
 const placeWalls = document.getElementById("placeWalls");
 const deleteWalls = document.getElementById("deleteWalls");
@@ -774,10 +775,6 @@ function progressQuestCounter(questItem, step) {
 }
 
 //Quest system <
-
-
-
-
 
 // Chest > 
 rewardChest.addEventListener("click", () => {
@@ -2387,9 +2384,9 @@ socket.on("loginAttempt", (msg) => {
     uiProfileCurrentClothing.style.visibility = "visible";
     menuUi.style.display = "flex";
     uiButtonParent.style.display = "flex";
-    menuUiProfile.style.display = "flex"
+    menuUiProfile.style.display = "flex";
+    timer.style.display = "flex"
     
-
 
     setTimeout(() => {
       loginBox.style.display = "none";
@@ -3322,6 +3319,47 @@ document.addEventListener('keyup', function(event) {
 
 // Chat System <
 
+//Timer <
+let timerInterval;
+let seconds = 0;
+let score = "";
+
+function formatTime(sec) {
+  let minutes = Math.floor(sec / 60);
+  let remainingSeconds = sec % 60;
+  return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+}
+
+function startTimer() {
+  score = ""
+  if (timerInterval) return; 
+  timerInterval = setInterval(() => {
+    seconds++;
+    timer.textContent = formatTime(seconds);
+  }, (1000 / 60));
+}
+
+function resetTimer() {
+  clearInterval(timerInterval);
+  timerInterval = null;
+  seconds = 0;
+  timer.textContent = "00:00";
+}
+
+document.addEventListener('keydown', (event) => {
+  if (event.key?.toLowerCase() === 'o') {
+    startTimer();
+  }
+});
+
+document.addEventListener('keydown', (event) => {
+  if (event.key?.toLowerCase() === 'p') {
+    score += timer.textContent
+   console.log(score)
+    resetTimer()
+  }
+});
+//Timer >
 
 let particles = [];
 
@@ -3485,7 +3523,7 @@ console.log("current land: ", currentLand)
 let mapsInfo = {
 
   islandOne: {
-    areaName: null,
+    areaName: "SLIME FOREST RUINS",
     areaSounds: grassLandsSoundtrack,
     backgroundImage: islandOneMap,
     foregroundImage: islandOneMapFront,
