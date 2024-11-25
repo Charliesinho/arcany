@@ -642,18 +642,6 @@ createButton.addEventListener("click", function(){
 
 //Quest system >
 
-questHubIcon.addEventListener("click", function(){
-  questHub.style.display = "flex"
-  paperAudio.play();
-
-  //Upadate quests hub >
-
-  updateQuestHub()
-
-  
-  //Upadate quests hub <
-});
-
 function updateQuestHub() {
 
   for (const questline of myPlayer.questsOngoing) {
@@ -2489,7 +2477,6 @@ setInterval(() => {
 }, 100);
 
 window.addEventListener("keydown", (e) => {
-  questHub.style.display = "none"
 
   if (!noMovement) {
     let keyCheck = e?.key?.toLowerCase()
