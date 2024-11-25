@@ -154,6 +154,8 @@ body {
     text-shadow: 0 0 20px black;
     opacity: 0;
     pointer-events: none;
+    white-space: nowrap;
+    z-index: 99;
 }
 
 #navBar {
@@ -666,6 +668,12 @@ body {
     /* display: flex; */
     /* height: 300px; */
     background: var(--backgroundObjects);
+    opacity: .3;
+    transition: all .2s ease;
+}
+
+#chat:hover {
+    opacity: 1;
 }
 
 #chat input {

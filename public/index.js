@@ -79,8 +79,12 @@ slime.src = "slime.png";
 const treeSimpleEnemy = new Image();
 treeSimpleEnemy.src = "./enemies/treeSimpleEnemy.png";
 
+const redMooshroomEnemy = new Image();
+redMooshroomEnemy.src = "./enemies/redMooshroomEnemy.png";
+
 let enemiesImages = {
   treeSimpleEnemy: treeSimpleEnemy,
+  redMooshroomEnemy: redMooshroomEnemy,
 };
 
 const slimeDMG = new Image();
@@ -2693,6 +2697,12 @@ window.addEventListener("keydown", (e) => {
   }
 
   //Chest island open <
+
+  if (e.key === "o") {
+    mapsInfo[currentLand].enemies?.forEach(enemy => {
+      activateEnemy(enemy);
+    })
+  }
 
 });
 
@@ -7032,7 +7042,8 @@ let mapsInfo = {
         "color": "rgb(204, 0, 204, 0)"
       }
     ],
-    enemies: [],
+    enemies: [
+    ],
   },
 
   lobbyCombatArea: {
@@ -8805,6 +8816,7 @@ let mapsInfo = {
   },
 
   mushroomForest: {
+    areaName: "MOOSHROOM HIDEOUT",
     areaSounds: lobbySoundtrack,
     backgroundImage: mushroomForest,
     foregroundImage: mushroomForestFront,
@@ -8822,7 +8834,145 @@ let mapsInfo = {
       "width": 284,
       "height": 496,
       "color": "rgb(204, 0, 204, 0)"
-    }]
+    }],
+    enemies: [
+      {
+        name: "redMooshroomEnemy",
+        imgw: 42,
+        imgh: 39,
+        imgcw: 42,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 5,
+        speedX: 15,
+        speedY: 15,
+        spawn: {
+          x: 1000,
+          y: 1100
+        },
+        w: 140,
+        h: 140,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, attackState, attackCircleState],
+        damaged: 0,
+        health: 5,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1000,
+          y: 1100
+        },
+        spawnTimer: null,
+        enemyStateInt: 1000,
+        active: false,
+      },
+      {
+        name: "redMooshroomEnemy",
+        imgw: 42,
+        imgh: 39,
+        imgcw: 42,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 5,
+        speedX: 15,
+        speedY: 15,
+        spawn: {
+          x: 1500,
+          y: 1300
+        },
+        w: 140,
+        h: 140,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, attackState, attackCircleState],
+        damaged: 0,
+        health: 5,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1500,
+          y: 1300
+        },
+        spawnTimer: null,
+        enemyStateInt: 1000,
+        active: false,
+      },
+      {
+        name: "redMooshroomEnemy",
+        imgw: 42,
+        imgh: 39,
+        imgcw: 42,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 5,
+        speedX: 15,
+        speedY: 15,
+        spawn: {
+          x: 1500,
+          y: 1100
+        },
+        w: 140,
+        h: 140,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, attackState, attackCircleState],
+        damaged: 0,
+        health: 5,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1500,
+          y: 1100
+        },
+        spawnTimer: null,
+        enemyStateInt: 1000,
+        active: false,
+      },
+      {
+        name: "redMooshroomEnemy",
+        imgw: 42,
+        imgh: 39,
+        imgcw: 42,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 5,
+        speedX: 15,
+        speedY: 15,
+        spawn: {
+          x: 1700,
+          y: 1700
+        },
+        w: 140,
+        h: 140,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, attackState, attackCircleState],
+        damaged: 0,
+        health: 5,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1700,
+          y: 1700
+        },
+        spawnTimer: null,
+        enemyStateInt: 1000,
+        active: false,
+      },
+    ]
   }
 
 };
@@ -10483,29 +10633,10 @@ function drawMap (layer) {
 
 // Enemy functions >
 
-
-
-function drawEnemy () {
-  mapsInfo[currentLand].enemies?.forEach(enemy => {
-
-    let directionMultiplier = enemy.spawn.x - cameraX + 200 > playerX - cameraX ? 107 : 0;
-
-    enemy.imgch = 
-    enemy.currentStateName === "dmg"
-    ? enemy.imgh * 8 :
-    enemy.currentStateName === "move" 
-    ? (enemy.imgh * 3) + directionMultiplier :
-    enemy.currentStateName === "attack1" 
-    ? (enemy.imgh * 0) + directionMultiplier :
-    enemy.currentStateName === "attack2" 
-    ? (enemy.imgh * 1) + directionMultiplier :
-    (enemy.imgh * 2) + directionMultiplier;
-
-  
-
-    // canvas.fillRect(enemy.spawn.x - cameraShakeX - cameraX, enemy.spawn.y - cameraShakeY - cameraY, enemy.w, enemy.h);
+function activateEnemy (enemy) {
+  let activateInterval = setInterval(() => {
     enemy.framesTimer--
-    
+        
     if (enemy.framesTimer <= 0) {
       enemy.framesTimer = 5;
     }
@@ -10513,31 +10644,84 @@ function drawEnemy () {
     if (enemy.framesTimer === 2) {
       enemy.frames++
       if (enemy.frames > 5) {
-        enemy.frames = 0
+        enemy.active = true;
+        clearInterval(activateInterval)
       }
     }
+  },20)
+}
 
-    canvas.drawImage(
-      enemiesImages[enemy.name],
-      enemy.imgcw * enemy.frames,
-      enemy.imgch,
-      enemy.imgw,
-      enemy.imgh,
-      enemy.spawn.x - cameraX - cameraShakeX,
-      enemy.spawn.y - cameraY - cameraShakeX,
-      enemy.w * 1.5,
-      enemy.h * 1.5,
-    );
+function drawEnemy () {
+  mapsInfo[currentLand].enemies?.forEach(enemy => {
 
-    if (
-      (enemy.spawn.x - cameraX) - (playerX - cameraX) + 200 > -1000 && (enemy.spawn.y - cameraY) - (playerY - cameraY) + 120 > -1000
-      &&
-      (enemy.spawn.x - cameraX) - (playerX - cameraX) + 200 < 1000 && (enemy.spawn.y - cameraY) - (playerY - cameraY) + 120 < 1000
-    ) {
-      handleEnemyState(enemy)
+    if (enemy.active === false) {
+      enemy.imgch = enemy.imgh * 9
+      canvas.drawImage(
+        enemiesImages[enemy.name],
+        enemy.imgcw * enemy.frames,
+        enemy.imgch,
+        enemy.imgw,
+        enemy.imgh,
+        enemy.spawn.x - cameraX - cameraShakeX,
+        enemy.spawn.y - cameraY - cameraShakeX,
+        enemy.w * 1.5,
+        enemy.h * 1.5,
+      );
+  
+    } else {
+
+      let directionMultiplier = enemy.spawn.x - cameraX + 200 > playerX - cameraX ? enemy.imgh * 4 - 1 : 0;
+  
+      enemy.imgch = 
+      enemy.currentStateName === "dmg"
+      ? enemy.imgh * 8 :
+      enemy.currentStateName === "move" 
+      ? (enemy.imgh * 3) + directionMultiplier :
+      enemy.currentStateName === "attack1" 
+      ? (enemy.imgh * 0) + directionMultiplier :
+      enemy.currentStateName === "attack2" 
+      ? (enemy.imgh * 1) + directionMultiplier :
+      (enemy.imgh * 2) + directionMultiplier;
+  
+    
+  
+      // canvas.fillRect(enemy.spawn.x - cameraShakeX - cameraX, enemy.spawn.y - cameraShakeY - cameraY, enemy.w, enemy.h);
+      enemy.framesTimer--
+      
+      if (enemy.framesTimer <= 0) {
+        enemy.framesTimer = 5;
+      }
+      
+      if (enemy.framesTimer === 2) {
+        enemy.frames++
+        if (enemy.frames > 5) {
+          enemy.frames = 0
+        }
+      }
+  
+      canvas.drawImage(
+        enemiesImages[enemy.name],
+        enemy.imgcw * enemy.frames,
+        enemy.imgch,
+        enemy.imgw,
+        enemy.imgh,
+        enemy.spawn.x - cameraX - cameraShakeX,
+        enemy.spawn.y - cameraY - cameraShakeX,
+        enemy.w * 1.5,
+        enemy.h * 1.5,
+      );
+  
+      if (
+        (enemy.spawn.x - cameraX) - (playerX - cameraX) + 200 > -1000 && (enemy.spawn.y - cameraY) - (playerY - cameraY) + 120 > -1000
+        &&
+        (enemy.spawn.x - cameraX) - (playerX - cameraX) + 200 < 1000 && (enemy.spawn.y - cameraY) - (playerY - cameraY) + 120 < 1000
+      ) {
+        handleEnemyState(enemy)
+      }
+  
+      checkEnemyCombat(enemy)
     }
 
-    checkEnemyCombat(enemy)
 
   }) 
 }
@@ -10560,16 +10744,21 @@ function checkEnemyCombat (enemy) {
     enemyDeathParticles(enemy)
     enemy.attackInterval = true;
     attackCircleState(enemy)
-    // enemy.currentStateName = "idle"
     mapsInfo[currentLand].enemies.splice(mapsInfo[currentLand].enemies.indexOf(enemy), 1)
-    enemy.spawn.x = -1000;
-    enemy.spawn.y = -1000;
+    // enemy.currentStateName = "idle"
     setTimeout(() => {
-      enemy.spawn.x = enemy.baseSpawn.x;
-      enemy.spawn.y = enemy.baseSpawn.y;
-      enemy.health = enemy.maxHealth
-      mapsInfo[currentLand].enemies.push(enemy)
-    }, enemy.spawnTimer);
+      enemy.spawn.x = -1000;
+      enemy.spawn.y = -1000;
+
+      if (enemy.spawnTimer) {
+        setTimeout(() => {
+          enemy.spawn.x = enemy.baseSpawn.x;
+          enemy.spawn.y = enemy.baseSpawn.y;
+          enemy.health = enemy.maxHealth
+          mapsInfo[currentLand].enemies.push(enemy)
+        }, enemy.spawnTimer);
+      }
+    }, 200)
   }
 
   if (localPlayerDamaged > 0) {
@@ -11103,6 +11292,7 @@ function lobbyLoop() {
 
 
   // Player settings
+  drawEnemy()
   playerCollision()
   drawOnlinePlayers("back")
   drawLocalPlayer()
@@ -11249,6 +11439,7 @@ function mushroomForestLoop() {
 
 
   // Player settings
+  drawEnemy()
   playerCollision()
   drawOnlinePlayers("back")
   drawLocalPlayer()
