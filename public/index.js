@@ -253,6 +253,8 @@ let projectiles = [];
 let cameraShakeX = -150;
 let cameraShakeY = -180;
 
+const chatButton = document.getElementById('chatIcon');
+const chat = document.getElementById('chat');
 const chatInput = document.getElementById("chatInput");
 let blockMovement = true;
 socket.emit("blockMovement", blockMovement);
@@ -804,7 +806,26 @@ function openChestIsland () {
 
 
 // Chat
+let chatIsActivate = false;
 const recentMessages = new Map();
+
+function showChatFunction(){
+  if(!chatIsActivate){
+    chat.style.display = "block";
+    chatButton.style.bottom = "237px"
+    chatIsActivate = true;
+  }else if(chatIsActivate){
+    chat.style.display = "none";
+    chatButton.style.bottom = "10px"
+    chatIsActivate = false;
+
+    chatInput.value = "";
+    chatInput.disabled = true;
+    chatInput.disabled = false;
+    blockMovement = false;
+    noMovement = false
+  }
+}
 
 function updateHistoryChat(value, sender) {
     const targetDiv = document.getElementById("chatHistory");
@@ -847,9 +868,12 @@ window.addEventListener("keydown", (e) => {
                 noMovement = false
             }
         } else {
+          if(!chatIsActivate) showChatFunction()
+            setTimeout(() => { 
             chatInput.focus();
             blockMovement = true;
             noMovement = true
+            }, 500);
         }
     }
     // if (e.key === "o") {
@@ -881,6 +905,13 @@ function cameraShake() {
 };
 
 let deleting = false;
+
+chatButton.addEventListener("click", () => {
+ showChatFunction()
+  
+})
+
+
 
 //Switch inventories >
 
@@ -2373,7 +2404,8 @@ socket.on("loginAttempt", (msg) => {
     menuUi.style.display = "flex";
     uiButtonParent.style.display = "flex";
     menuUiProfile.style.display = "flex";
-    timer.style.display = "flex"
+    timer.style.display = "flex";
+    chatButton.style.display = "block";
     
 
     setTimeout(() => {
@@ -11239,9 +11271,6 @@ function enemyDeathParticles (enemy) {
 }
 
 // Particle system <
-
-
-
 
 
 function islandOneLoop() {
