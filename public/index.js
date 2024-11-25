@@ -82,9 +82,13 @@ treeSimpleEnemy.src = "./enemies/treeSimpleEnemy.png";
 const redMooshroomEnemy = new Image();
 redMooshroomEnemy.src = "./enemies/redMooshroomEnemy.png";
 
+const mooshroomBossRed = new Image();
+mooshroomBossRed.src = "./enemies/mooshroomBossRed.png";
+
 let enemiesImages = {
   treeSimpleEnemy: treeSimpleEnemy,
   redMooshroomEnemy: redMooshroomEnemy,
+  mooshroomBossRed: mooshroomBossRed,
 };
 
 const slimeDMG = new Image();
@@ -171,6 +175,10 @@ glitchArcane.volume = 0.5;
 const ArcaneEnv = new Audio("./audios/ArcaneEnv.mp3");
 ArcaneEnv.loop = true;
 ArcaneEnv.volume = 0.5;
+
+const fightMusic1 = new Audio("./audios/fightMusic1.mp3");
+fightMusic1.loop = true;
+fightMusic1.volume = 0.3;
 
 const grasslandsLoop1 = new Audio("./audios/seaShanty.mp3");
 grasslandsLoop1.loop = true;
@@ -2700,7 +2708,7 @@ window.addEventListener("keydown", (e) => {
 
   if (e.key === "o") {
     mapsInfo[currentLand].enemies?.forEach(enemy => {
-      activateEnemy(enemy);
+      activateNormalEnemy(enemy);
     })
   }
 
@@ -3429,6 +3437,9 @@ function stopAllSound() {
 
   grasslandsEnviroment.pause();
   grasslandsEnviroment.currentTime = 0;
+ 
+  fightMusic1.pause();
+  fightMusic1.currentTime = 0;
 
   ArcaneEnv.pause();
   ArcaneEnv.currentTime = 0;
@@ -8817,7 +8828,7 @@ let mapsInfo = {
 
   mushroomForest: {
     areaName: "MOOSHROOM HIDEOUT",
-    areaSounds: lobbySoundtrack,
+    areaSounds: grassLandsSoundtrack,
     backgroundImage: mushroomForest,
     foregroundImage: mushroomForestFront,
     playerPos: {
@@ -8849,8 +8860,8 @@ let mapsInfo = {
         speedX: 15,
         speedY: 15,
         spawn: {
-          x: 1000,
-          y: 1100
+          x: 1825,
+          y: 1158
         },
         w: 140,
         h: 140,
@@ -8863,8 +8874,8 @@ let mapsInfo = {
         angle: 0,
         maxHealth: 10,
         baseSpawn: {
-          x: 1000,
-          y: 1100
+          x: 1825,
+          y: 1158
         },
         spawnTimer: null,
         enemyStateInt: 1000,
@@ -8883,8 +8894,8 @@ let mapsInfo = {
         speedX: 15,
         speedY: 15,
         spawn: {
-          x: 1500,
-          y: 1300
+          x: 2577,
+          y: 1128
         },
         w: 140,
         h: 140,
@@ -8897,8 +8908,8 @@ let mapsInfo = {
         angle: 0,
         maxHealth: 10,
         baseSpawn: {
-          x: 1500,
-          y: 1300
+          x: 2577,
+          y: 1128
         },
         spawnTimer: null,
         enemyStateInt: 1000,
@@ -8917,8 +8928,8 @@ let mapsInfo = {
         speedX: 15,
         speedY: 15,
         spawn: {
-          x: 1500,
-          y: 1100
+          x: 2842,
+          y: 1705
         },
         w: 140,
         h: 140,
@@ -8931,8 +8942,8 @@ let mapsInfo = {
         angle: 0,
         maxHealth: 10,
         baseSpawn: {
-          x: 1500,
-          y: 1100
+          x: 2842,
+          y: 1705
         },
         spawnTimer: null,
         enemyStateInt: 1000,
@@ -8951,8 +8962,8 @@ let mapsInfo = {
         speedX: 15,
         speedY: 15,
         spawn: {
-          x: 1700,
-          y: 1700
+          x: 1474,
+          y: 1707
         },
         w: 140,
         h: 140,
@@ -8965,11 +8976,114 @@ let mapsInfo = {
         angle: 0,
         maxHealth: 10,
         baseSpawn: {
-          x: 1700,
-          y: 1700
+          x: 1474,
+          y: 1707
         },
         spawnTimer: null,
         enemyStateInt: 1000,
+        active: false,
+      },
+      {
+        name: "redMooshroomEnemy",
+        imgw: 42,
+        imgh: 39,
+        imgcw: 42,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 5,
+        speedX: 15,
+        speedY: 15,
+        spawn: {
+          x: 1900,
+          y: 2125
+        },
+        w: 140,
+        h: 140,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, attackState, attackCircleState],
+        damaged: 0,
+        health: 5,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1900,
+          y: 2125
+        },
+        spawnTimer: null,
+        enemyStateInt: 1000,
+        active: false,
+      },
+      {
+        name: "redMooshroomEnemy",
+        imgw: 42,
+        imgh: 39,
+        imgcw: 42,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 5,
+        speedX: 15,
+        speedY: 15,
+        spawn: {
+          x: 2580,
+          y: 2048
+        },
+        w: 140,
+        h: 140,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, attackState, attackCircleState],
+        damaged: 0,
+        health: 5,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 2580,
+          y: 2048
+        },
+        spawnTimer: null,
+        enemyStateInt: 1000,
+        active: false,
+      },
+      {
+        name: "mooshroomBossRed",
+        isBoss: true,
+        imgw: 147,
+        imgh: 175,
+        imgcw: 147,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 5,
+        xp: 20,
+        speedX: 0,
+        speedY: 0,
+        spawn: {
+          x: 1900,
+          y: 1100
+        },
+        w: 550,
+        h: 550,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [lazerMooshState, attackCircleMooshBossState],
+        damaged: 0,
+        health: 10,
+        angle: 0,
+        maxHealth: 100,
+        baseSpawn: {
+          x: 1900,
+          y: 1100
+        },
+        spawnTimer: null,
+        enemyStateInt: 5000,
         active: false,
       },
     ]
@@ -9545,6 +9659,9 @@ window.addEventListener("wheel", event => {
 
 // Map functions >
 const smoothPlayers = {};
+let bossFight = false;
+let currentHue = 0;
+let currentLuminosity = 0;
 
 function initializeSmoothOnlinePlayers() {
   for (const player of players) {
@@ -9571,8 +9688,6 @@ function updateSmoothOnlinePlayerPosition(smoothPlayer) {
       : Math.abs(smoothPlayer.smoothY - player.y) > 400
       ? 200
       : 10;
-
-      console.log(speedX, speedY, Math.abs(smoothPlayer.smoothX - player.x), Math.abs(smoothPlayer.smoothY - player.y))
     
     if (player && player.username === smoothPlayer.username && player.username !== myPlayer.username) {
       if (Math.abs(smoothPlayer.smoothX - player.x) > 10) {
@@ -9633,6 +9748,8 @@ function mapSetup () {
       }
       cameraFollow();
       
+    } else {
+      cameraFollow()
     }
     
     // Set player position
@@ -10620,20 +10737,43 @@ function drawDevWallsPlacement () {
   }
 }
 
-function drawMap (layer) {
+function drawMap(layer) {
+  const targetHue = bossFight ? -95 : 0;
+  const targetLuminosity = bossFight ? -50 : 0;
+  const changeSpeed = 1;
+
+  if (currentHue < targetHue) {
+    currentHue = Math.min(currentHue + changeSpeed, targetHue);
+  } else if (currentHue > targetHue) {
+    currentHue = Math.max(currentHue - changeSpeed, targetHue);
+  }
+
+  if (currentLuminosity < targetLuminosity) {
+    currentLuminosity = Math.min(currentLuminosity + changeSpeed, targetLuminosity);
+  } else if (currentLuminosity > targetLuminosity) {
+    currentLuminosity = Math.max(currentLuminosity - changeSpeed, targetLuminosity);
+  }
+
+  canvas.filter = `hue-rotate(${currentHue}deg) brightness(${100 + currentLuminosity}%)`;
+
   if (layer === "back") {
     canvas.drawImage(mapsInfo[currentLand].backgroundImage, cameraShakeX - cameraX, cameraShakeY - cameraY, 4500, 4500);
   } else {
     canvas.drawImage(mapsInfo[currentLand].foregroundImage, cameraShakeX - cameraX, cameraShakeY - cameraY, 4500, 4500);
   }
+
+  canvas.filter = "none";
 }
+
 
 // Map functions <
 
 
 // Enemy functions >
 
-function activateEnemy (enemy) {
+function activateNormalEnemy (enemy) {
+  if (enemy.isBoss) return
+
   let activateInterval = setInterval(() => {
     enemy.framesTimer--
         
@@ -10649,6 +10789,40 @@ function activateEnemy (enemy) {
       }
     }
   },20)
+}
+
+
+function activateBossEnemy (enemy) {
+  cutscene = true;
+  secondaryCameraX = enemy.spawn.x - (enemy.w) + (enemy.w/4);
+  secondaryCameraY = enemy.spawn.y + (enemy.h/4);
+
+  fightMusic1.play();
+
+  setTimeout(() => {
+    const rocksFall = new Audio("./audios/rocksFall.wav");
+    rocksFall.loop = false;
+    rocksFall.volume = 0.2;
+    rocksFall.play();
+    bossFight = true;
+
+    let activateInterval = setInterval(() => {
+      enemy.framesTimer--
+          
+      if (enemy.framesTimer <= 0) {
+        enemy.framesTimer = 5;
+      }
+      
+      if (enemy.framesTimer === 2) {
+        enemy.frames++
+        if (enemy.frames > 5) {
+          enemy.active = true;
+          cutscene = false;
+          clearInterval(activateInterval)
+        }
+      }
+    },40)
+  }, 2000);
 }
 
 function drawEnemy () {
@@ -10745,7 +10919,25 @@ function checkEnemyCombat (enemy) {
     enemy.attackInterval = true;
     attackCircleState(enemy)
     mapsInfo[currentLand].enemies.splice(mapsInfo[currentLand].enemies.indexOf(enemy), 1)
-    // enemy.currentStateName = "idle"
+
+    const hasActiveBoss = mapsInfo[currentLand].enemies.some(
+      enemy => enemy.active === true && !enemy.isBoss
+    );
+    const bossAlive = mapsInfo[currentLand].enemies.find(
+      enemy => enemy.isBoss === true && enemy.health > 0
+    );
+    
+    if (!hasActiveBoss && bossAlive) {
+      const areaBoss = mapsInfo[currentLand].enemies.find(
+        enemy => enemy.isBoss === true && enemy.active === false
+      );
+      activateBossEnemy(areaBoss)
+    } else if (!bossAlive) {
+      fightMusic1.pause();
+      fightMusic1.currentTime = 0;
+      bossFight = false;
+    }
+    
     setTimeout(() => {
       enemy.spawn.x = -1000;
       enemy.spawn.y = -1000;
@@ -10977,8 +11169,8 @@ function attackState(enemy) {
 
     projectilesClient.push({
       angle: bulletAngle,
-      x: enemy.spawn.x + 200,
-      y: enemy.spawn.y + 200,
+      x: enemy.spawn.x + ((enemy.w)/2) + 200,
+      y: enemy.spawn.y + ((enemy.h)/2) + 200,
       speed: 5,
       timeLeft: 100,
       playerId: socket.id,
@@ -10989,6 +11181,89 @@ function attackState(enemy) {
     basicBulletTree.loop = false;
     basicBulletTree.volume = 0.5;
     basicBulletTree.play()
+  }
+}
+
+function lazerMooshState(enemy) {
+  
+  if (enemy.currentStateName === "idle") {
+    enemy.currentStateName = "attack1";
+  }
+  
+  if (enemy.attackInterval) {
+
+  let bulletAngle = getAngleBetweenPlayerAndEnemy(enemy);
+  enemy.attackInterval = false;
+
+  setTimeout(() => {
+    enemy.attackInterval = true;
+  }, 50);
+
+    projectilesClient.push({
+      angle: bulletAngle,
+      x: enemy.spawn.x + ((enemy.w)/2) + 200,
+      y: enemy.spawn.y + ((enemy.h)/2) + 200,
+      speed: 12,
+      timeLeft: 250,
+      playerId: socket.id,
+      enemy: true
+    }) 
+
+    projectilesClient.push({
+      angle: bulletAngle + 0.1,
+      x: enemy.spawn.x + ((enemy.w)/2) + 200,
+      y: enemy.spawn.y + ((enemy.h)/2) + 200,
+      speed: 12,
+      timeLeft: 250,
+      playerId: socket.id,
+      enemy: true
+    }) 
+
+    projectilesClient.push({
+      angle: bulletAngle - 0.1,
+      x: enemy.spawn.x + ((enemy.w)/2) + 200,
+      y: enemy.spawn.y + ((enemy.h)/2) + 200,
+      speed: 12,
+      timeLeft: 250,
+      playerId: socket.id,
+      enemy: true
+    }) 
+    
+    projectilesClient.push({
+      angle: bulletAngle + 0.3,
+      x: enemy.spawn.x + ((enemy.w)/2) + 200,
+      y: enemy.spawn.y + ((enemy.h)/2) + 200,
+      speed: 12,
+      timeLeft: 250,
+      playerId: socket.id,
+      enemy: true
+    }) 
+
+    projectilesClient.push({
+      angle: bulletAngle - 0.3,
+      x: enemy.spawn.x + ((enemy.w)/2) + 200,
+      y: enemy.spawn.y + ((enemy.h)/2) + 200,
+      speed: 12,
+      timeLeft: 250,
+      playerId: socket.id,
+      enemy: true
+    }) 
+
+    const pop1 = new Audio("./audios/pop1.wav");
+    pop1.loop = false;
+    pop1.volume = 0.5;
+
+    const pop2 = new Audio("./audios/pop2.wav");
+    pop2.loop = false;
+    pop2.volume = 0.5;
+
+    const sounds = [pop1, pop2];
+
+    const playRandomSound = () => {
+      sounds[Math.floor(Math.random() * sounds.length)].play();
+    };
+
+    playRandomSound();
   }
 }
 
@@ -11029,6 +11304,55 @@ function attackCircleState(enemy) {
   }
 }
 
+let attackCircleMooshBossStateVar = false;
+function attackCircleMooshBossState(enemy) {
+  if (enemy.currentStateName === "idle") {
+    enemy.currentStateName = "attack2";
+  }
+  
+  if (attackCircleMooshBossStateVar) {
+    attackCircleMooshBossStateVar = false;
+  } else {
+    attackCircleMooshBossStateVar = true
+  }
+  
+  if (enemy.attackInterval) {
+    enemy.attackInterval = false;
+
+    const totalBullets = 50; // Total bullets forming the circle
+    const angleIncrement = (2 * Math.PI) / totalBullets; // Full circle divided into 20 parts
+
+    const pop2 = new Audio("./audios/pop2.wav");
+    pop2.loop = false;
+    pop2.volume = 0.5;
+    pop2.play();
+
+    setTimeout(() => {
+      const basicBulletTree = new Audio("./audios/basicBulletTree.wav");
+      basicBulletTree.loop = false;
+      basicBulletTree.volume = 0.5;
+      // basicBulletTree.play()
+      for (let i = 0; i < totalBullets; i++) {
+        const bulletAngle = i * angleIncrement; // Calculate angle for each bullet
+        projectilesClient.push({
+          angle: attackCircleMooshBossStateVar ? bulletAngle : bulletAngle + 0.05,
+          x: enemy.spawn.x + ((enemy.w)/2) + 200 + Math.cos(bulletAngle) * 20, // Offset to create a circular spawn
+          y: enemy.spawn.y + ((enemy.h)/2) + 200 + Math.sin(bulletAngle) * 20,
+          speed: 7,
+          timeLeft: 400,
+          playerId: socket.id,
+          enemy: true,
+        });
+      }
+    }, 500);
+
+
+    setTimeout(() => {
+      enemy.attackInterval = true;
+    }, 300);
+  }
+}
+
 
 function resolveEnemyCollisions(enemy) {
   mapsInfo[currentLand].enemies.forEach(otherEnemy => {
@@ -11045,8 +11369,8 @@ function updateAllEnemies() {
 }
 
 function getAngleBetweenPlayerAndEnemy(enemy) {
-  const dx = playerX - enemy.spawn.x - 200;
-  const dy = playerY + 100 - enemy.spawn.y - 200;
+  const dx = playerX - enemy.spawn.x - ((enemy.w)/2) - 200;
+  const dy = playerY + 100 - enemy.spawn.y - ((enemy.h)/2) - 200;
   const angle = Math.atan2(dy, dx); // Returns the angle in radians
   return angle;
 }
