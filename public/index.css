@@ -157,7 +157,20 @@ body {
     white-space: nowrap;
     z-index: 99;
 }
-
+#timer{
+    display: none;
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    border: solid 2px white;
+    border-radius: 2px;
+    background-color: white;
+    width: 50px;
+    height: 25px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+}
 #navBar {
     width: 97.5vw;
     height: 100px;
@@ -229,6 +242,7 @@ body {
     right: 465px;
     transition: all 0.5s ease;
 }
+
 /* UI LABEL ORGANISATION */
 #ui{
     display: none;
@@ -659,7 +673,19 @@ body {
     background: rgb(255, 248, 146) !important;
 }
 
+#chatIcon{
+    display: none;
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    z-index: 2;
+    width: 50px;
+    height: auto;
+    transition: all 0.5s ease;
+}
+
 #chat {
+    display: none;
     position: absolute;
     z-index: 1;
     bottom: 10px;
@@ -670,7 +696,17 @@ body {
     background: var(--backgroundObjects);
     opacity: .3;
     transition: all .2s ease;
+    animation: showChat 0.5s ease forwards ;
 }
+
+@keyframes showChat {
+    0% {
+      bottom: -100vh;
+    }
+    100% {
+        bottom: 10px
+    }
+  }
 
 #chat:hover {
     opacity: 1;

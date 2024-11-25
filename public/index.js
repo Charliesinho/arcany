@@ -261,6 +261,8 @@ let projectiles = [];
 let cameraShakeX = -150;
 let cameraShakeY = -180;
 
+const chatButton = document.getElementById('chatIcon');
+const chat = document.getElementById('chat');
 const chatInput = document.getElementById("chatInput");
 let blockMovement = true;
 socket.emit("blockMovement", blockMovement);
@@ -358,6 +360,7 @@ const questHub = document.querySelector(".questHub");
 const questClose = document.querySelector(".questClose");
 
 const areaName = document.querySelector("#areaName");
+const timer = document.querySelector("#timer");
 
 const placeWalls = document.getElementById("placeWalls");
 const deleteWalls = document.getElementById("deleteWalls");
@@ -649,18 +652,6 @@ createButton.addEventListener("click", function(){
 
 //Quest system >
 
-questHubIcon.addEventListener("click", function(){
-  questHub.style.display = "flex"
-  paperAudio.play();
-
-  //Upadate quests hub >
-
-  updateQuestHub()
-
-  
-  //Upadate quests hub <
-});
-
 function updateQuestHub() {
 
   for (const questline of myPlayer.questsOngoing) {
@@ -783,10 +774,6 @@ function progressQuestCounter(questItem, step) {
 
 //Quest system <
 
-
-
-
-
 // Chest > 
 rewardChest.addEventListener("click", () => {
   openChestIsland ()
@@ -827,7 +814,26 @@ function openChestIsland () {
 
 
 // Chat
+let chatIsActivate = false;
 const recentMessages = new Map();
+
+function showChatFunction(){
+  if(!chatIsActivate){
+    chat.style.display = "block";
+    chatButton.style.bottom = "237px"
+    chatIsActivate = true;
+  }else if(chatIsActivate){
+    chat.style.display = "none";
+    chatButton.style.bottom = "10px"
+    chatIsActivate = false;
+
+    chatInput.value = "";
+    chatInput.disabled = true;
+    chatInput.disabled = false;
+    blockMovement = false;
+    noMovement = false
+  }
+}
 
 function updateHistoryChat(value, sender) {
     const targetDiv = document.getElementById("chatHistory");
@@ -870,9 +876,12 @@ window.addEventListener("keydown", (e) => {
                 noMovement = false
             }
         } else {
+          if(!chatIsActivate) showChatFunction()
+            setTimeout(() => { 
             chatInput.focus();
             blockMovement = true;
             noMovement = true
+            }, 500);
         }
     }
     // if (e.key === "o") {
@@ -904,6 +913,13 @@ function cameraShake() {
 };
 
 let deleting = false;
+
+chatButton.addEventListener("click", () => {
+ showChatFunction()
+  
+})
+
+
 
 //Switch inventories >
 
@@ -2395,9 +2411,10 @@ socket.on("loginAttempt", (msg) => {
     uiProfileCurrentClothing.style.visibility = "visible";
     menuUi.style.display = "flex";
     uiButtonParent.style.display = "flex";
-    menuUiProfile.style.display = "flex"
+    menuUiProfile.style.display = "flex";
+    timer.style.display = "flex";
+    chatButton.style.display = "block";
     
-
 
     setTimeout(() => {
       loginBox.style.display = "none";
@@ -2500,7 +2517,6 @@ setInterval(() => {
 }, 100);
 
 window.addEventListener("keydown", (e) => {
-  questHub.style.display = "none"
 
   if (!noMovement) {
     let keyCheck = e?.key?.toLowerCase()
@@ -3330,6 +3346,47 @@ document.addEventListener('keyup', function(event) {
 
 // Chat System <
 
+//Timer <
+let timerInterval;
+let seconds = 0;
+let score = "";
+
+function formatTime(sec) {
+  let minutes = Math.floor(sec / 60);
+  let remainingSeconds = sec % 60;
+  return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+}
+
+function startTimer() {
+  score = ""
+  if (timerInterval) return; 
+  timerInterval = setInterval(() => {
+    seconds++;
+    timer.textContent = formatTime(seconds);
+  }, (1000 / 60));
+}
+
+function resetTimer() {
+  clearInterval(timerInterval);
+  timerInterval = null;
+  seconds = 0;
+  timer.textContent = "00:00";
+}
+
+document.addEventListener('keydown', (event) => {
+  if (event.key?.toLowerCase() === 'o') {
+    startTimer();
+  }
+});
+
+document.addEventListener('keydown', (event) => {
+  if (event.key?.toLowerCase() === 'p') {
+    score += timer.textContent
+   console.log(score)
+    resetTimer()
+  }
+});
+//Timer >
 
 let particles = [];
 
@@ -3496,7 +3553,7 @@ console.log("current land: ", currentLand)
 let mapsInfo = {
 
   islandOne: {
-    areaName: null,
+    areaName: "SLIME FOREST RUINS",
     areaSounds: grassLandsSoundtrack,
     backgroundImage: islandOneMap,
     foregroundImage: islandOneMapFront,
@@ -11538,9 +11595,6 @@ function enemyDeathParticles (enemy) {
 }
 
 // Particle system <
-
-
-
 
 
 function islandOneLoop() {
