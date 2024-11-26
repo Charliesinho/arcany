@@ -1710,17 +1710,87 @@ setTimeout(() => {
 
 let maxHealth = 6;
 let currentHealth = 6;
+let dying = false;
 
 function playerDeath () {
+
+  if (dying) return;
+
+  dying = true;
+
   mapsInfo["lobby"].playerPos= {
     x: 300,
     y: 1200,
   }
+
+  // clearInterval(intervalCanvasBase)
+  projectilesClient = [];
+  stopAllSound()
+  const deathSound = new Audio("./audios/deathSound.wav");
+  deathSound.loop = false;
+  deathSound.play();
+  noMovement = true;
+  const dynamicFunctionName = currentSelectedMap + "Loop";   
+  const canvasFunction = window[dynamicFunctionName];
+
+  setTimeout(() => {
+    clearInterval(intervalCanvasBase);
+    intervalCanvasBase = setInterval(canvasFunction, 100);
+  }, 500);
+
+  setTimeout(() => {
+    clearInterval(intervalCanvasBase);
+  }, 2500);
   
-  currentSelectedMap = "lobby"
-  transitionArcane()
-  currentHealth = maxHealth
+  setTimeout(() => {
+    currentSelectedMap = "lobby"
+    bossFight = false;
+    blackScreen()
+    projectilesClient = [];
+
+    const youDied = document.getElementById("youDied");
+    const respawn = document.getElementById("respawn");
+    youDied.style.display = "block";
+    respawn.style.display = "block";
+
+  }, 3000)
+
+  setTimeout(() => {
+    projectilesClient = [];
+    currentHealth = maxHealth
+    noMovement = false;
+    dying = false;
+  }, 4000);
 }
+
+let blackScreenOpacity = 0;
+function blackScreen () {
+  const blackScreen = document.getElementById("blackScreen");
+
+  if (blackScreenOpacity === 0) {
+    let opacityInterval = setInterval(() => {
+      blackScreenOpacity++;
+      blackScreen.style.opacity = blackScreenOpacity / 100;
+
+      if (blackScreenOpacity > 100) {
+        clearInterval(opacityInterval);
+      }
+    }, 16)
+  } else {
+    let opacityInterval = setInterval(() => {
+      blackScreenOpacity--;
+      blackScreen.style.opacity = blackScreenOpacity / 100;
+
+      if (blackScreenOpacity < 0) {
+        clearInterval(opacityInterval);
+      }
+    }, 16)
+  }
+}
+
+questImage.addEventListener("click", () => {
+
+})
 
 function health() {
 
@@ -3402,13 +3472,13 @@ function transition (format) {
     transitionLiquid()
   }
 }
-function changeMap (dynamicFunctionName) {
+function changeMap (dynamicFunctionName, time) {
   clearInterval(intervalCanvasBase)
   const canvasFunction = window[dynamicFunctionName];
   if (typeof canvasFunction === "function") {
     stopAllSound()
     mapsInfo[currentSelectedMap].areaSounds();
-    intervalCanvasBase = setInterval(canvasFunction, 16.67);
+    intervalCanvasBase = setInterval(canvasFunction, time ? time: 16.67);
     if (mapsInfo[currentSelectedMap].areaName) areaNameDisplay(mapsInfo[currentSelectedMap].areaName)
     setTimeout(() => {
       transitionTimeout = false;
@@ -3427,7 +3497,7 @@ function transitionArcane () {
     }, 600);   
     const dynamicFunctionName = currentSelectedMap + "Loop";   
     setTimeout(() => {
-      changeMap(dynamicFunctionName)
+      changeMap(dynamicFunctionName, null)
       socket.emit("changeRoom", currentSelectedMap);
     }, 1000);   
     setTimeout(() => {
@@ -3453,7 +3523,7 @@ function transitionLiquid() {
     
     const dynamicFunctionName = currentSelectedMap + "Loop";    
     setTimeout(() => {
-      changeMap(dynamicFunctionName);
+      changeMap(dynamicFunctionName, null);
       socket.emit("changeRoom", currentSelectedMap);
     }, 1800);   
     
@@ -9132,7 +9202,7 @@ let mapsInfo = {
         attackInterval: true,
         states: [lazerMooshState, attackCircleMooshBossState],
         damaged: 0,
-        health: 10,
+        health: 100,
         angle: 0,
         maxHealth: 100,
         baseSpawn: {
@@ -10796,7 +10866,7 @@ function drawDevWallsPlacement () {
 
 function drawMap(layer) {
   const targetHue = bossFight ? -95 : 0;
-  const targetLuminosity = bossFight ? -50 : 0;
+  const targetLuminosity = dying ? -100 : bossFight ? -50 : 0;
   const changeSpeed = 1;
 
   if (currentHue < targetHue) {
@@ -11013,8 +11083,8 @@ function checkEnemyCombat (enemy) {
   if (localPlayerDamaged > 0) {
     localPlayerDamaged--
 
-    playerX += Math.cos(localPlayerDamageAngle) * localPlayerDamaged ;
-    playerY += Math.sin(localPlayerDamageAngle) * localPlayerDamaged;
+    playerX += Math.cos(localPlayerDamageAngle) * (localPlayerDamaged * 0.7) ;
+    playerY += Math.sin(localPlayerDamageAngle) * (localPlayerDamaged * 0.7);
 
   }
 
@@ -11059,7 +11129,7 @@ function checkEnemyCombat (enemy) {
 
       localPlayerDamageAngle = projectile.angle || projectile.bullet1 || projectile.bullet2;
       projectile.timeLeft = projectile.timeLeft > 1 ? 1 : projectile.timeLeft;
-      localPlayerDamaged = 10
+      localPlayerDamaged = 15
       currentHealth--
       const playerHurtHealth = new Audio("./audios/playerHurtHealth.wav");
       playerHurtHealth.loop = false;
@@ -11093,7 +11163,7 @@ function executeStateForDuration(enemy, stateFunction, duration) {
 
   const intervalId = setInterval(() => {
     stateFunction(enemy);
-    if (counter >= repetitions || !mapsInfo[currentLand].enemies.includes(enemy)) {
+    if (counter >= repetitions || !mapsInfo[currentLand].enemies.includes(enemy) || dying) {
       clearInterval(intervalId)
       enemy.currentStateName = "idle"
     };

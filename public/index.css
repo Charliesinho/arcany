@@ -143,6 +143,44 @@ body {
     image-rendering: pixelated;
 }
 
+#blackScreen {
+    width: 100vw;
+    height: 100vh;
+    background: black;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+#youDied {
+    display: none;
+    position: absolute;
+    z-index: 1;
+    color: white;
+    opacity: 0;
+    left: 50%;
+    top: 40%;
+    transform: translate(-50%, -50%);
+    font-size: 90px;
+    animation: opacityUp 1s ease 2s forwards;
+}
+
+#respawn {
+    display: none;
+    position: absolute;
+    z-index: 1;
+    color: black;
+    opacity: 0;
+    left: 50%;
+    top: 55%;
+    transform: translate(-50%, -50%);
+    font-size: 50px;
+    padding: 10px 40px;
+    animation: opacityUp 1s ease 2.2s forwards;
+}
+
 #areaName {
     position: absolute;
     color: white;
