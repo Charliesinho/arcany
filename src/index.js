@@ -324,7 +324,7 @@ async function main() {
 
                 let fishingLevelNum = Math.trunc(player.fishing / 1000);
                 
-                if (player.inventory.length <= 8) {
+                if (player.inventory.length <= 21) {
 
                     //Level 1
 

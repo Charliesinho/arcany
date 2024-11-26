@@ -290,6 +290,8 @@ const menuUiButtonSoulCollection = document.getElementById("uiButtonSoulCollecti
 const menuUiButtonQuest = document.getElementById("uiButtonQuest");
 const menuUiButtonBooks = document.getElementById("uiButtonBooks");
 
+const deleteInventoryButton = document.getElementById("deleteInventoryButton");
+const trashIcon = document.getElementById("trashIcon")
 
 menuUiProfile.style.width = window.innerWidth;
 menuUiProfile.style.height = window.innerHeight;
@@ -403,7 +405,16 @@ const inventorySlots = {
  inventorySlot8: document.querySelector(".inventorySlot8"),
  inventorySlot9: document.querySelector(".inventorySlot9"),
  inventorySlot10: document.querySelector(".inventorySlot10"),
- inventorySlot11: document.querySelector(".inventorySlot11")
+ inventorySlot11: document.querySelector(".inventorySlot11"),
+ inventorySlot12: document.querySelector(".inventorySlot12"),
+ inventorySlot13: document.querySelector(".inventorySlot13"),
+ inventorySlot14: document.querySelector(".inventorySlot14"),
+ inventorySlot15: document.querySelector(".inventorySlot15"),
+ inventorySlot16: document.querySelector(".inventorySlot16"),
+ inventorySlot17: document.querySelector(".inventorySlot17"),
+ inventorySlot18: document.querySelector(".inventorySlot18"),
+ inventorySlot19: document.querySelector(".inventorySlot19"),
+ inventorySlot20: document.querySelector(".inventorySlot20"),
 };
 const equippedItems = {
   weapon: document.querySelector(".weaponEquipped"),
@@ -431,8 +442,8 @@ let uiBooksOpen = false;
 function openIvn () {
   if (uiIsClose){
     menuUi.style.right = "0";
-    uiButtonParent.style.right = "0";
-    menuUiButtonOpener.style.right = "400px"
+    uiButtonParent.style.right = "44vh";
+    menuUiButtonOpener.style.right = "0vh"
     uiIsClose = false
     
     if (uiProfileOpen){
@@ -448,9 +459,9 @@ function openIvn () {
     }
   
    } else {
-    menuUi.style.right = "-415px";
-    uiButtonParent.style.right = "-480px";
-    menuUiButtonOpener.style.right = "465px"
+    menuUi.style.right = "-45.5vh";
+    uiButtonParent.style.right = "-10vh";
+    menuUiButtonOpener.style.right = "9vh"
     uiIsClose = true
     menuUiButtonProfile.style.zIndex = "1"
     menuUiButtonInventory.style.zIndex = "1"
@@ -1508,7 +1519,7 @@ let deleteSelect = true;
 function deleteInventory(item, index) {
   if (deleting) {
     if (item.type !== "soul") {
-      if (inventorySlots[`inventorySlot${index}`].style.background !== "none" && deleteSelect && !itemsToDelete.includes(index)) {
+      if (inventorySlots[`inventorySlot${index}`].src !== "data:image/svg+xml;charset=utf8,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%3E%3C/svg%3E" && deleteSelect && !itemsToDelete.includes(index)) {
   
           itemsToDelete.push(index);
   
@@ -1521,30 +1532,26 @@ function deleteInventory(item, index) {
           clearTimeout(timeoutDelete);
   
           timeoutDelete = setTimeout(() => {
-  
-            inventorySlots[`inventorySlot0`].style.border = `none`;
-            inventorySlots[`inventorySlot1`].style.border = `none`;
-            inventorySlots[`inventorySlot2`].style.border = `none`;
-            inventorySlots[`inventorySlot3`].style.border = `none`;
-            inventorySlots[`inventorySlot4`].style.border = `none`;
-            inventorySlots[`inventorySlot5`].style.border = `none`;
-            inventorySlots[`inventorySlot6`].style.border = `none`;
-            inventorySlots[`inventorySlot7`].style.border = `none`;
-            inventorySlots[`inventorySlot8`].style.border = `none`;
-  
+
+            for (const slot of Object.values(inventorySlots)) {
+              slot.style.background = "none";
+            }
+            
             socket.emit("toDelete", itemsToDelete);
+            deleting = false
+            trashIcon.src = "./icons/uiIcon/closeTrashInventoryIcon.png"
             itemsToDelete = [];
+            inventorySlots[`inventorySlot${index}`].removeEventListener("mousedown", (e) => deleteInventory(item, index));
           }, 2000);
   
-          inventorySlots[`inventorySlot${index}`].style.border = `solid 2px white`;
-          inventorySlots[`inventorySlot${index}`].removeEventListener("mousedown", (e) => deleteInventory(item, index));
+          inventorySlots[`inventorySlot${index}`].style.background = `red`;
   
       } else if (itemsToDelete.includes(index) && deleteSelect) {
   
           let indexItem = itemsToDelete.indexOf(index);
   
           itemsToDelete.splice(indexItem, 1);
-          // inventorySlots[`inventorySlot${index}`].style.border = `solid 2px black`;
+          inventorySlots[`inventorySlot${index}`].style.background = `none`;
   
           deleteSelect = false
   
@@ -1556,23 +1563,30 @@ function deleteInventory(item, index) {
   
           timeoutDelete = setTimeout(() => {
   
-            inventorySlots[`inventorySlot0`].style.border = `none`;
-            inventorySlots[`inventorySlot1`].style.border = `none`;
-            inventorySlots[`inventorySlot2`].style.border = `none`;
-            inventorySlots[`inventorySlot3`].style.border = `none`;
-            inventorySlots[`inventorySlot4`].style.border = `none`;
-            inventorySlots[`inventorySlot5`].style.border = `none`;
-            inventorySlots[`inventorySlot6`].style.border = `none`;
-            inventorySlots[`inventorySlot7`].style.border = `none`;
-            inventorySlots[`inventorySlot8`].style.border = `none`;
+            for (const slot of Object.values(inventorySlots)) {
+              slot.style.background = "none";
+            }
   
             socket.emit("toDelete", itemsToDelete);
+            deleting = false
+            trashIcon.src = "./icons/uiIcon/closeTrashInventoryIcon.png"
             itemsToDelete = [];
           }, 2000);
       }
     }
   }
 };
+
+deleteInventoryButton.addEventListener("click", () => {
+  console.log(deleting)
+  if (!deleting) {
+    trashIcon.src = "./icons/uiIcon/openTrashInventoryIcon.png"
+    deleting = true
+  } else if (deleting){
+    trashIcon.src = "./icons/uiIcon/closeTrashInventoryIcon.png"
+    deleting = false
+  }
+} )
 
 function interactEquipment (item, index) {
 
@@ -2182,31 +2196,6 @@ socket.on("player", (serverPlayer) => {
       // circleCharacter.style.background = "linear-gradient(rgb(255, 111, 111) 0%, #ff1515 100%)";
     }
 
-  if (myPlayer.artifacts.length) {
-    for (const artifact of myPlayer.artifacts) {
-      if (artifact.name === "rags") {
-        artifactInventory[`cape1`].style.background = `url(${artifact.image})`;
-        artifactInventory[`cape1`].style.backgroundSize = 'cover';
-        if (!myPlayer.artifact.length) {
-          artifactInventory[`cape1`].addEventListener("mousedown", (e) => {
-            interactInventory(artifact);
-            audioEquip.play();
-          });
-        }
-      }
-
-      if (artifact.name === "fisherman") {
-        artifactInventory[`cape2`].style.background = `url(${artifact.image})`;
-        artifactInventory[`cape2`].style.backgroundSize = 'cover';
-        if (!myPlayer.artifact.length) {
-          artifactInventory[`cape2`].addEventListener("mousedown", (e) => {
-            interactInventory(artifact);
-            audioEquip.play();
-          });
-        }
-      }
-    }
-  }
 
   if (myPlayer.armor.length) {
     equippedItems[`soul`].addEventListener("mousedown", (e) => {
@@ -2248,7 +2237,7 @@ socket.on("player", (serverPlayer) => {
 
   if (myPlayer.inventory.length !== 0) {
       // console.log(myPlayer.inventory)
-      for (let i = 0; i < 9; i++) {
+      for (let i = 0; i < 21; i++) {
 
 
         if (myPlayer.inventory[i]) {
