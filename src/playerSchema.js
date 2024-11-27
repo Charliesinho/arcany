@@ -13,7 +13,7 @@ const PlayerSchema = new mongoose.Schema({
   },
   health: {
     type: Number,
-    default: 3,
+    default: 6,
   },
   inventory: {
     type: Array,

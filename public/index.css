@@ -1,11 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=Tiny5&display=swap');
 .textTitle{
-    font-size: 25px;
-    font-weight: 600;
+    font-size: 39px;
+    font-weight: 100;
 }
 .textStandard{
     font-size: 15px;
     font-weight: 400;
+}
+
+.uiProfileLevel {
+    font-size: 24px;
+    font-weight: 400;
+    position: relative;
+    left: 2px;
+    top: -8px;
+    color: #00000061;
 }
 :root {
     --backgroundObjects: rgb(48, 37, 37);
@@ -179,6 +188,17 @@ body {
     font-size: 50px;
     padding: 10px 40px;
     animation: opacityUp 1s ease 2.2s forwards;
+}
+
+.skillBar {
+    height: 20px;
+    bottom: 15px;
+    /* width: 100% !important; */
+    max-width: 70px;
+    background: #60c560;
+    position: absolute;
+    border-right: solid 3px #493e29;
+    left: 53px;
 }
 
 #areaName {
@@ -374,6 +394,8 @@ body {
 }
 .individualSkillImg{
     width: 130px;
+    position: relative;
+    z-index: 2;
 }
 #uiSkinsImg {
     position: relative;
@@ -1003,11 +1025,11 @@ body {
 #obtainedItem {
     height: 150px;
     width: 150px;
-    opacity: 1;
+    opacity: 0;
 
     position: absolute;
-    top: 150vh;
-    left: 40vw;
+    top: 50%;
+    left: 50%;
     transform: translate(-50%, -50%);
     z-index: 101;
 
@@ -1016,20 +1038,24 @@ body {
     background: none;
     background-repeat: no-repeat !important;
     background-position: center !important;
+
+    pointer-events: none;
 }
 
 #catchGif {
     height: 250px;
     width: 250px;
-    opacity: 1;
+    opacity: 0;
 
     filter: saturate(2);
 
     position: absolute;
-    top: 150vh;
-    left: 40vw;
+    top: 50%;
+    left: 50%;
     transform: translate(-50%, -50%);
     z-index: 100;
+
+    pointer-events: none;
 
     border: none;
 }
@@ -1191,7 +1217,7 @@ body {
 
 .levelUpParent {
     position: absolute;
-    top: 25vw;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
@@ -1202,7 +1228,9 @@ body {
     z-index: 20;
     opacity: 1;
     display: none;
-    top: 200px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 
     height: 200px;
 }
@@ -1212,9 +1240,8 @@ body {
     z-index: 19;
 
     height: 400px;
-    top: -100px;
-
-   
+    top: 50%;
+    left: 50%;
 
     transform: rotate(0deg) translate(-50%, -50%);
 }

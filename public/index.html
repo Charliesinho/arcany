@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-COMPATIBLE" content="IE=edge" />
     <meta name="viewport" content="width=Device-width, initial-scale=1.0" />
     <script src="https://cdn.jsdelivr.net/gh/bevacqua/dragula@3.7.3/dist/dragula.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash/lodash.min.js"></script>
     <link rel="stylesheet" href="./index.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bevacqua/dragula@3.7.3/dist/dragula.min.css">
     <title>Arcany</title>
@@ -86,8 +87,8 @@
       <div id="uiProfileUserName">
         <img id="uiProfileRank" src="./ui/Rank/rankOne.png" >
         <div id="uiProfileUsernameAndLevel">
-          <p class="textTitle">Melina</p>
-          <p class="textStandard">LVL 1</p>
+          <p class="textTitle uiProfileName">Melina</p>
+          <p class="textStandard uiProfileLevel">LVL 1</p>
         </div>
       </div>
 
@@ -97,26 +98,31 @@
           <div class="individualSkill">
             <p class="individualSkillNum" id="fishingLevel">LVL 1</p>
             <img class="individualSkillImg" src="./ui/LVLicon/iconLVLFishing.png">
+            <div class="fishingXPbar skillBar"></div>
           </div>
 
           <div class="individualSkill">
             <p class="individualSkillNum" id="cookingLevel">LVL 2</p>
             <img class="individualSkillImg" src="./ui/LVLicon/iconLVLCooking.png">
+            <div class="cookingXPbar skillBar"></div>
           </div>
 
           <div class="individualSkill">
             <p class="individualSkillNum" id="craftingLevel">LVL 1</p>
             <img class="individualSkillImg" src="./ui/LVLicon/iconLVLCrafting.png">
+            <div class="craftingXPbar skillBar"></div>
           </div>
 
           <div class="individualSkill">
             <p class="individualSkillNum" id="combatLevel">LVL 2</p>
             <img class="individualSkillImg" src="./ui/LVLicon/iconLVLCombat.png">
+            <div class="combatXPbar skillBar"></div>
           </div>
 
           <div class="individualSkill">
             <p class="individualSkillNum" id="enchantingLevel">LVL 2</p>
             <img class="individualSkillImg" src="./ui/LVLicon/iconLVLEnchanting.png">
+            <div class="enchantingXPbar skillBar"></div>
           </div>
 
         </div>
