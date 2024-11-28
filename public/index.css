@@ -1670,7 +1670,7 @@ body {
 
     background: transparent;
 
-    overflow: auto;
+    overflow: hidden;
 
     /* border: solid 20px var(--backgroundObjects); */
 

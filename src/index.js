@@ -738,7 +738,7 @@ async function main() {
 
                 const player = await Player.findOne({socket: socket.id}).exec();
 
-                if (player.inventory.length <= 8) {
+                if (player.inventory.length <= 21) {
                     
                     if (item === "stick") {
 
@@ -765,8 +765,10 @@ async function main() {
                             io.to(socket.id).emit('obtained', nuclearGem);
                         }
                     }
-                    
+                    console.log(item)
                     if (item === "mushroomTrial") {
+                        const key = player.inventory.find(item => item.name === "chestKey");
+                        player.inventory.splice(player.inventory.indexOf(key), 1);
 
                         if (number < 30) {
                             player.inventory.push(tropicalHat);  
@@ -939,7 +941,7 @@ async function main() {
                     
 
                     const loginAttempt = "success";
-                    pushItem(arcaneRepeater, socket)
+                    pushItem(chestKey, socket)
 
                     // let item = {
                     //     type: "questItem",

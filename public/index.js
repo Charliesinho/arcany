@@ -824,11 +824,8 @@ function openChestIsland () {
         
         if (currentChestItem === "mushroomTrial") {
           if (key) {
+            console.log(currentChestItem)
             socket.emit("rewardChest", currentChestItem);
-          } else {
-            areaNameDisplay("Trial Started")
-            timer.style.display = "flex";
-            startTimer();
           }
         } else {
           socket.emit("rewardChest", currentChestItem);
@@ -836,6 +833,8 @@ function openChestIsland () {
 
         setTimeout(() => {
           currentLeft = 0
+          rewardChest.style.left = `-${currentLeft}%`;
+          IslandChestOpened = false;
         }, 1000);
       }
 
@@ -1749,6 +1748,8 @@ function playerDeath () {
   noMovement = true;
   const dynamicFunctionName = currentSelectedMap + "Loop";   
   const canvasFunction = window[dynamicFunctionName];
+  resetTimer()
+  hideTimer()
 
   setTimeout(() => {
     clearInterval(intervalCanvasBase);
@@ -2788,8 +2789,20 @@ window.addEventListener("keydown", (e) => {
   //Chest island open >
 
   if(e.key === "e" && IslandChestAvailable & !IslandOpenChest) {
-    IslandOpenChest = true;
-    openShopAudio.play();
+    const key = myPlayer.inventory.find(item => item.name === "chestKey");
+    if (currentChestItem === "mushroomTrial" && !key) {
+      areaNameDisplay("Trial Started")
+      timer.style.display = "flex";
+      setTimeout(() => {
+        startTimer();
+        mapsInfo[currentLand].enemies?.forEach(enemy => {
+          activateNormalEnemy(enemy);
+        })
+      }, 2000);
+    } else {
+      IslandOpenChest = true;
+      openShopAudio.play();
+    }
   } else if (e.key === "e" && IslandChestAvailable & IslandOpenChest) {
     IslandOpenChest = false;
   }
@@ -3469,6 +3482,7 @@ function startTimer() {
 }
 
 function resetTimer() {
+  if (dying) {return}
   score += timer.textContent
   console.log(score)
   clearInterval(timerInterval);
@@ -10003,6 +10017,15 @@ let mapsInfo = {
       y: 2750,
     },
     colliders: [
+      {
+        "type": "chest",
+        "item": "mushroomTrial",
+        "x": 2223.5,
+        "y": 761.5,
+        "width": 149,
+        "height": 210,
+        "color": "rgb(0, 0, 0, 0)"
+      },
       {
         "type": "wall",
         "x": 2759,
@@ -17507,6 +17530,15 @@ let originalMapsInfo = {
     },
     colliders: [
       {
+        "type": "chest",
+        "item": "mushroomTrial",
+        "x": 2223.5,
+        "y": 761.5,
+        "width": 149,
+        "height": 210,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
         "type": "wall",
         "x": 2759,
         "y": 2256.5,
@@ -20508,8 +20540,14 @@ function checkEnemyCombat (enemy) {
 
     if (enemy.isBoss) {
       resetTimer()
-      hideTimer()
       socket.emit("giveItem", "chestKey");
+      areaNameDisplay("Trial Completed");
+      setTimeout(() => {
+        let playerPosition =  mapsInfo.mushroomForest.playerPos;
+        mapsInfo.mushroomForest = _.cloneDeep(originalMapsInfo.mushroomForest);
+        mapsInfo.mushroomForest.playerPos = playerPosition;
+        hideTimer()
+      }, 2000);
     }
 
     const hasActiveBoss = mapsInfo[currentLand].enemies.some(
