@@ -218,17 +218,47 @@ body {
 #timer{
     display: none;
     position: absolute;
-    top: 30px;
-    left: 30px;
-    border: solid 2px white;
+    top: 5%;
+    left: 50%;
+    transform: translate(-50%, 158%);
     border-radius: 2px;
-    background-color: white;
+    font-size: 50px;
+    color: white;
     width: 50px;
     height: 25px;
     flex-wrap: wrap;
     justify-content: center;
     align-content: center;
+    text-shadow: 0 0 12px black;
+    font-weight: 100;
+    animation: timer 1s ease forwards;
 }
+
+@keyframes timer {
+    0% {
+        font-size: 0px;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+    20% {
+        font-size: 80px;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+    80% {
+        font-size: 80px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    100% {
+        font-size: 50px;
+        top: 5%;
+        left: 5%;
+        transform: translate(0%, 0%);
+    }
+}
+
 #navBar {
     width: 97.5vw;
     height: 100px;
@@ -1640,7 +1670,7 @@ body {
 
     background: transparent;
 
-    overflow: auto;
+    overflow: hidden;
 
     /* border: solid 20px var(--backgroundObjects); */
 

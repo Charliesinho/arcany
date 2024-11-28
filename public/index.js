@@ -100,6 +100,9 @@ WeaponStick.src = "stick.png";
 const arcaneStaffCommon = new Image();
 arcaneStaffCommon.src = "arcaneStaffCommon.png";
 
+const arcaneRepeater = new Image();
+arcaneRepeater.src = "./inventory/arcaneRepeater.png";
+
 const nuclearStaffCommon = new Image();
 nuclearStaffCommon.src = "nuclearStaffCommon.png";
 
@@ -817,10 +820,21 @@ function openChestIsland () {
 
         openChestAudio.play()
 
-        socket.emit("rewardChest", currentChestItem);
+        const key = myPlayer.inventory.find(item => item.name === "chestKey");
+        
+        if (currentChestItem === "mushroomTrial") {
+          if (key) {
+            console.log(currentChestItem)
+            socket.emit("rewardChest", currentChestItem);
+          }
+        } else {
+          socket.emit("rewardChest", currentChestItem);
+        }
 
         setTimeout(() => {
           currentLeft = 0
+          rewardChest.style.left = `-${currentLeft}%`;
+          IslandChestOpened = false;
         }, 1000);
       }
 
@@ -1341,19 +1355,6 @@ function interactInventory(item, index) {
         socket.emit("consumable", item);
       }
     }
-  } else if (item.type === "artifact") {
-
-    if(consumeAvailable === true) {
-
-      consumeAvailable = false;
-
-      setTimeout(() => {
-        consumeAvailable = true;
-      }, 3000);
-
-
-      socket.emit("consumable", item);
-    }
   } else {
 
     if (cookingContainer.style.display == "block" && currentlyCooking === false) {
@@ -1469,14 +1470,12 @@ function interactInventory(item, index) {
           inventorySlots[`inventorySlot${index}`].removeEventListener("mousedown", (e) => interactInventory(item, index));
 
           item.maxPower = maxHealth;
+          item.index = myPlayer.inventory.indexOf(item);
 
-          if(item.type === "food") {
-            socket.emit("consumable", item);
-          }
+          console.log(item)
 
-          if (item.type === "weapon") {
-            socket.emit("consumable", item);
-          }
+          socket.emit("consumable", item);
+          
         }
       }
 
@@ -1749,6 +1748,8 @@ function playerDeath () {
   noMovement = true;
   const dynamicFunctionName = currentSelectedMap + "Loop";   
   const canvasFunction = window[dynamicFunctionName];
+  resetTimer()
+  hideTimer()
 
   setTimeout(() => {
     clearInterval(intervalCanvasBase);
@@ -2487,7 +2488,6 @@ socket.on("loginAttempt", (msg) => {
     menuUi.style.display = "flex";
     uiButtonParent.style.display = "flex";
     menuUiProfile.style.display = "flex";
-    timer.style.display = "flex";
     chatButton.style.display = "block";
     
 
@@ -2789,8 +2789,20 @@ window.addEventListener("keydown", (e) => {
   //Chest island open >
 
   if(e.key === "e" && IslandChestAvailable & !IslandOpenChest) {
-    IslandOpenChest = true;
-    openShopAudio.play();
+    const key = myPlayer.inventory.find(item => item.name === "chestKey");
+    if (currentChestItem === "mushroomTrial" && !key) {
+      areaNameDisplay("Trial Started")
+      timer.style.display = "flex";
+      setTimeout(() => {
+        startTimer();
+        mapsInfo[currentLand].enemies?.forEach(enemy => {
+          activateNormalEnemy(enemy);
+        })
+      }, 2000);
+    } else {
+      IslandOpenChest = true;
+      openShopAudio.play();
+    }
   } else if (e.key === "e" && IslandChestAvailable & IslandOpenChest) {
     IslandOpenChest = false;
   }
@@ -2853,6 +2865,7 @@ function shootDefaultArcane () {
     y: playerY + 50,
     timeLeft: 20,
     playerId: socket.id,
+    damage: 1,
   }) 
 
   shooting = true;
@@ -2863,6 +2876,61 @@ function shootDefaultArcane () {
 
   const interval = setInterval(() => {
       if (mainSkillCooldown > 10) {
+          mainSkillCooldown = 0;
+          recoil = 0
+          clearInterval(interval);
+      }
+      mainSkillCooldown++;
+      recoil += recoil > 9 ? 0 : 3;
+  }, 20);
+}
+
+function shootArcaneRepeater () {
+  const angle = angleMouse
+  const audioShootNature = new Audio("./audios/shootNature.wav");
+  audioShootNature.loop = false;
+  audioShootNature.volume = 0.3;
+  audioShootNature.play()
+  const bullet1 = angle + 0.1
+  const bullet2 = angle - 0.1
+    // socket.emit("projectile", angle);
+    cameraShake();
+
+    projectilesClient.push({
+      bullet1,
+      x: playerX + 20,
+      y: playerY + 50,
+      timeLeft: 10,
+      playerId: socket.id,
+      damage: 0.5,
+    }) 
+
+    projectilesClient.push({
+      bullet2,
+      x: playerX + 20,
+      y: playerY + 50,
+      timeLeft: 10,
+      playerId: socket.id,
+      damage: 0.5,
+    }) 
+
+    projectilesClient.push({
+      angle,
+      x: playerX + 20,
+      y: playerY + 50,
+      timeLeft: 10,
+      playerId: socket.id,
+      damage: 0.5,
+    }) 
+
+  shooting = true;
+
+  setTimeout(() => {
+    shooting = false;
+  }, 20);
+
+  const interval = setInterval(() => {
+      if (mainSkillCooldown > 5) {
           mainSkillCooldown = 0;
           recoil = 0
           clearInterval(interval);
@@ -2938,42 +3006,14 @@ canvasLobby.addEventListener("mousedown", (e) => {
               }, 20);
             }
   
-            else if (myPlayer?.weapon[0].name === "willowStick") {
+            else if (myPlayer?.weapon[0].name === "arcaneRepeater") {
   
-              const bullet1 = angle + 0.1
-              const bullet2 = angle - 0.1
-  
-              projectilesClient.push({
-                bullet1,
-                x: playerX + 20,
-                y: playerY + 50,
-                timeLeft: 200,
-                playerId: socket.id,
-              }) 
-  
-              projectilesClient.push({
-                bullet2,
-                x: playerX + 20,
-                y: playerY + 50,
-                timeLeft: 200,
-                playerId: socket.id,
-              }) 
-  
-              shooting = true;
-  
-              setTimeout(() => {
-                shooting = false;
-              }, 70);
-    
-              const interval = setInterval(() => {
-                  if (mainSkillCooldown > 2) {
-                      mainSkillCooldown = 0;
-                      recoil = 0
-                      clearInterval(interval);
-                  }
-                  mainSkillCooldown++;
-                  recoil += 8
-              }, 50);
+            shootArcaneRepeater()
+            shootInterval = setInterval(() => {
+              if (mainSkillCooldown === 1 || mainSkillCooldown === 0) {
+                shootArcaneRepeater()
+              }
+            }, 100)
             }
   
         }
@@ -3442,7 +3482,15 @@ function startTimer() {
 }
 
 function resetTimer() {
+  if (dying) {return}
+  score += timer.textContent
+  console.log(score)
   clearInterval(timerInterval);
+}
+
+function hideTimer() {
+  clearInterval(timerInterval);
+  timer.style.display = "none";
   timerInterval = null;
   seconds = 0;
   timer.textContent = "00:00";
@@ -3450,14 +3498,15 @@ function resetTimer() {
 
 document.addEventListener('keydown', (event) => {
   if (event.key?.toLowerCase() === 'o') {
+    timer.style.display = "flex";
     startTimer();
   }
 });
 
+
+
 document.addEventListener('keydown', (event) => {
   if (event.key?.toLowerCase() === 'p') {
-    score += timer.textContent
-   console.log(score)
     resetTimer()
   }
 });
@@ -9968,6 +10017,15 @@ let mapsInfo = {
       y: 2750,
     },
     colliders: [
+      {
+        "type": "chest",
+        "item": "mushroomTrial",
+        "x": 2223.5,
+        "y": 761.5,
+        "width": 149,
+        "height": 210,
+        "color": "rgb(0, 0, 0, 0)"
+      },
       {
         "type": "wall",
         "x": 2759,
@@ -17472,6 +17530,15 @@ let originalMapsInfo = {
     },
     colliders: [
       {
+        "type": "chest",
+        "item": "mushroomTrial",
+        "x": 2223.5,
+        "y": 761.5,
+        "width": 149,
+        "height": 210,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
         "type": "wall",
         "x": 2759,
         "y": 2256.5,
@@ -19943,7 +20010,7 @@ function drawPlayerArmor (player) {
 
 function drawPlayerArtifact (player) {
   if (player.artifact[0]) {
-    if (player.artifact[0].name === "rags") {
+    if (player.artifact[0].name === "tropicalHat") {
       return cape;
     } else if (player.artifact[0].name === "fisherman") {
       return fishermanCape;
@@ -19968,6 +20035,9 @@ function drawPlayerWeaponOut (player) {
     }
     else if (player.weapon[0].name === "nuclearStaffCommon") {
       canvas.drawImage(nuclearStaffCommon ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
+    }
+    else if (player.weapon[0].name === "arcaneRepeater") {
+      canvas.drawImage(arcaneRepeater ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
     }
     canvas.restore();
   }
@@ -20083,7 +20153,7 @@ function drawLocalBullets () {
         canvas.drawImage(bulletStick, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
         push360Particles("red", 1, projectile.x + 20, projectile.y - 50)
       }
-      if (myPlayer?.weapon[0]?.name === "arcaneStaffCommon") {
+      if (myPlayer?.weapon[0]?.name === "arcaneStaffCommon" || myPlayer?.weapon[0]?.name === "arcaneRepeater") {
         canvas.drawImage(bulletStickBlue, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
         push360Particles("purple", 1, projectile.x + 20, projectile.y - 50)
       }
@@ -20450,8 +20520,10 @@ function checkEnemyCombat (enemy) {
 
     enemy.currentStateName = "dmg"
 
-    enemy.spawn.x += Math.cos(enemy.angle) * enemy.damaged ;
-    enemy.spawn.y += Math.sin(enemy.angle) * enemy.damaged;
+    if (!enemy.isBoss) {
+      enemy.spawn.x += Math.cos(enemy.angle) * enemy.damaged ;
+      enemy.spawn.y += Math.sin(enemy.angle) * enemy.damaged;
+    }
   } else {
     if (enemy.currentStateName === "dmg") {
       enemy.currentStateName = "idle"
@@ -20465,6 +20537,18 @@ function checkEnemyCombat (enemy) {
     mapsInfo[currentLand].enemies.splice(mapsInfo[currentLand].enemies.indexOf(enemy), 1)
 
     socket.emit("enemyKilled", enemy.xp);
+
+    if (enemy.isBoss) {
+      resetTimer()
+      socket.emit("giveItem", "chestKey");
+      areaNameDisplay("Trial Completed");
+      setTimeout(() => {
+        let playerPosition =  mapsInfo.mushroomForest.playerPos;
+        mapsInfo.mushroomForest = _.cloneDeep(originalMapsInfo.mushroomForest);
+        mapsInfo.mushroomForest.playerPos = playerPosition;
+        hideTimer()
+      }, 2000);
+    }
 
     const hasActiveBoss = mapsInfo[currentLand].enemies.some(
       enemy => enemy.active === true && !enemy.isBoss
@@ -20513,12 +20597,12 @@ function checkEnemyCombat (enemy) {
       && projectile.y - 190 > enemy.spawn.y && projectile.y - 190 < enemy.spawn.y + enemy.h 
       && enemy.damaged === 0 
       && !projectile.enemy
-      && myPlayer?.weapon[0]?.name === "arcaneStaffCommon") {
+      ) {
 
-      enemy.damaged = 5;
+      enemy.damaged = 2;
       enemy.angle = projectile.angle || projectile.bullet1 || projectile.bullet2;
       projectile.timeLeft = projectile.timeLeft > 1 ? 1 : projectile.timeLeft;
-      enemy.health = enemy.health - 1
+      enemy.health = enemy.health - projectile.damage;
 
       if (enemy.health > 0) {
         const enemyHitAudio = new Audio("./audios/enemyHit.mp3");
