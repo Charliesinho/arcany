@@ -39,6 +39,10 @@ const PlayerSchema = new mongoose.Schema({
     type: Array,
     default: [],
   },
+  scores: {
+    type: Array,
+    default: [],
+  },
   questsOngoing: {
     type: Array,
     default: [],
