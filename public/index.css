@@ -515,6 +515,36 @@ body {
 }
 
 /* UI DEVELOPPER ORGANISATION */
+
+#logOutButton{
+    display: flex;
+    position: relative;
+    flex-direction: row;
+    justify-content: center;
+    align-self: flex-end;
+    align-items: center;
+    width: 70px;
+    text-align: center;
+    height: 30px;
+    border: solid 2px black;
+    box-shadow: 3px 3px 0px black;
+    background-color: transparent;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    top: 0px;
+    left: 0px;
+}
+#logOutButton:hover{
+    
+    color: #FFE2C1;
+    box-shadow: 0px 0px 0px black;
+    background-color: black;
+    border-radius: 5px;
+    top: 3px;
+    left: 3px;
+}
+
+
 #uiDev {
     position: absolute;
     left: 0;
@@ -1061,7 +1091,7 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 101;
+    z-index: 99;
 
     border-radius: 10px;
     border: none 1px black;
@@ -1083,7 +1113,7 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 100;
+    z-index: 98;
 
     pointer-events: none;
 
@@ -1115,6 +1145,36 @@ body {
 
 #obtainedItem.obtainedAnim {
     animation: obtained 3s ease;
+}
+
+#scores {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    height: 500px;
+    background-color: #462c2d;
+    display: none;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    padding: 30px;
+}
+
+.score-item {
+    color: #9b9b9b;
+    font-size: 30px;
+    font-weight: 300;
+    align-self: flex-start;
+}
+
+#scoresTitle {
+    font-size: 50px;
+    color: white;
+    font-weight: 300;
+    text-decoration: underline;
 }
 
 @keyframes obtained {
@@ -1160,14 +1220,15 @@ body {
   }
   
   #fishingBar {
-    width: 120px;
+    width: 150px;
     margin-left: -50%;
-    height: 120px;
-    background: url("./Fishing/fishShadow.png");
+    height: 150px;
+    background: url("./Fishing/fishShadowGif.gif");
     background-repeat: no-repeat;
     background-size: cover;
     border-radius: 50%;
     opacity: .5;
+    transform: rotate(90deg);
   }
 
   #fishingBarHit {
@@ -1250,30 +1311,21 @@ body {
     position: absolute;
     top: 50%;
     left: 50%;
+    z-index: 101;
     transform: translate(-50%, -50%);
 }
 
 .levelUp {
     position: absolute;
     width: 1300px;
-    z-index: 9999;
-    opacity: 1;
-    display: none;
+    z-index: 101;
+    opacity: 0;
+    display: flex;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    pointer-events: none;
 
-}
-
-.levelUpCircle {
-    display: none;
-    z-index: 19;
-
-    height: 400px;
-    top: 50%;
-    left: 50%;
-
-    transform: rotate(0deg) translate(-50%, -50%);
 }
 
 .fadeInAnim {

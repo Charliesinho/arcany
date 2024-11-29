@@ -32,7 +32,7 @@
     <p id="youDied">YOU DIED</p>
     <button id="respawn" class="pointerActivator">Respawn</button>
     
-    <div id="uiDev" style="display: none;">
+    <div id="uiDev" style="display: flex;">
       <button id="placeWalls" class="buttonDev pointerActivator">🧱</button>
       <button id="placeFishingArea" class="buttonDev pointerActivator">🐟</button>
       <button id="placeCraftingArea" class="buttonDev pointerActivator">🛠️</button>
@@ -143,6 +143,11 @@
 
       <p id="uiProfileCurrentStrengthInformation">This is some explanation for the three boxes on top. Depending on which you select you have a diferent text.</p>
       
+
+      <button id="logOutButton" class="pointerActivator">
+        <p>Log out</p>
+      </button>
+
     </div>
 
     <div id="uiInventory" class="inventoryShadow inventoryHide dragParent">
@@ -242,7 +247,10 @@
   <div id="playerHeartParent">
     <div id="playerHeart">
     </div>
-    
+  </div>
+
+  <div id="scores">
+    <h1 id="scoresTitle">Mushroom Trial Scores</h1>
   </div>
 
  
@@ -296,10 +304,11 @@
       <div id="fishingBarHit" class=""></div>
     </div>
 
-    <div id="overlay">
       <div class="levelUpParent">
-        <img src="./Textures/levelUpFishing.gif" class="levelUp" />
-      </div>
+          <img src="./Textures/levelUpFishing.gif" class="levelUp" />
+        </div>
+      <div id="overlay">
+        
 
       <div class="container">
         <div class="char-img"></div>

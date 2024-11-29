@@ -203,7 +203,22 @@ async function main() {
         chatMessageStore[socket.id] = "none";
         blockMovementStore[socket.id] = false;
         usernames[socket.id] = "none";
-        myPlayer[socket.id] = {socket: 0, health: 6, weapon: [], artifact: [], souls: [], artifacts: [],  fishing: 0, cooking: 0, combat: 0}
+        myPlayer[socket.id] = 
+        {
+            socket: 0, 
+            health: 6, 
+            weapon: [], 
+            artifact: [], 
+            souls: [], 
+            artifacts: [],  
+            fishing: 0, 
+            cooking: 0, 
+            combat: 0, 
+            scores: [
+            {
+                mushroomTrial: 0,
+            }
+        ]}
         inventoryStore[socket.id] = [];
         
 
@@ -221,6 +236,11 @@ async function main() {
             combatLevel: 0,
             questsOngoing: [],
             questsCompleted: [],
+            scores: [
+                {
+                    mushroomTrial: 0,
+                }
+            ],
 
             inventory: [],
             weapon: [],
@@ -458,7 +478,9 @@ async function main() {
                     if (player.health > item.maxPower) {
                         player.health = item.maxPower;
                     }
+                    player.inventory.splice(item.index, 1);
                     await Player.findOneAndUpdate({socket: socket.id}, {health: player.health}, {new: true});
+                    await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
                     myPlayer[socket.id] = player;
                 }
               };
@@ -778,9 +800,13 @@ async function main() {
                             player.inventory.push(arcaneStaffCommon);                                           
                             io.to(socket.id).emit('obtained', arcaneStaffCommon);
                         } 
-                        else if (number >= 60 && number < 90) {
+                        else if (number >= 60 && number < 80) {
                             player.inventory.push(octopus);                                           
                             io.to(socket.id).emit('obtained', octopus);
+                        } 
+                        else if (number >= 80 && number < 90) {
+                            player.inventory.push(mushroomClothesRed);                                           
+                            io.to(socket.id).emit('obtained', mushroomClothesRed);
                         } 
                         else {
                             player.inventory.push(arcaneRepeater);                                           
@@ -943,7 +969,7 @@ async function main() {
                     
 
                     const loginAttempt = "success";
-                    pushItem(mushroomClothesRed, socket)
+                    pushItem(arcaneRepeater, socket)
 
                     // let item = {
                     //     type: "questItem",
@@ -1079,6 +1105,40 @@ async function main() {
                 playerId: socket.id,
             }) 
         });
+        
+        socket.on("score", (score) => {  
+            async function updateScore() {
+                const player = players.find(player => player.id === socket.id) 
+                player.scores[0].mushroomTrial = score;   
+                console.log(score, player.scores) 
+                await Player.findOneAndUpdate({socket: socket.id}, {scores: player.scores}, {new: true});
+                myPlayer[socket.id] = player;             
+            }
+            updateScore()
+        });
+        
+        socket.on("getScores", () => {
+            async function getScores() {
+              try {
+                // Fetch all players
+                const players = await Player.find().exec();
+          
+                // Process the scores
+                const scores = players
+                  .filter(player => player.username && player.scores && player.scores[0]) // Ensure username and scores exist
+                  .map(player => `${player.username}: ${player.scores[0].mushroomTrial}`); // Format the score
+          
+                // Emit the formatted scores array back to the client
+                socket.emit("scoresData", scores);
+              } catch (error) {
+                console.error("Error fetching scores:", error);
+              }
+            }
+          
+            getScores();
+          });
+          
+        
 
         socket.on("disconnect", () => {
             playerToDelete = players.find((player) => player.id !== socket.id);
@@ -1248,7 +1308,7 @@ const mushroomClothesRed = {
     name: "mushroomClothesRed",
     value: 20,
     rarity: "common",
-    image: "./inventory/willowStick.png",
+    image: "./inventory/mushroomClothesRedInventory.png",
 };
 const tropicalHat = {
     type: "artifact",
