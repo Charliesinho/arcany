@@ -1147,8 +1147,8 @@ body {
 #fishingMinigame {
     position: absolute;
     top: 50%;
-    left: 55vw;
-    transform: translate(-50%, 0%);
+    left: 75vw;
+    transform: translate(-50%, 0%) rotate(-90deg);
 
     width: 350px;
     background-color: transparent;
@@ -1178,6 +1178,7 @@ body {
     width: 140px;
     height: 140px;
     background: url("./Fishing/fishBuoy.gif");
+    transform: rotate(90deg);
     background-repeat: no-repeat;
     background-size: cover;
     border-radius: 5px;

@@ -20598,17 +20598,20 @@ function checkEnemyCombat (enemy) {
       fightMusic1.pause();
       fightMusic1.currentTime = 0;
       bossFight = false;
-      resetTimer()
-      socket.emit("giveItem", "chestKey");
-      areaNameDisplay("Trial Completed");
-      challengeCompleted.play();
-      setTimeout(() => {
-        let playerPosition =  mapsInfo.mushroomForest.playerPos;
-        mapsInfo.mushroomForest = _.cloneDeep(originalMapsInfo.mushroomForest);
-        mapsInfo.mushroomForest.playerPos = playerPosition;
-        hideTimer()
-      }, 2000);
-      mapsInfo[currentSelectedMap].areaSounds();
+
+      if (enemy.isBoss) {
+        resetTimer()
+        socket.emit("giveItem", "chestKey");
+        areaNameDisplay("Trial Completed");
+        challengeCompleted.play();
+        setTimeout(() => {
+          let playerPosition =  mapsInfo.mushroomForest.playerPos;
+          mapsInfo.mushroomForest = _.cloneDeep(originalMapsInfo.mushroomForest);
+          mapsInfo.mushroomForest.playerPos = playerPosition;
+          hideTimer()
+        }, 2000);
+        mapsInfo[currentSelectedMap].areaSounds();
+      }
     }
     
     setTimeout(() => {
