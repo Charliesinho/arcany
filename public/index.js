@@ -70,6 +70,9 @@ cape.src = "./capes/cape.png";
 const fishermanCape = new Image();
 fishermanCape.src = "./capes/mellyCape.png";
 
+const mushroomClothesRed = new Image();
+mushroomClothesRed.src = "./capes/mushroomClothesRed.png";
+
 const transparentCape = new Image();
 transparentCape.src = "./capes/transparent.png";
 
@@ -20012,9 +20015,14 @@ function drawPlayerArtifact (player) {
   if (player.artifact[0]) {
     if (player.artifact[0].name === "tropicalHat") {
       return cape;
-    } else if (player.artifact[0].name === "fisherman") {
+    } 
+    else if (player.artifact[0].name === "fisherman") {
       return fishermanCape;
-    } else {
+    } 
+    else if (player.artifact[0].name === "mushroomClothesRed") {
+      return mushroomClothesRed;
+    } 
+    else {
       return transparentCape;
     }
   } else {

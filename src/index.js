@@ -941,7 +941,7 @@ async function main() {
                     
 
                     const loginAttempt = "success";
-                    pushItem(chestKey, socket)
+                    pushItem(mushroomClothesRed, socket)
 
                     // let item = {
                     //     type: "questItem",
@@ -1240,6 +1240,13 @@ const chestKey = {
     value: 30,
     rarity: "rare",
     image: "./inventory/chestKey.png",
+};
+const mushroomClothesRed = {
+    type: "artifact",
+    name: "mushroomClothesRed",
+    value: 20,
+    rarity: "common",
+    image: "./inventory/willowStick.png",
 };
 const tropicalHat = {
     type: "artifact",
