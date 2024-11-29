@@ -913,7 +913,9 @@ async function main() {
            
             if (item === "chestKey") {
                 player.inventory.push(chestKey);
+                io.to(socket.id).emit('obtained', chestKey);
             }
+
 
             await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
 

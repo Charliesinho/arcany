@@ -178,6 +178,26 @@ const glitchArcane = new Audio("./audios/glitchArcane.wav");
 glitchArcane.loop = false;
 glitchArcane.volume = 0.5;
 
+const bossWakingUpChallenge = new Audio("./audios/bossWakingUpChallenge.wav");
+bossWakingUpChallenge.loop = false;
+bossWakingUpChallenge.volume = 0.3;
+
+const challengeAccepted = new Audio("./audios/challengeAccepted.wav");
+challengeAccepted.loop = false;
+challengeAccepted.volume = 0.5;
+
+const challengeCompleted = new Audio("./audios/challengeCompleted.wav");
+challengeCompleted.loop = false;
+challengeCompleted.volume = 0.4;
+
+const violinDanger = new Audio("./audios/violinDanger.wav");
+violinDanger.loop = false;
+violinDanger.volume = 0.3;
+
+const suspense1 = new Audio("./audios/suspense1.mp3");
+suspense1.loop = true;
+suspense1.volume = 0.5;
+
 const ArcaneEnv = new Audio("./audios/ArcaneEnv.mp3");
 ArcaneEnv.loop = true;
 ArcaneEnv.volume = 0.5;
@@ -821,17 +841,19 @@ function openChestIsland () {
       if (currentLeft >= 700) {
         clearInterval(openChest)
 
-        openChestAudio.play()
-
         const key = myPlayer.inventory.find(item => item.name === "chestKey");
         
         if (currentChestItem === "mushroomTrial") {
           if (key) {
             console.log(currentChestItem)
             socket.emit("rewardChest", currentChestItem);
+            openChestAudio.play()
+          } else {
+            clearInterval(openChest)
           }
         } else {
           socket.emit("rewardChest", currentChestItem);
+          openChestAudio.play()
         }
 
         setTimeout(() => {
@@ -2795,12 +2817,18 @@ window.addEventListener("keydown", (e) => {
     const key = myPlayer.inventory.find(item => item.name === "chestKey");
     if (currentChestItem === "mushroomTrial" && !key) {
       areaNameDisplay("Trial Started")
+      challengeAccepted.play()
       timer.style.display = "flex";
       setTimeout(() => {
         startTimer();
         mapsInfo[currentLand].enemies?.forEach(enemy => {
           activateNormalEnemy(enemy);
         })
+        const rocksFall = new Audio("./audios/rocksFall.wav");
+        rocksFall.loop = false;
+        rocksFall.volume = 0.1;
+        rocksFall.play();
+        suspense1.play();
       }, 2000);
     } else {
       IslandOpenChest = true;
@@ -3618,6 +3646,9 @@ liquidTransition.addEventListener("click", function() {
 function stopAllSound() {
   grasslandsLoop1.pause();
   grasslandsLoop1.currentTime = 0;
+  
+  suspense1.pause();
+  suspense1.currentTime = 0;
 
   grasslandsEnviroment.pause();
   grasslandsEnviroment.currentTime = 0;
@@ -20417,13 +20448,16 @@ function activateBossEnemy (enemy) {
   secondaryCameraX = enemy.spawn.x - (enemy.w) + (enemy.w/4);
   secondaryCameraY = enemy.spawn.y + (enemy.h/4);
   projectilesClient = [];
+  stopAllSound();
 
   fightMusic1.play();
+  violinDanger.play()
+  bossWakingUpChallenge.play()
 
   setTimeout(() => {
     const rocksFall = new Audio("./audios/rocksFall.wav");
     rocksFall.loop = false;
-    rocksFall.volume = 0.2;
+    rocksFall.volume = 0.3;
     rocksFall.play();
     bossFight = true;
 
@@ -20444,7 +20478,7 @@ function activateBossEnemy (enemy) {
         }
       }
     },40)
-  }, 2000);
+  }, 2500);
 }
 
 function drawEnemy () {
@@ -20546,18 +20580,6 @@ function checkEnemyCombat (enemy) {
 
     socket.emit("enemyKilled", enemy.xp);
 
-    if (enemy.isBoss) {
-      resetTimer()
-      socket.emit("giveItem", "chestKey");
-      areaNameDisplay("Trial Completed");
-      setTimeout(() => {
-        let playerPosition =  mapsInfo.mushroomForest.playerPos;
-        mapsInfo.mushroomForest = _.cloneDeep(originalMapsInfo.mushroomForest);
-        mapsInfo.mushroomForest.playerPos = playerPosition;
-        hideTimer()
-      }, 2000);
-    }
-
     const hasActiveBoss = mapsInfo[currentLand].enemies.some(
       enemy => enemy.active === true && !enemy.isBoss
     );
@@ -20574,6 +20596,17 @@ function checkEnemyCombat (enemy) {
       fightMusic1.pause();
       fightMusic1.currentTime = 0;
       bossFight = false;
+      resetTimer()
+      socket.emit("giveItem", "chestKey");
+      areaNameDisplay("Trial Completed");
+      challengeCompleted.play();
+      setTimeout(() => {
+        let playerPosition =  mapsInfo.mushroomForest.playerPos;
+        mapsInfo.mushroomForest = _.cloneDeep(originalMapsInfo.mushroomForest);
+        mapsInfo.mushroomForest.playerPos = playerPosition;
+        hideTimer()
+      }, 2000);
+      mapsInfo[currentSelectedMap].areaSounds();
     }
     
     setTimeout(() => {
