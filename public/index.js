@@ -19527,7 +19527,9 @@ function drawColliders (type, x, y, w, h) {
         }
         else if (wall.type === "transition") {
           currentSelectedMap = wall.destination
-          transition(wall.format)
+
+          if (!bossFight) transition(wall.format)
+          
         }
         else if (wall.type === "dialog") {
           dialogAvailable = true;
