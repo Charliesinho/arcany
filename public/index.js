@@ -321,6 +321,8 @@ const trashIcon = document.getElementById("trashIcon")
 
 menuUiProfile.style.width = window.innerWidth;
 menuUiProfile.style.height = window.innerHeight;
+
+const logOutButton = document.getElementById('logOutButton');
 //UI <
 
 const uiSkinsImg = document.getElementById("uiSkinsImg");
@@ -470,6 +472,11 @@ const artifactInventory = {
 const catchGif = document.getElementById("catchGif");
 
 //Ui interaction >
+
+logOutButton.addEventListener("click", function(){
+  location.reload();
+});
+
 let uiIsClose = true
 let uiProfileOpen = true;
 let uiInventoryOpen = false;
@@ -2471,8 +2478,8 @@ socket.on("startCooking", (item) => {
   cookingItem.style.backgroundImage = `url(${image})`
   cookingItem.style.backgroundSize = "cover"
   console.log("cooking started")
-  cookingAudio.play()
-  cookingAudio.loop = true
+  // cookingAudio.play()
+  // cookingAudio.loop = true
 
   const intervalCooking = setInterval(() => {
 
@@ -7266,6 +7273,22 @@ let mapsInfo = {
         "width": 802,
         "height": 174,
         "color": "rgb(204, 0, 204, 0)"
+      },
+      {
+        "type": "cook",
+        "x": 302,
+        "y": 1733.5,
+        "width": 471,
+        "height": 416,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 507,
+        "y": 1956.5,
+        "width": 122,
+        "height": 87,
+        "color": "rgb(0, 0, 0, 0)"
       }
     ],
     enemies: [

@@ -1248,7 +1248,7 @@ const mushroomClothesRed = {
     name: "mushroomClothesRed",
     value: 20,
     rarity: "common",
-    image: "./inventory/willowStick.png",
+    image: "./inventory/mushroomClothesRedInventory.png",
 };
 const tropicalHat = {
     type: "artifact",
