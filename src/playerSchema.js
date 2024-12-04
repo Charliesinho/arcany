@@ -41,7 +41,11 @@ const PlayerSchema = new mongoose.Schema({
   },
   scores: {
     type: Array,
-    default: [],
+    default: [
+      {
+        mushroomTrial: 0,
+      }
+    ],
   },
   questsOngoing: {
     type: Array,

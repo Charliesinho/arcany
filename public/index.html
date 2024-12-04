@@ -247,59 +247,62 @@
   <div id="playerHeartParent">
     <div id="playerHeart">
     </div>
-    
+  </div>
+
+  <div id="scores">
+    <h1 id="scoresTitle">Mushroom Trial Scores</h1>
   </div>
 
  
     <img class="pointerActivator" id='chatIcon' src="./icons/uiIcon/chatIcon.png">
 
-      <form id="chat">
-        <div id="chatHistory"></div>
+    <form id="chat">
+      <div id="chatHistory"></div>
+      <input
+        type="text"
+        id="chatInput"
+        name="chatInput"
+        placeholder="Type here..."
+        autocomplete="off"
+        maxlength="20"
+      />
+      <!-- <input type="submit" value="Send"> -->
+    </form>
+
+    <div id="loginScreen" class="">
+      <div id="loginArt">
+        <iframe if="" src='https://my.spline.design/crystalcopy-cd35cf24974b9bb9c15c0590dee4980f/' frameborder='0' width='100%' height='100%'></iframe>
+      </div>
+      <form id="login">
+        <h1 id="signIn">Sign in</h1>
         <input
           type="text"
-          id="chatInput"
-          name="chatInput"
-          placeholder="Type here..."
-          autocomplete="off"
-          maxlength="20"
+          id="usernameInput"
+          name="usernameInput"
+          placeholder="Username"
+          maxlength="6"
         />
-        <!-- <input type="submit" value="Send"> -->
-      </form>
-
-      <div id="loginScreen" class="">
-        <div id="loginArt">
-          <iframe if="" src='https://my.spline.design/crystalcopy-cd35cf24974b9bb9c15c0590dee4980f/' frameborder='0' width='100%' height='100%'></iframe>
+        <input
+          type="text"
+          id="passwordInput"
+          name="passwordInput"
+          placeholder="Password"
+          maxlength="23"
+        />
+        <div id="buttonsLogin">
+          <button id="loginButton" class="pointerActivator" value="Send">Login</button>
+          <button id="createButton" class="pointerActivator" value="Send">Create</button>
         </div>
-        <form id="login">
-          <h1 id="signIn">Sign in</h1>
-          <input
-            type="text"
-            id="usernameInput"
-            name="usernameInput"
-            placeholder="Username"
-            maxlength="6"
-          />
-          <input
-            type="text"
-            id="passwordInput"
-            name="passwordInput"
-            placeholder="Password"
-            maxlength="23"
-          />
-          <div id="buttonsLogin">
-            <button id="loginButton" class="pointerActivator" value="Send">Login</button>
-            <button id="createButton" class="pointerActivator" value="Send">Create</button>
-          </div>
-        </form>
-      </div>
+      </form>
+    </div>
 
-      <div id="obtainedItem" class=""></div>
-      <img id="catchGif" class="" src="./Fishing/catch.gif"/>
+    <div id="obtainedItem" class=""></div>
+    <img id="catchGif" class="" src="./Fishing/catch.gif"/>
 
-      <div id="fishingMinigame">
-        <div id="fishingBar"></div>
-        <div id="fishingBarHit" class=""></div>
-      </div>
+    <div id="fishingMinigame">
+      <div id="fishingBar"></div>
+      <div id="fishingBarHit" class=""></div>
+    </div>
 
       <div class="levelUpParent">
           <img src="./Textures/levelUpFishing.gif" class="levelUp" />
@@ -307,115 +310,115 @@
       <div id="overlay">
         
 
-        <div class="container">
-          <div class="char-img"></div>
+      <div class="container">
+        <div class="char-img"></div>
+        <div>
+          <div class="name-wrap">
+            <span class="char-name"></span>
+          </div>
+          <div class="text-wrap">
+            <p class="text-block"></p>
+          </div>
+        </div>
+      </div>
+
+      <div id="exploreMap">
+        <img class="exploreMapImage" src="./beachMap.png"></img>
+        <div class="exploreMapIsland1 pointerActivator"></div>
+      </div>
+
+      <div id="exploreMinigameBeach">
+        
+        <img id="progressExploreMinigame" src="./exploreMinigame/exploreProgress.gif" />
+        <div id="progressBarExploreMinigame"></div>
+        <img id="boatExploreMinigame" src="./exploreMinigame/boat.gif" />
+        <img id="islandExploreMinigame" src="./exploreMinigame/island.png" />
+        <!-- <img class="rockExploreMinigame" src="./exploreMinigame/rock.png" /> -->
+      </div>
+
+      
+      <div id="cookingContainer">
+        <div id="paddle"></div>  
+        <img class="cookingItem cookingItem1" src="./Textures/itemPlaceholder.png">
+        <!-- <img class="cookingItem cookingItem2" src="./Textures/itemPlaceholder.png"> -->
+        <img class="cookingItem cookingItem3" src="./Textures/itemPlaceholder.png">
+        <div id="cookingBarParent"><div id="cookingBarChild"></div></div>
+        <div id="cookingPotMin"></div>
+        <div id="cookingFrame"></div>
+      </div>
+
+      <div id="craftingContainer">
+        <div id="progressCraft">
+          <div id="progressCraftChild">
+          </div>
+        </div>
+        
+        <div id="failedCraft">
+          <div id="failedCraftchild">
+          </div>
+        </div>
+        <div id="craftingFrame"></div>
+        <img id="craftingItem1" class="craftingItem" src="./Textures/itemPlaceholder.png" alt="Image 1">
+        <img id="craftingItem2" class="craftingItem" src="./Textures/itemPlaceholder.png" alt="Image 2">
+  
+      
+      <div id="centerCraft">
+        
+      </div>
+      
+    </div>
+
+      <div id="rewardFrame">
+        <img src="./exploreMinigame/chestOpen.png" class="rewardChest pointerActivator" />
+      </div>
+
+    </div>
+
+    <div class="shop">
+      <img src="./typography/shopTitle.png" class="shopTitle" />
+      <div class="shopItems">
+        <img src="./cardsShop/shopStick.png" class="cardShop pointerActivator shopItem1" />
+        <img src="./cardsShop/shopMelrodSeed.png" class="cardShop pointerActivator shopItem4" />
+        <img src="./cardsShop/shopBaseCape.png" class="cardShop pointerActivator shopItem2" />
+        <img src="./cardsShop/shopFishermanLocked.png" class="cardShop pointerActivator shopItem3" />
+      </div>
+      <div class="shopItems">
+        <img src="./cardsShop/questSlimyProblem1.png" class="cardShop pointerActivator shopItem5" />
+      </div>
+    </div>
+
+    <div class="glitchOverlay"></div>
+    <div class="liquidOverlay"></div>
+
+    <div class="questInfo">
+      <div>
+        <div class="questHeader">
+          <h1 class="questTitle"></h1>
+          <h1 class="questClose pointerActivator"></h1>
+        </div>
+        <div class="questDescription"></div>
+      </div>
+
+      <div>
+        <p class="questEndTitle">Reward & Progress</p>
+        <div class="questEnd">
+
           <div>
-            <div class="name-wrap">
-              <span class="char-name"></span>
+            <div class="questRewardItem">
+              <img class="questEndItem" src=""/>
             </div>
-            <div class="text-wrap">
-              <p class="text-block"></p>
-            </div>
+            <p class="questReward"></p>
           </div>
-        </div>
 
-        <div id="exploreMap">
-          <img class="exploreMapImage" src="./beachMap.png"></img>
-          <div class="exploreMapIsland1 pointerActivator"></div>
-        </div>
-
-        <div id="exploreMinigameBeach">
-          
-          <img id="progressExploreMinigame" src="./exploreMinigame/exploreProgress.gif" />
-          <div id="progressBarExploreMinigame"></div>
-          <img id="boatExploreMinigame" src="./exploreMinigame/boat.gif" />
-          <img id="islandExploreMinigame" src="./exploreMinigame/island.png" />
-          <!-- <img class="rockExploreMinigame" src="./exploreMinigame/rock.png" /> -->
-        </div>
-
-        
-        <div id="cookingContainer">
-          <div id="paddle"></div>  
-          <img class="cookingItem cookingItem1" src="./Textures/itemPlaceholder.png">
-          <!-- <img class="cookingItem cookingItem2" src="./Textures/itemPlaceholder.png"> -->
-          <img class="cookingItem cookingItem3" src="./Textures/itemPlaceholder.png">
-          <div id="cookingBarParent"><div id="cookingBarChild"></div></div>
-          <div id="cookingPotMin"></div>
-          <div id="cookingFrame"></div>
-        </div>
-
-        <div id="craftingContainer">
-          <div id="progressCraft">
-            <div id="progressCraftChild">
+          <div>
+            <div class="questProgress">
+              <div class="questProgressChild"></div>
             </div>
-          </div>
-          
-          <div id="failedCraft">
-            <div id="failedCraftchild">
-            </div>
-          </div>
-          <div id="craftingFrame"></div>
-          <img id="craftingItem1" class="craftingItem" src="./Textures/itemPlaceholder.png" alt="Image 1">
-          <img id="craftingItem2" class="craftingItem" src="./Textures/itemPlaceholder.png" alt="Image 2">
-    
-        
-        <div id="centerCraft">
-          
-        </div>
-        
-      </div>
-
-        <div id="rewardFrame">
-          <img src="./exploreMinigame/chestOpen.png" class="rewardChest pointerActivator" />
-        </div>
-
-      </div>
-
-      <div class="shop">
-        <img src="./typography/shopTitle.png" class="shopTitle" />
-        <div class="shopItems">
-          <img src="./cardsShop/shopStick.png" class="cardShop pointerActivator shopItem1" />
-          <img src="./cardsShop/shopMelrodSeed.png" class="cardShop pointerActivator shopItem4" />
-          <img src="./cardsShop/shopBaseCape.png" class="cardShop pointerActivator shopItem2" />
-          <img src="./cardsShop/shopFishermanLocked.png" class="cardShop pointerActivator shopItem3" />
-        </div>
-        <div class="shopItems">
-          <img src="./cardsShop/questSlimyProblem1.png" class="cardShop pointerActivator shopItem5" />
-        </div>
-      </div>
-
-      <div class="glitchOverlay"></div>
-      <div class="liquidOverlay"></div>
-
-      <div class="questInfo">
-        <div>
-          <div class="questHeader">
-            <h1 class="questTitle"></h1>
-            <h1 class="questClose pointerActivator"></h1>
-          </div>
-          <div class="questDescription"></div>
-        </div>
-
-        <div>
-          <p class="questEndTitle">Reward & Progress</p>
-          <div class="questEnd">
-
-            <div>
-              <div class="questRewardItem">
-                <img class="questEndItem" src=""/>
-              </div>
-              <p class="questReward"></p>
-            </div>
-
-            <div>
-              <div class="questProgress">
-                <div class="questProgressChild"></div>
-              </div>
-              <p class="questProgressItems"></p>
-            </div>
+            <p class="questProgressItems"></p>
           </div>
         </div>
       </div>
+    </div>
 
       
 

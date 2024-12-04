@@ -1147,6 +1147,36 @@ body {
     animation: obtained 3s ease;
 }
 
+#scores {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    height: 500px;
+    background-color: #462c2d;
+    display: none;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    padding: 30px;
+}
+
+.score-item {
+    color: #9b9b9b;
+    font-size: 30px;
+    font-weight: 300;
+    align-self: flex-start;
+}
+
+#scoresTitle {
+    font-size: 50px;
+    color: white;
+    font-weight: 300;
+    text-decoration: underline;
+}
+
 @keyframes obtained {
     0% {
         height: 0;
@@ -1177,8 +1207,8 @@ body {
 #fishingMinigame {
     position: absolute;
     top: 50%;
-    left: 55vw;
-    transform: translate(-50%, 0%);
+    left: 75vw;
+    transform: translate(-50%, 0%) rotate(-90deg);
 
     width: 350px;
     background-color: transparent;
@@ -1190,14 +1220,15 @@ body {
   }
   
   #fishingBar {
-    width: 120px;
+    width: 150px;
     margin-left: -50%;
-    height: 120px;
-    background: url("./Fishing/fishShadow.png");
+    height: 150px;
+    background: url("./Fishing/fishShadowGif.gif");
     background-repeat: no-repeat;
     background-size: cover;
     border-radius: 50%;
     opacity: .5;
+    transform: rotate(90deg);
   }
 
   #fishingBarHit {
@@ -1208,6 +1239,7 @@ body {
     width: 140px;
     height: 140px;
     background: url("./Fishing/fishBuoy.gif");
+    transform: rotate(90deg);
     background-repeat: no-repeat;
     background-size: cover;
     border-radius: 5px;

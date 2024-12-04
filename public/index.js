@@ -1,7 +1,7 @@
 //Change this to push >
 
-const socket = io(`ws://localhost:5000`);
-// const socket = io(`https://arcanyGame.up.railway.app/`);
+// const socket = io(`ws://localhost:5000`);
+const socket = io(`https://arcanyGame.up.railway.app/`);
 
 //Change this to push <
 
@@ -159,11 +159,11 @@ audioClick.loop = false;
 
 const oilFry = new Audio("./audios/oilFry.wav");
 oilFry.loop = true;
-oilFry.volume = 0.3;
+oilFry.volume = 0.0;
 
 const cookingSong = new Audio("./audios/cookingSong.mp3");
 cookingSong.loop = true;
-cookingSong.volume = 0.3;
+cookingSong.volume = 0.0;
 
 const movezone = new Audio("./audios/movezone.wav");
 movezone.loop = false;
@@ -443,6 +443,7 @@ const liquidTransition = document.getElementById('liquidTransition');
 const placeDialog = document.getElementById('placeDialog');
 
 const exploreMap = document.getElementById("exploreMap");
+const scores = document.getElementById("scores");
 const uiTop = document.getElementById("uiTop");
 const playerHeartParent = document.getElementById("playerHeartParent");
 const playerHeart = document.getElementById("playerHeart");
@@ -508,6 +509,10 @@ let uiQuestOpen = false;
 let uiBooksOpen = false;
 
 function openIvn () {
+  const OpenMenuAudio = new Audio("./audios/OpenMenu.wav");
+  OpenMenuAudio.loop = false;
+  OpenMenuAudio.play()
+
   if (uiIsClose){
     menuUi.style.right = "0";
     uiButtonParent.style.right = "44vh";
@@ -539,6 +544,13 @@ function openIvn () {
    }
 }
 
+function playPaperSound() {
+  const unfoldPaperAudio = new Audio("./audios/unfoldPaper.wav");
+  unfoldPaperAudio.loop = false;
+  unfoldPaperAudio.play()
+
+}
+
 menuUiButtonOpener.addEventListener("click", function(){
   openIvn()
 });
@@ -550,6 +562,7 @@ menuUiButtonProfile.addEventListener("click", function(){
     uiSoulCollectionOpen = false
     uiQuestOpen = false;
     uiBooksOpen = false;
+    playPaperSound()
     
     menuUiProfile.style.display = "flex"
     menuUiInventory.style.display = "none"
@@ -572,6 +585,7 @@ menuUiButtonInventory.addEventListener("click", function(){
     uiSoulCollectionOpen = false
     uiQuestOpen = false;
     uiBooksOpen = false;
+    playPaperSound()
 
     menuUiInventory.style.display = "flex"
     menuUiProfile.style.display = "none"
@@ -594,6 +608,7 @@ menuUiButtonSoulCollection.addEventListener("click", function(){
     uiInventoryOpen = false;
     uiQuestOpen = false;
     uiBooksOpen = false;
+    playPaperSound()
 
     menuUiSoulCollection.style.display = "flex";
     menuUiProfile.style.display = "none";
@@ -617,6 +632,7 @@ menuUiButtonQuest.addEventListener("click", function(){
     uiInventoryOpen = false;
     uiQuestOpen = true;
     uiBooksOpen = false;
+    playPaperSound()
 
     menuUiSoulCollection.style.display = "none";
     menuUiProfile.style.display = "none";
@@ -638,6 +654,7 @@ menuUiButtonBooks.addEventListener("click", function(){
     uiInventoryOpen = false;
     uiQuestOpen = false;
     uiBooksOpen = true;
+    playPaperSound()
 
     menuUiSoulCollection.style.display = "none";
     menuUiProfile.style.display = "none";
@@ -1010,6 +1027,47 @@ chatButton.addEventListener("click", () => {
  showChatFunction()
   
 })
+
+window.addEventListener("keydown", (e) => {
+  if (e.key === "o") {
+    scores.style.display =  scores.style.display === "flex" ? "none" : "flex";
+    socket.emit("getScores", "")
+  }
+})
+
+socket.on("scoresData", (scoresArray) => {
+  // Remove only <p> elements inside the container
+  Array.from(scores.children).forEach(child => {
+    if (child.tagName === "P") {
+      scores.removeChild(child);
+    }
+  });
+
+  const sortedScores = scoresArray
+    .map(score => {
+      const [username, scoreValue] = score.split(": ");
+      // Convert "30:45" into 30.45 while preserving decimals
+      const numericScore = scoreValue.includes(":")
+        ? parseFloat(scoreValue.replace(":", "."))
+        : parseFloat(scoreValue) || 0;
+
+      return { username, score: numericScore };
+    })
+    .sort((a, b) => {
+      // Sort by score, placing 0 scores at the end
+      if (a.score === 0 && b.score !== 0) return 1;
+      if (b.score === 0 && a.score !== 0) return -1;
+      return a.score - b.score;
+    });
+
+  // Append each score as a <p> element with a class
+  sortedScores.forEach(({ username, score }, index) => {
+    const p = document.createElement("p");
+    p.textContent = `${index + 1}. ${username}: ${score}`
+    p.classList.add("score-item"); // Add a class to the <p> element
+    scores.appendChild(p);
+  });
+});
 
 
 
@@ -1792,6 +1850,7 @@ function playerDeath () {
   if (dying) return;
 
   dying = true;
+  challengeActive = false;
 
   // clearInterval(intervalCanvasBase)
   projectilesClient = [];
@@ -2700,8 +2759,10 @@ window.addEventListener("keydown", (e) => {
       }, 50);
     }
 
-    if (e?.key?.toLowerCase() === "i"){
-      openIvn()
+    if (myPlayer) {
+      if (e?.key?.toLowerCase() === "i"){
+        openIvn()
+      }
     }
 
     //Dialog grasslands open >
@@ -3545,8 +3606,8 @@ function startTimer() {
 function resetTimer() {
   if (dying) {return}
   score += timer.textContent
-  console.log(score)
   clearInterval(timerInterval);
+  socket.emit("score", score);
 }
 
 function hideTimer() {
@@ -3556,21 +3617,6 @@ function hideTimer() {
   seconds = 0;
   timer.textContent = "00:00";
 }
-
-document.addEventListener('keydown', (event) => {
-  if (event.key?.toLowerCase() === 'o') {
-    timer.style.display = "flex";
-    startTimer();
-  }
-});
-
-
-
-document.addEventListener('keydown', (event) => {
-  if (event.key?.toLowerCase() === 'p') {
-    resetTimer()
-  }
-});
 //Timer >
 
 let particles = [];
@@ -21499,6 +21545,7 @@ window.addEventListener("wheel", event => {
 // Map functions >
 const smoothPlayers = {};
 let bossFight = false;
+let challengeActive = false;
 let currentHue = 0;
 let currentLuminosity = 0;
 
@@ -21727,7 +21774,7 @@ function drawColliders (type, x, y, w, h) {
         else if (wall.type === "transition") {
           currentSelectedMap = wall.destination
 
-          if (!bossFight) transition(wall.format)
+          if (!challengeActive) transition(wall.format)
           
         }
         else if (wall.type === "dialog") {
@@ -22637,6 +22684,8 @@ function drawMap(layer) {
 function activateNormalEnemy (enemy) {
   if (enemy.isBoss) return
 
+  challengeActive = true;
+
   let activateInterval = setInterval(() => {
     enemy.framesTimer--
         
@@ -22808,17 +22857,21 @@ function checkEnemyCombat (enemy) {
       fightMusic1.pause();
       fightMusic1.currentTime = 0;
       bossFight = false;
-      resetTimer()
-      socket.emit("giveItem", "chestKey");
-      areaNameDisplay("Trial Completed");
-      challengeCompleted.play();
-      setTimeout(() => {
-        let playerPosition =  mapsInfo.mushroomForest.playerPos;
-        mapsInfo.mushroomForest = _.cloneDeep(originalMapsInfo.mushroomForest);
-        mapsInfo.mushroomForest.playerPos = playerPosition;
-        hideTimer()
-      }, 2000);
-      mapsInfo[currentSelectedMap].areaSounds();
+
+      if (enemy.isBoss) {
+        resetTimer()
+        socket.emit("giveItem", "chestKey");
+        areaNameDisplay("Trial Completed");
+        challengeCompleted.play();
+        challengeActive = false;
+        setTimeout(() => {
+          let playerPosition =  mapsInfo.mushroomForest.playerPos;
+          mapsInfo.mushroomForest = _.cloneDeep(originalMapsInfo.mushroomForest);
+          mapsInfo.mushroomForest.playerPos = playerPosition;
+          hideTimer()
+        }, 2000);
+        mapsInfo[currentSelectedMap].areaSounds();
+      }
     }
     
     setTimeout(() => {
@@ -22881,6 +22934,7 @@ function checkEnemyCombat (enemy) {
       projectile.enemy &&
       localPlayerDamaged === 0
       && !dashing
+      && !dying
     ) {
 
       localPlayerDamageAngle = projectile.angle || projectile.bullet1 || projectile.bullet2;
