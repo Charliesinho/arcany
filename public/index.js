@@ -1,7 +1,7 @@
 //Change this to push >
 
-// const socket = io(`ws://localhost:5000`);
-const socket = io(`https://arcanyGame.up.railway.app/`);
+const socket = io(`ws://localhost:5000`);
+// const socket = io(`https://arcanyGame.up.railway.app/`);
 
 //Change this to push <
 
@@ -59,41 +59,41 @@ mushroomForestFront.src = "./islands/mushroomFront.png"
 
 //PLAYER-SKINS <
 
-const humanSkin = new Image();
+var humanSkin = new Image();
 humanSkin.src = "./skins/humanSkin.png";
 
-const frogSkin = new Image();
+var frogSkin = new Image();
 frogSkin.src = "./skins/frogSkin.png";
 
-const ghostSkin = new Image();
+var ghostSkin = new Image();
 ghostSkin.src = "./skins/ghostSkin.png";
 
-const reaperSkin = new Image();
+var reaperSkin = new Image();
 reaperSkin.src = "./skins/reaperSkin.png";
 
 //PLAYER-SKINS >
 
 //PLAYER-ARMOR <
-const tropicalHat = new Image();
+var tropicalHat = new Image();
 tropicalHat.src = "./capes/tropicalHat.png";
 
-const skullHelmet = new Image();
+var skullHelmet = new Image();
 skullHelmet.src = "./capes/skullHelmet.png";
 
-const mushroomClothesRed = new Image();
+var mushroomClothesRed = new Image();
 mushroomClothesRed.src = "./capes/mushroomClothesRed.png";
 
-const fishermanClothes = new Image();
+var fishermanClothes = new Image();
 fishermanClothes.src = "./capes/fishermanClothes.png";
 
-const mushroomClothesOrange = new Image();
+var mushroomClothesOrange = new Image();
 mushroomClothesOrange.src = "./capes/mushroomClothesOrange.png";
 
-const reaperClothes = new Image();
+var reaperClothes = new Image();
 reaperClothes.src = "./capes/reaperClothes.png";
 
 
-const transparentCape = new Image();
+var transparentCape = new Image();
 transparentCape.src = "./capes/transparent.png";
 
 //PLAYER-ARMOR >
@@ -487,6 +487,26 @@ const equippedItems = {
 }
 const soulsInventory = {
   soul1: document.querySelector(".soul1"),
+  soul2: document.querySelector(".soul2"),
+  soul3: document.querySelector(".soul3"),
+  soul4: document.querySelector(".soul4"),
+  soul5: document.querySelector(".soul5"),
+  soul6: document.querySelector(".soul6"),
+  soul7: document.querySelector(".soul7"),
+  soul8: document.querySelector(".soul8"),
+  soul9: document.querySelector(".soul9"),
+  soul10: document.querySelector(".soul10"),
+  soul11: document.querySelector(".soul11"),
+  soul12: document.querySelector(".soul12"),
+  soul13: document.querySelector(".soul13"),
+  soul14: document.querySelector(".soul14"),
+  soul15: document.querySelector(".soul15"),
+  soul16: document.querySelector(".soul16"),
+  soul17: document.querySelector(".soul17"),
+  soul18: document.querySelector(".soul18"),
+  soul19: document.querySelector(".soul19"),
+  soul20: document.querySelector(".soul20"),
+  soul21: document.querySelector(".soul21"),
 }
 const artifactInventory = {
   cape1: document.querySelector(".cape1"),
@@ -1462,11 +1482,10 @@ function interactInventory(item, index) {
 
       setTimeout(() => {
         consumeAvailable = true;
-      }, 3000);
+      }, 1000);
 
-      if (item.name === "frog") {
-        socket.emit("consumable", item);
-      }
+      socket.emit("consumable", item);
+      
     }
   } else {
 
@@ -1973,8 +1992,6 @@ function health() {
   }
 }
 
-
-
 function updateQuestUI() {
   // Select the #uiQuest div
   const uiQuestDiv = document.getElementById("uiQuest");
@@ -2048,8 +2065,6 @@ questClose.addEventListener("click", () => {
   const questUi = document.querySelector(".questInfo");
   questUi.style.display = "none";
 })
-
-
 
 socket.on("player", (serverPlayer) => {
 
@@ -2361,15 +2376,12 @@ socket.on("player", (serverPlayer) => {
 
   if (myPlayer.souls.length) {
     for (const soul of myPlayer.souls) {
-      if (soul.name = "frog") {
-        soulsInventory[`soul1`].style.background = `url(${soul.image})`;
-        soulsInventory[`soul1`].style.backgroundSize = 'cover';
-        soulsInventory[`soul1`].addEventListener("mousedown", (e) => {
-          interactInventory(soul);
-          audioEquip.play();
-
-        });
-      }
+      soulsInventory[`soul${myPlayer.souls.indexOf(soul) + 1}`].style.background = `url(${soul.image})`;
+      soulsInventory[`soul${myPlayer.souls.indexOf(soul) + 1}`].style.backgroundSize = 'cover';
+      soulsInventory[`soul${myPlayer.souls.indexOf(soul) + 1}`].addEventListener("mousedown", (e) => {
+        interactInventory(soul);
+        audioEquip.play();
+      });
     }
   }
 
@@ -22280,12 +22292,9 @@ function drawOnlinePlayers (layer) {
 }
 
 function drawPlayerArmor (player) {
-  if (player.armor[0]) {
-    if (player.armor[0].name === "frog") {
-      return frogSkin;
-    } else {
-      return humanSkin;
-    }
+  if (player.armor[0]) {   
+    let name = player.armor[0].name;
+    return window[name];  
   } else {
     return humanSkin;
   }

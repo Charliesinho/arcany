@@ -438,11 +438,10 @@ async function main() {
         
                     myPlayer[socket.id] = player;
 
-                    if (item.name === "frog") {
-                        let arraySoul = [item];
-                        myPlayer[socket.id].armor = arraySoul;
-                        await Player.findOneAndUpdate({socket: socket.id}, {armor:  myPlayer[socket.id].armor}, {new: true});
-                    }
+                    let arraySoul = [item];
+                    myPlayer[socket.id].armor = arraySoul;
+                    await Player.findOneAndUpdate({socket: socket.id}, {armor:  myPlayer[socket.id].armor}, {new: true});
+                    
                 } else if (item.type === "artifact") {
         
                     myPlayer[socket.id] = player;
@@ -972,6 +971,7 @@ async function main() {
                     pushItem(tropicalHat, socket)
                     pushItem(skullHelmet, socket)
                     pushItem(reaperClothes, socket)
+                    await Player.findOneAndUpdate({socket: socket.id}, {souls: [frogSkin, ghostSkin, reaperSkin]}, {new: true});
 
                     // let item = {
                     //     type: "questItem",
@@ -1004,13 +1004,7 @@ async function main() {
                     const loginAttempt = "success";
                     io.to(id).emit('loginAttempt', loginAttempt); 
 
-                    const baseSoul = {
-                        name: "frog",
-                        image: "./inventory/frogSoul.png",
-                        type: "soul",
-                    }
-
-                    await Player.findOneAndUpdate({socket: socket.id}, {souls: [baseSoul]}, {new: true});
+                    // await Player.findOneAndUpdate({socket: socket.id}, {souls: [frogSkin, ghostSkin, reaperSkin]}, {new: true});
                     const playerData = await Player.findOne({username: username}).exec();
 
                     myPlayer[socket.id] = playerData;
@@ -1175,6 +1169,9 @@ async function pushItem(item, socket) {
     myPlayer[socket.id].inventory = player.inventory
 }
 
+
+// ITEMS
+
 const arcaneGem = {
     type: "gem",
     name: "arcaneGem",
@@ -1314,7 +1311,6 @@ const tropicalHat = {
     rarity: "common",
     image: "./inventory/tropicalHatInventory.png",
 };
-
 const skullHelmet = {
     type: "artifact",
     name: "skullHelmet",
@@ -1329,11 +1325,6 @@ const reaperClothes = {
     rarity: "common",
     image: "./inventory/reaperClothesInventory.gif",
 };
-
-
-
-//Level 1
-
 const sardin = {
     type: "fish",
     name: "sardin",
@@ -1341,9 +1332,6 @@ const sardin = {
     rarity: "common",
     image: "./inventory/sarding.png",
 };
-
-//Level 2
-
 const ballo = {
      type: "fish",
      name: "ballo",
@@ -1351,9 +1339,6 @@ const ballo = {
      rarity: "uncommon",
      image: "./inventory/ballo.jpg",
 };
-
-//Level 3
-
 const bass = {
     type: "fish",
     name: "bass",
@@ -1361,9 +1346,6 @@ const bass = {
     rarity: "rare",
     image: "./inventory/bass.png",
 };
-
- //Level 5
-
  const octopus = {
     type: "fish",
     name: "octopus",
@@ -1371,3 +1353,21 @@ const bass = {
     rarity: "rare",
     image: "./inventory/octopus.png",
 };
+
+// SOULS
+
+const frogSkin = {
+    name: "frogSkin",
+    image: "./inventory/frogSoul.png",
+    type: "soul",
+}
+const ghostSkin = {
+    name: "ghostSkin",
+    image: "./inventory/frogSoul.png",
+    type: "soul",
+}
+const reaperSkin = {
+    name: "reaperSkin",
+    image: "./inventory/frogSoul.png",
+    type: "soul",
+}
