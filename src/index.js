@@ -968,9 +968,8 @@ async function main() {
                     
 
                     const loginAttempt = "success";
-                    pushItem(tropicalHat, socket)
-                    pushItem(skullHelmet, socket)
-                    pushItem(reaperClothes, socket)
+                    pushItem(mushroomClothesRed, socket)
+                    pushItem(mushroomClothesOrange, socket)
                     await Player.findOneAndUpdate({socket: socket.id}, {souls: [frogSkin, ghostSkin, reaperSkin]}, {new: true});
 
                     // let item = {
@@ -1290,6 +1289,37 @@ const chestKey = {
     rarity: "rare",
     image: "./inventory/chestKey.png",
 };
+const sardin = {
+    type: "fish",
+    name: "sardin",
+    value: 1,
+    rarity: "common",
+    image: "./inventory/sarding.png",
+};
+const ballo = {
+     type: "fish",
+     name: "ballo",
+     value: 2,
+     rarity: "uncommon",
+     image: "./inventory/ballo.jpg",
+};
+const bass = {
+    type: "fish",
+    name: "bass",
+    value: 3,
+    rarity: "rare",
+    image: "./inventory/bass.png",
+};
+ const octopus = {
+    type: "fish",
+    name: "octopus",
+    value: 4,
+    rarity: "rare",
+    image: "./inventory/octopus.png",
+};
+
+// CLOTHES
+
 const mushroomClothesRed = {
     type: "artifact",
     name: "mushroomClothesRed",
@@ -1324,34 +1354,6 @@ const reaperClothes = {
     value: 20,
     rarity: "common",
     image: "./inventory/reaperClothesInventory.gif",
-};
-const sardin = {
-    type: "fish",
-    name: "sardin",
-    value: 1,
-    rarity: "common",
-    image: "./inventory/sarding.png",
-};
-const ballo = {
-     type: "fish",
-     name: "ballo",
-     value: 2,
-     rarity: "uncommon",
-     image: "./inventory/ballo.jpg",
-};
-const bass = {
-    type: "fish",
-    name: "bass",
-    value: 3,
-    rarity: "rare",
-    image: "./inventory/bass.png",
-};
- const octopus = {
-    type: "fish",
-    name: "octopus",
-    value: 4,
-    rarity: "rare",
-    image: "./inventory/octopus.png",
 };
 
 // SOULS

@@ -1604,8 +1604,6 @@ function interactInventory(item, index) {
           item.maxPower = maxHealth;
           item.index = myPlayer.inventory.indexOf(item);
 
-          console.log(item)
-
           socket.emit("consumable", item);
           
         }
@@ -22385,17 +22383,17 @@ function drawUsernameOnline (player, smoothPlayer) {
 }
 
 function drawUsernameLocal (player) {
-  canvas.drawImage(nameBubbleGreen, playerX - cameraX -40, playerY - cameraY -46, 100,50)
+  canvas.drawImage(nameBubbleGreen, playerX - cameraX -40, playerY - cameraY -66, 100,50)
   canvas.beginPath();
   canvas.font = "bolder 16px Tiny5";
   canvas.textAlign = "center";
   canvas.fillStyle = "black";
-  canvas.fillText(player.username, playerX - cameraX +10, playerY  - cameraY -10);
+  canvas.fillText(player.username, playerX - cameraX +10, playerY  - cameraY -30);
   canvas.beginPath();
   canvas.font = "bolder 12px Tiny5";
   canvas.textAlign = "center";
   canvas.fillStyle = "black";
-  canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)) , playerX - cameraX + 10, playerY  - cameraY - 30.5);
+  canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)) , playerX - cameraX + 10, playerY  - cameraY - 50.5);
 }
 
 function drawUsername () {
