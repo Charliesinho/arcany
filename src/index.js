@@ -418,7 +418,7 @@ async function main() {
         
                     myPlayer[socket.id] = player;
 
-                    if (item.name === "warrior") {
+                    if (item.name === "frog") {
                         let arraySoul = [item];
                         myPlayer[socket.id].armor = arraySoul;
                         await Player.findOneAndUpdate({socket: socket.id}, {armor:  myPlayer[socket.id].armor}, {new: true});
@@ -943,7 +943,9 @@ async function main() {
                     
 
                     const loginAttempt = "success";
-                    pushItem(mushroomClothesRed, socket)
+                    pushItem(tropicalHat, socket)
+                    pushItem(skullHelmet, socket)
+                    pushItem(reaperClothes, socket)
 
                     // let item = {
                     //     type: "questItem",
@@ -977,24 +979,12 @@ async function main() {
                     io.to(id).emit('loginAttempt', loginAttempt); 
 
                     const baseSoul = {
-                        name: "warrior",
-                        image: "./inventory/warriorSoul.png",
+                        name: "frog",
+                        image: "./inventory/frogSoul.png",
                         type: "soul",
                     }
 
-                    const baseCape = {
-                        name: "rags",
-                        image: "./inventory/baseCape.png",
-                        type: "artifact",
-                    }
-
-                    const FishermanCape = {
-                        name: "fisherman",
-                        image: "./inventory/fishermanCape.png",
-                        type: "artifact",
-                    }
                     await Player.findOneAndUpdate({socket: socket.id}, {souls: [baseSoul]}, {new: true});
-                    await Player.findOneAndUpdate({socket: socket.id}, {artifacts: [baseCape, FishermanCape]}, {new: true});
                     const playerData = await Player.findOne({username: username}).exec();
 
                     myPlayer[socket.id] = playerData;
@@ -1250,13 +1240,37 @@ const mushroomClothesRed = {
     rarity: "common",
     image: "./inventory/mushroomClothesRedInventory.png",
 };
+const mushroomClothesOrange = {
+    type: "artifact",
+    name: "mushroomClothesOrange",
+    value: 20,
+    rarity: "common",
+    image: "./inventory/mushroomClothesOrangeInventory.png",
+};
 const tropicalHat = {
     type: "artifact",
     name: "tropicalHat",
     value: 20,
     rarity: "common",
-    image: "./inventory/tropicalHat.png",
+    image: "./inventory/tropicalHatInventory.png",
 };
+
+const skullHelmet = {
+    type: "artifact",
+    name: "skullHelmet",
+    value: 20,
+    rarity: "common",
+    image: "./inventory/skullHelmetInventory.png",
+};
+const reaperClothes = {
+    type: "artifact",
+    name: "reaperClothes",
+    value: 20,
+    rarity: "common",
+    image: "./inventory/reaperClothesInventory.gif",
+};
+
+
 
 //Level 1
 
