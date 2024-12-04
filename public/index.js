@@ -20477,7 +20477,7 @@ function drawMap(layer) {
     currentLuminosity = Math.max(currentLuminosity - changeSpeed, targetLuminosity);
   }
 
-  canvas.filter = `hue-rotate(${currentHue}deg) brightness(${100 + currentLuminosity}%)`;
+  canvas.filter = `hue-rotate(${currentHue}deg) brightness(${100 + currentLuminosity}%) saturate(85%)`;
 
   if (layer === "back") {
     canvas.drawImage(mapsInfo[currentLand].backgroundImage, cameraShakeX - cameraX, cameraShakeY - cameraY, 4500, 4500);
