@@ -968,14 +968,14 @@ async function main() {
                     
 
                     const loginAttempt = "success";
-                    //pushItem(mushroomClothesRed, socket)
-                    //pushItem(mushroomClothesOrange, socket)
-                    //pushItem(reaperClothes, socket)
-                    //pushItem(blackVampiresClothes, socket)
-                    //pushItem(fishermanClothes, socket)
-                    //pushItem(tropicalHat, socket)
-                    //zdzpushItem(romanHelmet, socket)
-                    //pushItem(skullHelmet, socket)
+                    // await pushItem(mushroomClothesRed, socket)
+                    // await pushItem(mushroomClothesOrange, socket)
+                    // await pushItem(reaperClothes, socket)
+                    // await pushItem(blackVampiresClothes, socket)
+                    // await pushItem(fishermanClothes, socket)
+                    // await pushItem(tropicalHat, socket)
+                    // await pushItem(romanHelmet, socket)
+                    // await pushItem(arcaneRepeater, socket)
 
                     await Player.findOneAndUpdate({socket: socket.id}, {souls: [frogSkin, ghostSkin, reaperSkin, vampiresSkin, redDemon, pinkDemon, arcanyDemon]}, {new: true});
 
@@ -1098,11 +1098,21 @@ async function main() {
         
         socket.on("score", (score) => {  
             async function updateScore() {
-                const player = players.find(player => player.id === socket.id) 
-                player.scores[0].mushroomTrial = score;   
-                console.log(score, player.scores) 
-                await Player.findOneAndUpdate({socket: socket.id}, {scores: player.scores}, {new: true});
-                myPlayer[socket.id] = player;             
+                const player = await Player.findOne({socket: socket.id}).exec();
+                const numericScorePlayer = score.includes(":")
+                ? parseFloat(score.replace(":", "."))
+                : parseFloat(scoreValue) || 0;
+                const numericScoreOnline = player.scores[0].mushroomTrial.includes(":")
+                ? parseFloat(player.scores[0].mushroomTrial.replace(":", "."))
+                : parseFloat(scoreValue) || 0;
+
+                console.log(numericScoreOnline, numericScorePlayer) 
+
+                if (numericScoreOnline > numericScorePlayer) {
+                    player.scores[0].mushroomTrial = score;   
+                    await Player.findOneAndUpdate({socket: socket.id}, {scores: player.scores}, {new: true});
+                    myPlayer[socket.id] = player;             
+                }
             }
             updateScore()
         });

@@ -195,6 +195,9 @@ bulletStickBlue.src = "bulletStickBlue.png";
 const chatBubble = new Image();
 chatBubble.src = "chatBubble.png";
 
+const chatBubbleBigger = new Image();
+chatBubbleBigger.src = "chatBubbleBigger.png";
+
 const nameBubbleGreen = new Image();
 nameBubbleGreen.src = "./nameTags/nameTaglvl1.png";
 
@@ -1992,6 +1995,7 @@ respawn.addEventListener("click", () => {
     currentSelectedMap = "lobby"
     let functionName = currentSelectedMap + "Loop";
     changeMap(functionName)
+    socket.emit("changeRoom", currentSelectedMap);
     dying = false;
   }, 200);
 })
@@ -2978,11 +2982,11 @@ window.addEventListener("keydown", (e) => {
 
   //Chest island open <
 
-  if (e.key === "o") {
-    mapsInfo[currentLand].enemies?.forEach(enemy => {
-      activateNormalEnemy(enemy);
-    })
-  }
+  // if (e.key === "o") {
+  //   mapsInfo[currentLand].enemies?.forEach(enemy => {
+  //     activateNormalEnemy(enemy);
+  //   })
+  // }
 
 });
 
@@ -3110,6 +3114,7 @@ function shootArcaneRepeater () {
 }
 
 canvasLobby.addEventListener("mousedown", (e) => {
+  clearInterval(shootInterval)
   mouseLeftPressed = true;
     if (shootingBlock === false) {
       if (myPlayer.weapon[0]) {
@@ -24217,7 +24222,7 @@ function cameraFollow () {
   }
 }
 
-window.addEventListener("wheel", event => {
+canvasLobby.addEventListener("wheel", event => {
   const delta = Math.sign(event.deltaY);
 
   if (delta === 1 && canvasLobby.height < 1000) {
@@ -24609,7 +24614,7 @@ function drawLocalPlayer () {
     if (player.username === myPlayer.username && player.room === myPlayer.room) {
       let armor = drawPlayerArmor(player);
       let artifact = drawPlayerArtifact(player);
-      console.log(playerWidth, playerHeight)
+      // console.log(playerWidth, playerHeight)
       if (animPlayer === "idleRight" && player.lastLooked === "right") {
       frameCurrentPlayer = frameCurrentPlayer % 6;
   
@@ -25097,15 +25102,23 @@ function drawUsername () {
 }
 
 function drawChat () {
+  function drawChatBubble (img, player, x, xd, y, yd, w, h, cx, cy ) {
+    canvas.drawImage(img, x + xd, y + yd, w , h)
+    canvas.beginPath();
+    canvas.font = "bolder 16px Tiny5";
+    canvas.textAlign = "center";
+    canvas.fillStyle = "black";
+    canvas.fillText(player.chatMessage, x +cx, y -cy);
+  }
   for (const player of players) {
     if (player.room === myPlayer.room && player.username === myPlayer.username) {
       if (player.chatMessage !== "none") {
-        canvas.drawImage(chatBubble, playerX - cameraX -90, playerY - cameraY -115, 200, 60)
-        canvas.beginPath();
-        canvas.font = "bolder 16px Tiny5";
-        canvas.textAlign = "center";
-        canvas.fillStyle = "black";
-        canvas.fillText(player.chatMessage, playerX - cameraX +15, playerY - cameraY -90);
+        console.log(player.chatMessage.length)
+        if (player.chatMessage.length > 20) {
+          drawChatBubble(chatBubbleBigger, player, playerX - cameraX, -190, playerY - cameraY, -115, 400, 60, 5, 90 )
+        } else {
+          drawChatBubble(chatBubble, player, playerX - cameraX, -90, playerY - cameraY, -115, 200, 60, 15, 90 )
+        }
       }
     }
     else if (player.room === myPlayer.room) {
