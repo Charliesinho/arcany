@@ -20034,7 +20034,7 @@ let originalMapsInfo = {
       {
         "type": "transition",
         "format": "liquid",
-        "destination": "mushroomForestArcane",
+        "destination": "mushroomForest",
         "x": 2606.5,
         "y": 1728.5,
         "width": 407,
@@ -20271,6 +20271,24 @@ let originalMapsInfo = {
         "y": 2193,
         "width": 202,
         "height": 75,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "transition",
+        "format": "liquid",
+        "destination": "cemeteryPath",
+        "x": 61,
+        "y": 1729.5,
+        "width": 426,
+        "height": 746,
+        "color": "rgb(204, 0, 204, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -17,
+        "y": 1822.5,
+        "width": 199,
+        "height": 111,
         "color": "rgb(0, 0, 0, 0)"
       }
     ],
@@ -21452,6 +21470,87 @@ let originalMapsInfo = {
         active: false,
       },
     ]
+  },
+
+  cemeteryPath: {
+    areaName: "RESTFIELD FOREST",
+    areaSounds: grassLandsSoundtrack,
+    backgroundImage: cemeteryPath,
+    foregroundImage: cemeteryPathFront,
+    
+    playerPos: {
+      x: 3900,
+      y: 3850,
+    },
+    colliders: [ {
+      "type": "transition",
+      "format": "liquid",
+      "destination": "slimeForestPath",
+      "x": 3916,
+      "y": 3559,
+      "width": 272,
+      "height": 527,
+      "color": "rgb(204, 0, 204, 0)"
+    },
+    {
+      "type": "transition",
+      "format": "liquid",
+      "destination": "restFiledTown",
+      "x": 729,
+      "y": -275,
+      "width": 456,
+      "height": 249,
+      "color": "rgb(204, 0, 204, 0)"
+    }
+  ],
+    enemies: []
+  },
+
+  resfiledTownCemetery: {
+    areaName: "RESTFIELD CEMETERY",
+    areaSounds: grassLandsSoundtrack,
+    backgroundImage: resfiledTownCemetery,
+    foregroundImage: resfiledTownCemeteryFront,
+    
+    playerPos: {
+      x: 3900,
+      y: 3850,
+    },
+    colliders: [],
+    enemies: []
+  },
+  restFiledTown: {
+    areaName: "RESTFIELD FOREST",
+    areaSounds: grassLandsSoundtrack,
+    backgroundImage: restFiledTown,
+    foregroundImage: restFiledTownFront,
+    
+    playerPos: {
+      x: 2155,
+      y: 3888,
+    },
+    colliders: [
+      {
+      "type": "transition",
+      "format": "liquid",
+      "destination": "cemeteryPath",
+      "x": 1830,
+      "y": 3976,
+      "width": 364,
+      "height": 144,
+      "color": "rgb(204, 0, 204, 0)"
+    },
+    {
+      "type": "transition",
+      "format": "liquid",
+      "destination": "resfiledTownCemetery",
+      "x": -111,
+      "y": 2080.5,
+      "width": 235,
+      "height": 228,
+      "color": "rgb(204, 0, 204, 0)"
+    }],
+    enemies: []
   },
 
 // ARCANE ISLAND
