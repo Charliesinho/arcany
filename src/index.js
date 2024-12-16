@@ -968,9 +968,16 @@ async function main() {
                     
 
                     const loginAttempt = "success";
-                    pushItem(mushroomClothesRed, socket)
-                    pushItem(mushroomClothesOrange, socket)
-                    await Player.findOneAndUpdate({socket: socket.id}, {souls: [frogSkin, ghostSkin, reaperSkin]}, {new: true});
+                    //pushItem(mushroomClothesRed, socket)
+                    //pushItem(mushroomClothesOrange, socket)
+                    //pushItem(reaperClothes, socket)
+                    //pushItem(blackVampiresClothes, socket)
+                    //pushItem(fishermanClothes, socket)
+                    //pushItem(tropicalHat, socket)
+                    //zdzpushItem(romanHelmet, socket)
+                    //pushItem(skullHelmet, socket)
+
+                    await Player.findOneAndUpdate({socket: socket.id}, {souls: [frogSkin, ghostSkin, reaperSkin, vampiresSkin, redDemon, pinkDemon, arcanyDemon]}, {new: true});
 
                     // let item = {
                     //     type: "questItem",
@@ -1325,51 +1332,92 @@ const mushroomClothesRed = {
     name: "mushroomClothesRed",
     value: 20,
     rarity: "common",
-    image: "./inventory/mushroomClothesRedInventory.png",
+    image: "./inventory/clothesInventory/redMushroomlInventory.png",
 };
 const mushroomClothesOrange = {
     type: "artifact",
     name: "mushroomClothesOrange",
     value: 20,
     rarity: "common",
-    image: "./inventory/mushroomClothesOrangeInventory.png",
+    image: "./inventory/clothesInventory/rorangeMushroomlInventory.png",
 };
 const tropicalHat = {
     type: "artifact",
     name: "tropicalHat",
     value: 20,
     rarity: "common",
-    image: "./inventory/tropicalHatInventory.png",
+    image: "./inventory/clothesInventory/tropicalHatInventory.png",
 };
 const skullHelmet = {
     type: "artifact",
     name: "skullHelmet",
     value: 20,
     rarity: "common",
-    image: "./inventory/skullHelmetInventory.png",
+    image: "./inventory/clothesInventory/skullInventory.png",
 };
 const reaperClothes = {
     type: "artifact",
     name: "reaperClothes",
     value: 20,
     rarity: "common",
-    image: "./inventory/reaperClothesInventory.gif",
+    image: "./inventory/clothesInventory/reaperInventory.png",
+};
+const blackVampiresClothes = {
+    type: "artifact",
+    name: "blackVampiresClothes",
+    value: 20,
+    rarity: "common",
+    image: "./inventory/clothesInventory/vampiresInventory.png",
+};
+const fishermanClothes = {
+    type: "artifact",
+    name: "fishermanClothes",
+    value: 20,
+    rarity: "common",
+    image: "./inventory/clothesInventory/fishrmanInventory.png",
+};
+const romanHelmet = {
+    type: "artifact",
+    name: "romanHelmet",
+    value: 20,
+    rarity: "common",
+    image: "./inventory/clothesInventory/romanHelmetInventory.png",
 };
 
 // SOULS
 
 const frogSkin = {
     name: "frogSkin",
-    image: "./inventory/frogSoul.png",
+    image: "./inventory/soulInventory/frogSoulInventory.png",
     type: "soul",
 }
 const ghostSkin = {
     name: "ghostSkin",
-    image: "./inventory/frogSoul.png",
+    image: "./inventory/soulInventory/ghostSoulInventory.png",
     type: "soul",
 }
 const reaperSkin = {
     name: "reaperSkin",
-    image: "./inventory/frogSoul.png",
+    image: "./inventory/soulInventory/reaperSoulInventory.png",
+    type: "soul",
+}
+const arcanyDemon = {
+    name: "arcanyDemon",
+    image: "./inventory/soulInventory/arcanyDemonSoulInventory.png",
+    type: "soul",
+}
+const pinkDemon = {
+    name: "pinkDemon",
+    image: "./inventory/soulInventory/pinkDemonSoulInventory.png",
+    type: "soul",
+}
+const redDemon = {
+    name: "redDemon",
+    image: "./inventory/soulInventory/redDemonSoulInventory.png",
+    type: "soul",
+}
+const vampiresSkin = {
+    name: "vampiresSkin",
+    image: "./inventory/soulInventory/vampiresSoulInventory.png",
     type: "soul",
 }

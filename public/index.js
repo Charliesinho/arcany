@@ -66,6 +66,24 @@ mushroomForestArcane.src = "./islands/arcanyMaps/mushroomArcany/mushroomArcane.p
 const mushroomForestArcaneFront = new Image();
 mushroomForestArcaneFront.src = "./islands/arcanyMaps/mushroomArcany/mushroomFrontArcane.png"
 
+const cemeteryPath = new Image();
+cemeteryPath.src = "./islands/cemeteryPath.png"
+
+const cemeteryPathFront = new Image();
+cemeteryPathFront.src = "./islands/cemeteryPathFront.png"
+
+const restFiledTown = new Image();
+restFiledTown.src = "./islands/restFiledTown.png"
+
+const restFiledTownFront = new Image();
+restFiledTownFront.src = "./islands/restFiledTownFront.png"
+
+const resfiledTownCemetery = new Image();
+resfiledTownCemetery.src = "./islands/resfiledTownCemetery.png"
+
+const resfiledTownCemeteryFront = new Image();
+resfiledTownCemeteryFront.src = "./islands/resfiledTownCemeteryFront.png"
+
 
 
 
@@ -82,6 +100,18 @@ ghostSkin.src = "./skins/ghostSkin.png";
 
 var reaperSkin = new Image();
 reaperSkin.src = "./skins/reaperSkin.png";
+
+var arcanyDemon = new Image();
+arcanyDemon.src = "./skins/arcanyDemon.png";
+
+var pinkDemon = new Image();
+pinkDemon.src = "./skins/pinkDemon.png";
+
+var redDemon = new Image();
+redDemon.src = "./skins/redDemon.png";
+
+var vampiresSkin = new Image();
+vampiresSkin.src = "./skins/vampiresSkin.png";
 
 //PLAYER-SKINS >
 
@@ -103,6 +133,12 @@ mushroomClothesOrange.src = "./capes/mushroomClothesOrange.png";
 
 var reaperClothes = new Image();
 reaperClothes.src = "./capes/reaperClothes.png";
+
+var blackVampiresClothes = new Image();
+blackVampiresClothes.src = "./capes/blackVampiresClothes.png";
+
+var romanHelmet = new Image();
+romanHelmet.src = "./capes/romanHelmet.png";
 
 
 var transparentCape = new Image();
@@ -2402,22 +2438,11 @@ socket.on("player", (serverPlayer) => {
 
         if (item.name === "frog") {
           uiSkinsImg.src = "./ui/uiSkins/uiFrogSkin.png";
-          // mountainsUi.style.background = "url(\"./soulsEnviroments/mountains.png\")"
-          // mountainsUi.style.filter = "blur(2px)";
-          // mountainsUi.style.backgroundPosition = "center";
-          // menuUiProfile.style.background = "linear-gradient(hsl(184, 100%, 87%) 0%, rgb(209, 175, 147) 100%)";
-          // circleCharacter.style.background = ""
         }
-      }
-    } else {
-      uiSkinsImg.src = "./ui/uiSkins/uiHumanSkin.png"
-      // mountainsUi.style.background = "url(\"./soulsEnviroments/desert.png\")"
-      // mountainsUi.style.filter = "blur(2px) saturate(.3)";
-      // mountainsUi.style.backgroundPosition = "bottom";
-      // mountainsUi.style.backgroundRepeat = "no-repeat";
-      // menuUiProfile.style.background = "linear-gradient(hsl(0, 0%, 100%) 0%, rgb(154, 126, 109) 100%)";
-      // circleCharacter.style.background = "linear-gradient(rgb(255, 111, 111) 0%, #ff1515 100%)";
-    }
+        }
+        } else {
+        uiSkinsImg.src = "./ui/uiSkins/uiHumanSkin.png"
+        }
 
 
   if (myPlayer.armor.length) {
@@ -9132,13 +9157,21 @@ let mapsInfo = {
     },
     colliders: [
       {
+        "type": "wall",
+        "x": 2054,
+        "y": 1513.5,
+        "width": 75,
+        "height": 87,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
         "type": "transition",
         "format": "liquid",
         "destination": "islandOne",
-        "x": 1289.5,
-        "y": 1320.5,
-        "width": 873,
-        "height": 125,
+        "x": 1334,
+        "y": 1175.5,
+        "width": 820,
+        "height": 360,
         "color": "rgb(204, 0, 204, 0)"
       },
       {
@@ -9937,42 +9970,10 @@ let mapsInfo = {
       },
       {
         "type": "wall",
-        "x": 1161,
-        "y": 1752.5,
-        "width": 72,
-        "height": 127,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 996,
-        "y": 1780.5,
-        "width": 74,
-        "height": 140,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 928,
-        "y": 1623.5,
-        "width": 58,
-        "height": 156,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
         "x": 939,
         "y": 1481.5,
         "width": 43,
         "height": 192,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 932,
-        "y": 1741.5,
-        "width": 83,
-        "height": 80,
         "color": "rgb(0, 0, 0, 0)"
       },
       {
@@ -9988,38 +9989,6 @@ let mapsInfo = {
         "x": 1321,
         "y": 1677.5,
         "width": 50,
-        "height": 107,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1350,
-        "y": 1855.5,
-        "width": 58,
-        "height": 119,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1128,
-        "y": 1956.5,
-        "width": 58,
-        "height": 100,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1041,
-        "y": 1900.5,
-        "width": 94,
-        "height": 84,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1280,
-        "y": 2033.5,
-        "width": 64,
         "height": 107,
         "color": "rgb(0, 0, 0, 0)"
       },
@@ -10045,22 +10014,6 @@ let mapsInfo = {
         "y": 2290.5,
         "width": 53,
         "height": 94,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 977,
-        "y": 2249.5,
-        "width": 42,
-        "height": 99,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 991,
-        "y": 1875.5,
-        "width": 30,
-        "height": 417,
         "color": "rgb(0, 0, 0, 0)"
       },
       {
@@ -10164,14 +10117,263 @@ let mapsInfo = {
       {
         "type": "transition",
         "format": "liquid",
-        "destination": "mushroomForestArcane",
+        "destination": "mushroomForest",
         "x": 2606.5,
         "y": 1728.5,
         "width": 407,
         "height": 750,
         "color": "rgb(204, 0, 204, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1086,
+        "y": 1810,
+        "width": 77,
+        "height": 120,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1155,
+        "y": 1780,
+        "width": 73,
+        "height": 99,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1216,
+        "y": 1880,
+        "width": 61,
+        "height": 115,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1289,
+        "y": 1795,
+        "width": 88,
+        "height": 124,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 975,
+        "y": 1773,
+        "width": 58,
+        "height": 125,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1042,
+        "y": 1690,
+        "width": 62,
+        "height": 130,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 852,
+        "y": 1830,
+        "width": 70,
+        "height": 117,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 729,
+        "y": 1789,
+        "width": 91,
+        "height": 118,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 652,
+        "y": 1855,
+        "width": 65,
+        "height": 122,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 547,
+        "y": 1777,
+        "width": 79,
+        "height": 117,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 756,
+        "y": 1550,
+        "width": 66,
+        "height": 106,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 411,
+        "y": 1813,
+        "width": 75,
+        "height": 115,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 259,
+        "y": 1777,
+        "width": 81,
+        "height": 136,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 167,
+        "y": 1838,
+        "width": 89,
+        "height": 140,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 54,
+        "y": 1894,
+        "width": 71,
+        "height": 198,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 70,
+        "y": 2065,
+        "width": 58,
+        "height": 224,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 53,
+        "y": 2277,
+        "width": 146,
+        "height": 104,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 171,
+        "y": 2330,
+        "width": 104,
+        "height": 136,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 283,
+        "y": 2245,
+        "width": 78,
+        "height": 186,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 260,
+        "y": 2364,
+        "width": 84,
+        "height": 48,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 363,
+        "y": 2309,
+        "width": 131,
+        "height": 166,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 433,
+        "y": 2248,
+        "width": 68,
+        "height": 141,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 552,
+        "y": 2165,
+        "width": 56,
+        "height": 98,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 453,
+        "y": 2344,
+        "width": 629,
+        "height": 103,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 620,
+        "y": 2265,
+        "width": 583,
+        "height": 88,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 795.5,
+        "y": 2137,
+        "width": 54,
+        "height": 113,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 930.5,
+        "y": 2109,
+        "width": 47,
+        "height": 97,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1064.5,
+        "y": 2146,
+        "width": 63,
+        "height": 88,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1227.5,
+        "y": 2193,
+        "width": 202,
+        "height": 75,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "transition",
+        "format": "liquid",
+        "destination": "cemeteryPath",
+        "x": 61,
+        "y": 1729.5,
+        "width": 426,
+        "height": 746,
+        "color": "rgb(204, 0, 204, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -17,
+        "y": 1822.5,
+        "width": 199,
+        "height": 111,
+        "color": "rgb(0, 0, 0, 0)"
       }
-    
     ],
     enemies: [],
   },
@@ -10182,8 +10384,8 @@ let mapsInfo = {
     backgroundImage: mushroomForest,
     foregroundImage: mushroomForestFront,
     playerPos: {
-      x: 1935,
-      y: 2750,
+      x: 700,
+      y: 2000,
     },
     colliders: [
       {
@@ -11351,6 +11553,87 @@ let mapsInfo = {
         active: false,
       },
     ]
+  },
+
+  cemeteryPath: {
+    areaName: "RESTFIELD FOREST",
+    areaSounds: grassLandsSoundtrack,
+    backgroundImage: cemeteryPath,
+    foregroundImage: cemeteryPathFront,
+    
+    playerPos: {
+      x: 3900,
+      y: 3850,
+    },
+    colliders: [ {
+      "type": "transition",
+      "format": "liquid",
+      "destination": "slimeForestPath",
+      "x": 3916,
+      "y": 3559,
+      "width": 272,
+      "height": 527,
+      "color": "rgb(204, 0, 204, 0)"
+    },
+    {
+      "type": "transition",
+      "format": "liquid",
+      "destination": "restFiledTown",
+      "x": 729,
+      "y": -275,
+      "width": 456,
+      "height": 249,
+      "color": "rgb(204, 0, 204, 0)"
+    }
+  ],
+    enemies: []
+  },
+
+  resfiledTownCemetery: {
+    areaName: "RESTFIELD CEMETERY",
+    areaSounds: grassLandsSoundtrack,
+    backgroundImage: resfiledTownCemetery,
+    foregroundImage: resfiledTownCemeteryFront,
+    
+    playerPos: {
+      x: 3900,
+      y: 3850,
+    },
+    colliders: [],
+    enemies: []
+  },
+  restFiledTown: {
+    areaName: "RESTFIELD FOREST",
+    areaSounds: grassLandsSoundtrack,
+    backgroundImage: restFiledTown,
+    foregroundImage: restFiledTownFront,
+    
+    playerPos: {
+      x: 2155,
+      y: 3888,
+    },
+    colliders: [
+      {
+      "type": "transition",
+      "format": "liquid",
+      "destination": "cemeteryPath",
+      "x": 1830,
+      "y": 3976,
+      "width": 364,
+      "height": 144,
+      "color": "rgb(204, 0, 204, 0)"
+    },
+    {
+      "type": "transition",
+      "format": "liquid",
+      "destination": "resfiledTownCemetery",
+      "x": -111,
+      "y": 2080.5,
+      "width": 235,
+      "height": 228,
+      "color": "rgb(204, 0, 204, 0)"
+    }],
+    enemies: []
   },
 
 // ARCANE ISLAND
@@ -13445,8 +13728,8 @@ let mapsInfo = {
     backgroundImage: mushroomForestArcane,
     foregroundImage: mushroomForestArcaneFront,
     playerPos: {
-      x: 1935,
-      y: 2750,
+      x: 700,
+      y: 2000,
     },
     colliders: [
       {
@@ -18791,13 +19074,21 @@ let originalMapsInfo = {
     },
     colliders: [
       {
+        "type": "wall",
+        "x": 2054,
+        "y": 1513.5,
+        "width": 75,
+        "height": 87,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
         "type": "transition",
         "format": "liquid",
         "destination": "islandOne",
-        "x": 1289.5,
-        "y": 1320.5,
-        "width": 873,
-        "height": 125,
+        "x": 1334,
+        "y": 1175.5,
+        "width": 820,
+        "height": 360,
         "color": "rgb(204, 0, 204, 0)"
       },
       {
@@ -19596,42 +19887,10 @@ let originalMapsInfo = {
       },
       {
         "type": "wall",
-        "x": 1161,
-        "y": 1752.5,
-        "width": 72,
-        "height": 127,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 996,
-        "y": 1780.5,
-        "width": 74,
-        "height": 140,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 928,
-        "y": 1623.5,
-        "width": 58,
-        "height": 156,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
         "x": 939,
         "y": 1481.5,
         "width": 43,
         "height": 192,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 932,
-        "y": 1741.5,
-        "width": 83,
-        "height": 80,
         "color": "rgb(0, 0, 0, 0)"
       },
       {
@@ -19647,38 +19906,6 @@ let originalMapsInfo = {
         "x": 1321,
         "y": 1677.5,
         "width": 50,
-        "height": 107,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1350,
-        "y": 1855.5,
-        "width": 58,
-        "height": 119,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1128,
-        "y": 1956.5,
-        "width": 58,
-        "height": 100,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1041,
-        "y": 1900.5,
-        "width": 94,
-        "height": 84,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1280,
-        "y": 2033.5,
-        "width": 64,
         "height": 107,
         "color": "rgb(0, 0, 0, 0)"
       },
@@ -19704,22 +19931,6 @@ let originalMapsInfo = {
         "y": 2290.5,
         "width": 53,
         "height": 94,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 977,
-        "y": 2249.5,
-        "width": 42,
-        "height": 99,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 991,
-        "y": 1875.5,
-        "width": 30,
-        "height": 417,
         "color": "rgb(0, 0, 0, 0)"
       },
       {
@@ -19829,8 +20040,239 @@ let originalMapsInfo = {
         "width": 407,
         "height": 750,
         "color": "rgb(204, 0, 204, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1086,
+        "y": 1810,
+        "width": 77,
+        "height": 120,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1155,
+        "y": 1780,
+        "width": 73,
+        "height": 99,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1216,
+        "y": 1880,
+        "width": 61,
+        "height": 115,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1289,
+        "y": 1795,
+        "width": 88,
+        "height": 124,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 975,
+        "y": 1773,
+        "width": 58,
+        "height": 125,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1042,
+        "y": 1690,
+        "width": 62,
+        "height": 130,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 852,
+        "y": 1830,
+        "width": 70,
+        "height": 117,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 729,
+        "y": 1789,
+        "width": 91,
+        "height": 118,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 652,
+        "y": 1855,
+        "width": 65,
+        "height": 122,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 547,
+        "y": 1777,
+        "width": 79,
+        "height": 117,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 756,
+        "y": 1550,
+        "width": 66,
+        "height": 106,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 411,
+        "y": 1813,
+        "width": 75,
+        "height": 115,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 259,
+        "y": 1777,
+        "width": 81,
+        "height": 136,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 167,
+        "y": 1838,
+        "width": 89,
+        "height": 140,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 54,
+        "y": 1894,
+        "width": 71,
+        "height": 198,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 70,
+        "y": 2065,
+        "width": 58,
+        "height": 224,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 53,
+        "y": 2277,
+        "width": 146,
+        "height": 104,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 171,
+        "y": 2330,
+        "width": 104,
+        "height": 136,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 283,
+        "y": 2245,
+        "width": 78,
+        "height": 186,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 260,
+        "y": 2364,
+        "width": 84,
+        "height": 48,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 363,
+        "y": 2309,
+        "width": 131,
+        "height": 166,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 433,
+        "y": 2248,
+        "width": 68,
+        "height": 141,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 552,
+        "y": 2165,
+        "width": 56,
+        "height": 98,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 453,
+        "y": 2344,
+        "width": 629,
+        "height": 103,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 620,
+        "y": 2265,
+        "width": 583,
+        "height": 88,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 795.5,
+        "y": 2137,
+        "width": 54,
+        "height": 113,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 930.5,
+        "y": 2109,
+        "width": 47,
+        "height": 97,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1064.5,
+        "y": 2146,
+        "width": 63,
+        "height": 88,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1227.5,
+        "y": 2193,
+        "width": 202,
+        "height": 75,
+        "color": "rgb(0, 0, 0, 0)"
       }
-    
     ],
     enemies: [],
   },
@@ -19841,8 +20283,8 @@ let originalMapsInfo = {
     backgroundImage: mushroomForest,
     foregroundImage: mushroomForestFront,
     playerPos: {
-      x: 1935,
-      y: 2750,
+      x: 700,
+      y: 2000,
     },
     colliders: [
       {
@@ -23101,13 +23543,24 @@ let originalMapsInfo = {
   mushroomForestArcane: {
     areaName: "MUSHROOM FOREST",
     areaSounds: grassLandsSoundtrack,
-    backgroundImage: slimeForestPathArcane,
-    foregroundImage: slimeForestPathArcaneFront,
+    backgroundImage: mushroomForestArcane,
+    foregroundImage: mushroomForestArcaneFront,
     playerPos: {
-      x: 1935,
-      y: 2750,
+      x: 700,
+      y: 2000,
     },
-    colliders: [],
+    colliders: [
+      {
+        "type": "transition",
+        "format": "liquid",
+        "destination": "slimeForestPathArcane",
+        "x": 68.5,
+        "y": 1555.5,
+        "width": 388,
+        "height": 620,
+        "color": "rgb(204, 0, 204, 0)"
+      }
+    ],
     enemies: [],
   },
 
@@ -24447,6 +24900,13 @@ function drawPlayerArtifact (player) {
     else if (player.artifact[0].name === "skullHelmet") {
       return skullHelmet;
     }
+    else if (player.artifact[0].name === "blackVampiresClothes") {
+      return blackVampiresClothes;
+    }
+    else if (player.artifact[0].name === "romanHelmet") {
+      return romanHelmet;
+    }
+    
     
     else {
       return transparentCape;
@@ -24800,7 +25260,7 @@ function drawMap(layer) {
     currentLuminosity = Math.max(currentLuminosity - changeSpeed, targetLuminosity);
   }
 
-  canvas.filter = `hue-rotate(${currentHue}deg) brightness(${100 + currentLuminosity}%) saturate(85%)`;
+  canvas.filter = `hue-rotate(${currentHue}deg) brightness(${100 + currentLuminosity}%)`;
 
   if (layer === "back") {
     canvas.drawImage(mapsInfo[currentLand].backgroundImage, cameraShakeX - cameraX, cameraShakeY - cameraY, 4500, 4500);
@@ -25961,6 +26421,152 @@ function mushroomForestArcaneLoop() {
   // Map name        ↓
   currentLand = "mushroomForestArcane";
 
+
+  // Map setup ( Mandatory )
+  mapSetup();
+
+
+  // Background map Image and objects
+  drawMap("back")
+  drawObjects("back")
+
+
+  // Particle settings
+  particlesActor()
+  //shootingParticles()
+  dashParticles()
+  // // playerTrailParticles()
+
+
+  // Player settings
+  drawEnemy()
+  playerCollision()
+  drawOnlinePlayers("back")
+  drawLocalPlayer()
+  drawOnlinePlayers("front")
+  drawLocalBullets()
+  
+  
+  // Enemy settings
+  // // drawSlimeEnemy()
+  
+  
+  // Foreground map Image and objects
+  drawMap("front")
+  drawObjects("front")
+  drawUsername()
+  drawChat()
+
+
+  // Dev Colliders
+  drawDevWallsPlacement()
+  drawColliders("player", "", "", "", "")
+
+}
+
+function cemeteryPathLoop() {
+
+
+  // Map name        ↓
+  currentLand = "cemeteryPath";
+
+
+  // Map setup ( Mandatory )
+  mapSetup();
+
+
+  // Background map Image and objects
+  drawMap("back")
+  drawObjects("back")
+
+
+  // Particle settings
+  particlesActor()
+  //shootingParticles()
+  dashParticles()
+  // // playerTrailParticles()
+
+
+  // Player settings
+  drawEnemy()
+  playerCollision()
+  drawOnlinePlayers("back")
+  drawLocalPlayer()
+  drawOnlinePlayers("front")
+  drawLocalBullets()
+  
+  
+  // Enemy settings
+  // // drawSlimeEnemy()
+  
+  
+  // Foreground map Image and objects
+  drawMap("front")
+  drawObjects("front")
+  drawUsername()
+  drawChat()
+
+
+  // Dev Colliders
+  drawDevWallsPlacement()
+  drawColliders("player", "", "", "", "")
+
+}
+
+function restFiledTownLoop() {
+
+
+  // Map name        ↓
+  currentLand = "restFiledTown";
+
+
+  // Map setup ( Mandatory )
+  mapSetup();
+
+
+  // Background map Image and objects
+  drawMap("back")
+  drawObjects("back")
+
+
+  // Particle settings
+  particlesActor()
+  //shootingParticles()
+  dashParticles()
+  // // playerTrailParticles()
+
+
+  // Player settings
+  drawEnemy()
+  playerCollision()
+  drawOnlinePlayers("back")
+  drawLocalPlayer()
+  drawOnlinePlayers("front")
+  drawLocalBullets()
+  
+  
+  // Enemy settings
+  // // drawSlimeEnemy()
+  
+  
+  // Foreground map Image and objects
+  drawMap("front")
+  drawObjects("front")
+  drawUsername()
+  drawChat()
+
+
+  // Dev Colliders
+  drawDevWallsPlacement()
+  drawColliders("player", "", "", "", "")
+
+}
+
+function resfiledTownCemeteryLoop() {
+
+
+  // Map name        ↓
+  currentLand = "resfiledTownCemetery";
 
   // Map setup ( Mandatory )
   mapSetup();
