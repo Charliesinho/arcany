@@ -66,11 +66,11 @@ mushroomForestArcane.src = "./islands/arcanyMaps/mushroomArcany/mushroomArcane.p
 const mushroomForestArcaneFront = new Image();
 mushroomForestArcaneFront.src = "./islands/arcanyMaps/mushroomArcany/mushroomFrontArcane.png"
 
-const cemeteryPath = new Image();
-cemeteryPath.src = "./islands/cemeteryPath.png"
+const restfieldPath = new Image();
+restfieldPath.src = "./islands/restfieldPath.png"
 
-const cemeteryPathFront = new Image();
-cemeteryPathFront.src = "./islands/cemeteryPathFront.png"
+const restfieldPathFront = new Image();
+restfieldPathFront.src = "./islands/restfieldPathFront.png"
 
 const restFiledTown = new Image();
 restFiledTown.src = "./islands/restFiledTown.png"
@@ -162,11 +162,15 @@ mooshroomBossRed.src = "./enemies/mooshroomBossRed.png";
 const purpleSlime = new Image();
 purpleSlime.src = "./enemies/purpleSlime.png"
 
+const restfieldGhost = new Image();
+restfieldGhost.src = "./enemies/restfieldLittleghost.png"
+
 let enemiesImages = {
   treeSimpleEnemy: treeSimpleEnemy,
   redMooshroomEnemy: redMooshroomEnemy,
   mooshroomBossRed: mooshroomBossRed,
   purpleSlime: purpleSlime,
+  restfieldGhost : restfieldGhost,
 };
 
 const slimeDMG = new Image();
@@ -5046,7 +5050,8 @@ let mapsInfo = {
       },
       spawnTimer: 10000,
       enemyStateInt: 2000,
-    },{
+    },
+    {
       name: "purpleSlime",
       imgw: 31,
       imgh: 27,
@@ -10419,7 +10424,7 @@ let mapsInfo = {
       {
         "type": "transition",
         "format": "liquid",
-        "destination": "cemeteryPath",
+        "destination": "restfieldPath",
         "x": 61,
         "y": 1729.5,
         "width": 426,
@@ -11615,11 +11620,11 @@ let mapsInfo = {
     ]
   },
 
-  cemeteryPath: {
+  restfieldPath: {
     areaName: "RESTFIELD FOREST",
     areaSounds: grassLandsSoundtrack,
-    backgroundImage: cemeteryPath,
-    foregroundImage: cemeteryPathFront,
+    backgroundImage: restfieldPath,
+    foregroundImage: restfieldPathFront,
     
     playerPos: {
       x: 3900,
@@ -13870,10 +13875,419 @@ let mapsInfo = {
         "color": "rgb(0, 0, 0, 0)"
       }
     ],
-    enemies: []
+    enemies: [
+      {
+        name: "restfieldGhost",
+        imgw: 48,
+        imgh: 48,
+        imgcw: 48,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 1,
+        speedX: 2,
+        speedY: 2,
+        spawn: {
+          x: 1088.5,
+          y: 2979
+        },
+        w: 140,
+        h: 140,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState],
+        damaged: 0,
+        health: 5,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1088.5,
+          y: 2979
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+        drop: "blanket"
+      },
+      {
+        name: "restfieldGhost",
+        imgw: 48,
+        imgh: 48,
+        imgcw: 48,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 1,
+        speedX: 2,
+        speedY: 2,
+        spawn: {
+          x: 190,
+          y: 2400
+        },
+        w: 140,
+        h: 140,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState],
+        damaged: 0,
+        health: 5,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 190,
+          y: 2400
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+        drop: "blanket"
+      },
+      {
+        name: "restfieldGhost",
+        imgw: 48,
+        imgh: 48,
+        imgcw: 48,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 1,
+        speedX: 2,
+        speedY: 2,
+        spawn: {
+          x: 267,
+          y: 1755
+        },
+        w: 140,
+        h: 140,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState],
+        damaged: 0,
+        health: 5,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 267,
+          y: 1755
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+        drop: "blanket"
+      },
+      {
+        name: "restfieldGhost",
+        imgw: 48,
+        imgh: 48,
+        imgcw: 48,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 1,
+        speedX: 2,
+        speedY: 2,
+        spawn: {
+          x: 2378.5,
+          y: 2812.5
+        },
+        w: 140,
+        h: 140,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState],
+        damaged: 0,
+        health: 5,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 2378.5,
+          y: 2812.5
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+        drop: "blanket"
+      },
+      {
+        name: "restfieldGhost",
+        imgw: 48,
+        imgh: 48,
+        imgcw: 48,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 1,
+        speedX: 2,
+        speedY: 2,
+        spawn: {
+          x: 310.5,
+          y: 868
+        },
+        w: 140,
+        h: 140,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState],
+        damaged: 0,
+        health: 5,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 310.5,
+          y: 868
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+        drop: "blanket"
+      },
+      {
+        name: "restfieldGhost",
+        imgw: 48,
+        imgh: 48,
+        imgcw: 48,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 1,
+        speedX: 2,
+        speedY: 2,
+        spawn: {
+          x: 425,
+          y: 267
+        },
+        w: 140,
+        h: 140,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState],
+        damaged: 0,
+        health: 5,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 425,
+          y: 267
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+        drop: "blanket"
+      },
+      {
+        name: "restfieldGhost",
+        imgw: 48,
+        imgh: 48,
+        imgcw: 48,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 1,
+        speedX: 2,
+        speedY: 2,
+        spawn: {
+          x: 1460.5,
+          y: 504
+        },
+        w: 140,
+        h: 140,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState],
+        damaged: 0,
+        health: 5,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1460.5,
+          y: 504
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+        drop: "blanket"
+      },
+      {
+        name: "restfieldGhost",
+        imgw: 48,
+        imgh: 48,
+        imgcw: 48,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 1,
+        speedX: 2,
+        speedY: 2,
+        spawn: {
+          x: 2111.5,
+          y: 730
+        },
+        w: 140,
+        h: 140,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState],
+        damaged: 0,
+        health: 5,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 2111.5,
+          y: 730
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+        drop: "blanket"
+      },
+      {
+        name: "restfieldGhost",
+        imgw: 48,
+        imgh: 48,
+        imgcw: 48,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 1,
+        speedX: 2,
+        speedY: 2,
+        spawn: {
+          x: 2329.5,
+          y: -4
+        },
+        w: 140,
+        h: 140,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState],
+        damaged: 0,
+        health: 5,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 2329.5,
+          y: -4
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+        drop: "blanket"
+      },
+      {
+        name: "restfieldGhost",
+        imgw: 48,
+        imgh: 48,
+        imgcw: 48,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 1,
+        speedX: 2,
+        speedY: 2,
+        spawn: {
+          x: 2994.5,
+          y: 540
+        },
+        w: 140,
+        h: 140,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState],
+        damaged: 0,
+        health: 5,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 2994.5,
+          y: 540
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+        drop: "blanket"
+      },
+      {
+        name: "restfieldGhost",
+        imgw: 48,
+        imgh: 48,
+        imgcw: 48,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 1,
+        speedX: 2,
+        speedY: 2,
+        spawn: {
+          x: 3450,
+          y: 1243
+        },
+        w: 140,
+        h: 140,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState],
+        damaged: 0,
+        health: 5,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 3450,
+          y: 1243
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+        drop: "blanket"
+      },
+      {
+        name: "restfieldGhost",
+        imgw: 48,
+        imgh: 48,
+        imgcw: 48,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 1,
+        speedX: 2,
+        speedY: 2,
+        spawn: {
+          x: 3363,
+          y: 1652
+        },
+        w: 140,
+        h: 140,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState],
+        damaged: 0,
+        health: 5,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 3363,
+          y: 1652
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+        drop: "blanket"
+      },
+    ]
   },
   restFiledTown: {
-    areaName: "RESTFIELD FOREST",
+    areaName: "RESTFIELD TOWN",
     areaSounds: grassLandsSoundtrack,
     backgroundImage: restFiledTown,
     foregroundImage: restFiledTownFront,
@@ -13886,7 +14300,7 @@ let mapsInfo = {
       {
       "type": "transition",
       "format": "liquid",
-      "destination": "cemeteryPath",
+      "destination": "restfieldPath",
       "x": 1830,
       "y": 3976,
       "width": 364,
@@ -22546,7 +22960,7 @@ let originalMapsInfo = {
       {
         "type": "transition",
         "format": "liquid",
-        "destination": "cemeteryPath",
+        "destination": "restfieldPath",
         "x": 61,
         "y": 1729.5,
         "width": 426,
@@ -23742,11 +24156,11 @@ let originalMapsInfo = {
     ]
   },
 
-  cemeteryPath: {
+  restfieldPath: {
     areaName: "RESTFIELD FOREST",
     areaSounds: grassLandsSoundtrack,
-    backgroundImage: cemeteryPath,
-    foregroundImage: cemeteryPathFront,
+    backgroundImage: restfieldPath,
+    foregroundImage: restfieldPathFront,
     
     playerPos: {
       x: 3900,
@@ -26013,7 +26427,7 @@ let originalMapsInfo = {
       {
       "type": "transition",
       "format": "liquid",
-      "destination": "cemeteryPath",
+      "destination": "restfieldPath",
       "x": 1830,
       "y": 3976,
       "width": 364,
@@ -31043,11 +31457,11 @@ function mushroomForestArcaneLoop() {
 
 }
 
-function cemeteryPathLoop() {
+function restfieldPathLoop() {
 
 
   // Map name        ↓
-  currentLand = "cemeteryPath";
+  currentLand = "restfieldPath";
 
 
   // Map setup ( Mandatory )
