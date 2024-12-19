@@ -78,11 +78,17 @@ restFiledTown.src = "./islands/restFiledTown.png"
 const restFiledTownFront = new Image();
 restFiledTownFront.src = "./islands/restFiledTownFront.png"
 
-const resfiledTownCemetery = new Image();
-resfiledTownCemetery.src = "./islands/resfiledTownCemetery.png"
+const restfieldTownCemetery = new Image();
+restfieldTownCemetery.src = "./islands/restfieldTownCemetery.png"
 
-const resfiledTownCemeteryFront = new Image();
-resfiledTownCemeteryFront.src = "./islands/resfiledTownCemeteryFront.png"
+const restfieldTownCemeteryFront = new Image();
+restfieldTownCemeteryFront.src = "./islands/restfieldTownCemeteryFront.png"
+
+const restfieldTrial = new Image();
+restfieldTrial.src = "./islands/restfieldTrial.png"
+
+const restfieldTrialFront = new Image();
+restfieldTrialFront.src = "./islands/restfieldTrialFront.png"
 
 
 
@@ -112,6 +118,9 @@ redDemon.src = "./skins/redDemon.png";
 
 var vampiresSkin = new Image();
 vampiresSkin.src = "./skins/vampiresSkin.png";
+
+var restfieldSkeletonSkin = new Image();
+restfieldSkeletonSkin.src = "./skins/restfieldSkeletonSkin.png";
 
 //PLAYER-SKINS >
 
@@ -159,11 +168,17 @@ redMooshroomEnemy.src = "./enemies/redMooshroomEnemy.png";
 const mooshroomBossRed = new Image();
 mooshroomBossRed.src = "./enemies/mooshroomBossRed.png";
 
+const restfieldReaper = new Image();
+restfieldReaper.src = "./enemies/restfieldReaper.png";
+
 const purpleSlime = new Image();
 purpleSlime.src = "./enemies/purpleSlime.png"
 
 const restfieldGhost = new Image();
 restfieldGhost.src = "./enemies/restfieldLittleghost.png"
+
+const restfieldSkeleton = new Image();
+restfieldSkeleton.src = "./enemies/restfielSkeleton.png"
 
 let enemiesImages = {
   treeSimpleEnemy: treeSimpleEnemy,
@@ -171,6 +186,8 @@ let enemiesImages = {
   mooshroomBossRed: mooshroomBossRed,
   purpleSlime: purpleSlime,
   restfieldGhost : restfieldGhost,
+  restfieldSkeleton : restfieldSkeleton,
+  restfieldReaper : restfieldReaper,
 };
 
 const slimeDMG = new Image();
@@ -7496,6 +7513,41 @@ let mapsInfo = {
       }
     ],
     enemies: [
+      {
+        name: "mooshroomBossRed",
+        isBoss: true,
+        imgw: 147,
+        imgh: 175,
+        imgcw: 147,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 5,
+        xp: 1000,
+        speedX: 0,
+        speedY: 0,
+        spawn: {
+          x: 1501.5,
+          y: 863.5,
+        },
+        w: 550,
+        h: 550,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [lazerMooshState, attackCircleMooshBossState],
+        damaged: 0,
+        health: 100,
+        angle: 0,
+        maxHealth: 100,
+        baseSpawn: {
+          x: 1501.5,
+          y: 863.5,
+        },
+        spawnTimer: null,
+        enemyStateInt: 5000,
+        active: false,
+      }
     ],
   },
 
@@ -12610,11 +12662,11 @@ let mapsInfo = {
     enemies: []
   },
 
-  resfiledTownCemetery: {
+  restfieldTownCemetery: {
     areaName: "RESTFIELD CEMETERY",
     areaSounds: grassLandsSoundtrack,
-    backgroundImage: resfiledTownCemetery,
-    foregroundImage: resfiledTownCemeteryFront,
+    backgroundImage: restfieldTownCemetery,
+    foregroundImage: restfieldTownCemeteryFront,
     
     playerPos: {
       x: 3770,
@@ -14323,14 +14375,434 @@ let mapsInfo = {
     {
       "type": "transition",
       "format": "liquid",
-      "destination": "resfiledTownCemetery",
+      "destination": "restfieldTownCemetery",
       "x": -111,
       "y": 2080.5,
       "width": 235,
       "height": 228,
       "color": "rgb(204, 0, 204, 0)"
-    }],
+    },
+    {
+      "type": "transition",
+      "format": "liquid",
+      "destination": "restfieldTrial",
+      "x": 1689.5,
+      "y": -237,
+      "width": 421,
+      "height": 300,
+      "color": "rgb(204, 0, 204, 0)"
+    }
+  ],
     enemies: []
+  },
+
+  restfieldTrial: {
+    areaName: "RESTFIELD TRIAL",
+    areaSounds: grassLandsSoundtrack,
+    backgroundImage: restfieldTrial,
+    foregroundImage: restfieldTrialFront,
+    
+    playerPos: {
+      x: 2155,
+      y: 3888,
+    },
+    colliders: [
+      {
+        "type": "chest",
+        "item": "mushroomTrial",
+        "x": 1555.5,
+        "y": 879.5,
+        "width": 149,
+        "height": 210,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+        {
+          "type": "transition",
+          "format": "liquid",
+          "destination": "restFiledTown",
+          "x": 1844.5,
+          "y": 3675.5,
+          "width": 380,
+          "height": 177,
+          "color": "rgb(204, 0, 204, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1457.5,
+          "y": 898.5,
+          "width": 1188,
+          "height": 46,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1455.5,
+          "y": 942.5,
+          "width": 51,
+          "height": 152,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1274.5,
+          "y": 1068.5,
+          "width": 235,
+          "height": 21,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1835.5,
+          "y": 911.5,
+          "width": 39,
+          "height": 78,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1790.5,
+          "y": 931.5,
+          "width": 50,
+          "height": 56,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1647.5,
+          "y": 932.5,
+          "width": 59,
+          "height": 31,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 2508.5,
+          "y": 934.5,
+          "width": 45,
+          "height": 102,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 2611.5,
+          "y": 927.5,
+          "width": 29,
+          "height": 170,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 2612.5,
+          "y": 1059.5,
+          "width": 214,
+          "height": 32,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 2811.5,
+          "y": 1079.5,
+          "width": 32,
+          "height": 97,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 2819.5,
+          "y": 1132.5,
+          "width": 197,
+          "height": 41,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 2988.5,
+          "y": 1161.5,
+          "width": 28,
+          "height": 1206,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 2811.5,
+          "y": 2318.5,
+          "width": 190,
+          "height": 50,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 2808.5,
+          "y": 2338.5,
+          "width": 19,
+          "height": 370,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 2239.5,
+          "y": 2670.5,
+          "width": 579,
+          "height": 54,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1256.5,
+          "y": 2683.5,
+          "width": 635,
+          "height": 46,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1292.5,
+          "y": 2249.5,
+          "width": 18,
+          "height": 451,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1062.5,
+          "y": 2320.5,
+          "width": 238,
+          "height": 69,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1091.5,
+          "y": 1045.5,
+          "width": 27,
+          "height": 1301,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1084.5,
+          "y": 1138.5,
+          "width": 233,
+          "height": 48,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1250.5,
+          "y": 1045.5,
+          "width": 61,
+          "height": 118,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1588.5,
+          "y": 2692.5,
+          "width": 110,
+          "height": 201,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1589.5,
+          "y": 2872.5,
+          "width": 93,
+          "height": 183,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1623.5,
+          "y": 3040.5,
+          "width": 51,
+          "height": 232,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1662.5,
+          "y": 3146.5,
+          "width": 107,
+          "height": 79,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1659.5,
+          "y": 3068.5,
+          "width": 98,
+          "height": 107,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1730.5,
+          "y": 3110.5,
+          "width": 145,
+          "height": 85,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1773.5,
+          "y": 3166.5,
+          "width": 90,
+          "height": 361,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1871.5,
+          "y": 3323.5,
+          "width": 40,
+          "height": 257,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1788.5,
+          "y": 3467.5,
+          "width": 97,
+          "height": 266,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1814.5,
+          "y": 3704.5,
+          "width": 51,
+          "height": 171,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1848.5,
+          "y": 3820.5,
+          "width": 533,
+          "height": 47,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 2171.5,
+          "y": 3350.5,
+          "width": 55,
+          "height": 464,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 2189.5,
+          "y": 3763.5,
+          "width": 31,
+          "height": 84,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 2170.5,
+          "y": 3036.5,
+          "width": 53,
+          "height": 407,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 2173.5,
+          "y": 2906.5,
+          "width": 49,
+          "height": 225,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 2141.5,
+          "y": 2911.5,
+          "width": 370,
+          "height": 40,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 2423.5,
+          "y": 2702.5,
+          "width": 54,
+          "height": 254,
+          "color": "rgb(0, 0, 0, 0)"
+        }
+     ],
+    enemies: [
+      {
+      name: "restfieldReaper",
+      isBoss: true,
+      imgw: 147,
+      imgh: 175,
+      imgcw: 147,
+      imgch: 0,
+      frames: 0,
+      framesTimer: 0,
+      level: 5,
+      xp: 1000,
+      speedX: 0,
+      speedY: 0,
+      spawn: {
+        x: 1994.5,
+        y: 1053.5,
+      },
+      w: 550,
+      h: 550,
+      currentStateName: "idle",
+      currentState: null,
+      attackInterval: true,
+      states: [lazerMooshState, attackCircleMooshBossState],
+      damaged: 0,
+      health: 100,
+      angle: 0,
+      maxHealth: 100,
+      baseSpawn: {
+        x: 1994.5,
+        y: 1053.5,
+      },
+      spawnTimer: null,
+      enemyStateInt: 5000,
+      active: false,
+    },
+    {
+      name: "redMooshroomEnemy",
+      imgw: 42,
+      imgh: 39,
+      imgcw: 42,
+      imgch: 0,
+      frames: 0,
+      framesTimer: 0,
+      level: 1,
+      xp: 100,
+      speedX: 15,
+      speedY: 15,
+      spawn: {
+        x: 1825,
+        y: 1158
+      },
+      w: 140,
+      h: 140,
+      currentStateName: "idle",
+      currentState: null,
+      attackInterval: true,
+      states: [moveState, attackState, attackCircleState],
+      damaged: 0,
+      health: 5,
+      angle: 0,
+      maxHealth: 10,
+      baseSpawn: {
+        x: 1825,
+        y: 1158
+      },
+      spawnTimer: null,
+      enemyStateInt: 1000,
+      active: false,
+    },
+  
+  ]
   },
 
 // ARCANE ISLAND
@@ -17622,18 +18094,75 @@ let originalMapsInfo = {
         "height": 94,
         "color": "rgb(204, 0, 204, 0)"
       },
-      {
-        "type": "transition",
-        "format": "arcane",
-        "destination": "islandOneArcane",
-        "x": 2393,
-        "y": 2682.5,
-        "width": 447,
-        "height": 275,
-        "color": "rgb(204, 0, 204, 0)"
-      }
     ],
-    enemies: [],
+    enemies: [
+      {
+      name: "purpleSlime",
+      imgw: 31,
+      imgh: 27,
+      imgcw: 31,
+      imgch: 0,
+      frames: 0,
+      framesTimer: 0,
+      level: 1,
+      xp: 1,
+      speedX: 2,
+      speedY: 2,
+      spawn: {
+        x: 2000,
+        y: 3200
+      },
+      w: 100,
+      h: 100,
+      currentStateName: "idle",
+      currentState: null,
+      attackInterval: true,
+      states: [moveState],
+      damaged: 0,
+      health: 5,
+      angle: 0,
+      maxHealth: 10,
+      baseSpawn: {
+        x: 2000,
+        y: 3200
+      },
+      spawnTimer: 10000,
+      enemyStateInt: 2000,
+    },
+    {
+      name: "purpleSlime",
+      imgw: 31,
+      imgh: 27,
+      imgcw: 31,
+      imgch: 0,
+      frames: 0,
+      framesTimer: 0,
+      level: 1,
+      xp: 1,
+      speedX: 2,
+      speedY: 2,
+      spawn: {
+        x: 2240.5,
+        y: 3165.5
+      },
+      w: 100,
+      h: 100,
+      currentStateName: "idle",
+      currentState: null,
+      attackInterval: true,
+      states: [moveState],
+      damaged: 0,
+      health: 5,
+      angle: 0,
+      maxHealth: 10,
+      baseSpawn: {
+        x: 2240.5,
+        y: 3165.5
+      },
+      spawnTimer: 10000,
+      enemyStateInt: 2000,
+    }
+  ],
   },
 
   lobby: {
@@ -25146,15 +25675,15 @@ let originalMapsInfo = {
     enemies: []
   },
 
-  resfiledTownCemetery: {
+  restfieldTownCemetery: {
     areaName: "RESTFIELD CEMETERY",
     areaSounds: grassLandsSoundtrack,
-    backgroundImage: resfiledTownCemetery,
-    foregroundImage: resfiledTownCemeteryFront,
+    backgroundImage: restfieldTownCemetery,
+    foregroundImage: restfieldTownCemeteryFront,
     
     playerPos: {
-      x: 3900,
-      y: 3850,
+      x: 3770,
+      y: 2500,
     },
     colliders: [
       {
@@ -26424,10 +26953,419 @@ let originalMapsInfo = {
         "color": "rgb(0, 0, 0, 0)"
       }
     ],
-    enemies: []
+    enemies: [
+      {
+        name: "restfieldGhost",
+        imgw: 48,
+        imgh: 48,
+        imgcw: 48,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 1,
+        speedX: 2,
+        speedY: 2,
+        spawn: {
+          x: 1088.5,
+          y: 2979
+        },
+        w: 140,
+        h: 140,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState],
+        damaged: 0,
+        health: 5,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1088.5,
+          y: 2979
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+        drop: "blanket"
+      },
+      {
+        name: "restfieldGhost",
+        imgw: 48,
+        imgh: 48,
+        imgcw: 48,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 1,
+        speedX: 2,
+        speedY: 2,
+        spawn: {
+          x: 190,
+          y: 2400
+        },
+        w: 140,
+        h: 140,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState],
+        damaged: 0,
+        health: 5,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 190,
+          y: 2400
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+        drop: "blanket"
+      },
+      {
+        name: "restfieldGhost",
+        imgw: 48,
+        imgh: 48,
+        imgcw: 48,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 1,
+        speedX: 2,
+        speedY: 2,
+        spawn: {
+          x: 267,
+          y: 1755
+        },
+        w: 140,
+        h: 140,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState],
+        damaged: 0,
+        health: 5,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 267,
+          y: 1755
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+        drop: "blanket"
+      },
+      {
+        name: "restfieldGhost",
+        imgw: 48,
+        imgh: 48,
+        imgcw: 48,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 1,
+        speedX: 2,
+        speedY: 2,
+        spawn: {
+          x: 2378.5,
+          y: 2812.5
+        },
+        w: 140,
+        h: 140,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState],
+        damaged: 0,
+        health: 5,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 2378.5,
+          y: 2812.5
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+        drop: "blanket"
+      },
+      {
+        name: "restfieldGhost",
+        imgw: 48,
+        imgh: 48,
+        imgcw: 48,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 1,
+        speedX: 2,
+        speedY: 2,
+        spawn: {
+          x: 310.5,
+          y: 868
+        },
+        w: 140,
+        h: 140,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState],
+        damaged: 0,
+        health: 5,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 310.5,
+          y: 868
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+        drop: "blanket"
+      },
+      {
+        name: "restfieldGhost",
+        imgw: 48,
+        imgh: 48,
+        imgcw: 48,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 1,
+        speedX: 2,
+        speedY: 2,
+        spawn: {
+          x: 425,
+          y: 267
+        },
+        w: 140,
+        h: 140,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState],
+        damaged: 0,
+        health: 5,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 425,
+          y: 267
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+        drop: "blanket"
+      },
+      {
+        name: "restfieldGhost",
+        imgw: 48,
+        imgh: 48,
+        imgcw: 48,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 1,
+        speedX: 2,
+        speedY: 2,
+        spawn: {
+          x: 1460.5,
+          y: 504
+        },
+        w: 140,
+        h: 140,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState],
+        damaged: 0,
+        health: 5,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1460.5,
+          y: 504
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+        drop: "blanket"
+      },
+      {
+        name: "restfieldGhost",
+        imgw: 48,
+        imgh: 48,
+        imgcw: 48,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 1,
+        speedX: 2,
+        speedY: 2,
+        spawn: {
+          x: 2111.5,
+          y: 730
+        },
+        w: 140,
+        h: 140,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState],
+        damaged: 0,
+        health: 5,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 2111.5,
+          y: 730
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+        drop: "blanket"
+      },
+      {
+        name: "restfieldGhost",
+        imgw: 48,
+        imgh: 48,
+        imgcw: 48,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 1,
+        speedX: 2,
+        speedY: 2,
+        spawn: {
+          x: 2329.5,
+          y: -4
+        },
+        w: 140,
+        h: 140,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState],
+        damaged: 0,
+        health: 5,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 2329.5,
+          y: -4
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+        drop: "blanket"
+      },
+      {
+        name: "restfieldGhost",
+        imgw: 48,
+        imgh: 48,
+        imgcw: 48,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 1,
+        speedX: 2,
+        speedY: 2,
+        spawn: {
+          x: 2994.5,
+          y: 540
+        },
+        w: 140,
+        h: 140,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState],
+        damaged: 0,
+        health: 5,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 2994.5,
+          y: 540
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+        drop: "blanket"
+      },
+      {
+        name: "restfieldGhost",
+        imgw: 48,
+        imgh: 48,
+        imgcw: 48,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 1,
+        speedX: 2,
+        speedY: 2,
+        spawn: {
+          x: 3450,
+          y: 1243
+        },
+        w: 140,
+        h: 140,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState],
+        damaged: 0,
+        health: 5,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 3450,
+          y: 1243
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+        drop: "blanket"
+      },
+      {
+        name: "restfieldGhost",
+        imgw: 48,
+        imgh: 48,
+        imgcw: 48,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 1,
+        speedX: 2,
+        speedY: 2,
+        spawn: {
+          x: 3363,
+          y: 1652
+        },
+        w: 140,
+        h: 140,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState],
+        damaged: 0,
+        health: 5,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 3363,
+          y: 1652
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+        drop: "blanket"
+      },
+    ]
   },
   restFiledTown: {
-    areaName: "RESTFIELD FOREST",
+    areaName: "RESTFIELD TOWN",
     areaSounds: grassLandsSoundtrack,
     backgroundImage: restFiledTown,
     foregroundImage: restFiledTownFront,
@@ -26450,13 +27388,344 @@ let originalMapsInfo = {
     {
       "type": "transition",
       "format": "liquid",
-      "destination": "resfiledTownCemetery",
+      "destination": "restfieldTownCemetery",
       "x": -111,
       "y": 2080.5,
       "width": 235,
       "height": 228,
       "color": "rgb(204, 0, 204, 0)"
     }],
+    enemies: []
+  },
+
+  restfieldTrial: {
+    areaName: "RESTFIELD TRIAL",
+    areaSounds: grassLandsSoundtrack,
+    backgroundImage: restfieldTrial,
+    foregroundImage: restfieldTrialFront,
+    
+    playerPos: {
+      x: 2155,
+      y: 3888,
+    },
+    colliders: [
+      [
+        {
+          "type": "transition",
+          "format": "liquid",
+          "destination": "restFiledTown",
+          "x": 1844.5,
+          "y": 3675.5,
+          "width": 380,
+          "height": 177,
+          "color": "rgb(204, 0, 204, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1457.5,
+          "y": 898.5,
+          "width": 1188,
+          "height": 46,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1455.5,
+          "y": 942.5,
+          "width": 51,
+          "height": 152,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1274.5,
+          "y": 1068.5,
+          "width": 235,
+          "height": 21,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1835.5,
+          "y": 911.5,
+          "width": 39,
+          "height": 78,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1790.5,
+          "y": 931.5,
+          "width": 50,
+          "height": 56,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1647.5,
+          "y": 932.5,
+          "width": 59,
+          "height": 31,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 2508.5,
+          "y": 934.5,
+          "width": 45,
+          "height": 102,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 2611.5,
+          "y": 927.5,
+          "width": 29,
+          "height": 170,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 2612.5,
+          "y": 1059.5,
+          "width": 214,
+          "height": 32,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 2811.5,
+          "y": 1079.5,
+          "width": 32,
+          "height": 97,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 2819.5,
+          "y": 1132.5,
+          "width": 197,
+          "height": 41,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 2988.5,
+          "y": 1161.5,
+          "width": 28,
+          "height": 1206,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 2811.5,
+          "y": 2318.5,
+          "width": 190,
+          "height": 50,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 2808.5,
+          "y": 2338.5,
+          "width": 19,
+          "height": 370,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 2239.5,
+          "y": 2670.5,
+          "width": 579,
+          "height": 54,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1256.5,
+          "y": 2683.5,
+          "width": 635,
+          "height": 46,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1292.5,
+          "y": 2249.5,
+          "width": 18,
+          "height": 451,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1062.5,
+          "y": 2320.5,
+          "width": 238,
+          "height": 69,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1091.5,
+          "y": 1045.5,
+          "width": 27,
+          "height": 1301,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1084.5,
+          "y": 1138.5,
+          "width": 233,
+          "height": 48,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1250.5,
+          "y": 1045.5,
+          "width": 61,
+          "height": 118,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1588.5,
+          "y": 2692.5,
+          "width": 110,
+          "height": 201,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1589.5,
+          "y": 2872.5,
+          "width": 93,
+          "height": 183,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1623.5,
+          "y": 3040.5,
+          "width": 51,
+          "height": 232,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1662.5,
+          "y": 3146.5,
+          "width": 107,
+          "height": 79,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1659.5,
+          "y": 3068.5,
+          "width": 98,
+          "height": 107,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1730.5,
+          "y": 3110.5,
+          "width": 145,
+          "height": 85,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1773.5,
+          "y": 3166.5,
+          "width": 90,
+          "height": 361,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1871.5,
+          "y": 3323.5,
+          "width": 40,
+          "height": 257,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1788.5,
+          "y": 3467.5,
+          "width": 97,
+          "height": 266,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1814.5,
+          "y": 3704.5,
+          "width": 51,
+          "height": 171,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1848.5,
+          "y": 3820.5,
+          "width": 533,
+          "height": 47,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 2171.5,
+          "y": 3350.5,
+          "width": 55,
+          "height": 464,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 2189.5,
+          "y": 3763.5,
+          "width": 31,
+          "height": 84,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 2170.5,
+          "y": 3036.5,
+          "width": 53,
+          "height": 407,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 2173.5,
+          "y": 2906.5,
+          "width": 49,
+          "height": 225,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 2141.5,
+          "y": 2911.5,
+          "width": 370,
+          "height": 40,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 2423.5,
+          "y": 2702.5,
+          "width": 54,
+          "height": 254,
+          "color": "rgb(0, 0, 0, 0)"
+        }
+      ]
+     ],
     enemies: []
   },
 
@@ -31585,11 +32854,59 @@ function restFiledTownLoop() {
 
 }
 
-function resfiledTownCemeteryLoop() {
+function restfieldTownCemeteryLoop() {
 
 
   // Map name        ↓
-  currentLand = "resfiledTownCemetery";
+  currentLand = "restfieldTownCemetery";
+
+  // Map setup ( Mandatory )
+  mapSetup();
+
+
+  // Background map Image and objects
+  drawMap("back")
+  drawObjects("back")
+
+
+  // Particle settings
+  particlesActor()
+  //shootingParticles()
+  dashParticles()
+  // // playerTrailParticles()
+
+
+  // Player settings
+  drawEnemy()
+  playerCollision()
+  drawOnlinePlayers("back")
+  drawLocalPlayer()
+  drawOnlinePlayers("front")
+  drawLocalBullets()
+  
+  
+  // Enemy settings
+  // // drawSlimeEnemy()
+  
+  
+  // Foreground map Image and objects
+  drawMap("front")
+  drawObjects("front")
+  drawUsername()
+  drawChat()
+
+
+  // Dev Colliders
+  drawDevWallsPlacement()
+  drawColliders("player", "", "", "", "")
+
+}
+
+function restfieldTrialLoop() {
+
+
+  // Map name        ↓
+  currentLand = "restfieldTrial";
 
   // Map setup ( Mandatory )
   mapSetup();

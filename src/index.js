@@ -977,7 +977,7 @@ async function main() {
                     // await pushItem(romanHelmet, socket)
                     // await pushItem(arcaneRepeater, socket)
 
-                    await Player.findOneAndUpdate({socket: socket.id}, {souls: [frogSkin, ghostSkin, reaperSkin, vampiresSkin, redDemon, pinkDemon, arcanyDemon]}, {new: true});
+                    await Player.findOneAndUpdate({socket: socket.id}, {souls: [frogSkin, ghostSkin, reaperSkin, vampiresSkin, redDemon, pinkDemon, arcanyDemon, restfieldSkeletonSkin]}, {new: true});
 
                     // let item = {
                     //     type: "questItem",
@@ -1429,5 +1429,10 @@ const redDemon = {
 const vampiresSkin = {
     name: "vampiresSkin",
     image: "./inventory/soulInventory/vampiresSoulInventory.png",
+    type: "soul",
+}
+const restfieldSkeletonSkin = {
+    name: "restfieldSkeletonSkin",
+    image: "./inventory/soulInventory/restfieldSkeletonSoulInventory.png",
     type: "soul",
 }
