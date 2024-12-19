@@ -7500,41 +7500,6 @@ let mapsInfo = {
       }
     ],
     enemies: [
-      {
-        name: "mooshroomBossRed",
-        isBoss: true,
-        imgw: 147,
-        imgh: 175,
-        imgcw: 147,
-        imgch: 0,
-        frames: 0,
-        framesTimer: 0,
-        level: 5,
-        xp: 1000,
-        speedX: 0,
-        speedY: 0,
-        spawn: {
-          x: 1501.5,
-          y: 863.5,
-        },
-        w: 550,
-        h: 550,
-        currentStateName: "idle",
-        currentState: null,
-        attackInterval: true,
-        states: [lazerMooshState, attackCircleMooshBossState],
-        damaged: 0,
-        health: 100,
-        angle: 0,
-        maxHealth: 100,
-        baseSpawn: {
-          x: 1501.5,
-          y: 863.5,
-        },
-        spawnTimer: null,
-        enemyStateInt: 5000,
-        active: false,
-      }
     ],
   },
 
@@ -14733,8 +14698,8 @@ let mapsInfo = {
       speedX: 0,
       speedY: 0,
       spawn: {
-        x: 1994.5,
-        y: 1053.5,
+        x: 1825,
+        y: 1158
       },
       w: 550,
       h: 550,
@@ -14747,18 +14712,18 @@ let mapsInfo = {
       angle: 0,
       maxHealth: 100,
       baseSpawn: {
-        x: 1994.5,
-        y: 1053.5,
+        x: 1825,
+        y: 1158
       },
       spawnTimer: null,
       enemyStateInt: 5000,
       active: false,
     },
     {
-      name: "redMooshroomEnemy",
-      imgw: 42,
-      imgh: 39,
-      imgcw: 42,
+      name: "restfieldSkeleton",
+      imgw: 48,
+      imgh: 48,
+      imgcw: 48,
       imgch: 0,
       frames: 0,
       framesTimer: 0,
@@ -14767,8 +14732,8 @@ let mapsInfo = {
       speedX: 15,
       speedY: 15,
       spawn: {
-        x: 1825,
-        y: 1158
+        x: 1994.5,
+        y: 1053.5,
       },
       w: 140,
       h: 140,
@@ -14781,8 +14746,8 @@ let mapsInfo = {
       angle: 0,
       maxHealth: 10,
       baseSpawn: {
-        x: 1825,
-        y: 1158
+        x: 1994.5,
+        y: 1053.5,
       },
       spawnTimer: null,
       enemyStateInt: 1000,
@@ -27381,7 +27346,18 @@ let originalMapsInfo = {
       "width": 235,
       "height": 228,
       "color": "rgb(204, 0, 204, 0)"
-    }],
+    },
+    {
+      "type": "transition",
+      "format": "liquid",
+      "destination": "restfieldTrial",
+      "x": 1689.5,
+      "y": -237,
+      "width": 421,
+      "height": 300,
+      "color": "rgb(204, 0, 204, 0)"
+    }
+  ],
     enemies: []
   },
 
@@ -27396,7 +27372,15 @@ let originalMapsInfo = {
       y: 3888,
     },
     colliders: [
-      [
+      {
+        "type": "chest",
+        "item": "mushroomTrial",
+        "x": 1555.5,
+        "y": 879.5,
+        "width": 149,
+        "height": 210,
+        "color": "rgb(0, 0, 0, 0)"
+      },
         {
           "type": "transition",
           "format": "liquid",
@@ -27711,9 +27695,79 @@ let originalMapsInfo = {
           "height": 254,
           "color": "rgb(0, 0, 0, 0)"
         }
-      ]
      ],
-    enemies: []
+    enemies: [
+      {
+      name: "restfieldReaper",
+      isBoss: true,
+      imgw: 147,
+      imgh: 175,
+      imgcw: 147,
+      imgch: 0,
+      frames: 0,
+      framesTimer: 0,
+      level: 5,
+      xp: 1000,
+      speedX: 0,
+      speedY: 0,
+      spawn: {
+        x: 1825,
+        y: 1158
+      },
+      w: 550,
+      h: 550,
+      currentStateName: "idle",
+      currentState: null,
+      attackInterval: true,
+      states: [lazerMooshState, attackCircleMooshBossState],
+      damaged: 0,
+      health: 100,
+      angle: 0,
+      maxHealth: 100,
+      baseSpawn: {
+        x: 1825,
+        y: 1158
+      },
+      spawnTimer: null,
+      enemyStateInt: 5000,
+      active: false,
+    },
+    {
+      name: "restfielSkeleton",
+      imgw: 48,
+      imgh: 48,
+      imgcw: 48,
+      imgch: 0,
+      frames: 0,
+      framesTimer: 0,
+      level: 1,
+      xp: 100,
+      speedX: 15,
+      speedY: 15,
+      spawn: {
+        x: 1994.5,
+        y: 1053.5,
+      },
+      w: 140,
+      h: 140,
+      currentStateName: "idle",
+      currentState: null,
+      attackInterval: true,
+      states: [moveState, attackState, attackCircleState],
+      damaged: 0,
+      health: 5,
+      angle: 0,
+      maxHealth: 10,
+      baseSpawn: {
+        x: 1994.5,
+        y: 1053.5,
+      },
+      spawnTimer: null,
+      enemyStateInt: 1000,
+      active: false,
+    },
+  
+  ]
   },
 
 // ARCANE ISLAND
