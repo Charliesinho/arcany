@@ -178,6 +178,12 @@ WeaponStick.src = "stick.png";
 const arcaneStaffCommon = new Image();
 arcaneStaffCommon.src = "arcaneStaffCommon.png";
 
+const questOngoingImg = new Image();
+questOngoingImg.src = "./inventory/questOngoingImg.png";
+
+const questStartImg = new Image();
+questStartImg.src = "./inventory/questStartImg.png";
+
 const arcaneRepeater = new Image();
 arcaneRepeater.src = "./inventory/arcaneRepeater.png";
 
@@ -1061,10 +1067,10 @@ window.addEventListener("keydown", (e) => {
             }
         } else {
           if(!chatIsActivate) showChatFunction()
-            setTimeout(() => { 
             chatInput.focus();
             blockMovement = true;
             noMovement = true
+            setTimeout(() => { 
             }, 500);
         }
     }
@@ -3366,12 +3372,14 @@ let dialogBoxes = {
     rewardItem: 10,
     completionItem: "fish",
     completionAmount: 5,
+    markerX: 1500,
+    markerY: 1500,
     
 		dialogText:
 		[
       {
         NPC: "Quest giver",
-				text: "Hello Kid! Oh you are looking for a task? Well I can give you some money just for your efforts, go fish 5 fish and bring them back to me.",
+				text: "Hello Kid! Oh you are looking for a task? Well I can give you some money just for your efforts, go catch 5 fish and bring them back to me.",
 			},
 			{
         NPC: myPlayer ? myPlayer.username : "User",
@@ -29086,6 +29094,14 @@ function drawColliders (type, x, y, w, h) {
     
 }
 
+function drawQuestMarkers () {
+  mapsInfo[currentLand].colliders.forEach(wall => {
+    if (wall.type === "dialog") {
+      console.log(wall)
+    }
+  })
+}
+
 let playerAdjustmentX = 90;
 let playerAdjustmentY = 130;
 
@@ -29858,6 +29874,7 @@ function drawMap(layer) {
     canvas.drawImage(mapsInfo[currentLand].backgroundImage, cameraShakeX - cameraX, cameraShakeY - cameraY, 4500, 4500);
   } else {
     canvas.drawImage(mapsInfo[currentLand].foregroundImage, cameraShakeX - cameraX, cameraShakeY - cameraY, 4500, 4500);
+    drawQuestMarkers()
   }
 
   canvas.filter = "none";

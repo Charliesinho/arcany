@@ -841,10 +841,10 @@ body {
 
 @keyframes showChat {
     0% {
-      bottom: -100vh;
+        opacity: 0vh;
     }
     100% {
-        bottom: 10px
+        opacity: .3px
     }
   }
 
