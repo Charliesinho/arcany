@@ -149,12 +149,13 @@ blackVampiresClothes.src = "./capes/blackVampiresClothes.png";
 var romanHelmet = new Image();
 romanHelmet.src = "./capes/romanHelmet.png";
 
+var restfieldGhostClothes = new Image();
+restfieldGhostClothes.src = "./capes/restfieldGhostClothes.png";
 
 var transparentCape = new Image();
 transparentCape.src = "./capes/transparent.png";
 
 //PLAYER-ARMOR >
-
 
 const slime = new Image();
 slime.src = "slime.png";
@@ -180,6 +181,15 @@ restfieldGhost.src = "./enemies/restfieldLittleghost.png"
 const restfieldSkeleton = new Image();
 restfieldSkeleton.src = "./enemies/restfielSkeleton.png"
 
+const brownBunny = new Image();
+brownBunny.src = "./hunting/brownBunny.png"
+
+const whiteBunny = new Image();
+whiteBunny.src = "./hunting/whiteBunny.png"
+
+const blackBrownBunny = new Image();
+blackBrownBunny.src = "./hunting/blackBrownBunny.png"
+
 let enemiesImages = {
   treeSimpleEnemy: treeSimpleEnemy,
   redMooshroomEnemy: redMooshroomEnemy,
@@ -188,6 +198,9 @@ let enemiesImages = {
   restfieldGhost : restfieldGhost,
   restfieldSkeleton : restfieldSkeleton,
   restfieldReaper : restfieldReaper,
+  brownBunny : brownBunny,
+  whiteBunny : whiteBunny,
+  blackBrownBunny : blackBrownBunny,
 };
 
 const slimeDMG = new Image();
@@ -9225,6 +9238,476 @@ let mapsInfo = {
         spawnTimer: 10000,
         enemyStateInt: 2000,
       },
+
+      {
+        name: "blackBrownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 1052,
+          y: 2679
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1052,
+          y: 2679
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "brownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 1552,
+          y: 2700
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1552,
+          y: 2700
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "whiteBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 1352,
+          y: 2800
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1352,
+          y: 2800
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "brownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 1952,
+          y: 2900
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1952,
+          y: 2900
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "brownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 1852,
+          y: 3300
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1852,
+          y: 3300
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+
+
+      {
+        name: "blackBrownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 660,
+          y: 3000
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 660,
+          y: 3300
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "whiteBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 960,
+          y: 3300
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 960,
+          y: 3300
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+
+      {
+        name: "blackBrownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 3052,
+          y: 2679
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 3052,
+          y: 2679
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "brownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 3552,
+          y: 2700
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 3552,
+          y: 2700
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "whiteBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 3352,
+          y: 2800
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 3352,
+          y: 2800
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "brownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 3952,
+          y: 2900
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 3952,
+          y: 2900
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "brownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 3852,
+          y: 3300
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 3852,
+          y: 3300
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+
+
+      {
+        name: "blackBrownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 1660,
+          y: 3300
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1660,
+          y: 3300
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "whiteBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 1960,
+          y: 3300
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1960,
+          y: 3300
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+
+
     ]
   },
 
@@ -31590,6 +32073,9 @@ function drawPlayerArtifact (player) {
     else if (player.artifact[0].name === "romanHelmet") {
       return romanHelmet;
     }
+    else if (player.artifact[0].name === "restfieldGhostClothes") {
+      return restfieldGhostClothes;
+    }
     
     
     else {
@@ -32368,6 +32854,10 @@ function startCommitmentTimer(enemy) {
     enemy.committedDirection = null; // Clear commitment after 3 seconds
     enemy.commitTimer = null; // Reset timer reference
   }, 2000);
+}
+
+function idleState(enemy) {
+  enemy.currentStateName = "idle"
 }
 
 function attackState(enemy) {

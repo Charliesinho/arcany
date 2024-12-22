@@ -974,8 +974,10 @@ async function main() {
                     //pushItem(blackVampiresClothes, socket)
                     //pushItem(fishermanClothes, socket)
                     //pushItem(tropicalHat, socket)
-                    //zdzpushItem(romanHelmet, socket)
+                    //pushItem(romanHelmet, socket)
                     //pushItem(skullHelmet, socket)
+                    //pushItem(restfieldGhostClothes, socket)
+                    pushItem(arcaneRepeater, socket)
 
                     await Player.findOneAndUpdate({socket: socket.id}, {souls: [frogSkin, ghostSkin, reaperSkin, vampiresSkin, redDemon, pinkDemon, arcanyDemon, restfieldSkeletonSkin]}, {new: true});
 
@@ -1325,6 +1327,16 @@ const bass = {
     image: "./inventory/octopus.png",
 };
 
+ const restfieldBlanket = {
+    type: "fish",
+    name: "restfieldBlanket",
+    value: 4,
+    rarity: "rare",
+    image: "./inventory/restfieldBlanket.png",
+};
+
+
+
 // CLOTHES
 
 const mushroomClothesRed = {
@@ -1382,6 +1394,13 @@ const romanHelmet = {
     value: 20,
     rarity: "common",
     image: "./inventory/clothesInventory/romanHelmetInventory.png",
+};
+const restfieldGhostClothes = {
+    type: "artifact",
+    name: "restfieldGhostClothes",
+    value: 20,
+    rarity: "common",
+    image: "./inventory/clothesInventory/restfieldGhostInventory.png",
 };
 
 // SOULS
