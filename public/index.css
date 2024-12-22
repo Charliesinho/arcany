@@ -511,8 +511,10 @@ body {
 #uiQuest{
     display: none;
     width: calc(100% - 80px);
-    height: calc(100% - 90px);
+    /* height: calc(100% - 90px); */
     padding: 45px 40px;
+    flex-wrap: wrap;
+    gap: 20px;
 }
 #uiBooks{
     display: none;
@@ -1450,6 +1452,10 @@ body {
     animation: opacityUp 1s ease forwards;
 }
 
+.questEndItem {
+    width: 70px;
+}
+
 @keyframes opacityUp {
     0% {
         opacity: 0;
@@ -2073,8 +2079,8 @@ body {
 }
 
 .questCardImage {
-    width: 70px;
-    height: 90px;
+    width: 66px;
+    /* height: 90px; */
     position: relative;
     top: 0;
     transform: rotateX(0deg) rotateY(0deg);
@@ -2082,8 +2088,6 @@ body {
 }
 
 .questCardImage:hover {
-    width: 70px;
-    height: 90px;
     transform: rotateX(10deg) rotateY(20deg);
 }
 

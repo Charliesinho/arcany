@@ -732,13 +732,37 @@ async function main() {
                     let playerCurrency =  player.currency + quest.rewardAmount;
                     await Player.findOneAndUpdate({socket: socket.id}, {currency: playerCurrency}, {new: true}).exec();
                     myPlayer[socket.id].currency = playerCurrency;
-                    console.log(myPlayer[socket.id].currency)
+                }
+
+                if (quest.rewardType === "soul") {
+                    let soulToPush = itemsObj[quest.rewardAmount];
+                    let playerSouls =  player.souls
+                    playerSouls.push(soulToPush);
+                    console.log(itemsObj[quest.rewardAmount])
+                    await Player.findOneAndUpdate({socket: socket.id}, {souls: playerSouls}, {new: true}).exec();
+                    myPlayer[socket.id].souls = playerSouls;
+                }
+
+                if (quest.rewardType === "item") {
+                    let itemToPush = itemsObj[quest.rewardAmount];
+                    let playerInventory =  player.inventory
+                    playerInventory.push(itemToPush);
+                    console.log(itemsObj[quest.rewardAmount])
+                    await Player.findOneAndUpdate({socket: socket.id}, {inventory: playerInventory}, {new: true}).exec();
+                    myPlayer[socket.id].inventory = playerInventory;
+                }
+
+                if (quest.rewardType === "quest") {
+                    if (quest.rewardAmount === "restfieldAccess") {
+                        player.access[0].restfield = true;
+                        await Player.findOneAndUpdate({socket: socket.id}, {access: player.access}, {new: true}).exec();
+                    }
                 }
 
                 const index = questsOngoing.findIndex(obj => obj.title === quest.name);
 
                 let finishedQuest = questsOngoing.splice(index, 1);
-                questsCompleted.push(finishedQuest[0])
+                questsCompleted.push(finishedQuest[0]);
 
                 await Player.findOneAndUpdate({socket: socket.id}, {questsOngoing: questsOngoing}, {new: true}).exec();
                 await Player.findOneAndUpdate({socket: socket.id}, {questsCompleted: questsCompleted}, {new: true}).exec();
@@ -817,6 +841,25 @@ async function main() {
                     myPlayer[socket.id] = player;      
                             
 
+                }
+              }
+              consume()
+        });
+        
+        socket.on("enemyDrop", (item) => {
+
+            async function consume() {
+
+                const player = await Player.findOne({socket: socket.id}).exec();
+
+                if (player.inventory.length <= 21) {
+                    let itemToGive = itemsObj[item];
+                    player.inventory.push(itemToGive);
+                    
+                    await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
+                    myPlayer[socket.id] = player;    
+                    
+                    io.to(socket.id).emit('obtained', itemToGive);          
                 }
               }
               consume()
@@ -968,16 +1011,16 @@ async function main() {
                     
 
                     const loginAttempt = "success";
-                    // await pushItem(mushroomClothesRed, socket)
+                    // await pushItem(stick, socket)
                     // await pushItem(mushroomClothesOrange, socket)
                     // await pushItem(reaperClothes, socket)
                     // await pushItem(blackVampiresClothes, socket)
                     // await pushItem(fishermanClothes, socket)
                     // await pushItem(tropicalHat, socket)
                     // await pushItem(romanHelmet, socket)
-                    // await pushItem(arcaneRepeater, socket)
+                    // await pushItem(arcaneRepeaterInv, socket)
 
-                    await Player.findOneAndUpdate({socket: socket.id}, {souls: [frogSkin, ghostSkin, reaperSkin, vampiresSkin, redDemon, pinkDemon, arcanyDemon, restfieldSkeletonSkin]}, {new: true});
+                    // await Player.findOneAndUpdate({socket: socket.id}, {souls: [frogSoulInventory, ghostSkin, reaperSkin, vampiresSkin, redDemon, pinkDemon, arcanyDemon, restfieldSkeletonSkin]}, {new: true});
 
                     // let item = {
                     //     type: "questItem",
@@ -1010,7 +1053,7 @@ async function main() {
                     const loginAttempt = "success";
                     io.to(id).emit('loginAttempt', loginAttempt); 
 
-                    // await Player.findOneAndUpdate({socket: socket.id}, {souls: [frogSkin, ghostSkin, reaperSkin]}, {new: true});
+                    // await Player.findOneAndUpdate({socket: socket.id}, {souls: [frogSoulInventory, ghostSkin, reaperSkin]}, {new: true});
                     const playerData = await Player.findOne({username: username}).exec();
 
                     myPlayer[socket.id] = playerData;
@@ -1098,17 +1141,18 @@ async function main() {
         
         socket.on("score", (score) => {  
             async function updateScore() {
+                console.log(score)
                 const player = await Player.findOne({socket: socket.id}).exec();
                 const numericScorePlayer = score.includes(":")
                 ? parseFloat(score.replace(":", "."))
-                : parseFloat(scoreValue) || 0;
-                const numericScoreOnline = player.scores[0].mushroomTrial.includes(":")
+                : parseFloat(score) || 0;
+                const numericScoreOnline = player.scores[0].mushroomTrial.toString().includes(":")
                 ? parseFloat(player.scores[0].mushroomTrial.replace(":", "."))
-                : parseFloat(scoreValue) || 0;
+                : parseFloat( player.scores[0].mushroomTrial) || 0;
 
                 console.log(numericScoreOnline, numericScorePlayer) 
 
-                if (numericScoreOnline > numericScorePlayer) {
+                if (numericScoreOnline > numericScorePlayer || player.scores[0].mushroomTrial < 1) {
                     player.scores[0].mushroomTrial = score;   
                     await Player.findOneAndUpdate({socket: socket.id}, {scores: player.scores}, {new: true});
                     myPlayer[socket.id] = player;             
@@ -1248,9 +1292,9 @@ const arcaneStaffCommon = {
     rarity: "common",
     image: "./inventory/arcaneStaffCommon.png",
 };
-const arcaneRepeater = {
+const arcaneRepeaterInv = {
     type: "weapon",
-    name: "arcaneRepeater",
+    name: "arcaneRepeaterInv",
     value: 30,
     rarity: "common",
     image: "./inventory/arcaneRepeaterInv.gif",
@@ -1327,68 +1371,89 @@ const bass = {
     rarity: "rare",
     image: "./inventory/bass.png",
 };
- const octopus = {
+const octopus = {
     type: "fish",
     name: "octopus",
     value: 4,
     rarity: "rare",
     image: "./inventory/octopus.png",
 };
+const treeLeaf = {
+    type: "quest",
+    name: "treeLeaf",
+    value: 4,
+    rarity: "rare",
+    image: "./inventory/treeLeaf.png",
+};
+const miniMushroom = {
+    type: "quest",
+    name: "miniMushroom",
+    value: 4,
+    rarity: "rare",
+    image: "./inventory/miniMushroom.png",
+};
+const bone = {
+    type: "quest",
+    name: "bone",
+    value: 4,
+    rarity: "rare",
+    image: "./inventory/bone.png",
+};
 
 // CLOTHES
 
 const mushroomClothesRed = {
     type: "artifact",
-    name: "mushroomClothesRed",
+    name: "redMushroomlInventory",
     value: 20,
     rarity: "common",
     image: "./inventory/clothesInventory/redMushroomlInventory.png",
 };
 const mushroomClothesOrange = {
     type: "artifact",
-    name: "mushroomClothesOrange",
+    name: "rorangeMushroomlInventory",
     value: 20,
     rarity: "common",
     image: "./inventory/clothesInventory/rorangeMushroomlInventory.png",
 };
-const tropicalHat = {
+const tropicalHatInventory = {
     type: "artifact",
-    name: "tropicalHat",
+    name: "tropicalHatInventory",
     value: 20,
     rarity: "common",
     image: "./inventory/clothesInventory/tropicalHatInventory.png",
 };
 const skullHelmet = {
     type: "artifact",
-    name: "skullHelmet",
+    name: "skullInventory",
     value: 20,
     rarity: "common",
     image: "./inventory/clothesInventory/skullInventory.png",
 };
 const reaperClothes = {
     type: "artifact",
-    name: "reaperClothes",
+    name: "reaperInventory",
     value: 20,
     rarity: "common",
     image: "./inventory/clothesInventory/reaperInventory.png",
 };
 const blackVampiresClothes = {
     type: "artifact",
-    name: "blackVampiresClothes",
+    name: "vampiresInventory",
     value: 20,
     rarity: "common",
     image: "./inventory/clothesInventory/vampiresInventory.png",
 };
 const fishermanClothes = {
     type: "artifact",
-    name: "fishermanClothes",
+    name: "fishrmanInventory",
     value: 20,
     rarity: "common",
     image: "./inventory/clothesInventory/fishrmanInventory.png",
 };
 const romanHelmet = {
     type: "artifact",
-    name: "romanHelmet",
+    name: "romanHelmetInventory",
     value: 20,
     rarity: "common",
     image: "./inventory/clothesInventory/romanHelmetInventory.png",
@@ -1396,43 +1461,86 @@ const romanHelmet = {
 
 // SOULS
 
-const frogSkin = {
-    name: "frogSkin",
+const frogSoulInventory = {
+    name: "frogSoulInventory",
     image: "./inventory/soulInventory/frogSoulInventory.png",
     type: "soul",
 }
-const ghostSkin = {
-    name: "ghostSkin",
+const ghostSoulInventory = {
+    name: "ghostSoulInventory",
     image: "./inventory/soulInventory/ghostSoulInventory.png",
     type: "soul",
 }
-const reaperSkin = {
-    name: "reaperSkin",
+const reaperSoulInventory = {
+    name: "reaperSoulInventory",
     image: "./inventory/soulInventory/reaperSoulInventory.png",
     type: "soul",
 }
-const arcanyDemon = {
-    name: "arcanyDemon",
+const arcanyDemonSoulInventory = {
+    name: "arcanyDemonSoulInventory",
     image: "./inventory/soulInventory/arcanyDemonSoulInventory.png",
     type: "soul",
 }
-const pinkDemon = {
-    name: "pinkDemon",
+const pinkDemonSoulInventory = {
+    name: "pinkDemonSoulInventory",
     image: "./inventory/soulInventory/pinkDemonSoulInventory.png",
     type: "soul",
 }
-const redDemon = {
-    name: "redDemon",
+const redDemonSoulInventory = {
+    name: "redDemonSoulInventory",
     image: "./inventory/soulInventory/redDemonSoulInventory.png",
     type: "soul",
 }
-const vampiresSkin = {
-    name: "vampiresSkin",
+const vampiresSoulInventory = {
+    name: "vampiresSoulInventory",
     image: "./inventory/soulInventory/vampiresSoulInventory.png",
     type: "soul",
 }
-const restfieldSkeletonSkin = {
-    name: "restfieldSkeletonSkin",
+const restfieldSkeletonSoulInventory = {
+    name: "restfieldSkeletonSoulInventory",
     image: "./inventory/soulInventory/restfieldSkeletonSoulInventory.png",
     type: "soul",
 }
+
+const itemsObj = {
+    arcaneGem,
+    solarGem,
+    nuclearGem,
+    commonFishStick,
+    uncommonFishStick,
+    rareFishStick,
+    commonFish,
+    arcaneStaffCommon,
+    arcaneRepeaterInv,
+    solarStaffCommon,
+    nuclearStaffCommon,
+    uncommonFish,
+    rareFish,
+    stick,
+    willowStick,
+    chestKey,
+    sardin,
+    ballo,
+    bass,
+    octopus,
+    mushroomClothesRed,
+    mushroomClothesOrange,
+    tropicalHatInventory,
+    skullHelmet,
+    reaperClothes,
+    blackVampiresClothes,
+    fishermanClothes,
+    romanHelmet,
+    frogSoulInventory,
+    ghostSoulInventory,
+    reaperSoulInventory,
+    arcanyDemonSoulInventory,
+    pinkDemonSoulInventory,
+    redDemonSoulInventory,
+    vampiresSoulInventory,
+    restfieldSkeletonSoulInventory,
+    miniMushroom,
+    treeLeaf,
+    bone,
+};
+

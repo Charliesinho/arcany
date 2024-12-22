@@ -93,67 +93,67 @@ restfieldTrialFront.src = "./islands/restfieldTrialFront.png"
 
 
 
-//PLAYER-SKINS <
+// PLAYER-SKINS <
 
 var humanSkin = new Image();
 humanSkin.src = "./skins/humanSkin.png";
 
-var frogSkin = new Image();
-frogSkin.src = "./skins/frogSkin.png";
+var frogSoulInventory = new Image();
+frogSoulInventory.src = "./skins/frogSkin.png";
 
-var ghostSkin = new Image();
-ghostSkin.src = "./skins/ghostSkin.png";
+var ghostSoulInventory = new Image();
+ghostSoulInventory.src = "./skins/ghostSkin.png";
 
-var reaperSkin = new Image();
-reaperSkin.src = "./skins/reaperSkin.png";
+var reaperSoulInventory = new Image();
+reaperSoulInventory.src = "./skins/reaperSkin.png";
 
-var arcanyDemon = new Image();
-arcanyDemon.src = "./skins/arcanyDemon.png";
+var arcanyDemonSoulInventory = new Image();
+arcanyDemonSoulInventory.src = "./skins/arcanyDemon.png";
 
-var pinkDemon = new Image();
-pinkDemon.src = "./skins/pinkDemon.png";
+var pinkDemonSoulInventory = new Image();
+pinkDemonSoulInventory.src = "./skins/pinkDemon.png";
 
-var redDemon = new Image();
-redDemon.src = "./skins/redDemon.png";
+var redDemonSoulInventory = new Image();
+redDemonSoulInventory.src = "./skins/redDemon.png";
 
-var vampiresSkin = new Image();
-vampiresSkin.src = "./skins/vampiresSkin.png";
+var vampiresSoulInventory = new Image();
+vampiresSoulInventory.src = "./skins/vampiresSkin.png";
 
-var restfieldSkeletonSkin = new Image();
-restfieldSkeletonSkin.src = "./skins/restfieldSkeletonSkin.png";
+var restfieldSkeletonSoulInventory = new Image();
+restfieldSkeletonSoulInventory.src = "./skins/restfieldSkeletonSkin.png";
 
-//PLAYER-SKINS >
+// PLAYER-SKINS >
 
-//PLAYER-ARMOR <
-var tropicalHat = new Image();
-tropicalHat.src = "./capes/tropicalHat.png";
+// PLAYER-ARMOR <
+var tropicalHatInventory = new Image();
+tropicalHatInventory.src = "./capes/tropicalHat.png";
 
-var skullHelmet = new Image();
-skullHelmet.src = "./capes/skullHelmet.png";
+var skullInventory = new Image();
+skullInventory.src = "./capes/skullHelmet.png";
 
-var mushroomClothesRed = new Image();
-mushroomClothesRed.src = "./capes/mushroomClothesRed.png";
+var redMushroomlInventory = new Image();
+redMushroomlInventory.src = "./capes/mushroomClothesRed.png";
 
-var fishermanClothes = new Image();
-fishermanClothes.src = "./capes/fishermanClothes.png";
+var fishrmanInventory = new Image();
+fishrmanInventory.src = "./capes/fishermanClothes.png";
 
-var mushroomClothesOrange = new Image();
-mushroomClothesOrange.src = "./capes/mushroomClothesOrange.png";
+var rorangeMushroomlInventory = new Image();
+rorangeMushroomlInventory.src = "./capes/mushroomClothesOrange.png";
 
-var reaperClothes = new Image();
-reaperClothes.src = "./capes/reaperClothes.png";
+var reaperInventory = new Image();
+reaperInventory.src = "./capes/reaperClothes.png";
 
-var blackVampiresClothes = new Image();
-blackVampiresClothes.src = "./capes/blackVampiresClothes.png";
+var vampiresInventory = new Image();
+vampiresInventory.src = "./capes/blackVampiresClothes.png";
 
-var romanHelmet = new Image();
-romanHelmet.src = "./capes/romanHelmet.png";
-
+var romanHelmetInventory = new Image();
+romanHelmetInventory.src = "./capes/romanHelmet.png";
 
 var transparentCape = new Image();
 transparentCape.src = "./capes/transparent.png";
 
-//PLAYER-ARMOR >
+// PLAYER-ARMOR >
+
 
 
 const slime = new Image();
@@ -200,10 +200,10 @@ const arcaneStaffCommon = new Image();
 arcaneStaffCommon.src = "arcaneStaffCommon.png";
 
 const questOngoingImg = new Image();
-questOngoingImg.src = "./inventory/questOngoingImg.png";
+questOngoingImg.src = "./Textures/questOngoingImg.png";
 
 const questStartImg = new Image();
-questStartImg.src = "./inventory/questStartImg.png";
+questStartImg.src = "./Textures/questStartImg.png";
 
 const arcaneRepeater = new Image();
 arcaneRepeater.src = "./inventory/arcaneRepeater.png";
@@ -1932,6 +1932,8 @@ let newCombatLevel = 0;
 let changeCombatLevel = true;
 let combatLevelSimple = 0;
 
+let dialogBoxes;
+
 function initDraggables() {
   dragula([document.querySelector(".dragParent"), document.querySelector(".dragParent1")])
 }
@@ -2132,20 +2134,24 @@ function updateQuestInfo(quest) {
 
   questTitle.innerHTML = quest.title;
   questDescription.innerHTML = quest.questDescription;
-  questEndItem.src = `./inventory/${quest.rewardType}.png`
+  questEndItem.src = `./inventory/${quest.rewardItem}.png`
 
-  let itemAmount = myPlayer.inventory.filter((item) => item.type === quest.completionItem).length;
+  console.log(myPlayer.inventory, quest)
+
+  let itemAmount = myPlayer.inventory.filter((item) => item.name === quest.completionItem).length;
   questProgressItems.innerHTML = itemAmount + " / " + quest.completionAmount + " " + quest.completionItem
 
   questProgressChild.style.width = (itemAmount / quest.completionAmount) * 100 + "%";
 
-  questReward.innerHTML = "x" + quest.rewardItem + " " + quest.rewardType
+  questReward.innerHTML = quest.rewardType;
 }
 
 questClose.addEventListener("click", () => {
   const questUi = document.querySelector(".questInfo");
   questUi.style.display = "none";
 })
+
+let updateDialogs = true;
 
 socket.on("player", (serverPlayer) => {
 
@@ -2172,8 +2178,363 @@ socket.on("player", (serverPlayer) => {
     currentHealth = maxHealth
   }
 
+  dialogBoxes = {
+
+
+    "Fishing Quest": {
+    dialogName: "quest",
+    questRequirements: [],
+    type: "counter",
+  
+    questName: "Fishing quest",
+    questDecription: "Melina said that if I bring her five fish of any type then she will give me a reward",
+    questCard: "./Cards/fish.png",
+    rewardType: "soul",
+    rewardItem: "frogSoulInventory",
+    completionItem: "sardin",
+    completionAmount: 10,
+    markerX: 1500,
+    markerY: 863,
+    
+    dialogText:
+    [
+      {
+        NPC: "Fisherman",
+        text: "Hello Adventurer! Oh you are looking for a task?",
+      },
+      {
+        NPC: "Fisherman",
+        text: "Umm... Well.. Lets see...",
+      },
+      {
+        NPC: "Fisherman",
+        text: "Well I can give you something I found just for your efforts, go catch 5 red sardines and bring them back to me.",
+      },
+      {
+        NPC: myPlayer ? myPlayer.username : "User",
+        text: "Alright that sounds simple enough!",
+      },
+    ],
+  
+    progressText:
+    [
+      {
+        NPC: "Fisherman",
+        text: "So? I am waiting on those fish!",
+      },
+      {
+        NPC: "Fisherman",
+        text: "Do you have them?",
+        check: true,
+      },
+    ],
+  
+    rewardText:
+    [
+      {
+        NPC: "Fisherman",
+        text: "Really nice job!",
+      },
+      {
+        NPC: myPlayer ? myPlayer.username : "User",
+        text: "Thank you!",
+      },
+    ],
+    },
+    "Deep Forestry Quest": {
+    dialogName: "quest",
+    questRequirements: [],
+    type: "counter",
+  
+    questName: "Deep Forestry Quest",
+    questDecription: "The guy in the forest said that for a few sticks he can give me a hat, would be nice for the sun!",
+    questCard: "./Cards/clothes.png",
+    rewardType: "item",
+    rewardItem: "tropicalHatInventory",
+    completionItem: "stick",
+    completionAmount: 2,
+    markerX: 1700,
+    markerY: 863,
+    
+    dialogText:
+    [
+      {
+        NPC: "Explorer",
+        text: "Hello Adventurer! Listen I am having a bad time.",
+      },
+      {
+        NPC: "Explorer",
+        text: "I want to explore but I keep getting sunburnt so I need to get under the trees, and I already got lost 3 times because of that.",
+      },
+      {
+        NPC: "Explorer",
+        text: "I can make a hat for you and me if you bring me 2 sticks of wood! The sun can be harsh this time of the year...",
+      },
+      {
+        NPC: myPlayer ? myPlayer.username : "User",
+        text: "I am sure I saw sticks in the lake!",
+      },
+    ],
+  
+    progressText:
+    [
+      {
+        NPC: "Explorer",
+        text: "Please tell me you have the sticks",
+      },
+      {
+        NPC: "Explorer",
+        text: "...",
+        check: true,
+      },
+    ],
+  
+    rewardText:
+    [
+      {
+        NPC: "Explorer",
+        text: "Finally! Here you go",
+      },
+      {
+        NPC: myPlayer ? myPlayer.username : "User",
+        text: "Oh wow, stylish!",
+      },
+    ],
+    },
+    "Tree Issues Quest": {
+    dialogName: "quest",
+    questRequirements: [],
+    type: "counter",
+  
+    questName: "Tree Issues Quest",
+    questDecription: "This dude by the crystal mentioned that he is trying to figure out why the trees are alive in that area, I need to get some leaves from those trees.",
+    questCard: "./Cards/fight.png",
+    rewardType: "soul",
+    rewardItem: "arcanyDemonSoulInventory",
+    completionItem: "treeLeaf",
+    completionAmount: 5,
+    markerX: 1400,
+    markerY: 863,
+    
+    dialogText:
+    [
+      {
+        NPC: "Scientist",
+        text: "Oh hey there! Can you help me with something?",
+      },
+      {
+        NPC: "Scientist",
+        text: "This crystal has some connection with the environment but I cant figure out why...",
+      },
+      {
+        NPC: "Scientist",
+        text: "If you bring me 5 leaves from those trees I can investigate further",
+      },
+      {
+        NPC: myPlayer ? myPlayer.username : "User",
+        text: "And my reward?",
+      },
+      {
+        NPC: "Scientist",
+        text: "These kids... yes yes of course you will have a reward!",
+      },
+    ],
+  
+    progressText:
+    [
+      {
+        NPC: "Scientist",
+        text: "So, how is it going?",
+      },
+      {
+        NPC: "Scientist",
+        text: "These trees really dont like that I am here!",
+        check: true,
+      },
+    ],
+  
+    rewardText:
+    [
+      {
+        NPC: "Scientist",
+        text: "Amazing! Here you go",
+      },
+    ],
+    },
+    "A locked door Quest": {
+    dialogName: "quest",
+    questRequirements: [],
+    type: "counter",
+  
+    questName: "A locked door Quest",
+    questDecription: "The witch at the door of Restfield wants me to help her cook something, I will need 3 mushrooms for that.",
+    questCard: "./Cards/fight.png",
+    rewardType: "quest",
+    rewardItem: "restfieldAccess",
+    completionItem: "miniMushroom",
+    completionAmount: 3,
+    markerX: 1400,
+    markerY: 863,
+    
+    dialogText:
+    [
+      {
+        NPC: "Witch",
+        text: "Hey there little one! Can you help me out an old witch?... Okay maybe not so old",
+      },
+      {
+        NPC: "Witch",
+        text: "I am trying to finish my cacerol but I am missing one ingredient...",
+      },
+      {
+        NPC: "Witch",
+        text: "TINY MUSHROOMS!!!!!",
+      },
+      {
+        NPC: "Witch",
+        text: "....",
+      },
+      {
+        NPC: "Witch",
+        text: "Sorry...",
+      },
+      {
+        NPC: "Witch",
+        text: "I saw a little mushroom kingdom close to here, they seem to have plenty.",
+      },
+      {
+        NPC: myPlayer ? myPlayer.username : "User",
+        text: "Would I need to kill them?",
+      },
+      {
+        NPC: "Witch",
+        text: "Well...",
+      },
+      {
+        NPC: "Witch",
+        text: "Um...",
+      },
+      {
+        NPC: "Witch",
+        text: "Yes. BUT if you do so I can open this massive door for you!",
+      },
+    ],
+  
+    progressText:
+    [
+      {
+        NPC: "Witch",
+        text: "So, any luck? I am getting older by the minute out here",
+      },
+      {
+        NPC: "Witch",
+        text: "...",
+        check: true,
+      },
+    ],
+  
+    rewardText:
+    [
+      {
+        NPC: "Witch",
+        text: "Amazing! Welcome to RESTFIELD!",
+      },
+    ],
+    },
+  
+  
+  
+  dialogCastelDoor: {
+    dialogName: "dialogCastelDoor",
+    questRequirements: [],
+    type: "dialog",
+    dialogText:
+    [{
+        NPC: myPlayer ? myPlayer.username : "User",
+        text: "This door seems to be locked, I need to find a way to open it.",
+      },
+    ],
+  },
+  
+  dialogFishingPole: {
+    dialogName: "dialogFishingPole",
+    questRequirements: [],
+    type: "dialog",
+    dialogText:
+    [{
+        NPC: "Sign",
+        text: "You will find all kinds of fish species here. Get close to the water and press 'E' to fish.",
+      },
+    ],
+  },
+  
+  dialogCombatAreaPole: {
+    dialogName: "dialogCombatAreaPole",
+    questRequirements: [],
+    type: "dialog",
+    dialogText:
+    [{
+        NPC: "Sign",
+        text: "You are entering a combat zone. All kinds of monsters are present, so stay alert.",
+      },
+    ],
+  },
+  
+  dialogWayPoint: {
+    dialogName: "dialogWayPoint",
+    questRequirements: [],
+    type: "dialog",
+    dialogText:
+    [{
+      NPC: "Mel",
+      text: "It seems like I came from here. What is this... a crystal? Why does it look so strange?",
+    },
+  ],
+  },
+  
+  dialogCoffeeMachine: {
+  dialogName: "dialogCoffeeMachine",
+  questRequirements: [],
+  type: "dialog",
+  dialogText:
+  [{
+      NPC: "Coffee Machine",
+      text: "Apologies! Out of beans. Maintenance required.",
+    },
+  ],
+  },
+  
+  dialogCristalPortal: {
+  dialogName: "dialogCristalPortal",
+  questRequirements: [],
+  type: "dialog",
+  dialogText:
+  [{
+      NPC: "Mel",
+      text: "What a strange crystal... What could it be for?",
+    },
+  ],
+  },
+  dialogSlimeBoxes: {
+  dialogName: "dialogSlimeBoxes",
+  questRequirements: [],
+  type: "dialog",
+  dialogText:
+  [{
+      NPC: "Mel",
+      text: "What a strange texture...",
+    },
+  ],
+  },
+  
+  };
+
   health()
   updateQuestUI()
+  if (updateDialogs) {
+    addMapsInfoToDiv()
+    updateDialogs = false
+  }
 
   playerCoinsAmount.innerHTML = myPlayer.currency 
   // console.log(myPlayer)
@@ -3211,7 +3572,7 @@ canvasLobby.addEventListener("mousedown", (e) => {
               }, 20);
             }
   
-            else if (myPlayer?.weapon[0].name === "arcaneRepeater") {
+            else if (myPlayer?.weapon[0].name === "arcaneRepeaterInv") {
   
             shootArcaneRepeater()
             shootInterval = setInterval(() => {
@@ -3370,156 +3731,13 @@ var starquest = document.querySelector('.starquest');
 var charimg = document.querySelector('.char-img');
 var containerChat = document.querySelector('.container');
 
-var textSpeed = 50;
+var textSpeed = 20;
 let currentDialogTitle = ""
 var currentDialog = [];  // This will hold the current dialog to display
 let currentDialogParent = {};
 var currentDialogIndex = 0;  // Keeps track of which paragraph we're on
 var loopLen = 0;  // Character loop index
 var isTyping = false;  // Flag to prevent advancing while typing
-
-let dialogBoxes = {
-
-
-    "fishing Quest": {
-		dialogName: "quest",
-		questRequirements: [],
-		type: "counter",
-
-    questName: "Fishing quest",
-    questDecription: "Melina said that if I bring her five fish of any type then she will give me a reward",
-    questCard: "./Cards/fish.png",
-    rewardType: "coins",
-    rewardItem: 10,
-    completionItem: "fish",
-    completionAmount: 5,
-    markerX: 1500,
-    markerY: 1500,
-    
-		dialogText:
-		[
-      {
-        NPC: "Quest giver",
-				text: "Hello Kid! Oh you are looking for a task? Well I can give you some money just for your efforts, go catch 5 fish and bring them back to me.",
-			},
-			{
-        NPC: myPlayer ? myPlayer.username : "User",
-				text: "Alright that sounds simple enough!",
-			},
-		],
-
-    progressText:
-    [
-      {
-        NPC: "Quest giver",
-        text: "So? I am waiting on those fish!",
-      },
-      {
-        NPC: "Quest giver",
-        text: "Do you have them?",
-        check: true,
-      },
-    ],
-
-    rewardText:
-    [
-      {
-        NPC: "Quest giver",
-        text: "Really nice job! Here is some cash.",
-      },
-      {
-        NPC: myPlayer ? myPlayer.username : "User",
-        text: "Thank you!",
-      },
-    ],
-	},
-
-
-
-  dialogCastelDoor: {
-		dialogName: "dialogCastelDoor",
-		questRequirements: [],
-		type: "dialog",
-		dialogText:
-		[{
-				NPC: myPlayer ? myPlayer.username : "User",
-				text: "This door seems to be locked, I need to find a way to open it.",
-			},
-		],
-	},
-
-  dialogFishingPole: {
-		dialogName: "dialogFishingPole",
-		questRequirements: [],
-		type: "dialog",
-		dialogText:
-		[{
-				NPC: "Sign",
-				text: "You will find all kinds of fish species here. Get close to the water and press 'E' to fish.",
-			},
-		],
-	},
-
-  dialogCombatAreaPole: {
-		dialogName: "dialogCombatAreaPole",
-		questRequirements: [],
-		type: "dialog",
-		dialogText:
-		[{
-				NPC: "Sign",
-				text: "You are entering a combat zone. All kinds of monsters are present, so stay alert.",
-			},
-		],
-	},
-
-  dialogWayPoint: {
-    dialogName: "dialogWayPoint",
-		questRequirements: [],
-		type: "dialog",
-		dialogText:
-		[{
-      NPC: "Mel",
-      text: "It seems like I came from here. What is this... a crystal? Why does it look so strange?",
-    },
-  ],
-},
-
-  dialogCoffeeMachine: {
-  dialogName: "dialogCoffeeMachine",
-  questRequirements: [],
-  type: "dialog",
-  dialogText:
-  [{
-      NPC: "Coffee Machine",
-      text: "Apologies! Out of beans. Maintenance required.",
-    },
-  ],
-},
-
-  dialogCristalPortal: {
-  dialogName: "dialogCristalPortal",
-  questRequirements: [],
-  type: "dialog",
-  dialogText:
-  [{
-      NPC: "Mel",
-      text: "What a strange crystal... What could it be for?",
-    },
-  ],
-},
-  dialogSlimeBoxes: {
-  dialogName: "dialogSlimeBoxes",
-  questRequirements: [],
-  type: "dialog",
-  dialogText:
-  [{
-      NPC: "Mel",
-      text: "What a strange texture...",
-    },
-  ],
-},
-
-};
 
 // Function to display one paragraph from the dialog
 function displayDialogParagraph() {
@@ -3570,12 +3788,15 @@ document.addEventListener('keyup', function(event) {
         currentDialogIndex++;  // Move to the next paragraph
         if (currentDialogIndex < currentDialog.length) {
             displayDialogParagraph();  // Display the next paragraph
+            console.log("repeating dialog")
         } else if (dialogOpened) {
           dialogOpened = false;
           containerChat.style.display = "none";
-          console.log("Dialog finished", currentDialogParent.dialogName);
+          // console.log("Dialog finished", currentDialogParent, currentDialog);
 
           if (currentDialogParent.dialogName === "quest") {
+             
+            let indexToDeliver = [];
             
             if (!myPlayer.questsOngoing.some(quest => quest.title === currentDialogParent.questName) && finishingQuest === false) {
               const questToSend = {
@@ -3593,26 +3814,30 @@ document.addEventListener('keyup', function(event) {
               socket.emit("questStarted", questToSend);
             }
 
-            finishingQuest = false; 
-            let indexToDeliver = [];
-  
-            for (const item of myPlayer.inventory) {
-              if (item.type === currentDialogParent.completionItem) {
-                indexToDeliver.push(myPlayer.inventory.indexOf(item))
+
+            else if (myPlayer.questsOngoing.some(quest => quest.title === currentDialogParent.questName) && finishingQuest === false) {
+
+              for (const item of myPlayer.inventory) {
+                if (item.name === currentDialogParent.completionItem) {
+                  indexToDeliver.push(myPlayer.inventory.indexOf(item))
+                }
+              }
+    
+              if (indexToDeliver.length >= currentDialogParent.completionAmount) {
+                let indexToDeliverMod = indexToDeliver.splice(0, currentDialogParent.completionAmount)
+                let questCompleted = {
+                  name: currentDialogParent.questName,
+                  rewardType: currentDialogParent.rewardType,
+                  rewardAmount: currentDialogParent.rewardItem
+                }
+    
+                // socket.emit("toDelete", indexToDeliverMod);
+                socket.emit("questFinished", questCompleted);
               }
             }
   
-            if (indexToDeliver.length >= currentDialogParent.completionAmount) {
-              let indexToDeliverMod = indexToDeliver.splice(0, currentDialogParent.completionAmount)
-              let questCompleted = {
-                name: currentDialogParent.questName,
-                rewardType: currentDialogParent.rewardType,
-                rewardAmount: currentDialogParent.rewardItem
-              }
-  
-              socket.emit("toDelete", indexToDeliverMod);
-              socket.emit("questFinished", questCompleted);
-            }
+
+            finishingQuest = false;
             
             
           }
@@ -3652,19 +3877,19 @@ function startDialog(dialogKey) {
     }
 }
 
-// Increase text print speed on spacebar press (keydown)
-document.addEventListener('keydown', function(event) {
-    if (event.keyCode === 32) {
-        textSpeed = 5;  // Increase speed
-    }
-});
+// // Increase text print speed on spacebar press (keydown)
+// document.addEventListener('keydown', function(event) {
+//     if (event.keyCode === 32) {
+//         textSpeed = 5;  // Increase speed
+//     }
+// });
 
-// Reset text print speed on spacebar release (keyup)
-document.addEventListener('keyup', function(event) {
-    if (event.keyCode === 32) {
-        textSpeed = 50;  // Reset speed
-    }
-});
+// // Reset text print speed on spacebar release (keyup)
+// document.addEventListener('keyup', function(event) {
+//     if (event.keyCode === 32) {
+//         textSpeed = 50;  // Reset speed
+//     }
+// });
 
 // Chat System <
 
@@ -9171,8 +9396,10 @@ let mapsInfo = {
           x: 764,
           y: 692
         },
-        spawnTimer: 10000,
+        spawnTimer: 20000,
         enemyStateInt: 2000,
+        drop: "treeLeaf",
+        dropRate: 50,
       },
       {
         name: "treeSimpleEnemy",
@@ -9204,8 +9431,10 @@ let mapsInfo = {
           x: 3368,
           y: 1094
         },
-        spawnTimer: 10000,
+        spawnTimer: 20000,
         enemyStateInt: 2000,
+        drop: "treeLeaf",
+        dropRate: 50,
       },
       {
         name: "treeSimpleEnemy",
@@ -9237,8 +9466,10 @@ let mapsInfo = {
           x: 1832,
           y: 573
         },
-        spawnTimer: 10000,
+        spawnTimer: 20000,
         enemyStateInt: 2000,
+        drop: "treeLeaf",
+        dropRate: 50,
       },
       {
         name: "treeSimpleEnemy",
@@ -9270,8 +9501,10 @@ let mapsInfo = {
           x: 3052,
           y: 579
         },
-        spawnTimer: 10000,
+        spawnTimer: 20000,
         enemyStateInt: 2000,
+        drop: "treeLeaf",
+        dropRate: 50,
       },
     ]
   },
@@ -11476,6 +11709,8 @@ let mapsInfo = {
         spawnTimer: null,
         enemyStateInt: 1000,
         active: false,
+        drop: "miniMushroom",
+        dropRate: 30,
       },
       {
         name: "redMooshroomEnemy",
@@ -11510,6 +11745,8 @@ let mapsInfo = {
         spawnTimer: null,
         enemyStateInt: 1000,
         active: false,
+        drop: "miniMushroom",
+        dropRate: 30,
       },
       {
         name: "redMooshroomEnemy",
@@ -11544,6 +11781,8 @@ let mapsInfo = {
         spawnTimer: null,
         enemyStateInt: 1000,
         active: false,
+        drop: "miniMushroom",
+        dropRate: 30,
       },
       {
         name: "redMooshroomEnemy",
@@ -11578,6 +11817,8 @@ let mapsInfo = {
         spawnTimer: null,
         enemyStateInt: 1000,
         active: false,
+        drop: "miniMushroom",
+        dropRate: 30,
       },
       {
         name: "redMooshroomEnemy",
@@ -11612,6 +11853,8 @@ let mapsInfo = {
         spawnTimer: null,
         enemyStateInt: 1000,
         active: false,
+        drop: "miniMushroom",
+        dropRate: 30,
       },
       {
         name: "redMooshroomEnemy",
@@ -11646,6 +11889,8 @@ let mapsInfo = {
         spawnTimer: null,
         enemyStateInt: 1000,
         active: false,
+        drop: "miniMushroom",
+        dropRate: 30,
       },
       {
         name: "mooshroomBossRed",
@@ -30347,8 +30592,6 @@ function addMapsInfoToDiv() {
   }
 }
 
-addMapsInfoToDiv();
-
 // Developer UI <
 
 
@@ -30645,6 +30888,7 @@ function drawColliders (type, x, y, w, h) {
           
         }
         else if (wall.type === "dialog") {
+          if (!myPlayer.questsCompleted.find(quest => quest.title === dialogBoxes[wall.name].questName))
           dialogAvailable = true;
           currentDialogTitle = wall.name;
           if (dialogOpened) {
@@ -30780,7 +31024,14 @@ function drawColliders (type, x, y, w, h) {
 function drawQuestMarkers () {
   mapsInfo[currentLand].colliders.forEach(wall => {
     if (wall.type === "dialog") {
-      console.log(wall)
+      if (dialogBoxes[wall.name].dialogName === "quest") {
+        if (myPlayer.questsOngoing.find(quest => quest.title === dialogBoxes[wall.name].questName)) {
+          canvas.drawImage(questOngoingImg, dialogBoxes[wall.name].markerX - cameraX, dialogBoxes[wall.name].markerY - cameraY, 40, 75);
+        } 
+        else if (!myPlayer.questsCompleted.find(quest => quest.title === dialogBoxes[wall.name].questName)) {
+          canvas.drawImage(questStartImg, dialogBoxes[wall.name].markerX - cameraX, dialogBoxes[wall.name].markerY - cameraY, 40, 75);
+        }
+      }
     }
   })
 }
@@ -31165,35 +31416,8 @@ function drawPlayerArmor (player) {
 
 function drawPlayerArtifact (player) {
   if (player.artifact[0]) {
-    if (player.artifact[0].name === "tropicalHat") {
-      return tropicalHat;
-    } 
-    else if (player.artifact[0].name === "mushroomClothesRed") {
-      return mushroomClothesRed;
-    } 
-    else if (player.artifact[0].name === "mushroomClothesOrange") {
-      return mushroomClothesOrange;
-    }
-    else if (player.artifact[0].name === "fishermanClothes") {
-      return fishermanClothes;
-    }
-    else if (player.artifact[0].name === "reaperClothes") {
-      return reaperClothes;
-    }
-    else if (player.artifact[0].name === "skullHelmet") {
-      return skullHelmet;
-    }
-    else if (player.artifact[0].name === "blackVampiresClothes") {
-      return blackVampiresClothes;
-    }
-    else if (player.artifact[0].name === "romanHelmet") {
-      return romanHelmet;
-    }
-    
-    
-    else {
-      return transparentCape;
-    }
+    let name = player.artifact[0].name;
+    return window[name]; 
   } else {
     return transparentCape;
   }
@@ -31204,6 +31428,7 @@ function drawPlayerWeaponOut (player) {
     canvas.save(); // Save the current canvas state
     canvas.translate(playerX - cameraX - cameraShakeX - 150 +18 - recoil, playerY + cameraShakeY + 180 - cameraY +70); // Translate to the player's position
     canvas.rotate(angleMouse); // Rotate based on the mouse angle
+    let name = player.artifact[0].name;
     if (player.weapon[0].name === "solarStaffCommon") {
       canvas.drawImage(solarStaffCommon ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
     }
@@ -31213,9 +31438,10 @@ function drawPlayerWeaponOut (player) {
     else if (player.weapon[0].name === "nuclearStaffCommon") {
       canvas.drawImage(nuclearStaffCommon ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
     }
-    else if (player.weapon[0].name === "arcaneRepeater") {
+    else if (player.weapon[0].name === "arcaneRepeaterInv") {
       canvas.drawImage(arcaneRepeater ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
     }
+    
     canvas.restore();
   }
 }
@@ -31338,7 +31564,7 @@ function drawLocalBullets () {
         canvas.drawImage(bulletStick, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
         push360Particles("red", 1, projectile.x + 20, projectile.y - 50)
       }
-      if (myPlayer?.weapon[0]?.name === "arcaneStaffCommon" || myPlayer?.weapon[0]?.name === "arcaneRepeater") {
+      if (myPlayer?.weapon[0]?.name === "arcaneStaffCommon" || myPlayer?.weapon[0]?.name === "arcaneRepeaterInv") {
         canvas.drawImage(bulletStickBlue, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
         push360Particles("purple", 1, projectile.x + 20, projectile.y - 50)
       }
@@ -31557,7 +31783,6 @@ function drawMap(layer) {
     canvas.drawImage(mapsInfo[currentLand].backgroundImage, cameraShakeX - cameraX, cameraShakeY - cameraY, 4500, 4500);
   } else {
     canvas.drawImage(mapsInfo[currentLand].foregroundImage, cameraShakeX - cameraX, cameraShakeY - cameraY, 4500, 4500);
-    drawQuestMarkers()
   }
 
   canvas.filter = "none";
@@ -31728,6 +31953,13 @@ function checkEnemyCombat (enemy) {
     mapsInfo[currentLand].enemies.splice(mapsInfo[currentLand].enemies.indexOf(enemy), 1)
 
     socket.emit("enemyKilled", enemy.xp);
+
+    if (enemy.drop) {
+      let randomNumber = Math.floor(Math.random() * 101);
+      if (enemy.dropRate <= randomNumber) {
+        socket.emit("enemyDrop", enemy.drop);
+      }
+    }
 
     const hasActiveBoss = mapsInfo[currentLand].enemies.some(
       enemy => enemy.active === true && !enemy.isBoss
@@ -32509,6 +32741,9 @@ function lobbyLoop() {
   // Dev Colliders
   drawDevWallsPlacement()
   drawColliders("player", "", "", "", "")
+
+  // Quest marker
+  drawQuestMarkers()
 
 }
 
