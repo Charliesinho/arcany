@@ -54,6 +54,7 @@ function tick() {
                 player.souls = clientPlayer.souls;
                 player.artifacts = clientPlayer.artifacts;
                 player.currency = clientPlayer.currency;
+                player.access = clientPlayer.access;
 
                 player.weapon = clientPlayer.weapon;
                 player.armor = clientPlayer.armor;
@@ -239,6 +240,11 @@ async function main() {
             scores: [
                 {
                     mushroomTrial: 0,
+                }
+            ],
+            access: [
+                {
+                    restfield: false,
                 }
             ],
 
@@ -756,6 +762,7 @@ async function main() {
                     if (quest.rewardAmount === "restfieldAccess") {
                         player.access[0].restfield = true;
                         await Player.findOneAndUpdate({socket: socket.id}, {access: player.access}, {new: true}).exec();
+                        myPlayer[socket.id].access = player.access;
                     }
                 }
 
@@ -816,8 +823,8 @@ async function main() {
                         player.inventory.splice(player.inventory.indexOf(key), 1);
 
                         if (number < 30) {
-                            player.inventory.push(tropicalHat);  
-                            io.to(socket.id).emit('obtained', tropicalHat);
+                            player.inventory.push(tropicalHatInventory);  
+                            io.to(socket.id).emit('obtained', tropicalHatInventory);
                         } 
                         else if (number >= 30 && number < 60) {
                             player.inventory.push(arcaneStaffCommon);                                           
@@ -832,8 +839,8 @@ async function main() {
                             io.to(socket.id).emit('obtained', mushroomClothesRed);
                         } 
                         else {
-                            player.inventory.push(arcaneRepeater);                                           
-                            io.to(socket.id).emit('obtained', arcaneRepeater);
+                            player.inventory.push(arcaneRepeaterInv);                                           
+                            io.to(socket.id).emit('obtained', arcaneRepeaterInv);
                         }
                     }
                     
@@ -1005,7 +1012,7 @@ async function main() {
                 if (playerData && playerData.password === password) {
                     const newPlayerData = await Player.findOneAndUpdate({username: username}, {socket: id}, {new: true}).exec()  
                     usernames[socket.id] = username;  
-                    myPlayer[socket.id] = newPlayerData;      
+                    myPlayer[socket.id] = newPlayerData; 
                     inventoryStore[socket.id] = myPlayer[socket.id];
 
                     
@@ -1017,8 +1024,8 @@ async function main() {
                     // await pushItem(blackVampiresClothes, socket)
                     // await pushItem(fishermanClothes, socket)
                     // await pushItem(tropicalHat, socket)
-                    // await pushItem(romanHelmet, socket)
-                    // await pushItem(arcaneRepeaterInv, socket)
+                    // await pushItem(skullHelmet, socket)
+                    await pushItem(arcaneRepeaterInv, socket)
 
                     // await Player.findOneAndUpdate({socket: socket.id}, {souls: [frogSoulInventory, ghostSkin, reaperSkin, vampiresSkin, redDemon, pinkDemon, arcanyDemon, restfieldSkeletonSkin]}, {new: true});
 
@@ -1400,6 +1407,16 @@ const bone = {
     image: "./inventory/bone.png",
 };
 
+ const restfieldBlanket = {
+    type: "fish",
+    name: "restfieldBlanket",
+    value: 4,
+    rarity: "rare",
+    image: "./inventory/restfieldBlanket.png",
+};
+
+
+
 // CLOTHES
 
 const mushroomClothesRed = {
@@ -1457,6 +1474,13 @@ const romanHelmet = {
     value: 20,
     rarity: "common",
     image: "./inventory/clothesInventory/romanHelmetInventory.png",
+};
+const restfieldGhostClothes = {
+    type: "artifact",
+    name: "restfieldGhostClothes",
+    value: 20,
+    rarity: "common",
+    image: "./inventory/clothesInventory/restfieldGhostInventory.png",
 };
 
 // SOULS
@@ -1539,8 +1563,10 @@ const itemsObj = {
     redDemonSoulInventory,
     vampiresSoulInventory,
     restfieldSkeletonSoulInventory,
+    restfieldGhostClothes,
     miniMushroom,
     treeLeaf,
     bone,
+    restfieldBlanket
 };
 

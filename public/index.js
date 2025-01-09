@@ -148,6 +148,8 @@ vampiresInventory.src = "./capes/blackVampiresClothes.png";
 
 var romanHelmetInventory = new Image();
 romanHelmetInventory.src = "./capes/romanHelmet.png";
+var restfieldGhostClothes = new Image();
+restfieldGhostClothes.src = "./capes/restfieldGhostClothes.png";
 
 var transparentCape = new Image();
 transparentCape.src = "./capes/transparent.png";
@@ -180,6 +182,15 @@ restfieldGhost.src = "./enemies/restfieldLittleghost.png"
 const restfieldSkeleton = new Image();
 restfieldSkeleton.src = "./enemies/restfielSkeleton.png"
 
+const brownBunny = new Image();
+brownBunny.src = "./hunting/brownBunny.png"
+
+const whiteBunny = new Image();
+whiteBunny.src = "./hunting/whiteBunny.png"
+
+const blackBrownBunny = new Image();
+blackBrownBunny.src = "./hunting/blackBrownBunny.png"
+
 let enemiesImages = {
   treeSimpleEnemy: treeSimpleEnemy,
   redMooshroomEnemy: redMooshroomEnemy,
@@ -188,6 +199,9 @@ let enemiesImages = {
   restfieldGhost : restfieldGhost,
   restfieldSkeleton : restfieldSkeleton,
   restfieldReaper : restfieldReaper,
+  brownBunny : brownBunny,
+  whiteBunny : whiteBunny,
+  blackBrownBunny : blackBrownBunny,
 };
 
 const slimeDMG = new Image();
@@ -213,6 +227,9 @@ nuclearStaffCommon.src = "nuclearStaffCommon.png";
 
 const solarStaffCommon = new Image();
 solarStaffCommon.src = "solarStaffCommon.png";
+
+const fishingStick = new Image();
+fishingStick.src = "fishingStick.png";
 
 const WeaponWillowStick = new Image();
 WeaponWillowStick.src = "willowStick.png";
@@ -311,12 +328,20 @@ const fightMusic1 = new Audio("./audios/fightMusic1.mp3");
 fightMusic1.loop = true;
 fightMusic1.volume = 0.3;
 
+const SokosBoss = new Audio("./audios/SokosBoss.wav");
+SokosBoss.loop = true;
+// SokosBoss.volume = ;
+
 const grasslandsLoop1 = new Audio("./audios/seaShanty.mp3");
 grasslandsLoop1.loop = true;
 grasslandsLoop1.volume = 0.0;
 
 const grasslandsEnviroment = new Audio("./audios/grasslandsEnviroment.mp3");
 grasslandsEnviroment.loop = true;
+
+const restfield = new Audio("./audios/restfield.mp3");
+restfield.loop = true;
+restfield.volume = 0.05;
 
 const grassLandsSong = new Audio("./audios/grassLandsSong.mp3");
 grassLandsSong.loop = true;
@@ -2193,8 +2218,8 @@ socket.on("player", (serverPlayer) => {
     rewardItem: "frogSoulInventory",
     completionItem: "sardin",
     completionAmount: 10,
-    markerX: 1500,
-    markerY: 863,
+    markerX: 1922 + 364,
+    markerY: 1879 + 347 / 2,
     
     dialogText:
     [
@@ -2253,8 +2278,8 @@ socket.on("player", (serverPlayer) => {
     rewardItem: "tropicalHatInventory",
     completionItem: "stick",
     completionAmount: 2,
-    markerX: 1700,
-    markerY: 863,
+    markerX: 1974 - 200,
+    markerY: 1443 + 600,
     
     dialogText:
     [
@@ -2313,8 +2338,8 @@ socket.on("player", (serverPlayer) => {
     rewardItem: "arcanyDemonSoulInventory",
     completionItem: "treeLeaf",
     completionAmount: 5,
-    markerX: 1400,
-    markerY: 863,
+    markerX: 1573 + 250,
+    markerY: 1851 + 200,
     
     dialogText:
     [
@@ -2373,8 +2398,8 @@ socket.on("player", (serverPlayer) => {
     rewardItem: "restfieldAccess",
     completionItem: "miniMushroom",
     completionAmount: 3,
-    markerX: 1400,
-    markerY: 863,
+    markerX: 1281,
+    markerY: 1829,
     
     dialogText:
     [
@@ -3250,7 +3275,7 @@ window.addEventListener("keydown", (e) => {
     fishingGame.style.display = "block";
     fishing = true;
 
-    const number = Math.floor(Math.random() * (10000 - 3000 + 1) + 3000);
+    const number = Math.floor(Math.random() * (30000 - 10000 + 1) + 10000);
 
     function fishingStart() {
 
@@ -3281,7 +3306,7 @@ window.addEventListener("keydown", (e) => {
             fishingBarHit.classList.add('noFish');
           }, 300);
         }
-      }, 5);
+      }, 10);
 
     };
 
@@ -3507,6 +3532,7 @@ function shootArcaneRepeater () {
 
 canvasLobby.addEventListener("mousedown", (e) => {
   clearInterval(shootInterval)
+  if (fishing) return;
   mouseLeftPressed = true;
     if (shootingBlock === false) {
       if (myPlayer.weapon[0]) {
@@ -4038,9 +4064,15 @@ function stopAllSound() {
 
   grasslandsEnviroment.pause();
   grasslandsEnviroment.currentTime = 0;
+  
+  restfield.pause();
+  restfield.currentTime = 0;
  
   fightMusic1.pause();
   fightMusic1.currentTime = 0;
+  
+  SokosBoss.pause();
+  SokosBoss.currentTime = 0;
 
   ArcaneEnv.pause();
   ArcaneEnv.currentTime = 0;
@@ -4062,6 +4094,10 @@ function lobbySoundtrack () {
   grasslandsEnviroment.play();
   console.log("playing lobby song")
   lobbySong.play()
+}
+
+function restfieldSoundtrack () {
+  restfield.play();
 }
 
 function grassLandsSoundtrack () {
@@ -4106,6 +4142,15 @@ let mapsInfo = {
       y: 3798
     },
     colliders: [
+      {
+        "type": "dialog",
+        "name": "Deep Forestry Quest",
+        "x": 1443.5,
+        "y": 1974.5,
+        "width": 546,
+        "height": 273,
+        "color": "rgb(0, 0, 0, 0)"
+      },
       {
         "type": "wall",
         "x": 3804,
@@ -5352,6 +5397,15 @@ let mapsInfo = {
       y: 785
     },
     colliders:  [
+      {
+        "type": "dialog",
+        "name": "Fishing Quest",
+        "x": 1922.5,
+        "y": 1879.5,
+        "width": 364,
+        "height": 347,
+        "color": "rgb(0, 0, 0, 0)"
+      },
       {
         "type": "wall",
         "x": 951,
@@ -7738,41 +7792,6 @@ let mapsInfo = {
       }
     ],
     enemies: [
-      {
-        name: "mooshroomBossRed",
-        isBoss: true,
-        imgw: 147,
-        imgh: 175,
-        imgcw: 147,
-        imgch: 0,
-        frames: 0,
-        framesTimer: 0,
-        level: 5,
-        xp: 1000,
-        speedX: 0,
-        speedY: 0,
-        spawn: {
-          x: 1501.5,
-          y: 863.5,
-        },
-        w: 550,
-        h: 550,
-        currentStateName: "idle",
-        currentState: null,
-        attackInterval: true,
-        states: [lazerMooshState, attackCircleMooshBossState],
-        damaged: 0,
-        health: 100,
-        angle: 0,
-        maxHealth: 100,
-        baseSpawn: {
-          x: 1501.5,
-          y: 863.5,
-        },
-        spawnTimer: null,
-        enemyStateInt: 5000,
-        active: false,
-      }
     ],
   },
 
@@ -7786,6 +7805,15 @@ let mapsInfo = {
       y: 1800,
     },
     colliders: [
+      {
+        "type": "dialog",
+        "name": "Tree Issues Quest",
+        "x": 1573.5,
+        "y": 1851.5,
+        "width": 371,
+        "height": 259,
+        "color": "rgb(0, 0, 0, 0)"
+      },
       {
         "type": "wall",
         "x": 520,
@@ -9506,6 +9534,478 @@ let mapsInfo = {
         drop: "treeLeaf",
         dropRate: 50,
       },
+
+      {
+        name: "blackBrownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 1052,
+          y: 2679
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1052,
+          y: 2679
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+        drop: "treeLeaf",
+        dropRate: 50,
+      },
+      {
+        name: "brownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 1552,
+          y: 2700
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1552,
+          y: 2700
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "whiteBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 1352,
+          y: 2800
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1352,
+          y: 2800
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "brownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 1952,
+          y: 2900
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1952,
+          y: 2900
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "brownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 1852,
+          y: 3300
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1852,
+          y: 3300
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+
+
+      {
+        name: "blackBrownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 660,
+          y: 3000
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 660,
+          y: 3300
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "whiteBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 960,
+          y: 3300
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 960,
+          y: 3300
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+
+      {
+        name: "blackBrownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 3052,
+          y: 2679
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 3052,
+          y: 2679
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "brownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 3552,
+          y: 2700
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 3552,
+          y: 2700
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "whiteBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 3352,
+          y: 2800
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 3352,
+          y: 2800
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "brownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 3952,
+          y: 2900
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 3952,
+          y: 2900
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "brownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 3852,
+          y: 3300
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 3852,
+          y: 3300
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+
+
+      {
+        name: "blackBrownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 1660,
+          y: 3300
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1660,
+          y: 3300
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "whiteBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 1960,
+          y: 3300
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1960,
+          y: 3300
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+
+
     ]
   },
 
@@ -11932,7 +12432,7 @@ let mapsInfo = {
 
   restfieldPath: {
     areaName: "RESTFIELD FOREST",
-    areaSounds: grassLandsSoundtrack,
+    areaSounds: restfieldSoundtrack,
     backgroundImage: restfieldPath,
     foregroundImage: restfieldPathFront,
     
@@ -11941,6 +12441,25 @@ let mapsInfo = {
       y: 3850,
     },
     colliders: [
+      {
+        "type": "dialog",
+        "name": "A locked door Quest",
+        "x": 1036.5,
+        "y": 1697.5,
+        "width": 323,
+        "height": 251,
+        "color": "rgb(179, 255, 213, 0)"
+      },
+      {
+        "type": "transition",
+        "format": "liquid",
+        "destination": "slimeForestPath",
+        "x": 3752,
+        "y": 3554,
+        "width": 426,
+        "height": 330,
+        "color": "rgb(204, 0, 204, 0)"
+      },
       {
         "type": "wall",
         "x": 3103,
@@ -12099,14 +12618,6 @@ let mapsInfo = {
         "y": 1664,
         "width": 712,
         "height": 128,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 388,
-        "y": 1671,
-        "width": 459,
-        "height": 103,
         "color": "rgb(0, 0, 0, 0)"
       },
       {
@@ -12902,6 +13413,15 @@ let mapsInfo = {
         "width": 501,
         "height": 258,
         "color": "rgb(204, 0, 204, 0)"
+      },
+      {
+        "type": "wall",
+        "condition": "restfield",
+        "x": 606,
+        "y": 1601.5,
+        "width": 517,
+        "height": 131,
+        "color": "rgb(0, 0, 0, 0)"
       }
     ],
     enemies: []
@@ -12909,7 +13429,7 @@ let mapsInfo = {
 
   restfieldTownCemetery: {
     areaName: "RESTFIELD CEMETERY",
-    areaSounds: grassLandsSoundtrack,
+    areaSounds: restfieldSoundtrack,
     backgroundImage: restfieldTownCemetery,
     foregroundImage: restfieldTownCemeteryFront,
     
@@ -14598,7 +15118,7 @@ let mapsInfo = {
   },
   restFiledTown: {
     areaName: "RESTFIELD TOWN",
-    areaSounds: grassLandsSoundtrack,
+    areaSounds: restfieldSoundtrack,
     backgroundImage: restFiledTown,
     foregroundImage: restFiledTownFront,
     
@@ -14643,7 +15163,7 @@ let mapsInfo = {
 
   restfieldTrial: {
     areaName: "RESTFIELD TRIAL",
-    areaSounds: grassLandsSoundtrack,
+    areaSounds: restfieldSoundtrack,
     backgroundImage: restfieldTrial,
     foregroundImage: restfieldTrialFront,
     
@@ -14652,6 +15172,14 @@ let mapsInfo = {
       y: 3888,
     },
     colliders: [
+      {
+        "type": "wall",
+        "x": 2256.5,
+        "y": 2673,
+        "width": 568,
+        "height": 73,
+        "color": "rgb(0, 0, 0, 0)"
+      },
       {
         "type": "chest",
         "item": "mushroomTrial",
@@ -14974,49 +15502,22 @@ let mapsInfo = {
           "width": 54,
           "height": 254,
           "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1700.5,
+          "y": 2720,
+          "width": 116,
+          "height": 110,
+          "color": "rgb(0, 0, 0, 0)"
         }
      ],
     enemies: [
-      {
-      name: "restfieldReaper",
-      isBoss: true,
-      imgw: 147,
-      imgh: 175,
-      imgcw: 147,
-      imgch: 0,
-      frames: 0,
-      framesTimer: 0,
-      level: 5,
-      xp: 1000,
-      speedX: 0,
-      speedY: 0,
-      spawn: {
-        x: 1994.5,
-        y: 1053.5,
-      },
-      w: 550,
-      h: 550,
-      currentStateName: "idle",
-      currentState: null,
-      attackInterval: true,
-      states: [lazerMooshState, attackCircleMooshBossState],
-      damaged: 0,
-      health: 100,
-      angle: 0,
-      maxHealth: 100,
-      baseSpawn: {
-        x: 1994.5,
-        y: 1053.5,
-      },
-      spawnTimer: null,
-      enemyStateInt: 5000,
-      active: false,
-    },
     {
-      name: "redMooshroomEnemy",
-      imgw: 42,
-      imgh: 39,
-      imgcw: 42,
+      name: "restfieldSkeleton",
+      imgw: 48,
+      imgh: 48,
+      imgcw: 48,
       imgch: 0,
       frames: 0,
       framesTimer: 0,
@@ -15025,7 +15526,7 @@ let mapsInfo = {
       speedX: 15,
       speedY: 15,
       spawn: {
-        x: 1825,
+        x: 1575,
         y: 1158
       },
       w: 140,
@@ -15039,11 +15540,222 @@ let mapsInfo = {
       angle: 0,
       maxHealth: 10,
       baseSpawn: {
-        x: 1825,
+        x: 1575,
         y: 1158
       },
       spawnTimer: null,
       enemyStateInt: 1000,
+      active: false,
+    },
+
+    {
+      name: "restfieldSkeleton",
+      imgw: 48,
+      imgh: 48,
+      imgcw: 48,
+      imgch: 0,
+      frames: 0,
+      framesTimer: 0,
+      level: 1,
+      xp: 100,
+      speedX: 15,
+      speedY: 15,
+      spawn: {
+        x: 2327,
+        y: 1128
+      },
+      w: 140,
+      h: 140,
+      currentStateName: "idle",
+      currentState: null,
+      attackInterval: true,
+      states: [moveState, attackState, attackCircleState],
+      damaged: 0,
+      health: 5,
+      angle: 0,
+      maxHealth: 10,
+      baseSpawn: {
+        x: 2327,
+        y: 1128
+      },
+      spawnTimer: null,
+      enemyStateInt: 1000,
+      active: false,
+    },
+
+    {
+      name: "restfieldSkeleton",
+      imgw: 48,
+      imgh: 48,
+      imgcw: 48,
+      imgch: 0,
+      frames: 0,
+      framesTimer: 0,
+      level: 1,
+      xp: 100,
+      speedX: 15,
+      speedY: 15,
+      spawn: {
+        x: 2590,
+        y: 1705
+      },
+      w: 140,
+      h: 140,
+      currentStateName: "idle",
+      currentState: null,
+      attackInterval: true,
+      states: [moveState, attackState, attackCircleState],
+      damaged: 0,
+      health: 5,
+      angle: 0,
+      maxHealth: 10,
+      baseSpawn: {
+        x: 2590,
+        y: 1705
+      },
+      spawnTimer: null,
+      enemyStateInt: 1000,
+      active: false,
+    },
+
+    {
+      name: "restfieldSkeleton",
+      imgw: 48,
+      imgh: 48,
+      imgcw: 48,
+      imgch: 0,
+      frames: 0,
+      framesTimer: 0,
+      level: 1,
+      xp: 100,
+      speedX: 15,
+      speedY: 15,
+      spawn: {
+        x: 1225,
+        y: 1707
+      },
+      w: 140,
+      h: 140,
+      currentStateName: "idle",
+      currentState: null,
+      attackInterval: true,
+      states: [moveState, attackState, attackCircleState],
+      damaged: 0,
+      health: 5,
+      angle: 0,
+      maxHealth: 10,
+      baseSpawn: {
+        x: 1225,
+        y: 1707
+      },
+      spawnTimer: null,
+      enemyStateInt: 1000,
+      active: false,
+    },
+    
+    {
+      name: "restfieldSkeleton",
+      imgw: 48,
+      imgh: 48,
+      imgcw: 48,
+      imgch: 0,
+      frames: 0,
+      framesTimer: 0,
+      level: 1,
+      xp: 100,
+      speedX: 15,
+      speedY: 15,
+      spawn: {
+        x: 1650,
+        y: 2125
+      },
+      w: 140,
+      h: 140,
+      currentStateName: "idle",
+      currentState: null,
+      attackInterval: true,
+      states: [moveState, attackState, attackCircleState],
+      damaged: 0,
+      health: 5,
+      angle: 0,
+      maxHealth: 10,
+      baseSpawn: {
+        x: 1650,
+        y: 2125
+      },
+      spawnTimer: null,
+      enemyStateInt: 1000,
+      active: false,
+    },
+
+    {
+      name: "restfieldSkeleton",
+      imgw: 48,
+      imgh: 48,
+      imgcw: 48,
+      imgch: 0,
+      frames: 0,
+      framesTimer: 0,
+      level: 1,
+      xp: 100,
+      speedX: 15,
+      speedY: 15,
+      spawn: {
+        x: 2330,
+        y: 2048
+      },
+      w: 140,
+      h: 140,
+      currentStateName: "idle",
+      currentState: null,
+      attackInterval: true,
+      states: [moveState, attackState, attackCircleState],
+      damaged: 0,
+      health: 5,
+      angle: 0,
+      maxHealth: 10,
+      baseSpawn: {
+        x: 2330,
+        y: 2048
+      },
+      spawnTimer: null,
+      enemyStateInt: 1000,
+      active: false,
+    },
+
+    {
+      name: "restfieldReaper",
+      isBoss: true,
+      imgw: 147,
+      imgh: 175,
+      imgcw: 147,
+      imgch: 0,
+      frames: 0,
+      framesTimer: 0,
+      level: 5,
+      xp: 2000,
+      speedX: 5,
+      speedY: 5,
+      spawn: {
+        x: 1650,
+        y: 1100
+      },
+      w: 550,
+      h: 550,
+      currentStateName: "idle",
+      currentState: null,
+      attackInterval: true,
+      states: [lazerMooshState, attackCircleMooshBossState, moveState],
+      damaged: 0,
+      health: 100,
+      angle: 0,
+      maxHealth: 100,
+      baseSpawn: {
+        x: 1650,
+        y: 1100
+      },
+      spawnTimer: null,
+      enemyStateInt: 2000,
       active: false,
     },
   
@@ -17175,6 +17887,15 @@ let originalMapsInfo = {
     },
     colliders: [
       {
+        "type": "dialog",
+        "name": "Deep Forestry Quest",
+        "x": 1443.5,
+        "y": 1974.5,
+        "width": 546,
+        "height": 273,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
         "type": "wall",
         "x": 3804,
         "y": 3306,
@@ -18420,6 +19141,15 @@ let originalMapsInfo = {
       y: 785
     },
     colliders:  [
+      {
+        "type": "dialog",
+        "name": "Fishing Quest",
+        "x": 1922.5,
+        "y": 1879.5,
+        "width": 364,
+        "height": 347,
+        "color": "rgb(0, 0, 0, 0)"
+      },
       {
         "type": "wall",
         "x": 951,
@@ -20820,6 +21550,15 @@ let originalMapsInfo = {
     },
     colliders: [
       {
+        "type": "dialog",
+        "name": "Tree Issues Quest",
+        "x": 1573.5,
+        "y": 1851.5,
+        "width": 371,
+        "height": 259,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
         "type": "wall",
         "x": 520,
         "y": 404.5,
@@ -22429,8 +23168,10 @@ let originalMapsInfo = {
           x: 764,
           y: 692
         },
-        spawnTimer: 10000,
+        spawnTimer: 20000,
         enemyStateInt: 2000,
+        drop: "treeLeaf",
+        dropRate: 50,
       },
       {
         name: "treeSimpleEnemy",
@@ -22462,8 +23203,10 @@ let originalMapsInfo = {
           x: 3368,
           y: 1094
         },
-        spawnTimer: 10000,
+        spawnTimer: 20000,
         enemyStateInt: 2000,
+        drop: "treeLeaf",
+        dropRate: 50,
       },
       {
         name: "treeSimpleEnemy",
@@ -22495,8 +23238,10 @@ let originalMapsInfo = {
           x: 1832,
           y: 573
         },
-        spawnTimer: 10000,
+        spawnTimer: 20000,
         enemyStateInt: 2000,
+        drop: "treeLeaf",
+        dropRate: 50,
       },
       {
         name: "treeSimpleEnemy",
@@ -22528,9 +23273,483 @@ let originalMapsInfo = {
           x: 3052,
           y: 579
         },
+        spawnTimer: 20000,
+        enemyStateInt: 2000,
+        drop: "treeLeaf",
+        dropRate: 50,
+      },
+
+      {
+        name: "blackBrownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 1052,
+          y: 2679
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1052,
+          y: 2679
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+        drop: "treeLeaf",
+        dropRate: 50,
+      },
+      {
+        name: "brownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 1552,
+          y: 2700
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1552,
+          y: 2700
+        },
         spawnTimer: 10000,
         enemyStateInt: 2000,
       },
+      {
+        name: "whiteBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 1352,
+          y: 2800
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1352,
+          y: 2800
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "brownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 1952,
+          y: 2900
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1952,
+          y: 2900
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "brownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 1852,
+          y: 3300
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1852,
+          y: 3300
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+
+
+      {
+        name: "blackBrownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 660,
+          y: 3000
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 660,
+          y: 3300
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "whiteBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 960,
+          y: 3300
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 960,
+          y: 3300
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+
+      {
+        name: "blackBrownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 3052,
+          y: 2679
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 3052,
+          y: 2679
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "brownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 3552,
+          y: 2700
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 3552,
+          y: 2700
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "whiteBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 3352,
+          y: 2800
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 3352,
+          y: 2800
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "brownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 3952,
+          y: 2900
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 3952,
+          y: 2900
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "brownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 3852,
+          y: 3300
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 3852,
+          y: 3300
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+
+
+      {
+        name: "blackBrownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 1660,
+          y: 3300
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1660,
+          y: 3300
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "whiteBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 1960,
+          y: 3300
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1960,
+          y: 3300
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+
+
     ]
   },
 
@@ -24734,6 +25953,8 @@ let originalMapsInfo = {
         spawnTimer: null,
         enemyStateInt: 1000,
         active: false,
+        drop: "miniMushroom",
+        dropRate: 30,
       },
       {
         name: "redMooshroomEnemy",
@@ -24768,6 +25989,8 @@ let originalMapsInfo = {
         spawnTimer: null,
         enemyStateInt: 1000,
         active: false,
+        drop: "miniMushroom",
+        dropRate: 30,
       },
       {
         name: "redMooshroomEnemy",
@@ -24802,6 +26025,8 @@ let originalMapsInfo = {
         spawnTimer: null,
         enemyStateInt: 1000,
         active: false,
+        drop: "miniMushroom",
+        dropRate: 30,
       },
       {
         name: "redMooshroomEnemy",
@@ -24836,6 +26061,8 @@ let originalMapsInfo = {
         spawnTimer: null,
         enemyStateInt: 1000,
         active: false,
+        drop: "miniMushroom",
+        dropRate: 30,
       },
       {
         name: "redMooshroomEnemy",
@@ -24870,6 +26097,8 @@ let originalMapsInfo = {
         spawnTimer: null,
         enemyStateInt: 1000,
         active: false,
+        drop: "miniMushroom",
+        dropRate: 30,
       },
       {
         name: "redMooshroomEnemy",
@@ -24904,6 +26133,8 @@ let originalMapsInfo = {
         spawnTimer: null,
         enemyStateInt: 1000,
         active: false,
+        drop: "miniMushroom",
+        dropRate: 30,
       },
       {
         name: "mooshroomBossRed",
@@ -24945,7 +26176,7 @@ let originalMapsInfo = {
 
   restfieldPath: {
     areaName: "RESTFIELD FOREST",
-    areaSounds: grassLandsSoundtrack,
+    areaSounds: restfieldSoundtrack,
     backgroundImage: restfieldPath,
     foregroundImage: restfieldPathFront,
     
@@ -24954,6 +26185,25 @@ let originalMapsInfo = {
       y: 3850,
     },
     colliders: [
+      {
+        "type": "dialog",
+        "name": "A locked door Quest",
+        "x": 1036.5,
+        "y": 1697.5,
+        "width": 323,
+        "height": 251,
+        "color": "rgb(179, 255, 213, 0)"
+      },
+      {
+        "type": "transition",
+        "format": "liquid",
+        "destination": "slimeForestPath",
+        "x": 3752,
+        "y": 3554,
+        "width": 426,
+        "height": 330,
+        "color": "rgb(204, 0, 204, 0)"
+      },
       {
         "type": "wall",
         "x": 3103,
@@ -25112,14 +26362,6 @@ let originalMapsInfo = {
         "y": 1664,
         "width": 712,
         "height": 128,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 388,
-        "y": 1671,
-        "width": 459,
-        "height": 103,
         "color": "rgb(0, 0, 0, 0)"
       },
       {
@@ -25915,6 +27157,15 @@ let originalMapsInfo = {
         "width": 501,
         "height": 258,
         "color": "rgb(204, 0, 204, 0)"
+      },
+      {
+        "type": "wall",
+        "condition": "restfield",
+        "x": 606,
+        "y": 1601.5,
+        "width": 517,
+        "height": 131,
+        "color": "rgb(0, 0, 0, 0)"
       }
     ],
     enemies: []
@@ -25922,7 +27173,7 @@ let originalMapsInfo = {
 
   restfieldTownCemetery: {
     areaName: "RESTFIELD CEMETERY",
-    areaSounds: grassLandsSoundtrack,
+    areaSounds: restfieldSoundtrack,
     backgroundImage: restfieldTownCemetery,
     foregroundImage: restfieldTownCemeteryFront,
     
@@ -27611,7 +28862,7 @@ let originalMapsInfo = {
   },
   restFiledTown: {
     areaName: "RESTFIELD TOWN",
-    areaSounds: grassLandsSoundtrack,
+    areaSounds: restfieldSoundtrack,
     backgroundImage: restFiledTown,
     foregroundImage: restFiledTownFront,
     
@@ -27639,13 +28890,24 @@ let originalMapsInfo = {
       "width": 235,
       "height": 228,
       "color": "rgb(204, 0, 204, 0)"
-    }],
+    },
+    {
+      "type": "transition",
+      "format": "liquid",
+      "destination": "restfieldTrial",
+      "x": 1689.5,
+      "y": -237,
+      "width": 421,
+      "height": 300,
+      "color": "rgb(204, 0, 204, 0)"
+    }
+  ],
     enemies: []
   },
 
   restfieldTrial: {
     areaName: "RESTFIELD TRIAL",
-    areaSounds: grassLandsSoundtrack,
+    areaSounds: restfieldSoundtrack,
     backgroundImage: restfieldTrial,
     foregroundImage: restfieldTrialFront,
     
@@ -27654,7 +28916,23 @@ let originalMapsInfo = {
       y: 3888,
     },
     colliders: [
-      [
+      {
+        "type": "wall",
+        "x": 2256.5,
+        "y": 2673,
+        "width": 568,
+        "height": 73,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "chest",
+        "item": "mushroomTrial",
+        "x": 1555.5,
+        "y": 879.5,
+        "width": 149,
+        "height": 210,
+        "color": "rgb(0, 0, 0, 0)"
+      },
         {
           "type": "transition",
           "format": "liquid",
@@ -27968,10 +29246,264 @@ let originalMapsInfo = {
           "width": 54,
           "height": 254,
           "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1700.5,
+          "y": 2720,
+          "width": 116,
+          "height": 110,
+          "color": "rgb(0, 0, 0, 0)"
         }
-      ]
      ],
-    enemies: []
+    enemies: [
+    {
+      name: "restfieldSkeleton",
+      imgw: 48,
+      imgh: 48,
+      imgcw: 48,
+      imgch: 0,
+      frames: 0,
+      framesTimer: 0,
+      level: 1,
+      xp: 100,
+      speedX: 15,
+      speedY: 15,
+      spawn: {
+        x: 1575,
+        y: 1158
+      },
+      w: 140,
+      h: 140,
+      currentStateName: "idle",
+      currentState: null,
+      attackInterval: true,
+      states: [moveState, attackState, attackCircleState],
+      damaged: 0,
+      health: 5,
+      angle: 0,
+      maxHealth: 10,
+      baseSpawn: {
+        x: 1575,
+        y: 1158
+      },
+      spawnTimer: null,
+      enemyStateInt: 1000,
+      active: false,
+    },
+
+    {
+      name: "restfieldSkeleton",
+      imgw: 48,
+      imgh: 48,
+      imgcw: 48,
+      imgch: 0,
+      frames: 0,
+      framesTimer: 0,
+      level: 1,
+      xp: 100,
+      speedX: 15,
+      speedY: 15,
+      spawn: {
+        x: 2327,
+        y: 1128
+      },
+      w: 140,
+      h: 140,
+      currentStateName: "idle",
+      currentState: null,
+      attackInterval: true,
+      states: [moveState, attackState, attackCircleState],
+      damaged: 0,
+      health: 5,
+      angle: 0,
+      maxHealth: 10,
+      baseSpawn: {
+        x: 2327,
+        y: 1128
+      },
+      spawnTimer: null,
+      enemyStateInt: 1000,
+      active: false,
+    },
+
+    {
+      name: "restfieldSkeleton",
+      imgw: 48,
+      imgh: 48,
+      imgcw: 48,
+      imgch: 0,
+      frames: 0,
+      framesTimer: 0,
+      level: 1,
+      xp: 100,
+      speedX: 15,
+      speedY: 15,
+      spawn: {
+        x: 2590,
+        y: 1705
+      },
+      w: 140,
+      h: 140,
+      currentStateName: "idle",
+      currentState: null,
+      attackInterval: true,
+      states: [moveState, attackState, attackCircleState],
+      damaged: 0,
+      health: 5,
+      angle: 0,
+      maxHealth: 10,
+      baseSpawn: {
+        x: 2590,
+        y: 1705
+      },
+      spawnTimer: null,
+      enemyStateInt: 1000,
+      active: false,
+    },
+
+    {
+      name: "restfieldSkeleton",
+      imgw: 48,
+      imgh: 48,
+      imgcw: 48,
+      imgch: 0,
+      frames: 0,
+      framesTimer: 0,
+      level: 1,
+      xp: 100,
+      speedX: 15,
+      speedY: 15,
+      spawn: {
+        x: 1225,
+        y: 1707
+      },
+      w: 140,
+      h: 140,
+      currentStateName: "idle",
+      currentState: null,
+      attackInterval: true,
+      states: [moveState, attackState, attackCircleState],
+      damaged: 0,
+      health: 5,
+      angle: 0,
+      maxHealth: 10,
+      baseSpawn: {
+        x: 1225,
+        y: 1707
+      },
+      spawnTimer: null,
+      enemyStateInt: 1000,
+      active: false,
+    },
+    
+    {
+      name: "restfieldSkeleton",
+      imgw: 48,
+      imgh: 48,
+      imgcw: 48,
+      imgch: 0,
+      frames: 0,
+      framesTimer: 0,
+      level: 1,
+      xp: 100,
+      speedX: 15,
+      speedY: 15,
+      spawn: {
+        x: 1650,
+        y: 2125
+      },
+      w: 140,
+      h: 140,
+      currentStateName: "idle",
+      currentState: null,
+      attackInterval: true,
+      states: [moveState, attackState, attackCircleState],
+      damaged: 0,
+      health: 5,
+      angle: 0,
+      maxHealth: 10,
+      baseSpawn: {
+        x: 1650,
+        y: 2125
+      },
+      spawnTimer: null,
+      enemyStateInt: 1000,
+      active: false,
+    },
+
+    {
+      name: "restfieldSkeleton",
+      imgw: 48,
+      imgh: 48,
+      imgcw: 48,
+      imgch: 0,
+      frames: 0,
+      framesTimer: 0,
+      level: 1,
+      xp: 100,
+      speedX: 15,
+      speedY: 15,
+      spawn: {
+        x: 2330,
+        y: 2048
+      },
+      w: 140,
+      h: 140,
+      currentStateName: "idle",
+      currentState: null,
+      attackInterval: true,
+      states: [moveState, attackState, attackCircleState],
+      damaged: 0,
+      health: 5,
+      angle: 0,
+      maxHealth: 10,
+      baseSpawn: {
+        x: 2330,
+        y: 2048
+      },
+      spawnTimer: null,
+      enemyStateInt: 1000,
+      active: false,
+    },
+
+    {
+      name: "restfieldReaper",
+      isBoss: true,
+      imgw: 147,
+      imgh: 175,
+      imgcw: 147,
+      imgch: 0,
+      frames: 0,
+      framesTimer: 0,
+      level: 5,
+      xp: 2000,
+      speedX: 5,
+      speedY: 5,
+      spawn: {
+        x: 1650,
+        y: 1100
+      },
+      w: 550,
+      h: 550,
+      currentStateName: "idle",
+      currentState: null,
+      attackInterval: true,
+      states: [lazerMooshState, attackCircleMooshBossState, moveState],
+      damaged: 0,
+      health: 100,
+      angle: 0,
+      maxHealth: 100,
+      baseSpawn: {
+        x: 1650,
+        y: 1100
+      },
+      spawnTimer: null,
+      enemyStateInt: 2000,
+      active: false,
+    },
+  
+  ]
   },
 
 // ARCANE ISLAND
@@ -30804,10 +32336,10 @@ function localPlayerMovement () {
 }
 
 function playerCollision () {
-  playerColminX = playerX - cameraX - 30;
-  playerColminY = playerY - cameraY + 70;
-  playerColLengthX = playerWidth + 50;
-  playerColLengthY = playerHeight + 22;
+  playerColminX = playerX - cameraX - 20;
+  playerColminY = playerY - cameraY + 80;
+  playerColLengthX = playerWidth + 0;
+  playerColLengthY = playerHeight - 10;
   mapsInfo[currentLand].playerPos.x = playerX;
   mapsInfo[currentLand].playerPos.y = playerY;
   canvas.beginPath();
@@ -30864,6 +32396,10 @@ function drawColliders (type, x, y, w, h) {
         const overlapY = (colliderToCheck.height / 2 + wall.height / 2) - Math.abs(playerCenterY - wallCenterY);
 
         if (wall.type === "wall") {
+          // console.log(myPlayer.access[0], wall.condition, myPlayer.access[0][wall.condition])
+          if (wall.condition && myPlayer.access[0][wall.condition] === true) {
+            return;
+          }
           if (overlapX < overlapY) {
               if (playerCenterX < wallCenterX) {
                   allowedMoveUpRight = false; 
@@ -31026,10 +32562,31 @@ function drawQuestMarkers () {
     if (wall.type === "dialog") {
       if (dialogBoxes[wall.name].dialogName === "quest") {
         if (myPlayer.questsOngoing.find(quest => quest.title === dialogBoxes[wall.name].questName)) {
-          canvas.drawImage(questOngoingImg, dialogBoxes[wall.name].markerX - cameraX, dialogBoxes[wall.name].markerY - cameraY, 40, 75);
+          canvas.drawImage(
+            questOngoingImg,
+            (questOngoingImg.width / 6) * (frameCurrentPlayer === 0 ? 0 : frameCurrentPlayer - 1),
+            0,
+            questOngoingImg.width / 6,
+            questOngoingImg.height,
+            dialogBoxes[wall.name].markerX - cameraX,
+            dialogBoxes[wall.name].markerY - cameraY,
+            100,
+            210,
+          );
         } 
         else if (!myPlayer.questsCompleted.find(quest => quest.title === dialogBoxes[wall.name].questName)) {
-          canvas.drawImage(questStartImg, dialogBoxes[wall.name].markerX - cameraX, dialogBoxes[wall.name].markerY - cameraY, 40, 75);
+          // console.log((frameCurrentPlayer === 0 ? 0 : frameCurrentPlayer - 1))
+          canvas.drawImage(
+            questStartImg,
+            (questStartImg.width / 6) * (frameCurrentPlayer === 0 ? 0 : frameCurrentPlayer - 1),
+            0,
+            questStartImg.width / 6,
+            questStartImg.height,
+            dialogBoxes[wall.name].markerX - cameraX,
+            dialogBoxes[wall.name].markerY - cameraY,
+            100,
+            210,
+          );
         }
       }
     }
@@ -31045,7 +32602,35 @@ function drawLocalPlayer () {
       let armor = drawPlayerArmor(player);
       let artifact = drawPlayerArtifact(player);
       // console.log(playerWidth, playerHeight)
-      if (animPlayer === "idleRight" && player.lastLooked === "right") {
+      if (fishing) {
+        frameCurrentPlayer = frameCurrentPlayer % 6;
+  
+      playerCutX = frameCurrentPlayer * playerWidth;
+
+      canvas.drawImage(
+        armor,
+        playerCutX,
+        playerCutY + 200,
+        playerWidth,
+        playerHeight,
+        playerX - cameraX + 65 - cameraShakeX - playerAdjustmentX,
+        playerY - cameraY + 120 - cameraShakeY - playerAdjustmentY,
+        playerWidth - playerZoomX,
+        playerHeight - playerZoomY,
+      );
+      canvas.drawImage(
+        artifact,
+        playerCutX,
+        playerCutY + 200,
+        playerWidth,
+        playerHeight,
+        playerX - cameraX + 65 - cameraShakeX - playerAdjustmentX,
+        playerY - cameraY + 120 - cameraShakeY - playerAdjustmentY,
+        playerWidth - playerZoomX,
+        playerHeight - playerZoomY,
+      );
+      }
+      else if (animPlayer === "idleRight" && player.lastLooked === "right") {
       frameCurrentPlayer = frameCurrentPlayer % 6;
   
       playerCutX = frameCurrentPlayer * playerWidth;
@@ -31428,8 +33013,11 @@ function drawPlayerWeaponOut (player) {
     canvas.save(); // Save the current canvas state
     canvas.translate(playerX - cameraX - cameraShakeX - 150 +18 - recoil, playerY + cameraShakeY + 180 - cameraY +70); // Translate to the player's position
     canvas.rotate(angleMouse); // Rotate based on the mouse angle
-    let name = player.artifact[0].name;
-    if (player.weapon[0].name === "solarStaffCommon") {
+    // let name = player.artifact[0].name;
+    if (fishing) {
+      canvas.drawImage(fishingStick ,0, -7.5, 100, 25);
+    }
+    else if (player.weapon[0].name === "solarStaffCommon") {
       canvas.drawImage(solarStaffCommon ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
     }
     else if (player.weapon[0].name === "arcaneStaffCommon") {
@@ -31781,6 +33369,7 @@ function drawMap(layer) {
 
   if (layer === "back") {
     canvas.drawImage(mapsInfo[currentLand].backgroundImage, cameraShakeX - cameraX, cameraShakeY - cameraY, 4500, 4500);
+    drawQuestMarkers()
   } else {
     canvas.drawImage(mapsInfo[currentLand].foregroundImage, cameraShakeX - cameraX, cameraShakeY - cameraY, 4500, 4500);
   }
@@ -31823,10 +33412,19 @@ function activateBossEnemy (enemy) {
   secondaryCameraY = enemy.spawn.y + (enemy.h/4);
   projectilesClient = [];
   stopAllSound();
+  let timeToWake = 0;
 
-  fightMusic1.play();
-  violinDanger.play()
-  bossWakingUpChallenge.play()
+  if (enemy.name === "mooshroomBossRed") {
+    fightMusic1.play();
+    violinDanger.play()
+    bossWakingUpChallenge.play()
+    timeToWake = 40;
+  }
+  else if (enemy.name === "restfieldReaper") {
+    SokosBoss.play();
+    timeToWake = 10000;
+  }
+
 
   setTimeout(() => {
     const rocksFall = new Audio("./audios/rocksFall.wav");
@@ -31852,7 +33450,7 @@ function activateBossEnemy (enemy) {
         }
       }
     },40)
-  }, 2500);
+  }, timeToWake);
 }
 
 function drawEnemy () {
@@ -31976,6 +33574,8 @@ function checkEnemyCombat (enemy) {
     } else if (!bossAlive) {
       fightMusic1.pause();
       fightMusic1.currentTime = 0;
+      SokosBoss.pause();
+      SokosBoss.currentTime = 0;
       bossFight = false;
 
       if (enemy.isBoss) {
@@ -32208,6 +33808,10 @@ function startCommitmentTimer(enemy) {
     enemy.committedDirection = null; // Clear commitment after 3 seconds
     enemy.commitTimer = null; // Reset timer reference
   }, 2000);
+}
+
+function idleState(enemy) {
+  enemy.currentStateName = "idle"
 }
 
 function attackState(enemy) {
@@ -32741,9 +34345,6 @@ function lobbyLoop() {
   // Dev Colliders
   drawDevWallsPlacement()
   drawColliders("player", "", "", "", "")
-
-  // Quest marker
-  drawQuestMarkers()
 
 }
 
