@@ -1482,6 +1482,13 @@ const restfieldGhostClothes = {
     rarity: "common",
     image: "./inventory/clothesInventory/restfieldGhostInventory.png",
 };
+const restfieldZombieClothes = {
+    type: "artifact",
+    name: "restfieldZombieClothes",
+    value: 20,
+    rarity: "common",
+    image: "./inventory/clothesInventory/restfieldZombieInventory.png",
+};
 
 // SOULS
 
@@ -1523,6 +1530,11 @@ const vampiresSoulInventory = {
 const restfieldSkeletonSoulInventory = {
     name: "restfieldSkeletonSoulInventory",
     image: "./inventory/soulInventory/restfieldSkeletonSoulInventory.png",
+    type: "soul",
+}
+const restfieldZombieSkin = {
+    name: "restfieldZombieSkin",
+    image: "./inventory/soulInventory/restfieldZombieSoulInventory.png",
     type: "soul",
 }
 
