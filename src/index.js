@@ -1482,9 +1482,9 @@ const restfieldGhostClothes = {
     rarity: "common",
     image: "./inventory/clothesInventory/restfieldGhostInventory.png",
 };
-const restfieldZombieClothes = {
+const restfieldZombieInventory = {
     type: "artifact",
-    name: "restfieldZombieClothes",
+    name: "restfieldZombieInventory",
     value: 20,
     rarity: "common",
     image: "./inventory/clothesInventory/restfieldZombieInventory.png",
@@ -1532,8 +1532,8 @@ const restfieldSkeletonSoulInventory = {
     image: "./inventory/soulInventory/restfieldSkeletonSoulInventory.png",
     type: "soul",
 }
-const restfieldZombieSkin = {
-    name: "restfieldZombieSkin",
+const restfieldZombieSoulInventory = {
+    name: "restfieldZombieSoulInventory",
     image: "./inventory/soulInventory/restfieldZombieSoulInventory.png",
     type: "soul",
 }
@@ -1579,6 +1579,8 @@ const itemsObj = {
     miniMushroom,
     treeLeaf,
     bone,
-    restfieldBlanket
+    restfieldBlanket,
+    restfieldZombieSoulInventory,
+    restfieldZombieInventory
 };
 

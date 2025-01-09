@@ -96,12 +96,6 @@ restfieldMall.src = "./islands/restfieldMall.png"
 const restfieldMallFront = new Image();
 restfieldMallFront.src = "./islands/restfieldMallFront.png"
 
-const restfieldMall = new Image();
-restfieldMall.src = "./islands/restfieldMall.png"
-
-const restfieldMallFront = new Image();
-restfieldMallFront.src = "./islands/restfieldMallFront.png"
-
 
 
 
@@ -134,8 +128,8 @@ vampiresSoulInventory.src = "./skins/vampiresSkin.png";
 var restfieldSkeletonSoulInventory = new Image();
 restfieldSkeletonSoulInventory.src = "./skins/restfieldSkeletonSkin.png";
 
-var restfieldZombieSkin = new Image();
-restfieldZombieSkin.src = "./skins/restfieldZombieSkin.png";
+var restfieldZombieSoulInventory = new Image();
+restfieldZombieSoulInventory.src = "./skins/restfieldZombieSkin.png";
 
 // PLAYER-SKINS >
 
@@ -166,8 +160,8 @@ romanHelmetInventory.src = "./capes/romanHelmet.png";
 var restfieldGhostClothes = new Image();
 restfieldGhostClothes.src = "./capes/restfieldGhostClothes.png";
 
-var restfieldZombieClothes = new Image();
-restfieldZombieClothes.src = "./capes/restfieldZombieClothes.png";
+var restfieldZombieInventory = new Image();
+restfieldZombieInventory.src = "./capes/restfieldZombieClothes.png";
 
 var transparentCape = new Image();
 transparentCape.src = "./capes/transparent.png";
