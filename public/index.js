@@ -7912,39 +7912,6 @@ let mapsInfo = {
       }
     ],
     enemies: [
-      {
-        name: "restfieldZombie",
-        imgw: 48,
-        imgh: 48,
-        imgcw: 48,
-        imgch: 0,
-        frames: 0,
-        framesTimer: 0,
-        level: 1,
-        xp: 100,
-        speedX: 5,
-        speedY: 5,
-        spawn: {
-          x: 764,
-          y: 692
-        },
-        w: 155,
-        h: 155,
-        currentStateName: "idle",
-        currentState: null,
-        attackInterval: true,
-        states: [moveStateRandom ],
-        damaged: 0,
-        health: 15,
-        angle: 0,
-        maxHealth: 10,
-        baseSpawn: {
-          x: 1548,
-          y: 865
-        },
-        spawnTimer: 10000,
-        enemyStateInt: 2000,
-      }
     ],
   },
 
@@ -19040,9 +19007,531 @@ let mapsInfo = {
         "width": 52,
         "height": 57,
         "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1773,
+        "y": 1735,
+        "width": 74,
+        "height": 30,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1726,
+        "y": 1707,
+        "width": 76,
+        "height": 98,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 734,
+        "y": 2236,
+        "width": 136,
+        "height": 23,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 819,
+        "y": 2211,
+        "width": 123,
+        "height": 24,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 888,
+        "y": 2195,
+        "width": 72,
+        "height": 28,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 919,
+        "y": 2178,
+        "width": 105,
+        "height": 20,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 954,
+        "y": 2145,
+        "width": 84,
+        "height": 36,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 992,
+        "y": 2132,
+        "width": 91,
+        "height": 10,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1015,
+        "y": 2108,
+        "width": 104,
+        "height": 34,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1093,
+        "y": 2076,
+        "width": 55,
+        "height": 38,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1129,
+        "y": 2062,
+        "width": 81,
+        "height": 28,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1210,
+        "y": 2018,
+        "width": 72,
+        "height": 50,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1334,
+        "y": 1941,
+        "width": 67,
+        "height": 54,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1463,
+        "y": 1883,
+        "width": 75,
+        "height": 47,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1436,
+        "y": 1912,
+        "width": 59,
+        "height": 27,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1384,
+        "y": 1926,
+        "width": 63,
+        "height": 31,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1266,
+        "y": 1989,
+        "width": 85,
+        "height": 34,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1825,
+        "y": 1672,
+        "width": 64,
+        "height": 38,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1866,
+        "y": 1633,
+        "width": 132,
+        "height": 46,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1918,
+        "y": 1597,
+        "width": 122,
+        "height": 70,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1790,
+        "y": 1697,
+        "width": 84,
+        "height": 30,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1777,
+        "y": 1673,
+        "width": 68,
+        "height": 52,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1309,
+        "y": 1947,
+        "width": 47,
+        "height": 31,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1425,
+        "y": 1866,
+        "width": 92,
+        "height": 54,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1476,
+        "y": 1849,
+        "width": 55,
+        "height": 57,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1282,
+        "y": 1929,
+        "width": 124,
+        "height": 62,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1359,
+        "y": 1908,
+        "width": 78,
+        "height": 47,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1163,
+        "y": 2012,
+        "width": 114,
+        "height": 50,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1218,
+        "y": 1949,
+        "width": 101,
+        "height": 70,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1161,
+        "y": 1994,
+        "width": 94,
+        "height": 43,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1039,
+        "y": 2081,
+        "width": 86,
+        "height": 36,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1063,
+        "y": 2020,
+        "width": 104,
+        "height": 54,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 898,
+        "y": 2136,
+        "width": 91,
+        "height": 62,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 937,
+        "y": 2085,
+        "width": 121,
+        "height": 62,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 762,
+        "y": 2190,
+        "width": 86,
+        "height": 60,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 792,
+        "y": 2176,
+        "width": 112,
+        "height": 46,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1013,
+        "y": 2057,
+        "width": 95,
+        "height": 54,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3439,
+        "y": 2357,
+        "width": 119,
+        "height": 66,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3613,
+        "y": 2314,
+        "width": 114,
+        "height": 92,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3614,
+        "y": 1892,
+        "width": 122,
+        "height": 453,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3593,
+        "y": 877,
+        "width": 145,
+        "height": 1149,
+        "color": "rgb(0, 0, 0, 0)"
       }
     ],
-    enemies:[]
+    enemies:[
+      {
+        name: "restfieldZombie",
+        imgw: 48,
+        imgh: 48,
+        imgcw: 48,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 480,
+          y: 2930
+        },
+        w: 155,
+        h: 155,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveStateRandom ],
+        damaged: 0,
+        health: 15,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1548,
+          y: 865
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      }, {
+        name: "restfieldZombie",
+        imgw: 48,
+        imgh: 48,
+        imgcw: 48,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 40,
+          y: 2000
+        },
+        w: 155,
+        h: 155,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveStateRandom ],
+        damaged: 0,
+        health: 15,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1548,
+          y: 865
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      }, {
+        name: "restfieldZombie",
+        imgw: 48,
+        imgh: 48,
+        imgcw: 48,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 1070,
+          y: 2200
+        },
+        w: 155,
+        h: 155,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveStateRandom ],
+        damaged: 0,
+        health: 15,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1548,
+          y: 865
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      }, {
+        name: "restfieldZombie",
+        imgw: 48,
+        imgh: 48,
+        imgcw: 48,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 2500,
+          y: 1500
+        },
+        w: 155,
+        h: 155,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveStateRandom ],
+        damaged: 0,
+        health: 15,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1548,
+          y: 865
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      }, {
+        name: "restfieldZombie",
+        imgw: 48,
+        imgh: 48,
+        imgcw: 48,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 1800,
+          y: 2000
+        },
+        w: 155,
+        h: 155,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveStateRandom ],
+        damaged: 0,
+        health: 15,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1548,
+          y: 865
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      }, {
+        name: "restfieldZombie",
+        imgw: 48,
+        imgh: 48,
+        imgcw: 48,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 3500,
+          y: 900
+        },
+        w: 155,
+        h: 155,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveStateRandom ],
+        damaged: 0,
+        health: 15,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1548,
+          y: 865
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      } 
+    ]
   },
 
 // ARCANE ISLAND
