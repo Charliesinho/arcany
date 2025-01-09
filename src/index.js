@@ -976,10 +976,10 @@ async function main() {
                     //pushItem(tropicalHat, socket)
                     //pushItem(romanHelmet, socket)
                     //pushItem(skullHelmet, socket)
-                    //pushItem(restfieldGhostClothes, socket)
-                    pushItem(arcaneRepeater, socket)
+                    pushItem(restfieldZombieClothes, socket)
+                    //pushItem(arcaneRepeater, socket)
 
-                    await Player.findOneAndUpdate({socket: socket.id}, {souls: [frogSkin, ghostSkin, reaperSkin, vampiresSkin, redDemon, pinkDemon, arcanyDemon, restfieldSkeletonSkin]}, {new: true});
+                    await Player.findOneAndUpdate({socket: socket.id}, {souls: [frogSkin, ghostSkin, reaperSkin, vampiresSkin, redDemon, pinkDemon, arcanyDemon, restfieldSkeletonSkin, restfieldZombieSkin]}, {new: true});
 
                     // let item = {
                     //     type: "questItem",
@@ -1402,6 +1402,13 @@ const restfieldGhostClothes = {
     rarity: "common",
     image: "./inventory/clothesInventory/restfieldGhostInventory.png",
 };
+const restfieldZombieClothes = {
+    type: "artifact",
+    name: "restfieldZombieClothes",
+    value: 20,
+    rarity: "common",
+    image: "./inventory/clothesInventory/restfieldZombieInventory.png",
+};
 
 // SOULS
 
@@ -1443,5 +1450,10 @@ const vampiresSkin = {
 const restfieldSkeletonSkin = {
     name: "restfieldSkeletonSkin",
     image: "./inventory/soulInventory/restfieldSkeletonSoulInventory.png",
+    type: "soul",
+}
+const restfieldZombieSkin = {
+    name: "restfieldZombieSkin",
+    image: "./inventory/soulInventory/restfieldZombieSoulInventory.png",
     type: "soul",
 }
