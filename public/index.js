@@ -521,6 +521,11 @@ const placeChestStick = document.getElementById("placeChestStick");
 const placeChestGem = document.getElementById("placeChestGem");
 const placeChestVeg = document.getElementById("placeChestVeg");
 
+const bossBarParent = document.getElementById("bossBarParent");
+const bossBarHealth = document.getElementById("bossBarHealth");
+const bossBarHealthFollower = document.getElementById("bossBarHealthFollower");
+const bossBarImg = document.getElementById("bossBarImg");
+
 const cookingItem = document.querySelector(".cookingItem");
 const container = document.getElementById('cookingContainer');
 const paddle = document.getElementById('paddle');
@@ -1993,6 +1998,10 @@ function playerDeath () {
 
   dying = true;
   challengeActive = false;
+
+  bossBarParent.style.display = "none";
+  bossBarHealth.style.width = 100 + "%";
+  bossBarHealthFollower.style.width = 100 + "%";
 
   // clearInterval(intervalCanvasBase)
   projectilesClient = [];
@@ -7924,7 +7933,7 @@ let mapsInfo = {
         currentStateName: "idle",
         currentState: null,
         attackInterval: true,
-        states: [moveState ],
+        states: [moveStateRandom ],
         damaged: 0,
         health: 15,
         angle: 0,
@@ -36693,8 +36702,14 @@ function activateBossEnemy (enemy) {
     violinDanger.play()
     bossWakingUpChallenge.play()
     timeToWake = 40;
+    bossBarHealth.style.width = 100 + "%";
+    bossBarHealthFollower.style.width = 100 + "%";
+    bossBarParent.style.display = "block"
+    bossBarImg.src = "./Textures/bossBarMoosh.png"
   }
   else if (enemy.name === "restfieldReaper") {
+    bossBarParent.style.display = "block"
+    bossBarImg.src = "./Textures/bossBarReaper.png"
     SokosBoss.play();
     timeToWake = 10000;
   }
@@ -36788,9 +36803,9 @@ function drawEnemy () {
       );
   
       if (
-        (enemy.spawn.x - cameraX) - (playerX - cameraX) + 200 > -1000 && (enemy.spawn.y - cameraY) - (playerY - cameraY) + 120 > -1000
+        (enemy.spawn.x - cameraX) - (playerX - cameraX) + 200 > -1000 && (enemy.spawn.y - cameraY) - (playerY - cameraY) + 120 > -2000
         &&
-        (enemy.spawn.x - cameraX) - (playerX - cameraX) + 200 < 1000 && (enemy.spawn.y - cameraY) - (playerY - cameraY) + 120 < 1000
+        (enemy.spawn.x - cameraX) - (playerX - cameraX) + 200 < 1000 && (enemy.spawn.y - cameraY) - (playerY - cameraY) + 120 < 2000
       ) {
         handleEnemyState(enemy)
       }
@@ -36801,6 +36816,8 @@ function drawEnemy () {
 
   }) 
 }
+
+let bossBarPercentage = 100;
 
 function checkEnemyCombat (enemy) {
   if (enemy.damaged > 0) {
@@ -36821,7 +36838,7 @@ function checkEnemyCombat (enemy) {
   if (enemy.health <= 0) {
     enemyDeathParticles(enemy)
     enemy.attackInterval = true;
-    attackCircleState(enemy)
+    // attackCircleState(enemy)
     mapsInfo[currentLand].enemies.splice(mapsInfo[currentLand].enemies.indexOf(enemy), 1)
 
     socket.emit("enemyKilled", enemy.xp);
@@ -36851,6 +36868,9 @@ function checkEnemyCombat (enemy) {
       SokosBoss.pause();
       SokosBoss.currentTime = 0;
       bossFight = false;
+      bossBarParent.style.display = "none";
+      bossBarHealth.style.width = 100 + "%";
+      bossBarHealthFollower.style.width = 100 + "%";
 
       if (enemy.isBoss) {
         resetTimer()
@@ -36903,6 +36923,9 @@ function checkEnemyCombat (enemy) {
       enemy.angle = projectile.angle || projectile.bullet1 || projectile.bullet2;
       projectile.timeLeft = projectile.timeLeft > 1 ? 1 : projectile.timeLeft;
       enemy.health = enemy.health - projectile.damage;
+      bossBarPercentage = Math.max(0, (enemy.health / enemy.maxHealth) * 100);
+      bossBarHealth.style.width = bossBarPercentage + "%";
+      bossBarHealthFollower.style.width = bossBarPercentage + "%";
 
       if (enemy.health > 0) {
         const enemyHitAudio = new Audio("./audios/enemyHit.mp3");
@@ -37076,6 +37099,67 @@ function moveState(enemy) {
   resolveEnemyCollisions(enemy);
 }
 
+function moveStateRandom(enemy) {
+  if (enemy.currentStateName === "idle") {
+    enemy.currentStateName = "move";
+  }
+
+  const colliders = drawColliders("enemy", enemy.spawn.x, enemy.spawn.y, enemy.w, enemy.h);
+
+  if (!enemy.commitTimer) {
+    enemy.commitTimer = null;
+  }
+
+  if (!enemy.committedDirection) {
+    enemy.committedDirection = null;
+  }
+
+  const chooseRandomDirection = () => {
+    const directions = ["up", "down", "left", "right"];
+    const availableDirections = directions.filter(dir => !colliders.includes(dir));
+    if (availableDirections.length > 0) {
+      const randomIndex = Math.floor(Math.random() * availableDirections.length);
+      const randomDirection = availableDirections[randomIndex];
+      enemy.committedDirection = randomDirection;
+      startCommitmentTimer(enemy);
+      return randomDirection;
+    }
+    return null;
+  };
+
+  // Handle committed direction
+  if (enemy.committedDirection) {
+    if (colliders.includes(enemy.committedDirection)) {
+      enemy.committedDirection = null;
+    } else {
+      switch (enemy.committedDirection) {
+        case "up":
+          enemy.spawn.y -= enemy.speedY;
+          return;
+        case "down":
+          enemy.spawn.y += enemy.speedY;
+          return;
+        case "left":
+          enemy.spawn.x -= enemy.speedX;
+          return;
+        case "right":
+          enemy.spawn.x += enemy.speedX;
+          return;
+      }
+    }
+  }
+
+  // Decide random movement when no commitment
+  const direction = chooseRandomDirection();
+  if (direction === "up") enemy.spawn.y -= enemy.speedY;
+  if (direction === "down") enemy.spawn.y += enemy.speedY;
+  if (direction === "left") enemy.spawn.x -= enemy.speedX;
+  if (direction === "right") enemy.spawn.x += enemy.speedX;
+
+  resolveEnemyCollisions(enemy);
+}
+
+
 function startCommitmentTimer(enemy) {
   if (enemy.commitTimer) clearTimeout(enemy.commitTimer); // Reset existing timer if active
   enemy.commitTimer = setTimeout(() => {
@@ -37133,7 +37217,7 @@ function lazerMooshState(enemy) {
 
   setTimeout(() => {
     enemy.attackInterval = true;
-  }, 50);
+  }, 500);
 
     projectilesClient.push({
       angle: bulletAngle,
@@ -37211,7 +37295,7 @@ function attackCircleState(enemy) {
   if (enemy.attackInterval) {
     enemy.attackInterval = false;
 
-    const totalBullets = 50; // Total bullets forming the circle
+    const totalBullets = 20; // Total bullets forming the circle
     const angleIncrement = (2 * Math.PI) / totalBullets; // Full circle divided into 20 parts
 
     setTimeout(() => {
@@ -37231,7 +37315,7 @@ function attackCircleState(enemy) {
           enemy: true,
         });
       }
-    }, 500);
+    }, 1000);
 
 
     setTimeout(() => {
@@ -37255,7 +37339,7 @@ function attackCircleMooshBossState(enemy) {
   if (enemy.attackInterval) {
     enemy.attackInterval = false;
 
-    const totalBullets = 50; // Total bullets forming the circle
+    const totalBullets = 25; // Total bullets forming the circle
     const angleIncrement = (2 * Math.PI) / totalBullets; // Full circle divided into 20 parts
 
     const pop2 = new Audio("./audios/pop2.wav");
@@ -37280,15 +37364,14 @@ function attackCircleMooshBossState(enemy) {
           enemy: true,
         });
       }
-    }, 500);
+    }, 1000);
 
 
     setTimeout(() => {
       enemy.attackInterval = true;
-    }, 300);
+    }, 800);
   }
 }
-
 
 function resolveEnemyCollisions(enemy) {
   mapsInfo[currentLand].enemies.forEach(otherEnemy => {

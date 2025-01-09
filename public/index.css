@@ -2229,4 +2229,61 @@ body {
   .shake {
     animation: shake .2s ease;
   }
+
+
+  #bossBarParent {
+    display: none;
+    position: absolute;
+    width: 1000px;
+    height: 250px;
+    left: 50%;
+    top: 65%;
+    transform: translate(-50%, 0);
+    opacity: 0;
+    animation: opacityUp .5s ease forwards;
+  }
+
+  #bossBarImg {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+  
+  #bossBar {
+    position: absolute;
+    width: 80%;
+    height: 11%;
+    bottom: 84px;
+    left: 98px;
+  }
+  
+  #bossBarHealth {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: #ff4646; /* Green for health */
+    width: 100%; /* Set width dynamically depending on health */
+    transition: all .2s ease;
+  }
+  
+  #bossBarHealthFollower {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: rgb(246, 246, 246); /* Slightly transparent green */
+    width: 100%; /* Can be updated dynamically */
+    transition: all .5s ease 1s;
+  }
+  
+  #bossBarHealthBack {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: #555; /* Darker color for background */
+    width: 100%;
+  }
+  
   
