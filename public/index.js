@@ -104,70 +104,71 @@ restfieldMallFront.src = "./islands/restfieldMallFront.png"
 var humanSkin = new Image();
 humanSkin.src = "./skins/humanSkin.png";
 
-var frogSkin = new Image();
-frogSkin.src = "./skins/frogSkin.png";
+var frogSoulInventory = new Image();
+frogSoulInventory.src = "./skins/frogSkin.png";
 
-var ghostSkin = new Image();
-ghostSkin.src = "./skins/ghostSkin.png";
+var ghostSoulInventory = new Image();
+ghostSoulInventory.src = "./skins/ghostSkin.png";
 
-var reaperSkin = new Image();
-reaperSkin.src = "./skins/reaperSkin.png";
+var reaperSoulInventory = new Image();
+reaperSoulInventory.src = "./skins/reaperSkin.png";
 
-var arcanyDemon = new Image();
-arcanyDemon.src = "./skins/arcanyDemon.png";
+var arcanyDemonSoulInventory = new Image();
+arcanyDemonSoulInventory.src = "./skins/arcanyDemon.png";
 
-var pinkDemon = new Image();
-pinkDemon.src = "./skins/pinkDemon.png";
+var pinkDemonSoulInventory = new Image();
+pinkDemonSoulInventory.src = "./skins/pinkDemon.png";
 
-var redDemon = new Image();
-redDemon.src = "./skins/redDemon.png";
+var redDemonSoulInventory = new Image();
+redDemonSoulInventory.src = "./skins/redDemon.png";
 
-var vampiresSkin = new Image();
-vampiresSkin.src = "./skins/vampiresSkin.png";
+var vampiresSoulInventory = new Image();
+vampiresSoulInventory.src = "./skins/vampiresSkin.png";
 
-var restfieldSkeletonSkin = new Image();
-restfieldSkeletonSkin.src = "./skins/restfieldSkeletonSkin.png";
+var restfieldSkeletonSoulInventory = new Image();
+restfieldSkeletonSoulInventory.src = "./skins/restfieldSkeletonSkin.png";
 
-var restfieldZombieSkin = new Image();
-restfieldZombieSkin.src = "./skins/restfieldZombieSkin.png";
+var restfieldZombieSoulInventory = new Image();
+restfieldZombieSoulInventory.src = "./skins/restfieldZombieSkin.png";
 
-//PLAYER-SKINS >
+// PLAYER-SKINS >
 
-//PLAYER-ARMOR <
-var tropicalHat = new Image();
-tropicalHat.src = "./capes/tropicalHat.png";
+// PLAYER-ARMOR <
+var tropicalHatInventory = new Image();
+tropicalHatInventory.src = "./capes/tropicalHat.png";
 
-var skullHelmet = new Image();
-skullHelmet.src = "./capes/skullHelmet.png";
+var skullInventory = new Image();
+skullInventory.src = "./capes/skullHelmet.png";
 
-var mushroomClothesRed = new Image();
-mushroomClothesRed.src = "./capes/mushroomClothesRed.png";
+var redMushroomlInventory = new Image();
+redMushroomlInventory.src = "./capes/mushroomClothesRed.png";
 
-var fishermanClothes = new Image();
-fishermanClothes.src = "./capes/fishermanClothes.png";
+var fishrmanInventory = new Image();
+fishrmanInventory.src = "./capes/fishermanClothes.png";
 
-var mushroomClothesOrange = new Image();
-mushroomClothesOrange.src = "./capes/mushroomClothesOrange.png";
+var rorangeMushroomlInventory = new Image();
+rorangeMushroomlInventory.src = "./capes/mushroomClothesOrange.png";
 
-var reaperClothes = new Image();
-reaperClothes.src = "./capes/reaperClothes.png";
+var reaperInventory = new Image();
+reaperInventory.src = "./capes/reaperClothes.png";
 
-var blackVampiresClothes = new Image();
-blackVampiresClothes.src = "./capes/blackVampiresClothes.png";
+var vampiresInventory = new Image();
+vampiresInventory.src = "./capes/blackVampiresClothes.png";
 
-var romanHelmet = new Image();
-romanHelmet.src = "./capes/romanHelmet.png";
-
+var romanHelmetInventory = new Image();
+romanHelmetInventory.src = "./capes/romanHelmet.png";
 var restfieldGhostClothes = new Image();
 restfieldGhostClothes.src = "./capes/restfieldGhostClothes.png";
 
-var restfieldZombieClothes = new Image();
-restfieldZombieClothes.src = "./capes/restfieldZombieClothes.png";
+var restfieldZombieInventory = new Image();
+restfieldZombieInventory.src = "./capes/restfieldZombieClothes.png";
 
 var transparentCape = new Image();
 transparentCape.src = "./capes/transparent.png";
 
-//PLAYER-ARMOR >
+// PLAYER-ARMOR >
+
+
 
 const slime = new Image();
 slime.src = "slime.png";
@@ -228,6 +229,12 @@ WeaponStick.src = "stick.png";
 const arcaneStaffCommon = new Image();
 arcaneStaffCommon.src = "arcaneStaffCommon.png";
 
+const questOngoingImg = new Image();
+questOngoingImg.src = "./Textures/questOngoingImg.png";
+
+const questStartImg = new Image();
+questStartImg.src = "./Textures/questStartImg.png";
+
 const arcaneRepeater = new Image();
 arcaneRepeater.src = "./inventory/arcaneRepeater.png";
 
@@ -236,6 +243,9 @@ nuclearStaffCommon.src = "nuclearStaffCommon.png";
 
 const solarStaffCommon = new Image();
 solarStaffCommon.src = "solarStaffCommon.png";
+
+const fishingStick = new Image();
+fishingStick.src = "fishingStick.png";
 
 const WeaponWillowStick = new Image();
 WeaponWillowStick.src = "willowStick.png";
@@ -248,6 +258,9 @@ bulletStickBlue.src = "bulletStickBlue.png";
 
 const chatBubble = new Image();
 chatBubble.src = "chatBubble.png";
+
+const chatBubbleBigger = new Image();
+chatBubbleBigger.src = "chatBubbleBigger.png";
 
 const nameBubbleGreen = new Image();
 nameBubbleGreen.src = "./nameTags/nameTaglvl1.png";
@@ -331,12 +344,20 @@ const fightMusic1 = new Audio("./audios/fightMusic1.mp3");
 fightMusic1.loop = true;
 fightMusic1.volume = 0.3;
 
+const SokosBoss = new Audio("./audios/SokosBoss.wav");
+SokosBoss.loop = true;
+// SokosBoss.volume = ;
+
 const grasslandsLoop1 = new Audio("./audios/seaShanty.mp3");
 grasslandsLoop1.loop = true;
 grasslandsLoop1.volume = 0.0;
 
 const grasslandsEnviroment = new Audio("./audios/grasslandsEnviroment.mp3");
 grasslandsEnviroment.loop = true;
+
+const restfield = new Audio("./audios/restfield.mp3");
+restfield.loop = true;
+restfield.volume = 0.05;
 
 const grassLandsSong = new Audio("./audios/grassLandsSong.mp3");
 grassLandsSong.loop = true;
@@ -1108,10 +1129,10 @@ window.addEventListener("keydown", (e) => {
             }
         } else {
           if(!chatIsActivate) showChatFunction()
-            setTimeout(() => { 
             chatInput.focus();
             blockMovement = true;
             noMovement = true
+            setTimeout(() => { 
             }, 500);
         }
     }
@@ -1952,6 +1973,8 @@ let newCombatLevel = 0;
 let changeCombatLevel = true;
 let combatLevelSimple = 0;
 
+let dialogBoxes;
+
 function initDraggables() {
   dragula([document.querySelector(".dragParent"), document.querySelector(".dragParent1")])
 }
@@ -2046,6 +2069,7 @@ respawn.addEventListener("click", () => {
     currentSelectedMap = "lobby"
     let functionName = currentSelectedMap + "Loop";
     changeMap(functionName)
+    socket.emit("changeRoom", currentSelectedMap);
     dying = false;
   }, 200);
 })
@@ -2151,20 +2175,24 @@ function updateQuestInfo(quest) {
 
   questTitle.innerHTML = quest.title;
   questDescription.innerHTML = quest.questDescription;
-  questEndItem.src = `./inventory/${quest.rewardType}.png`
+  questEndItem.src = `./inventory/${quest.rewardItem}.png`
 
-  let itemAmount = myPlayer.inventory.filter((item) => item.type === quest.completionItem).length;
+  console.log(myPlayer.inventory, quest)
+
+  let itemAmount = myPlayer.inventory.filter((item) => item.name === quest.completionItem).length;
   questProgressItems.innerHTML = itemAmount + " / " + quest.completionAmount + " " + quest.completionItem
 
   questProgressChild.style.width = (itemAmount / quest.completionAmount) * 100 + "%";
 
-  questReward.innerHTML = "x" + quest.rewardItem + " " + quest.rewardType
+  questReward.innerHTML = quest.rewardType;
 }
 
 questClose.addEventListener("click", () => {
   const questUi = document.querySelector(".questInfo");
   questUi.style.display = "none";
 })
+
+let updateDialogs = true;
 
 socket.on("player", (serverPlayer) => {
 
@@ -2191,8 +2219,363 @@ socket.on("player", (serverPlayer) => {
     currentHealth = maxHealth
   }
 
+  dialogBoxes = {
+
+
+    "Fishing Quest": {
+    dialogName: "quest",
+    questRequirements: [],
+    type: "counter",
+  
+    questName: "Fishing quest",
+    questDecription: "Melina said that if I bring her five fish of any type then she will give me a reward",
+    questCard: "./Cards/fish.png",
+    rewardType: "soul",
+    rewardItem: "frogSoulInventory",
+    completionItem: "sardin",
+    completionAmount: 10,
+    markerX: 1922 + 364,
+    markerY: 1879 + 347 / 2,
+    
+    dialogText:
+    [
+      {
+        NPC: "Fisherman",
+        text: "Hello Adventurer! Oh you are looking for a task?",
+      },
+      {
+        NPC: "Fisherman",
+        text: "Umm... Well.. Lets see...",
+      },
+      {
+        NPC: "Fisherman",
+        text: "Well I can give you something I found just for your efforts, go catch 5 red sardines and bring them back to me.",
+      },
+      {
+        NPC: myPlayer ? myPlayer.username : "User",
+        text: "Alright that sounds simple enough!",
+      },
+    ],
+  
+    progressText:
+    [
+      {
+        NPC: "Fisherman",
+        text: "So? I am waiting on those fish!",
+      },
+      {
+        NPC: "Fisherman",
+        text: "Do you have them?",
+        check: true,
+      },
+    ],
+  
+    rewardText:
+    [
+      {
+        NPC: "Fisherman",
+        text: "Really nice job!",
+      },
+      {
+        NPC: myPlayer ? myPlayer.username : "User",
+        text: "Thank you!",
+      },
+    ],
+    },
+    "Deep Forestry Quest": {
+    dialogName: "quest",
+    questRequirements: [],
+    type: "counter",
+  
+    questName: "Deep Forestry Quest",
+    questDecription: "The guy in the forest said that for a few sticks he can give me a hat, would be nice for the sun!",
+    questCard: "./Cards/clothes.png",
+    rewardType: "item",
+    rewardItem: "tropicalHatInventory",
+    completionItem: "stick",
+    completionAmount: 2,
+    markerX: 1974 - 200,
+    markerY: 1443 + 600,
+    
+    dialogText:
+    [
+      {
+        NPC: "Explorer",
+        text: "Hello Adventurer! Listen I am having a bad time.",
+      },
+      {
+        NPC: "Explorer",
+        text: "I want to explore but I keep getting sunburnt so I need to get under the trees, and I already got lost 3 times because of that.",
+      },
+      {
+        NPC: "Explorer",
+        text: "I can make a hat for you and me if you bring me 2 sticks of wood! The sun can be harsh this time of the year...",
+      },
+      {
+        NPC: myPlayer ? myPlayer.username : "User",
+        text: "I am sure I saw sticks in the lake!",
+      },
+    ],
+  
+    progressText:
+    [
+      {
+        NPC: "Explorer",
+        text: "Please tell me you have the sticks",
+      },
+      {
+        NPC: "Explorer",
+        text: "...",
+        check: true,
+      },
+    ],
+  
+    rewardText:
+    [
+      {
+        NPC: "Explorer",
+        text: "Finally! Here you go",
+      },
+      {
+        NPC: myPlayer ? myPlayer.username : "User",
+        text: "Oh wow, stylish!",
+      },
+    ],
+    },
+    "Tree Issues Quest": {
+    dialogName: "quest",
+    questRequirements: [],
+    type: "counter",
+  
+    questName: "Tree Issues Quest",
+    questDecription: "This dude by the crystal mentioned that he is trying to figure out why the trees are alive in that area, I need to get some leaves from those trees.",
+    questCard: "./Cards/fight.png",
+    rewardType: "soul",
+    rewardItem: "arcanyDemonSoulInventory",
+    completionItem: "treeLeaf",
+    completionAmount: 5,
+    markerX: 1573 + 250,
+    markerY: 1851 + 200,
+    
+    dialogText:
+    [
+      {
+        NPC: "Scientist",
+        text: "Oh hey there! Can you help me with something?",
+      },
+      {
+        NPC: "Scientist",
+        text: "This crystal has some connection with the environment but I cant figure out why...",
+      },
+      {
+        NPC: "Scientist",
+        text: "If you bring me 5 leaves from those trees I can investigate further",
+      },
+      {
+        NPC: myPlayer ? myPlayer.username : "User",
+        text: "And my reward?",
+      },
+      {
+        NPC: "Scientist",
+        text: "These kids... yes yes of course you will have a reward!",
+      },
+    ],
+  
+    progressText:
+    [
+      {
+        NPC: "Scientist",
+        text: "So, how is it going?",
+      },
+      {
+        NPC: "Scientist",
+        text: "These trees really dont like that I am here!",
+        check: true,
+      },
+    ],
+  
+    rewardText:
+    [
+      {
+        NPC: "Scientist",
+        text: "Amazing! Here you go",
+      },
+    ],
+    },
+    "A locked door Quest": {
+    dialogName: "quest",
+    questRequirements: [],
+    type: "counter",
+  
+    questName: "A locked door Quest",
+    questDecription: "The witch at the door of Restfield wants me to help her cook something, I will need 3 mushrooms for that.",
+    questCard: "./Cards/fight.png",
+    rewardType: "quest",
+    rewardItem: "restfieldAccess",
+    completionItem: "miniMushroom",
+    completionAmount: 3,
+    markerX: 1281,
+    markerY: 1829,
+    
+    dialogText:
+    [
+      {
+        NPC: "Witch",
+        text: "Hey there little one! Can you help me out an old witch?... Okay maybe not so old",
+      },
+      {
+        NPC: "Witch",
+        text: "I am trying to finish my cacerol but I am missing one ingredient...",
+      },
+      {
+        NPC: "Witch",
+        text: "TINY MUSHROOMS!!!!!",
+      },
+      {
+        NPC: "Witch",
+        text: "....",
+      },
+      {
+        NPC: "Witch",
+        text: "Sorry...",
+      },
+      {
+        NPC: "Witch",
+        text: "I saw a little mushroom kingdom close to here, they seem to have plenty.",
+      },
+      {
+        NPC: myPlayer ? myPlayer.username : "User",
+        text: "Would I need to kill them?",
+      },
+      {
+        NPC: "Witch",
+        text: "Well...",
+      },
+      {
+        NPC: "Witch",
+        text: "Um...",
+      },
+      {
+        NPC: "Witch",
+        text: "Yes. BUT if you do so I can open this massive door for you!",
+      },
+    ],
+  
+    progressText:
+    [
+      {
+        NPC: "Witch",
+        text: "So, any luck? I am getting older by the minute out here",
+      },
+      {
+        NPC: "Witch",
+        text: "...",
+        check: true,
+      },
+    ],
+  
+    rewardText:
+    [
+      {
+        NPC: "Witch",
+        text: "Amazing! Welcome to RESTFIELD!",
+      },
+    ],
+    },
+  
+  
+  
+  dialogCastelDoor: {
+    dialogName: "dialogCastelDoor",
+    questRequirements: [],
+    type: "dialog",
+    dialogText:
+    [{
+        NPC: myPlayer ? myPlayer.username : "User",
+        text: "This door seems to be locked, I need to find a way to open it.",
+      },
+    ],
+  },
+  
+  dialogFishingPole: {
+    dialogName: "dialogFishingPole",
+    questRequirements: [],
+    type: "dialog",
+    dialogText:
+    [{
+        NPC: "Sign",
+        text: "You will find all kinds of fish species here. Get close to the water and press 'E' to fish.",
+      },
+    ],
+  },
+  
+  dialogCombatAreaPole: {
+    dialogName: "dialogCombatAreaPole",
+    questRequirements: [],
+    type: "dialog",
+    dialogText:
+    [{
+        NPC: "Sign",
+        text: "You are entering a combat zone. All kinds of monsters are present, so stay alert.",
+      },
+    ],
+  },
+  
+  dialogWayPoint: {
+    dialogName: "dialogWayPoint",
+    questRequirements: [],
+    type: "dialog",
+    dialogText:
+    [{
+      NPC: "Mel",
+      text: "It seems like I came from here. What is this... a crystal? Why does it look so strange?",
+    },
+  ],
+  },
+  
+  dialogCoffeeMachine: {
+  dialogName: "dialogCoffeeMachine",
+  questRequirements: [],
+  type: "dialog",
+  dialogText:
+  [{
+      NPC: "Coffee Machine",
+      text: "Apologies! Out of beans. Maintenance required.",
+    },
+  ],
+  },
+  
+  dialogCristalPortal: {
+  dialogName: "dialogCristalPortal",
+  questRequirements: [],
+  type: "dialog",
+  dialogText:
+  [{
+      NPC: "Mel",
+      text: "What a strange crystal... What could it be for?",
+    },
+  ],
+  },
+  dialogSlimeBoxes: {
+  dialogName: "dialogSlimeBoxes",
+  questRequirements: [],
+  type: "dialog",
+  dialogText:
+  [{
+      NPC: "Mel",
+      text: "What a strange texture...",
+    },
+  ],
+  },
+  
+  };
+
   health()
   updateQuestUI()
+  if (updateDialogs) {
+    addMapsInfoToDiv()
+    updateDialogs = false
+  }
 
   playerCoinsAmount.innerHTML = myPlayer.currency 
   // console.log(myPlayer)
@@ -2908,7 +3291,7 @@ window.addEventListener("keydown", (e) => {
     fishingGame.style.display = "block";
     fishing = true;
 
-    const number = Math.floor(Math.random() * (10000 - 3000 + 1) + 3000);
+    const number = Math.floor(Math.random() * (30000 - 10000 + 1) + 10000);
 
     function fishingStart() {
 
@@ -2939,7 +3322,7 @@ window.addEventListener("keydown", (e) => {
             fishingBarHit.classList.add('noFish');
           }, 300);
         }
-      }, 5);
+      }, 10);
 
     };
 
@@ -3032,11 +3415,11 @@ window.addEventListener("keydown", (e) => {
 
   //Chest island open <
 
-  if (e.key === "o") {
-    mapsInfo[currentLand].enemies?.forEach(enemy => {
-      activateNormalEnemy(enemy);
-    })
-  }
+  // if (e.key === "o") {
+  //   mapsInfo[currentLand].enemies?.forEach(enemy => {
+  //     activateNormalEnemy(enemy);
+  //   })
+  // }
 
 });
 
@@ -3164,6 +3547,8 @@ function shootArcaneRepeater () {
 }
 
 canvasLobby.addEventListener("mousedown", (e) => {
+  clearInterval(shootInterval)
+  if (fishing) return;
   mouseLeftPressed = true;
     if (shootingBlock === false) {
       if (myPlayer.weapon[0]) {
@@ -3229,7 +3614,7 @@ canvasLobby.addEventListener("mousedown", (e) => {
               }, 20);
             }
   
-            else if (myPlayer?.weapon[0].name === "arcaneRepeater") {
+            else if (myPlayer?.weapon[0].name === "arcaneRepeaterInv") {
   
             shootArcaneRepeater()
             shootInterval = setInterval(() => {
@@ -3388,154 +3773,13 @@ var starquest = document.querySelector('.starquest');
 var charimg = document.querySelector('.char-img');
 var containerChat = document.querySelector('.container');
 
-var textSpeed = 50;
+var textSpeed = 20;
 let currentDialogTitle = ""
 var currentDialog = [];  // This will hold the current dialog to display
 let currentDialogParent = {};
 var currentDialogIndex = 0;  // Keeps track of which paragraph we're on
 var loopLen = 0;  // Character loop index
 var isTyping = false;  // Flag to prevent advancing while typing
-
-let dialogBoxes = {
-
-
-    "fishing Quest": {
-		dialogName: "quest",
-		questRequirements: [],
-		type: "counter",
-
-    questName: "Fishing quest",
-    questDecription: "Melina said that if I bring her five fish of any type then she will give me a reward",
-    questCard: "./Cards/fish.png",
-    rewardType: "coins",
-    rewardItem: 10,
-    completionItem: "fish",
-    completionAmount: 5,
-    
-		dialogText:
-		[
-      {
-        NPC: "Quest giver",
-				text: "Hello Kid! Oh you are looking for a task? Well I can give you some money just for your efforts, go fish 5 fish and bring them back to me.",
-			},
-			{
-        NPC: myPlayer ? myPlayer.username : "User",
-				text: "Alright that sounds simple enough!",
-			},
-		],
-
-    progressText:
-    [
-      {
-        NPC: "Quest giver",
-        text: "So? I am waiting on those fish!",
-      },
-      {
-        NPC: "Quest giver",
-        text: "Do you have them?",
-        check: true,
-      },
-    ],
-
-    rewardText:
-    [
-      {
-        NPC: "Quest giver",
-        text: "Really nice job! Here is some cash.",
-      },
-      {
-        NPC: myPlayer ? myPlayer.username : "User",
-        text: "Thank you!",
-      },
-    ],
-	},
-
-
-
-  dialogCastelDoor: {
-		dialogName: "dialogCastelDoor",
-		questRequirements: [],
-		type: "dialog",
-		dialogText:
-		[{
-				NPC: myPlayer ? myPlayer.username : "User",
-				text: "This door seems to be locked, I need to find a way to open it.",
-			},
-		],
-	},
-
-  dialogFishingPole: {
-		dialogName: "dialogFishingPole",
-		questRequirements: [],
-		type: "dialog",
-		dialogText:
-		[{
-				NPC: "Sign",
-				text: "You will find all kinds of fish species here. Get close to the water and press 'E' to fish.",
-			},
-		],
-	},
-
-  dialogCombatAreaPole: {
-		dialogName: "dialogCombatAreaPole",
-		questRequirements: [],
-		type: "dialog",
-		dialogText:
-		[{
-				NPC: "Sign",
-				text: "You are entering a combat zone. All kinds of monsters are present, so stay alert.",
-			},
-		],
-	},
-
-  dialogWayPoint: {
-    dialogName: "dialogWayPoint",
-		questRequirements: [],
-		type: "dialog",
-		dialogText:
-		[{
-      NPC: "Mel",
-      text: "It seems like I came from here. What is this... a crystal? Why does it look so strange?",
-    },
-  ],
-},
-
-  dialogCoffeeMachine: {
-  dialogName: "dialogCoffeeMachine",
-  questRequirements: [],
-  type: "dialog",
-  dialogText:
-  [{
-      NPC: "Coffee Machine",
-      text: "Apologies! Out of beans. Maintenance required.",
-    },
-  ],
-},
-
-  dialogCristalPortal: {
-  dialogName: "dialogCristalPortal",
-  questRequirements: [],
-  type: "dialog",
-  dialogText:
-  [{
-      NPC: "Mel",
-      text: "What a strange crystal... What could it be for?",
-    },
-  ],
-},
-  dialogSlimeBoxes: {
-  dialogName: "dialogSlimeBoxes",
-  questRequirements: [],
-  type: "dialog",
-  dialogText:
-  [{
-      NPC: "Mel",
-      text: "What a strange texture...",
-    },
-  ],
-},
-
-};
 
 // Function to display one paragraph from the dialog
 function displayDialogParagraph() {
@@ -3586,12 +3830,15 @@ document.addEventListener('keyup', function(event) {
         currentDialogIndex++;  // Move to the next paragraph
         if (currentDialogIndex < currentDialog.length) {
             displayDialogParagraph();  // Display the next paragraph
+            console.log("repeating dialog")
         } else if (dialogOpened) {
           dialogOpened = false;
           containerChat.style.display = "none";
-          console.log("Dialog finished", currentDialogParent.dialogName);
+          // console.log("Dialog finished", currentDialogParent, currentDialog);
 
           if (currentDialogParent.dialogName === "quest") {
+             
+            let indexToDeliver = [];
             
             if (!myPlayer.questsOngoing.some(quest => quest.title === currentDialogParent.questName) && finishingQuest === false) {
               const questToSend = {
@@ -3609,26 +3856,30 @@ document.addEventListener('keyup', function(event) {
               socket.emit("questStarted", questToSend);
             }
 
-            finishingQuest = false; 
-            let indexToDeliver = [];
-  
-            for (const item of myPlayer.inventory) {
-              if (item.type === currentDialogParent.completionItem) {
-                indexToDeliver.push(myPlayer.inventory.indexOf(item))
+
+            else if (myPlayer.questsOngoing.some(quest => quest.title === currentDialogParent.questName) && finishingQuest === false) {
+
+              for (const item of myPlayer.inventory) {
+                if (item.name === currentDialogParent.completionItem) {
+                  indexToDeliver.push(myPlayer.inventory.indexOf(item))
+                }
+              }
+    
+              if (indexToDeliver.length >= currentDialogParent.completionAmount) {
+                let indexToDeliverMod = indexToDeliver.splice(0, currentDialogParent.completionAmount)
+                let questCompleted = {
+                  name: currentDialogParent.questName,
+                  rewardType: currentDialogParent.rewardType,
+                  rewardAmount: currentDialogParent.rewardItem
+                }
+    
+                // socket.emit("toDelete", indexToDeliverMod);
+                socket.emit("questFinished", questCompleted);
               }
             }
   
-            if (indexToDeliver.length >= currentDialogParent.completionAmount) {
-              let indexToDeliverMod = indexToDeliver.splice(0, currentDialogParent.completionAmount)
-              let questCompleted = {
-                name: currentDialogParent.questName,
-                rewardType: currentDialogParent.rewardType,
-                rewardAmount: currentDialogParent.rewardItem
-              }
-  
-              socket.emit("toDelete", indexToDeliverMod);
-              socket.emit("questFinished", questCompleted);
-            }
+
+            finishingQuest = false;
             
             
           }
@@ -3668,19 +3919,19 @@ function startDialog(dialogKey) {
     }
 }
 
-// Increase text print speed on spacebar press (keydown)
-document.addEventListener('keydown', function(event) {
-    if (event.keyCode === 32) {
-        textSpeed = 5;  // Increase speed
-    }
-});
+// // Increase text print speed on spacebar press (keydown)
+// document.addEventListener('keydown', function(event) {
+//     if (event.keyCode === 32) {
+//         textSpeed = 5;  // Increase speed
+//     }
+// });
 
-// Reset text print speed on spacebar release (keyup)
-document.addEventListener('keyup', function(event) {
-    if (event.keyCode === 32) {
-        textSpeed = 50;  // Reset speed
-    }
-});
+// // Reset text print speed on spacebar release (keyup)
+// document.addEventListener('keyup', function(event) {
+//     if (event.keyCode === 32) {
+//         textSpeed = 50;  // Reset speed
+//     }
+// });
 
 // Chat System <
 
@@ -3829,9 +4080,15 @@ function stopAllSound() {
 
   grasslandsEnviroment.pause();
   grasslandsEnviroment.currentTime = 0;
+  
+  restfield.pause();
+  restfield.currentTime = 0;
  
   fightMusic1.pause();
   fightMusic1.currentTime = 0;
+  
+  SokosBoss.pause();
+  SokosBoss.currentTime = 0;
 
   ArcaneEnv.pause();
   ArcaneEnv.currentTime = 0;
@@ -3853,6 +4110,10 @@ function lobbySoundtrack () {
   grasslandsEnviroment.play();
   console.log("playing lobby song")
   lobbySong.play()
+}
+
+function restfieldSoundtrack () {
+  restfield.play();
 }
 
 function grassLandsSoundtrack () {
@@ -3897,6 +4158,15 @@ let mapsInfo = {
       y: 3798
     },
     colliders: [
+      {
+        "type": "dialog",
+        "name": "Deep Forestry Quest",
+        "x": 1443.5,
+        "y": 1974.5,
+        "width": 546,
+        "height": 273,
+        "color": "rgb(0, 0, 0, 0)"
+      },
       {
         "type": "wall",
         "x": 3804,
@@ -5143,6 +5413,15 @@ let mapsInfo = {
       y: 785
     },
     colliders:  [
+      {
+        "type": "dialog",
+        "name": "Fishing Quest",
+        "x": 1922.5,
+        "y": 1879.5,
+        "width": 364,
+        "height": 347,
+        "color": "rgb(0, 0, 0, 0)"
+      },
       {
         "type": "wall",
         "x": 951,
@@ -7576,6 +7855,15 @@ let mapsInfo = {
     },
     colliders: [
       {
+        "type": "dialog",
+        "name": "Tree Issues Quest",
+        "x": 1573.5,
+        "y": 1851.5,
+        "width": 371,
+        "height": 259,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
         "type": "wall",
         "x": 520,
         "y": 404.5,
@@ -9185,8 +9473,10 @@ let mapsInfo = {
           x: 764,
           y: 692
         },
-        spawnTimer: 10000,
+        spawnTimer: 20000,
         enemyStateInt: 2000,
+        drop: "treeLeaf",
+        dropRate: 50,
       },
       {
         name: "treeSimpleEnemy",
@@ -9218,8 +9508,10 @@ let mapsInfo = {
           x: 3368,
           y: 1094
         },
-        spawnTimer: 10000,
+        spawnTimer: 20000,
         enemyStateInt: 2000,
+        drop: "treeLeaf",
+        dropRate: 50,
       },
       {
         name: "treeSimpleEnemy",
@@ -9251,8 +9543,10 @@ let mapsInfo = {
           x: 1832,
           y: 573
         },
-        spawnTimer: 10000,
+        spawnTimer: 20000,
         enemyStateInt: 2000,
+        drop: "treeLeaf",
+        dropRate: 50,
       },
       {
         name: "treeSimpleEnemy",
@@ -9284,8 +9578,10 @@ let mapsInfo = {
           x: 3052,
           y: 579
         },
-        spawnTimer: 10000,
+        spawnTimer: 20000,
         enemyStateInt: 2000,
+        drop: "treeLeaf",
+        dropRate: 50,
       },
 
       {
@@ -9320,6 +9616,8 @@ let mapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
+        drop: "treeLeaf",
+        dropRate: 50,
       },
       {
         name: "brownBunny",
@@ -11960,6 +12258,8 @@ let mapsInfo = {
         spawnTimer: null,
         enemyStateInt: 1000,
         active: false,
+        drop: "miniMushroom",
+        dropRate: 30,
       },
       {
         name: "redMooshroomEnemy",
@@ -11994,6 +12294,8 @@ let mapsInfo = {
         spawnTimer: null,
         enemyStateInt: 1000,
         active: false,
+        drop: "miniMushroom",
+        dropRate: 30,
       },
       {
         name: "redMooshroomEnemy",
@@ -12028,6 +12330,8 @@ let mapsInfo = {
         spawnTimer: null,
         enemyStateInt: 1000,
         active: false,
+        drop: "miniMushroom",
+        dropRate: 30,
       },
       {
         name: "redMooshroomEnemy",
@@ -12062,6 +12366,8 @@ let mapsInfo = {
         spawnTimer: null,
         enemyStateInt: 1000,
         active: false,
+        drop: "miniMushroom",
+        dropRate: 30,
       },
       {
         name: "redMooshroomEnemy",
@@ -12096,6 +12402,8 @@ let mapsInfo = {
         spawnTimer: null,
         enemyStateInt: 1000,
         active: false,
+        drop: "miniMushroom",
+        dropRate: 30,
       },
       {
         name: "redMooshroomEnemy",
@@ -12130,6 +12438,8 @@ let mapsInfo = {
         spawnTimer: null,
         enemyStateInt: 1000,
         active: false,
+        drop: "miniMushroom",
+        dropRate: 30,
       },
       {
         name: "mooshroomBossRed",
@@ -12171,7 +12481,7 @@ let mapsInfo = {
 
   restfieldPath: {
     areaName: "RESTFIELD FOREST",
-    areaSounds: grassLandsSoundtrack,
+    areaSounds: restfieldSoundtrack,
     backgroundImage: restfieldPath,
     foregroundImage: restfieldPathFront,
     
@@ -12180,6 +12490,25 @@ let mapsInfo = {
       y: 3850,
     },
     colliders: [
+      {
+        "type": "dialog",
+        "name": "A locked door Quest",
+        "x": 1036.5,
+        "y": 1697.5,
+        "width": 323,
+        "height": 251,
+        "color": "rgb(179, 255, 213, 0)"
+      },
+      {
+        "type": "transition",
+        "format": "liquid",
+        "destination": "slimeForestPath",
+        "x": 3752,
+        "y": 3554,
+        "width": 426,
+        "height": 330,
+        "color": "rgb(204, 0, 204, 0)"
+      },
       {
         "type": "wall",
         "x": 3103,
@@ -12338,14 +12667,6 @@ let mapsInfo = {
         "y": 1664,
         "width": 712,
         "height": 128,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 388,
-        "y": 1671,
-        "width": 459,
-        "height": 103,
         "color": "rgb(0, 0, 0, 0)"
       },
       {
@@ -13141,6 +13462,15 @@ let mapsInfo = {
         "width": 501,
         "height": 258,
         "color": "rgb(204, 0, 204, 0)"
+      },
+      {
+        "type": "wall",
+        "condition": "restfield",
+        "x": 606,
+        "y": 1601.5,
+        "width": 517,
+        "height": 131,
+        "color": "rgb(0, 0, 0, 0)"
       }
     ],
     enemies: []
@@ -13148,7 +13478,7 @@ let mapsInfo = {
 
   restfieldTownCemetery: {
     areaName: "RESTFIELD CEMETERY",
-    areaSounds: grassLandsSoundtrack,
+    areaSounds: restfieldSoundtrack,
     backgroundImage: restfieldTownCemetery,
     foregroundImage: restfieldTownCemeteryFront,
     
@@ -14857,7 +15187,7 @@ let mapsInfo = {
 
   restFiledTown: {
     areaName: "RESTFIELD TOWN",
-    areaSounds: grassLandsSoundtrack,
+    areaSounds: restfieldSoundtrack,
     backgroundImage: restFiledTown,
     foregroundImage: restFiledTownFront,
     
@@ -14902,7 +15232,7 @@ let mapsInfo = {
 
   restfieldTrial: {
     areaName: "RESTFIELD TRIAL",
-    areaSounds: grassLandsSoundtrack,
+    areaSounds: restfieldSoundtrack,
     backgroundImage: restfieldTrial,
     foregroundImage: restfieldTrialFront,
     
@@ -19163,6 +19493,15 @@ let originalMapsInfo = {
     },
     colliders: [
       {
+        "type": "dialog",
+        "name": "Deep Forestry Quest",
+        "x": 1443.5,
+        "y": 1974.5,
+        "width": 546,
+        "height": 273,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
         "type": "wall",
         "x": 3804,
         "y": 3306,
@@ -20408,6 +20747,15 @@ let originalMapsInfo = {
       y: 785
     },
     colliders:  [
+      {
+        "type": "dialog",
+        "name": "Fishing Quest",
+        "x": 1922.5,
+        "y": 1879.5,
+        "width": 364,
+        "height": 347,
+        "color": "rgb(0, 0, 0, 0)"
+      },
       {
         "type": "wall",
         "x": 951,
@@ -22808,6 +23156,15 @@ let originalMapsInfo = {
     },
     colliders: [
       {
+        "type": "dialog",
+        "name": "Tree Issues Quest",
+        "x": 1573.5,
+        "y": 1851.5,
+        "width": 371,
+        "height": 259,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
         "type": "wall",
         "x": 520,
         "y": 404.5,
@@ -24417,8 +24774,10 @@ let originalMapsInfo = {
           x: 764,
           y: 692
         },
-        spawnTimer: 10000,
+        spawnTimer: 20000,
         enemyStateInt: 2000,
+        drop: "treeLeaf",
+        dropRate: 50,
       },
       {
         name: "treeSimpleEnemy",
@@ -24450,8 +24809,10 @@ let originalMapsInfo = {
           x: 3368,
           y: 1094
         },
-        spawnTimer: 10000,
+        spawnTimer: 20000,
         enemyStateInt: 2000,
+        drop: "treeLeaf",
+        dropRate: 50,
       },
       {
         name: "treeSimpleEnemy",
@@ -24483,8 +24844,10 @@ let originalMapsInfo = {
           x: 1832,
           y: 573
         },
-        spawnTimer: 10000,
+        spawnTimer: 20000,
         enemyStateInt: 2000,
+        drop: "treeLeaf",
+        dropRate: 50,
       },
       {
         name: "treeSimpleEnemy",
@@ -24516,9 +24879,483 @@ let originalMapsInfo = {
           x: 3052,
           y: 579
         },
+        spawnTimer: 20000,
+        enemyStateInt: 2000,
+        drop: "treeLeaf",
+        dropRate: 50,
+      },
+
+      {
+        name: "blackBrownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 1052,
+          y: 2679
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1052,
+          y: 2679
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+        drop: "treeLeaf",
+        dropRate: 50,
+      },
+      {
+        name: "brownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 1552,
+          y: 2700
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1552,
+          y: 2700
+        },
         spawnTimer: 10000,
         enemyStateInt: 2000,
       },
+      {
+        name: "whiteBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 1352,
+          y: 2800
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1352,
+          y: 2800
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "brownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 1952,
+          y: 2900
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1952,
+          y: 2900
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "brownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 1852,
+          y: 3300
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1852,
+          y: 3300
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+
+
+      {
+        name: "blackBrownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 660,
+          y: 3000
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 660,
+          y: 3300
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "whiteBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 960,
+          y: 3300
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 960,
+          y: 3300
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+
+      {
+        name: "blackBrownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 3052,
+          y: 2679
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 3052,
+          y: 2679
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "brownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 3552,
+          y: 2700
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 3552,
+          y: 2700
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "whiteBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 3352,
+          y: 2800
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 3352,
+          y: 2800
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "brownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 3952,
+          y: 2900
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 3952,
+          y: 2900
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "brownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 3852,
+          y: 3300
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 3852,
+          y: 3300
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+
+
+      {
+        name: "blackBrownBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 1660,
+          y: 3300
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1660,
+          y: 3300
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+      {
+        name: "whiteBunny",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 100,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 1960,
+          y: 3300
+        },
+        w: 80,
+        h: 80,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState, idleState],
+        damaged: 0,
+        health: 4,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1960,
+          y: 3300
+        },
+        spawnTimer: 10000,
+        enemyStateInt: 2000,
+      },
+
+
     ]
   },
 
@@ -26722,6 +27559,8 @@ let originalMapsInfo = {
         spawnTimer: null,
         enemyStateInt: 1000,
         active: false,
+        drop: "miniMushroom",
+        dropRate: 30,
       },
       {
         name: "redMooshroomEnemy",
@@ -26756,6 +27595,8 @@ let originalMapsInfo = {
         spawnTimer: null,
         enemyStateInt: 1000,
         active: false,
+        drop: "miniMushroom",
+        dropRate: 30,
       },
       {
         name: "redMooshroomEnemy",
@@ -26790,6 +27631,8 @@ let originalMapsInfo = {
         spawnTimer: null,
         enemyStateInt: 1000,
         active: false,
+        drop: "miniMushroom",
+        dropRate: 30,
       },
       {
         name: "redMooshroomEnemy",
@@ -26824,6 +27667,8 @@ let originalMapsInfo = {
         spawnTimer: null,
         enemyStateInt: 1000,
         active: false,
+        drop: "miniMushroom",
+        dropRate: 30,
       },
       {
         name: "redMooshroomEnemy",
@@ -26858,6 +27703,8 @@ let originalMapsInfo = {
         spawnTimer: null,
         enemyStateInt: 1000,
         active: false,
+        drop: "miniMushroom",
+        dropRate: 30,
       },
       {
         name: "redMooshroomEnemy",
@@ -26892,6 +27739,8 @@ let originalMapsInfo = {
         spawnTimer: null,
         enemyStateInt: 1000,
         active: false,
+        drop: "miniMushroom",
+        dropRate: 30,
       },
       {
         name: "mooshroomBossRed",
@@ -26933,7 +27782,7 @@ let originalMapsInfo = {
 
   restfieldPath: {
     areaName: "RESTFIELD FOREST",
-    areaSounds: grassLandsSoundtrack,
+    areaSounds: restfieldSoundtrack,
     backgroundImage: restfieldPath,
     foregroundImage: restfieldPathFront,
     
@@ -26942,6 +27791,25 @@ let originalMapsInfo = {
       y: 3850,
     },
     colliders: [
+      {
+        "type": "dialog",
+        "name": "A locked door Quest",
+        "x": 1036.5,
+        "y": 1697.5,
+        "width": 323,
+        "height": 251,
+        "color": "rgb(179, 255, 213, 0)"
+      },
+      {
+        "type": "transition",
+        "format": "liquid",
+        "destination": "slimeForestPath",
+        "x": 3752,
+        "y": 3554,
+        "width": 426,
+        "height": 330,
+        "color": "rgb(204, 0, 204, 0)"
+      },
       {
         "type": "wall",
         "x": 3103,
@@ -27100,14 +27968,6 @@ let originalMapsInfo = {
         "y": 1664,
         "width": 712,
         "height": 128,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 388,
-        "y": 1671,
-        "width": 459,
-        "height": 103,
         "color": "rgb(0, 0, 0, 0)"
       },
       {
@@ -27903,6 +28763,15 @@ let originalMapsInfo = {
         "width": 501,
         "height": 258,
         "color": "rgb(204, 0, 204, 0)"
+      },
+      {
+        "type": "wall",
+        "condition": "restfield",
+        "x": 606,
+        "y": 1601.5,
+        "width": 517,
+        "height": 131,
+        "color": "rgb(0, 0, 0, 0)"
       }
     ],
     enemies: []
@@ -27910,7 +28779,7 @@ let originalMapsInfo = {
 
   restfieldTownCemetery: {
     areaName: "RESTFIELD CEMETERY",
-    areaSounds: grassLandsSoundtrack,
+    areaSounds: restfieldSoundtrack,
     backgroundImage: restfieldTownCemetery,
     foregroundImage: restfieldTownCemeteryFront,
     
@@ -29599,7 +30468,7 @@ let originalMapsInfo = {
   },
   restFiledTown: {
     areaName: "RESTFIELD TOWN",
-    areaSounds: grassLandsSoundtrack,
+    areaSounds: restfieldSoundtrack,
     backgroundImage: restFiledTown,
     foregroundImage: restFiledTownFront,
     
@@ -29644,7 +30513,7 @@ let originalMapsInfo = {
 
   restfieldTrial: {
     areaName: "RESTFIELD TRIAL",
-    areaSounds: grassLandsSoundtrack,
+    areaSounds: restfieldSoundtrack,
     backgroundImage: restfieldTrial,
     foregroundImage: restfieldTrialFront,
     
@@ -29653,6 +30522,14 @@ let originalMapsInfo = {
       y: 3888,
     },
     colliders: [
+      {
+        "type": "wall",
+        "x": 2256.5,
+        "y": 2673,
+        "width": 568,
+        "height": 73,
+        "color": "rgb(0, 0, 0, 0)"
+      },
       {
         "type": "chest",
         "item": "mushroomTrial",
@@ -29974,6 +30851,14 @@ let originalMapsInfo = {
           "y": 2702.5,
           "width": 54,
           "height": 254,
+          "color": "rgb(0, 0, 0, 0)"
+        },
+        {
+          "type": "wall",
+          "x": 1700.5,
+          "y": 2720,
+          "width": 116,
+          "height": 110,
           "color": "rgb(0, 0, 0, 0)"
         }
      ],
@@ -32845,8 +33730,6 @@ function addMapsInfoToDiv() {
   }
 }
 
-addMapsInfoToDiv();
-
 // Developer UI <
 
 
@@ -32891,7 +33774,7 @@ function cameraFollow () {
   }
 }
 
-window.addEventListener("wheel", event => {
+canvasLobby.addEventListener("wheel", event => {
   const delta = Math.sign(event.deltaY);
 
   if (delta === 1 && canvasLobby.height < 1000) {
@@ -33059,10 +33942,10 @@ function localPlayerMovement () {
 }
 
 function playerCollision () {
-  playerColminX = playerX - cameraX - 30;
-  playerColminY = playerY - cameraY + 70;
-  playerColLengthX = playerWidth + 50;
-  playerColLengthY = playerHeight + 22;
+  playerColminX = playerX - cameraX - 20;
+  playerColminY = playerY - cameraY + 80;
+  playerColLengthX = playerWidth + 0;
+  playerColLengthY = playerHeight - 10;
   mapsInfo[currentLand].playerPos.x = playerX;
   mapsInfo[currentLand].playerPos.y = playerY;
   canvas.beginPath();
@@ -33119,6 +34002,10 @@ function drawColliders (type, x, y, w, h) {
         const overlapY = (colliderToCheck.height / 2 + wall.height / 2) - Math.abs(playerCenterY - wallCenterY);
 
         if (wall.type === "wall") {
+          // console.log(myPlayer.access[0], wall.condition, myPlayer.access[0][wall.condition])
+          if (wall.condition && myPlayer.access[0][wall.condition] === true) {
+            return;
+          }
           if (overlapX < overlapY) {
               if (playerCenterX < wallCenterX) {
                   allowedMoveUpRight = false; 
@@ -33143,6 +34030,7 @@ function drawColliders (type, x, y, w, h) {
           
         }
         else if (wall.type === "dialog") {
+          if (!myPlayer.questsCompleted.find(quest => quest.title === dialogBoxes[wall.name].questName))
           dialogAvailable = true;
           currentDialogTitle = wall.name;
           if (dialogOpened) {
@@ -33275,6 +34163,42 @@ function drawColliders (type, x, y, w, h) {
     
 }
 
+function drawQuestMarkers () {
+  mapsInfo[currentLand].colliders.forEach(wall => {
+    if (wall.type === "dialog") {
+      if (dialogBoxes[wall.name].dialogName === "quest") {
+        if (myPlayer.questsOngoing.find(quest => quest.title === dialogBoxes[wall.name].questName)) {
+          canvas.drawImage(
+            questOngoingImg,
+            (questOngoingImg.width / 6) * (frameCurrentPlayer === 0 ? 0 : frameCurrentPlayer - 1),
+            0,
+            questOngoingImg.width / 6,
+            questOngoingImg.height,
+            dialogBoxes[wall.name].markerX - cameraX,
+            dialogBoxes[wall.name].markerY - cameraY,
+            100,
+            210,
+          );
+        } 
+        else if (!myPlayer.questsCompleted.find(quest => quest.title === dialogBoxes[wall.name].questName)) {
+          // console.log((frameCurrentPlayer === 0 ? 0 : frameCurrentPlayer - 1))
+          canvas.drawImage(
+            questStartImg,
+            (questStartImg.width / 6) * (frameCurrentPlayer === 0 ? 0 : frameCurrentPlayer - 1),
+            0,
+            questStartImg.width / 6,
+            questStartImg.height,
+            dialogBoxes[wall.name].markerX - cameraX,
+            dialogBoxes[wall.name].markerY - cameraY,
+            100,
+            210,
+          );
+        }
+      }
+    }
+  })
+}
+
 let playerAdjustmentX = 90;
 let playerAdjustmentY = 130;
 
@@ -33283,8 +34207,36 @@ function drawLocalPlayer () {
     if (player.username === myPlayer.username && player.room === myPlayer.room) {
       let armor = drawPlayerArmor(player);
       let artifact = drawPlayerArtifact(player);
-      console.log(playerWidth, playerHeight)
-      if (animPlayer === "idleRight" && player.lastLooked === "right") {
+      // console.log(playerWidth, playerHeight)
+      if (fishing) {
+        frameCurrentPlayer = frameCurrentPlayer % 6;
+  
+      playerCutX = frameCurrentPlayer * playerWidth;
+
+      canvas.drawImage(
+        armor,
+        playerCutX,
+        playerCutY + 200,
+        playerWidth,
+        playerHeight,
+        playerX - cameraX + 65 - cameraShakeX - playerAdjustmentX,
+        playerY - cameraY + 120 - cameraShakeY - playerAdjustmentY,
+        playerWidth - playerZoomX,
+        playerHeight - playerZoomY,
+      );
+      canvas.drawImage(
+        artifact,
+        playerCutX,
+        playerCutY + 200,
+        playerWidth,
+        playerHeight,
+        playerX - cameraX + 65 - cameraShakeX - playerAdjustmentX,
+        playerY - cameraY + 120 - cameraShakeY - playerAdjustmentY,
+        playerWidth - playerZoomX,
+        playerHeight - playerZoomY,
+      );
+      }
+      else if (animPlayer === "idleRight" && player.lastLooked === "right") {
       frameCurrentPlayer = frameCurrentPlayer % 6;
   
       playerCutX = frameCurrentPlayer * playerWidth;
@@ -33655,41 +34607,8 @@ function drawPlayerArmor (player) {
 
 function drawPlayerArtifact (player) {
   if (player.artifact[0]) {
-    if (player.artifact[0].name === "tropicalHat") {
-      return tropicalHat;
-    } 
-    else if (player.artifact[0].name === "mushroomClothesRed") {
-      return mushroomClothesRed;
-    } 
-    else if (player.artifact[0].name === "mushroomClothesOrange") {
-      return mushroomClothesOrange;
-    }
-    else if (player.artifact[0].name === "fishermanClothes") {
-      return fishermanClothes;
-    }
-    else if (player.artifact[0].name === "reaperClothes") {
-      return reaperClothes;
-    }
-    else if (player.artifact[0].name === "skullHelmet") {
-      return skullHelmet;
-    }
-    else if (player.artifact[0].name === "blackVampiresClothes") {
-      return blackVampiresClothes;
-    }
-    else if (player.artifact[0].name === "romanHelmet") {
-      return romanHelmet;
-    }
-    else if (player.artifact[0].name === "restfieldGhostClothes") {
-      return restfieldGhostClothes;
-    }
-    else if (player.artifact[0].name === "restfieldZombieClothes") {
-      return restfieldZombieClothes;
-    }
-    
-    
-    else {
-      return transparentCape;
-    }
+    let name = player.artifact[0].name;
+    return window[name]; 
   } else {
     return transparentCape;
   }
@@ -33700,7 +34619,11 @@ function drawPlayerWeaponOut (player) {
     canvas.save(); // Save the current canvas state
     canvas.translate(playerX - cameraX - cameraShakeX - 150 +18 - recoil, playerY + cameraShakeY + 180 - cameraY +70); // Translate to the player's position
     canvas.rotate(angleMouse); // Rotate based on the mouse angle
-    if (player.weapon[0].name === "solarStaffCommon") {
+    // let name = player.artifact[0].name;
+    if (fishing) {
+      canvas.drawImage(fishingStick ,0, -7.5, 100, 25);
+    }
+    else if (player.weapon[0].name === "solarStaffCommon") {
       canvas.drawImage(solarStaffCommon ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
     }
     else if (player.weapon[0].name === "arcaneStaffCommon") {
@@ -33709,9 +34632,10 @@ function drawPlayerWeaponOut (player) {
     else if (player.weapon[0].name === "nuclearStaffCommon") {
       canvas.drawImage(nuclearStaffCommon ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
     }
-    else if (player.weapon[0].name === "arcaneRepeater") {
+    else if (player.weapon[0].name === "arcaneRepeaterInv") {
       canvas.drawImage(arcaneRepeater ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
     }
+    
     canvas.restore();
   }
 }
@@ -33777,15 +34701,23 @@ function drawUsername () {
 }
 
 function drawChat () {
+  function drawChatBubble (img, player, x, xd, y, yd, w, h, cx, cy ) {
+    canvas.drawImage(img, x + xd, y + yd, w , h)
+    canvas.beginPath();
+    canvas.font = "bolder 16px Tiny5";
+    canvas.textAlign = "center";
+    canvas.fillStyle = "black";
+    canvas.fillText(player.chatMessage, x +cx, y -cy);
+  }
   for (const player of players) {
     if (player.room === myPlayer.room && player.username === myPlayer.username) {
       if (player.chatMessage !== "none") {
-        canvas.drawImage(chatBubble, playerX - cameraX -90, playerY - cameraY -115, 200, 60)
-        canvas.beginPath();
-        canvas.font = "bolder 16px Tiny5";
-        canvas.textAlign = "center";
-        canvas.fillStyle = "black";
-        canvas.fillText(player.chatMessage, playerX - cameraX +15, playerY - cameraY -90);
+        console.log(player.chatMessage.length)
+        if (player.chatMessage.length > 20) {
+          drawChatBubble(chatBubbleBigger, player, playerX - cameraX, -190, playerY - cameraY, -115, 400, 60, 5, 90 )
+        } else {
+          drawChatBubble(chatBubble, player, playerX - cameraX, -90, playerY - cameraY, -115, 200, 60, 15, 90 )
+        }
       }
     }
     else if (player.room === myPlayer.room) {
@@ -33826,7 +34758,7 @@ function drawLocalBullets () {
         canvas.drawImage(bulletStick, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
         push360Particles("red", 1, projectile.x + 20, projectile.y - 50)
       }
-      if (myPlayer?.weapon[0]?.name === "arcaneStaffCommon" || myPlayer?.weapon[0]?.name === "arcaneRepeater") {
+      if (myPlayer?.weapon[0]?.name === "arcaneStaffCommon" || myPlayer?.weapon[0]?.name === "arcaneRepeaterInv") {
         canvas.drawImage(bulletStickBlue, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
         push360Particles("purple", 1, projectile.x + 20, projectile.y - 50)
       }
@@ -34043,6 +34975,7 @@ function drawMap(layer) {
 
   if (layer === "back") {
     canvas.drawImage(mapsInfo[currentLand].backgroundImage, cameraShakeX - cameraX, cameraShakeY - cameraY, 4500, 4500);
+    drawQuestMarkers()
   } else {
     canvas.drawImage(mapsInfo[currentLand].foregroundImage, cameraShakeX - cameraX, cameraShakeY - cameraY, 4500, 4500);
   }
@@ -34085,10 +35018,19 @@ function activateBossEnemy (enemy) {
   secondaryCameraY = enemy.spawn.y + (enemy.h/4);
   projectilesClient = [];
   stopAllSound();
+  let timeToWake = 0;
 
-  fightMusic1.play();
-  violinDanger.play()
-  bossWakingUpChallenge.play()
+  if (enemy.name === "mooshroomBossRed") {
+    fightMusic1.play();
+    violinDanger.play()
+    bossWakingUpChallenge.play()
+    timeToWake = 40;
+  }
+  else if (enemy.name === "restfieldReaper") {
+    SokosBoss.play();
+    timeToWake = 10000;
+  }
+
 
   setTimeout(() => {
     const rocksFall = new Audio("./audios/rocksFall.wav");
@@ -34114,7 +35056,7 @@ function activateBossEnemy (enemy) {
         }
       }
     },40)
-  }, 2500);
+  }, timeToWake);
 }
 
 function drawEnemy () {
@@ -34216,6 +35158,13 @@ function checkEnemyCombat (enemy) {
 
     socket.emit("enemyKilled", enemy.xp);
 
+    if (enemy.drop) {
+      let randomNumber = Math.floor(Math.random() * 101);
+      if (enemy.dropRate <= randomNumber) {
+        socket.emit("enemyDrop", enemy.drop);
+      }
+    }
+
     const hasActiveBoss = mapsInfo[currentLand].enemies.some(
       enemy => enemy.active === true && !enemy.isBoss
     );
@@ -34231,6 +35180,8 @@ function checkEnemyCombat (enemy) {
     } else if (!bossAlive) {
       fightMusic1.pause();
       fightMusic1.currentTime = 0;
+      SokosBoss.pause();
+      SokosBoss.currentTime = 0;
       bossFight = false;
 
       if (enemy.isBoss) {

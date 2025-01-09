@@ -78,7 +78,15 @@ const PlayerSchema = new mongoose.Schema({
   level: {
     type: Number,
     default: 0,
-  }
+  },
+  access: {
+    type: Array,
+    default: [
+      {
+        restfield: false,
+      }
+    ],
+  },
 });
 
 const Player = mongoose.model("Player", PlayerSchema);

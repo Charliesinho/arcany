@@ -1,4 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=Tiny5&display=swap');
+
 .textTitle{
     font-size: 39px;
     font-weight: 100;
@@ -30,7 +32,8 @@
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* Internet Explorer/Edge */
     cursor: none;
-    font-family: "Tiny5", sans-serif !important;
+    font-family: "Pixelify Sans", serif !important;
+    /* font-weight: 100 ; */
     -webkit-user-drag: none;
   }
   
@@ -74,10 +77,11 @@ body {
 
 #openerScreen-button {
     line-height: 25px;
-    height: 100px;
-    width: 430px;
+    /* height: 100px; */
+    width: 530px;
+    padding: 29px;
     color: #ffffff;
-    font-size: 15px;
+    font-size: 23px;
     font-weight: bolder;
     border: solid 1px rgb(93 51 51);
     background-color: rgb(175 132 121);
@@ -115,6 +119,7 @@ body {
     background-color: white;
     border-style: none;
     transition: all .2s ease;
+    font-size: 14px;
 }
 .languageSetting-button:hover{
     background-color: rgb(171, 255, 93);
@@ -207,9 +212,9 @@ body {
     left: 50%;
     top: 20%;
     transform: translate(-50%, -50%);
-    font-size: 100px;
-    text-decoration: underline;
-    text-shadow: 0 0 20px black;
+    font-size: 145px;
+    /* text-decoration: underline; */
+    text-shadow: 0 0 20px rgb(209, 209, 209);
     opacity: 0;
     pointer-events: none;
     white-space: nowrap;
@@ -511,8 +516,10 @@ body {
 #uiQuest{
     display: none;
     width: calc(100% - 80px);
-    height: calc(100% - 90px);
+    /* height: calc(100% - 90px); */
     padding: 45px 40px;
+    flex-wrap: wrap;
+    gap: 20px;
 }
 #uiBooks{
     display: none;
@@ -841,10 +848,10 @@ body {
 
 @keyframes showChat {
     0% {
-      bottom: -100vh;
+        opacity: 0vh;
     }
     100% {
-        bottom: 10px
+        opacity: .3px
     }
   }
 
@@ -958,18 +965,19 @@ body {
     text-align: center;
 
     border: solid 1px rgb(255, 255, 255);
-    border-radius: 5px;
+    /* border-radius: 5px; */
     background-color: rgb(16, 21, 25);
     
     padding: 10px;
-    color: rgb(255, 255, 255);
-    font-size: 16px;
+    color: rgba(255, 255, 255, 0.674);
     font-weight: bolder;
+    font-size: 19px;
 }
 
 #login input::placeholder {
-    color: white;
+    color: rgba(255, 255, 255, 0.674);
     font-weight: 100;
+    font-style: italic;
 }
 
 #usernameInput {
@@ -995,11 +1003,11 @@ body {
     text-align: center;
 
     border: none 1px rgb(160, 160, 160);
-    border-radius: 5px;
+    /* border-radius: 5px; */
     background: rgb(16, 21, 25);
     
     color: rgb(255, 255, 255);
-    font-size: 16px;
+    font-size: 19px;
     font-weight: bolder;
 
     cursor: pointer;
@@ -1016,15 +1024,15 @@ body {
 
 #createButton {
     color: rgb(20, 20, 20) !important;
-    background: white !important;
-    cursor: none;
+    background: #98ff84  !important;
+    cursor: none !important;
 }
 
 #loginButton {
     color: white !important;
     background: rgb(16, 21, 25) !important;
     border: solid 1px white !important;
-    cursor: none;
+    cursor: none !important;
 }
 
 #loginArt {
@@ -1448,6 +1456,10 @@ body {
     flex-direction: column;
     transition: all 1s ease;
     animation: opacityUp 1s ease forwards;
+}
+
+.questEndItem {
+    width: 70px;
 }
 
 @keyframes opacityUp {
@@ -2019,8 +2031,9 @@ body {
 
 .name-wrap {
     display: inline-block;
-    padding: 7px 20px;
+    padding: 3px 0px;
     font-weight: bold;
+    font-size: 23px;
     position: relative;
     left: 50%;
     transform: translate(-50%, 20%);
@@ -2041,7 +2054,7 @@ body {
 
 .text-block {
     margin: 0;
-    font-size: 1.4em;
+    font-size: 23px;
     font-weight: 500;
     padding: 5px 10px;
     line-height: 1.4em;
@@ -2073,8 +2086,8 @@ body {
 }
 
 .questCardImage {
-    width: 70px;
-    height: 90px;
+    width: 66px;
+    /* height: 90px; */
     position: relative;
     top: 0;
     transform: rotateX(0deg) rotateY(0deg);
@@ -2082,8 +2095,6 @@ body {
 }
 
 .questCardImage:hover {
-    width: 70px;
-    height: 90px;
     transform: rotateX(10deg) rotateY(20deg);
 }
 
@@ -2105,6 +2116,7 @@ body {
 
 .questTitle {
     margin: 0;
+    font-size: 27px;
     position: absolute;
     left: 50%;
     transform: translate(-50%, 20%);
@@ -2123,7 +2135,7 @@ body {
 }
 
 .questDescription {
-    font-size: 18px;
+    font-size: 23px;
     margin: 100px 0 0 0px;
     color: #653d3d;
     text-align: center;
@@ -2154,7 +2166,7 @@ body {
 }
 
 .questProgressItems {
-    font-size: 18px;
+    font-size: 23px;
     margin-top: 5px;
     color: #653d3d;
 }
@@ -2165,12 +2177,12 @@ body {
 }
 
 .questEndTitle {
-    font-size: 18px;
+    font-size: 23px;
     margin-bottom: 10px;
 }
 
 .questReward {
-    font-size: 18px;
+    font-size: 23px;
     margin-top: 5px;
     color: #653d3d;
 }
