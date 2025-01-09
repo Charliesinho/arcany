@@ -4174,7 +4174,7 @@ let mapsInfo = {
         "y": 1974.5,
         "width": 546,
         "height": 273,
-        "color": "rgb(0, 0, 0, 0)"
+        "color": "rgb(179, 255, 213, 0)"
       },
       {
         "type": "wall",
@@ -4262,14 +4262,6 @@ let mapsInfo = {
         "y": 2754,
         "width": 89,
         "height": 82,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 2965,
-        "y": 2750,
-        "width": 148,
-        "height": 62,
         "color": "rgb(0, 0, 0, 0)"
       },
       {
@@ -4454,14 +4446,6 @@ let mapsInfo = {
         "y": 2557,
         "width": 54,
         "height": 71,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 3008,
-        "y": 2791,
-        "width": 68,
-        "height": 55,
         "color": "rgb(0, 0, 0, 0)"
       },
       {
@@ -5341,6 +5325,38 @@ let mapsInfo = {
         "height": 94,
         "color": "rgb(204, 0, 204, 0)"
       },
+      {
+        "type": "wall",
+        "x": 2939,
+        "y": 2743.5,
+        "width": 214,
+        "height": 83,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3010,
+        "y": 2778.5,
+        "width": 80,
+        "height": 116,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3270,
+        "y": 2940.5,
+        "width": 180,
+        "height": 42,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3287,
+        "y": 2877.5,
+        "width": 127,
+        "height": 82,
+        "color": "rgb(0, 0, 0, 0)"
+      }
     ],
     enemies: [
       {
@@ -5422,31 +5438,6 @@ let mapsInfo = {
       y: 785
     },
     colliders:  [
-      {
-        "type": "dialog",
-        "name": "Fishing Quest",
-        "x": 1922.5,
-        "y": 1879.5,
-        "width": 364,
-        "height": 347,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 951,
-        "y": 2470.5,
-        "width": 17,
-        "height": 184,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 898,
-        "y": 2563.5,
-        "width": 19,
-        "height": 191,
-        "color": "rgb(0, 0, 0, 0)"
-      },
       {
         "type": "wall",
         "x": 819,
@@ -7225,54 +7216,6 @@ let mapsInfo = {
       },
       {
         "type": "wall",
-        "x": -261,
-        "y": 896.5,
-        "width": 167,
-        "height": 38,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": -101,
-        "y": 864.5,
-        "width": 77,
-        "height": 38,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": -57,
-        "y": 833.5,
-        "width": 72,
-        "height": 59,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": -20,
-        "y": 833.5,
-        "width": 86,
-        "height": 25,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 49,
-        "y": 780.5,
-        "width": 38,
-        "height": 58,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 83,
-        "y": 797.5,
-        "width": 66,
-        "height": 87,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
         "x": 993,
         "y": 1413.5,
         "width": 366,
@@ -7681,54 +7624,6 @@ let mapsInfo = {
       },
       {
         "type": "wall",
-        "x": 4038,
-        "y": 1069.5,
-        "width": 49,
-        "height": 140,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 4052,
-        "y": 987.5,
-        "width": 42,
-        "height": 114,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 3971,
-        "y": 911.5,
-        "width": 41,
-        "height": 102,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 3998,
-        "y": 970.5,
-        "width": 70,
-        "height": 67,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 3943,
-        "y": 752.5,
-        "width": 37,
-        "height": 202,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 3901,
-        "y": 749.5,
-        "width": 60,
-        "height": 146,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
         "x": 3840,
         "y": 766.5,
         "width": 44,
@@ -7805,7 +7700,7 @@ let mapsInfo = {
         "y": 1733.5,
         "width": 471,
         "height": 416,
-        "color": "rgb(0, 0, 0, 0)"
+        "color": "rgb(153, 255, 102, 0)"
       },
       {
         "type": "wall",
@@ -7813,6 +7708,206 @@ let mapsInfo = {
         "y": 1956.5,
         "width": 122,
         "height": 87,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -102,
+        "y": 884.5,
+        "width": 127,
+        "height": 64,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -39,
+        "y": 836.5,
+        "width": 143,
+        "height": 58,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 58,
+        "y": 809.5,
+        "width": 94,
+        "height": 72,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 118,
+        "y": 845.5,
+        "width": 36,
+        "height": 98,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -113,
+        "y": 918.5,
+        "width": 22,
+        "height": 614,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 697,
+        "y": 598.5,
+        "width": 120,
+        "height": 57,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 583,
+        "y": 637.5,
+        "width": 229,
+        "height": 56,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 952,
+        "y": 569.5,
+        "width": 201,
+        "height": 65,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1102,
+        "y": 595.5,
+        "width": 320,
+        "height": 47,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1325,
+        "y": 623.5,
+        "width": 277,
+        "height": 62,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1568,
+        "y": 659.5,
+        "width": 219,
+        "height": 68,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1744,
+        "y": 686.5,
+        "width": 173,
+        "height": 41,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2346,
+        "y": 808.5,
+        "width": 60,
+        "height": 111,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2386,
+        "y": 869.5,
+        "width": 127,
+        "height": 41,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2388,
+        "y": 836.5,
+        "width": 184,
+        "height": 53,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2549,
+        "y": 787.5,
+        "width": 110,
+        "height": 60,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2623,
+        "y": 715.5,
+        "width": 112,
+        "height": 118,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 4050,
+        "y": 1080.5,
+        "width": 37,
+        "height": 123,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3981,
+        "y": 990.5,
+        "width": 89,
+        "height": 114,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3952,
+        "y": 913.5,
+        "width": 67,
+        "height": 120,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3910,
+        "y": 888.5,
+        "width": 108,
+        "height": 107,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3877,
+        "y": 872.5,
+        "width": 85,
+        "height": 77,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3855,
+        "y": 827.5,
+        "width": 40,
+        "height": 108,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1821,
+        "y": 1712.5,
+        "width": 239,
+        "height": 74,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1922,
+        "y": 1754.5,
+        "width": 70,
+        "height": 52,
         "color": "rgb(0, 0, 0, 0)"
       }
     ],
@@ -7863,47 +7958,6 @@ let mapsInfo = {
       y: 1800,
     },
     colliders: [
-      {
-        "type": "dialog",
-        "name": "Tree Issues Quest",
-        "x": 1573.5,
-        "y": 1851.5,
-        "width": 371,
-        "height": 259,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 520,
-        "y": 404.5,
-        "width": 58,
-        "height": 86,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 711,
-        "y": 329.5,
-        "width": 46,
-        "height": 90,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 790,
-        "y": 410.5,
-        "width": 50,
-        "height": 97,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 973,
-        "y": 426.5,
-        "width": 66,
-        "height": 106,
-        "color": "rgb(0, 0, 0, 0)"
-      },
       {
         "type": "wall",
         "x": 606,
@@ -9082,14 +9136,6 @@ let mapsInfo = {
       },
       {
         "type": "wall",
-        "x": 1499,
-        "y": 847.5,
-        "width": 462,
-        "height": 87,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
         "x": 1019,
         "y": 939.5,
         "width": 62,
@@ -9138,94 +9184,6 @@ let mapsInfo = {
       },
       {
         "type": "wall",
-        "x": 2184,
-        "y": 875.5,
-        "width": 90,
-        "height": 65,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 2198,
-        "y": 932.5,
-        "width": 66,
-        "height": 43,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 2249,
-        "y": 897.5,
-        "width": 178,
-        "height": 58,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 2389,
-        "y": 924.5,
-        "width": 96,
-        "height": 50,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 2430,
-        "y": 966.5,
-        "width": 136,
-        "height": 53,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 2514,
-        "y": 1003.5,
-        "width": 208,
-        "height": 55,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 2658,
-        "y": 1038.5,
-        "width": 293,
-        "height": 60,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 3044,
-        "y": 1077.5,
-        "width": 66,
-        "height": 30,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 3091,
-        "y": 1096.5,
-        "width": 108,
-        "height": 34,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 3058,
-        "y": 1098.5,
-        "width": 121,
-        "height": 104,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 2905,
-        "y": 855.5,
-        "width": 93,
-        "height": 121,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
         "x": 1498,
         "y": 1880.5,
         "width": 485,
@@ -9265,22 +9223,6 @@ let mapsInfo = {
         "color": "rgb(0, 0, 0, 0)"
       },
       {
-        "type": "wall",
-        "x": 2545,
-        "y": 1025.5,
-        "width": 169,
-        "height": 80,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 2641,
-        "y": 1078.5,
-        "width": 249,
-        "height": 81,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
         "type": "transition",
         "format": "liquid",
         "destination": "lobby",
@@ -9300,146 +9242,10 @@ let mapsInfo = {
       },
       {
         "type": "wall",
-        "x": 1267.5,
-        "y": 2995.5,
-        "width": 74,
-        "height": 38,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1319.5,
-        "y": 3018.5,
-        "width": 116,
-        "height": 53,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 578.5,
-        "y": 2756.5,
-        "width": 50,
-        "height": 87,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
         "x": 558.5,
         "y": 2749.5,
         "width": 22,
         "height": 51,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 597.5,
-        "y": 2834.5,
-        "width": 168,
-        "height": 38,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 669.5,
-        "y": 2858.5,
-        "width": 239,
-        "height": 73,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 804.5,
-        "y": 2912.5,
-        "width": 388,
-        "height": 60,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 941.5,
-        "y": 2951.5,
-        "width": 232,
-        "height": 69,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 2663.5,
-        "y": 2854.5,
-        "width": 234,
-        "height": 78,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 2860.5,
-        "y": 2831.5,
-        "width": 134,
-        "height": 35,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 2965.5,
-        "y": 2791.5,
-        "width": 143,
-        "height": 52,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 3100.5,
-        "y": 2768.5,
-        "width": 104,
-        "height": 33,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 3079.5,
-        "y": 2758.5,
-        "width": 123,
-        "height": 66,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 3160.5,
-        "y": 2725.5,
-        "width": 54,
-        "height": 55,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 3038.5,
-        "y": 2766.5,
-        "width": 68,
-        "height": 40,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 2929.5,
-        "y": 2807.5,
-        "width": 55,
-        "height": 40,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 2803.5,
-        "y": 2827.5,
-        "width": 194,
-        "height": 40,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 2911.5,
-        "y": 2810.5,
-        "width": 73,
-        "height": 32,
         "color": "rgb(0, 0, 0, 0)"
       },
       {
@@ -9449,619 +9255,827 @@ let mapsInfo = {
         "width": 467,
         "height": 100,
         "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1287,
+        "y": 2991.5,
+        "width": 152,
+        "height": 90,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1268,
+        "y": 2963.5,
+        "width": 50,
+        "height": 77,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 541,
+        "y": 2766.5,
+        "width": 177,
+        "height": 69,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 606,
+        "y": 2788.5,
+        "width": 186,
+        "height": 158,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 714,
+        "y": 2899.5,
+        "width": 327,
+        "height": 88,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 923,
+        "y": 2933.5,
+        "width": 159,
+        "height": 130,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1031,
+        "y": 2985.5,
+        "width": 119,
+        "height": 54,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1125,
+        "y": 2879.5,
+        "width": 48,
+        "height": 124,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2671,
+        "y": 2896.5,
+        "width": 222,
+        "height": 66,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2779,
+        "y": 2857.5,
+        "width": 285,
+        "height": 72,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2923,
+        "y": 2789.5,
+        "width": 313,
+        "height": 80,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3108,
+        "y": 2724.5,
+        "width": 116,
+        "height": 79,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2669,
+        "y": 2843.5,
+        "width": 281,
+        "height": 72,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2855,
+        "y": 2791.5,
+        "width": 218,
+        "height": 71,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3004,
+        "y": 2759.5,
+        "width": 168,
+        "height": 48,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1505,
+        "y": 854.5,
+        "width": 452,
+        "height": 129,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1475,
+        "y": 849.5,
+        "width": 50,
+        "height": 107,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2306,
+        "y": 905.5,
+        "width": 150,
+        "height": 104,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2399,
+        "y": 945.5,
+        "width": 298,
+        "height": 147,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2570,
+        "y": 1009.5,
+        "width": 313,
+        "height": 127,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2666,
+        "y": 1057.5,
+        "width": 178,
+        "height": 130,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3041,
+        "y": 1078.5,
+        "width": 163,
+        "height": 135,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2911,
+        "y": 835.5,
+        "width": 91,
+        "height": 127,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2166,
+        "y": 876.5,
+        "width": 157,
+        "height": 131,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2815,
+        "y": 1016.5,
+        "width": 132,
+        "height": 161,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2967,
+        "y": 834.5,
+        "width": 62,
+        "height": 72,
+        "color": "rgb(0, 0, 0, 0)"
       }
     ],
     enemies: [
-      {
-        name: "treeSimpleEnemy",
-        imgw: 31,
-        imgh: 27,
-        imgcw: 31,
-        imgch: 0,
-        frames: 0,
-        framesTimer: 0,
-        level: 1,
-        xp: 100,
-        speedX: 5,
-        speedY: 5,
-        spawn: {
-          x: 764,
-          y: 692
-        },
-        w: 100,
-        h: 100,
-        currentStateName: "idle",
-        currentState: null,
-        attackInterval: true,
-        states: [moveState, attackState, attackCircleState],
-        damaged: 0,
-        health: 10,
-        angle: 0,
-        maxHealth: 10,
-        baseSpawn: {
-          x: 764,
-          y: 692
-        },
-        spawnTimer: 20000,
-        enemyStateInt: 2000,
-        drop: "treeLeaf",
-        dropRate: 50,
-      },
-      {
-        name: "treeSimpleEnemy",
-        imgw: 31,
-        imgh: 27,
-        imgcw: 31,
-        imgch: 0,
-        frames: 0,
-        framesTimer: 0,
-        level: 1,
-        xp: 100,
-        speedX: 5,
-        speedY: 5,
-        spawn: {
-          x: 3368,
-          y: 1094
-        },
-        w: 100,
-        h: 100,
-        currentStateName: "idle",
-        currentState: null,
-        attackInterval: true,
-        states: [moveState, attackState, attackCircleState],
-        damaged: 0,
-        health: 10,
-        angle: 0,
-        maxHealth: 10,
-        baseSpawn: {
-          x: 3368,
-          y: 1094
-        },
-        spawnTimer: 20000,
-        enemyStateInt: 2000,
-        drop: "treeLeaf",
-        dropRate: 50,
-      },
-      {
-        name: "treeSimpleEnemy",
-        imgw: 31,
-        imgh: 27,
-        imgcw: 31,
-        imgch: 0,
-        frames: 0,
-        framesTimer: 0,
-        level: 1,
-        xp: 100,
-        speedX: 5,
-        speedY: 5,
-        spawn: {
-          x: 1832,
-          y: 573
-        },
-        w: 100,
-        h: 100,
-        currentStateName: "idle",
-        currentState: null,
-        attackInterval: true,
-        states: [moveState, attackState, attackCircleState],
-        damaged: 0,
-        health: 10,
-        angle: 0,
-        maxHealth: 10,
-        baseSpawn: {
-          x: 1832,
-          y: 573
-        },
-        spawnTimer: 20000,
-        enemyStateInt: 2000,
-        drop: "treeLeaf",
-        dropRate: 50,
-      },
-      {
-        name: "treeSimpleEnemy",
-        imgw: 31,
-        imgh: 27,
-        imgcw: 31,
-        imgch: 0,
-        frames: 0,
-        framesTimer: 0,
-        level: 1,
-        xp: 100,
-        speedX: 5,
-        speedY: 5,
-        spawn: {
-          x: 3052,
-          y: 579
-        },
-        w: 100,
-        h: 100,
-        currentStateName: "idle",
-        currentState: null,
-        attackInterval: true,
-        states: [moveState, attackState, attackCircleState],
-        damaged: 0,
-        health: 10,
-        angle: 0,
-        maxHealth: 10,
-        baseSpawn: {
-          x: 3052,
-          y: 579
-        },
-        spawnTimer: 20000,
-        enemyStateInt: 2000,
-        drop: "treeLeaf",
-        dropRate: 50,
-      },
+    //   {
+    //     name: "treeSimpleEnemy",
+    //     imgw: 31,
+    //     imgh: 27,
+    //     imgcw: 31,
+    //     imgch: 0,
+    //     frames: 0,
+    //     framesTimer: 0,
+    //     level: 1,
+    //     xp: 100,
+    //     speedX: 5,
+    //     speedY: 5,
+    //     spawn: {
+    //       x: 764,
+    //       y: 692
+    //     },
+    //     w: 100,
+    //     h: 100,
+    //     currentStateName: "idle",
+    //     currentState: null,
+    //     attackInterval: true,
+    //     states: [moveState, attackState, attackCircleState],
+    //     damaged: 0,
+    //     health: 10,
+    //     angle: 0,
+    //     maxHealth: 10,
+    //     baseSpawn: {
+    //       x: 764,
+    //       y: 692
+    //     },
+    //     spawnTimer: 20000,
+    //     enemyStateInt: 2000,
+    //     drop: "treeLeaf",
+    //     dropRate: 50,
+    //   },
+    //   {
+    //     name: "treeSimpleEnemy",
+    //     imgw: 31,
+    //     imgh: 27,
+    //     imgcw: 31,
+    //     imgch: 0,
+    //     frames: 0,
+    //     framesTimer: 0,
+    //     level: 1,
+    //     xp: 100,
+    //     speedX: 5,
+    //     speedY: 5,
+    //     spawn: {
+    //       x: 3368,
+    //       y: 1094
+    //     },
+    //     w: 100,
+    //     h: 100,
+    //     currentStateName: "idle",
+    //     currentState: null,
+    //     attackInterval: true,
+    //     states: [moveState, attackState, attackCircleState],
+    //     damaged: 0,
+    //     health: 10,
+    //     angle: 0,
+    //     maxHealth: 10,
+    //     baseSpawn: {
+    //       x: 3368,
+    //       y: 1094
+    //     },
+    //     spawnTimer: 20000,
+    //     enemyStateInt: 2000,
+    //     drop: "treeLeaf",
+    //     dropRate: 50,
+    //   },
+    //   {
+    //     name: "treeSimpleEnemy",
+    //     imgw: 31,
+    //     imgh: 27,
+    //     imgcw: 31,
+    //     imgch: 0,
+    //     frames: 0,
+    //     framesTimer: 0,
+    //     level: 1,
+    //     xp: 100,
+    //     speedX: 5,
+    //     speedY: 5,
+    //     spawn: {
+    //       x: 1832,
+    //       y: 573
+    //     },
+    //     w: 100,
+    //     h: 100,
+    //     currentStateName: "idle",
+    //     currentState: null,
+    //     attackInterval: true,
+    //     states: [moveState, attackState, attackCircleState],
+    //     damaged: 0,
+    //     health: 10,
+    //     angle: 0,
+    //     maxHealth: 10,
+    //     baseSpawn: {
+    //       x: 1832,
+    //       y: 573
+    //     },
+    //     spawnTimer: 20000,
+    //     enemyStateInt: 2000,
+    //     drop: "treeLeaf",
+    //     dropRate: 50,
+    //   },
+    //   {
+    //     name: "treeSimpleEnemy",
+    //     imgw: 31,
+    //     imgh: 27,
+    //     imgcw: 31,
+    //     imgch: 0,
+    //     frames: 0,
+    //     framesTimer: 0,
+    //     level: 1,
+    //     xp: 100,
+    //     speedX: 5,
+    //     speedY: 5,
+    //     spawn: {
+    //       x: 3052,
+    //       y: 579
+    //     },
+    //     w: 100,
+    //     h: 100,
+    //     currentStateName: "idle",
+    //     currentState: null,
+    //     attackInterval: true,
+    //     states: [moveState, attackState, attackCircleState],
+    //     damaged: 0,
+    //     health: 10,
+    //     angle: 0,
+    //     maxHealth: 10,
+    //     baseSpawn: {
+    //       x: 3052,
+    //       y: 579
+    //     },
+    //     spawnTimer: 20000,
+    //     enemyStateInt: 2000,
+    //     drop: "treeLeaf",
+    //     dropRate: 50,
+    //   },
 
-      {
-        name: "blackBrownBunny",
-        imgw: 31,
-        imgh: 27,
-        imgcw: 31,
-        imgch: 0,
-        frames: 0,
-        framesTimer: 0,
-        level: 1,
-        xp: 100,
-        speedX: 5,
-        speedY: 5,
-        spawn: {
-          x: 1052,
-          y: 2679
-        },
-        w: 80,
-        h: 80,
-        currentStateName: "idle",
-        currentState: null,
-        attackInterval: true,
-        states: [moveState, idleState],
-        damaged: 0,
-        health: 4,
-        angle: 0,
-        maxHealth: 10,
-        baseSpawn: {
-          x: 1052,
-          y: 2679
-        },
-        spawnTimer: 10000,
-        enemyStateInt: 2000,
-        drop: "treeLeaf",
-        dropRate: 50,
-      },
-      {
-        name: "brownBunny",
-        imgw: 31,
-        imgh: 27,
-        imgcw: 31,
-        imgch: 0,
-        frames: 0,
-        framesTimer: 0,
-        level: 1,
-        xp: 100,
-        speedX: 5,
-        speedY: 5,
-        spawn: {
-          x: 1552,
-          y: 2700
-        },
-        w: 80,
-        h: 80,
-        currentStateName: "idle",
-        currentState: null,
-        attackInterval: true,
-        states: [moveState, idleState],
-        damaged: 0,
-        health: 4,
-        angle: 0,
-        maxHealth: 10,
-        baseSpawn: {
-          x: 1552,
-          y: 2700
-        },
-        spawnTimer: 10000,
-        enemyStateInt: 2000,
-      },
-      {
-        name: "whiteBunny",
-        imgw: 31,
-        imgh: 27,
-        imgcw: 31,
-        imgch: 0,
-        frames: 0,
-        framesTimer: 0,
-        level: 1,
-        xp: 100,
-        speedX: 5,
-        speedY: 5,
-        spawn: {
-          x: 1352,
-          y: 2800
-        },
-        w: 80,
-        h: 80,
-        currentStateName: "idle",
-        currentState: null,
-        attackInterval: true,
-        states: [moveState, idleState],
-        damaged: 0,
-        health: 4,
-        angle: 0,
-        maxHealth: 10,
-        baseSpawn: {
-          x: 1352,
-          y: 2800
-        },
-        spawnTimer: 10000,
-        enemyStateInt: 2000,
-      },
-      {
-        name: "brownBunny",
-        imgw: 31,
-        imgh: 27,
-        imgcw: 31,
-        imgch: 0,
-        frames: 0,
-        framesTimer: 0,
-        level: 1,
-        xp: 100,
-        speedX: 5,
-        speedY: 5,
-        spawn: {
-          x: 1952,
-          y: 2900
-        },
-        w: 80,
-        h: 80,
-        currentStateName: "idle",
-        currentState: null,
-        attackInterval: true,
-        states: [moveState, idleState],
-        damaged: 0,
-        health: 4,
-        angle: 0,
-        maxHealth: 10,
-        baseSpawn: {
-          x: 1952,
-          y: 2900
-        },
-        spawnTimer: 10000,
-        enemyStateInt: 2000,
-      },
-      {
-        name: "brownBunny",
-        imgw: 31,
-        imgh: 27,
-        imgcw: 31,
-        imgch: 0,
-        frames: 0,
-        framesTimer: 0,
-        level: 1,
-        xp: 100,
-        speedX: 5,
-        speedY: 5,
-        spawn: {
-          x: 1852,
-          y: 3300
-        },
-        w: 80,
-        h: 80,
-        currentStateName: "idle",
-        currentState: null,
-        attackInterval: true,
-        states: [moveState, idleState],
-        damaged: 0,
-        health: 4,
-        angle: 0,
-        maxHealth: 10,
-        baseSpawn: {
-          x: 1852,
-          y: 3300
-        },
-        spawnTimer: 10000,
-        enemyStateInt: 2000,
-      },
-
-
-      {
-        name: "blackBrownBunny",
-        imgw: 31,
-        imgh: 27,
-        imgcw: 31,
-        imgch: 0,
-        frames: 0,
-        framesTimer: 0,
-        level: 1,
-        xp: 100,
-        speedX: 5,
-        speedY: 5,
-        spawn: {
-          x: 660,
-          y: 3000
-        },
-        w: 80,
-        h: 80,
-        currentStateName: "idle",
-        currentState: null,
-        attackInterval: true,
-        states: [moveState, idleState],
-        damaged: 0,
-        health: 4,
-        angle: 0,
-        maxHealth: 10,
-        baseSpawn: {
-          x: 660,
-          y: 3300
-        },
-        spawnTimer: 10000,
-        enemyStateInt: 2000,
-      },
-      {
-        name: "whiteBunny",
-        imgw: 31,
-        imgh: 27,
-        imgcw: 31,
-        imgch: 0,
-        frames: 0,
-        framesTimer: 0,
-        level: 1,
-        xp: 100,
-        speedX: 5,
-        speedY: 5,
-        spawn: {
-          x: 960,
-          y: 3300
-        },
-        w: 80,
-        h: 80,
-        currentStateName: "idle",
-        currentState: null,
-        attackInterval: true,
-        states: [moveState, idleState],
-        damaged: 0,
-        health: 4,
-        angle: 0,
-        maxHealth: 10,
-        baseSpawn: {
-          x: 960,
-          y: 3300
-        },
-        spawnTimer: 10000,
-        enemyStateInt: 2000,
-      },
-
-      {
-        name: "blackBrownBunny",
-        imgw: 31,
-        imgh: 27,
-        imgcw: 31,
-        imgch: 0,
-        frames: 0,
-        framesTimer: 0,
-        level: 1,
-        xp: 100,
-        speedX: 5,
-        speedY: 5,
-        spawn: {
-          x: 3052,
-          y: 2679
-        },
-        w: 80,
-        h: 80,
-        currentStateName: "idle",
-        currentState: null,
-        attackInterval: true,
-        states: [moveState, idleState],
-        damaged: 0,
-        health: 4,
-        angle: 0,
-        maxHealth: 10,
-        baseSpawn: {
-          x: 3052,
-          y: 2679
-        },
-        spawnTimer: 10000,
-        enemyStateInt: 2000,
-      },
-      {
-        name: "brownBunny",
-        imgw: 31,
-        imgh: 27,
-        imgcw: 31,
-        imgch: 0,
-        frames: 0,
-        framesTimer: 0,
-        level: 1,
-        xp: 100,
-        speedX: 5,
-        speedY: 5,
-        spawn: {
-          x: 3552,
-          y: 2700
-        },
-        w: 80,
-        h: 80,
-        currentStateName: "idle",
-        currentState: null,
-        attackInterval: true,
-        states: [moveState, idleState],
-        damaged: 0,
-        health: 4,
-        angle: 0,
-        maxHealth: 10,
-        baseSpawn: {
-          x: 3552,
-          y: 2700
-        },
-        spawnTimer: 10000,
-        enemyStateInt: 2000,
-      },
-      {
-        name: "whiteBunny",
-        imgw: 31,
-        imgh: 27,
-        imgcw: 31,
-        imgch: 0,
-        frames: 0,
-        framesTimer: 0,
-        level: 1,
-        xp: 100,
-        speedX: 5,
-        speedY: 5,
-        spawn: {
-          x: 3352,
-          y: 2800
-        },
-        w: 80,
-        h: 80,
-        currentStateName: "idle",
-        currentState: null,
-        attackInterval: true,
-        states: [moveState, idleState],
-        damaged: 0,
-        health: 4,
-        angle: 0,
-        maxHealth: 10,
-        baseSpawn: {
-          x: 3352,
-          y: 2800
-        },
-        spawnTimer: 10000,
-        enemyStateInt: 2000,
-      },
-      {
-        name: "brownBunny",
-        imgw: 31,
-        imgh: 27,
-        imgcw: 31,
-        imgch: 0,
-        frames: 0,
-        framesTimer: 0,
-        level: 1,
-        xp: 100,
-        speedX: 5,
-        speedY: 5,
-        spawn: {
-          x: 3952,
-          y: 2900
-        },
-        w: 80,
-        h: 80,
-        currentStateName: "idle",
-        currentState: null,
-        attackInterval: true,
-        states: [moveState, idleState],
-        damaged: 0,
-        health: 4,
-        angle: 0,
-        maxHealth: 10,
-        baseSpawn: {
-          x: 3952,
-          y: 2900
-        },
-        spawnTimer: 10000,
-        enemyStateInt: 2000,
-      },
-      {
-        name: "brownBunny",
-        imgw: 31,
-        imgh: 27,
-        imgcw: 31,
-        imgch: 0,
-        frames: 0,
-        framesTimer: 0,
-        level: 1,
-        xp: 100,
-        speedX: 5,
-        speedY: 5,
-        spawn: {
-          x: 3852,
-          y: 3300
-        },
-        w: 80,
-        h: 80,
-        currentStateName: "idle",
-        currentState: null,
-        attackInterval: true,
-        states: [moveState, idleState],
-        damaged: 0,
-        health: 4,
-        angle: 0,
-        maxHealth: 10,
-        baseSpawn: {
-          x: 3852,
-          y: 3300
-        },
-        spawnTimer: 10000,
-        enemyStateInt: 2000,
-      },
+    //   {
+    //     name: "blackBrownBunny",
+    //     imgw: 31,
+    //     imgh: 27,
+    //     imgcw: 31,
+    //     imgch: 0,
+    //     frames: 0,
+    //     framesTimer: 0,
+    //     level: 1,
+    //     xp: 100,
+    //     speedX: 5,
+    //     speedY: 5,
+    //     spawn: {
+    //       x: 1052,
+    //       y: 2679
+    //     },
+    //     w: 80,
+    //     h: 80,
+    //     currentStateName: "idle",
+    //     currentState: null,
+    //     attackInterval: true,
+    //     states: [moveState, idleState],
+    //     damaged: 0,
+    //     health: 4,
+    //     angle: 0,
+    //     maxHealth: 10,
+    //     baseSpawn: {
+    //       x: 1052,
+    //       y: 2679
+    //     },
+    //     spawnTimer: 10000,
+    //     enemyStateInt: 2000,
+    //     drop: "treeLeaf",
+    //     dropRate: 50,
+    //   },
+    //   {
+    //     name: "brownBunny",
+    //     imgw: 31,
+    //     imgh: 27,
+    //     imgcw: 31,
+    //     imgch: 0,
+    //     frames: 0,
+    //     framesTimer: 0,
+    //     level: 1,
+    //     xp: 100,
+    //     speedX: 5,
+    //     speedY: 5,
+    //     spawn: {
+    //       x: 1552,
+    //       y: 2700
+    //     },
+    //     w: 80,
+    //     h: 80,
+    //     currentStateName: "idle",
+    //     currentState: null,
+    //     attackInterval: true,
+    //     states: [moveState, idleState],
+    //     damaged: 0,
+    //     health: 4,
+    //     angle: 0,
+    //     maxHealth: 10,
+    //     baseSpawn: {
+    //       x: 1552,
+    //       y: 2700
+    //     },
+    //     spawnTimer: 10000,
+    //     enemyStateInt: 2000,
+    //   },
+    //   {
+    //     name: "whiteBunny",
+    //     imgw: 31,
+    //     imgh: 27,
+    //     imgcw: 31,
+    //     imgch: 0,
+    //     frames: 0,
+    //     framesTimer: 0,
+    //     level: 1,
+    //     xp: 100,
+    //     speedX: 5,
+    //     speedY: 5,
+    //     spawn: {
+    //       x: 1352,
+    //       y: 2800
+    //     },
+    //     w: 80,
+    //     h: 80,
+    //     currentStateName: "idle",
+    //     currentState: null,
+    //     attackInterval: true,
+    //     states: [moveState, idleState],
+    //     damaged: 0,
+    //     health: 4,
+    //     angle: 0,
+    //     maxHealth: 10,
+    //     baseSpawn: {
+    //       x: 1352,
+    //       y: 2800
+    //     },
+    //     spawnTimer: 10000,
+    //     enemyStateInt: 2000,
+    //   },
+    //   {
+    //     name: "brownBunny",
+    //     imgw: 31,
+    //     imgh: 27,
+    //     imgcw: 31,
+    //     imgch: 0,
+    //     frames: 0,
+    //     framesTimer: 0,
+    //     level: 1,
+    //     xp: 100,
+    //     speedX: 5,
+    //     speedY: 5,
+    //     spawn: {
+    //       x: 1952,
+    //       y: 2900
+    //     },
+    //     w: 80,
+    //     h: 80,
+    //     currentStateName: "idle",
+    //     currentState: null,
+    //     attackInterval: true,
+    //     states: [moveState, idleState],
+    //     damaged: 0,
+    //     health: 4,
+    //     angle: 0,
+    //     maxHealth: 10,
+    //     baseSpawn: {
+    //       x: 1952,
+    //       y: 2900
+    //     },
+    //     spawnTimer: 10000,
+    //     enemyStateInt: 2000,
+    //   },
+    //   {
+    //     name: "brownBunny",
+    //     imgw: 31,
+    //     imgh: 27,
+    //     imgcw: 31,
+    //     imgch: 0,
+    //     frames: 0,
+    //     framesTimer: 0,
+    //     level: 1,
+    //     xp: 100,
+    //     speedX: 5,
+    //     speedY: 5,
+    //     spawn: {
+    //       x: 1852,
+    //       y: 3300
+    //     },
+    //     w: 80,
+    //     h: 80,
+    //     currentStateName: "idle",
+    //     currentState: null,
+    //     attackInterval: true,
+    //     states: [moveState, idleState],
+    //     damaged: 0,
+    //     health: 4,
+    //     angle: 0,
+    //     maxHealth: 10,
+    //     baseSpawn: {
+    //       x: 1852,
+    //       y: 3300
+    //     },
+    //     spawnTimer: 10000,
+    //     enemyStateInt: 2000,
+    //   },
 
 
-      {
-        name: "blackBrownBunny",
-        imgw: 31,
-        imgh: 27,
-        imgcw: 31,
-        imgch: 0,
-        frames: 0,
-        framesTimer: 0,
-        level: 1,
-        xp: 100,
-        speedX: 5,
-        speedY: 5,
-        spawn: {
-          x: 1660,
-          y: 3300
-        },
-        w: 80,
-        h: 80,
-        currentStateName: "idle",
-        currentState: null,
-        attackInterval: true,
-        states: [moveState, idleState],
-        damaged: 0,
-        health: 4,
-        angle: 0,
-        maxHealth: 10,
-        baseSpawn: {
-          x: 1660,
-          y: 3300
-        },
-        spawnTimer: 10000,
-        enemyStateInt: 2000,
-      },
-      {
-        name: "whiteBunny",
-        imgw: 31,
-        imgh: 27,
-        imgcw: 31,
-        imgch: 0,
-        frames: 0,
-        framesTimer: 0,
-        level: 1,
-        xp: 100,
-        speedX: 5,
-        speedY: 5,
-        spawn: {
-          x: 1960,
-          y: 3300
-        },
-        w: 80,
-        h: 80,
-        currentStateName: "idle",
-        currentState: null,
-        attackInterval: true,
-        states: [moveState, idleState],
-        damaged: 0,
-        health: 4,
-        angle: 0,
-        maxHealth: 10,
-        baseSpawn: {
-          x: 1960,
-          y: 3300
-        },
-        spawnTimer: 10000,
-        enemyStateInt: 2000,
-      },
+    //   {
+    //     name: "blackBrownBunny",
+    //     imgw: 31,
+    //     imgh: 27,
+    //     imgcw: 31,
+    //     imgch: 0,
+    //     frames: 0,
+    //     framesTimer: 0,
+    //     level: 1,
+    //     xp: 100,
+    //     speedX: 5,
+    //     speedY: 5,
+    //     spawn: {
+    //       x: 660,
+    //       y: 3000
+    //     },
+    //     w: 80,
+    //     h: 80,
+    //     currentStateName: "idle",
+    //     currentState: null,
+    //     attackInterval: true,
+    //     states: [moveState, idleState],
+    //     damaged: 0,
+    //     health: 4,
+    //     angle: 0,
+    //     maxHealth: 10,
+    //     baseSpawn: {
+    //       x: 660,
+    //       y: 3300
+    //     },
+    //     spawnTimer: 10000,
+    //     enemyStateInt: 2000,
+    //   },
+    //   {
+    //     name: "whiteBunny",
+    //     imgw: 31,
+    //     imgh: 27,
+    //     imgcw: 31,
+    //     imgch: 0,
+    //     frames: 0,
+    //     framesTimer: 0,
+    //     level: 1,
+    //     xp: 100,
+    //     speedX: 5,
+    //     speedY: 5,
+    //     spawn: {
+    //       x: 960,
+    //       y: 3300
+    //     },
+    //     w: 80,
+    //     h: 80,
+    //     currentStateName: "idle",
+    //     currentState: null,
+    //     attackInterval: true,
+    //     states: [moveState, idleState],
+    //     damaged: 0,
+    //     health: 4,
+    //     angle: 0,
+    //     maxHealth: 10,
+    //     baseSpawn: {
+    //       x: 960,
+    //       y: 3300
+    //     },
+    //     spawnTimer: 10000,
+    //     enemyStateInt: 2000,
+    //   },
+
+    //   {
+    //     name: "blackBrownBunny",
+    //     imgw: 31,
+    //     imgh: 27,
+    //     imgcw: 31,
+    //     imgch: 0,
+    //     frames: 0,
+    //     framesTimer: 0,
+    //     level: 1,
+    //     xp: 100,
+    //     speedX: 5,
+    //     speedY: 5,
+    //     spawn: {
+    //       x: 3052,
+    //       y: 2679
+    //     },
+    //     w: 80,
+    //     h: 80,
+    //     currentStateName: "idle",
+    //     currentState: null,
+    //     attackInterval: true,
+    //     states: [moveState, idleState],
+    //     damaged: 0,
+    //     health: 4,
+    //     angle: 0,
+    //     maxHealth: 10,
+    //     baseSpawn: {
+    //       x: 3052,
+    //       y: 2679
+    //     },
+    //     spawnTimer: 10000,
+    //     enemyStateInt: 2000,
+    //   },
+    //   {
+    //     name: "brownBunny",
+    //     imgw: 31,
+    //     imgh: 27,
+    //     imgcw: 31,
+    //     imgch: 0,
+    //     frames: 0,
+    //     framesTimer: 0,
+    //     level: 1,
+    //     xp: 100,
+    //     speedX: 5,
+    //     speedY: 5,
+    //     spawn: {
+    //       x: 3552,
+    //       y: 2700
+    //     },
+    //     w: 80,
+    //     h: 80,
+    //     currentStateName: "idle",
+    //     currentState: null,
+    //     attackInterval: true,
+    //     states: [moveState, idleState],
+    //     damaged: 0,
+    //     health: 4,
+    //     angle: 0,
+    //     maxHealth: 10,
+    //     baseSpawn: {
+    //       x: 3552,
+    //       y: 2700
+    //     },
+    //     spawnTimer: 10000,
+    //     enemyStateInt: 2000,
+    //   },
+    //   {
+    //     name: "whiteBunny",
+    //     imgw: 31,
+    //     imgh: 27,
+    //     imgcw: 31,
+    //     imgch: 0,
+    //     frames: 0,
+    //     framesTimer: 0,
+    //     level: 1,
+    //     xp: 100,
+    //     speedX: 5,
+    //     speedY: 5,
+    //     spawn: {
+    //       x: 3352,
+    //       y: 2800
+    //     },
+    //     w: 80,
+    //     h: 80,
+    //     currentStateName: "idle",
+    //     currentState: null,
+    //     attackInterval: true,
+    //     states: [moveState, idleState],
+    //     damaged: 0,
+    //     health: 4,
+    //     angle: 0,
+    //     maxHealth: 10,
+    //     baseSpawn: {
+    //       x: 3352,
+    //       y: 2800
+    //     },
+    //     spawnTimer: 10000,
+    //     enemyStateInt: 2000,
+    //   },
+    //   {
+    //     name: "brownBunny",
+    //     imgw: 31,
+    //     imgh: 27,
+    //     imgcw: 31,
+    //     imgch: 0,
+    //     frames: 0,
+    //     framesTimer: 0,
+    //     level: 1,
+    //     xp: 100,
+    //     speedX: 5,
+    //     speedY: 5,
+    //     spawn: {
+    //       x: 3952,
+    //       y: 2900
+    //     },
+    //     w: 80,
+    //     h: 80,
+    //     currentStateName: "idle",
+    //     currentState: null,
+    //     attackInterval: true,
+    //     states: [moveState, idleState],
+    //     damaged: 0,
+    //     health: 4,
+    //     angle: 0,
+    //     maxHealth: 10,
+    //     baseSpawn: {
+    //       x: 3952,
+    //       y: 2900
+    //     },
+    //     spawnTimer: 10000,
+    //     enemyStateInt: 2000,
+    //   },
+    //   {
+    //     name: "brownBunny",
+    //     imgw: 31,
+    //     imgh: 27,
+    //     imgcw: 31,
+    //     imgch: 0,
+    //     frames: 0,
+    //     framesTimer: 0,
+    //     level: 1,
+    //     xp: 100,
+    //     speedX: 5,
+    //     speedY: 5,
+    //     spawn: {
+    //       x: 3852,
+    //       y: 3300
+    //     },
+    //     w: 80,
+    //     h: 80,
+    //     currentStateName: "idle",
+    //     currentState: null,
+    //     attackInterval: true,
+    //     states: [moveState, idleState],
+    //     damaged: 0,
+    //     health: 4,
+    //     angle: 0,
+    //     maxHealth: 10,
+    //     baseSpawn: {
+    //       x: 3852,
+    //       y: 3300
+    //     },
+    //     spawnTimer: 10000,
+    //     enemyStateInt: 2000,
+    //   },
+
+
+    //   {
+    //     name: "blackBrownBunny",
+    //     imgw: 31,
+    //     imgh: 27,
+    //     imgcw: 31,
+    //     imgch: 0,
+    //     frames: 0,
+    //     framesTimer: 0,
+    //     level: 1,
+    //     xp: 100,
+    //     speedX: 5,
+    //     speedY: 5,
+    //     spawn: {
+    //       x: 1660,
+    //       y: 3300
+    //     },
+    //     w: 80,
+    //     h: 80,
+    //     currentStateName: "idle",
+    //     currentState: null,
+    //     attackInterval: true,
+    //     states: [moveState, idleState],
+    //     damaged: 0,
+    //     health: 4,
+    //     angle: 0,
+    //     maxHealth: 10,
+    //     baseSpawn: {
+    //       x: 1660,
+    //       y: 3300
+    //     },
+    //     spawnTimer: 10000,
+    //     enemyStateInt: 2000,
+    //   },
+    //   {
+    //     name: "whiteBunny",
+    //     imgw: 31,
+    //     imgh: 27,
+    //     imgcw: 31,
+    //     imgch: 0,
+    //     frames: 0,
+    //     framesTimer: 0,
+    //     level: 1,
+    //     xp: 100,
+    //     speedX: 5,
+    //     speedY: 5,
+    //     spawn: {
+    //       x: 1960,
+    //       y: 3300
+    //     },
+    //     w: 80,
+    //     h: 80,
+    //     currentStateName: "idle",
+    //     currentState: null,
+    //     attackInterval: true,
+    //     states: [moveState, idleState],
+    //     damaged: 0,
+    //     health: 4,
+    //     angle: 0,
+    //     maxHealth: 10,
+    //     baseSpawn: {
+    //       x: 1960,
+    //       y: 3300
+    //     },
+    //     spawnTimer: 10000,
+    //     enemyStateInt: 2000,
+    //   },
 
 
     ]
@@ -11294,6 +11308,78 @@ let mapsInfo = {
         "width": 199,
         "height": 111,
         "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2074,
+        "y": 1867.5,
+        "width": 128,
+        "height": 75,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2171,
+        "y": 1913.5,
+        "width": 100,
+        "height": 86,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2246,
+        "y": 1964.5,
+        "width": 97,
+        "height": 60,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2465,
+        "y": 1976.5,
+        "width": 109,
+        "height": 54,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2530,
+        "y": 1905.5,
+        "width": 97,
+        "height": 100,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2277,
+        "y": 1888.5,
+        "width": 258,
+        "height": 59,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2463,
+        "y": 1915.5,
+        "width": 22,
+        "height": 117,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2289,
+        "y": 1898.5,
+        "width": 58,
+        "height": 123,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1208,
+        "y": 1833.5,
+        "width": 167,
+        "height": 146,
+        "color": "rgb(0, 0, 0, 0)"
       }
     ],
     enemies: [],
@@ -11309,55 +11395,6 @@ let mapsInfo = {
       y: 2000,
     },
     colliders: [
-      {
-        "type": "chest",
-        "item": "mushroomTrial",
-        "x": 2223.5,
-        "y": 761.5,
-        "width": 149,
-        "height": 210,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 2759,
-        "y": 2256.5,
-        "width": 122,
-        "height": 50,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 2804,
-        "y": 2218.5,
-        "width": 67,
-        "height": 66,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 2616,
-        "y": 2288.5,
-        "width": 126,
-        "height": 47,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 2667,
-        "y": 2257.5,
-        "width": 122,
-        "height": 49,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 2510,
-        "y": 2309.5,
-        "width": 146,
-        "height": 60,
-        "color": "rgb(0, 0, 0, 0)"
-      },
       {
         "type": "wall",
         "x": 614,
@@ -11606,14 +11643,6 @@ let mapsInfo = {
         "y": 762.5,
         "width": 169,
         "height": 89,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 2303,
-        "y": 2346.5,
-        "width": 285,
-        "height": 91,
         "color": "rgb(0, 0, 0, 0)"
       },
       {
@@ -12230,6 +12259,454 @@ let mapsInfo = {
         "y": 2040.5,
         "width": 68,
         "height": 144,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2311,
+        "y": 2339.5,
+        "width": 106,
+        "height": 133,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2379,
+        "y": 2388.5,
+        "width": 152,
+        "height": 83,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2387,
+        "y": 2331.5,
+        "width": 211,
+        "height": 95,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2514,
+        "y": 2285.5,
+        "width": 234,
+        "height": 108,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2683,
+        "y": 2255.5,
+        "width": 190,
+        "height": 95,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2813,
+        "y": 2213.5,
+        "width": 55,
+        "height": 86,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -101,
+        "y": 1515.5,
+        "width": 500,
+        "height": 137,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 170,
+        "y": 1362.5,
+        "width": 395,
+        "height": 114,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 303,
+        "y": 1424.5,
+        "width": 98,
+        "height": 155,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -112,
+        "y": 1607.5,
+        "width": 208,
+        "height": 508,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 30,
+        "y": 1913.5,
+        "width": 138,
+        "height": 336,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 100,
+        "y": 2090.5,
+        "width": 208,
+        "height": 194,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 217,
+        "y": 2176.5,
+        "width": 327,
+        "height": 115,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 594,
+        "y": 1245.5,
+        "width": 83,
+        "height": 114,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 685,
+        "y": 1120.5,
+        "width": 55,
+        "height": 108,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 896,
+        "y": 931.5,
+        "width": 76,
+        "height": 102,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 802,
+        "y": 1235.5,
+        "width": 54,
+        "height": 80,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1094,
+        "y": 694.5,
+        "width": 76,
+        "height": 112,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1018,
+        "y": 999.5,
+        "width": 44,
+        "height": 109,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1433,
+        "y": 637.5,
+        "width": 204,
+        "height": 114,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1546,
+        "y": 589.5,
+        "width": 717,
+        "height": 60,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1783,
+        "y": 495.5,
+        "width": 463,
+        "height": 125,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2208,
+        "y": 588.5,
+        "width": 214,
+        "height": 72,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2385,
+        "y": 622.5,
+        "width": 151,
+        "height": 83,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2611,
+        "y": 471.5,
+        "width": 82,
+        "height": 130,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2826,
+        "y": 698.5,
+        "width": 88,
+        "height": 144,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2997,
+        "y": 668.5,
+        "width": 71,
+        "height": 137,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3209,
+        "y": 706.5,
+        "width": 61,
+        "height": 132,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3095,
+        "y": 823.5,
+        "width": 78,
+        "height": 119,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3420,
+        "y": 1024.5,
+        "width": 47,
+        "height": 105,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3335,
+        "y": 823.5,
+        "width": 73,
+        "height": 125,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3459,
+        "y": 804.5,
+        "width": 54,
+        "height": 131,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3603,
+        "y": 1066.5,
+        "width": 83,
+        "height": 137,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3552,
+        "y": 950.5,
+        "width": 50,
+        "height": 131,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3724,
+        "y": 1325.5,
+        "width": 59,
+        "height": 148,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3861,
+        "y": 1324.5,
+        "width": 70,
+        "height": 129,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2822,
+        "y": -200,
+        "width": 889,
+        "height": 111,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3383,
+        "y": -114,
+        "width": 347,
+        "height": 162,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3601,
+        "y": 5,
+        "width": 580,
+        "height": 210,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 4050,
+        "y": 124,
+        "width": 110,
+        "height": 3691.5,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3879,
+        "y": 2437.5,
+        "width": 74,
+        "height": 164,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3623,
+        "y": 2591.5,
+        "width": 67,
+        "height": 92,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3595,
+        "y": 2846.5,
+        "width": 54,
+        "height": 108,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1192,
+        "y": 3954,
+        "width": 2952,
+        "height": 86,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 4054,
+        "y": 3744,
+        "width": 73,
+        "height": 258,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1986,
+        "y": 3860,
+        "width": 85,
+        "height": 123,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2050,
+        "y": 3559,
+        "width": 54,
+        "height": 129,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 981,
+        "y": 3808,
+        "width": 243,
+        "height": 164,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 879,
+        "y": 3776.5,
+        "width": 186,
+        "height": 79,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 625,
+        "y": 3669.5,
+        "width": 314,
+        "height": 133,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 545,
+        "y": 3569.5,
+        "width": 149,
+        "height": 133,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 443,
+        "y": 3501.5,
+        "width": 163,
+        "height": 107,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 338,
+        "y": 3443.5,
+        "width": 158,
+        "height": 85,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -43,
+        "y": 3432.5,
+        "width": 441,
+        "height": 43,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -101,
+        "y": 3196.5,
+        "width": 85,
+        "height": 285,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -96,
+        "y": 2067.5,
+        "width": 52,
+        "height": 1223,
         "color": "rgb(0, 0, 0, 0)"
       }
     ],
@@ -13480,6 +13957,62 @@ let mapsInfo = {
         "width": 517,
         "height": 131,
         "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2498,
+        "y": 4055,
+        "width": 1577,
+        "height": 41,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 4086,
+        "y": 3413.5,
+        "width": 69,
+        "height": 661,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 4018,
+        "y": 4029.5,
+        "width": 111,
+        "height": 41,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1063,
+        "y": 817.5,
+        "width": 19,
+        "height": 134,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 691,
+        "y": 584.5,
+        "width": 28,
+        "height": 143,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1049,
+        "y": 317.5,
+        "width": 36,
+        "height": 139,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 658,
+        "y": 15,
+        "width": 57,
+        "height": 139,
+        "color": "rgb(0, 0, 0, 0)"
       }
     ],
     enemies: []
@@ -13550,14 +14083,6 @@ let mapsInfo = {
         "y": 1492,
         "width": 369,
         "height": 69,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1062.5,
-        "y": 1302,
-        "width": 524,
-        "height": 70,
         "color": "rgb(0, 0, 0, 0)"
       },
       {
@@ -14110,14 +14635,6 @@ let mapsInfo = {
         "y": 2682,
         "width": 119,
         "height": 581,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 3839,
-        "y": 2235,
-        "width": 52,
-        "height": 92,
         "color": "rgb(0, 0, 0, 0)"
       },
       {
@@ -14779,8 +15296,15 @@ let mapsInfo = {
         "width": 325,
         "height": 193,
         "color": "rgb(204, 0, 204, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1115,
+        "y": 1298.5,
+        "width": 459,
+        "height": 65,
+        "color": "rgb(0, 0, 0, 0)"
       }
-    
     ],
     enemies: [
       {
@@ -15206,36 +15730,1180 @@ let mapsInfo = {
     },
     colliders: [
       {
-      "type": "transition",
-      "format": "liquid",
-      "destination": "restfieldPath",
-      "x": 1830,
-      "y": 3976,
-      "width": 364,
-      "height": 144,
-      "color": "rgb(204, 0, 204, 0)"
-    },
-    {
-      "type": "transition",
-      "format": "liquid",
-      "destination": "restfieldTownCemetery",
-      "x": -111,
-      "y": 2080.5,
-      "width": 235,
-      "height": 228,
-      "color": "rgb(204, 0, 204, 0)"
-    },
-    {
-      "type": "transition",
-      "format": "liquid",
-      "destination": "restfieldTrial",
-      "x": 1689.5,
-      "y": -237,
-      "width": 421,
-      "height": 300,
-      "color": "rgb(204, 0, 204, 0)"
-    }
-  ],
+        "type": "transition",
+        "format": "liquid",
+        "destination": "restfieldPath",
+        "x": 1830,
+        "y": 3976,
+        "width": 364,
+        "height": 144,
+        "color": "rgb(204, 0, 204, 0)"
+      },
+      {
+        "type": "transition",
+        "format": "liquid",
+        "destination": "restfieldTownCemetery",
+        "x": -111,
+        "y": 2080.5,
+        "width": 235,
+        "height": 228,
+        "color": "rgb(204, 0, 204, 0)"
+      },
+      {
+        "type": "transition",
+        "format": "liquid",
+        "destination": "restfieldTrial",
+        "x": 1689.5,
+        "y": -237,
+        "width": 421,
+        "height": 300,
+        "color": "rgb(204, 0, 204, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1817,
+        "y": 3620,
+        "width": 38,
+        "height": 141,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2129,
+        "y": 3794,
+        "width": 28,
+        "height": 148,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2138,
+        "y": 3367.5,
+        "width": 14,
+        "height": 140,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1835,
+        "y": 3135.5,
+        "width": 39,
+        "height": 145,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2137,
+        "y": 2872.5,
+        "width": 17,
+        "height": 144,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1836,
+        "y": 2657.5,
+        "width": 36,
+        "height": 148,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1799,
+        "y": 2365.5,
+        "width": 25,
+        "height": 136,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2180,
+        "y": 2354.5,
+        "width": 42,
+        "height": 150,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1742,
+        "y": 1995.5,
+        "width": 426,
+        "height": 121,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1896,
+        "y": 2086.5,
+        "width": 49,
+        "height": 55,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2138,
+        "y": 2028.5,
+        "width": 60,
+        "height": 69,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2733,
+        "y": 2038.5,
+        "width": 104,
+        "height": 58,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2768,
+        "y": 2003.5,
+        "width": 60,
+        "height": 58,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2487,
+        "y": 1832.5,
+        "width": 204,
+        "height": 80,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2597,
+        "y": 1874.5,
+        "width": 89,
+        "height": 81,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2681,
+        "y": 1906.5,
+        "width": 50,
+        "height": 35,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2329,
+        "y": 1750.5,
+        "width": 190,
+        "height": 81,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2425,
+        "y": 1791.5,
+        "width": 78,
+        "height": 78,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2473,
+        "y": 1768.5,
+        "width": 163,
+        "height": 75,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2630,
+        "y": 1812.5,
+        "width": 64,
+        "height": 40,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3250,
+        "y": 1618.5,
+        "width": 114,
+        "height": 125,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3542,
+        "y": 1521.5,
+        "width": 30,
+        "height": 58,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3566,
+        "y": 1555.5,
+        "width": 21,
+        "height": 56,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3235,
+        "y": 1561.5,
+        "width": 35,
+        "height": 63,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3204,
+        "y": 1600.5,
+        "width": 47,
+        "height": 50,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1669,
+        "y": 4043,
+        "width": 2419,
+        "height": 53,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2208,
+        "y": 3976,
+        "width": 223,
+        "height": 92,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2403,
+        "y": 3994,
+        "width": 299,
+        "height": 80,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2459,
+        "y": 3898,
+        "width": 103,
+        "height": 142,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2557,
+        "y": 3922,
+        "width": 142,
+        "height": 74,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2716,
+        "y": 3846,
+        "width": 89,
+        "height": 112,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2676,
+        "y": 3913,
+        "width": 93,
+        "height": 44,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2819,
+        "y": 3879,
+        "width": 129,
+        "height": 71,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2761,
+        "y": 3904,
+        "width": 92,
+        "height": 44,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2951,
+        "y": 3912,
+        "width": 58,
+        "height": 72,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2996,
+        "y": 3946,
+        "width": 213,
+        "height": 56,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3206,
+        "y": 3964,
+        "width": 406,
+        "height": 40,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3260,
+        "y": 3758,
+        "width": 95,
+        "height": 138,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3249,
+        "y": 3855,
+        "width": 118,
+        "height": 126,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3335,
+        "y": 3813,
+        "width": 186,
+        "height": 81,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3453,
+        "y": 3838,
+        "width": 592,
+        "height": 73,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3978,
+        "y": -261,
+        "width": 121,
+        "height": 4145,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3157,
+        "y": 3558,
+        "width": 389,
+        "height": 56,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3418,
+        "y": 3531,
+        "width": 538,
+        "height": 62,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3636,
+        "y": 3572,
+        "width": 352,
+        "height": 89,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3782,
+        "y": 3630,
+        "width": 214,
+        "height": 60,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3910,
+        "y": 3655,
+        "width": 89,
+        "height": 89,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2767,
+        "y": 3407.5,
+        "width": 486,
+        "height": 84,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2930,
+        "y": 3460.5,
+        "width": 187,
+        "height": 71,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3057,
+        "y": 3493.5,
+        "width": 197,
+        "height": 85,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2524,
+        "y": 3311.5,
+        "width": 285,
+        "height": 95,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2638,
+        "y": 3378.5,
+        "width": 166,
+        "height": 62,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2422,
+        "y": 3172.5,
+        "width": 104,
+        "height": 146,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2476,
+        "y": 3278.5,
+        "width": 83,
+        "height": 89,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2369,
+        "y": 2989.5,
+        "width": 79,
+        "height": 241,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2408,
+        "y": 2927.5,
+        "width": 158,
+        "height": 77,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2462,
+        "y": 2878.5,
+        "width": 199,
+        "height": 75,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2532,
+        "y": 2842.5,
+        "width": 327,
+        "height": 72,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2609,
+        "y": 2808.5,
+        "width": 436,
+        "height": 57,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2689,
+        "y": 2770.5,
+        "width": 531,
+        "height": 67,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2819,
+        "y": 2712.5,
+        "width": 550,
+        "height": 85,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3125,
+        "y": 2676.5,
+        "width": 383,
+        "height": 48,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3231,
+        "y": 2633.5,
+        "width": 241,
+        "height": 53,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3287,
+        "y": 2596.5,
+        "width": 258,
+        "height": 49,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3394,
+        "y": 2560.5,
+        "width": 305,
+        "height": 56,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3563,
+        "y": 2545.5,
+        "width": 344,
+        "height": 38,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3610,
+        "y": 2484.5,
+        "width": 297,
+        "height": 72,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3717,
+        "y": 2421.5,
+        "width": 131,
+        "height": 64,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3758,
+        "y": 2337.5,
+        "width": 94,
+        "height": 116,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3816,
+        "y": 2251.5,
+        "width": 56,
+        "height": 113,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3844,
+        "y": 2162.5,
+        "width": 57,
+        "height": 106,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3877,
+        "y": 2045.5,
+        "width": 60,
+        "height": 148,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3875,
+        "y": 1926.5,
+        "width": 90,
+        "height": 153,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3870,
+        "y": 1786.5,
+        "width": 97,
+        "height": 196,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3887,
+        "y": 1626.5,
+        "width": 58,
+        "height": 193,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3906,
+        "y": 1528.5,
+        "width": 128,
+        "height": 119,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3929,
+        "y": 1178.5,
+        "width": 66,
+        "height": 331,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3925,
+        "y": 982.5,
+        "width": 77,
+        "height": 255,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2495,
+        "y": 578.5,
+        "width": 100,
+        "height": 102,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3352,
+        "y": -58.5,
+        "width": 651,
+        "height": 108,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3482,
+        "y": -12.5,
+        "width": 198,
+        "height": 132,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3585,
+        "y": 75.5,
+        "width": 52,
+        "height": 148,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3728,
+        "y": 5.5,
+        "width": 120,
+        "height": 164,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3808,
+        "y": 123.5,
+        "width": 127,
+        "height": 173,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3854,
+        "y": 245.5,
+        "width": 77,
+        "height": 133,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3900,
+        "y": 204.5,
+        "width": 113,
+        "height": 73,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3008,
+        "y": -121,
+        "width": 232,
+        "height": 95,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3068,
+        "y": -118,
+        "width": 876,
+        "height": 73,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 3069,
+        "y": -56,
+        "width": 114,
+        "height": 134,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2246,
+        "y": -260,
+        "width": 1149,
+        "height": 66,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2779,
+        "y": -233,
+        "width": 119,
+        "height": 176,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2585,
+        "y": -225,
+        "width": 60,
+        "height": 126,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2318,
+        "y": -222,
+        "width": 80,
+        "height": 136,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1360,
+        "y": -242,
+        "width": 1046,
+        "height": 49,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2080,
+        "y": -133,
+        "width": 10,
+        "height": 132,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1723,
+        "y": 210,
+        "width": 38,
+        "height": 128,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2084,
+        "y": 436.5,
+        "width": 30,
+        "height": 141,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1715,
+        "y": 669.5,
+        "width": 49,
+        "height": 155,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2059,
+        "y": 917.5,
+        "width": 42,
+        "height": 142,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1703,
+        "y": 1153.5,
+        "width": 40,
+        "height": 144,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2069,
+        "y": 1351.5,
+        "width": 31,
+        "height": 152,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1663,
+        "y": 1545.5,
+        "width": 69,
+        "height": 147,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1647,
+        "y": 1633.5,
+        "width": 45,
+        "height": 202,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1546,
+        "y": 1648.5,
+        "width": 21,
+        "height": 139,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1380,
+        "y": 1793.5,
+        "width": 119,
+        "height": 87,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1468,
+        "y": 1796.5,
+        "width": 97,
+        "height": 59,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1272,
+        "y": 1819.5,
+        "width": 28,
+        "height": 214,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1145,
+        "y": 1766.5,
+        "width": 30,
+        "height": 218,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 847,
+        "y": 1902.5,
+        "width": 185,
+        "height": 63,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 975,
+        "y": 1932.5,
+        "width": 68,
+        "height": 76,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 826,
+        "y": 1937.5,
+        "width": 39,
+        "height": 99,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 849,
+        "y": 2004.5,
+        "width": 31,
+        "height": 63,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 880,
+        "y": 2035.5,
+        "width": 31,
+        "height": 41,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 590,
+        "y": 1992.5,
+        "width": 44,
+        "height": 107,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 362,
+        "y": 1960.5,
+        "width": 33,
+        "height": 100,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 94,
+        "y": 2210.5,
+        "width": 33,
+        "height": 127,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -107,
+        "y": 1938.5,
+        "width": 57,
+        "height": 110,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 608,
+        "y": 1469.5,
+        "width": 102,
+        "height": 106,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 787,
+        "y": 264,
+        "width": 97,
+        "height": 131,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 47,
+        "y": -229,
+        "width": 1371,
+        "height": 44,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 661,
+        "y": -218,
+        "width": 50,
+        "height": 109,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 405,
+        "y": -213,
+        "width": 59,
+        "height": 96,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 902,
+        "y": -213,
+        "width": 39,
+        "height": 155,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1109,
+        "y": -213,
+        "width": 51,
+        "height": 135,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 73,
+        "y": -206,
+        "width": 117,
+        "height": 197,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 114,
+        "y": -46,
+        "width": 34,
+        "height": 109,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -107,
+        "y": -38,
+        "width": 234,
+        "height": 98,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -70,
+        "y": 15,
+        "width": 79,
+        "height": 267,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -96,
+        "y": 237,
+        "width": 48,
+        "height": 3741,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -67,
+        "y": 3851,
+        "width": 115,
+        "height": 103,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 22,
+        "y": 3895,
+        "width": 1524,
+        "height": 83,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -77,
+        "y": 3626,
+        "width": 121,
+        "height": 134,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 674,
+        "y": 3817,
+        "width": 76,
+        "height": 103,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 760,
+        "y": 3816,
+        "width": 101,
+        "height": 128,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 914,
+        "y": 3842,
+        "width": 84,
+        "height": 108,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1252,
+        "y": 3824,
+        "width": 161,
+        "height": 113,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1540,
+        "y": 3930,
+        "width": 82,
+        "height": 126,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1570,
+        "y": 3990,
+        "width": 114,
+        "height": 95,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 553,
+        "y": 3141.5,
+        "width": 121,
+        "height": 131,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -50,
+        "y": 3175.5,
+        "width": 77,
+        "height": 111,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -93,
+        "y": 2801.5,
+        "width": 110,
+        "height": 448,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1687,
+        "y": 2005.5,
+        "width": 66,
+        "height": 119,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 594,
+        "y": 2238.5,
+        "width": 55,
+        "height": 95,
+        "color": "rgb(0, 0, 0, 0)"
+      }
+    ],
     enemies: []
   },
 
