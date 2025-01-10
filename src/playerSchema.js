@@ -83,7 +83,7 @@ const PlayerSchema = new mongoose.Schema({
     type: Array,
     default: [
       {
-        restfield: false,
+        restfieldPath: false,
       }
     ],
   },
