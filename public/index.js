@@ -41316,8 +41316,8 @@ function drawOnlinePlayers (layer) {
             playerCutY + 200,
             playerWidth,
             playerHeight,
-            playerX - cameraX + 65 - cameraShakeX - playerAdjustmentX,
-            playerY - cameraY + 120 - cameraShakeY - playerAdjustmentY,
+            smoothPlayer.smoothX + 65 - cameraShakeX,
+            smoothPlayer.smoothY + 120 - cameraShakeY,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -41327,8 +41327,8 @@ function drawOnlinePlayers (layer) {
             playerCutY + 200,
             playerWidth,
             playerHeight,
-            playerX - cameraX + 65 - cameraShakeX - playerAdjustmentX,
-            playerY - cameraY + 120 - cameraShakeY - playerAdjustmentY,
+            smoothPlayer.smoothX + 65 - cameraShakeX,
+            smoothPlayer.smoothY + 120 - cameraShakeY,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -41344,8 +41344,8 @@ function drawOnlinePlayers (layer) {
             playerCutY + 250,
             playerWidth,
             playerHeight,
-            playerX - cameraX + 65 - cameraShakeX - playerAdjustmentX,
-            playerY - cameraY + 120 - cameraShakeY - playerAdjustmentY,
+            smoothPlayer.smoothX + 65 - cameraShakeX,
+            smoothPlayer.smoothY + 120 - cameraShakeY,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -41355,8 +41355,8 @@ function drawOnlinePlayers (layer) {
             playerCutY + 250,
             playerWidth,
             playerHeight,
-            playerX - cameraX + 65 - cameraShakeX - playerAdjustmentX,
-            playerY - cameraY + 120 - cameraShakeY - playerAdjustmentY,
+            smoothPlayer.smoothX + 65 - cameraShakeX,
+            smoothPlayer.smoothY + 120 - cameraShakeY,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -41600,7 +41600,7 @@ function drawUsernameOnline (player, smoothPlayer) {
   canvas.font = "bolder 16px Tiny5";
   canvas.textAlign = "center";
   canvas.fillStyle = "black";
-  canvas.fillText(player.username, playerX - cameraX +10, playerY  - cameraY -30);
+  canvas.fillText(player.username, smoothPlayer.smoothX - cameraX +10, smoothPlayer.smoothY  - cameraY -30);
   canvas.beginPath();
   canvas.font = "bolder 12px Tiny5";
   canvas.textAlign = "center";
