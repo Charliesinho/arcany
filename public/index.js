@@ -41372,8 +41372,8 @@ function drawOnlinePlayers (layer) {
             playerCutY,
             playerWidth,
             playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 150,
-            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 180,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX,
+            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -41383,8 +41383,8 @@ function drawOnlinePlayers (layer) {
             playerCutY,
             playerWidth,
             playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 150,
-            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 180,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX,
+            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -41395,22 +41395,22 @@ function drawOnlinePlayers (layer) {
           canvas.drawImage(
             armor,
             playerCutX,
-            playerCutY + 24,
+            playerCutY + 50,
             playerWidth,
             playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 150,
-            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 180,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX,
+            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
           canvas.drawImage(
             artifact,
             playerCutX,
-            playerCutY + 24,
+            playerCutY + 50,
             playerWidth,
             playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 150,
-            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 180,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX,
+            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -41421,22 +41421,22 @@ function drawOnlinePlayers (layer) {
           canvas.drawImage(
             armor,
             playerCutX,
-            playerCutY + 47.5,
+            playerCutY + 100,
             playerWidth,
             playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 150,
-            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 180,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX,
+            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
           canvas.drawImage(
             artifact,
             playerCutX,
-            playerCutY + 47.5,
+            playerCutY + 100,
             playerWidth,
             playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 150,
-            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 180,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX,
+            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -41447,22 +41447,22 @@ function drawOnlinePlayers (layer) {
           canvas.drawImage(
             armor,
             playerCutX,
-            playerCutY + 72,
+            playerCutY + 150,
             playerWidth,
             playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 150,
-            smoothPlayer.smoothY - cameraY + 125 - cameraShakeY - 180,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX,
+            smoothPlayer.smoothY - cameraY + 125 - cameraShakeY,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
           canvas.drawImage(
             artifact,
             playerCutX,
-            playerCutY + 72,
+            playerCutY + 150,
             playerWidth,
             playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 150,
-            smoothPlayer.smoothY - cameraY + 125 - cameraShakeY - 180,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX,
+            smoothPlayer.smoothY - cameraY + 125 - cameraShakeY,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -41476,22 +41476,22 @@ function drawOnlinePlayers (layer) {
             canvas.drawImage(
               armor,
               playerCutX,
-              playerCutY + 47.5, // Same as runRight
+              playerCutY + 100, // Same as runRight
               playerWidth,
               playerHeight,
-              smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 150,
-              smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 180,
+              smoothPlayer.smoothX - cameraX + 65 - cameraShakeX,
+              smoothPlayer.smoothY - cameraY + 120 - cameraShakeY,
               playerWidth - playerZoomX,
               playerHeight - playerZoomY,
             );
             canvas.drawImage(
               artifact,
               playerCutX,
-              playerCutY + 47.5, // Same as runRight
+              playerCutY + 100, // Same as runRight
               playerWidth,
               playerHeight,
-              smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 150,
-              smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 180,
+              smoothPlayer.smoothX - cameraX + 65 - cameraShakeX,
+              smoothPlayer.smoothY - cameraY + 120 - cameraShakeY,
               playerWidth - playerZoomX,
               playerHeight - playerZoomY,
             );
@@ -41501,22 +41501,22 @@ function drawOnlinePlayers (layer) {
             canvas.drawImage(
               armor,
               playerCutX,
-              playerCutY + 72, // Same as runLeft
+              playerCutY + 150, // Same as runLeft
               playerWidth,
               playerHeight,
-              smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 150,
-              smoothPlayer.smoothY - cameraY + 125 - cameraShakeY - 180,
+              smoothPlayer.smoothX - cameraX + 65 - cameraShakeX,
+              smoothPlayer.smoothY - cameraY + 125 - cameraShakeY,
               playerWidth - playerZoomX,
               playerHeight - playerZoomY,
             );
             canvas.drawImage(
               artifact,
               playerCutX,
-              playerCutY + 72, // Same as runLeft
+              playerCutY + 150, // Same as runLeft
               playerWidth,
               playerHeight,
-              smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 150,
-              smoothPlayer.smoothY - cameraY + 125 - cameraShakeY - 180,
+              smoothPlayer.smoothX - cameraX + 65 - cameraShakeX,
+              smoothPlayer.smoothY - cameraY + 125 - cameraShakeY,
               playerWidth - playerZoomX,
               playerHeight - playerZoomY,
             );
@@ -41600,7 +41600,7 @@ function drawUsernameOnline (player, smoothPlayer) {
   canvas.font = "bolder 16px Tiny5";
   canvas.textAlign = "center";
   canvas.fillStyle = "black";
-  canvas.fillText(player.username, smoothPlayer.smoothX - cameraX +10, smoothPlayer.smoothY  - cameraY -10);
+  canvas.fillText(player.username, playerX - cameraX +10, playerY  - cameraY -30);
   canvas.beginPath();
   canvas.font = "bolder 12px Tiny5";
   canvas.textAlign = "center";
@@ -41609,7 +41609,7 @@ function drawUsernameOnline (player, smoothPlayer) {
 }
 
 function drawUsernameLocal (player) {
-  canvas.drawImage(nameBubbleGreen, playerX - cameraX -40, playerY - cameraY -66, 100,50)
+  canvas.drawImage(nameBubbleGreen, playerX - cameraX -40, playerY - cameraY -48, 100,50)
   canvas.beginPath();
   canvas.font = "bolder 16px Tiny5";
   canvas.textAlign = "center";
@@ -41619,7 +41619,7 @@ function drawUsernameLocal (player) {
   canvas.font = "bolder 12px Tiny5";
   canvas.textAlign = "center";
   canvas.fillStyle = "black";
-  canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)) , playerX - cameraX + 10, playerY  - cameraY - 50.5);
+  canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)) , playerX - cameraX + 10, playerY  - cameraY - 30.5);
 }
 
 function drawUsername () {
