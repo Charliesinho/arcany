@@ -41305,7 +41305,8 @@ function drawOnlinePlayers (layer) {
       
 
       function drawPlayerOnline () {
-        if (player.anim === "sittingDown" && player.lastLooked === "right"){
+        if (player.anim === "sittingDown" && player.lastLooked === "right") {
+          console.log(player.anim)
           frameCurrentPlayer = frameCurrentPlayer % 6;
     
           playerCutX = frameCurrentPlayer * playerWidth;
@@ -41316,8 +41317,8 @@ function drawOnlinePlayers (layer) {
             playerCutY + 200,
             playerWidth,
             playerHeight,
-            smoothPlayer.smoothX + 65 - cameraShakeX,
-            smoothPlayer.smoothY + 120 - cameraShakeY,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -41327,8 +41328,8 @@ function drawOnlinePlayers (layer) {
             playerCutY + 200,
             playerWidth,
             playerHeight,
-            smoothPlayer.smoothX + 65 - cameraShakeX,
-            smoothPlayer.smoothY + 120 - cameraShakeY,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -41344,8 +41345,8 @@ function drawOnlinePlayers (layer) {
             playerCutY + 250,
             playerWidth,
             playerHeight,
-            smoothPlayer.smoothX + 65 - cameraShakeX,
-            smoothPlayer.smoothY + 120 - cameraShakeY,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 125 - cameraShakeY - 130,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -41355,8 +41356,8 @@ function drawOnlinePlayers (layer) {
             playerCutY + 250,
             playerWidth,
             playerHeight,
-            smoothPlayer.smoothX + 65 - cameraShakeX,
-            smoothPlayer.smoothY + 120 - cameraShakeY,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -41372,8 +41373,8 @@ function drawOnlinePlayers (layer) {
             playerCutY,
             playerWidth,
             playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX,
-            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -41383,8 +41384,8 @@ function drawOnlinePlayers (layer) {
             playerCutY,
             playerWidth,
             playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX,
-            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -41398,8 +41399,8 @@ function drawOnlinePlayers (layer) {
             playerCutY + 50,
             playerWidth,
             playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX,
-            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -41409,8 +41410,8 @@ function drawOnlinePlayers (layer) {
             playerCutY + 50,
             playerWidth,
             playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX,
-            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -41424,8 +41425,8 @@ function drawOnlinePlayers (layer) {
             playerCutY + 100,
             playerWidth,
             playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX,
-            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -41435,8 +41436,8 @@ function drawOnlinePlayers (layer) {
             playerCutY + 100,
             playerWidth,
             playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX,
-            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -41450,8 +41451,8 @@ function drawOnlinePlayers (layer) {
             playerCutY + 150,
             playerWidth,
             playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX,
-            smoothPlayer.smoothY - cameraY + 125 - cameraShakeY,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 125 - cameraShakeY - 130,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -41461,8 +41462,8 @@ function drawOnlinePlayers (layer) {
             playerCutY + 150,
             playerWidth,
             playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX,
-            smoothPlayer.smoothY - cameraY + 125 - cameraShakeY,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 125 - cameraShakeY - 130,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -41479,8 +41480,8 @@ function drawOnlinePlayers (layer) {
               playerCutY + 100, // Same as runRight
               playerWidth,
               playerHeight,
-              smoothPlayer.smoothX - cameraX + 65 - cameraShakeX,
-              smoothPlayer.smoothY - cameraY + 120 - cameraShakeY,
+              smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+              smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
               playerWidth - playerZoomX,
               playerHeight - playerZoomY,
             );
@@ -41490,8 +41491,8 @@ function drawOnlinePlayers (layer) {
               playerCutY + 100, // Same as runRight
               playerWidth,
               playerHeight,
-              smoothPlayer.smoothX - cameraX + 65 - cameraShakeX,
-              smoothPlayer.smoothY - cameraY + 120 - cameraShakeY,
+              smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+              smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
               playerWidth - playerZoomX,
               playerHeight - playerZoomY,
             );
@@ -41504,8 +41505,8 @@ function drawOnlinePlayers (layer) {
               playerCutY + 150, // Same as runLeft
               playerWidth,
               playerHeight,
-              smoothPlayer.smoothX - cameraX + 65 - cameraShakeX,
-              smoothPlayer.smoothY - cameraY + 125 - cameraShakeY,
+              smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+              smoothPlayer.smoothY - cameraY + 125 - cameraShakeY - 130,
               playerWidth - playerZoomX,
               playerHeight - playerZoomY,
             );
@@ -41515,8 +41516,8 @@ function drawOnlinePlayers (layer) {
               playerCutY + 150, // Same as runLeft
               playerWidth,
               playerHeight,
-              smoothPlayer.smoothX - cameraX + 65 - cameraShakeX,
-              smoothPlayer.smoothY - cameraY + 125 - cameraShakeY,
+              smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+              smoothPlayer.smoothY - cameraY + 125 - cameraShakeY - 130,
               playerWidth - playerZoomX,
               playerHeight - playerZoomY,
             );
@@ -41600,7 +41601,7 @@ function drawUsernameOnline (player, smoothPlayer) {
   canvas.font = "bolder 16px Tiny5";
   canvas.textAlign = "center";
   canvas.fillStyle = "black";
-  canvas.fillText(player.username, smoothPlayer.smoothX - cameraX +10, smoothPlayer.smoothY  - cameraY -30);
+  canvas.fillText(player.username, smoothPlayer.smoothX - cameraX +10, smoothPlayer.smoothY  - cameraY -10);
   canvas.beginPath();
   canvas.font = "bolder 12px Tiny5";
   canvas.textAlign = "center";
@@ -41614,7 +41615,7 @@ function drawUsernameLocal (player) {
   canvas.font = "bolder 16px Tiny5";
   canvas.textAlign = "center";
   canvas.fillStyle = "black";
-  canvas.fillText(player.username, playerX - cameraX +10, playerY  - cameraY -30);
+  canvas.fillText(player.username, playerX - cameraX +10, playerY  - cameraY -10);
   canvas.beginPath();
   canvas.font = "bolder 12px Tiny5";
   canvas.textAlign = "center";
