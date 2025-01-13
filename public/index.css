@@ -828,14 +828,23 @@ body {
     z-index: 2;
     width: 50px;
     height: auto;
-    transition: all 0.5s ease;
+}
+
+#sitDownIcon{
+    display: none;
+    position: absolute;
+    bottom: 15px;
+    left: 70px;
+    z-index: 2;
+    width: 35px;
+    height: auto;
 }
 
 #chat {
     display: none;
     position: absolute;
     z-index: 1;
-    bottom: 10px;
+    bottom: 60px;
     left: 10px;
     color: rgb(255, 255, 255);
     /* display: flex; */
@@ -846,14 +855,6 @@ body {
     animation: showChat 0.5s ease forwards ;
 }
 
-@keyframes showChat {
-    0% {
-        opacity: 0vh;
-    }
-    100% {
-        opacity: .3px
-    }
-  }
 
 #chat:hover {
     opacity: 1;
