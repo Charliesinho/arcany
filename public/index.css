@@ -828,7 +828,6 @@ body {
     z-index: 2;
     width: 50px;
     height: auto;
-    transition: all 0.5s ease;
 }
 
 #chat {
@@ -846,14 +845,6 @@ body {
     animation: showChat 0.5s ease forwards ;
 }
 
-@keyframes showChat {
-    0% {
-        opacity: 0vh;
-    }
-    100% {
-        opacity: .3px
-    }
-  }
 
 #chat:hover {
     opacity: 1;
