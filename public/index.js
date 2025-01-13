@@ -458,6 +458,7 @@ let cameraShakeX = -150;
 let cameraShakeY = -180;
 
 const chatButton = document.getElementById('chatIcon');
+const sitDownIconButton = document.getElementById('sitDownIcon');
 const chat = document.getElementById('chat');
 const chatInput = document.getElementById("chatInput");
 let blockMovement = true;
@@ -1110,7 +1111,6 @@ const recentMessages = new Map();
 function showChatFunction(){
   if(!chatIsActivate){
     chat.style.display = "block";
-    chatButton.style.bottom = "237px"
     chatIsActivate = true;
   }else if(chatIsActivate){
     chat.style.display = "none";
@@ -1187,6 +1187,18 @@ window.addEventListener("keydown", (e) => {
 
 });
 
+window.addEventListener("keydown", (e) => {
+    if (e.key === "1" || e.key === "&") {
+        e.preventDefault();
+        if (animPlayer !== "sittingDown"){
+          animPlayer = "sittingDown"
+          socket.emit("animPlayer", animPlayer);
+          socket.emit("lastLookPlayer", lastLookPlayer);
+        }
+    }
+
+});
+
 function cameraShake() {
     let counter = 0;
     const interval = setInterval(function() {
@@ -1206,6 +1218,14 @@ let deleting = false;
 
 chatButton.addEventListener("click", () => {
  showChatFunction()
+  
+})
+sitDownIconButton.addEventListener("click", () => {
+  if (animPlayer !== "sittingDown"){
+    animPlayer = "sittingDown"
+    socket.emit("animPlayer", animPlayer);
+    socket.emit("lastLookPlayer", lastLookPlayer);
+  }
   
 })
 
@@ -3132,6 +3152,7 @@ socket.on("loginAttempt", (msg) => {
     uiButtonParent.style.display = "flex";
     menuUiProfile.style.display = "flex";
     chatButton.style.display = "block";
+    sitDownIconButton.style.display = "block";
     
 
     setTimeout(() => {
@@ -3177,6 +3198,7 @@ let angleMouse;
 
 let mainSkillCooldown = 0;
 
+let sittingDown = false;
 let fishing = false;
 let width = 20;
 let marginFish = -50;
@@ -40859,33 +40881,89 @@ function drawLocalPlayer () {
       let armor = drawPlayerArmor(player);
       let artifact = drawPlayerArtifact(player);
       // console.log(playerWidth, playerHeight)
-      if (fishing) {
+      if (animPlayer === "sittingDown" && player.lastLooked === "right"){
         frameCurrentPlayer = frameCurrentPlayer % 6;
   
-      playerCutX = frameCurrentPlayer * playerWidth;
+        playerCutX = frameCurrentPlayer * playerWidth;
 
-      canvas.drawImage(
-        armor,
-        playerCutX,
-        playerCutY + 200,
-        playerWidth,
-        playerHeight,
-        playerX - cameraX + 65 - cameraShakeX - playerAdjustmentX,
-        playerY - cameraY + 120 - cameraShakeY - playerAdjustmentY,
-        playerWidth - playerZoomX,
-        playerHeight - playerZoomY,
-      );
-      canvas.drawImage(
-        artifact,
-        playerCutX,
-        playerCutY + 200,
-        playerWidth,
-        playerHeight,
-        playerX - cameraX + 65 - cameraShakeX - playerAdjustmentX,
-        playerY - cameraY + 120 - cameraShakeY - playerAdjustmentY,
-        playerWidth - playerZoomX,
-        playerHeight - playerZoomY,
-      );
+        canvas.drawImage(
+          armor,
+          playerCutX,
+          playerCutY + 200,
+          playerWidth,
+          playerHeight,
+          playerX - cameraX + 65 - cameraShakeX - playerAdjustmentX,
+          playerY - cameraY + 120 - cameraShakeY - playerAdjustmentY,
+          playerWidth - playerZoomX,
+          playerHeight - playerZoomY,
+        );
+        canvas.drawImage(
+          artifact,
+          playerCutX,
+          playerCutY + 200,
+          playerWidth,
+          playerHeight,
+          playerX - cameraX + 65 - cameraShakeX - playerAdjustmentX,
+          playerY - cameraY + 120 - cameraShakeY - playerAdjustmentY,
+          playerWidth - playerZoomX,
+          playerHeight - playerZoomY,
+        );
+      }
+      else if (animPlayer === "sittingDown" && player.lastLooked === "left"){
+        frameCurrentPlayer = frameCurrentPlayer % 6;
+  
+        playerCutX = frameCurrentPlayer * playerWidth;
+
+        canvas.drawImage(
+          armor,
+          playerCutX,
+          playerCutY + 250,
+          playerWidth,
+          playerHeight,
+          playerX - cameraX + 65 - cameraShakeX - playerAdjustmentX,
+          playerY - cameraY + 120 - cameraShakeY - playerAdjustmentY,
+          playerWidth - playerZoomX,
+          playerHeight - playerZoomY,
+        );
+        canvas.drawImage(
+          artifact,
+          playerCutX,
+          playerCutY + 250,
+          playerWidth,
+          playerHeight,
+          playerX - cameraX + 65 - cameraShakeX - playerAdjustmentX,
+          playerY - cameraY + 120 - cameraShakeY - playerAdjustmentY,
+          playerWidth - playerZoomX,
+          playerHeight - playerZoomY,
+        );
+      }
+      else if (fishing) {
+        frameCurrentPlayer = frameCurrentPlayer % 6;
+  
+        playerCutX = frameCurrentPlayer * playerWidth;
+
+        canvas.drawImage(
+          armor,
+          playerCutX,
+          playerCutY + 200,
+          playerWidth,
+          playerHeight,
+          playerX - cameraX + 65 - cameraShakeX - playerAdjustmentX,
+          playerY - cameraY + 120 - cameraShakeY - playerAdjustmentY,
+          playerWidth - playerZoomX,
+          playerHeight - playerZoomY,
+        );
+        canvas.drawImage(
+          artifact,
+          playerCutX,
+          playerCutY + 200,
+          playerWidth,
+          playerHeight,
+          playerX - cameraX + 65 - cameraShakeX - playerAdjustmentX,
+          playerY - cameraY + 120 - cameraShakeY - playerAdjustmentY,
+          playerWidth - playerZoomX,
+          playerHeight - playerZoomY,
+        );
       }
       else if (animPlayer === "idleRight" && player.lastLooked === "right") {
       frameCurrentPlayer = frameCurrentPlayer % 6;
@@ -41082,7 +41160,63 @@ function drawOnlinePlayers (layer) {
       
 
       function drawPlayerOnline () {
-        if (player.anim === "idleRight" && player.lastLooked === "right") {
+        if (player.anim === "sittingDown" && player.lastLooked === "right"){
+          frameCurrentPlayer = frameCurrentPlayer % 6;
+    
+          playerCutX = frameCurrentPlayer * playerWidth;
+  
+          canvas.drawImage(
+            armor,
+            playerCutX,
+            playerCutY + 200,
+            playerWidth,
+            playerHeight,
+            playerX - cameraX + 65 - cameraShakeX - playerAdjustmentX,
+            playerY - cameraY + 120 - cameraShakeY - playerAdjustmentY,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+          canvas.drawImage(
+            artifact,
+            playerCutX,
+            playerCutY + 200,
+            playerWidth,
+            playerHeight,
+            playerX - cameraX + 65 - cameraShakeX - playerAdjustmentX,
+            playerY - cameraY + 120 - cameraShakeY - playerAdjustmentY,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+        }
+        else if (player.anim === "sittingDown" && player.lastLooked === "left"){
+          frameCurrentPlayer = frameCurrentPlayer % 6;
+    
+          playerCutX = frameCurrentPlayer * playerWidth;
+  
+          canvas.drawImage(
+            armor,
+            playerCutX,
+            playerCutY + 250,
+            playerWidth,
+            playerHeight,
+            playerX - cameraX + 65 - cameraShakeX - playerAdjustmentX,
+            playerY - cameraY + 120 - cameraShakeY - playerAdjustmentY,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+          canvas.drawImage(
+            artifact,
+            playerCutX,
+            playerCutY + 250,
+            playerWidth,
+            playerHeight,
+            playerX - cameraX + 65 - cameraShakeX - playerAdjustmentX,
+            playerY - cameraY + 120 - cameraShakeY - playerAdjustmentY,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+        }
+        else if (player.anim === "idleRight" && player.lastLooked === "right") {
           frameCurrentPlayer = frameCurrentPlayer % 6;
       
           playerCutX = frameCurrentPlayer * playerWidth;
