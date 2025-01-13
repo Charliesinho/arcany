@@ -1450,6 +1450,13 @@ const bone = {
     rarity: "rare",
     image: "./inventory/bone.png",
 };
+const slimeGuts = {
+    type: "quest",
+    name: "slimeGuts",
+    value: 4,
+    rarity: "rare",
+    image: "./inventory/slimeGuts.png",
+};
 
  const restfieldBlanket = {
     type: "fish",
@@ -1626,6 +1633,7 @@ const itemsObj = {
     bone,
     restfieldBlanket,
     restfieldZombieSoulInventory,
-    restfieldZombieInventory
+    restfieldZombieInventory,
+    slimeGuts
 };
 

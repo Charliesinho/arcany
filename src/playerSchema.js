@@ -84,6 +84,7 @@ const PlayerSchema = new mongoose.Schema({
     default: [
       {
         restfieldPath: false,
+        slimeForestPath: false,
       }
     ],
   },

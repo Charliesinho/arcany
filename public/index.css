@@ -2020,6 +2020,7 @@ body {
     background: url("./Textures/dialogBack.png");
     background-size: contain;
     animation: opacityUp .3s ease forwards;
+    background-repeat: no-repeat;
 }
 
 .name-wrap,

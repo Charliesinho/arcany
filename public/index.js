@@ -1,7 +1,7 @@
 //Change this to push >
 
-// const socket = io(`ws://localhost:5000`);
-const socket = io(`https://arcanyGame.up.railway.app/`);
+const socket = io(`ws://localhost:5000`);
+// const socket = io(`https://arcanyGame.up.railway.app/`);
 
 //Change this to push <
 
@@ -44,6 +44,9 @@ lobbyCombatAreaFront.src = "./islands/lobbyCombatAreaFront.png";
 
 const slimeForestPath = new Image();
 slimeForestPath.src = "./islands/slimeForestPath.png"
+
+const slimeForestPathOpen = new Image();
+slimeForestPathOpen.src = "./islands/slimeForestPathOpen.png"
 
 const slimeForestPathFront = new Image();
 slimeForestPathFront.src = "./islands/slimeForestPathFront.png"
@@ -2252,6 +2255,7 @@ socket.on("player", (serverPlayer) => {
   dialogBoxes = {
 
 
+    // CASTLESIDE
     "Fishing Quest": {
     dialogName: "quest",
     questRequirements: [],
@@ -2432,6 +2436,136 @@ socket.on("player", (serverPlayer) => {
       },
     ],
     },
+    "Mushroom Town Quest": {
+    dialogName: "quest",
+    questRequirements: [],
+    type: "counter",
+  
+    questName: "Mushroom Town Quest",
+    questDecription: "The mage of the tower told me that he will open the path to the mushroom town if I can bring him 10 slime guts.",
+    questCard: "./Cards/fight.png",
+    rewardType: "quest",
+    rewardItem: "mushroomAccess",
+    completionItem: "slimeGuts",
+    completionAmount: 10,
+    markerX: 1573 + 650,
+    markerY: 1851 + 300,
+    
+    dialogText:
+    [
+      {
+        NPC: "Tordmun",
+        text: "Hello there friend! Do you have a minute?",
+      },
+      {
+        NPC: "Tordmun",
+        text: "I would need some help regarding my investigation...",
+      },
+      {
+        NPC: "Tordmun",
+        text: "You see... I am Tormund and this tower is were I live",
+      },
+      {
+        NPC: "Tordmun",
+        text: "On the top of it you will find an ENCHANTING TABLE!!",
+      },
+      {
+        NPC: "Tordmun",
+        text: "I have been working on it since the great collapse",
+      },
+      {
+        NPC: "Tordmun",
+        text: "It gathers energy from the sumit of mount Nakro, were the beast resides",
+      },
+      {
+        NPC: "Tordmun",
+        text: "...",
+      },
+      {
+        NPC: "Tordmun",
+        text: "Perhaps I have overspoken...",
+      },
+      {
+        NPC: "Tordmun",
+        text: "Anyway...",
+      },
+      {
+        NPC: "Tordmun",
+        text: "To get the machine to function I will just need 10 slime guts, dont worry they don't feel anything...",
+      },
+      {
+        NPC: "Tordmun",
+        text: "They come from somewhere else, I am still trying to find out where...",
+      },
+      {
+        NPC: "Tordmun",
+        text: "Bring them to me so I can get the machine working and in return I will not only clear these rocks here for you to pass",
+      },
+      {
+        NPC: "Tordmun",
+        text: "But I will also give you access to my table so you can enchant your weapons!",
+      },
+      {
+        NPC: "Tordmun",
+        text: "Off you go then.",
+      },
+    ],
+  
+    progressText:
+    [
+      {
+        NPC: "Tordmun",
+        text: "So, how is it going?",
+      },
+      {
+        NPC: "Tordmun",
+        text: "Remember you can always craft a weapon by getting a gem from this chest!",
+      },
+      {
+        NPC: "Tordmun",
+        text: "... I forgot were the key is though ...",
+        check: true,
+      },
+    ],
+  
+    rewardText:
+    [
+      {
+        NPC: "Tordmun",
+        text: "Good job!!",
+      },
+      {
+        NPC: "Tordmun",
+        text: "Now you can enchant your weapons!",
+      },
+      {
+        NPC: "Tordmun",
+        text: "However to do so you will need a gem shard from mount Nakro, you can find them all over the world",
+      },
+      {
+        NPC: "Tordmun",
+        text: "Each gem will give you a modifier, more bullets, more speed or even more distance for your weapon!",
+      },
+      {
+        NPC: "Tordmun",
+        text: "...",
+      },
+      {
+        NPC: "Tordmun",
+        text: "You will also need to pay a fee to enchant your weapon...",
+      },
+      {
+        NPC: "Tordmun",
+        text: "Dont look at me like that!",
+      },
+      {
+        NPC: "Tordmun",
+        text: "... I will go now.",
+      },
+    ],
+    },
+
+    // RESTFIELD
     "A locked door Quest": {
     dialogName: "quest",
     questRequirements: [],
@@ -3866,8 +4000,10 @@ function typeText(entry) {
         if (loopLen < entry.length) {
             typeText(entry);  // Continue typing if not finished
             if (dialogOpened) {
-              const dialogsound = new Audio("./audios/dialogsound.wav");
+              const randomNumber = Math.floor(Math.random() * 7) + 1;
+              const dialogsound = new Audio("./audios/voice" + randomNumber + ".wav");
               dialogsound.loop = false;
+              dialogsound.volume = 0.15;
               dialogsound.play()
             }
         } else {
@@ -10103,11 +10239,21 @@ let mapsInfo = {
     areaSounds: grassLandsSoundtrack,
     backgroundImage: slimeForestPath,
     foregroundImage: slimeForestPathFront,
+    backgroundImageOpen: slimeForestPathOpen,
     playerPos: {
       x: 1935,
       y: 2750,
     },
     colliders: [
+      {
+        "type": "wall",
+        "condition": "slimeForestPath",
+        "x": 2617,
+        "y": 1885.5,
+        "width": 309,
+        "height": 511,
+        "color": "rgb(0, 0, 0, 0)"
+      },
       {
         "type": "chest",
         "item": "baseWeapon",
@@ -39882,7 +40028,6 @@ function drawColliders (type, x, y, w, h) {
         const overlapY = (colliderToCheck.height / 2 + wall.height / 2) - Math.abs(playerCenterY - wallCenterY);
 
         if (wall.type === "wall") {
-          // console.log(myPlayer.access[0], wall.condition, myPlayer.access[0][wall.condition])
           if (wall.condition && myPlayer.access[0][wall.condition] === true) {
             return;
           }
@@ -40866,7 +41011,7 @@ function drawMap(layer) {
   const isSpriteSheet = mapInfo.backgroundImage.width > frameWidth;
 
   if (layer === "back") {
-    if (currentLand === "restfieldPath") {
+    if (currentLand === "restfieldPath" || currentLand === "slimeForestPath") {
       if (myPlayer.access[0][currentLand] === false) {
         drawMapSprite(mapInfo.backgroundImage, isSpriteSheet, frameWidth, frameHeight);
       } else {
