@@ -432,7 +432,7 @@ motorAudio.volume = 0.1;
 
 const footsteps = new Audio("./audios/footsteps.wav");
 footsteps.loop = true;
-footsteps.volume = 1;
+footsteps.volume = 0.5;
 
 const sizzle = new Audio("./audios/sizzle.wav");
 sizzle.loop = false;
@@ -1233,10 +1233,10 @@ sitDownIconButton.addEventListener("click", () => {
 })
 
 window.addEventListener("keydown", (e) => {
-  if (e.key === "o") {
-    scores.style.display =  scores.style.display === "flex" ? "none" : "flex";
-    socket.emit("getScores", "")
-  }
+  // if (e.key === "o") {
+  //   scores.style.display =  scores.style.display === "flex" ? "none" : "flex";
+  //   socket.emit("getScores", "")
+  // }
 })
 
 socket.on("scoresData", (scoresArray) => {
@@ -2480,8 +2480,8 @@ socket.on("player", (serverPlayer) => {
     rewardItem: "mushroomAccess",
     completionItem: "slimeGuts",
     completionAmount: 10,
-    markerX: 1573 + 650,
-    markerY: 1851 + 300,
+    markerX: 1573 + 1080,
+    markerY: 1851 + 200,
     
     dialogText:
     [
@@ -5627,6 +5627,8 @@ let mapsInfo = {
       },
       spawnTimer: 10000,
       enemyStateInt: 2000,
+      drop: "slimeGuts",
+      dropRate: 20,
     },
     {
       name: "purpleSlime",
@@ -5660,6 +5662,8 @@ let mapsInfo = {
       },
       spawnTimer: 10000,
       enemyStateInt: 2000,
+      drop: "slimeGuts",
+      dropRate: 20,
     }
   ],
   },
@@ -5674,6 +5678,15 @@ let mapsInfo = {
       y: 785
     },
     colliders:  [
+      {
+        "type": "dialog",
+        "name": "Fishing Quest",
+        "x": 2106,
+        "y": 2005.5,
+        "width": 170,
+        "height": 185,
+        "color": "rgb(179, 255, 213, 0)"
+      },
       {
         "type": "wall",
         "x": 819,
@@ -10296,12 +10309,30 @@ let mapsInfo = {
     },
     colliders: [
       {
+        "type": "dialog",
+        "name": "Mushroom Town Quest",
+        "x": 2451.5,
+        "y": 1984.5,
+        "width": 186,
+        "height": 147,
+        "color": "rgb(179, 255, 213, 0)"
+      },
+      {
         "type": "wall",
         "condition": "slimeForestPath",
         "x": 2617,
         "y": 1885.5,
         "width": 309,
         "height": 511,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "condition": "slimeForestPath",
+        "x": 2335.5,
+        "y": 1950.5,
+        "width": 144,
+        "height": 96,
         "color": "rgb(0, 0, 0, 0)"
       },
       {

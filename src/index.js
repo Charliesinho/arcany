@@ -764,6 +764,11 @@ async function main() {
                         await Player.findOneAndUpdate({socket: socket.id}, {access: player.access}, {new: true}).exec();
                         myPlayer[socket.id].access = player.access;
                     }
+                    if (quest.rewardAmount === "mushroomAccess") {
+                        player.access[0].slimeForestPath = true;
+                        await Player.findOneAndUpdate({socket: socket.id}, {access: player.access}, {new: true}).exec();
+                        myPlayer[socket.id].access = player.access;
+                    }
                 }
 
                 const index = questsOngoing.findIndex(obj => obj.title === quest.name);
@@ -1055,7 +1060,7 @@ async function main() {
                     
 
                     const loginAttempt = "success";
-                    // await pushItem(stick, socket)
+                    // await pushItem(fishermanClothes, socket)
                     // await pushItem(mushroomClothesOrange, socket)
                     // await pushItem(reaperClothes, socket)
                     // await pushItem(blackVampiresClothes, socket)
@@ -1064,7 +1069,7 @@ async function main() {
                     // await pushItem(skullHelmet, socket)
                     // await pushItem(arcaneRepeaterInv, socket)
 
-                    // await Player.findOneAndUpdate({socket: socket.id}, {souls: [frogSoulInventory, ghostSkin, reaperSkin, vampiresSkin, redDemon, pinkDemon, arcanyDemon, restfieldSkeletonSkin]}, {new: true});
+                    // await Player.findOneAndUpdate({socket: socket.id}, {souls: [restfieldSkeletonSoulInventory, ghostSoulInventory, restfieldZombieSoulInventory, redDemonSoulInventory, pinkDemonSoulInventory]}, {new: true});
 
                     // let item = {
                     //     type: "questItem",
@@ -1097,7 +1102,10 @@ async function main() {
                     const loginAttempt = "success";
                     io.to(id).emit('loginAttempt', loginAttempt); 
 
-                    // await Player.findOneAndUpdate({socket: socket.id}, {souls: [frogSoulInventory, ghostSkin, reaperSkin]}, {new: true});
+                    await pushItem(fishermanClothes, socket)
+                    await pushItem(blackVampiresClothes, socket)
+
+                    await Player.findOneAndUpdate({socket: socket.id}, {souls: [restfieldSkeletonSoulInventory, ghostSoulInventory, restfieldZombieSoulInventory, redDemonSoulInventory, pinkDemonSoulInventory]}, {new: true});
                     const playerData = await Player.findOne({username: username}).exec();
 
                     myPlayer[socket.id] = playerData;
@@ -1482,7 +1490,7 @@ const mushroomClothesOrange = {
     name: "rorangeMushroomlInventory",
     value: 20,
     rarity: "common",
-    image: "./inventory/clothesInventory/rorangeMushroomlInventory.png",
+    image: "./inventory/clothesInventory/orangeMushroomlInventory.png",
 };
 const tropicalHatInventory = {
     type: "artifact",

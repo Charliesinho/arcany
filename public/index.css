@@ -32,7 +32,7 @@
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* Internet Explorer/Edge */
     cursor: none;
-    font-family: "Pixelify Sans", serif !important;
+    font-family: "Tiny5", serif !important;
     /* font-weight: 100 ; */
     -webkit-user-drag: none;
   }
@@ -2035,10 +2035,10 @@ body {
     display: inline-block;
     padding: 3px 0px;
     font-weight: bold;
-    font-size: 23px;
+    font-size: 17px;
     position: relative;
     left: 50%;
-    transform: translate(-50%, 20%);
+    transform: translate(-50%, 33%);
     /* border: 2px solid #333; */
     border-bottom: none;
     border-top-left-radius: 10px;
@@ -2243,6 +2243,7 @@ body {
     transform: translate(-50%, 0);
     opacity: 0;
     animation: opacityUp .5s ease forwards;
+    pointer-events: none;
   }
 
   #bossBarImg {
