@@ -526,7 +526,12 @@ body {
     width: calc(100% - 80px);
     height: calc(100% - 90px);
     padding: 45px 40px;
-    background-color: #000;
+}
+#uiBooksIngredients{
+    display: flex
+;
+    width: 80px;
+    height: 100px;
 }
 
 /* UI DEVELOPPER ORGANISATION */
