@@ -1532,14 +1532,16 @@ body {
 }
 
 #cookingContainer {
-    position: relative;
+    position: absolute;
+    top: 50%;
+    left: 36%;
+    transform: translate(-50%, -50%);
+    z-index: 99;
     width: 800px;
     height: 600px;
-    border: 2px solid black;
-    overflow: hidden;
-    margin: 100px auto;
     background: url("./Textures/cookback.gif");
-    z-index: 99;
+    border: 2px solid #000;
+    overflow: hidden;
     display: none;
   }
 
@@ -1903,15 +1905,57 @@ body {
   #craftingContainer {
     position: absolute;
     top: 50%;
-    left: 50%;
+    left: 36%;
     transform: translate(-50%, -50%);
     z-index: 99;
     width: 800px;
     height: 600px;
-    background-color: #fff;
+    background: url("./Textures/cookback.gif");
     border: 2px solid #000;
     overflow: hidden;
     display: none;
+    pointer-events: all;
+}
+
+#craftingHammer {
+    background: url("./Textures/craftingHammer.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 430px;
+    height: 181px;
+    position: absolute;
+    z-index: 1;
+    transform: rotate(0deg);
+    left: 345px;
+    top: 24px;
+    transition: all .2s ease;
+}
+
+.smashHammer {
+    animation: smashHammer .2s ease;
+}
+
+@keyframes smashHammer {
+    0% {
+        transform: rotate(0deg);
+        left: 345px;
+        top: 24px;
+    }
+    10% {
+        transform: rotate(-25deg);
+        left: 308px;
+        top: 57px;
+    }
+    50% {
+        transform: rotate(-25deg);
+        left: 308px;
+        top: 57px;
+    }
+    100% {
+        transform: rotate(0deg);
+        left: 345px;
+        top: 24px;
+    }
 }
 
 #progressCraft {

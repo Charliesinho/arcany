@@ -44,6 +44,7 @@ const PlayerSchema = new mongoose.Schema({
     default: [
       {
         mushroomTrial: 0,
+        restfieldTrial: 0,
       }
     ],
   },

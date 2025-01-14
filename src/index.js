@@ -1191,21 +1191,40 @@ async function main() {
             }) 
         });
         
-        socket.on("score", (score) => {  
+        socket.on("score", (score, land) => {  
             async function updateScore() {
-                console.log(score)
+
                 const player = await Player.findOne({socket: socket.id}).exec();
                 const numericScorePlayer = score.includes(":")
                 ? parseFloat(score.replace(":", "."))
                 : parseFloat(score) || 0;
-                const numericScoreOnline = player.scores[0].mushroomTrial.toString().includes(":")
-                ? parseFloat(player.scores[0].mushroomTrial.replace(":", "."))
-                : parseFloat( player.scores[0].mushroomTrial) || 0;
 
-                console.log(numericScoreOnline, numericScorePlayer) 
+                let numericScoreOnline 
+                
+                if (land === "mushroomForest") {
+                    numericScoreOnline = player.scores[0].mushroomTrial.toString().includes(":")
+                    ? parseFloat(player.scores[0].mushroomTrial.replace(":", "."))
+                    : parseFloat( player.scores[0].mushroomTrial) || 0;
+                }
+                if (land === "restfieldTrial") {
+                    numericScoreOnline = player.scores[0].restfieldTrial.toString().includes(":")
+                    ? parseFloat(player.scores[0].restfieldTrial.replace(":", "."))
+                    : parseFloat( player.scores[0].restfieldTrial) || 0;
+                }
+
+                // console.log(numericScoreOnline, numericScorePlayer) 
 
                 if (numericScoreOnline > numericScorePlayer || player.scores[0].mushroomTrial < 1) {
-                    player.scores[0].mushroomTrial = score;   
+                    if (land === "mushroomForest") {
+                        player.scores[0].mushroomTrial = score;   
+                    }
+                    await Player.findOneAndUpdate({socket: socket.id}, {scores: player.scores}, {new: true});
+                    myPlayer[socket.id] = player;             
+                }
+                if (numericScoreOnline > numericScorePlayer || player.scores[0].restfieldTrial < 1) {
+                    if (land === "restfieldTrial") {
+                        player.scores[0].restfieldTrial = score;   
+                    }
                     await Player.findOneAndUpdate({socket: socket.id}, {scores: player.scores}, {new: true});
                     myPlayer[socket.id] = player;             
                 }
@@ -1213,16 +1232,24 @@ async function main() {
             updateScore()
         });
         
-        socket.on("getScores", () => {
+        socket.on("getScores", (land) => {
             async function getScores() {
               try {
                 // Fetch all players
                 const players = await Player.find().exec();
           
                 // Process the scores
-                const scores = players
-                  .filter(player => player.username && player.scores && player.scores[0]) // Ensure username and scores exist
-                  .map(player => `${player.username}: ${player.scores[0].mushroomTrial}`); // Format the score
+                let scores 
+                if (land === "mushroomForest") {
+                    scores = players
+                      .filter(player => player.username && player.scores && player.scores[0]) // Ensure username and scores exist
+                      .map(player => `${player.username}: ${player.scores[0].mushroomTrial}`); // Format the score
+                }
+                if (land === "restfieldTrial") {
+                    scores = players
+                      .filter(player => player.username && player.scores && player.scores[0]) // Ensure username and scores exist
+                      .map(player => `${player.username}: ${player.scores[0].restfieldTrial}`); // Format the score
+                }
           
                 // Emit the formatted scores array back to the client
                 socket.emit("scoresData", scores);
