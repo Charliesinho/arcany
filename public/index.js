@@ -84,6 +84,9 @@ restfieldPathOpen.src = "./islands/restfieldPathOpen.png"
 const restfieldPathFront = new Image();
 restfieldPathFront.src = "./islands/restfieldPathFront.png"
 
+const restfieldPathFrontOpen = new Image();
+restfieldPathFrontOpen.src = "./islands/restfieldPathFrontOpen.png"
+
 const restFiledTown = new Image();
 restFiledTown.src = "./islands/restFiledTown.png"
 
@@ -497,6 +500,31 @@ menuUiProfile.style.width = window.innerWidth;
 menuUiProfile.style.height = window.innerHeight;
 
 const logOutButton = document.getElementById('logOutButton');
+
+//UI BOOK<
+const ingredientBook = document.getElementById('ingredientBook');
+const historyBook = document.getElementById('historyBook');
+const soulsAndClothesBook = document.getElementById('soulsAndClothesBook');
+const weaponBook = document.getElementById('weaponBook');
+const enchantingBook = document.getElementById('enchantingBook');
+
+const BookParent = document.getElementById('BookParent');
+
+
+
+const sardinTag = document.querySelector('.sardinTag');
+const crabTag = document.querySelector('.crabTag');
+const balloTag = document.querySelector('.balloTag');
+const bassTag = document.querySelector('.bassTag');
+const corkTag = document.querySelector('.corkTag');
+const octopusTag = document.querySelector('.octopusTag');
+const nameBook = document.querySelector('.nameBook');
+const ImgBook = document.querySelector('.ImgBook');
+const descriptionBook = document.querySelector('.descriptionBook');
+const lvlBook = document.querySelector('.lvlBook');
+
+//UI BOOK>
+
 //UI <
 
 const uiSkinsImg = document.getElementById("uiSkinsImg");
@@ -824,6 +852,7 @@ menuUiButtonQuest.addEventListener("click", function(){
   }
 })
 
+
 menuUiButtonBooks.addEventListener("click", function(){
   uiSoulCollectionOpen = false;
     uiProfileOpen = false;
@@ -844,8 +873,60 @@ menuUiButtonBooks.addEventListener("click", function(){
     menuUiButtonQuest.style.zIndex = "1"
     menuUiButtonBooks.style.zIndex = "2"
 })
-//Ui interaction <
 
+//UI BOOKBUTTON<
+
+uiBooksIngredients.addEventListener("click", function(){
+
+  BookParent.style.display = 'flex'
+
+  ingredientBook.style.display = "flex"
+  historyBook.style.display = "none"
+  soulsAndClothesBook.style.display = "none"
+  weaponBook.style.display = "none"
+  enchantingBook.style.display = "none"
+})
+uiBooksHistory.addEventListener("click", function(){
+  BookParent.style.display = 'flex'
+
+  ingredientBook.style.display = "none"
+  historyBook.style.display = "flex"
+  soulsAndClothesBook.style.display = "none"
+  weaponBook.style.display = "none"
+  enchantingBook.style.display = "none"
+})
+uiBooksSoulsAndClothes.addEventListener("click", function(){
+
+  BookParent.style.display = 'flex'
+
+  ingredientBook.style.display = "none"
+  historyBook.style.display = "none"
+  soulsAndClothesBook.style.display = "flex"
+  weaponBook.style.display = "none"
+  enchantingBook.style.display = "none"
+})
+uiBooksWeaponbook.addEventListener("click", function(){
+
+  BookParent.style.display = 'flex'
+
+  ingredientBook.style.display = "none"
+  historyBook.style.display = "none"
+  soulsAndClothesBook.style.display = "none"
+  weaponBook.style.display = "flex"
+  enchantingBook.style.display = "none"
+})
+uiBooksEnchantingbook.addEventListener("click", function(){
+  BookParent.style.display = 'flex'
+  
+  ingredientBook.style.display = "none"
+  historyBook.style.display = "none"
+  soulsAndClothesBook.style.display = "none"
+  weaponBook.style.display = "none"
+  enchantingBook.style.display = "flex"
+})
+//UI BOOKBUTTON>
+
+//Ui interaction <
 
 //Mouse cursor >
 
@@ -1216,6 +1297,94 @@ function cameraShake() {
         cameraShakeY = Math.floor(Math.random() * (-170 - -190 + 1)) + -190;
     }, 30)
 };
+
+let objFishes = {
+  sardine: {
+    name: "SARDINE",
+    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    lvl: "LEVEL REQUIRED 1",
+    img: "./inventory/sarding.png"
+  },
+  crab: {
+    name: "Crab",
+    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    lvl: "LEVEL REQUIRED 1",
+    img: "./inventory/crab.png"
+  },
+  ballo: {
+    name: "BALLO",
+    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    lvl: "LEVEL REQUIRED 2",
+    img: "./inventory/ballo.jpg"
+  },
+  bass: {
+    name: "BASS",
+    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    lvl: "LEVEL REQUIRED 3",
+    img: "./inventory/bass.png"
+  },
+  cork: {
+    name: "CORK",
+    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    lvl: "LEVEL REQUIRED 3",
+    img: "./inventory/cork.png"
+  },
+  octopus: {
+    name: "OCTOPUS",
+    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    lvl: "LEVEL REQUIRED 5",
+    img: "./inventory/octopus.png"
+  }
+};
+
+sardinTag.addEventListener("click", (e) =>{
+  console.log("hello")
+let item = "sardine"
+nameBook.innerHTML = objFishes[item].name
+ImgBook.src = objFishes[item].img
+descriptionBook.innerHTML = objFishes[item].desc
+lvlBook.innerHTML = objFishes[item].lvl
+});
+crabTag.addEventListener("click", (e) =>{
+  console.log("hello")
+let item = "crab"
+nameBook.innerHTML = objFishes[item].name
+ImgBook.src = objFishes[item].img
+descriptionBook.innerHTML = objFishes[item].desc
+lvlBook.innerHTML = objFishes[item].lvl
+});
+balloTag.addEventListener("click", (e) =>{
+  console.log("hello")
+let item = "ballo"
+nameBook.innerHTML = objFishes[item].name
+ImgBook.src = objFishes[item].img
+descriptionBook.innerHTML = objFishes[item].desc
+lvlBook.innerHTML = objFishes[item].lvl
+});
+bassTag.addEventListener("click", (e) =>{
+  console.log("hello")
+let item = "bass"
+nameBook.innerHTML = objFishes[item].name
+ImgBook.src = objFishes[item].img
+descriptionBook.innerHTML = objFishes[item].desc
+lvlBook.innerHTML = objFishes[item].lvl
+});
+corkTag.addEventListener("click", (e) =>{
+  console.log("hello")
+let item = "cork"
+nameBook.innerHTML = objFishes[item].name
+ImgBook.src = objFishes[item].img
+descriptionBook.innerHTML = objFishes[item].desc
+lvlBook.innerHTML = objFishes[item].lvl
+});
+octopusTag.addEventListener("click", (e) =>{
+  console.log("hello")
+let item = "octopus"
+nameBook.innerHTML = objFishes[item].name
+ImgBook.src = objFishes[item].img
+descriptionBook.innerHTML = objFishes[item].desc
+lvlBook.innerHTML = objFishes[item].lvl
+});
 
 let deleting = false;
 
@@ -10302,6 +10471,7 @@ let mapsInfo = {
     areaSounds: grassLandsSoundtrack,
     backgroundImage: slimeForestPath,
     foregroundImage: slimeForestPathFront,
+    foregroundImageOpen: slimeForestPathFront,
     backgroundImageOpen: slimeForestPathOpen,
     playerPos: {
       x: 1935,
@@ -13417,6 +13587,7 @@ let mapsInfo = {
     backgroundImage: restfieldPath,
     foregroundImage: restfieldPathFront,
     backgroundImageOpen: restfieldPathOpen,
+    foregroundImageOpen: restfieldPathFrontOpen,
     
     playerPos: {
       x: 3900,
@@ -41958,8 +42129,17 @@ function drawMap(layer) {
       drawMapSprite(mapInfo.backgroundImage, isSpriteSheet, frameWidth, frameHeight);
     }
     drawQuestMarkers();
-  } else {
-    drawMapSprite(mapInfo.foregroundImage, isSpriteSheet, frameWidth, frameHeight);
+  } 
+  else {
+    if (currentLand === "restfieldPath" || currentLand === "slimeForestPath") {
+      if (myPlayer.access[0][currentLand] === false) {
+        drawMapSprite(mapInfo.foregroundImage, isSpriteSheet, frameWidth, frameHeight);
+      } else {
+        drawMapSprite(mapInfo.foregroundImageOpen, isSpriteSheet, frameWidth, frameHeight);
+      }
+    } else {
+      drawMapSprite(mapInfo.foregroundImage, isSpriteSheet, frameWidth, frameHeight);
+    }
   }
 
   // Reset filter

@@ -490,6 +490,91 @@ body {
     right: 6%;
     gap: 20px;
 }
+
+#BookParent{
+    width: 950px;
+    height: 628px;
+    display: none;
+    left: 36%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    /* padding: 10% 0% 10% 5%; */
+    position: absolute;
+    background: url('./ui/uiBookBackground.png');
+    background-size: cover;
+}
+
+.bookOrganisation{
+    display: flex ;
+    padding: 40px 80px 75px 80px;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+    gap: 90px;
+}
+.leftPage{
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 40px;
+}
+.rightPage{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    justify-content: flex-start;
+    align-items: center;
+}
+.tittleBookSection{
+    font-size: 40px;
+    color: #C0A58C;
+    text-align: center;
+}
+
+.nameBook{
+    font-size: 40px;
+    color: #C0A58C;
+    text-align: center;
+}
+.ImgBook{
+    display: flex;
+    width: 300px;
+    justify-self: center;
+    margin: 30px 0px;
+}
+.descriptionBook{
+    width: 90%;
+    position: relative;
+    text-align: justify;
+}
+.lvlBook{
+}
+
+.fishIcon{
+    width: 70px;
+}
+.fishTag{
+    display: flex;
+    height: 5%;
+    width: 90%;
+    border: solid 2px #C0A58C;
+    background-color: transparent;
+    flex-direction: row;
+    text-align: center;
+    align-items: center;
+    gap: 10px;
+    transition: all .2s ease;
+    color: black;
+}
+
+.fishTag:hover{
+    color: white;
+    background-color: #C0A58C;
+}
+
 #deleteInventoryButton{
     display: flex;
     position: relative;
