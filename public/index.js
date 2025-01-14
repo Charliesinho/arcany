@@ -45,6 +45,9 @@ lobbyCombatAreaFront.src = "./islands/lobbyCombatAreaFront.png";
 const slimeForestPath = new Image();
 slimeForestPath.src = "./islands/slimeForestPath.png"
 
+const slimeForestPathOpen = new Image();
+slimeForestPathOpen.src = "./islands/slimeForestPathOpen.png"
+
 const slimeForestPathFront = new Image();
 slimeForestPathFront.src = "./islands/slimeForestPathFront.png"
 
@@ -429,7 +432,7 @@ motorAudio.volume = 0.1;
 
 const footsteps = new Audio("./audios/footsteps.wav");
 footsteps.loop = true;
-footsteps.volume = 1;
+footsteps.volume = 0.5;
 
 const sizzle = new Audio("./audios/sizzle.wav");
 sizzle.loop = false;
@@ -1230,10 +1233,10 @@ sitDownIconButton.addEventListener("click", () => {
 })
 
 window.addEventListener("keydown", (e) => {
-  if (e.key === "o") {
-    scores.style.display =  scores.style.display === "flex" ? "none" : "flex";
-    socket.emit("getScores", "")
-  }
+  // if (e.key === "o") {
+  //   scores.style.display =  scores.style.display === "flex" ? "none" : "flex";
+  //   socket.emit("getScores", "")
+  // }
 })
 
 socket.on("scoresData", (scoresArray) => {
@@ -2284,6 +2287,7 @@ socket.on("player", (serverPlayer) => {
   dialogBoxes = {
 
 
+    // CASTLESIDE
     "Fishing Quest": {
     dialogName: "quest",
     questRequirements: [],
@@ -2464,6 +2468,136 @@ socket.on("player", (serverPlayer) => {
       },
     ],
     },
+    "Mushroom Town Quest": {
+    dialogName: "quest",
+    questRequirements: [],
+    type: "counter",
+  
+    questName: "Mushroom Town Quest",
+    questDecription: "The mage of the tower told me that he will open the path to the mushroom town if I can bring him 10 slime guts.",
+    questCard: "./Cards/fight.png",
+    rewardType: "quest",
+    rewardItem: "mushroomAccess",
+    completionItem: "slimeGuts",
+    completionAmount: 10,
+    markerX: 1573 + 1080,
+    markerY: 1851 + 200,
+    
+    dialogText:
+    [
+      {
+        NPC: "Tordmun",
+        text: "Hello there friend! Do you have a minute?",
+      },
+      {
+        NPC: "Tordmun",
+        text: "I would need some help regarding my investigation...",
+      },
+      {
+        NPC: "Tordmun",
+        text: "You see... I am Tormund and this tower is were I live",
+      },
+      {
+        NPC: "Tordmun",
+        text: "On the top of it you will find an ENCHANTING TABLE!!",
+      },
+      {
+        NPC: "Tordmun",
+        text: "I have been working on it since the great collapse",
+      },
+      {
+        NPC: "Tordmun",
+        text: "It gathers energy from the sumit of mount Nakro, were the beast resides",
+      },
+      {
+        NPC: "Tordmun",
+        text: "...",
+      },
+      {
+        NPC: "Tordmun",
+        text: "Perhaps I have overspoken...",
+      },
+      {
+        NPC: "Tordmun",
+        text: "Anyway...",
+      },
+      {
+        NPC: "Tordmun",
+        text: "To get the machine to function I will just need 10 slime guts, dont worry they don't feel anything...",
+      },
+      {
+        NPC: "Tordmun",
+        text: "They come from somewhere else, I am still trying to find out where...",
+      },
+      {
+        NPC: "Tordmun",
+        text: "Bring them to me so I can get the machine working and in return I will not only clear these rocks here for you to pass",
+      },
+      {
+        NPC: "Tordmun",
+        text: "But I will also give you access to my table so you can enchant your weapons!",
+      },
+      {
+        NPC: "Tordmun",
+        text: "Off you go then.",
+      },
+    ],
+  
+    progressText:
+    [
+      {
+        NPC: "Tordmun",
+        text: "So, how is it going?",
+      },
+      {
+        NPC: "Tordmun",
+        text: "Remember you can always craft a weapon by getting a gem from this chest!",
+      },
+      {
+        NPC: "Tordmun",
+        text: "... I forgot were the key is though ...",
+        check: true,
+      },
+    ],
+  
+    rewardText:
+    [
+      {
+        NPC: "Tordmun",
+        text: "Good job!!",
+      },
+      {
+        NPC: "Tordmun",
+        text: "Now you can enchant your weapons!",
+      },
+      {
+        NPC: "Tordmun",
+        text: "However to do so you will need a gem shard from mount Nakro, you can find them all over the world",
+      },
+      {
+        NPC: "Tordmun",
+        text: "Each gem will give you a modifier, more bullets, more speed or even more distance for your weapon!",
+      },
+      {
+        NPC: "Tordmun",
+        text: "...",
+      },
+      {
+        NPC: "Tordmun",
+        text: "You will also need to pay a fee to enchant your weapon...",
+      },
+      {
+        NPC: "Tordmun",
+        text: "Dont look at me like that!",
+      },
+      {
+        NPC: "Tordmun",
+        text: "... I will go now.",
+      },
+    ],
+    },
+
+    // RESTFIELD
     "A locked door Quest": {
     dialogName: "quest",
     questRequirements: [],
@@ -3900,8 +4034,10 @@ function typeText(entry) {
         if (loopLen < entry.length) {
             typeText(entry);  // Continue typing if not finished
             if (dialogOpened) {
-              const dialogsound = new Audio("./audios/dialogsound.wav");
+              const randomNumber = Math.floor(Math.random() * 7) + 1;
+              const dialogsound = new Audio("./audios/voice" + randomNumber + ".wav");
               dialogsound.loop = false;
+              dialogsound.volume = 0.15;
               dialogsound.play()
             }
         } else {
@@ -5491,6 +5627,8 @@ let mapsInfo = {
       },
       spawnTimer: 10000,
       enemyStateInt: 2000,
+      drop: "slimeGuts",
+      dropRate: 20,
     },
     {
       name: "purpleSlime",
@@ -5524,6 +5662,8 @@ let mapsInfo = {
       },
       spawnTimer: 10000,
       enemyStateInt: 2000,
+      drop: "slimeGuts",
+      dropRate: 20,
     }
   ],
   },
@@ -5538,6 +5678,15 @@ let mapsInfo = {
       y: 785
     },
     colliders:  [
+      {
+        "type": "dialog",
+        "name": "Fishing Quest",
+        "x": 2106,
+        "y": 2005.5,
+        "width": 170,
+        "height": 185,
+        "color": "rgb(179, 255, 213, 0)"
+      },
       {
         "type": "wall",
         "x": 819,
@@ -10153,11 +10302,39 @@ let mapsInfo = {
     areaSounds: grassLandsSoundtrack,
     backgroundImage: slimeForestPath,
     foregroundImage: slimeForestPathFront,
+    backgroundImageOpen: slimeForestPathOpen,
     playerPos: {
       x: 1935,
       y: 2750,
     },
     colliders: [
+      {
+        "type": "dialog",
+        "name": "Mushroom Town Quest",
+        "x": 2451.5,
+        "y": 1984.5,
+        "width": 186,
+        "height": 147,
+        "color": "rgb(179, 255, 213, 0)"
+      },
+      {
+        "type": "wall",
+        "condition": "slimeForestPath",
+        "x": 2617,
+        "y": 1885.5,
+        "width": 309,
+        "height": 511,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "condition": "slimeForestPath",
+        "x": 2335.5,
+        "y": 1950.5,
+        "width": 144,
+        "height": 96,
+        "color": "rgb(0, 0, 0, 0)"
+      },
       {
         "type": "chest",
         "item": "baseWeapon",
@@ -40675,7 +40852,6 @@ function drawColliders (type, x, y, w, h) {
         const overlapY = (colliderToCheck.height / 2 + wall.height / 2) - Math.abs(playerCenterY - wallCenterY);
 
         if (wall.type === "wall") {
-          // console.log(myPlayer.access[0], wall.condition, myPlayer.access[0][wall.condition])
           if (wall.condition && myPlayer.access[0][wall.condition] === true) {
             return;
           }
@@ -41160,7 +41336,8 @@ function drawOnlinePlayers (layer) {
       
 
       function drawPlayerOnline () {
-        if (player.anim === "sittingDown" && player.lastLooked === "right"){
+        if (player.anim === "sittingDown" && player.lastLooked === "right") {
+          console.log(player.anim)
           frameCurrentPlayer = frameCurrentPlayer % 6;
     
           playerCutX = frameCurrentPlayer * playerWidth;
@@ -41171,8 +41348,8 @@ function drawOnlinePlayers (layer) {
             playerCutY + 200,
             playerWidth,
             playerHeight,
-            playerX - cameraX + 65 - cameraShakeX - playerAdjustmentX,
-            playerY - cameraY + 120 - cameraShakeY - playerAdjustmentY,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -41182,8 +41359,8 @@ function drawOnlinePlayers (layer) {
             playerCutY + 200,
             playerWidth,
             playerHeight,
-            playerX - cameraX + 65 - cameraShakeX - playerAdjustmentX,
-            playerY - cameraY + 120 - cameraShakeY - playerAdjustmentY,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -41199,8 +41376,8 @@ function drawOnlinePlayers (layer) {
             playerCutY + 250,
             playerWidth,
             playerHeight,
-            playerX - cameraX + 65 - cameraShakeX - playerAdjustmentX,
-            playerY - cameraY + 120 - cameraShakeY - playerAdjustmentY,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 125 - cameraShakeY - 130,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -41210,8 +41387,8 @@ function drawOnlinePlayers (layer) {
             playerCutY + 250,
             playerWidth,
             playerHeight,
-            playerX - cameraX + 65 - cameraShakeX - playerAdjustmentX,
-            playerY - cameraY + 120 - cameraShakeY - playerAdjustmentY,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -41227,8 +41404,8 @@ function drawOnlinePlayers (layer) {
             playerCutY,
             playerWidth,
             playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 150,
-            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 180,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -41238,8 +41415,8 @@ function drawOnlinePlayers (layer) {
             playerCutY,
             playerWidth,
             playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 150,
-            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 180,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -41250,22 +41427,22 @@ function drawOnlinePlayers (layer) {
           canvas.drawImage(
             armor,
             playerCutX,
-            playerCutY + 24,
+            playerCutY + 50,
             playerWidth,
             playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 150,
-            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 180,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
           canvas.drawImage(
             artifact,
             playerCutX,
-            playerCutY + 24,
+            playerCutY + 50,
             playerWidth,
             playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 150,
-            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 180,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -41276,22 +41453,22 @@ function drawOnlinePlayers (layer) {
           canvas.drawImage(
             armor,
             playerCutX,
-            playerCutY + 47.5,
+            playerCutY + 100,
             playerWidth,
             playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 150,
-            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 180,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
           canvas.drawImage(
             artifact,
             playerCutX,
-            playerCutY + 47.5,
+            playerCutY + 100,
             playerWidth,
             playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 150,
-            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 180,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -41302,22 +41479,22 @@ function drawOnlinePlayers (layer) {
           canvas.drawImage(
             armor,
             playerCutX,
-            playerCutY + 72,
+            playerCutY + 150,
             playerWidth,
             playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 150,
-            smoothPlayer.smoothY - cameraY + 125 - cameraShakeY - 180,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 125 - cameraShakeY - 130,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
           canvas.drawImage(
             artifact,
             playerCutX,
-            playerCutY + 72,
+            playerCutY + 150,
             playerWidth,
             playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 150,
-            smoothPlayer.smoothY - cameraY + 125 - cameraShakeY - 180,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 125 - cameraShakeY - 130,
             playerWidth - playerZoomX,
             playerHeight - playerZoomY,
           );
@@ -41331,22 +41508,22 @@ function drawOnlinePlayers (layer) {
             canvas.drawImage(
               armor,
               playerCutX,
-              playerCutY + 47.5, // Same as runRight
+              playerCutY + 100, // Same as runRight
               playerWidth,
               playerHeight,
-              smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 150,
-              smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 180,
+              smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+              smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
               playerWidth - playerZoomX,
               playerHeight - playerZoomY,
             );
             canvas.drawImage(
               artifact,
               playerCutX,
-              playerCutY + 47.5, // Same as runRight
+              playerCutY + 100, // Same as runRight
               playerWidth,
               playerHeight,
-              smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 150,
-              smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 180,
+              smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+              smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
               playerWidth - playerZoomX,
               playerHeight - playerZoomY,
             );
@@ -41356,22 +41533,22 @@ function drawOnlinePlayers (layer) {
             canvas.drawImage(
               armor,
               playerCutX,
-              playerCutY + 72, // Same as runLeft
+              playerCutY + 150, // Same as runLeft
               playerWidth,
               playerHeight,
-              smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 150,
-              smoothPlayer.smoothY - cameraY + 125 - cameraShakeY - 180,
+              smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+              smoothPlayer.smoothY - cameraY + 125 - cameraShakeY - 130,
               playerWidth - playerZoomX,
               playerHeight - playerZoomY,
             );
             canvas.drawImage(
               artifact,
               playerCutX,
-              playerCutY + 72, // Same as runLeft
+              playerCutY + 150, // Same as runLeft
               playerWidth,
               playerHeight,
-              smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 150,
-              smoothPlayer.smoothY - cameraY + 125 - cameraShakeY - 180,
+              smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+              smoothPlayer.smoothY - cameraY + 125 - cameraShakeY - 130,
               playerWidth - playerZoomX,
               playerHeight - playerZoomY,
             );
@@ -41464,17 +41641,17 @@ function drawUsernameOnline (player, smoothPlayer) {
 }
 
 function drawUsernameLocal (player) {
-  canvas.drawImage(nameBubbleGreen, playerX - cameraX -40, playerY - cameraY -66, 100,50)
+  canvas.drawImage(nameBubbleGreen, playerX - cameraX -40, playerY - cameraY -48, 100,50)
   canvas.beginPath();
   canvas.font = "bolder 16px Tiny5";
   canvas.textAlign = "center";
   canvas.fillStyle = "black";
-  canvas.fillText(player.username, playerX - cameraX +10, playerY  - cameraY -30);
+  canvas.fillText(player.username, playerX - cameraX +10, playerY  - cameraY -10);
   canvas.beginPath();
   canvas.font = "bolder 12px Tiny5";
   canvas.textAlign = "center";
   canvas.fillStyle = "black";
-  canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)) , playerX - cameraX + 10, playerY  - cameraY - 50.5);
+  canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)) , playerX - cameraX + 10, playerY  - cameraY - 30.5);
 }
 
 function drawUsername () {
@@ -41771,7 +41948,7 @@ function drawMap(layer) {
   const isSpriteSheet = mapInfo.backgroundImage.width > frameWidth;
 
   if (layer === "back") {
-    if (currentLand === "restfieldPath") {
+    if (currentLand === "restfieldPath" || currentLand === "slimeForestPath") {
       if (myPlayer.access[0][currentLand] === false) {
         drawMapSprite(mapInfo.backgroundImage, isSpriteSheet, frameWidth, frameHeight);
       } else {
