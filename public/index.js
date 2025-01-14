@@ -7935,7 +7935,7 @@ let mapsInfo = {
       },
       {
         "type": "transition",
-        "format": "liquid",
+        "format": "instant",
         "destination": "slimeForestPath",
         "x": -201.5,
         "y": 336.5,
@@ -25911,7 +25911,7 @@ let originalMapsInfo = {
       },
       {
         "type": "transition",
-        "format": "liquid",
+        "format": "instant",
         "destination": "slimeForestPath",
         "x": -201.5,
         "y": 336.5,

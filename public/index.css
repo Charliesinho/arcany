@@ -523,13 +523,16 @@ body {
 }
 #uiBooks{
     display: none;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding-left: 20%;
+    flex-wrap: wrap;
+    gap: 30px;
     width: calc(100% - 80px);
-    height: calc(100% - 90px);
-    padding: 45px 40px;
+    padding: 45px 0px 45px 40px;
 }
-#uiBooksIngredients{
-    display: flex
-;
+.uibooks{
+    display: flex;
     width: 80px;
     height: 100px;
 }
