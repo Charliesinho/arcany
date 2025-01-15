@@ -322,50 +322,126 @@
     <img class="closeBookButton pointerActivator" src="./ui/uiBookCloseIcon.png"></img>
 
       <div id="ingredientBook" style="width: 100%;">
-        <div  class="bookOrganisation">
+        <div id="uiBookChapterParent">
+          <button id="ingredientBookBookFish" class="uiBookChapter pointerActivator">F</button>
+          <button id="ingredientBookBookMeat" class="uiBookChapter pointerActivator">M</button>
+          <button id="ingredientBookBookVegetable" class="uiBookChapter pointerActivator">V</button>
+          <button id="ingredientBookBookFruit" class="uiBookChapter pointerActivator">F</button>
+          <button id="ingredientBookBookMonsterPart" class="uiBookChapter pointerActivator">M</button>
+        </div>
+
+        <div id="fishOne"  class="bookOrganisation">
           <div class="leftPage">
             <p class="tittleBookSection">INGREDIENT</p>
 
-            <div class="fishTag pointerActivator sardinTag">
+            <div class="bookTag pointerActivator sardinTag">
               <img src="./inventory/sarding.png"  class=" fishIcon">
               <p>Sardin</p>
             </div>
-            <div class="fishTag pointerActivator crabTag">
+            <div class="bookTag pointerActivator crabTag">
               <img src="./inventory/crab.png" class=" fishIcon">
               <p>Crab</p>
             </div>
-            <div class="fishTag pointerActivator balloTag">
+            <div class="bookTag pointerActivator balloTag">
               <img src="./inventory/ballo.jpg" class=" fishIcon">
               <p>Ballo</p>
             </div>
-            <div class="fishTag pointerActivator bassTag">
+            <div class="bookTag pointerActivator bassTag">
               <img src="./inventory/bass.png" class=" fishIcon">
               <p>Bass</p>
             </div>
-            <div class="fishTag pointerActivator corkTag">
+            <div class="bookTag pointerActivator corkTag">
               <img src="./inventory/cork.png" class=" fishIcon">
               <p>Cork</p>
             </div>
-            <div class="fishTag pointerActivator octopusTag">
+            <div class="bookTag pointerActivator octopusTag">
               <img src="./inventory/octopus.png" class=" fishIcon">
               <p>Octopus</p>
             </div>
-          
           </div>
 
-          <div id="fishOne" class="rightPage">
+          <div class="rightPage">
             <p class="nameBookFish"></p>
             <p class="lvlBookFish"></p>
             <img class="ImgBookFish" src="">
             <p class="descriptionBookFish"></p>
           </div>
         </div>
+        <div id="meatOne"  class="bookOrganisation" style="display: none;">
+          <div class="leftPage">
+            <p class="tittleBookSection">INGREDIENT</p>
+          </div>
+
+          <div class="rightPage">
+            <p class="nameBook"></p>
+            <p class="lvlBook"></p>
+            <img class="ImgBook" src="">
+            <p class="descriptionBook"></p>
+          </div>
+        </div>
+        <div id="vegetableOne"  class="bookOrganisation" style="display: none;">
+          <div class="leftPage">
+            <p class="tittleBookSection">INGREDIENT</p>
+          
+          </div>
+
+          <div class="rightPage">
+            <p class="nameBook"></p>
+            <p class="lvlBook"></p>
+            <img class="ImgBook" src="">
+            <p class="descriptionBook"></p>
+          </div>
+        </div>
+        <div id="fruitOne"  class="bookOrganisation" style="display: none;">
+          <div class="leftPage">
+            <p class="tittleBookSection">INGREDIENT</p>
+          </div>
+
+          <div class="rightPage">
+            <p class="nameBook"></p>
+            <p class="lvlBook"></p>
+            <img class="ImgBook" src="">
+            <p class="descriptionBook"></p>
+          </div>
+        </div>
+        <div id="monsterPart"  class="bookOrganisation" style="display: none;">
+          <div class="leftPage">
+            <p class="tittleBookSection">INGREDIENT</p>
+            <div class="bookTag pointerActivator miniMushroomTag">
+              <img src="./inventory/miniMushroom.png"  class=" fishIcon">
+              <p>Mini Mushroom</p>
+            </div>
+            <div class="bookTag pointerActivator boneTag">
+              <img src="./inventory/bone.png" class=" fishIcon">
+              <p>Bone</p>
+            </div>
+            <div class="bookTag pointerActivator blanketTag">
+              <img src="./inventory/restfieldBlanket.png" class=" fishIcon">
+              <p>Blanket</p>
+            </div>
+            <div class="bookTag pointerActivator slimeTag">
+              <img src="./inventory/slimeGuts.png" class=" fishIcon">
+              <p>Slime</p>
+            </div>
+            <div class="bookTag pointerActivator treeLeafTag">
+              <img src="./inventory/treeLeaf.png" class=" fishIcon">
+              <p>Tree Leaf</p>
+            </div>
+          </div>
+
+          <div class="rightPage">
+            <p class="nameBookMonster nameBookFish"></p>
+            <p class="lvlBookMonster lvlBookFish"></p>
+            <img class="ImgBookMonster ImgBookFish" src="">
+            <p class="descriptionBookMonster descriptionBookFish"></p>
+          </div>
+        </div>
       </div>
 
       <div id="historyBook" style="width: 100%;">
         <div id="uiBookChapterParent">
-          <button id="historyBookCastelSide" class="uiBookChapter pointerActivator">Castel Side</button>
-          <button id="historyBookRestfield" class="uiBookChapter pointerActivator">Restfield Town</button>
+          <button id="historyBookCastelSide" class="uiBookChapter pointerActivator">C</button>
+          <button id="historyBookRestfield" class="uiBookChapter pointerActivator">R</button>
         </div>
         
         <div class="bookOrganisation">

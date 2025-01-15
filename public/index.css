@@ -548,12 +548,17 @@ body {
     background: url(./ui/uibookBackgroundTag.png);
     background-size: cover;
     /* position: absolute; */
+    display: flex;
     width: 45px;
     height: 50px;
     border: none;
-    padding: 15px;
+    /* padding: 15px; */
     font-size: 23px;
     color: #C0A58C;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    padding-top: 10px;
 }
 
 .nameBookFish{
@@ -575,7 +580,7 @@ body {
 .fishIcon{
     width: 70px;
 }
-.fishTag{
+.bookTag{
     display: flex;
     height: 5%;
    
@@ -588,7 +593,7 @@ body {
     transition: all .2s ease;
     color: black;
 }
-.fishTag:hover{
+.bookTag:hover{
     color: white;
     background-color: #C0A58C;
 }
