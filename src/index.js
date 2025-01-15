@@ -641,26 +641,14 @@ async function main() {
 
                     let staff;
 
-                    if (arrayOfNames.includes("solarGem")) {
-
-                        if (arrayOfRarity.includes("common")) {
-                            staff = solarStaffCommon;
-                        }
-                        
+                    if (arrayOfNames.includes("arcaneGem2")) {
+                        staff = arcaneLancerInv;    
                     }
                     else if (arrayOfNames.includes("arcaneGem")) {
-
-                        if (arrayOfRarity.includes("common")) {
-                            staff = arcaneStaffCommon;
-                        }
-                        
+                        staff = arcaneStaffCommon; 
                     }
-                    else if (arrayOfNames.includes("nuclearGem")) {
-
-                        if (arrayOfRarity.includes("common")) {
-                            staff = nuclearStaffCommon;
-                        }
-                        
+                    else if (arrayOfNames.includes("arcaneGem3")) {
+                        staff = arcaneRepeaterInv; 
                     }
                     
 
@@ -819,17 +807,17 @@ async function main() {
                             
                         }
                     }
-                    if (item === "gem") {
+                    if (item === "gemArcane") {
 
-                        if (number < 80) {
-                            player.inventory.push(solarGem);  
-                            io.to(socket.id).emit('obtained', solarGem);
-                        } else if (number >= 80 && number <= 98) {
-                            player.inventory.push(arcaneGem);                                           
+                        if (number < 60) {
+                            player.inventory.push(arcaneGem);  
                             io.to(socket.id).emit('obtained', arcaneGem);
+                        } else if (number >= 60 && number <= 80) {
+                            player.inventory.push(arcaneGem2);                                           
+                            io.to(socket.id).emit('obtained', arcaneGem2);
                         } else {
-                            player.inventory.push(nuclearGem);                                           
-                            io.to(socket.id).emit('obtained', nuclearGem);
+                            player.inventory.push(arcaneGem3);                                           
+                            io.to(socket.id).emit('obtained', arcaneGem3);
                         }
                     }
                     if (item === "mushroomTrial") {
@@ -1318,6 +1306,34 @@ const arcaneGem = {
     rarity: "common",
     image: "./inventory/arcaneGem.png",
 };
+const arcaneGem2 = {
+    type: "gem",
+    name: "arcaneGem2",
+    value: 10,
+    rarity: "uncommon",
+    image: "./inventory/arcaneGem2.png",
+};
+const arcaneGem3 = {
+    type: "gem",
+    name: "arcaneGem3",
+    value: 15,
+    rarity: "rare",
+    image: "./inventory/arcaneGem3.png",
+};
+const arcaneGem4 = {
+    type: "gem",
+    name: "arcaneGem4",
+    value: 20,
+    rarity: "rare",
+    image: "./inventory/arcaneGem4.png",
+};
+const arcaneGem5 = {
+    type: "gem",
+    name: "arcaneGem5",
+    value: 50,
+    rarity: "rare",
+    image: "./inventory/arcaneGem5.png",
+};
 const solarGem = {
     type: "gem",
     name: "solarGem",
@@ -1376,7 +1392,14 @@ const arcaneRepeaterInv = {
     name: "arcaneRepeaterInv",
     value: 30,
     rarity: "common",
-    image: "./inventory/arcaneRepeaterInv.gif",
+    image: "./inventory/arcaneRepeaterInv.png",
+};
+const arcaneLancerInv = {
+    type: "weapon",
+    name: "arcaneLancerInv",
+    value: 60,
+    rarity: "common",
+    image: "./inventory/arcaneLancerInv.gif",
 };
 const solarStaffCommon = {
     type: "weapon",
@@ -1626,6 +1649,10 @@ const restfieldZombieSoulInventory = {
 
 const itemsObj = {
     arcaneGem,
+    arcaneGem2,
+    arcaneGem3,
+    arcaneGem4,
+    arcaneGem5,
     solarGem,
     nuclearGem,
     commonFishStick,
@@ -1634,6 +1661,7 @@ const itemsObj = {
     commonFish,
     arcaneStaffCommon,
     arcaneRepeaterInv,
+    arcaneLancerInv,
     solarStaffCommon,
     nuclearStaffCommon,
     uncommonFish,
