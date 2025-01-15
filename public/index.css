@@ -599,7 +599,12 @@ body {
 }
 
 .descriptionBookHistory{
-text-align: justify;
+    text-align: justify;
+    font-size: 14px;
+    margin-top: 50px;
+    color: #000000cc;
+    line-height: 22px;
+    padding: 0 23px;
 }
 .ImgBookHistory{
     height: 100%;
