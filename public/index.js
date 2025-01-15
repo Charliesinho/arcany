@@ -2250,7 +2250,7 @@ function interactEquipment (item, index) {
 
     if (item.type === "weapon") {
 
-      if (myPlayer.inventory.length <= 8) {
+      if (myPlayer.inventory.length <= 20) {
 
           consumeAvailable = false;
 
@@ -3941,7 +3941,8 @@ window.addEventListener("keydown", (e) => {
   if(e.key === "e" && IslandChestAvailable & !IslandOpenChest) {
     const key = myPlayer.inventory.find(item => item.name === "chestKey");
     const chestKeyRestfield = myPlayer.inventory.find(item => (item.name === "chestKeyRestfield"));
-    console.log(currentChestItem, chestKeyRestfield)
+    const chestKeyCommon = myPlayer.inventory.find(item => (item.name === "chestKeyCommon"));
+
     if ((currentChestItem === "mushroomTrial") && !key) {
       areaNameDisplay("Trial Started")
       challengeAccepted.play()
@@ -3974,7 +3975,7 @@ window.addEventListener("keydown", (e) => {
         suspense1.play();
       }, 2000);
     } 
-    else {
+    else if (((currentChestItem === "restfieldTrial") && chestKeyRestfield) || ((currentChestItem === "mushroomTrial") && key) || chestKeyCommon) {
       IslandOpenChest = true;
       openShopAudio.play();
     }
@@ -4025,23 +4026,31 @@ let shooting = false;
 let mouseLeftPressed = false;
 let shootInterval;
 
+
 function shootDefaultArcane () {
-  const angle = angleMouse
+  let angle = angleMouse
   const audioShootNature = new Audio("./audios/shootNature.wav");
   audioShootNature.loop = false;
   audioShootNature.volume = 0.3;
   audioShootNature.play()
-    // socket.emit("projectile", angle);
-    cameraShake();
 
-  projectilesClient.push({
-    angle,
-    x: playerX + 20,
-    y: playerY + 50,
-    timeLeft: 20,
-    playerId: socket.id,
-    damage: 1,
-  }) 
+  // socket.emit("projectile", angle);
+  cameraShake();
+
+  console.log(myPlayer?.weapon[0])
+ 
+  for (let i = 1; i <= myPlayer?.weapon[0].bullets; i++) {
+    angle = i === 0 ? angle : i === 1 ? angle + 0.1 : i === 2 ? angle - 0.1 : i === 3 ? angle + 0.2 : angle - 0.2
+
+    projectilesClient.push({
+        angle,
+        x: playerX + 20,
+        y: playerY + 50,
+        timeLeft: myPlayer?.weapon[0].range,
+        playerId: socket.id,
+        damage: myPlayer?.weapon[0].damage,
+      }) 
+  }
 
   shooting = true;
 
@@ -4050,7 +4059,7 @@ function shootDefaultArcane () {
   }, 20);
 
   const interval = setInterval(() => {
-      if (mainSkillCooldown > 10) {
+      if (mainSkillCooldown > myPlayer?.weapon[0].fireRate) {
           mainSkillCooldown = 0;
           recoil = 0
           clearInterval(interval);
@@ -4158,7 +4167,8 @@ canvasLobby.addEventListener("mousedown", (e) => {
     if (shootingBlock === false) {
       if (myPlayer.weapon[0]) {
         if (mainSkillCooldown === 1 || mainSkillCooldown === 0) {  
-          if (myPlayer?.weapon[0].name === "arcaneStaffCommon") {
+          // console.log(myPlayer?.weapon[0].name)
+          if (myPlayer?.weapon[0].name.includes("arcane")) {
             shootDefaultArcane()
             shootInterval = setInterval(() => {
               if (mainSkillCooldown === 1 || mainSkillCooldown === 0) {
