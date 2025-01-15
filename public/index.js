@@ -521,7 +521,7 @@ const weaponBook = document.getElementById('weaponBook');
 const enchantingBook = document.getElementById('enchantingBook');
 
 const BookParent = document.getElementById('BookParent');
-
+const closeBookButton = document.querySelector('.closeBookButton')
 
 
 const sardinTag = document.querySelector('.sardinTag');
@@ -937,6 +937,10 @@ uiBooksEnchantingbook.addEventListener("click", function(){
   soulsAndClothesBook.style.display = "none"
   weaponBook.style.display = "none"
   enchantingBook.style.display = "flex"
+})
+
+closeBookButton.addEventListener("click", function(){
+  BookParent.style.display = 'none'
 })
 //UI BOOKBUTTON>
 
