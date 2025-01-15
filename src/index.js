@@ -808,67 +808,78 @@ async function main() {
                         }
                     }
                     if (item === "gemArcane") {
+                        const key = player.inventory.find(item => item.name === "chestKeyCommon");
 
-                        if (number < 60) {
-                            player.inventory.push(arcaneGem);  
-                            io.to(socket.id).emit('obtained', arcaneGem);
-                        } else if (number >= 60 && number <= 80) {
-                            player.inventory.push(arcaneGem2);                                           
-                            io.to(socket.id).emit('obtained', arcaneGem2);
-                        } else {
-                            player.inventory.push(arcaneGem3);                                           
-                            io.to(socket.id).emit('obtained', arcaneGem3);
+                        if (key) {
+                            player.inventory.splice(player.inventory.indexOf(key), 1);
+    
+                            if (number < 60) {
+                                player.inventory.push(arcaneGem);  
+                                io.to(socket.id).emit('obtained', arcaneGem);
+                            } else if (number >= 60 && number <= 80) {
+                                player.inventory.push(arcaneGem2);                                           
+                                io.to(socket.id).emit('obtained', arcaneGem2);
+                            } else {
+                                player.inventory.push(arcaneGem3);                                           
+                                io.to(socket.id).emit('obtained', arcaneGem3);
+                            }
                         }
                     }
                     if (item === "mushroomTrial") {
                         const key = player.inventory.find(item => item.name === "chestKey");
-                        player.inventory.splice(player.inventory.indexOf(key), 1);
 
-                        if (number < 30) {
-                            player.inventory.push(miniMushroom);  
-                            io.to(socket.id).emit('obtained', miniMushroom);
-                        } 
-                        else if (number >= 30 && number < 60) {
-                            player.inventory.push(arcaneStaffCommon);                                           
-                            io.to(socket.id).emit('obtained', arcaneStaffCommon);
-                        } 
-                        else if (number >= 60 && number < 80) {
-                            player.inventory.push(ballo);                                           
-                            io.to(socket.id).emit('obtained', octopus);
-                        } 
-                        else if (number >= 80 && number < 90) {
-                            player.inventory.push(mushroomClothesRed);                                           
-                            io.to(socket.id).emit('obtained', mushroomClothesRed);
-                        } 
-                        else {
-                            player.inventory.push(arcaneRepeaterInv);                                           
-                            io.to(socket.id).emit('obtained', arcaneRepeaterInv);
+                        if (key) {
+                            player.inventory.splice(player.inventory.indexOf(key), 1);
+    
+                            if (number < 30) {
+                                player.inventory.push(chestKeyCommon);  
+                                io.to(socket.id).emit('obtained', chestKeyCommon);
+                            } 
+                            else if (number >= 30 && number < 60) {
+                                player.inventory.push(arcaneStaffCommon);                                           
+                                io.to(socket.id).emit('obtained', arcaneStaffCommon);
+                            } 
+                            else if (number >= 60 && number < 80) {
+                                player.inventory.push(ballo);                                           
+                                io.to(socket.id).emit('obtained', octopus);
+                            } 
+                            else if (number >= 80 && number < 90) {
+                                player.inventory.push(mushroomClothesRed);                                           
+                                io.to(socket.id).emit('obtained', mushroomClothesRed);
+                            } 
+                            else {
+                                player.inventory.push(arcaneRepeaterInv);                                           
+                                io.to(socket.id).emit('obtained', arcaneRepeaterInv);
+                            }
                         }
                     }
                     if (item === "restfieldTrial") {
                         const key = player.inventory.find(item => item.name === "chestKeyRestfield");
-                        player.inventory.splice(player.inventory.indexOf(key), 1);
 
-                        if (number < 30) {
-                            player.inventory.push(skullHelmet);  
-                            io.to(socket.id).emit('obtained', skullHelmet);
-                        } 
-                        else if (number >= 30 && number < 60) {
-                            player.inventory.push(arcaneRepeaterInv);                                           
-                            io.to(socket.id).emit('obtained', arcaneRepeaterInv);
-                        } 
-                        else if (number >= 60 && number < 80) {
-                            player.inventory.push(octopus);                                           
-                            io.to(socket.id).emit('obtained', octopus);
-                        } 
-                        else if (number >= 80 && number < 90) {
-                            player.inventory.push(reaperInventory);                                           
-                            io.to(socket.id).emit('obtained', reaperInventory);
-                        } 
-                        else {
-                            player.souls.push(reaperSoulInventory);                 
-                            await Player.findOneAndUpdate({socket: socket.id}, {souls: player.souls}, {new: true});                          
-                            io.to(socket.id).emit('obtained', reaperSoulInventory);
+                        if (key) {
+                            player.inventory.splice(player.inventory.indexOf(key), 1);
+    
+                            if (number < 30) {
+                                player.inventory.push(skullHelmet);  
+                                io.to(socket.id).emit('obtained', skullHelmet);
+                            } 
+                            else if (number >= 30 && number < 60) {
+                                player.inventory.push(chestKeyCommon);                                           
+                                io.to(socket.id).emit('obtained', chestKeyCommon);
+                            } 
+                            else if (number >= 60 && number < 80) {
+                                player.inventory.push(octopus);                                           
+                                io.to(socket.id).emit('obtained', octopus);
+                            } 
+                            else if (number >= 80 && number < 90) {
+                                player.inventory.push(reaperInventory);                                           
+                                io.to(socket.id).emit('obtained', reaperInventory);
+                            } 
+                            else {
+                                player.souls.push(reaperSoulInventory);                 
+                                await Player.findOneAndUpdate({socket: socket.id}, {souls: player.souls}, {new: true});                          
+                                io.to(socket.id).emit('obtained', reaperSoulInventory);
+                            }
                         }
                     }
                     
@@ -1386,6 +1397,14 @@ const arcaneStaffCommon = {
     value: 30,
     rarity: "common",
     image: "./inventory/arcaneStaffCommon.png",
+
+    durability: 50,
+    damage: 1,
+    bullets: 1,
+    speed: 1,
+    range: 20,
+    fireRate: 10,
+    special: "none"
 };
 const arcaneRepeaterInv = {
     type: "weapon",
@@ -1393,6 +1412,14 @@ const arcaneRepeaterInv = {
     value: 30,
     rarity: "common",
     image: "./inventory/arcaneRepeaterInv.png",
+
+    durability: 50,
+    damage: 0.5,
+    bullets: 3,
+    speed: 1,
+    range: 10,
+    fireRate: 10,
+    special: "none"
 };
 const arcaneLancerInv = {
     type: "weapon",
@@ -1400,6 +1427,15 @@ const arcaneLancerInv = {
     value: 60,
     rarity: "common",
     image: "./inventory/arcaneLancerInv.gif",
+
+    durability: 50,
+    damage: 5,
+    bullets: 1,
+    speed: 2,
+    range: 30,
+    fireRate: 30,
+    special: "none"
+    
 };
 const solarStaffCommon = {
     type: "weapon",
@@ -1451,6 +1487,13 @@ const chestKey = {
     value: 30,
     rarity: "rare",
     image: "./inventory/chestKey.png",
+};
+const chestKeyCommon = {
+    type: "key",
+    name: "chestKeyCommon",
+    value: 30,
+    rarity: "rare",
+    image: "./inventory/chestKeyCommon.png",
 };
 const chestKeyRestfield = {
     type: "key",
@@ -1515,7 +1558,6 @@ const slimeGuts = {
     rarity: "rare",
     image: "./inventory/slimeGuts.png",
 };
-
  const restfieldBlanket = {
     type: "fish",
     name: "restfieldBlanket",
@@ -1670,6 +1712,7 @@ const itemsObj = {
     willowStick,
     chestKey,
     chestKeyRestfield,
+    chestKeyCommon,
     sardin,
     ballo,
     bass,
