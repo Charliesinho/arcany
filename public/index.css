@@ -505,12 +505,12 @@ body {
 }
 
 .bookOrganisation{
-    display: flex ;
-    padding: 40px 80px 75px 80px;
+    display: flex;
+    padding: 40px 70px 75px 70px;
     flex-direction: row;
-    width: 100%;
-    justify-content: space-around;
-    gap: 90px;
+    width: calc(100% - 70px - 70px);
+    justify-content: space-between;
+    gap: 75px;
 }
 .leftPage{
     width: 50%;
@@ -519,6 +519,7 @@ body {
     flex-direction: column;
     justify-content: flex-start;
     gap: 40px;
+    overflow: hidden;
 }
 .rightPage{
     position: relative;
@@ -533,33 +534,49 @@ body {
     color: #C0A58C;
     text-align: center;
 }
+#uiBookChapterParent{
+    position: absolute;
+    display: flex;
+    top: -50px;
+    left: 60px;
+    width: 50%;
+    gap: 15px;
+}
+.uiBookChapter{
+    background: url(./ui/uibookBackgroundTag.png);
+    background-size: cover;
+    /* position: absolute; */
+    width: 45px;
+    height: 50px;
+    border: none;
+    padding: 15px;
+    font-size: 23px;
+    color: #C0A58C;
+}
 
-.nameBook{
+.nameBookFish{
     font-size: 40px;
     color: #C0A58C;
     text-align: center;
 }
-.ImgBook{
+.ImgBookFish{
     display: flex;
     width: 300px;
     justify-self: center;
     margin: 30px 0px;
 }
-.descriptionBook{
+.descriptionBookFish{
     width: 90%;
     position: relative;
     text-align: justify;
 }
-.lvlBook{
-}
-
 .fishIcon{
     width: 70px;
 }
 .fishTag{
     display: flex;
     height: 5%;
-    width: 90%;
+   
     border: solid 2px #C0A58C;
     background-color: transparent;
     flex-direction: row;
@@ -569,12 +586,21 @@ body {
     transition: all .2s ease;
     color: black;
 }
-
 .fishTag:hover{
     color: white;
     background-color: #C0A58C;
 }
 
+.descriptionBookHistory{
+text-align: justify;
+}
+.ImgBookHistory{
+    height: 100%;
+    width: 200%;
+    position: relative;
+    right: 190px;
+    filter: sepia(1) contrast(0.7) brightness(1.2);
+}
 #deleteInventoryButton{
     display: flex;
     position: relative;
@@ -591,7 +617,7 @@ body {
     transition: all 0.5s ease;
     width: 45px;
     height: 45px;
-    z-index: 1;
+    z-index: 3;
 }
 .closeBookButton:hover{
     filter:none;
