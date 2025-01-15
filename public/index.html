@@ -319,14 +319,13 @@
   </div>
 
   <div id="BookParent">
+    <img class="closeBookButton pointerActivator" src="./ui/uiBookCloseIcon.png"></img>
 
       <div id="ingredientBook" style="width: 100%;">
-        
         <div  class="bookOrganisation">
-          <img class="closeBookButton pointerActivator" src="./ui/uiBookCloseIcon.png"></img>
           <div class="leftPage">
-
             <p class="tittleBookSection">INGREDIENT</p>
+
             <div class="fishTag pointerActivator sardinTag">
               <img src="./inventory/sarding.png"  class=" fishIcon">
               <p>Sardin</p>
@@ -355,19 +354,31 @@
           </div>
 
           <div id="fishOne" class="rightPage">
-            <p class="nameBook"></p>
-            <p class="lvlBook"></p>
-            <img class="ImgBook" src="">
-            <p class="descriptionBook"></p>
+            <p class="nameBookFish"></p>
+            <p class="lvlBookFish"></p>
+            <img class="ImgBookFish" src="">
+            <p class="descriptionBookFish"></p>
           </div>
-
         </div>
-
-       
       </div>
 
-      <div id="historyBook">
-        <p>history</p>
+      <div id="historyBook" style="width: 100%;">
+        <div id="uiBookChapterParent">
+          <button id="historyBookCastelSide" class="uiBookChapter pointerActivator">Castel Side</button>
+          <button id="historyBookRestfield" class="uiBookChapter pointerActivator">Restfield Town</button>
+        </div>
+        
+        <div class="bookOrganisation">
+          <div class="leftPage">
+            <p class="tittleBookSection">HISTORY</p>
+            <img class="ImgBookHistory">
+            
+          </div>
+          <div class="rightPage">
+            <p class="nameBookHistory nameBookFish"></p>
+            <p class="descriptionBookHistory"></p>
+          </div>
+        </div>
       </div>
 
       <div id="soulsAndClothesBook">

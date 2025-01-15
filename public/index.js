@@ -518,7 +518,27 @@ const logOutButton = document.getElementById('logOutButton');
 
 //UI BOOK<
 const ingredientBook = document.getElementById('ingredientBook');
+
+const sardinTag = document.querySelector('.sardinTag');
+const crabTag = document.querySelector('.crabTag');
+const balloTag = document.querySelector('.balloTag');
+const bassTag = document.querySelector('.bassTag');
+const corkTag = document.querySelector('.corkTag');
+const octopusTag = document.querySelector('.octopusTag');
+const nameBookFish = document.querySelector('.nameBookFish');
+const ImgBookFish = document.querySelector('.ImgBookFish');
+const descriptionBookFish = document.querySelector('.descriptionBookFish');
+const lvlBookFish = document.querySelector('.lvlBookFish');
+
 const historyBook = document.getElementById('historyBook');
+
+const historyBookCastelSide = document.getElementById('historyBookCastelSide')
+const historyBookRestfield = document.getElementById('historyBookRestfield')
+const nameBookHistory = document.querySelector('.nameBookHistory')
+const descriptionBookHistory = document.querySelector('.descriptionBookHistory')
+const ImgBookHistory = document.querySelector('.ImgBookHistory')
+
+
 const soulsAndClothesBook = document.getElementById('soulsAndClothesBook');
 const weaponBook = document.getElementById('weaponBook');
 const enchantingBook = document.getElementById('enchantingBook');
@@ -527,16 +547,8 @@ const BookParent = document.getElementById('BookParent');
 const closeBookButton = document.querySelector('.closeBookButton')
 
 
-const sardinTag = document.querySelector('.sardinTag');
-const crabTag = document.querySelector('.crabTag');
-const balloTag = document.querySelector('.balloTag');
-const bassTag = document.querySelector('.bassTag');
-const corkTag = document.querySelector('.corkTag');
-const octopusTag = document.querySelector('.octopusTag');
-const nameBook = document.querySelector('.nameBook');
-const ImgBook = document.querySelector('.ImgBook');
-const descriptionBook = document.querySelector('.descriptionBook');
-const lvlBook = document.querySelector('.lvlBook');
+
+
 
 //UI BOOK>
 
@@ -912,6 +924,7 @@ uiBooksHistory.addEventListener("click", function(){
   weaponBook.style.display = "none"
   enchantingBook.style.display = "none"
 })
+
 uiBooksSoulsAndClothes.addEventListener("click", function(){
 
   BookParent.style.display = 'flex'
@@ -1358,54 +1371,89 @@ let objFishes = {
   }
 };
 
+nameBookFish.innerHTML = objFishes["sardine"].name
+ImgBookFish.src = objFishes["sardine"].img
+descriptionBookFish.innerHTML = objFishes["sardine"].desc
+lvlBookFish.innerHTML = objFishes["sardine"].lvl
+
 sardinTag.addEventListener("click", (e) =>{
-  console.log("hello")
 let item = "sardine"
-nameBook.innerHTML = objFishes[item].name
-ImgBook.src = objFishes[item].img
-descriptionBook.innerHTML = objFishes[item].desc
-lvlBook.innerHTML = objFishes[item].lvl
+nameBookFish.innerHTML = objFishes[item].name
+ImgBookFish.src = objFishes[item].img
+descriptionBookFish.innerHTML = objFishes[item].desc
+lvlBookFish.innerHTML = objFishes[item].lvl
 });
 crabTag.addEventListener("click", (e) =>{
-  console.log("hello")
 let item = "crab"
-nameBook.innerHTML = objFishes[item].name
-ImgBook.src = objFishes[item].img
-descriptionBook.innerHTML = objFishes[item].desc
-lvlBook.innerHTML = objFishes[item].lvl
+nameBookFish.innerHTML = objFishes[item].name
+ImgBookFish.src = objFishes[item].img
+descriptionBookFish.innerHTML = objFishes[item].desc
+lvlBookFish.innerHTML = objFishes[item].lvl
 });
 balloTag.addEventListener("click", (e) =>{
-  console.log("hello")
 let item = "ballo"
-nameBook.innerHTML = objFishes[item].name
-ImgBook.src = objFishes[item].img
-descriptionBook.innerHTML = objFishes[item].desc
-lvlBook.innerHTML = objFishes[item].lvl
+nameBookFish.innerHTML = objFishes[item].name
+ImgBookFish.src = objFishes[item].img
+descriptionBookFish.innerHTML = objFishes[item].desc
+lvlBookFish.innerHTML = objFishes[item].lvl
 });
 bassTag.addEventListener("click", (e) =>{
-  console.log("hello")
 let item = "bass"
-nameBook.innerHTML = objFishes[item].name
-ImgBook.src = objFishes[item].img
-descriptionBook.innerHTML = objFishes[item].desc
-lvlBook.innerHTML = objFishes[item].lvl
+nameBookFish.innerHTML = objFishes[item].name
+ImgBookFish.src = objFishes[item].img
+descriptionBookFish.innerHTML = objFishes[item].desc
+lvlBookFish.innerHTML = objFishes[item].lvl
 });
 corkTag.addEventListener("click", (e) =>{
-  console.log("hello")
 let item = "cork"
-nameBook.innerHTML = objFishes[item].name
-ImgBook.src = objFishes[item].img
-descriptionBook.innerHTML = objFishes[item].desc
-lvlBook.innerHTML = objFishes[item].lvl
+nameBookFish.innerHTML = objFishes[item].name
+ImgBookFish.src = objFishes[item].img
+descriptionBookFish.innerHTML = objFishes[item].desc
+lvlBookFish.innerHTML = objFishes[item].lvl
 });
 octopusTag.addEventListener("click", (e) =>{
-  console.log("hello")
 let item = "octopus"
-nameBook.innerHTML = objFishes[item].name
-ImgBook.src = objFishes[item].img
-descriptionBook.innerHTML = objFishes[item].desc
-lvlBook.innerHTML = objFishes[item].lvl
+nameBookFish.innerHTML = objFishes[item].name
+ImgBookFish.src = objFishes[item].img
+descriptionBookFish.innerHTML = objFishes[item].desc
+lvlBookFish.innerHTML = objFishes[item].lvl
 });
+
+let objHistory = {
+  castelSide: {
+    name: "CASTEL SIDE",
+    history: `After all the critical citizens were exiled to Antarctica, chaos consumed the civilization left behind. Panic spread like wildfire as the remaining people felt abandoned, left to face their fate. The corrosion of Arcane magic had ravaged and corrupted mechanisms essential to industrial life. With these processes rendered useless, people were forced to reconnect with nature, learning once again how to live off the land. Over time, abandoned castles and temples became sanctuaries, repopulated as small, peaceful civilizations began to thrive.The Arcane corruption grew stronger the farther north one ventured. In response, people migrated southward. Before reaching the southern coast, they discovered a serene, vibrant forest, its lush grass and small trees blanketing the land around an imposing, ancient castle.The leader of the first expedition, Rupheos, chose this castle as their refuge, naming the area “The Grasslands.” From the castle's towering heights, the trees and grass seemed to blend into a seamless green expanse, a sight both calming and majestic.Years passed, and Rupheos was crowned King of the Grasslands. His love for the land and tireless efforts to rebuild society earned him the admiration of his people. Under his guidance, a flourishing community emerged, enduring for decades. But one fateful night...` ,
+    img: "./ui/uiBooks/historyBookContent/castleSideLore.png",
+  },
+  restfield: {
+    name: "RESTFIELD",
+    history: `The Castle of the Grasslands towered over the land, a vigilant guardian under the rule of King Rupheos.
+Though his reign was just, it was not without dissent. Rupheos showed no mercy to criminals, a stern stance in a land rife with lawlessness. One seemingly ordinary night, the criminals struck. Armed with explosives, they tore through the castle walls, slaughtering soldiers and civilians who dared to resist. They stormed into the king’s chamber, capturing Rupheos. With a blade pressed to his throat, the gang leader growled, his voice laced with venom:
+“Remember my name, Rupheos. It was Sokon who killed you.” As the knife pressed harder against his neck, a sudden purple light pierced the chamber through the window, bathing it in an otherworldly glow. “The sky... it’s purple?” one of the criminals murmured in disbelief.
+Mere moments later, a deafening explosion erupted in the nearby forest, shaking the earth violently. The tremor brought half of the chamber crashing down. Clinging to a column, Rupheos barely held his footing, while Sokon lost his grip and plummeted to his death. He landed on a strange, glowing purple crystal. The moment his body struck it, the crystal shattered, consuming him in a blinding flash before vanishing without a trace.
+From that night on, the castle's cemetery became a place of dread. Corpses, skeletons, and restless spirits stirred, rising from their graves. Sokon’s tomb, along with those of his gang, was built far to the north, isolated from the rest.
+Even now, whispers are said to drift from that cursed ground, carried on the wind to those brave—or foolish—enough to linger.`,
+    img: "./ui/uiBooks/historyBookContent/restfieldLore.jpeg",
+  }
+}
+  nameBookHistory.innerHTML = objHistory["castelSide"].name
+  descriptionBookHistory.innerHTML = objHistory["castelSide"].history
+  ImgBookHistory.src = objHistory["castelSide"].img
+  
+historyBookCastelSide.addEventListener("click", (e) =>{
+  let item = "castelSide"
+  nameBookHistory.innerHTML = objHistory[item].name
+  descriptionBookHistory.innerHTML = objHistory[item].history
+  ImgBookHistory.src = objHistory[item].img
+})
+
+historyBookRestfield.addEventListener("click", (e) =>{
+  let item = "restfield"
+  console.log(objHistory[item], item)
+  nameBookHistory.innerHTML = objHistory[item].name
+  descriptionBookHistory.innerHTML = objHistory[item].history
+  ImgBookHistory.src = objHistory[item].img
+})
 
 let deleting = false;
 
