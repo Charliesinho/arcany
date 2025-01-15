@@ -514,7 +514,17 @@ menuUiProfile.style.height = window.innerHeight;
 const logOutButton = document.getElementById('logOutButton');
 
 //UI BOOK<
-const ingredientBook = document.getElementById('ingredientBook');
+  const ingredientBook = document.getElementById('ingredientBook');
+const ingredientBookBookFish = document.getElementById('ingredientBookBookFish');
+const ingredientBookBookMeat = document.getElementById('ingredientBookBookMeat');
+const ingredientBookBookVegetable = document.getElementById('ingredientBookBookVegetable');
+const ingredientBookBookFruit = document.getElementById('ingredientBookBookFruit');
+const ingredientBookBookMonsterPart = document.getElementById('ingredientBookBookMonsterPart');
+
+const fishOne = document.getElementById('fishOne');
+const meatOne = document.getElementById('meatOne');
+const vegetableOne = document.getElementById('vegetableOne');
+const fruitOne = document.getElementById('fruitOne');
 
 const sardinTag = document.querySelector('.sardinTag');
 const crabTag = document.querySelector('.crabTag');
@@ -522,13 +532,25 @@ const balloTag = document.querySelector('.balloTag');
 const bassTag = document.querySelector('.bassTag');
 const corkTag = document.querySelector('.corkTag');
 const octopusTag = document.querySelector('.octopusTag');
+
+const miniMushroomTag = document.querySelector('.miniMushroomTag');
+const boneTag = document.querySelector('.boneTag');
+const blanketTag = document.querySelector('.blanketTag');
+const slimeTag = document.querySelector('.slimeTag');
+const treeLeafTag = document.querySelector('.treeLeafTag');
+
 const nameBookFish = document.querySelector('.nameBookFish');
 const ImgBookFish = document.querySelector('.ImgBookFish');
 const descriptionBookFish = document.querySelector('.descriptionBookFish');
 const lvlBookFish = document.querySelector('.lvlBookFish');
 
-const historyBook = document.getElementById('historyBook');
+const nameBookMonster = document.querySelector('.nameBookMonster');
+const ImgBookMonster = document.querySelector('.ImgBookMonster');
+const descriptionBookMonster = document.querySelector('.descriptionBookMonster');
+const lvlBookMonster = document.querySelector('.lvlBookMonster');
 
+
+  const historyBook = document.getElementById('historyBook');
 const historyBookCastelSide = document.getElementById('historyBookCastelSide')
 const historyBookRestfield = document.getElementById('historyBookRestfield')
 const nameBookHistory = document.querySelector('.nameBookHistory')
@@ -1326,8 +1348,149 @@ function cameraShake() {
         counter++;
         cameraShakeX = Math.floor(Math.random() * (-140 - -160 + 1)) + -160;
         cameraShakeY = Math.floor(Math.random() * (-170 - -190 + 1)) + -190;
-    }, 30)
+      }, 30)
 };
+  
+
+ingredientBookBookFish.addEventListener("click", (e) =>{
+  fishOne.style.display = "flex"
+  meatOne.style.display = "none"
+  vegetableOne.style.display = "none"
+  fruitOne.style.display = "none"
+  monsterPart.style.display = "none"
+
+  ingredientBookBookFish.style.color = 'black'
+  ingredientBookBookMeat.style.color = '#C0A58C'
+  ingredientBookBookVegetable.style.color = '#C0A58C'
+  ingredientBookBookMonsterPart.style.color = '#C0A58C'
+  ingredientBookBookFruit.style.color = '#C0A58C'
+});
+ingredientBookBookMeat.addEventListener("click", (e) =>{
+  fishOne.style.display = "none"
+  meatOne.style.display = "flex"
+  vegetableOne.style.display = "none"
+  fruitOne.style.display = "none"
+  monsterPart.style.display = "none"
+
+  ingredientBookBookFish.style.color = '#C0A58C'
+  ingredientBookBookMeat.style.color = 'black'
+  ingredientBookBookVegetable.style.color = '#C0A58C'
+  ingredientBookBookMonsterPart.style.color = '#C0A58C'
+  ingredientBookBookFruit.style.color = '#C0A58C'
+});
+ingredientBookBookVegetable.addEventListener("click", (e) =>{
+  fishOne.style.display = "none"
+  meatOne.style.display = "none"
+  vegetableOne.style.display = "flex"
+  fruitOne.style.display = "none"
+  monsterPart.style.display = "none"
+
+  ingredientBookBookFish.style.color = '#C0A58C'
+  ingredientBookBookMeat.style.color = '#C0A58C'
+  ingredientBookBookVegetable.style.color = 'black'
+  ingredientBookBookMonsterPart.style.color = '#C0A58C'
+  ingredientBookBookFruit.style.color = '#C0A58C'
+});
+ingredientBookBookFruit.addEventListener("click", (e) =>{
+  fishOne.style.display = "none"
+  meatOne.style.display = "none"
+  vegetableOne.style.display = "none"
+  fruitOne.style.display = "flex"
+  monsterPart.style.display = "none"
+
+  ingredientBookBookFish.style.color = '#C0A58C'
+  ingredientBookBookMeat.style.color = '#C0A58C'
+  ingredientBookBookVegetable.style.color = '#C0A58C'
+  ingredientBookBookMonsterPart.style.color = '#C0A58C'
+  ingredientBookBookFruit.style.color = 'black'
+});
+ingredientBookBookMonsterPart.addEventListener("click", (e) =>{
+  fishOne.style.display = "none"
+  meatOne.style.display = "none"
+  vegetableOne.style.display = "none"
+  fruitOne.style.display = "none"
+  monsterPart.style.display = "flex"
+
+  ingredientBookBookFish.style.color = '#C0A58C'
+  ingredientBookBookMeat.style.color = '#C0A58C'
+  ingredientBookBookVegetable.style.color = '#C0A58C'
+  ingredientBookBookMonsterPart.style.color = 'black'
+  ingredientBookBookFruit.style.color = '#C0A58C'
+});
+
+let objMonsterPart = {
+  miniMushroom: {
+    name: "MINI MUSHROOM",
+    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    lvl: "LEVEL REQUIRED 1",
+    img: "./inventory/miniMushroom.png"
+  },
+  bone: {
+    name: "BONE",
+    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    lvl: "LEVEL REQUIRED 1",
+    img: "./inventory/bone.png"
+  },
+  blanket: {
+    name: "BLANKET",
+    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    lvl: "LEVEL REQUIRED 2",
+    img: "./inventory/restfieldBlanket.png"
+  },
+  slime: {
+    name: "SLIME",
+    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    lvl: "LEVEL REQUIRED 3",
+    img: "./inventory/slimeGuts.png"
+  },
+  treeLeaf: {
+    name: "TREE MEAF",
+    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    lvl: "LEVEL REQUIRED 3",
+    img: "./inventory/treeLeaf.png"
+  },
+};
+nameBookMonster.innerHTML = objMonsterPart["miniMushroom"].name
+  ImgBookMonster.src = objMonsterPart["miniMushroom"].img
+  descriptionBookMonster.innerHTML = objMonsterPart["miniMushroom"].desc
+  lvlBookMonster.innerHTML = objMonsterPart["miniMushroom"].lvl
+  ingredientBookBookFish.style.color = 'black'
+
+miniMushroomTag.addEventListener("click", (e) =>{
+  let item = "miniMushroom"
+  nameBookMonster.innerHTML = objMonsterPart[item].name
+  ImgBookMonster.src = objMonsterPart[item].img
+  descriptionBookMonster.innerHTML = objMonsterPart[item].desc
+  lvlBookMonster.innerHTML = objMonsterPart[item].lvl
+});
+boneTag.addEventListener("click", (e) =>{
+  let item = "bone"
+  nameBookMonster.innerHTML = objMonsterPart[item].name
+  ImgBookMonster.src = objMonsterPart[item].img
+  descriptionBookMonster.innerHTML = objMonsterPart[item].desc
+  lvlBookMonster.innerHTML = objMonsterPart[item].lvl
+});
+blanketTag.addEventListener("click", (e) =>{
+  let item = "blanket"
+  nameBookMonster.innerHTML = objMonsterPart[item].name
+  ImgBookMonster.src = objMonsterPart[item].img
+  descriptionBookMonster.innerHTML = objMonsterPart[item].desc
+  lvlBookMonster.innerHTML = objMonsterPart[item].lvl
+});
+slimeTag.addEventListener("click", (e) =>{
+  let item = "slime"
+  nameBookMonster.innerHTML = objMonsterPart[item].name
+  ImgBookMonster.src = objMonsterPart[item].img
+  descriptionBookMonster.innerHTML = objMonsterPart[item].desc
+  lvlBookMonster.innerHTML = objMonsterPart[item].lvl
+});
+treeLeafTag.addEventListener("click", (e) =>{
+  let item = "treeLeaf"
+  nameBookMonster.innerHTML = objMonsterPart[item].name
+  ImgBookMonster.src = objMonsterPart[item].img
+  descriptionBookMonster.innerHTML = objMonsterPart[item].desc
+  lvlBookMonster.innerHTML = objMonsterPart[item].lvl
+});
 
 let objFishes = {
   sardine: {
@@ -1367,11 +1530,11 @@ let objFishes = {
     img: "./inventory/octopus.png"
   }
 };
-
 nameBookFish.innerHTML = objFishes["sardine"].name
 ImgBookFish.src = objFishes["sardine"].img
 descriptionBookFish.innerHTML = objFishes["sardine"].desc
 lvlBookFish.innerHTML = objFishes["sardine"].lvl
+
 
 sardinTag.addEventListener("click", (e) =>{
 let item = "sardine"
@@ -1436,12 +1599,16 @@ Even now, whispers are said to drift from that cursed ground, carried on the win
   nameBookHistory.innerHTML = objHistory["castelSide"].name
   descriptionBookHistory.innerHTML = objHistory["castelSide"].history
   ImgBookHistory.src = objHistory["castelSide"].img
-  
+  historyBookCastelSide.style.color = 'black'
+
 historyBookCastelSide.addEventListener("click", (e) =>{
   let item = "castelSide"
   nameBookHistory.innerHTML = objHistory[item].name
   descriptionBookHistory.innerHTML = objHistory[item].history
   ImgBookHistory.src = objHistory[item].img
+
+  historyBookCastelSide.style.color = 'black'
+  historyBookRestfield.style.color = '#C0A58C'
 })
 
 historyBookRestfield.addEventListener("click", (e) =>{
@@ -1450,6 +1617,9 @@ historyBookRestfield.addEventListener("click", (e) =>{
   nameBookHistory.innerHTML = objHistory[item].name
   descriptionBookHistory.innerHTML = objHistory[item].history
   ImgBookHistory.src = objHistory[item].img
+
+  historyBookCastelSide.style.color = '#C0A58C'
+  historyBookRestfield.style.color = 'black'
 })
 
 let deleting = false;
