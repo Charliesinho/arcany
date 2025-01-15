@@ -583,6 +583,20 @@ body {
     height: 60px;
 }
 
+.closeBookButton{
+    position: absolute;
+    top: 35px;
+    right: 70px;
+    filter: sepia() brightness(2.6);
+    transition: all 0.5s ease;
+    width: 45px;
+    height: 45px;
+    z-index: 1;
+}
+.closeBookButton:hover{
+    filter:none;
+}
+
 /* INVENTORY > */
 #uiSoulCollection{
     display: none;
