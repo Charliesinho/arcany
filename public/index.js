@@ -3578,12 +3578,37 @@ socket.on("player", (serverPlayer) => {
         equippedItems[`soul`].style.background = `url(${item.image})`;
         equippedItems[`soul`].style.backgroundSize = 'cover';
 
-        if (item.name === "frog") {
-          uiSkinsImg.src = "./ui/uiSkins/uiFrogSkin.png";
+        if (item.name === "frogSoulInventory") {
+          uiSkinsImg.src = "./ui/uiSkins/uiFrogSkin.gif";
+        } 
+        else if (item.name === "redDemonSoulInventory") {
+          uiSkinsImg.src = "./ui/uiSkins/uiDemonSkin.gif";
         }
+        else if (item.name === "restfieldSkeletonSoulInventory") {
+          uiSkinsImg.src = "./ui/uiSkins/uiSkeletonSkin.gif";
+        }
+        else if (item.name === "restfieldZombieSoulInventory") {
+          uiSkinsImg.src = "./ui/uiSkins/uiZombieSkin.gif";
+        }
+        else if (item.name === "vampiresSoulInventory") {
+          uiSkinsImg.src = "./ui/uiSkins/uiVampiresSkin.gif";
+        }
+        else if (item.name === "pinkDemonSoulInventory") {
+          uiSkinsImg.src = "./ui/uiSkins/uiPinkSkin.gif";
+        }
+        else if (item.name === "arcanyDemonSoulInventory") {
+          uiSkinsImg.src = "./ui/uiSkins/uiPurpleSkin.gif";
+        }
+        else if (item.name === "reaperSoulInventory") {
+          uiSkinsImg.src = "./ui/uiSkins/uiReaperSkin.gif";
+        }
+        else if (item.name === "ghostSoulInventory") {
+          uiSkinsImg.src = "./ui/uiSkins/uiGhostSkin.gif";
+        }
+        
         }
         } else {
-        uiSkinsImg.src = "./ui/uiSkins/uiHumanSkin.png"
+          uiSkinsImg.src = "./ui/uiSkins/uiHumanSkin.gif"
         }
 
 

@@ -1104,7 +1104,7 @@ async function main() {
                     await pushItem(fishermanClothes, socket)
                     await pushItem(blackVampiresClothes, socket)
 
-                    await Player.findOneAndUpdate({socket: socket.id}, {souls: [restfieldSkeletonSoulInventory, ghostSoulInventory, restfieldZombieSoulInventory, redDemonSoulInventory, pinkDemonSoulInventory]}, {new: true});
+                    await Player.findOneAndUpdate({socket: socket.id}, {souls: [restfieldSkeletonSoulInventory, ghostSoulInventory, restfieldZombieSoulInventory, redDemonSoulInventory, pinkDemonSoulInventory, frogSoulInventory,arcanyDemonSoulInventory,vampiresSoulInventory,reaperSoulInventory]}, {new: true});
                     const playerData = await Player.findOne({username: username}).exec();
 
                     myPlayer[socket.id] = playerData;
