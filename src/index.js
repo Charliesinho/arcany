@@ -786,7 +786,10 @@ async function main() {
                 if (player.inventory.length <= 21) {
                     
                     if (item === "stick") {
+                        const key = player.inventory.find(item => item.name === "chestKeyCommon");
 
+                        if (key) {
+                            player.inventory.splice(player.inventory.indexOf(key), 1);
                         if (number < 80) {
                             player.inventory.push(stick);  
                             io.to(socket.id).emit('obtained', stick);
@@ -794,6 +797,7 @@ async function main() {
                             player.inventory.push(willowStick);                                           
                             io.to(socket.id).emit('obtained', willowStick);
                             
+                        }
                         }
                     }
                     if (item === "baseWeapon") {
@@ -1103,6 +1107,7 @@ async function main() {
 
                     await pushItem(fishermanClothes, socket)
                     await pushItem(blackVampiresClothes, socket)
+                    await pushItem(chestKeyCommon, socket)
 
                     await Player.findOneAndUpdate({socket: socket.id}, {souls: [restfieldSkeletonSoulInventory, ghostSoulInventory, restfieldZombieSoulInventory, redDemonSoulInventory, pinkDemonSoulInventory]}, {new: true});
                     const playerData = await Player.findOne({username: username}).exec();
