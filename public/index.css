@@ -616,10 +616,21 @@ body {
     width: calc(100% - 80px);
     padding: 45px 0px 45px 40px;
 }
-.uibooks{
+.uibooks {
     display: flex;
     width: 80px;
     height: 100px;
+    box-shadow: 5px 5px #0000003d;
+    position: relative;
+    top: 0px;
+    left: 0px;
+    transition: all .2s ease;
+}
+
+.uibooks:hover {
+    box-shadow: 10px 10px #0000003d;
+    top: -5px;
+    left: -5px;
 }
 
 /* UI DEVELOPPER ORGANISATION */
@@ -2229,12 +2240,13 @@ body {
     /* height: 90px; */
     position: relative;
     top: 0;
-    transform: rotateX(0deg) rotateY(0deg);
     transition: all .2s ease;
+    ox-shadow: inset -10px -10px rgb(192, 165, 140), 2px 2px rgb(192, 165, 140);
 }
 
 .questCardImage:hover {
-    transform: rotateX(10deg) rotateY(20deg);
+    top: -5px;
+    box-shadow: inset -10px -10px rgb(192, 165, 140), 5px 7px rgb(192, 165, 140);
 }
 
 .questInfo {
