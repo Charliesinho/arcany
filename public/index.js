@@ -265,6 +265,9 @@ questStartImg.src = "./Textures/questStartImg.png";
 const arcaneRepeater = new Image();
 arcaneRepeater.src = "./inventory/arcaneRepeater.png";
 
+const arcaneLancer = new Image();
+arcaneLancer.src = "./inventory/arcaneLancer.png";
+
 const nuclearStaffCommon = new Image();
 nuclearStaffCommon.src = "nuclearStaffCommon.png";
 
@@ -4054,7 +4057,43 @@ function shootArcaneRepeater () {
   }, 20);
 
   const interval = setInterval(() => {
-      if (mainSkillCooldown > 5) {
+      if (mainSkillCooldown > 10) {
+          mainSkillCooldown = 0;
+          recoil = 0
+          clearInterval(interval);
+      }
+      mainSkillCooldown++;
+      recoil += recoil > 9 ? 0 : 3;
+  }, 20);
+}
+
+function shootArcaneLancer () {
+  const angle = angleMouse
+  const audioShootNature = new Audio("./audios/shootNature.wav");
+  audioShootNature.loop = false;
+  audioShootNature.volume = 0.3;
+  audioShootNature.play()
+  // socket.emit("projectile", angle);
+  cameraShake();
+
+  projectilesClient.push({
+    angle,
+    x: playerX + 20,
+    y: playerY + 50,
+    timeLeft: 30,
+    playerId: socket.id,
+    damage: 5,
+  }) 
+
+  
+  shooting = true;
+  
+  setTimeout(() => {
+    shooting = false;
+  }, 20);
+  
+  const interval = setInterval(() => {
+      if (mainSkillCooldown > 30) {
           mainSkillCooldown = 0;
           recoil = 0
           clearInterval(interval);
@@ -4138,6 +4177,14 @@ canvasLobby.addEventListener("mousedown", (e) => {
             shootInterval = setInterval(() => {
               if (mainSkillCooldown === 1 || mainSkillCooldown === 0) {
                 shootArcaneRepeater()
+              }
+            }, 100)
+            }
+            else if (myPlayer?.weapon[0].name === "arcaneLancerInv") {
+            shootArcaneLancer()
+            shootInterval = setInterval(() => {
+              if (mainSkillCooldown === 1 || mainSkillCooldown === 0) {
+                shootArcaneLancer()
               }
             }, 100)
             }
@@ -10646,7 +10693,7 @@ let mapsInfo = {
       },
       {
         "type": "chest",
-        "item": "baseWeapon",
+        "item": "gemArcane",
         "x": 1994,
         "y": 1825.5,
         "width": 225,
@@ -28626,6 +28673,7 @@ let originalMapsInfo = {
     areaSounds: grassLandsSoundtrack,
     backgroundImage: slimeForestPath,
     foregroundImage: slimeForestPathFront,
+    foregroundImageOpen: slimeForestPathFront,
     backgroundImageOpen: slimeForestPathOpen,
     playerPos: {
       x: 1935,
@@ -28661,7 +28709,7 @@ let originalMapsInfo = {
       },
       {
         "type": "chest",
-        "item": "baseWeapon",
+        "item": "gemArcane",
         "x": 1994,
         "y": 1825.5,
         "width": 225,
@@ -31749,6 +31797,7 @@ let originalMapsInfo = {
     backgroundImage: restfieldPath,
     foregroundImage: restfieldPathFront,
     backgroundImageOpen: restfieldPathOpen,
+    foregroundImageOpen: restfieldPathFrontOpen,
     
     playerPos: {
       x: 3900,
@@ -42254,6 +42303,9 @@ function drawPlayerWeaponOut (player) {
     else if (player.weapon[0].name === "arcaneRepeaterInv") {
       canvas.drawImage(arcaneRepeater ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
     }
+    else if (player.weapon[0].name === "arcaneLancerInv") {
+      canvas.drawImage(arcaneLancer ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
+    }
     
     canvas.restore();
   }
@@ -42377,7 +42429,7 @@ function drawLocalBullets () {
         canvas.drawImage(bulletStick, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
         push360Particles("red", 1, projectile.x + 20, projectile.y - 50)
       }
-      if (myPlayer?.weapon[0]?.name === "arcaneStaffCommon" || myPlayer?.weapon[0]?.name === "arcaneRepeaterInv") {
+      if (myPlayer?.weapon[0]?.name === "arcaneStaffCommon" || myPlayer?.weapon[0]?.name === "arcaneRepeaterInv" || myPlayer?.weapon[0]?.name === "arcaneLancerInv") {
         canvas.drawImage(bulletStickBlue, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
         push360Particles("purple", 1, projectile.x + 20, projectile.y - 50)
       }
