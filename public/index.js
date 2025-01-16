@@ -524,6 +524,10 @@ const ingredientBookBookVegetable = document.getElementById('ingredientBookBookV
 const ingredientBookBookFruit = document.getElementById('ingredientBookBookFruit');
 const ingredientBookBookMonsterPart = document.getElementById('ingredientBookBookMonsterPart');
 
+const enchantingBookBookArcany = document.getElementById('enchantingBookBookArcany');
+const enchantingBookBookSolar = document.getElementById('enchantingBookBookSolar');
+const enchantingBookBookNuclear = document.getElementById('enchantingBookBookNuclear');
+
 const fishOne = document.getElementById('fishOne');
 const meatOne = document.getElementById('meatOne');
 const vegetableOne = document.getElementById('vegetableOne');
@@ -542,6 +546,19 @@ const blanketTag = document.querySelector('.blanketTag');
 const slimeTag = document.querySelector('.slimeTag');
 const treeLeafTag = document.querySelector('.treeLeafTag');
 
+const gemOneTag = document.querySelector('.gemOneTag');
+const gemTwoTag = document.querySelector('.gemTwoTag');
+const gemThreeTag = document.querySelector('.gemThreeTag');
+const gemFourTag = document.querySelector('.gemFourTag');
+const gemFiveTag = document.querySelector('.gemFiveTag');
+
+const runeRangeTag = document.querySelector('.runeRangeTag');
+const runeFireRateTag = document.querySelector('.runeFireRateTag');
+const runeBulletsTag = document.querySelector('.runeBulletsTag');
+
+const miniCommonMeatTag = document.querySelector('.miniCommonMeatTag');
+const commonMeatTag = document.querySelector('.commonMeatTag');
+
 const nameBookFish = document.querySelector('.nameBookFish');
 const ImgBookFish = document.querySelector('.ImgBookFish');
 const descriptionBookFish = document.querySelector('.descriptionBookFish');
@@ -551,6 +568,22 @@ const nameBookMonster = document.querySelector('.nameBookMonster');
 const ImgBookMonster = document.querySelector('.ImgBookMonster');
 const descriptionBookMonster = document.querySelector('.descriptionBookMonster');
 const lvlBookMonster = document.querySelector('.lvlBookMonster');
+
+const nameBookMeat = document.querySelector('.nameBookMeat');
+const ImgBookMeat = document.querySelector('.ImgBookMeat');
+const descriptionBookMeat = document.querySelector('.descriptionBookMeat');
+const lvlBookMeat = document.querySelector('.lvlBookMeat');
+
+const nameBookWeapon = document.querySelector('.nameBookWeapon');
+const ImgBookWeapon = document.querySelector('.ImgBookWeapon');
+const descriptionBookWeapon = document.querySelector('.descriptionBookWeapon');
+const lvlBookWeapon = document.querySelector('.lvlBookWeapon');
+
+const nameBookEnchantment = document.querySelector('.nameBookEnchantment');
+const ImgBookEnchantment = document.querySelector('.ImgBookEnchantment');
+const descriptionBookEnchantment = document.querySelector('.descriptionBookEnchantment');
+const lvlBookEnchantment = document.querySelector('.lvlBookEnchantment');
+const enchantmentBook = document.querySelector('.enchantmentBook');
 
 
   const historyBook = document.getElementById('historyBook');
@@ -1369,68 +1402,87 @@ function cameraShake() {
 ingredientBookBookFish.addEventListener("click", (e) =>{
   fishOne.style.display = "flex"
   meatOne.style.display = "none"
-  vegetableOne.style.display = "none"
-  fruitOne.style.display = "none"
+  // vegetableOne.style.display = "none"
+  // fruitOne.style.display = "none"
   monsterPart.style.display = "none"
 
-  ingredientBookBookFish.style.color = 'black'
-  ingredientBookBookMeat.style.color = '#C0A58C'
-  ingredientBookBookVegetable.style.color = '#C0A58C'
-  ingredientBookBookMonsterPart.style.color = '#C0A58C'
-  ingredientBookBookFruit.style.color = '#C0A58C'
 });
 ingredientBookBookMeat.addEventListener("click", (e) =>{
   fishOne.style.display = "none"
   meatOne.style.display = "flex"
-  vegetableOne.style.display = "none"
-  fruitOne.style.display = "none"
+  // vegetableOne.style.display = "none"
+  // fruitOne.style.display = "none"
   monsterPart.style.display = "none"
-
-  ingredientBookBookFish.style.color = '#C0A58C'
-  ingredientBookBookMeat.style.color = 'black'
-  ingredientBookBookVegetable.style.color = '#C0A58C'
-  ingredientBookBookMonsterPart.style.color = '#C0A58C'
-  ingredientBookBookFruit.style.color = '#C0A58C'
 });
-ingredientBookBookVegetable.addEventListener("click", (e) =>{
-  fishOne.style.display = "none"
-  meatOne.style.display = "none"
-  vegetableOne.style.display = "flex"
-  fruitOne.style.display = "none"
-  monsterPart.style.display = "none"
+// ingredientBookBookVegetable.addEventListener("click", (e) =>{
+//   fishOne.style.display = "none"
+//   meatOne.style.display = "none"
+//   vegetableOne.style.display = "flex"
+//   fruitOne.style.display = "none"
+//   monsterPart.style.display = "none"
 
-  ingredientBookBookFish.style.color = '#C0A58C'
-  ingredientBookBookMeat.style.color = '#C0A58C'
-  ingredientBookBookVegetable.style.color = 'black'
-  ingredientBookBookMonsterPart.style.color = '#C0A58C'
-  ingredientBookBookFruit.style.color = '#C0A58C'
-});
-ingredientBookBookFruit.addEventListener("click", (e) =>{
-  fishOne.style.display = "none"
-  meatOne.style.display = "none"
-  vegetableOne.style.display = "none"
-  fruitOne.style.display = "flex"
-  monsterPart.style.display = "none"
+//   ingredientBookBookFish.style.color = '#C0A58C'
+//   ingredientBookBookMeat.style.color = '#C0A58C'
+//   ingredientBookBookVegetable.style.color = 'black'
+//   ingredientBookBookMonsterPart.style.color = '#C0A58C'
+//   ingredientBookBookFruit.style.color = '#C0A58C'
+// });
 
-  ingredientBookBookFish.style.color = '#C0A58C'
-  ingredientBookBookMeat.style.color = '#C0A58C'
-  ingredientBookBookVegetable.style.color = '#C0A58C'
-  ingredientBookBookMonsterPart.style.color = '#C0A58C'
-  ingredientBookBookFruit.style.color = 'black'
-});
+// ingredientBookBookFruit.addEventListener("click", (e) =>{
+//   fishOne.style.display = "none"
+//   meatOne.style.display = "none"
+//   vegetableOne.style.display = "none"
+//   fruitOne.style.display = "flex"
+//   monsterPart.style.display = "none"
+
+//   ingredientBookBookFish.style.color = '#C0A58C'
+//   ingredientBookBookMeat.style.color = '#C0A58C'
+//   ingredientBookBookVegetable.style.color = '#C0A58C'
+//   ingredientBookBookMonsterPart.style.color = '#C0A58C'
+//   ingredientBookBookFruit.style.color = 'black'
+// });
 ingredientBookBookMonsterPart.addEventListener("click", (e) =>{
   fishOne.style.display = "none"
   meatOne.style.display = "none"
-  vegetableOne.style.display = "none"
-  fruitOne.style.display = "none"
+  // vegetableOne.style.display = "none"
+  // fruitOne.style.display = "none"
   monsterPart.style.display = "flex"
 
-  ingredientBookBookFish.style.color = '#C0A58C'
-  ingredientBookBookMeat.style.color = '#C0A58C'
-  ingredientBookBookVegetable.style.color = '#C0A58C'
-  ingredientBookBookMonsterPart.style.color = 'black'
-  ingredientBookBookFruit.style.color = '#C0A58C'
 });
+
+let objMeat = {
+  miniCommonMeat: {
+    name: "MINI STEAK",
+    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    lvl: "LEVEL REQUIRED 1",
+    img: "./inventory/smallCommonMeat.png"
+  },
+  CommonMeat: {
+    name: "STEAK",
+    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    lvl: "LEVEL REQUIRED 1",
+    img: "./inventory/bigCommonMeat.png"
+  }
+};
+  nameBookMeat.innerHTML = objMeat["CommonMeat"].name
+  ImgBookMeat.src = objMeat["CommonMeat"].img
+  descriptionBookMeat.innerHTML = objMeat["CommonMeat"].desc
+  lvlBookMeat.innerHTML = objMeat["CommonMeat"].lvl
+
+  miniCommonMeatTag.addEventListener("click", (e) =>{
+    let item = "miniCommonMeat"
+    nameBookMeat.innerHTML = objMeat["miniCommonMeat"].name
+  ImgBookMeat.src = objMeat["miniCommonMeat"].img
+  descriptionBookMeat.innerHTML = objMeat["miniCommonMeat"].desc
+  lvlBookMeat.innerHTML = objMeat["miniCommonMeat"].lvl
+  });
+  commonMeatTag.addEventListener("click", (e) =>{
+    let item = "CommonMeat"
+    nameBookMeat.innerHTML = objMeat["CommonMeat"].name
+    ImgBookMeat.src = objMeat["CommonMeat"].img
+    descriptionBookMeat.innerHTML = objMeat["CommonMeat"].desc
+    lvlBookMeat.innerHTML = objMeat["CommonMeat"].lvl
+  });
 
 let objMonsterPart = {
   miniMushroom: {
@@ -1549,7 +1601,6 @@ ImgBookFish.src = objFishes["sardine"].img
 descriptionBookFish.innerHTML = objFishes["sardine"].desc
 lvlBookFish.innerHTML = objFishes["sardine"].lvl
 
-
 sardinTag.addEventListener("click", (e) =>{
 let item = "sardine"
 nameBookFish.innerHTML = objFishes[item].name
@@ -1624,10 +1675,8 @@ historyBookCastelSide.addEventListener("click", (e) =>{
   historyBookCastelSide.style.color = 'black'
   historyBookRestfield.style.color = '#C0A58C'
 })
-
 historyBookRestfield.addEventListener("click", (e) =>{
   let item = "restfield"
-  console.log(objHistory[item], item)
   nameBookHistory.innerHTML = objHistory[item].name
   descriptionBookHistory.innerHTML = objHistory[item].history
   ImgBookHistory.src = objHistory[item].img
@@ -1635,6 +1684,121 @@ historyBookRestfield.addEventListener("click", (e) =>{
   historyBookCastelSide.style.color = '#C0A58C'
   historyBookRestfield.style.color = 'black'
 })
+
+let objEnchanting = {
+  runeRange: {
+    name: "RUNE RANGE",
+    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    lvl: "LEVEL REQUIRED 1",
+    img: "./inventory/runeRange.png",
+    enchantingImg: "./inventory/runeRange.png"
+  },
+  runeFireRate: {
+    name: "RUNE FIRE RATE",
+    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    lvl: "LEVEL REQUIRED 1",
+    img: "./inventory/runeFireRate.png",
+    enchantingImg: "./inventory/runeFireRate.png"
+  },
+  runeBullets: {
+    name: "RUNE BULLETS",
+    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    lvl: "LEVEL REQUIRED 1",
+    img: "./inventory/runeBullets.png",
+    enchantingImg: "./inventory/runeBullets.png"
+  }
+}
+enchantingBookBookArcany.addEventListener("click", (e) =>{
+  arcanyGem.style.display = "flex"
+  solarGem.style.display = "none"
+  nuclearGem.style.display = "none"
+
+});
+enchantingBookBookSolar.addEventListener("click", (e) =>{
+  arcanyGem.style.display = "none"
+  solarGem.style.display = "flex"
+  nuclearGem.style.display = "none"
+
+});
+enchantingBookBookNuclear.addEventListener("click", (e) =>{
+  arcanyGem.style.display = "none"
+  solarGem.style.display = "none"
+  nuclearGem.style.display = "flex"
+
+});
+
+nameBookEnchantment.innerHTML = objEnchanting["runeRange"].name
+  ImgBookEnchantment.src = objEnchanting["runeRange"].img
+  enchantmentBook.src = objEnchanting["runeRange"].enchantingImg
+  descriptionBookEnchantment.innerHTML = objEnchanting["runeRange"].desc
+  lvlBookEnchantment.innerHTML = objEnchanting["runeRange"].lvl
+
+runeRangeTag.addEventListener("click", (e) =>{
+  let item = "runeRange"
+  nameBookEnchantment.innerHTML = objEnchanting[item].name
+  ImgBookEnchantment.src = objEnchanting[item].img
+  enchantmentBook.src = objEnchanting[item].enchantingImg
+  descriptionBookEnchantment.innerHTML = objEnchanting[item].desc
+  lvlBookEnchantment.innerHTML = objEnchanting[item].lvl
+});
+runeFireRateTag.addEventListener("click", (e) =>{
+  let item = "runeFireRate"
+  nameBookEnchantment.innerHTML = objEnchanting[item].name
+  ImgBookEnchantment.src = objEnchanting[item].img
+  descriptionBookEnchantment.innerHTML = objEnchanting[item].desc
+  lvlBookEnchantment.innerHTML = objEnchanting[item].lvl
+});
+runeBulletsTag.addEventListener("click", (e) =>{
+  let item = "runeBullets"
+  nameBookEnchantment.innerHTML = objEnchanting[item].name
+  ImgBookEnchantment.src = objEnchanting[item].img
+  descriptionBookEnchantment.innerHTML = objEnchanting[item].desc
+  lvlBookEnchantment.innerHTML = objEnchanting[item].lvl
+});
+
+let objWeaponArcany = {
+  common: {
+    name: "FLOPPER",
+    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    lvl: "LEVEL REQUIRED 1",
+    img: "./inventory/arcaneStaffCommon.png"
+  },
+  lancer: {
+    name: "LANCER",
+    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    lvl: "LEVEL REQUIRED 1",
+    img: "./inventory/arcaneLancerInv.gif"
+  },
+  repeater: {
+    name: "REPEATER",
+    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    lvl: "LEVEL REQUIRED 1",
+    img: "./inventory/arcaneRepeaterInv.png"
+  },
+
+}
+gemOneTag.addEventListener("click", (e) =>{
+  let item = "common"
+  nameBookWeapon.innerHTML = objWeaponArcany[item].name
+  ImgBookWeapon.src = objWeaponArcany[item].img
+  descriptionBookWeapon.innerHTML = objWeaponArcany[item].desc
+  lvlBookWeapon.innerHTML = objWeaponArcany[item].lvl
+});
+gemTwoTag.addEventListener("click", (e) =>{
+  let item = "lancer"
+  nameBookWeapon.innerHTML = objWeaponArcany[item].name
+  ImgBookWeapon.src = objWeaponArcany[item].img
+  descriptionBookWeapon.innerHTML = objWeaponArcany[item].desc
+  lvlBookWeapon.innerHTML = objWeaponArcany[item].lvl
+});
+gemThreeTag.addEventListener("click", (e) =>{
+  let item = "repeater"
+  nameBookWeapon.innerHTML = objWeaponArcany[item].name
+  ImgBookWeapon.src = objWeaponArcany[item].img
+  descriptionBookWeapon.innerHTML = objWeaponArcany[item].desc
+  lvlBookWeapon.innerHTML = objWeaponArcany[item].lvl
+});
+
 
 let deleting = false;
 
