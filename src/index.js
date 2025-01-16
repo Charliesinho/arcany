@@ -474,8 +474,8 @@ async function main() {
 
                     let arrayWeapon = [item];
                     myPlayer[socket.id].weapon = arrayWeapon;
-                    await Player.findOneAndUpdate({socket: socket.id}, {weapon:  arrayWeapon}, {new: true});
-                    await Player.findOneAndUpdate({socket: socket.id}, {inventory:   player.inventory}, {new: true});
+                    await Player.findOneAndUpdate({socket: socket.id}, {weapon: arrayWeapon}, {new: true});
+                    await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
     
                 } else if (item.type === "food") {
                     console.log(item)
@@ -611,6 +611,54 @@ async function main() {
                     myPlayer[socket.id] = player; 
 
                     console.log(arrayOfTypes)
+                
+              };
+              cooking()
+        });
+        
+        socket.on("enchanting", (items) => {
+
+            async function cooking() {
+                const player = await Player.findOne({socket: socket.id}).exec();
+
+                    // player.inventory.splice(item.index, 1);
+                                           
+                    // await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
+        
+                    myPlayer[socket.id] = player;   
+
+                    let arrayOfNames = []
+                    let arrayOfRarity = []
+                    let staff = null;
+
+                    for (const item of items) {
+                        if (!arrayOfNames.includes(item.name)) {
+                            arrayOfNames.push(item.name)
+                            if (item.type === "weapon") {
+                                staff = item;
+                            }
+                        }
+                        if (!arrayOfRarity.includes(item.rarity)) {
+                            arrayOfRarity.push(item.rarity)
+                        }
+                    }
+
+                    if (arrayOfNames.includes("runeBullets")) {
+                        staff.bullets *= 2;    
+                    }
+                    else if (arrayOfNames.includes("runeRange")) {
+                        staff.range *= 2; 
+                    }
+                    else if (arrayOfNames.includes("runeFireRate")) {
+                        staff.fireRate /= 2; 
+                    }
+
+                    staff.charges -= 1;
+                    
+
+                    player.inventory.push(staff);                                           
+                    await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
+                    io.to(socket.id).emit('obtained', staff);
                 
               };
               cooking()
@@ -1063,14 +1111,18 @@ async function main() {
                     
 
                     const loginAttempt = "success";
-                    await pushItem(arcaneLancerInv, socket)
+                    await pushItem(runeBullets, socket)
+                    await pushItem(runeFireRate, socket)
+                    await pushItem(runeRange, socket)
                     // await pushItem(mushroomClothesOrange, socket)
                     // await pushItem(reaperClothes, socket)
                     // await pushItem(blackVampiresClothes, socket)
                     // await pushItem(fishermanClothes, socket)
                     // await pushItem(tropicalHat, socket)
                     // await pushItem(skullHelmet, socket)
-                    // await pushItem(arcaneRepeaterInv, socket)
+                    await pushItem(arcaneRepeaterInv, socket)
+                    await pushItem(arcaneLancerInv, socket)
+                    await pushItem(arcaneStaffCommon, socket)
 
                     // await Player.findOneAndUpdate({socket: socket.id}, {souls: [restfieldSkeletonSoulInventory, ghostSoulInventory, restfieldZombieSoulInventory, redDemonSoulInventory, pinkDemonSoulInventory]}, {new: true});
 
@@ -1402,6 +1454,8 @@ const arcaneStaffCommon = {
     value: 30,
     rarity: "common",
     image: "./inventory/arcaneStaffCommon.png",
+    enchanted: false,
+    charges: 1,
 
     durability: 50,
     damage: 1,
@@ -1417,6 +1471,8 @@ const arcaneRepeaterInv = {
     value: 30,
     rarity: "common",
     image: "./inventory/arcaneRepeaterInv.png",
+    enchanted: false,
+    charges: 3,
 
     durability: 50,
     damage: 0.5,
@@ -1432,6 +1488,8 @@ const arcaneLancerInv = {
     value: 60,
     rarity: "common",
     image: "./inventory/arcaneLancerInv.gif",
+    enchanted: false,
+    charges: 2,
 
     durability: 50,
     damage: 5,
@@ -1563,12 +1621,36 @@ const slimeGuts = {
     rarity: "rare",
     image: "./inventory/slimeGuts.png",
 };
- const restfieldBlanket = {
+const restfieldBlanket = {
     type: "fish",
     name: "restfieldBlanket",
     value: 4,
     rarity: "rare",
     image: "./inventory/restfieldBlanket.png",
+};
+const runeBullets = {
+    type: "rune",
+    name: "runeBullets",
+    value: 4,
+    code: "054231",
+    rarity: "rare",
+    image: "./inventory/runeBullets.png",
+};
+const runeFireRate = {
+    type: "rune",
+    name: "runeFireRate",
+    value: 4,
+    code: "502341",
+    rarity: "rare",
+    image: "./inventory/runeFireRate.png",
+};
+const runeRange = {
+    type: "rune",
+    name: "runeRange",
+    value: 4,
+    code: "203145",
+    rarity: "rare",
+    image: "./inventory/runeRange.png",
 };
 
 
@@ -1695,6 +1777,9 @@ const restfieldZombieSoulInventory = {
 }
 
 const itemsObj = {
+    runeBullets,
+    runeFireRate,
+    runeRange,
     arcaneGem,
     arcaneGem2,
     arcaneGem3,
