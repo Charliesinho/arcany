@@ -1063,7 +1063,7 @@ async function main() {
                     
 
                     const loginAttempt = "success";
-                    // await pushItem(fishermanClothes, socket)
+                    await pushItem(arcaneLancerInv, socket)
                     // await pushItem(mushroomClothesOrange, socket)
                     // await pushItem(reaperClothes, socket)
                     // await pushItem(blackVampiresClothes, socket)
