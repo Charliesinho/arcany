@@ -505,6 +505,9 @@ body {
     background: url('./ui/uiBookBackground.png');
     background-size: cover;
 }
+.chapterIcon{
+    width: 50px;
+}
 
 .bookOrganisation{
     display: flex;
@@ -520,7 +523,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    gap: 40px;
+    gap: 25px;
     overflow: hidden;
 }
 .rightPage{
@@ -565,12 +568,13 @@ body {
     font-size: 40px;
     color: #C0A58C;
     text-align: center;
+    width: 85%;
 }
 .ImgBookFish{
     display: flex;
     width: 300px;
     justify-self: center;
-    margin: 30px 0px;
+    margin: 20px 0px;
 }
 .descriptionBookFish{
     width: 90%;
@@ -582,7 +586,7 @@ body {
 }
 .bookTag{
     display: flex;
-    height: 5%;
+    height: 7%;
    
     border: solid 2px #C0A58C;
     background-color: transparent;

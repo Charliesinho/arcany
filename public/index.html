@@ -323,11 +323,11 @@
 
       <div id="ingredientBook" style="width: 100%;">
         <div id="uiBookChapterParent">
-          <button id="ingredientBookBookFish" class="uiBookChapter pointerActivator">F</button>
-          <button id="ingredientBookBookMeat" class="uiBookChapter pointerActivator">M</button>
-          <button id="ingredientBookBookVegetable" class="uiBookChapter pointerActivator">V</button>
-          <button id="ingredientBookBookFruit" class="uiBookChapter pointerActivator">F</button>
-          <button id="ingredientBookBookMonsterPart" class="uiBookChapter pointerActivator">M</button>
+          <button id="ingredientBookBookFish" class="uiBookChapter pointerActivator"><img src="./inventory/sarding.png" class="chapterIcon"></button>
+          <button id="ingredientBookBookMeat" class="uiBookChapter pointerActivator"><img src="./inventory/smallCommonMeat.png" class="chapterIcon"></button>
+          <!-- <button id="ingredientBookBookVegetable" class="uiBookChapter pointerActivator"><img class="chapterIcon"></button> -->
+          <!-- <button id="ingredientBookBookFruit" class="uiBookChapter pointerActivator"><img  class="chapterIcon"></button> -->
+          <button id="ingredientBookBookMonsterPart" class="uiBookChapter pointerActivator"><img src="./inventory/slimeGuts.png" class="chapterIcon"></button>
         </div>
 
         <div id="fishOne"  class="bookOrganisation">
@@ -370,13 +370,23 @@
         <div id="meatOne"  class="bookOrganisation" style="display: none;">
           <div class="leftPage">
             <p class="tittleBookSection">INGREDIENT</p>
+
+            <div class="bookTag pointerActivator commonMeatTag">
+              <img src="./inventory/bigCommonMeat.png "  class=" fishIcon">
+              <p>Steak</p>
+            </div>
+            <div class="bookTag pointerActivator miniCommonMeatTag">
+              <img src="./inventory/smallCommonMeat.png" class=" fishIcon">
+              <p>Mini Steak</p>
+            </div>
+            
           </div>
 
           <div class="rightPage">
-            <p class="nameBook"></p>
-            <p class="lvlBook"></p>
-            <img class="ImgBook" src="">
-            <p class="descriptionBook"></p>
+            <p class="nameBookMeat nameBookFish"></p>
+            <p class="lvlBookMeat lvlBookFish"></p>
+            <img class="ImgBookMeat ImgBookFish" src="">
+            <p class="descriptionBookMeat descriptionBookFish"></p>
           </div>
         </div>
         <div id="vegetableOne"  class="bookOrganisation" style="display: none;">
@@ -461,12 +471,109 @@
         <p>soulsAndClothesBook</p>
       </div>
 
-      <div id="weaponBook">
-        <p>weaponBook</p>
+      <div id="weaponBook" style="width: 100%;">
+        <div id="uiBookChapterParent">
+          <button id="enchantingBookBookArcany" class="uiBookChapter pointerActivator"><img src="./inventory/arcaneGem.png" class="chapterIcon"></button>
+          <button id="enchantingBookBookSolar" class="uiBookChapter pointerActivator"><img src="./inventory/solarGem.png" class="chapterIcon"></button>
+          <button id="enchantingBookBookNuclear" class="uiBookChapter pointerActivator"><img src="./inventory/nuclearGem.png" class="chapterIcon"></button>
+        </div>
+
+        <div id="arcanyGem"  class="bookOrganisation">
+          <div class="leftPage">
+            <p class="tittleBookSection">WEAPON</p>
+
+            <div class="bookTag pointerActivator gemOneTag">
+              <img src="./inventory/arcaneGem.png"  class=" fishIcon">
+              <p>Gem One</p>
+            </div>
+            <div class="bookTag pointerActivator gemTwoTag">
+              <img src="./inventory/arcaneGem2.png"  class=" fishIcon">
+              <p>Gem Two</p>
+            </div>
+            <div class="bookTag pointerActivator gemThreeTag">
+              <img src="./inventory/arcaneGem3.png"  class=" fishIcon">
+              <p>Gem Three</p>
+            </div>
+            <div class="bookTag pointerActivator gemFourTag">
+              <img src="./inventory/arcaneGem4.png"  class=" fishIcon">
+              <p>Gem Four</p>
+            </div>
+            <div class="bookTag pointerActivator gemFiveTag">
+              <img src="./inventory/arcaneGem5.png"  class=" fishIcon">
+              <p>Gem Five</p>
+            </div>
+          </div>
+
+          <div class="rightPage">
+            <p class="nameBookWeapon nameBookFish"></p>
+            <p class="lvlBookWeapon lvlBookFish"></p>
+            <img class="ImgBookWeapon ImgBookFish" src="">
+            <p class="descriptionBookWeapon descriptionBookFish"></p>
+          </div>
+        </div>
+        <div id="solarGem"  class="bookOrganisation" style="display: none;">
+          <div class="leftPage">
+            <p class="tittleBookSection">WEAPON</p>
+
+            <div class="bookTag pointerActivator gemOneTag">
+              <img src="./inventory/solarGem.png"  class=" fishIcon">
+              <p>Gem One</p>
+            </div>
+          
+          </div>
+
+          <div class="rightPage">
+            <p class="nameBookFish"></p>
+            <p class="lvlBookFish"></p>
+            <img class="ImgBookFish" src="">
+            <p class="descriptionBookFish"></p>
+          </div>
+        </div>
+        <div id="nuclearGem"  class="bookOrganisation" style="display: none;">
+          <div class="leftPage">
+            <p class="tittleBookSection">WEAPON</p>
+
+            <div class="bookTag pointerActivator gemOneTag">
+              <img src="./inventory//nuclearGem.png"  class=" fishIcon">
+              <p>Gem One</p>
+            </div>
+          </div>
+
+          <div class="rightPage">
+            <p class="nameBookFish"></p>
+            <p class="lvlBookFish"></p>
+            <img class="ImgBookFish" src="">
+            <p class="descriptionBookFish"></p>
+          </div>
+        </div>
+
       </div>
 
-      <div id="enchantingBook">
-        <p>enchantingBook</p>
+      <div id="enchantingBook" class="bookOrganisation">
+        <div class="leftPage">
+          <p class="tittleBookSection">ENCHANTING</p>
+
+          <div class="bookTag pointerActivator runeRangeTag">
+            <img src="./inventory/runeRange.png"  class=" fishIcon">
+            <p>Rune Range</p>
+          </div>
+          <div class="bookTag pointerActivator runeFireRateTag">
+            <img src="./inventory/runeFireRate.png" class=" fishIcon">
+            <p>Rune Fire Rate</p>
+          </div>
+          <div class="bookTag pointerActivator runeBulletsTag">
+            <img src="./inventory/runeBullets.png" class=" fishIcon">
+            <p>Rune Bullets</p>
+          </div>
+        </div>
+        <div class="rightPage">
+          <p class="nameBookEnchantment nameBookFish"></p>
+          <p class="lvlBookEnchantment lvlBookFish"></p>
+          <img class="ImgBookEnchantment ImgBookFish" src="">
+          <p>ENCHANTMENT</p>
+          <img class="enchantmentBook" src="">
+          <p class="descriptionBookEnchantment descriptionBookFish"></p>
+        </div>
       </div>
   </div>
 
