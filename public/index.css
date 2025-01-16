@@ -724,12 +724,13 @@ body {
     position: absolute;
     left: 0;
     top: 0;
-    width: 50px;
-    height: 100vh;
-    background-color: rgb(30 26 37);
-    border: none;
+    width: 41px;
+    height: calc(100vh - 22px);
+    background-color: rgb(30 26 37 / 0%);
+    backdrop-filter: blur(4px);
+    border: solid 1px white;
     display: flex;
-    gap: 5px;
+    /* gap: 5px; */
     flex-wrap: wrap;
     z-index: 50;
     flex-direction: column;
@@ -741,20 +742,19 @@ body {
 .buttonDev {
     height: 40px;
     width: 40px;
-    background-color: rgb(0, 0, 0);
+    background-color: rgb(255 255 255 / 29%);
     border-radius: 5px;
     font-size: 20px;
     transition: all .5s ease;
     color: black;
     border: none;
     outline: solid 2px rgb(31, 31, 31);
-    outline-offset: -4px;
-
+    outline-offset: -3px;
     transition: all .2s ease;
 }
 
 .buttonDev:hover {
-    background-color: rgb(255, 210, 142) !important;
+    background-color: rgb(255, 215, 84) !important;
 }
 
 #roomsDev {
@@ -2061,6 +2061,95 @@ body {
     height: 40px;
     border-radius: 50%;
   }
+
+  .enchantmentBook {
+    height: 26px;
+    margin-bottom: 20px;
+  }
+
+  .ImgBookEnchantment {
+    margin-bottom: 0 !important;
+  }
+
+  #enchantingContainer {
+        position: absolute;
+        top: 50%;
+        left: 36%;
+        transform: translate(-50%, -50%);
+        z-index: 99;
+        width: 800px;
+        height: 600px;
+        background: url("./Textures/cookback.gif");
+        border: 2px solid #000;
+        overflow: hidden;
+        display: none;
+        pointer-events: all;
+    }
+
+    #enchantingFrame {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background: url("./Textures/emchantingFrame.gif");
+        background-size: cover;
+        /* z-index: 9999; */
+    }
+
+    .enchantingItem {
+        position: absolute;
+        top: 110px;
+        left: 293px;
+        height: 222px;
+        z-index: 1;
+        animation: rotate 5s infinite linear;
+    }
+
+    #enchantingItem1 {
+        animation: none;
+        transform: rotate(45deg);
+    }
+    #enchantingItem2 {
+        top: 217px;
+    }
+
+    .rune {
+        position: absolute;
+        z-index: 1;
+        width: 49px;
+        filter: saturate(0);
+        transition: all .2s ease;
+    }
+    .rune:hover {
+        position: absolute;
+        z-index: 1;
+        width: 49px;
+        filter: saturate(2);
+    }
+
+    #rune0 {
+        left: 687px;
+        top: 176px;
+    }
+    #rune1 {
+        left: 640px;
+        top: 268px;
+    }
+    #rune2 {
+        left: 525px;
+        top: 316px;
+    }
+    #rune3 {
+        left: 216px;
+        top: 288px;
+    }
+    #rune4 {
+        left: 63px;
+        top: 315px;
+    }
+    #rune5 {
+        top: 184px;
+        left: 119px;
+    }
 
   #craftingContainer {
     position: absolute;
