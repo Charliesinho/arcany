@@ -2563,7 +2563,6 @@ function interactInventory(item, index) {
               noMovement = true
   
               setTimeout(() => {
-                startCookAudio.play();
                 currentlyEnchanting = true;
                 setTimeout(() => {
                   currentlyEnchanting = false;
@@ -4443,12 +4442,13 @@ window.addEventListener("keydown", (e) => {
     grassOpenEnchanting = true;
     console.log(grassOpenEnchanting)
     noMovement = true
+    resetEnchant()
     if (uiIsClose) openIvn()
   } else if (e.key === "e" && grassEnchantingAvailable & grassOpenEnchanting) {
     noMovement = false
+    resetEnchant()
     grassOpenEnchanting = false;
     if (!uiIsClose) openIvn()
-    cancelCrafting()
   }
 
   //Enchanting grasslands open <
