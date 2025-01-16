@@ -641,14 +641,17 @@ async function main() {
 
                     let staff;
 
-                    if (arrayOfNames.includes("arcaneGem2")) {
+                    if (arrayOfNames.includes("arcaneGem2") && arrayOfNames.includes("stick")) {
                         staff = arcaneLancerInv;    
                     }
-                    else if (arrayOfNames.includes("arcaneGem")) {
+                    else if (arrayOfNames.includes("arcaneGem") && arrayOfNames.includes("stick")) {
                         staff = arcaneStaffCommon; 
                     }
-                    else if (arrayOfNames.includes("arcaneGem3")) {
+                    else if (arrayOfNames.includes("arcaneGem3") && arrayOfNames.includes("stick")) {
                         staff = arcaneRepeaterInv; 
+                    } 
+                    else if (arrayOfNames.includes("restfieldBlanket") && arrayOfNames.includes("restfieldBlanket")){
+                        staff = restfieldGhostClothes; 
                     }
                     
 
@@ -900,6 +903,7 @@ async function main() {
 
                 const player = await Player.findOne({socket: socket.id}).exec();
 
+                
                 if (player.inventory.length <= 21) {
                     let itemToGive = itemsObj[item];
                     player.inventory.push(itemToGive);
@@ -1564,7 +1568,7 @@ const slimeGuts = {
     image: "./inventory/slimeGuts.png",
 };
  const restfieldBlanket = {
-    type: "fish",
+    type: "material",
     name: "restfieldBlanket",
     value: 4,
     rarity: "rare",

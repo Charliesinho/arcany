@@ -1323,7 +1323,7 @@ function updateHistoryChat(value, sender) {
 }
 
 window.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
+    if (e?.key?.toLowerCase() === "Enter") {
         e.preventDefault();
         if (chatInput === document.activeElement) {
             if (chatInput.value) {
@@ -1347,7 +1347,7 @@ window.addEventListener("keydown", (e) => {
             }, 500);
         }
     }
-    // if (e.key === "o") {
+    // if (e?.key?.toLowerCase() === "o") {
     //   clearInterval(intervalCanvasBase)
 
     //   canvas.clearRect(0, 0, canvasLobby.width, canvasLobby.height);
@@ -1361,7 +1361,7 @@ window.addEventListener("keydown", (e) => {
 });
 
 window.addEventListener("keydown", (e) => {
-    if (e.key === "1" || e.key === "&") {
+    if (e?.key?.toLowerCase() === "1" || e?.key?.toLowerCase() === "&") {
         e.preventDefault();
         if (animPlayer !== "sittingDown"){
           animPlayer = "sittingDown"
@@ -1805,7 +1805,7 @@ sitDownIconButton.addEventListener("click", () => {
 })
 
 window.addEventListener("keydown", (e) => {
-  // if (e.key === "o") {
+  // if (e?.key?.toLowerCase() === "o") {
   //   scores.style.display =  scores.style.display === "flex" ? "none" : "flex";
   //   socket.emit("getScores", "")
   // }
@@ -2396,7 +2396,7 @@ function interactInventory(item, index) {
       if (inventorySlots[`inventorySlot${index}`].src !== "") {
         if(consumeAvailable === true && deleting === false) {
 
-          if (item.type !== "stick" && item.type !== "gem") {
+          if (item.type !== "stick" && item.type !== "gem" && item.type !== "material") {
             return;
           }
           
@@ -2409,25 +2409,25 @@ function interactInventory(item, index) {
           pop.play()
           
          
-          if (craftingArray[0]?.type !== item.type) {
-            if (craftingArray.length === 0) {
-              craftedItems.push(index)
-              craftingArray.push(item);
-              craftingItem1.src = item.image;
-            }
-            else if (craftingArray.length === 1) {
-              craftedItems.push(index)
-              craftingArray.push(item);
-              craftingItem2.src = item.image;
-              noMovement = true
-  
-              setTimeout(() => {
-                startCookAudio.play();
-                currentlyCrafting = true;
-                startAnimations();
-              }, 1000);
-            }
+    
+          if (craftingArray.length === 0) {
+            craftedItems.push(index)
+            craftingArray.push(item);
+            craftingItem1.src = item.image;
           }
+          else if (craftingArray.length === 1) {
+            craftedItems.push(index)
+            craftingArray.push(item);
+            craftingItem2.src = item.image;
+            noMovement = true
+
+            setTimeout(() => {
+              startCookAudio.play();
+              currentlyCrafting = true;
+              startAnimations();
+            }, 1000);
+          }
+        
           
 
           // inventorySlots[`inventorySlot${index}`].style.background = `none`;
@@ -4147,10 +4147,10 @@ window.addEventListener("keydown", (e) => {
 
     //Dialog grasslands open >
 
-  if(e.key === "e" && dialogAvailable & !dialogOpened) {
+  if(e?.key?.toLowerCase() === "e" && dialogAvailable & !dialogOpened) {
     dialogOpened = true;
     startDialog(currentDialogTitle);
-  } else if (e.key === "e" && dialogAvailable & dialogOpened) {
+  } else if (e?.key?.toLowerCase() === "e" && dialogAvailable & dialogOpened) {
     dialogOpened = false;
   }
 
@@ -4163,10 +4163,10 @@ window.addEventListener("keydown", (e) => {
   }
 
   // Testing >
-  // if (e.key === "f") {
+  // if (e?.key?.toLowerCase() === "f") {
   //   transitionLiquid()
   // }
-  // if (e.key === "g") {
+  // if (e?.key?.toLowerCase() === "g") {
   //   if (!cutscene) {
   //     cutscene = true
   //   } else {
@@ -4177,7 +4177,7 @@ window.addEventListener("keydown", (e) => {
 
   //Fishing Minigame >
 
-  if(e.key === "e" && fishAvailable === true && fishing === false) {
+  if(e?.key?.toLowerCase() === "e" && fishAvailable === true && fishing === false) {
 
     fishingBarHit.classList.add('startFish');
     noMovement = true
@@ -4228,7 +4228,7 @@ window.addEventListener("keydown", (e) => {
 
 
   };
-  if(e.key === "e" && fishAvailable === true && fishing === true) {
+  if(e?.key?.toLowerCase() === "e" && fishAvailable === true && fishing === true) {
 
     if (marginFish < 65 && marginFish > 35) {
 
@@ -4241,7 +4241,7 @@ window.addEventListener("keydown", (e) => {
   }
   //Fishing Minigame <
   
-  if(e.key === "e" && scoreAvailable === true) {
+  if(e?.key?.toLowerCase() === "e" && scoreAvailable === true) {
     scores.style.display =  scores.style.display === "flex" ? "none" : "flex";
     console.log(currentLand)
     socket.emit("getScores", currentLand)
@@ -4250,10 +4250,10 @@ window.addEventListener("keydown", (e) => {
 
   //Shop grasslands open >
 
-  if(e.key === "e" && grassShopAvailable & !grassOpenShop) {
+  if(e?.key?.toLowerCase() === "e" && grassShopAvailable & !grassOpenShop) {
     grassOpenShop = true;
     openShopAudio.play();
-  } else if (e.key === "e" && grassShopAvailable & grassOpenShop) {
+  } else if (e?.key?.toLowerCase() === "e" && grassShopAvailable & grassOpenShop) {
     grassOpenShop = false;
   }
 
@@ -4261,14 +4261,14 @@ window.addEventListener("keydown", (e) => {
   
   //Cooking grasslands open >
 
-  if(e.key === "e" && grassCookingAvailable & !grassOpenCooking) {
+  if(e?.key?.toLowerCase() === "e" && grassCookingAvailable & !grassOpenCooking) {
     grassOpenCooking = true;
     openCookingAudio.play();
     cookingSong.play()
     oilFry.play()
     noMovement = true
     if (uiIsClose) openIvn()
-  } else if (e.key === "e" && grassCookingAvailable & grassOpenCooking) {
+  } else if (e?.key?.toLowerCase() === "e" && grassCookingAvailable & grassOpenCooking) {
     cookingSong.pause()
     oilFry.pause()
     noMovement = false
@@ -4281,12 +4281,12 @@ window.addEventListener("keydown", (e) => {
   
   //Crafting grasslands open >
 
-  if(e.key === "e" && grassCraftingAvailable & !grassOpenCrafting) {
+  if(e?.key?.toLowerCase() === "e" && grassCraftingAvailable & !grassOpenCrafting) {
     grassOpenCrafting = true;
     console.log(grassOpenCrafting)
     noMovement = true
     if (uiIsClose) openIvn()
-  } else if (e.key === "e" && grassCraftingAvailable & grassOpenCrafting) {
+  } else if (e?.key?.toLowerCase() === "e" && grassCraftingAvailable & grassOpenCrafting) {
     noMovement = false
     grassOpenCrafting = false;
     if (!uiIsClose) openIvn()
@@ -4297,7 +4297,7 @@ window.addEventListener("keydown", (e) => {
 
   //Chest island open >
 
-  if(e.key === "e" && IslandChestAvailable & !IslandOpenChest) {
+  if(e?.key?.toLowerCase() === "e" && IslandChestAvailable & !IslandOpenChest) {
     const key = myPlayer.inventory.find(item => item.name === "chestKey");
     const chestKeyRestfield = myPlayer.inventory.find(item => (item.name === "chestKeyRestfield"));
     const chestKeyCommon = myPlayer.inventory.find(item => (item.name === "chestKeyCommon"));
@@ -4338,13 +4338,13 @@ window.addEventListener("keydown", (e) => {
       IslandOpenChest = true;
       openShopAudio.play();
     }
-  } else if (e.key === "e" && IslandChestAvailable & IslandOpenChest) {
+  } else if (e?.key?.toLowerCase() === "e" && IslandChestAvailable & IslandOpenChest) {
     IslandOpenChest = false;
   }
 
   //Chest island open <
 
-  // if (e.key === "o") {
+  // if (e?.key?.toLowerCase() === "o") {
   //   mapsInfo[currentLand].enemies?.forEach(enemy => {
   //     activateNormalEnemy(enemy);
   //   })
@@ -16568,7 +16568,8 @@ let mapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
-        drop: "blanket"
+        drop: "restfieldBlanket",
+        dropRate: 90,
       },
       {
         name: "restfieldGhost",
@@ -16602,7 +16603,8 @@ let mapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
-        drop: "blanket"
+        drop: "restfieldBlanket",
+        dropRate: 90,
       },
       {
         name: "restfieldGhost",
@@ -16636,7 +16638,8 @@ let mapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
-        drop: "blanket"
+        drop: "restfieldBlanket",
+        dropRate: 90,
       },
       {
         name: "restfieldGhost",
@@ -16670,7 +16673,8 @@ let mapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
-        drop: "blanket"
+        drop: "restfieldBlanket",
+        dropRate: 90,
       },
       {
         name: "restfieldGhost",
@@ -16704,7 +16708,8 @@ let mapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
-        drop: "blanket"
+        drop: "restfieldBlanket",
+        dropRate: 90,
       },
       {
         name: "restfieldGhost",
@@ -16738,7 +16743,8 @@ let mapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
-        drop: "blanket"
+        drop: "restfieldBlanket",
+        dropRate: 90,
       },
       {
         name: "restfieldGhost",
@@ -16772,7 +16778,8 @@ let mapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
-        drop: "blanket"
+        drop: "restfieldBlanket",
+        dropRate: 90,
       },
       {
         name: "restfieldGhost",
@@ -16806,7 +16813,8 @@ let mapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
-        drop: "blanket"
+        drop: "restfieldBlanket",
+        dropRate: 90,
       },
       {
         name: "restfieldGhost",
@@ -16840,7 +16848,8 @@ let mapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
-        drop: "blanket"
+        drop: "restfieldBlanket",
+        dropRate: 90,
       },
       {
         name: "restfieldGhost",
@@ -16874,7 +16883,8 @@ let mapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
-        drop: "blanket"
+        drop: "restfieldBlanket",
+        dropRate: 90,
       },
       {
         name: "restfieldGhost",
@@ -16908,7 +16918,8 @@ let mapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
-        drop: "blanket"
+        drop: "restfieldBlanket",
+        dropRate: 90,
       },
       {
         name: "restfieldGhost",
@@ -16942,7 +16953,8 @@ let mapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
-        drop: "blanket"
+        drop: "restfieldBlanket",
+        dropRate: 90,
       },
     ]
   },
@@ -34821,7 +34833,8 @@ let originalMapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
-        drop: "blanket"
+        drop: "restfieldBlanket",
+        dropRate: 90,
       },
       {
         name: "restfieldGhost",
@@ -34855,7 +34868,8 @@ let originalMapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
-        drop: "blanket"
+        drop: "restfieldBlanket",
+        dropRate: 90,
       },
       {
         name: "restfieldGhost",
@@ -34889,7 +34903,8 @@ let originalMapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
-        drop: "blanket"
+        drop: "restfieldBlanket",
+        dropRate: 90,
       },
       {
         name: "restfieldGhost",
@@ -34923,7 +34938,8 @@ let originalMapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
-        drop: "blanket"
+        drop: "restfieldBlanket",
+        dropRate: 90,
       },
       {
         name: "restfieldGhost",
@@ -34957,7 +34973,8 @@ let originalMapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
-        drop: "blanket"
+        drop: "restfieldBlanket",
+        dropRate: 90,
       },
       {
         name: "restfieldGhost",
@@ -34991,7 +35008,8 @@ let originalMapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
-        drop: "blanket"
+        drop: "restfieldBlanket",
+        dropRate: 90,
       },
       {
         name: "restfieldGhost",
@@ -35025,7 +35043,8 @@ let originalMapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
-        drop: "blanket"
+        drop: "restfieldBlanket",
+        dropRate: 90,
       },
       {
         name: "restfieldGhost",
@@ -35059,7 +35078,8 @@ let originalMapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
-        drop: "blanket"
+        drop: "restfieldBlanket",
+        dropRate: 90,
       },
       {
         name: "restfieldGhost",
@@ -35093,7 +35113,8 @@ let originalMapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
-        drop: "blanket"
+        drop: "restfieldBlanket",
+        dropRate: 90,
       },
       {
         name: "restfieldGhost",
@@ -35127,7 +35148,8 @@ let originalMapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
-        drop: "blanket"
+        drop: "restfieldBlanket",
+        dropRate: 90,
       },
       {
         name: "restfieldGhost",
@@ -35161,7 +35183,8 @@ let originalMapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
-        drop: "blanket"
+        drop: "restfieldBlanket",
+        dropRate: 90,
       },
       {
         name: "restfieldGhost",
@@ -35195,7 +35218,8 @@ let originalMapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
-        drop: "blanket"
+        drop: "restfieldBlanket",
+        dropRate: 90,
       },
     ]
   },
