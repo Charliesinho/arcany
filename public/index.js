@@ -1698,7 +1698,7 @@ let objEnchanting = {
     desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
     lvl: "LEVEL REQUIRED 2",
     img: "./inventory/runeFireRate.png",
-    enchantingImg: "./Textures/rangeCode.png"
+    enchantingImg: "./Textures/fireRateCode.png"
   },
   runeBullets: {
     name: "RUNE BULLETS",
