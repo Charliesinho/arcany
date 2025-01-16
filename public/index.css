@@ -2062,6 +2062,15 @@ body {
     border-radius: 50%;
   }
 
+  .enchantmentBook {
+    height: 26px;
+    margin-bottom: 20px;
+  }
+
+  .ImgBookEnchantment {
+    margin-bottom: 0 !important;
+  }
+
   #enchantingContainer {
         position: absolute;
         top: 50%;

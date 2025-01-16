@@ -1691,21 +1691,21 @@ let objEnchanting = {
     desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
     lvl: "LEVEL REQUIRED 1",
     img: "./inventory/runeRange.png",
-    enchantingImg: "./inventory/runeRange.png"
+    enchantingImg: "./Textures/rangeCode.png"
   },
   runeFireRate: {
     name: "RUNE FIRE RATE",
     desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
-    lvl: "LEVEL REQUIRED 1",
+    lvl: "LEVEL REQUIRED 2",
     img: "./inventory/runeFireRate.png",
-    enchantingImg: "./inventory/runeFireRate.png"
+    enchantingImg: "./Textures/rangeCode.png"
   },
   runeBullets: {
     name: "RUNE BULLETS",
     desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
-    lvl: "LEVEL REQUIRED 1",
+    lvl: "LEVEL REQUIRED 3",
     img: "./inventory/runeBullets.png",
-    enchantingImg: "./inventory/runeBullets.png"
+    enchantingImg: "./Textures/bulletsCode.png"
   }
 }
 enchantingBookBookArcany.addEventListener("click", (e) =>{
@@ -1747,6 +1747,7 @@ runeFireRateTag.addEventListener("click", (e) =>{
   ImgBookEnchantment.src = objEnchanting[item].img
   descriptionBookEnchantment.innerHTML = objEnchanting[item].desc
   lvlBookEnchantment.innerHTML = objEnchanting[item].lvl
+  enchantmentBook.src = objEnchanting[item].enchantingImg
 });
 runeBulletsTag.addEventListener("click", (e) =>{
   let item = "runeBullets"
@@ -1754,6 +1755,7 @@ runeBulletsTag.addEventListener("click", (e) =>{
   ImgBookEnchantment.src = objEnchanting[item].img
   descriptionBookEnchantment.innerHTML = objEnchanting[item].desc
   lvlBookEnchantment.innerHTML = objEnchanting[item].lvl
+  enchantmentBook.src = objEnchanting[item].enchantingImg
 });
 
 let objWeaponArcany = {
