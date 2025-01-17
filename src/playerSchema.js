@@ -68,11 +68,15 @@ const PlayerSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  explore: {
+  crafting: {
     type: Number,
     default: 0,
   },
   combat: {
+    type: Number,
+    default: 0,
+  },
+  enchanting: {
     type: Number,
     default: 0,
   },

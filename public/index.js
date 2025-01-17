@@ -1,7 +1,7 @@
 //Change this to push >
 
-// const socket = io(`ws://localhost:5000`);
-const socket = io(`https://arcanyGame.up.railway.app/`);
+const socket = io(`ws://localhost:5000`);
+// const socket = io(`https://arcanyGame.up.railway.app/`);
 
 //Change this to push <
 
@@ -632,6 +632,7 @@ const body = document.getElementById("body");
 const fishingLevel = document.getElementById("fishingLevel");
 const cookingLevel = document.getElementById("cookingLevel");
 const enchantingLevel = document.getElementById("enchantingLevel");
+const craftingLevel = document.getElementById("craftingLevel");
 const combatLevel = document.getElementById("combatLevel");
 const obtainedItem = document.querySelector("#obtainedItem");
 const levelUp = document.querySelector(".levelUp");
@@ -665,6 +666,8 @@ const bossBarHealthFollower = document.getElementById("bossBarHealthFollower");
 const bossBarImg = document.getElementById("bossBarImg");
 
 const craftingHammer = document.getElementById('craftingHammer');
+
+const errorPopUp = document.getElementById('errorPopUp');
 
 const cookingItem = document.querySelector(".cookingItem");
 const container = document.getElementById('cookingContainer');
@@ -2437,13 +2440,17 @@ function interactInventory(item, index) {
             return;
           }
 
+          if (item.level > cookingLevelSimple) {
+            errorDisplay("You need to be at least Cooking level " + item.level + " to use this item.")
+            return;
+          }
+
           consumeAvailable = false;
 
           setTimeout(() => {
             consumeAvailable = true;
           }, 500);
-          
-          console.log("cooking")
+        
           pop.play()
 
           cookedItems.push(index)
@@ -2484,6 +2491,11 @@ function interactInventory(item, index) {
         if(consumeAvailable === true && deleting === false) {
 
           if (item.type !== "stick" && item.type !== "gem" && item.type !== "material") {
+            return;
+          }
+
+          if (item.level > craftingLevelSimple) {
+            errorDisplay("You need to be at least Crafting level " + item.level + " to use this item.")
             return;
           }
           
@@ -2527,8 +2539,8 @@ function interactInventory(item, index) {
           }
         }
         
-      }
-      if (enchantingContainer.style.display == "block" && currentlyEnchanting === false) {
+    }
+    if (enchantingContainer.style.display == "block" && currentlyEnchanting === false) {
         
         console.log("enchating")
         
@@ -2547,6 +2559,11 @@ function interactInventory(item, index) {
           }, 500);
           
           pop.play()
+
+          if (item.level > enchantingLevelSimple) {
+            errorDisplay("You need to be at least Enchanting level " + item.level + " to use this item.")
+            return;
+          }
           
          
           if (enchantingArray[0]?.type !== item.type) {
@@ -2567,6 +2584,9 @@ function interactInventory(item, index) {
                   currentlyEnchanting = false;
                 }, 1000);
               }, 1000);
+            }
+            else if (item.charges === 0) {
+              errorDisplay("Your weapon has reached its maximum enchantments, it cannot be enchanted further.")
             }
           }
           
@@ -2589,6 +2609,8 @@ function interactInventory(item, index) {
 
           consumeAvailable = false;
 
+          console.log(item)
+
           setTimeout(() => {
             consumeAvailable = true;
           }, 1000);
@@ -2596,10 +2618,16 @@ function interactInventory(item, index) {
           inventorySlots[`inventorySlot${index}`].src = `data:,`;
           inventorySlots[`inventorySlot${index}`].removeEventListener("mousedown", (e) => interactInventory(item, index));
 
-          item.maxPower = maxHealth;
-          item.index = myPlayer.inventory.indexOf(item);
+          if (item.type === "weapon" && item.level > combatLevelSimple) {
+            errorDisplay("You need to be at least Combat level " + item.level + " to use this item.")
+            return;
+          } else {
+            item.maxPower = maxHealth;
+            item.index = myPlayer.inventory.indexOf(item);
+  
+            socket.emit("consumable", item);
+          }
 
-          socket.emit("consumable", item);
           
         }
       }
@@ -2829,6 +2857,11 @@ let oldCookingLevel = 0;
 let newCookingLevel = 0;
 let changeCookingLevel = true;
 let cookingLevelSimple = 0;
+
+let oldCraftingLevel = 0;
+let newCraftingLevel = 0;
+let changeCraftingLevel = true;
+let craftingLevelSimple = 0;
 
 let oldEnchantingLevel = 0;
 let newEnchantingLevel = 0;
@@ -3653,6 +3686,8 @@ socket.on("player", (serverPlayer) => {
 
   let enchantingLevelNum = Math.trunc(myPlayer.enchantingLevel / 1000);
 
+  enchantingXPbar.style.width = `${Math.min(((myPlayer.enchantingLevel - (enchantingLevelNum < 1 ? 0 : enchantingLevelNum < 3 ? 1000 : enchantingLevelNum < 6 ? 3000 : enchantingLevelNum < 12 ? 6000 : 12000)) / (enchantingLevelNum < 1 ? 1000 : enchantingLevelNum < 3 ? 2000 : enchantingLevelNum < 6 ? 3000 : enchantingLevelNum < 12 ? 6000 : Infinity)) * 75, 75)}px`;
+
   if (changeEnchantingLevel === true && myPlayer.enchantingLevel !== 0) {
     if (enchantingLevelNum < 1) {
       newEnchantingLevel = 1;
@@ -3774,6 +3809,72 @@ socket.on("player", (serverPlayer) => {
   generalLevelCooking = cookingLevelSimple;
 
   // Cooking level <
+
+  // Crafting level >
+
+  let craftingLevelNum = Math.trunc(myPlayer.craftingLevel / 1000);
+
+  craftingXPbar.style.width = `${Math.min(((myPlayer.craftingLevel - (craftingLevelNum < 1 ? 0 : craftingLevelNum < 3 ? 1000 : craftingLevelNum < 6 ? 3000 : craftingLevelNum < 12 ? 6000 : 12000)) / (craftingLevelNum < 1 ? 1000 : craftingLevelNum < 3 ? 2000 : craftingLevelNum < 6 ? 3000 : craftingLevelNum < 12 ? 6000 : Infinity)) * 75, 75)}px`;
+
+
+  if (changeCraftingLevel === true && myPlayer.craftingLevel !== 0) {
+    if (craftingLevelNum < 1) {
+      newCraftingLevel = 1;
+    }
+    else if (craftingLevelNum < 3) {
+      newCraftingLevel = 2;
+    }
+    else if (craftingLevelNum < 6) {
+      newCraftingLevel = 3;
+    }
+    else if (craftingLevelNum < 12) {
+      newCraftingLevel = 4;
+    }
+    else {
+      newCraftingLevel = 5;
+    }
+
+    changeCraftingLevel = false;
+  }
+
+  if (craftingLevelNum < 1) {
+    craftingLevel.innerHTML = "LVL 1";
+    craftingLevelSimple = 1;
+  }
+  else if (craftingLevelNum < 3) {
+    craftingLevel.innerHTML = "LVL 2";
+    craftingLevelSimple = 2;
+  }
+  else if (craftingLevelNum < 6) {
+    craftingLevel.innerHTML = "LVL 3";
+    craftingLevelSimple = 3;
+  }
+  else if (craftingLevelNum < 12) {
+    craftingLevel.innerHTML = "LVL 4";
+    craftingLevelSimple = 4;
+  }
+  else {
+    craftingLevel.innerHTML = "MAX";
+    craftingLevelSimple = 5;
+    craftingLevel.style.color = "#9b4fb9"
+  }
+
+  if (craftingLevelSimple > newCraftingLevel && myPlayer.craftingLevel !== 0) {
+    changeCraftingLevel = true;
+    levelUp.src = "./Textures/levelUpCrafting.gif"
+    levelUp.classList.add('fadeInAnim');
+    levelUp.style.display = "block";
+    levelUpAudio.play();
+
+    setTimeout(() => {
+      levelUp.style.display = "none";
+      levelUp.classList.remove('fadeInAnim');
+    }, 5000);
+  }
+
+  generalLevel = craftingLevelSimple;
+
+  // Fishing level <
 
   // Fishing level >
 
@@ -4559,16 +4660,16 @@ function shootDefaultArcane () {
     angle = i === 0 ? angle
     : i === 1 ? angle + 0.1
     : i === 2 ? angle - 0.1
-    : i === 3 ? angle + 0.2
-    : i === 4 ? angle - 0.2
-    : i === 5 ? angle + 0.3
-    : i === 6 ? angle - 0.3
-    : i === 7 ? angle + 0.4
-    : i === 8 ? angle - 0.4
-    : i === 9 ? angle + 0.5
-    : i === 10 ? angle - 0.5
-    : i === 11 ? angle + 0.6
-    : i === 12 ? angle - 0.6
+    : i === 3 ? angle + 0.05
+    : i === 4 ? angle - 0.05
+    : i === 5 ? angle + 0.15
+    : i === 6 ? angle - 0.15
+    : i === 7 ? angle + 0.2
+    : i === 8 ? angle - 0.2
+    : i === 9 ? angle + 0.25
+    : i === 10 ? angle - 0.25
+    : i === 11 ? angle + 0.3
+    : i === 12 ? angle - 0.3
     : angle;
 
 
@@ -5310,6 +5411,18 @@ areaName.style.transition = "opacity 1s ease";
 
 setTimeout(() => {
     areaName.style.opacity = 0;
+}, 4000);
+}
+
+function errorDisplay(name) {
+
+errorPopUp.textContent = name;
+
+errorPopUp.style.opacity = 1;
+errorPopUp.style.transition = "opacity 1s ease"; 
+
+setTimeout(() => {
+    errorPopUp.style.opacity = 0;
 }, 4000);
 }
 
@@ -14151,7 +14264,7 @@ let mapsInfo = {
         enemyStateInt: 1000,
         active: false,
         drop: "miniMushroom",
-        dropRate: 30,
+        dropRate: 10,
       },
       {
         name: "redMooshroomEnemy",
@@ -14187,7 +14300,7 @@ let mapsInfo = {
         enemyStateInt: 1000,
         active: false,
         drop: "miniMushroom",
-        dropRate: 30,
+        dropRate: 10,
       },
       {
         name: "redMooshroomEnemy",
@@ -14223,7 +14336,7 @@ let mapsInfo = {
         enemyStateInt: 1000,
         active: false,
         drop: "miniMushroom",
-        dropRate: 30,
+        dropRate: 10,
       },
       {
         name: "redMooshroomEnemy",
@@ -14259,7 +14372,7 @@ let mapsInfo = {
         enemyStateInt: 1000,
         active: false,
         drop: "miniMushroom",
-        dropRate: 30,
+        dropRate: 10,
       },
       {
         name: "redMooshroomEnemy",
@@ -14295,7 +14408,7 @@ let mapsInfo = {
         enemyStateInt: 1000,
         active: false,
         drop: "miniMushroom",
-        dropRate: 30,
+        dropRate: 10,
       },
       {
         name: "redMooshroomEnemy",
@@ -14331,7 +14444,7 @@ let mapsInfo = {
         enemyStateInt: 1000,
         active: false,
         drop: "miniMushroom",
-        dropRate: 30,
+        dropRate: 10,
       },
       {
         name: "mooshroomBossRed",
@@ -18919,11 +19032,11 @@ let mapsInfo = {
       currentStateName: "idle",
       currentState: null,
       attackInterval: true,
-      states: [lazerMooshState, attackCircleMooshBossState, moveState],
+      states: [lazerSokoState, attackCircleSokoState, moveState, invokeSokoState],
       damaged: 0,
-      health: 100,
+      health: 500,
       angle: 0,
-      maxHealth: 100,
+      maxHealth: 500,
       baseSpawn: {
         x: 1650,
         y: 1100
@@ -32416,7 +32529,7 @@ let originalMapsInfo = {
         enemyStateInt: 1000,
         active: false,
         drop: "miniMushroom",
-        dropRate: 30,
+        dropRate: 10,
       },
       {
         name: "redMooshroomEnemy",
@@ -32452,7 +32565,7 @@ let originalMapsInfo = {
         enemyStateInt: 1000,
         active: false,
         drop: "miniMushroom",
-        dropRate: 30,
+        dropRate: 10,
       },
       {
         name: "redMooshroomEnemy",
@@ -32488,7 +32601,7 @@ let originalMapsInfo = {
         enemyStateInt: 1000,
         active: false,
         drop: "miniMushroom",
-        dropRate: 30,
+        dropRate: 10,
       },
       {
         name: "redMooshroomEnemy",
@@ -32524,7 +32637,7 @@ let originalMapsInfo = {
         enemyStateInt: 1000,
         active: false,
         drop: "miniMushroom",
-        dropRate: 30,
+        dropRate: 10,
       },
       {
         name: "redMooshroomEnemy",
@@ -32560,7 +32673,7 @@ let originalMapsInfo = {
         enemyStateInt: 1000,
         active: false,
         drop: "miniMushroom",
-        dropRate: 30,
+        dropRate: 10,
       },
       {
         name: "redMooshroomEnemy",
@@ -32596,7 +32709,7 @@ let originalMapsInfo = {
         enemyStateInt: 1000,
         active: false,
         drop: "miniMushroom",
-        dropRate: 30,
+        dropRate: 10,
       },
       {
         name: "mooshroomBossRed",
@@ -43910,7 +44023,7 @@ function activateBossEnemy (enemy) {
     fightMusic1.play();
     violinDanger.play()
     bossWakingUpChallenge.play()
-    timeToWake = 40;
+    timeToWake = 100;
     bossBarImg.src = "./Textures/bossBarMoosh.png"
   }
   else if (enemy.name === "restfieldReaper") {
@@ -44055,19 +44168,22 @@ function checkEnemyCombat (enemy) {
 
     if (enemy.drop) {
       let randomNumber = Math.floor(Math.random() * 101);
-      if (enemy.dropRate <= randomNumber) {
+      if (enemy.dropRate >= randomNumber) {
         socket.emit("enemyDrop", enemy.drop);
       }
     }
 
-    const hasActiveBoss = mapsInfo[currentLand].enemies.some(
+    const hasActiveMinions = mapsInfo[currentLand].enemies.some(
       enemy => enemy.active === true && !enemy.isBoss
+    );
+    const hasActiveBoss = mapsInfo[currentLand].enemies.some(
+      enemy => enemy.active === true && enemy.isBoss
     );
     const bossAlive = mapsInfo[currentLand].enemies.find(
       enemy => enemy.isBoss === true && enemy.health > 0
     );
     
-    if (!hasActiveBoss && bossAlive) {
+    if (!hasActiveMinions && bossAlive && !hasActiveBoss) {
       const areaBoss = mapsInfo[currentLand].enemies.find(
         enemy => enemy.isBoss === true && enemy.active === false
       );
@@ -44597,6 +44713,416 @@ function attackCircleMooshBossState(enemy) {
       enemy.attackInterval = true;
     }, 800);
   }
+}
+
+function attackCircleSokoState(enemy) {
+  if (enemy.currentStateName === "idle") {
+    enemy.currentStateName = "attack2";
+  }
+  
+  if (attackCircleMooshBossStateVar) {
+    attackCircleMooshBossStateVar = false;
+  } else {
+    attackCircleMooshBossStateVar = true
+  }
+  
+  if (enemy.attackInterval) {
+    enemy.attackInterval = false;
+
+    const totalBullets = 80; // Total bullets forming the circle
+    const angleIncrement = (2 * Math.PI) / totalBullets; // Full circle divided into 20 parts
+
+    const pop2 = new Audio("./audios/pop2.wav");
+    pop2.loop = false;
+    pop2.volume = 0.5;
+    pop2.play();
+
+    setTimeout(() => {
+      const basicBulletTree = new Audio("./audios/basicBulletTree.wav");
+      basicBulletTree.loop = false;
+      basicBulletTree.volume = 0.5;
+      // basicBulletTree.play()
+      for (let i = 0; i < totalBullets; i++) {
+        const bulletAngle = i * angleIncrement; // Calculate angle for each bullet
+        projectilesClient.push({
+          angle: attackCircleMooshBossStateVar ? bulletAngle : bulletAngle + 0.01,
+          x: enemy.spawn.x + ((enemy.w)/2) + 200 + Math.cos(bulletAngle) * 20, // Offset to create a circular spawn
+          y: enemy.spawn.y + ((enemy.h)/2) + 200 + Math.sin(bulletAngle) * 20,
+          speed: 5,
+          timeLeft: 300,
+          playerId: socket.id,
+          enemy: true,
+        });
+      }
+    }, 1000);
+
+
+    setTimeout(() => {
+      enemy.attackInterval = true;
+    }, 2000);
+  }
+}
+
+function lazerSokoState(enemy) {
+  
+  if (enemy.currentStateName === "idle") {
+    enemy.currentStateName = "attack1";
+  }
+  
+  if (enemy.attackInterval) {
+
+  let bulletAngle = getAngleBetweenPlayerAndEnemy(enemy);
+  enemy.attackInterval = false;
+
+  setTimeout(() => {
+    enemy.attackInterval = true;
+  }, 100);
+
+    projectilesClient.push({
+      angle: bulletAngle,
+      x: enemy.spawn.x + ((enemy.w)/2) + 200,
+      y: enemy.spawn.y + ((enemy.h)/2) + 200,
+      speed: 15,
+      timeLeft: 250,
+      playerId: socket.id,
+      enemy: true
+    }) 
+
+    projectilesClient.push({
+      angle: bulletAngle + 0.05,
+      x: enemy.spawn.x + ((enemy.w)/2) + 200,
+      y: enemy.spawn.y + ((enemy.h)/2) + 200,
+      speed: 15,
+      timeLeft: 250,
+      playerId: socket.id,
+      enemy: true
+    }) 
+
+    projectilesClient.push({
+      angle: bulletAngle - 0.05,
+      x: enemy.spawn.x + ((enemy.w)/2) + 200,
+      y: enemy.spawn.y + ((enemy.h)/2) + 200,
+      speed: 15,
+      timeLeft: 250,
+      playerId: socket.id,
+      enemy: true
+    }) 
+    
+    projectilesClient.push({
+      angle: bulletAngle + 0.1,
+      x: enemy.spawn.x + ((enemy.w)/2) + 200,
+      y: enemy.spawn.y + ((enemy.h)/2) + 200,
+      speed: 15,
+      timeLeft: 250,
+      playerId: socket.id,
+      enemy: true
+    }) 
+
+    projectilesClient.push({
+      angle: bulletAngle - 0.1,
+      x: enemy.spawn.x + ((enemy.w)/2) + 200,
+      y: enemy.spawn.y + ((enemy.h)/2) + 200,
+      speed: 15,
+      timeLeft: 250,
+      playerId: socket.id,
+      enemy: true
+    }) 
+
+    projectilesClient.push({
+      angle: bulletAngle - 0.15,
+      x: enemy.spawn.x + ((enemy.w)/2) + 200,
+      y: enemy.spawn.y + ((enemy.h)/2) + 200,
+      speed: 15,
+      timeLeft: 250,
+      playerId: socket.id,
+      enemy: true
+    }) 
+
+    projectilesClient.push({
+      angle: bulletAngle - 0.15,
+      x: enemy.spawn.x + ((enemy.w)/2) + 200,
+      y: enemy.spawn.y + ((enemy.h)/2) + 200,
+      speed: 15,
+      timeLeft: 250,
+      playerId: socket.id,
+      enemy: true
+    }) 
+    
+    projectilesClient.push({
+      angle: bulletAngle - 0.20,
+      x: enemy.spawn.x + ((enemy.w)/2) + 200,
+      y: enemy.spawn.y + ((enemy.h)/2) + 200,
+      speed: 15,
+      timeLeft: 250,
+      playerId: socket.id,
+      enemy: true
+    }) 
+
+    projectilesClient.push({
+      angle: bulletAngle - 0.20,
+      x: enemy.spawn.x + ((enemy.w)/2) + 200,
+      y: enemy.spawn.y + ((enemy.h)/2) + 200,
+      speed: 15,
+      timeLeft: 250,
+      playerId: socket.id,
+      enemy: true
+    }) 
+
+    const pop1 = new Audio("./audios/pop1.wav");
+    pop1.loop = false;
+    pop1.volume = 0.5;
+
+    const pop2 = new Audio("./audios/pop2.wav");
+    pop2.loop = false;
+    pop2.volume = 0.5;
+
+    const sounds = [pop1, pop2];
+
+    const playRandomSound = () => {
+      sounds[Math.floor(Math.random() * sounds.length)].play();
+    };
+
+    playRandomSound();
+  }
+}
+
+function invokeSokoState(enemy) {
+  if (enemy.currentStateName === "idle") {
+    enemy.currentStateName = "attack1";
+  }
+  
+  if (enemy.attackInterval) {
+
+  enemy.attackInterval = false;
+
+  setTimeout(() => {
+    enemy.attackInterval = true;
+  }, 5000);
+
+  let skeletonsToPush =  [
+    {
+      name: "restfieldSkeleton",
+      imgw: 48,
+      imgh: 48,
+      imgcw: 48,
+      imgch: 0,
+      frames: 0,
+      framesTimer: 0,
+      level: 1,
+      xp: 100,
+      speedX: 15,
+      speedY: 15,
+      spawn: {
+        x: 1575,
+        y: 1158
+      },
+      w: 140,
+      h: 140,
+      currentStateName: "idle",
+      currentState: null,
+      attackInterval: true,
+      states: [moveState, attackState],
+      damaged: 0,
+      health: 5,
+      angle: 0,
+      maxHealth: 10,
+      baseSpawn: {
+        x: 1575,
+        y: 1158
+      },
+      spawnTimer: null,
+      enemyStateInt: 1000,
+      active: false,
+    },
+
+    {
+      name: "restfieldSkeleton",
+      imgw: 48,
+      imgh: 48,
+      imgcw: 48,
+      imgch: 0,
+      frames: 0,
+      framesTimer: 0,
+      level: 1,
+      xp: 100,
+      speedX: 15,
+      speedY: 15,
+      spawn: {
+        x: 2327,
+        y: 1128
+      },
+      w: 140,
+      h: 140,
+      currentStateName: "idle",
+      currentState: null,
+      attackInterval: true,
+      states: [moveState, attackState],
+      damaged: 0,
+      health: 5,
+      angle: 0,
+      maxHealth: 10,
+      baseSpawn: {
+        x: 2327,
+        y: 1128
+      },
+      spawnTimer: null,
+      enemyStateInt: 1000,
+      active: false,
+    },
+
+    {
+      name: "restfieldSkeleton",
+      imgw: 48,
+      imgh: 48,
+      imgcw: 48,
+      imgch: 0,
+      frames: 0,
+      framesTimer: 0,
+      level: 1,
+      xp: 100,
+      speedX: 15,
+      speedY: 15,
+      spawn: {
+        x: 2590,
+        y: 1705
+      },
+      w: 140,
+      h: 140,
+      currentStateName: "idle",
+      currentState: null,
+      attackInterval: true,
+      states: [moveState, attackState],
+      damaged: 0,
+      health: 5,
+      angle: 0,
+      maxHealth: 10,
+      baseSpawn: {
+        x: 2590,
+        y: 1705
+      },
+      spawnTimer: null,
+      enemyStateInt: 1000,
+      active: false,
+    },
+
+    {
+      name: "restfieldSkeleton",
+      imgw: 48,
+      imgh: 48,
+      imgcw: 48,
+      imgch: 0,
+      frames: 0,
+      framesTimer: 0,
+      level: 1,
+      xp: 100,
+      speedX: 15,
+      speedY: 15,
+      spawn: {
+        x: 1225,
+        y: 1707
+      },
+      w: 140,
+      h: 140,
+      currentStateName: "idle",
+      currentState: null,
+      attackInterval: true,
+      states: [moveState, attackState],
+      damaged: 0,
+      health: 5,
+      angle: 0,
+      maxHealth: 10,
+      baseSpawn: {
+        x: 1225,
+        y: 1707
+      },
+      spawnTimer: null,
+      enemyStateInt: 1000,
+      active: false,
+    },
+    
+    {
+      name: "restfieldSkeleton",
+      imgw: 48,
+      imgh: 48,
+      imgcw: 48,
+      imgch: 0,
+      frames: 0,
+      framesTimer: 0,
+      level: 1,
+      xp: 100,
+      speedX: 15,
+      speedY: 15,
+      spawn: {
+        x: 1650,
+        y: 2125
+      },
+      w: 140,
+      h: 140,
+      currentStateName: "idle",
+      currentState: null,
+      attackInterval: true,
+      states: [moveState, attackState],
+      damaged: 0,
+      health: 5,
+      angle: 0,
+      maxHealth: 10,
+      baseSpawn: {
+        x: 1650,
+        y: 2125
+      },
+      spawnTimer: null,
+      enemyStateInt: 1000,
+      active: false,
+    },
+
+    {
+      name: "restfieldSkeleton",
+      imgw: 48,
+      imgh: 48,
+      imgcw: 48,
+      imgch: 0,
+      frames: 0,
+      framesTimer: 0,
+      level: 1,
+      xp: 100,
+      speedX: 15,
+      speedY: 15,
+      spawn: {
+        x: 2330,
+        y: 2048
+      },
+      w: 140,
+      h: 140,
+      currentStateName: "idle",
+      currentState: null,
+      attackInterval: true,
+      states: [moveState, attackState],
+      damaged: 0,
+      health: 5,
+      angle: 0,
+      maxHealth: 10,
+      baseSpawn: {
+        x: 2330,
+        y: 2048
+      },
+      spawnTimer: null,
+      enemyStateInt: 1000,
+      active: false,
+    },
+  ]
+
+  skeletonsToPush.forEach(skelly => {
+    mapsInfo[currentLand].enemies.push(skelly);
+  })
+
+  setTimeout(() => {
+    mapsInfo[currentLand].enemies.forEach(skelly => {
+      activateNormalEnemy(skelly)
+    })
+  }, 1000);
+
+  }
+
 }
 
 function resolveEnemyCollisions(enemy) {

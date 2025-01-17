@@ -62,8 +62,9 @@ function tick() {
 
                 player.fishingLevel = clientPlayer.fishing;
                 player.cookingLevel = clientPlayer.cooking;
-                player.enchantingLevel = clientPlayer.explore;
+                player.craftingLevel = clientPlayer.crafting;
                 player.combatLevel = clientPlayer.combat;
+                player.enchantingLevel = clientPlayer.enchanting;
                 player.questsOngoing = clientPlayer.questsOngoing;
                 player.questsCompleted = clientPlayer.questsCompleted;
             }
@@ -214,6 +215,8 @@ async function main() {
             artifacts: [],  
             fishing: 0, 
             cooking: 0, 
+            crafting: 0, 
+            enchanting: 0, 
             combat: 0, 
             scores: [
             {
@@ -234,6 +237,7 @@ async function main() {
             fishingLevel: 0,
             cookingLevel: 0,
             enchantingLevel: 0,
+            craftingLevel: 0,
             combatLevel: 0,
             questsOngoing: [],
             questsCompleted: [],
@@ -524,9 +528,9 @@ async function main() {
         socket.on("islandOneExplored", () => {
             async function explored() {
                 const player = await Player.findOne({socket: socket.id}).exec();
-                const exploringLevelPlus = player.explore + 500;
+                const exploringLevelPlus = player.crafting + 500;
                                            
-                await Player.findOneAndUpdate({socket: socket.id}, {explore: exploringLevelPlus}, {new: true});
+                await Player.findOneAndUpdate({socket: socket.id}, {crafting: exploringLevelPlus}, {new: true});
         
                 myPlayer[socket.id] = player;      
                 
@@ -630,6 +634,7 @@ async function main() {
                     let arrayOfNames = []
                     let arrayOfRarity = []
                     let staff = null;
+                    let xp = 0;
 
                     for (const item of items) {
                         if (!arrayOfNames.includes(item.name)) {
@@ -645,19 +650,24 @@ async function main() {
 
                     if (arrayOfNames.includes("runeBullets")) {
                         staff.bullets *= 2;    
+                        xp = 1500;
                     }
                     else if (arrayOfNames.includes("runeRange")) {
                         staff.range *= 2; 
+                        xp = 500;
                     }
                     else if (arrayOfNames.includes("runeFireRate")) {
                         staff.fireRate /= 2; 
+                        xp = 1000;
                     }
 
                     staff.charges -= 1;
                     
 
                     player.inventory.push(staff);                                           
+                    player.enchanting += xp;                                           
                     await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
+                    await Player.findOneAndUpdate({socket: socket.id}, {enchanting: player.enchanting}, {new: true});
                     io.to(socket.id).emit('obtained', staff);
                 
               };
@@ -688,23 +698,30 @@ async function main() {
                     }
 
                     let staff;
+                    let xp = 0;
 
                     if (arrayOfNames.includes("arcaneGem2") && arrayOfNames.includes("stick")) {
-                        staff = arcaneLancerInv;    
+                        staff = arcaneLancerInv;   
+                        xp = 1000; 
                     }
                     else if (arrayOfNames.includes("arcaneGem") && arrayOfNames.includes("stick")) {
                         staff = arcaneStaffCommon; 
+                        xp = 500;
                     }
                     else if (arrayOfNames.includes("arcaneGem3") && arrayOfNames.includes("stick")) {
                         staff = arcaneRepeaterInv; 
+                        xp = 1500;
                     } 
                     else if (arrayOfNames.includes("restfieldBlanket") && arrayOfNames.includes("restfieldBlanket")){
                         staff = restfieldGhostClothes; 
+                        xp = 500;
                     }
                     
 
-                    player.inventory.push(staff);                                           
+                    player.inventory.push(staff); 
+                    player.crafting += xp;                                          
                     await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
+                    await Player.findOneAndUpdate({socket: socket.id}, {crafting: player.crafting}, {new: true});
                     io.to(socket.id).emit('obtained', staff);
                 
               };
@@ -970,28 +987,10 @@ async function main() {
                 
                 const player = await Player.findOne({socket: socket.id}).exec();
 
-                if (player.inventory.length <= 8) {                                             
+                if (player.inventory.length <= 20) {                                             
             
                         myPlayer[socket.id] = player; 
                         let itemObj;     
-                        
-                        if (item === "stick") {
-                            itemObj = {
-                                type: "stick",
-                                name: "stick",
-                                value: 2,
-                                image: "./inventory/stick.png",
-                            };                           
-                        }     
-
-                        if (item === "melrodSeed") {
-                            itemObj = {
-                                type: "seed",
-                                name: "melrodSeed",
-                                value: 1,
-                                image: "./inventory/melrodSeed.png",
-                            };
-                        }     
 
                         if (myPlayer[socket.id].currency >= itemObj.value) {
                             myPlayer[socket.id].currency -= itemObj.value;
@@ -1041,7 +1040,6 @@ async function main() {
                     await Player.findOneAndUpdate({socket: socket.id}, {weapon: player.weapon}, {new: true});
                     await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
 
-                    console.log("after", player.inventory)
     
                     myPlayer[socket.id] = player;      
                 } 
@@ -1115,17 +1113,27 @@ async function main() {
                     
 
                     const loginAttempt = "success";
-                    await pushItem(runeBullets, socket)
-                    await pushItem(runeFireRate, socket)
+                    // await pushItem(runeBullets, socket)
+                    // await pushItem(runeFireRate, socket)
                     await pushItem(runeRange, socket)
-                    // await pushItem(mushroomClothesOrange, socket)
+                    await pushItem(chestKeyCommon, socket)
+                    await pushItem(chestKeyCommon, socket)
+                    await pushItem(chestKeyCommon, socket)
+                    await pushItem(chestKeyCommon, socket)
                     // await pushItem(reaperClothes, socket)
                     // await pushItem(blackVampiresClothes, socket)
                     // await pushItem(fishermanClothes, socket)
                     // await pushItem(tropicalHat, socket)
                     // await pushItem(skullHelmet, socket)
-                    await pushItem(arcaneRepeaterInv, socket)
-                    await pushItem(arcaneLancerInv, socket)
+                    // await pushItem(arcaneGem, socket)
+                    // await pushItem(arcaneGem, socket)
+                    // await pushItem(arcaneGem, socket)
+                    // await pushItem(stick, socket)
+                    // await pushItem(stick, socket)
+                    // await pushItem(stick, socket)
+                    // await pushItem(arcaneRepeaterInv, socket)
+                    // await pushItem(arcaneLancerInv, socket)
+                    await pushItem(arcaneStaffCommon, socket)
                     await pushItem(arcaneStaffCommon, socket)
 
                     // await Player.findOneAndUpdate({socket: socket.id}, {souls: [restfieldSkeletonSoulInventory, ghostSoulInventory, restfieldZombieSoulInventory, redDemonSoulInventory, pinkDemonSoulInventory]}, {new: true});
@@ -1133,7 +1141,7 @@ async function main() {
                     // let item = {
                     //     type: "questItem",
                     //     name: "slimePoison",
-                    //     value: 20,
+                    //     value: 20
                     //     image: "./inventory/slimePotion.png",
                     // }
                     // let inventory = newPlayerData.inventory
@@ -1374,6 +1382,7 @@ async function pushItem(item, socket) {
 const arcaneGem = {
     type: "gem",
     name: "arcaneGem",
+    level: 1,
     value: 5,
     rarity: "common",
     image: "./inventory/arcaneGem.png",
@@ -1381,6 +1390,7 @@ const arcaneGem = {
 const arcaneGem2 = {
     type: "gem",
     name: "arcaneGem2",
+    level: 2,
     value: 10,
     rarity: "uncommon",
     image: "./inventory/arcaneGem2.png",
@@ -1388,6 +1398,7 @@ const arcaneGem2 = {
 const arcaneGem3 = {
     type: "gem",
     name: "arcaneGem3",
+    level: 3,
     value: 15,
     rarity: "rare",
     image: "./inventory/arcaneGem3.png",
@@ -1395,6 +1406,7 @@ const arcaneGem3 = {
 const arcaneGem4 = {
     type: "gem",
     name: "arcaneGem4",
+    level: 4,
     value: 20,
     rarity: "rare",
     image: "./inventory/arcaneGem4.png",
@@ -1402,6 +1414,7 @@ const arcaneGem4 = {
 const arcaneGem5 = {
     type: "gem",
     name: "arcaneGem5",
+    level: 5,
     value: 50,
     rarity: "rare",
     image: "./inventory/arcaneGem5.png",
@@ -1409,6 +1422,7 @@ const arcaneGem5 = {
 const solarGem = {
     type: "gem",
     name: "solarGem",
+    level: 1,
     value: 5,
     rarity: "common",
     image: "./inventory/solarGem.png",
@@ -1416,6 +1430,7 @@ const solarGem = {
 const nuclearGem = {
     type: "gem",
     name: "nuclearGem",
+    level: 5,
     value: 5,
     rarity: "common",
     image: "./inventory/nuclearGem.png",
@@ -1423,6 +1438,7 @@ const nuclearGem = {
 const commonFishStick = {
     type: "food",
     name: "commonFishStick",
+    level: 1,
     value: 5,
     power: 1,
     rarity: "common",
@@ -1431,6 +1447,7 @@ const commonFishStick = {
 const uncommonFishStick = {
     type: "food",
     name: "uncommonFishStick",
+    level: 2,
     value: 5,
     power: 2,
     rarity: "uncommon",
@@ -1439,6 +1456,7 @@ const uncommonFishStick = {
 const rareFishStick = {
     type: "food",
     name: "rareFishStick",
+    level: 3,
     value: 5,
     power: 4,
     rarity: "rare",
@@ -1447,6 +1465,7 @@ const rareFishStick = {
 const commonFish = {
     type: "food",
     name: "commonFish",
+    level: 1,
     value: 5,
     power: 1,
     rarity: "common",
@@ -1455,6 +1474,7 @@ const commonFish = {
 const arcaneStaffCommon = {
     type: "weapon",
     name: "arcaneStaffCommon",
+    level: 1,
     value: 30,
     rarity: "common",
     image: "./inventory/arcaneStaffCommon.png",
@@ -1472,6 +1492,7 @@ const arcaneStaffCommon = {
 const arcaneRepeaterInv = {
     type: "weapon",
     name: "arcaneRepeaterInv",
+    level: 3,
     value: 30,
     rarity: "common",
     image: "./inventory/arcaneRepeaterInv.png",
@@ -1489,6 +1510,7 @@ const arcaneRepeaterInv = {
 const arcaneLancerInv = {
     type: "weapon",
     name: "arcaneLancerInv",
+    level: 2,
     value: 60,
     rarity: "common",
     image: "./inventory/arcaneLancerInv.gif",
@@ -1496,7 +1518,7 @@ const arcaneLancerInv = {
     charges: 2,
 
     durability: 50,
-    damage: 5,
+    damage: 3,
     bullets: 1,
     speed: 2,
     range: 30,
@@ -1507,6 +1529,7 @@ const arcaneLancerInv = {
 const solarStaffCommon = {
     type: "weapon",
     name: "solarStaffCommon",
+    level: 1,
     value: 20,
     rarity: "common",
     image: "./inventory/solarStaffCommon.png",
@@ -1514,6 +1537,7 @@ const solarStaffCommon = {
 const nuclearStaffCommon = {
     type: "weapon",
     name: "nuclearStaffCommon",
+    level: 5,
     value: 50,
     rarity: "common",
     image: "./inventory/nuclearStaffCommon.png",
@@ -1521,6 +1545,7 @@ const nuclearStaffCommon = {
 const uncommonFish = {
     type: "food",
     name: "uncommonFish",
+    level: 2,
     value: 5,
     power: 2,
     rarity: "uncommon",
@@ -1529,6 +1554,7 @@ const uncommonFish = {
 const rareFish = {
     type: "food",
     name: "rareFish",
+    level: 3,
     value: 5,
     power: 4,
     rarity: "rare",
@@ -1537,6 +1563,7 @@ const rareFish = {
 const stick = {
     type: "stick",
     name: "stick",
+    level: 1,
     value: 2,
     rarity: "common",
     image: "./inventory/stick.png",
@@ -1544,6 +1571,7 @@ const stick = {
 const willowStick = {
     type: "stick",
     name: "willowStick",
+    level: 1,
     value: 2,
     rarity: "rare",
     image: "./inventory/willowStick.png",
@@ -1551,6 +1579,7 @@ const willowStick = {
 const chestKey = {
     type: "key",
     name: "chestKey",
+    level: 1,
     value: 30,
     rarity: "rare",
     image: "./inventory/chestKey.png",
@@ -1558,6 +1587,7 @@ const chestKey = {
 const chestKeyCommon = {
     type: "key",
     name: "chestKeyCommon",
+    level: 1,
     value: 30,
     rarity: "rare",
     image: "./inventory/chestKeyCommon.png",
@@ -1565,6 +1595,7 @@ const chestKeyCommon = {
 const chestKeyRestfield = {
     type: "key",
     name: "chestKeyRestfield",
+    level: 1,
     value: 30,
     rarity: "rare",
     image: "./inventory/chestKeyRestfield.png",
@@ -1572,6 +1603,7 @@ const chestKeyRestfield = {
 const sardin = {
     type: "fish",
     name: "sardin",
+    level: 1,
     value: 1,
     rarity: "common",
     image: "./inventory/sarding.png",
@@ -1579,6 +1611,7 @@ const sardin = {
 const ballo = {
      type: "fish",
      name: "ballo",
+     level: 2,
      value: 2,
      rarity: "uncommon",
      image: "./inventory/ballo.jpg",
@@ -1586,6 +1619,7 @@ const ballo = {
 const bass = {
     type: "fish",
     name: "bass",
+    level: 3,
     value: 3,
     rarity: "rare",
     image: "./inventory/bass.png",
@@ -1593,6 +1627,7 @@ const bass = {
 const octopus = {
     type: "fish",
     name: "octopus",
+    level: 5,
     value: 4,
     rarity: "rare",
     image: "./inventory/octopus.png",
@@ -1600,6 +1635,7 @@ const octopus = {
 const treeLeaf = {
     type: "quest",
     name: "treeLeaf",
+    level: 1,
     value: 4,
     rarity: "rare",
     image: "./inventory/treeLeaf.png",
@@ -1607,6 +1643,7 @@ const treeLeaf = {
 const miniMushroom = {
     type: "quest",
     name: "miniMushroom",
+    level: 2,
     value: 4,
     rarity: "rare",
     image: "./inventory/miniMushroom.png",
@@ -1614,6 +1651,7 @@ const miniMushroom = {
 const bone = {
     type: "quest",
     name: "bone",
+    level: 3,
     value: 4,
     rarity: "rare",
     image: "./inventory/bone.png",
@@ -1621,6 +1659,7 @@ const bone = {
 const slimeGuts = {
     type: "quest",
     name: "slimeGuts",
+    level: 1,
     value: 4,
     rarity: "rare",
     image: "./inventory/slimeGuts.png",
@@ -1628,6 +1667,7 @@ const slimeGuts = {
  const restfieldBlanket = {
     type: "material",
     name: "restfieldBlanket",
+    level: 3,
     value: 4,
     rarity: "rare",
     image: "./inventory/restfieldBlanket.png",
@@ -1635,6 +1675,7 @@ const slimeGuts = {
 const runeBullets = {
     type: "rune",
     name: "runeBullets",
+    level: 3,
     value: 4,
     code: "054231",
     rarity: "rare",
@@ -1643,6 +1684,7 @@ const runeBullets = {
 const runeFireRate = {
     type: "rune",
     name: "runeFireRate",
+    level: 2,
     value: 4,
     code: "502341",
     rarity: "rare",
@@ -1651,6 +1693,7 @@ const runeFireRate = {
 const runeRange = {
     type: "rune",
     name: "runeRange",
+    level: 1,
     value: 4,
     code: "203145",
     rarity: "rare",
@@ -1664,6 +1707,7 @@ const runeRange = {
 const mushroomClothesRed = {
     type: "artifact",
     name: "redMushroomlInventory",
+    level: 1,
     value: 20,
     rarity: "common",
     image: "./inventory/clothesInventory/redMushroomlInventory.png",
@@ -1671,6 +1715,7 @@ const mushroomClothesRed = {
 const mushroomClothesOrange = {
     type: "artifact",
     name: "rorangeMushroomlInventory",
+    level: 1,
     value: 20,
     rarity: "common",
     image: "./inventory/clothesInventory/orangeMushroomlInventory.png",
@@ -1678,6 +1723,7 @@ const mushroomClothesOrange = {
 const tropicalHatInventory = {
     type: "artifact",
     name: "tropicalHatInventory",
+    level: 1,
     value: 20,
     rarity: "common",
     image: "./inventory/clothesInventory/tropicalHatInventory.png",
@@ -1685,6 +1731,7 @@ const tropicalHatInventory = {
 const skullHelmet = {
     type: "artifact",
     name: "skullInventory",
+    level: 1,
     value: 20,
     rarity: "common",
     image: "./inventory/clothesInventory/skullInventory.png",
@@ -1692,6 +1739,7 @@ const skullHelmet = {
 const reaperInventory = {
     type: "artifact",
     name: "reaperInventory",
+    level: 1,
     value: 20,
     rarity: "common",
     image: "./inventory/clothesInventory/reaperInventory.png",
@@ -1699,6 +1747,7 @@ const reaperInventory = {
 const blackVampiresClothes = {
     type: "artifact",
     name: "vampiresInventory",
+    level: 1,
     value: 20,
     rarity: "common",
     image: "./inventory/clothesInventory/vampiresInventory.png",
@@ -1706,6 +1755,7 @@ const blackVampiresClothes = {
 const fishermanClothes = {
     type: "artifact",
     name: "fishrmanInventory",
+    level: 1,
     value: 20,
     rarity: "common",
     image: "./inventory/clothesInventory/fishrmanInventory.png",
@@ -1713,6 +1763,7 @@ const fishermanClothes = {
 const romanHelmet = {
     type: "artifact",
     name: "romanHelmetInventory",
+    level: 1,
     value: 20,
     rarity: "common",
     image: "./inventory/clothesInventory/romanHelmetInventory.png",
@@ -1720,6 +1771,7 @@ const romanHelmet = {
 const restfieldGhostClothes = {
     type: "artifact",
     name: "restfieldGhostClothes",
+    level: 1,
     value: 20,
     rarity: "common",
     image: "./inventory/clothesInventory/restfieldGhostInventory.png",
@@ -1727,6 +1779,7 @@ const restfieldGhostClothes = {
 const restfieldZombieInventory = {
     type: "artifact",
     name: "restfieldZombieInventory",
+    level: 1,
     value: 20,
     rarity: "common",
     image: "./inventory/clothesInventory/restfieldZombieInventory.png",
