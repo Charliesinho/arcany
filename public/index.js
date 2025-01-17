@@ -3529,6 +3529,67 @@ socket.on("player", (serverPlayer) => {
       },
     ],
     },
+    "Jonny the sneaky One Quest": {
+    dialogName: "quest",
+    questRequirements: [],
+    type: "counter",
+  
+    questName: "Jonny the sneaky One Quest",
+    questDecription: `Restfield Cemetery is full of ghosts. Garald's family is buried there, and his only dream is to pray at his mom’s grave one last time. However, his brother Jonny is a sneaky one and constantly scares him.Help Garald gather 10 ghost blankets so he can disguise himself as one of them and finally pray for his mom.`,
+    questCard: "./Cards/fight.png",
+    rewardType: "soul",
+    rewardItem: "ghostSoulInventory",
+    completionItem: "restfieldBlanket",
+    completionAmount: 10,
+    markerX: 453,
+    markerY: 2018,
+    
+    dialogText:
+    [
+      {
+        NPC: "Gerald",
+        text: "This... this place. They... they appear from everywhere.",
+      },
+      {
+        NPC: "Gerald",
+        text: "All my family is buried in Restfield Cemetery, including my brother, Jonny. Ever since he died, I haven’t been able to go there—he used to spend all his time scaring me.",
+      },
+      {
+        NPC: "Gerald",
+        text: "I’m scared. I’m old now, you know. I can’t defend myself anymore.",
+      },
+      {
+        NPC: "Gerald",
+        text: "If only I had 10 of those blankets they drop... Maybe, just maybe, I could craft something that would make me like them. Then I could finally visit my mom’s grave.",
+      },
+      {
+        NPC: "Gerald",
+        text: "Just one last time.",
+      },
+      
+    ],
+  
+    progressText:
+    [
+      {
+        NPC: "Gerald",
+        text: "So, how is Jonny? Did you found him?",
+      },
+      {
+        NPC: "Gearld",
+        text: "...",
+        check: true,
+      },
+    ],
+  
+    rewardText:
+    [
+      {
+        NPC: "Gerald",
+        text: "Amazing! Mommy I am comming!",
+      },
+    ],
+    },
   
   
   
@@ -18457,6 +18518,15 @@ let mapsInfo = {
         "width": 55,
         "height": 95,
         "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "dialog",
+        "name": "Jonny the sneaky One Quest",
+        "x": 305,
+        "y": 1941.5,
+        "width": 368,
+        "height": 240,
+        "color": "rgb(179, 255, 213, 0)"
       }
     ],
     enemies: []
@@ -31074,14 +31144,6 @@ let originalMapsInfo = {
       },
       {
         "type": "wall",
-        "x": 2117.5,
-        "y": 3097,
-        "width": 147,
-        "height": 323,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
         "x": 1837.5,
         "y": 3385,
         "width": 154,
@@ -31161,6 +31223,22 @@ let originalMapsInfo = {
         "width": 96,
         "height": 87,
         "color": "rgb(204, 0, 204, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2113.5,
+        "y": 3105.5,
+        "width": 5,
+        "height": 335,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "enchanting",
+        "x": 1629.5,
+        "y": 2773.5,
+        "width": 599,
+        "height": 464,
+        "color": "rgb(204, 0, 255, 0)"
       }
     ],
     enemies: [],
@@ -36722,6 +36800,15 @@ let originalMapsInfo = {
         "width": 55,
         "height": 95,
         "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "dialog",
+        "name": "Jonny the sneaky One Quest",
+        "x": 305,
+        "y": 1941.5,
+        "width": 368,
+        "height": 240,
+        "color": "rgb(179, 255, 213, 0)"
       }
     ],
     enemies: []
@@ -37319,11 +37406,11 @@ let originalMapsInfo = {
       currentStateName: "idle",
       currentState: null,
       attackInterval: true,
-      states: [lazerMooshState, attackCircleMooshBossState, moveState],
+      states: [lazerSokoState, attackCircleSokoState, moveState, invokeSokoState],
       damaged: 0,
-      health: 100,
+      health: 500,
       angle: 0,
-      maxHealth: 100,
+      maxHealth: 500,
       baseSpawn: {
         x: 1650,
         y: 1100
