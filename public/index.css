@@ -1019,6 +1019,15 @@ body {
     width: 35px;
     height: auto;
 }
+#hideAndSick{
+    display: none;
+    position: absolute;
+    bottom: 14px;
+    left: 115px;
+    z-index: 2;
+    width: 43px;
+    height: auto;
+}
 
 #chat {
     display: none;

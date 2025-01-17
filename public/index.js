@@ -480,6 +480,7 @@ let cameraShakeY = -180;
 
 const chatButton = document.getElementById('chatIcon');
 const sitDownIconButton = document.getElementById('sitDownIcon');
+const hideAndSickButton = document.getElementById('hideAndSick');
 const chat = document.getElementById('chat');
 const chatInput = document.getElementById("chatInput");
 let blockMovement = true;
@@ -1817,6 +1818,16 @@ sitDownIconButton.addEventListener("click", () => {
     socket.emit("animPlayer", animPlayer);
     socket.emit("lastLookPlayer", lastLookPlayer);
   }
+  
+})
+let hideAndSickvar = false
+hideAndSickButton.addEventListener("click", () => {
+  if (hideAndSickvar === false){
+    hideAndSickvar = true
+  } else {
+    hideAndSickvar = false
+  }
+  
   
 })
 
@@ -3529,8 +3540,8 @@ socket.on("player", (serverPlayer) => {
     rewardItem: "ghostSoulInventory",
     completionItem: "restfieldBlanket",
     completionAmount: 10,
-    markerX: 453,
-    markerY: 2018,
+    markerX: 550,
+    markerY: 2090,
     
     dialogText:
     [
@@ -4280,6 +4291,7 @@ socket.on("loginAttempt", (msg) => {
     menuUiProfile.style.display = "flex";
     chatButton.style.display = "block";
     sitDownIconButton.style.display = "block";
+    hideAndSickButton.style.display = "block";
     
 
     setTimeout(() => {
@@ -43688,8 +43700,10 @@ function drawPlayerWeaponSheated(player) {
   }
 }
 
+
 function drawUsernameOnline (player, smoothPlayer) {
-  canvas.drawImage(nameBubbleGreen, smoothPlayer.smoothX - cameraX -40, smoothPlayer.smoothY - cameraY -48, 100,50)
+  if (hideAndSickvar === false){
+canvas.drawImage(nameBubbleGreen, smoothPlayer.smoothX - cameraX -40, smoothPlayer.smoothY - cameraY -48, 100,50)
   canvas.beginPath();
   canvas.font = "bolder 16px Tiny5";
   canvas.textAlign = "center";
@@ -43700,6 +43714,8 @@ function drawUsernameOnline (player, smoothPlayer) {
   canvas.textAlign = "center";
   canvas.fillStyle = "black";
   canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)) , smoothPlayer.smoothX - cameraX + 10, smoothPlayer.smoothY  - cameraY - 30.5);
+  }
+  
 }
 
 function drawUsernameLocal (player) {
