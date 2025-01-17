@@ -1,7 +1,7 @@
 //Change this to push >
 
-const socket = io(`ws://localhost:5000`);
-// const socket = io(`https://arcanyGame.up.railway.app/`);
+// const socket = io(`ws://localhost:5000`);
+const socket = io(`https://arcanyGame.up.railway.app/`);
 
 //Change this to push <
 
@@ -2375,7 +2375,6 @@ function checkCodeEnachant (number) {
       } else {
         const enchantFail = new Audio("./audios/enchantFail.wav");
         enchantFail.loop = false;
-        enchantFail.volume = 0.5;
         enchantFail.play();
       }
       setTimeout(() => {   

@@ -1014,11 +1014,11 @@ async function main() {
                 if (equipment.type === "soul") {
                     const player = await Player.findOne({socket: socket.id}).exec();
     
-                    player.souls = [equipment];
+                    // player.souls = [equipment];
                     player.armor.splice(equipment.index, 1);
                                            
                     await Player.findOneAndUpdate({socket: socket.id}, {armor: player.armor}, {new: true});
-                    await Player.findOneAndUpdate({socket: socket.id}, {souls: player.souls}, {new: true});
+                    // await Player.findOneAndUpdate({socket: socket.id}, {souls: player.souls}, {new: true});
     
                     myPlayer[socket.id] = player;   
                 } else if (equipment.type === "artifact") {
