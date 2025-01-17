@@ -851,7 +851,7 @@ async function main() {
 
                 const player = await Player.findOne({socket: socket.id}).exec();
 
-                if (player.inventory.length <= 21) {
+                if (player.inventory.length <= 20) {
                     
                     if (item === "stick") {
                         const key = player.inventory.find(item => item.name === "chestKeyCommon");
@@ -877,6 +877,24 @@ async function main() {
                             player.inventory.push(arcaneRepeaterInv);                                           
                             io.to(socket.id).emit('obtained', arcaneRepeaterInv);
                             
+                        }
+                    }
+                    if (item === "rune") {
+                        const key = player.inventory.find(item => item.name === "chestKeyCommon");
+
+                        if (key) {
+                            player.inventory.splice(player.inventory.indexOf(key), 1);
+    
+                            if (number < 60) {
+                                player.inventory.push(runeRange);  
+                                io.to(socket.id).emit('obtained', runeRange);
+                            } else if (number >= 60 && number <= 80) {
+                                player.inventory.push(runeFireRate);                                           
+                                io.to(socket.id).emit('obtained', runeFireRate);
+                            } else {
+                                player.inventory.push(runeBullets);                                           
+                                io.to(socket.id).emit('obtained', runeBullets);
+                            }
                         }
                     }
                     if (item === "gemArcane") {
@@ -913,7 +931,7 @@ async function main() {
                             } 
                             else if (number >= 60 && number < 80) {
                                 player.inventory.push(ballo);                                           
-                                io.to(socket.id).emit('obtained', octopus);
+                                io.to(socket.id).emit('obtained', ballo);
                             } 
                             else if (number >= 80 && number < 90) {
                                 player.inventory.push(mushroomClothesRed);                                           
@@ -969,7 +987,7 @@ async function main() {
                 const player = await Player.findOne({socket: socket.id}).exec();
 
                 
-                if (player.inventory.length <= 21) {
+                if (player.inventory.length <= 20) {
                     let itemToGive = itemsObj[item];
                     player.inventory.push(itemToGive);
                     
@@ -977,6 +995,9 @@ async function main() {
                     myPlayer[socket.id] = player;    
                     
                     io.to(socket.id).emit('obtained', itemToGive);          
+                }
+                else {
+                    io.to(socket.id).emit('inventoryFull');
                 }
               }
               consume()

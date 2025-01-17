@@ -342,8 +342,8 @@ body {
     left: 50%;
     transform: translate(-50%, 0);
     width: calc(554px - 40px);
-    padding: 0 20px;
-    height: 105px;
+    padding: 0 20px 10px 20px;
+    height: calc(105px - 10px);
     text-align: center;
     background: url(./Textures/errorPopUp.png);
     background-size: cover;
@@ -354,6 +354,7 @@ body {
     z-index: 100;
     opacity: 0;
     pointer-events: none;
+    margin: 0;
 }
 
 /* UI LABEL ORGANISATION */

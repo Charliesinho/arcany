@@ -1244,13 +1244,28 @@ function openChestIsland () {
 
     IslandChestOpened = true;
 
-    const openChest = setInterval(() => {
+    const key = myPlayer.inventory.find(item => (item.name === "chestKey"));
+    const chestKeyRestfield = myPlayer.inventory.find(item => (item.name === "chestKeyRestfield"));
+    const chestKeyCommon = myPlayer.inventory.find(item => (item.name === "chestKeyCommon"));
 
-      if (currentLeft >= 700) {
-        clearInterval(openChest)
+    if (key || chestKeyRestfield || chestKeyCommon) {
 
-        const key = myPlayer.inventory.find(item => (item.name === "chestKey"));
-        const chestKeyRestfield = myPlayer.inventory.find(item => (item.name === "chestKeyRestfield"));
+        const openChest = setInterval(() => {
+    
+          if (currentLeft >= 700) {
+            clearInterval(openChest)
+    
+            setTimeout(() => {
+              currentLeft = 0
+              rewardChest.style.left = `-${currentLeft}%`;
+              IslandChestOpened = false;
+            }, 1000);
+          }
+    
+          rewardChest.style.left = `-${currentLeft}%`;
+    
+          currentLeft += 100;
+        }, 50);
         
         if (currentChestItem === "mushroomTrial") {
           if (key) {
@@ -1268,23 +1283,20 @@ function openChestIsland () {
             clearInterval(openChest)
           }
         } 
-        else {
+        else if (chestKeyCommon) {
           socket.emit("rewardChest", currentChestItem);
           openChestAudio.play()
         }
+        else {
+          errorDisplay("Your inventory is full.")
+        }
+    }
+    else {
+      errorDisplay("Your dont have a key.")
+      IslandChestOpened = false;
+    }
+    }
 
-        setTimeout(() => {
-          currentLeft = 0
-          rewardChest.style.left = `-${currentLeft}%`;
-          IslandChestOpened = false;
-        }, 1000);
-      }
-
-      rewardChest.style.left = `-${currentLeft}%`;
-
-      currentLeft += 100;
-    }, 50);
-  }
 
 }
 
@@ -4501,7 +4513,7 @@ window.addEventListener("keydown", (e) => {
     fishingGame.style.display = "block";
     fishing = true;
 
-    const number = Math.floor(Math.random() * (30000 - 10000 + 1) + 10000);
+    const number = Math.floor(Math.random() * (20000 - 5000 + 1) + 5000);
 
     function fishingStart() {
 
@@ -4587,7 +4599,6 @@ window.addEventListener("keydown", (e) => {
     oilFry.pause()
     noMovement = false
     grassOpenCooking = false;
-    if (!uiIsClose) openIvn()
     closeCooking()
   }
 
@@ -4603,7 +4614,6 @@ window.addEventListener("keydown", (e) => {
   } else if (e?.key?.toLowerCase() === "e" && grassCraftingAvailable & grassOpenCrafting) {
     noMovement = false
     grassOpenCrafting = false;
-    if (!uiIsClose) openIvn()
     cancelCrafting()
   }
 
@@ -4621,7 +4631,6 @@ window.addEventListener("keydown", (e) => {
     noMovement = false
     resetEnchant()
     grassOpenEnchanting = false;
-    if (!uiIsClose) openIvn()
   }
 
   //Enchanting grasslands open <
@@ -5228,6 +5237,10 @@ socket.on("questFinishedDialog", (quest) => {
   currentDialogIndex = 0;
   dialogOpened = true;
   displayDialogParagraph();
+})
+
+socket.on("inventoryFull", () => {
+  errorDisplay("Your inventory is full.")
 })
 
 // Function to start a specific dialog
@@ -12942,11 +12955,20 @@ let mapsInfo = {
       },
       {
         "type": "enchanting",
-        "x": 1629.5,
-        "y": 2773.5,
-        "width": 599,
-        "height": 464,
+        "x": 1594,
+        "y": 2801.5,
+        "width": 387,
+        "height": 444,
         "color": "rgb(204, 0, 255, 0)"
+      },
+      {
+        "type": "chest",
+        "item": "rune",
+        "x": 1998,
+        "y": 2947.5,
+        "width": 283,
+        "height": 307,
+        "color": "rgb(255, 255, 204, 0)"
       }
     ],
     enemies: [],
