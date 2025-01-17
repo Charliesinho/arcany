@@ -742,6 +742,21 @@ async function main() {
               };
               expObtained()
         });
+        socket.on("toTrade", (array) => {
+
+            async function expObtained() {
+                let playerTarget = array[0];
+                let item = array[1];
+                const player = await Player.findOne({username: playerTarget}).exec();     
+                console.log(playerTarget, player)
+                if (!player) return;                                      
+                player.inventory.push(item);
+                await Player.findOneAndUpdate({socket: player.socket}, {inventory: player.inventory}, {new: true});
+                io.to(player.socket).emit('obtained', item);           
+                
+              };
+              expObtained()
+        });
 
         socket.on("questStarted", (quest) => {
 

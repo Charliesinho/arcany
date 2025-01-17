@@ -48,7 +48,7 @@ body {
 
 .custom-cursor {
     position: absolute;
-    z-index: 100;
+    z-index: 101;
     width: 50px; /* Set your desired width */
     height: 50px; /* Set your desired height */
     background-image: url('../cursors/default.png'); /* Replace 'path_to_your_image.png' with your image URL */
@@ -262,6 +262,73 @@ body {
         left: 5%;
         transform: translate(0%, 0%);
     }
+}
+
+#tradeButton {
+    position: absolute;
+    left: 116px;
+    bottom: 10px;
+    height: 50px;
+    width: 50px;
+    background: url("./icons/cards.png");
+    background-size: cover;
+}
+
+#tradeScreen {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: url("./Textures/backGeneral.png");
+    background-size: cover;
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    flex-direction: column;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    opacity: 0;
+    transition: all .5s ease;
+    pointer-events: none;
+}
+
+#tradeScreen h1 {
+    font-size: 40px;
+}
+
+#tradeScreen p {
+    text-align: justify;
+    margin-top: 22px;
+    font-size: 19px;
+    width: 90%;
+    color: #00000075;
+}
+
+#tradeScreen img {
+    height: 163px;
+}
+
+#playerTradeId{
+    margin-top: 30px;
+    /* height: 40px; */
+    width: 200px;
+    padding: 10px;
+    background: #e9dbce;
+    border: solid 6px;
+}
+
+#tradeScreen button {
+    width: 200px;
+    height: 57px;
+    border: solid 6px black;
+    background: #a9ffa9;
+    font-size: 19px;
+}
+
+#tradeScreen button:hover {
+
+    background: #90c3fd;
 }
 
 #navBar {
@@ -1289,7 +1356,7 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 99;
+    z-index: 100;
 
     border-radius: 10px;
     border: none 1px black;
@@ -1311,7 +1378,7 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 98;
+    z-index: 100;
 
     pointer-events: none;
 

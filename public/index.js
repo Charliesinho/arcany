@@ -667,6 +667,13 @@ const bossBarImg = document.getElementById("bossBarImg");
 
 const craftingHammer = document.getElementById('craftingHammer');
 
+const tradeItemImg = document.getElementById('tradeItemImg');
+const tradeSend = document.getElementById('tradeSend');
+const tradeButton = document.getElementById('tradeButton');
+const tradeScreen = document.getElementById('tradeScreen');
+const playerTradeId = document.getElementById('playerTradeId');
+
+
 const errorPopUp = document.getElementById('errorPopUp');
 
 const cookingItem = document.querySelector(".cookingItem");
@@ -1229,6 +1236,36 @@ function progressQuestCounter(questItem, step) {
 }
 
 //Quest system <
+
+// Trade system >
+
+let trading = false;
+
+tradeSend.addEventListener("click", function(){
+  socket.emit("toDelete", tradedItems);
+
+  setTimeout(() => {
+    let tradingItems = [playerTradeId.value, tradingArray[0]]
+    console.log(tradingItems)
+    socket.emit("toTrade", tradingItems);
+
+    playerTradeId.value = 0;
+    tradedItems = [];
+    tradingArray = [];
+    trading = false;
+    tradeScreen.style.opacity = "0";
+    tradeScreen.style.pointerEvents = "none"
+  }, 500);
+})
+tradeButton.addEventListener("click", function(){
+  trading = trading ? false : true
+  noMovement = trading ? true : false;
+  tradeScreen.style.opacity = trading ? "1" : "0";
+  tradeScreen.style.pointerEvents = trading ? "all" : "none";
+  if (uiIsClose) openIvn()
+})
+
+// Trade system <
 
 // Chest > 
 rewardChest.addEventListener("click", () => {
@@ -2391,6 +2428,7 @@ function checkCodeEnachant (number) {
         const enchantFail = new Audio("./audios/enchantFail.wav");
         enchantFail.loop = false;
         enchantFail.play();
+        errorDisplay("The enchantation was not correct.")
       }
       setTimeout(() => {   
         enchantingCode = "";
@@ -2426,6 +2464,9 @@ let craftedItems = []
 let enchantingArray = [];
 let enchantingInterval = null;
 let enchantedItems = []
+
+let tradedItems = []
+let tradingArray = []
 
 function interactInventory(item, index) {
   if (item.type === "soul") {
@@ -2551,6 +2592,31 @@ function interactInventory(item, index) {
           }
         }
         
+    }
+    if (trading) {
+        
+        if (inventorySlots[`inventorySlot${index}`].src !== "") {
+        if(consumeAvailable === true && deleting === false) {
+          
+          consumeAvailable = false;
+          
+          setTimeout(() => {
+            consumeAvailable = true;
+          }, 500);
+          
+          pop.play()
+
+          errorDisplay("Make sure your friend has inventory space or your item might get lost!")            
+            
+          if (tradingArray.length === 0) {
+            tradedItems.push(index)
+            tradingArray.push(item);
+            tradeItemImg.src = item.image;
+          }
+
+        }
+      }
+
     }
     if (enchantingContainer.style.display == "block" && currentlyEnchanting === false) {
         
