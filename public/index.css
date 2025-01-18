@@ -266,7 +266,7 @@ body {
 
 #tradeButton {
     position: absolute;
-    left: 116px;
+    left: 165px;
     bottom: 10px;
     height: 50px;
     width: 50px;
@@ -299,14 +299,17 @@ body {
 
 #tradeScreen p {
     text-align: justify;
-    margin-top: 22px;
+    /* margin-top: 22px; */
     font-size: 19px;
     width: 90%;
     color: #00000075;
 }
 
 #tradeScreen img {
-    height: 163px;
+    height: 139px;
+    margin: 17px;
+    border: solid 6px #0000003b;
+    background: #b8b8b870;
 }
 
 #playerTradeId{
@@ -316,6 +319,7 @@ body {
     padding: 10px;
     background: #e9dbce;
     border: solid 6px;
+    font-size: 18px;
 }
 
 #tradeScreen button {

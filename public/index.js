@@ -1249,16 +1249,22 @@ tradeSend.addEventListener("click", function(){
     let tradingItems = [playerTradeId.value, tradingArray[0]]
     console.log(tradingItems)
     socket.emit("toTrade", tradingItems);
-
-    playerTradeId.value = 0;
-    tradedItems = [];
-    tradingArray = [];
+    resetTrading();
     trading = false;
-    tradeScreen.style.opacity = "0";
-    tradeScreen.style.pointerEvents = "none"
   }, 500);
 })
+
+function resetTrading () {
+  playerTradeId.value = "";
+  tradedItems = [];
+  tradingArray = [];
+  tradeItemImg.src = "./Textures/itemPlaceholder.png"
+  tradeScreen.style.opacity = "0";
+  tradeScreen.style.pointerEvents = "none"
+}
+
 tradeButton.addEventListener("click", function(){
+  if (trading) resetTrading();
   trading = trading ? false : true
   noMovement = trading ? true : false;
   tradeScreen.style.opacity = trading ? "1" : "0";
@@ -1506,13 +1512,13 @@ ingredientBookBookMonsterPart.addEventListener("click", (e) =>{
 let objMeat = {
   miniCommonMeat: {
     name: "MINI STEAK",
-    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    desc: "This meat usually comes from very small creatures, such as bunnies and squirrels, and can be turned into delicious plates.",
     lvl: "LEVEL REQUIRED 1",
     img: "./inventory/smallCommonMeat.png"
   },
   CommonMeat: {
     name: "STEAK",
-    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    desc: "The Steak is a popular choice for a meal, it comes from bigger wild creatures such as deers or bears, just make sure to season it properly to get the best taste out of it!",
     lvl: "LEVEL REQUIRED 1",
     img: "./inventory/bigCommonMeat.png"
   }
@@ -1540,31 +1546,31 @@ let objMeat = {
 let objMonsterPart = {
   miniMushroom: {
     name: "MINI MUSHROOM",
-    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    desc: "This tiny mushroom is a common ingredient in cooking. It's a good source of nutrients and can be used in various dishes.",
     lvl: "LEVEL REQUIRED 1",
     img: "./inventory/miniMushroom.png"
   },
   bone: {
     name: "BONE",
-    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    desc: "The Bone is not really edible but perhaps it can be used for other things. It is said that it contains the power of death.",
     lvl: "LEVEL REQUIRED 1",
     img: "./inventory/bone.png"
   },
   blanket: {
     name: "BLANKET",
-    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    desc: "This blanket is usually worn by ghosts, I really did not expect these creatures to use a physical object to cover their identity. I dont believe it to be edible.",
     lvl: "LEVEL REQUIRED 2",
     img: "./inventory/restfieldBlanket.png"
   },
   slime: {
-    name: "SLIME",
-    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    name: "SLIME DROP",
+    desc: "This exotic ingredient is made of slimy material, however it's composition is not from this world, whatever that means.",
     lvl: "LEVEL REQUIRED 3",
     img: "./inventory/slimeGuts.png"
   },
   treeLeaf: {
     name: "TREE MEAF",
-    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    desc: "A natural wrapper found in nature, can be obtained by harvesting trees and bushes, it can be cooked with meat in order to create a delicious and exotic dish!",
     lvl: "LEVEL REQUIRED 3",
     img: "./inventory/treeLeaf.png"
   },
@@ -1614,37 +1620,37 @@ treeLeafTag.addEventListener("click", (e) =>{
 let objFishes = {
   sardine: {
     name: "SARDINE",
-    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    desc: "Sardine of Grassland. You can find it in CastleSide. Seems to really like rivers but their small size dont allow them to have a very big brain... Do as you please with that information.",
     lvl: "LEVEL REQUIRED 1",
     img: "./inventory/sarding.png"
   },
   crab: {
-    name: "Crab",
-    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    name: "CRAB",
+    desc: "The Crab can be found in the south coast of the Grasslands. You can cook it into a delicious meal, just be careful with their claws!",
     lvl: "LEVEL REQUIRED 1",
     img: "./inventory/crab.png"
   },
   ballo: {
     name: "BALLO",
-    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    desc: "The Ballo is a fairly big fish that loves river waters. His green color helps him blend into the water, allowing him to hunt sardins very easily.",
     lvl: "LEVEL REQUIRED 2",
     img: "./inventory/ballo.jpg"
   },
   bass: {
     name: "BASS",
-    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    desc: "The Bass used to be yellow, however after the great collapse he slowly turned purple. Not sure if it is safe to eat but you might as well try, it's gorgeous though!",
     lvl: "LEVEL REQUIRED 3",
     img: "./inventory/bass.png"
   },
   cork: {
     name: "CORK",
-    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    desc: "The Cork is a type of scavanger fish, he like to eat dead things that fall in the water, for this reason is very common to find these in Restfield, just make sure to cook it before eating it!",
     lvl: "LEVEL REQUIRED 3",
     img: "./inventory/cork.png"
   },
   octopus: {
     name: "OCTOPUS",
-    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    desc: "It is believed that the Octopus is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
     lvl: "LEVEL REQUIRED 5",
     img: "./inventory/octopus.png"
   }
@@ -1699,7 +1705,7 @@ lvlBookFish.innerHTML = objFishes[item].lvl
 
 let objHistory = {
   castelSide: {
-    name: "CASTEL SIDE",
+    name: "CASTLE SIDE",
     history: `After critical citizens were exiled to Antarctica, chaos engulfed the remaining civilization. Panic spread as people, abandoned and powerless, faced the corruption of Arcane magic, which destroyed vital mechanisms. Forced to reconnect with nature, they learned to live off the land. Over time, abandoned castles and temples became peaceful sanctuaries for small civilizations.
 The Arcane corruption grew worse in the north, driving people southward. Before reaching the southern coast, they found a serene forest surrounding an ancient castle. Rupheos, leader of the first expedition, made it their refuge, naming the area “The Grasslands.” From the castle's heights, the lush trees and grass formed a tranquil green expanse.
 Rupheos became King of the Grasslands, loved for rebuilding society and fostering a thriving community that endured for decades. But one fateful night...` ,
@@ -1741,21 +1747,21 @@ historyBookRestfield.addEventListener("click", (e) =>{
 let objEnchanting = {
   runeRange: {
     name: "RUNE RANGE",
-    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    desc: "This rune will allow the weapon to shoot further away, this way proximity to targets would not be nescessary.",
     lvl: "LEVEL REQUIRED 1",
     img: "./inventory/runeRange.png",
     enchantingImg: "./Textures/rangeCode.png"
   },
   runeFireRate: {
     name: "RUNE FIRE RATE",
-    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    desc: "The Fire Rate rune will allow the weapon to fire faster by reducing the cooldown time between shots.",
     lvl: "LEVEL REQUIRED 2",
     img: "./inventory/runeFireRate.png",
     enchantingImg: "./Textures/fireRateCode.png"
   },
   runeBullets: {
     name: "RUNE BULLETS",
-    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    desc: "The Bullets rune will allow the weapon to double the amount of projectile it can fire, without reducing the damage that each of them does.",
     lvl: "LEVEL REQUIRED 3",
     img: "./inventory/runeBullets.png",
     enchantingImg: "./Textures/bulletsCode.png"
@@ -1814,19 +1820,19 @@ runeBulletsTag.addEventListener("click", (e) =>{
 let objWeaponArcany = {
   common: {
     name: "FLOPPER",
-    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    desc: "This is the most common weapon, by simply crafting the gem with a stick, you will be able to use it. It will not do too much damage but it will get the job done.",
     lvl: "LEVEL REQUIRED 1",
     img: "./inventory/arcaneStaffCommon.png"
   },
   lancer: {
     name: "LANCER",
-    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    desc: "The Lancer acts as a deadly sniper, it has a high damage but low fire rate trade off. It is said to be the weapon used to defend Castleside when the great collapse happened.",
     lvl: "LEVEL REQUIRED 1",
     img: "./inventory/arcaneLancerInv.gif"
   },
   repeater: {
     name: "REPEATER",
-    desc: "Sardine of Grassland. You can find it in CastelSide. Cooked, it will increase your health of half a heart. :)",
+    desc: "This weapon was discovered by accident, a weird geometry in the gem makes it shoot 3 projectiles intead of 1. However the damage is severly reduced.",
     lvl: "LEVEL REQUIRED 1",
     img: "./inventory/arcaneRepeaterInv.png"
   },
@@ -2619,11 +2625,11 @@ function interactInventory(item, index) {
 
           errorDisplay("Make sure your friend has inventory space or your item might get lost!")            
             
-          if (tradingArray.length === 0) {
-            tradedItems.push(index)
-            tradingArray.push(item);
-            tradeItemImg.src = item.image;
-          }
+        
+          tradedItems = [index]
+          tradingArray = [item]
+          tradeItemImg.src = item.image;
+          
 
         }
       }
@@ -4315,7 +4321,7 @@ socket.on("obtained", (item) => {
   console.log("OBTAINED", item)
   const image = item.image;
   obtainedAnim(image);
-
+  socket.emit("updateServer");
 });
 
 let cookingColor = 0;
@@ -5259,6 +5265,10 @@ document.addEventListener('keyup', function(event) {
               }
   
               socket.emit("questStarted", questToSend);
+
+              setTimeout(() => {
+                socket.emit("updateServer");
+              }, 1000);
             }
 
 
@@ -5280,6 +5290,9 @@ document.addEventListener('keyup', function(event) {
     
                 socket.emit("toDelete", indexToDeliverMod);
                 socket.emit("questFinished", questCompleted);
+                setTimeout(() => {
+                  socket.emit("updateServer");
+                }, 1000);
               }
             }
   
@@ -6803,7 +6816,7 @@ let mapsInfo = {
       frames: 0,
       framesTimer: 0,
       level: 1,
-      xp: 1,
+      xp: 10,
       speedX: 2,
       speedY: 2,
       spawn: {
@@ -6838,7 +6851,7 @@ let mapsInfo = {
       frames: 0,
       framesTimer: 0,
       level: 1,
-      xp: 1,
+      xp: 10,
       speedX: 2,
       speedY: 2,
       spawn: {
@@ -10899,7 +10912,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 25,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -10923,7 +10936,7 @@ let mapsInfo = {
         spawnTimer: 20000,
         enemyStateInt: 2000,
         drop: "treeLeaf",
-        dropRate: 50,
+        dropRate: 30,
       },
       {
         name: "treeSimpleEnemy",
@@ -10934,7 +10947,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 25,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -10958,7 +10971,7 @@ let mapsInfo = {
         spawnTimer: 20000,
         enemyStateInt: 2000,
         drop: "treeLeaf",
-        dropRate: 50,
+        dropRate: 30,
       },
       {
         name: "treeSimpleEnemy",
@@ -10969,7 +10982,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 25,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -10993,7 +11006,7 @@ let mapsInfo = {
         spawnTimer: 20000,
         enemyStateInt: 2000,
         drop: "treeLeaf",
-        dropRate: 50,
+        dropRate: 30,
       },
       {
         name: "treeSimpleEnemy",
@@ -11004,7 +11017,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 25,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -11028,7 +11041,7 @@ let mapsInfo = {
         spawnTimer: 20000,
         enemyStateInt: 2000,
         drop: "treeLeaf",
-        dropRate: 50,
+        dropRate: 30,
       },
 
       {
@@ -11040,7 +11053,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 1,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -11063,8 +11076,8 @@ let mapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
-        drop: "treeLeaf",
-        dropRate: 50,
+        drop: "miniCommonMeat",
+        dropRate: 10,
       },
       {
         name: "brownBunny",
@@ -11075,7 +11088,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 1,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -11098,6 +11111,8 @@ let mapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
+        drop: "smallCommonMeat",
+        dropRate: 10,
       },
       {
         name: "whiteBunny",
@@ -11108,7 +11123,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 1,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -11131,6 +11146,8 @@ let mapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
+        drop: "smallCommonMeat",
+        dropRate: 10,
       },
       {
         name: "brownBunny",
@@ -11141,7 +11158,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 1,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -11164,6 +11181,8 @@ let mapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
+        drop: "smallCommonMeat",
+        dropRate: 10,
       },
       {
         name: "brownBunny",
@@ -11174,7 +11193,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 1,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -11197,6 +11216,8 @@ let mapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
+        drop: "smallCommonMeat",
+        dropRate: 10,
       },
 
 
@@ -11209,7 +11230,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 1,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -11232,6 +11253,8 @@ let mapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
+        drop: "smallCommonMeat",
+        dropRate: 10,
       },
       {
         name: "whiteBunny",
@@ -11242,7 +11265,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 1,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -11265,6 +11288,8 @@ let mapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
+        drop: "smallCommonMeat",
+        dropRate: 10,
       },
 
       {
@@ -11276,7 +11301,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 1,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -11299,6 +11324,8 @@ let mapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
+        drop: "smallCommonMeat",
+        dropRate: 10,
       },
       {
         name: "brownBunny",
@@ -11309,7 +11336,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 1,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -11332,6 +11359,8 @@ let mapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
+        drop: "smallCommonMeat",
+        dropRate: 10,
       },
       {
         name: "whiteBunny",
@@ -11342,7 +11371,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 1,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -11365,6 +11394,8 @@ let mapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
+        drop: "smallCommonMeat",
+        dropRate: 10,
       },
       {
         name: "brownBunny",
@@ -11375,7 +11406,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 1,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -11398,6 +11429,8 @@ let mapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
+        drop: "smallCommonMeat",
+        dropRate: 10,
       },
       {
         name: "brownBunny",
@@ -11408,7 +11441,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 1,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -11431,6 +11464,8 @@ let mapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
+        drop: "smallCommonMeat",
+        dropRate: 10,
       },
 
 
@@ -11443,7 +11478,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 1,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -11466,6 +11501,8 @@ let mapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
+        drop: "smallCommonMeat",
+        dropRate: 10,
       },
       {
         name: "whiteBunny",
@@ -11476,7 +11513,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 1,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -11499,6 +11536,8 @@ let mapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
+        drop: "smallCommonMeat",
+        dropRate: 10,
       },
 
 
@@ -14400,7 +14439,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 25,
         speedX: 15,
         speedY: 15,
         spawn: {
@@ -14436,7 +14475,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 25,
         speedX: 15,
         speedY: 15,
         spawn: {
@@ -14472,7 +14511,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 25,
         speedX: 15,
         speedY: 15,
         spawn: {
@@ -14508,7 +14547,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 25,
         speedX: 15,
         speedY: 15,
         spawn: {
@@ -14544,7 +14583,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 25,
         speedX: 15,
         speedY: 15,
         spawn: {
@@ -14580,7 +14619,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 25,
         speedX: 15,
         speedY: 15,
         spawn: {
@@ -14617,7 +14656,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 5,
-        xp: 1000,
+        xp: 100,
         speedX: 0,
         speedY: 0,
         spawn: {
@@ -18979,7 +19018,7 @@ let mapsInfo = {
       frames: 0,
       framesTimer: 0,
       level: 1,
-      xp: 100,
+      xp: 25,
       speedX: 15,
       speedY: 15,
       spawn: {
@@ -19014,7 +19053,7 @@ let mapsInfo = {
       frames: 0,
       framesTimer: 0,
       level: 1,
-      xp: 100,
+      xp: 25,
       speedX: 15,
       speedY: 15,
       spawn: {
@@ -19049,7 +19088,7 @@ let mapsInfo = {
       frames: 0,
       framesTimer: 0,
       level: 1,
-      xp: 100,
+      xp: 25,
       speedX: 15,
       speedY: 15,
       spawn: {
@@ -19084,7 +19123,7 @@ let mapsInfo = {
       frames: 0,
       framesTimer: 0,
       level: 1,
-      xp: 100,
+      xp: 25,
       speedX: 15,
       speedY: 15,
       spawn: {
@@ -19119,7 +19158,7 @@ let mapsInfo = {
       frames: 0,
       framesTimer: 0,
       level: 1,
-      xp: 100,
+      xp: 25,
       speedX: 15,
       speedY: 15,
       spawn: {
@@ -19154,7 +19193,7 @@ let mapsInfo = {
       frames: 0,
       framesTimer: 0,
       level: 1,
-      xp: 100,
+      xp: 25,
       speedX: 15,
       speedY: 15,
       spawn: {
@@ -19190,7 +19229,7 @@ let mapsInfo = {
       frames: 0,
       framesTimer: 0,
       level: 5,
-      xp: 2000,
+      xp: 500,
       speedX: 5,
       speedY: 5,
       spawn: {
@@ -21101,7 +21140,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 50,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -21113,7 +21152,7 @@ let mapsInfo = {
         currentStateName: "idle",
         currentState: null,
         attackInterval: true,
-        states: [moveStateRandom ],
+        states: [moveStateAndMelee],
         damaged: 0,
         health: 15,
         angle: 0,
@@ -21134,7 +21173,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 50,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -21146,7 +21185,7 @@ let mapsInfo = {
         currentStateName: "idle",
         currentState: null,
         attackInterval: true,
-        states: [moveStateRandom ],
+        states: [moveStateAndMelee],
         damaged: 0,
         health: 15,
         angle: 0,
@@ -21167,7 +21206,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 50,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -21179,7 +21218,7 @@ let mapsInfo = {
         currentStateName: "idle",
         currentState: null,
         attackInterval: true,
-        states: [moveStateRandom ],
+        states: [moveStateAndMelee],
         damaged: 0,
         health: 15,
         angle: 0,
@@ -21200,7 +21239,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 50,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -21212,7 +21251,7 @@ let mapsInfo = {
         currentStateName: "idle",
         currentState: null,
         attackInterval: true,
-        states: [moveStateRandom ],
+        states: [moveStateAndMelee],
         damaged: 0,
         health: 15,
         angle: 0,
@@ -21233,7 +21272,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 50,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -21245,7 +21284,7 @@ let mapsInfo = {
         currentStateName: "idle",
         currentState: null,
         attackInterval: true,
-        states: [moveStateRandom ],
+        states: [moveStateAndMelee],
         damaged: 0,
         health: 15,
         angle: 0,
@@ -21266,7 +21305,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 50,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -21278,7 +21317,7 @@ let mapsInfo = {
         currentStateName: "idle",
         currentState: null,
         attackInterval: true,
-        states: [moveStateRandom ],
+        states: [moveStateAndMelee],
         damaged: 0,
         health: 15,
         angle: 0,
@@ -21478,11 +21517,11 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 25,
         speedX: 5,
         speedY: 5,
         spawn: {
-          x: 1000,
+          x: 1100,
           y: 1840
         },
         w: 155,
@@ -21490,13 +21529,13 @@ let mapsInfo = {
         currentStateName: "idle",
         currentState: null,
         attackInterval: true,
-        states: [moveStateRandom ],
+        states: [moveStateAndMelee],
         damaged: 0,
         health: 15,
         angle: 0,
         maxHealth: 10,
         baseSpawn: {
-          x: 1000,
+          x: 1100,
           y: 1840
         },
         spawnTimer: 10000,
@@ -21511,7 +21550,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 25,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -21523,7 +21562,7 @@ let mapsInfo = {
         currentStateName: "idle",
         currentState: null,
         attackInterval: true,
-        states: [moveStateRandom ],
+        states: [moveStateAndMelee],
         damaged: 0,
         health: 15,
         angle: 0,
@@ -21544,7 +21583,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 25,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -21556,7 +21595,7 @@ let mapsInfo = {
         currentStateName: "idle",
         currentState: null,
         attackInterval: true,
-        states: [moveStateRandom ],
+        states: [moveStateAndMelee],
         damaged: 0,
         health: 15,
         angle: 0,
@@ -21577,11 +21616,11 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 25,
         speedX: 5,
         speedY: 5,
         spawn: {
-          x: 900,
+          x: 1400,
           y: 1790
         },
         w: 155,
@@ -21589,13 +21628,13 @@ let mapsInfo = {
         currentStateName: "idle",
         currentState: null,
         attackInterval: true,
-        states: [moveStateRandom ],
+        states: [moveStateAndMelee],
         damaged: 0,
         health: 15,
         angle: 0,
         maxHealth: 10,
         baseSpawn: {
-          x: 900,
+          x: 1400,
           y: 1790
         },
         spawnTimer: 10000,
@@ -21610,26 +21649,26 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 25,
         speedX: 5,
         speedY: 5,
         spawn: {
           x: 880,
-          y: 1790
+          y: 1890
         },
         w: 155,
         h: 155,
         currentStateName: "idle",
         currentState: null,
         attackInterval: true,
-        states: [moveStateRandom ],
+        states: [moveStateAndMelee],
         damaged: 0,
         health: 15,
         angle: 0,
         maxHealth: 10,
         baseSpawn: {
           x: 880,
-          y: 1790
+          y: 1890
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
@@ -21643,26 +21682,26 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 25,
         speedX: 5,
         speedY: 5,
         spawn: {
           x: 880,
-          y: 1760
+          y: 2060
         },
         w: 155,
         h: 155,
         currentStateName: "idle",
         currentState: null,
         attackInterval: true,
-        states: [moveStateRandom ],
+        states: [moveStateAndMelee],
         damaged: 0,
         health: 15,
         angle: 0,
         maxHealth: 10,
         baseSpawn: {
           x: 880,
-          y: 1760
+          y: 2060
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
@@ -21676,11 +21715,11 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 25,
         speedX: 5,
         speedY: 5,
         spawn: {
-          x: 880,
+          x: 1580,
           y: 1750
         },
         w: 155,
@@ -21688,13 +21727,13 @@ let mapsInfo = {
         currentStateName: "idle",
         currentState: null,
         attackInterval: true,
-        states: [moveStateRandom ],
+        states: [moveStateAndMelee],
         damaged: 0,
         health: 15,
         angle: 0,
         maxHealth: 10,
         baseSpawn: {
-          x: 880,
+          x: 1580,
           y: 1750
         },
         spawnTimer: 10000,
@@ -25094,7 +25133,7 @@ let originalMapsInfo = {
       frames: 0,
       framesTimer: 0,
       level: 1,
-      xp: 1,
+      xp: 10,
       speedX: 2,
       speedY: 2,
       spawn: {
@@ -25129,7 +25168,7 @@ let originalMapsInfo = {
       frames: 0,
       framesTimer: 0,
       level: 1,
-      xp: 1,
+      xp: 10,
       speedX: 2,
       speedY: 2,
       spawn: {
@@ -29190,7 +29229,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 25,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -29214,7 +29253,7 @@ let originalMapsInfo = {
         spawnTimer: 20000,
         enemyStateInt: 2000,
         drop: "treeLeaf",
-        dropRate: 50,
+        dropRate: 30,
       },
       {
         name: "treeSimpleEnemy",
@@ -29225,7 +29264,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 25,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -29249,7 +29288,7 @@ let originalMapsInfo = {
         spawnTimer: 20000,
         enemyStateInt: 2000,
         drop: "treeLeaf",
-        dropRate: 50,
+        dropRate: 30,
       },
       {
         name: "treeSimpleEnemy",
@@ -29260,7 +29299,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 25,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -29284,7 +29323,7 @@ let originalMapsInfo = {
         spawnTimer: 20000,
         enemyStateInt: 2000,
         drop: "treeLeaf",
-        dropRate: 50,
+        dropRate: 30,
       },
       {
         name: "treeSimpleEnemy",
@@ -29295,7 +29334,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 25,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -29319,7 +29358,7 @@ let originalMapsInfo = {
         spawnTimer: 20000,
         enemyStateInt: 2000,
         drop: "treeLeaf",
-        dropRate: 50,
+        dropRate: 30,
       },
 
       {
@@ -29331,7 +29370,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 1,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -29354,8 +29393,8 @@ let originalMapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
-        drop: "treeLeaf",
-        dropRate: 50,
+        drop: "miniCommonMeat",
+        dropRate: 10,
       },
       {
         name: "brownBunny",
@@ -29366,7 +29405,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 1,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -29389,6 +29428,8 @@ let originalMapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
+        drop: "smallCommonMeat",
+        dropRate: 10,
       },
       {
         name: "whiteBunny",
@@ -29399,7 +29440,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 1,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -29422,6 +29463,8 @@ let originalMapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
+        drop: "smallCommonMeat",
+        dropRate: 10,
       },
       {
         name: "brownBunny",
@@ -29432,7 +29475,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 1,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -29455,6 +29498,8 @@ let originalMapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
+        drop: "smallCommonMeat",
+        dropRate: 10,
       },
       {
         name: "brownBunny",
@@ -29465,7 +29510,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 1,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -29488,6 +29533,8 @@ let originalMapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
+        drop: "smallCommonMeat",
+        dropRate: 10,
       },
 
 
@@ -29500,7 +29547,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 1,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -29523,6 +29570,8 @@ let originalMapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
+        drop: "smallCommonMeat",
+        dropRate: 10,
       },
       {
         name: "whiteBunny",
@@ -29533,7 +29582,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 1,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -29556,6 +29605,8 @@ let originalMapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
+        drop: "smallCommonMeat",
+        dropRate: 10,
       },
 
       {
@@ -29567,7 +29618,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 1,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -29590,6 +29641,8 @@ let originalMapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
+        drop: "smallCommonMeat",
+        dropRate: 10,
       },
       {
         name: "brownBunny",
@@ -29600,7 +29653,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 1,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -29623,6 +29676,8 @@ let originalMapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
+        drop: "smallCommonMeat",
+        dropRate: 10,
       },
       {
         name: "whiteBunny",
@@ -29633,7 +29688,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 1,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -29656,6 +29711,8 @@ let originalMapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
+        drop: "smallCommonMeat",
+        dropRate: 10,
       },
       {
         name: "brownBunny",
@@ -29666,7 +29723,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 1,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -29689,6 +29746,8 @@ let originalMapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
+        drop: "smallCommonMeat",
+        dropRate: 10,
       },
       {
         name: "brownBunny",
@@ -29699,7 +29758,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 1,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -29722,6 +29781,8 @@ let originalMapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
+        drop: "smallCommonMeat",
+        dropRate: 10,
       },
 
 
@@ -29734,7 +29795,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 1,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -29757,6 +29818,8 @@ let originalMapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
+        drop: "smallCommonMeat",
+        dropRate: 10,
       },
       {
         name: "whiteBunny",
@@ -29767,7 +29830,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 1,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -29790,6 +29853,8 @@ let originalMapsInfo = {
         },
         spawnTimer: 10000,
         enemyStateInt: 2000,
+        drop: "smallCommonMeat",
+        dropRate: 10,
       },
 
 
@@ -31312,11 +31377,20 @@ let originalMapsInfo = {
       },
       {
         "type": "enchanting",
-        "x": 1629.5,
-        "y": 2773.5,
-        "width": 599,
-        "height": 464,
+        "x": 1594,
+        "y": 2801.5,
+        "width": 387,
+        "height": 444,
         "color": "rgb(204, 0, 255, 0)"
+      },
+      {
+        "type": "chest",
+        "item": "rune",
+        "x": 1998,
+        "y": 2947.5,
+        "width": 283,
+        "height": 307,
+        "color": "rgb(255, 255, 204, 0)"
       }
     ],
     enemies: [],
@@ -32682,7 +32756,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 25,
         speedX: 15,
         speedY: 15,
         spawn: {
@@ -32718,7 +32792,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 25,
         speedX: 15,
         speedY: 15,
         spawn: {
@@ -32754,7 +32828,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 25,
         speedX: 15,
         speedY: 15,
         spawn: {
@@ -32790,7 +32864,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 25,
         speedX: 15,
         speedY: 15,
         spawn: {
@@ -32826,7 +32900,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 25,
         speedX: 15,
         speedY: 15,
         spawn: {
@@ -32862,7 +32936,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 25,
         speedX: 15,
         speedY: 15,
         spawn: {
@@ -32899,7 +32973,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 5,
-        xp: 1000,
+        xp: 100,
         speedX: 0,
         speedY: 0,
         spawn: {
@@ -37261,7 +37335,7 @@ let originalMapsInfo = {
       frames: 0,
       framesTimer: 0,
       level: 1,
-      xp: 100,
+      xp: 25,
       speedX: 15,
       speedY: 15,
       spawn: {
@@ -37296,7 +37370,7 @@ let originalMapsInfo = {
       frames: 0,
       framesTimer: 0,
       level: 1,
-      xp: 100,
+      xp: 25,
       speedX: 15,
       speedY: 15,
       spawn: {
@@ -37331,7 +37405,7 @@ let originalMapsInfo = {
       frames: 0,
       framesTimer: 0,
       level: 1,
-      xp: 100,
+      xp: 25,
       speedX: 15,
       speedY: 15,
       spawn: {
@@ -37366,7 +37440,7 @@ let originalMapsInfo = {
       frames: 0,
       framesTimer: 0,
       level: 1,
-      xp: 100,
+      xp: 25,
       speedX: 15,
       speedY: 15,
       spawn: {
@@ -37401,7 +37475,7 @@ let originalMapsInfo = {
       frames: 0,
       framesTimer: 0,
       level: 1,
-      xp: 100,
+      xp: 25,
       speedX: 15,
       speedY: 15,
       spawn: {
@@ -37436,7 +37510,7 @@ let originalMapsInfo = {
       frames: 0,
       framesTimer: 0,
       level: 1,
-      xp: 100,
+      xp: 25,
       speedX: 15,
       speedY: 15,
       spawn: {
@@ -37472,7 +37546,7 @@ let originalMapsInfo = {
       frames: 0,
       framesTimer: 0,
       level: 5,
-      xp: 2000,
+      xp: 500,
       speedX: 5,
       speedY: 5,
       spawn: {
@@ -39383,7 +39457,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 50,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -39416,7 +39490,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 50,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -39449,7 +39523,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 50,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -39482,7 +39556,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 50,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -39515,7 +39589,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 50,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -39548,7 +39622,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 50,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -39760,7 +39834,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 25,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -39793,7 +39867,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 25,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -39826,7 +39900,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 25,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -39859,7 +39933,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 25,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -39892,7 +39966,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 25,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -39925,7 +39999,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 25,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -39958,7 +40032,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 100,
+        xp: 25,
         speedX: 5,
         speedY: 5,
         spawn: {
@@ -43072,6 +43146,7 @@ function drawColliders (type, x, y, w, h) {
           containerChat.style.display = "none";
           cutscene = false;
           dialogAvailable = false;
+          currentDialogTitle = ""
         }
         if (wall.type === "cook") {
           grassOpenCooking = false;
@@ -44439,8 +44514,8 @@ function checkEnemyCombat (enemy) {
   if (localPlayerDamaged > 0) {
     localPlayerDamaged--
 
-    playerX += Math.cos(localPlayerDamageAngle) * (localPlayerDamaged * 0.7) ;
-    playerY += Math.sin(localPlayerDamageAngle) * (localPlayerDamaged * 0.7);
+    // playerX += Math.cos(localPlayerDamageAngle) * (localPlayerDamaged * 0.7) ;
+    // playerY += Math.sin(localPlayerDamageAngle) * (localPlayerDamaged * 0.7);
 
   }
 
@@ -44632,6 +44707,110 @@ function moveState(enemy) {
   resolveEnemyCollisions(enemy);
 }
 
+function moveStateAndMelee(enemy) {
+  // console.log(enemy.currentStateName)
+  if (enemy.currentStateName === "idle") {
+    enemy.currentStateName = "move";
+  }
+
+  const colliders = drawColliders("enemy", enemy.spawn.x + 50, enemy.spawn.y + 100, enemy.w / 2, enemy.h / 2);
+
+  if (!enemy.commitTimer) {
+    enemy.commitTimer = null;
+  }
+
+  if (!enemy.committedDirection) {
+    enemy.committedDirection = null;
+  }
+
+  const chooseDirection = (primary, fallback1, fallback2) => {
+    if (!colliders.includes(primary)) {
+      enemy.committedDirection = primary; 
+      startCommitmentTimer(enemy); 
+      return primary;
+    } else if (!colliders.includes(fallback1)) {
+      enemy.committedDirection = fallback1; 
+      startCommitmentTimer(enemy); 
+      return fallback1;
+    } else if (!colliders.includes(fallback2)) {
+      enemy.committedDirection = fallback2; 
+      startCommitmentTimer(enemy); 
+      return fallback2;
+    }
+    return null;
+  };
+
+  // Handle committed direction
+  if (enemy.committedDirection) {
+    if (colliders.includes(enemy.committedDirection)) {
+      enemy.committedDirection = null;
+    } else {
+      switch (enemy.committedDirection) {
+        case "up":
+          enemy.spawn.y -= enemy.speedY;
+          return;
+        case "down":
+          enemy.spawn.y += enemy.speedY;
+          return;
+        case "left":
+          enemy.spawn.x -= enemy.speedX;
+          return;
+        case "right":
+          enemy.spawn.x += enemy.speedX;
+          return;
+      }
+    }
+  }
+
+  // Decide movement directly toward the player
+  let moveX = 0;
+  let moveY = 0;
+
+  if (playerX + 1000 > enemy.spawn.x && !colliders.includes("right")) {
+    moveX = enemy.speedX;
+  } else if (playerX - 1000 < enemy.spawn.x && !colliders.includes("left")) {
+    moveX = -enemy.speedX;
+  }
+
+  if (playerY > enemy.spawn.y && !colliders.includes("down")) {
+    moveY = enemy.speedY;
+  } else if (playerY - 1000 < enemy.spawn.y && !colliders.includes("up")) {
+    moveY = -enemy.speedY;
+  }
+
+  // Apply movement
+  enemy.spawn.x += moveX;
+  enemy.spawn.y += moveY;
+
+  resolveEnemyCollisionsZombie(enemy);
+
+  if (enemy.attackInterval) {
+
+    let bulletAngle = getAngleBetweenPlayerAndEnemy(enemy);
+    enemy.attackInterval = false;
+  
+    setTimeout(() => {
+      enemy.attackInterval = true;
+    }, 300);
+  
+      projectilesClient.push({
+        angle: bulletAngle,
+        x: enemy.spawn.x + ((enemy.w)/2) + 200,
+        y: enemy.spawn.y + ((enemy.h)/2) + 200,
+        speed: 5,
+        timeLeft: 30,
+        playerId: socket.id,
+        enemy: true
+      }) 
+  
+      // const basicBulletTree = new Audio("./audios/basicBulletTree.wav");
+      // basicBulletTree.loop = false;
+      // basicBulletTree.volume = 0.5;
+      // basicBulletTree.play()
+    }
+}
+
+
 function moveStateRandom(enemy) {
   if (enemy.currentStateName === "idle") {
     enemy.currentStateName = "move";
@@ -44692,13 +44871,12 @@ function moveStateRandom(enemy) {
   resolveEnemyCollisions(enemy);
 }
 
-
 function startCommitmentTimer(enemy) {
   if (enemy.commitTimer) clearTimeout(enemy.commitTimer); // Reset existing timer if active
   enemy.commitTimer = setTimeout(() => {
     enemy.committedDirection = null; // Clear commitment after 3 seconds
     enemy.commitTimer = null; // Reset timer reference
-  }, 2000);
+  }, 1000);
 }
 
 function idleState(enemy) {
@@ -45323,6 +45501,15 @@ function resolveEnemyCollisions(enemy) {
     const dy = enemy.spawn.y - otherEnemy.spawn.y;
     if (Math.abs(dx) < 100) enemy.spawn.x += dx > 0 ? enemy.speedX : -enemy.speedX;
     if (Math.abs(dy) < 100) enemy.spawn.y += dy > 0 ? enemy.speedY : -enemy.speedY;
+  });
+}
+function resolveEnemyCollisionsZombie(enemy) {
+  mapsInfo[currentLand].enemies.forEach(otherEnemy => {
+    if (otherEnemy === enemy) return;
+    const dx = enemy.spawn.x - otherEnemy.spawn.x;
+    const dy = enemy.spawn.y - otherEnemy.spawn.y;
+    if (Math.abs(dx) < 50) enemy.spawn.x += dx > 0 ? enemy.speedX : -enemy.speedX;
+    if (Math.abs(dy) < 50) enemy.spawn.y += dy > 0 ? enemy.speedY : -enemy.speedY;
   });
 }
 

@@ -742,6 +742,7 @@ async function main() {
               };
               expObtained()
         });
+
         socket.on("toTrade", (array) => {
 
             async function expObtained() {
@@ -753,6 +754,17 @@ async function main() {
                 player.inventory.push(item);
                 await Player.findOneAndUpdate({socket: player.socket}, {inventory: player.inventory}, {new: true});
                 io.to(player.socket).emit('obtained', item);           
+                
+              };
+              expObtained()
+        });
+        
+        socket.on("updateServer", () => {
+
+            async function expObtained() {
+                const player = await Player.findOne({socket: socket.id}).exec();     
+                if (!player) return;                                      
+                myPlayer[socket.id] = player       
                 
               };
               expObtained()
@@ -1692,6 +1704,14 @@ const bone = {
     rarity: "rare",
     image: "./inventory/bone.png",
 };
+const smallCommonMeat = {
+    type: "quest",
+    name: "smallCommonMeat",
+    level: 3,
+    value: 4,
+    rarity: "rare",
+    image: "./inventory/smallCommonMeat.png",
+};
 const slimeGuts = {
     type: "quest",
     name: "slimeGuts",
@@ -1871,6 +1891,7 @@ const restfieldZombieSoulInventory = {
 
 const itemsObj = {
     runeBullets,
+    smallCommonMeat,
     runeFireRate,
     runeRange,
     arcaneGem,
