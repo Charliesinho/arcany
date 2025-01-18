@@ -933,9 +933,8 @@ async function main() {
                             player.inventory.push(stick);  
                             io.to(socket.id).emit('obtained', stick);
                         } else {
-                            player.inventory.push(willowStick);                                           
-                            io.to(socket.id).emit('obtained', willowStick);
-                            
+                            player.inventory.push(stick);  
+                            io.to(socket.id).emit('obtained', stick);
                         }
                         }
                     }
@@ -1221,11 +1220,11 @@ async function main() {
                     // await pushItem(runeFireRate, socket)
                     //await pushItem(treeLeaf, socket)
                     //await pushItem(treeLeaf, socket)
-                    await pushItem(smallCommonMeat, socket)
+                    // await pushItem(smallCommonMeat, socket)
                     // await pushItem(ballo, socket)
                     // await pushItem(sardin, socket)
-                     await pushItem(octopus, socket)
-                     await pushItem(octopus, socket)
+                    //  await pushItem(octopus, socket)
+                    //  await pushItem(octopus, socket)
                     // await pushItem(bass, socket)
                     // await pushItem(reaperClothes, socket)
                     // await pushItem(blackVampiresClothes, socket)
@@ -1276,8 +1275,10 @@ async function main() {
                     const loginAttempt = "success";
                     io.to(id).emit('loginAttempt', loginAttempt); 
 
-                    await pushItem(fishermanClothes, socket)
+                    await pushItem(restfieldZombieInventory, socket)
+                    await pushItem(romanHelmet, socket)
                     await pushItem(blackVampiresClothes, socket)
+                    await pushItem(chestKeyCommon, socket)
                     await pushItem(chestKeyCommon, socket)
 
                     await Player.findOneAndUpdate({socket: socket.id}, {souls: [restfieldZombieSoulInventory, redDemonSoulInventory, pinkDemonSoulInventory, vampiresSoulInventory]}, {new: true});

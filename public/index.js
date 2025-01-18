@@ -1,7 +1,7 @@
 //Change this to push >
 
-const socket = io(`ws://localhost:5000`);
-// const socket = io(`https://arcanyGame.up.railway.app/`);
+// const socket = io(`ws://localhost:5000`);
+const socket = io(`https://arcanyGame.up.railway.app/`);
 
 //Change this to push <
 
@@ -1393,7 +1393,7 @@ function updateHistoryChat(value, sender) {
 }
 
 window.addEventListener("keydown", (e) => {
-    if (e?.key?.toLowerCase() === "Enter") {
+    if (e?.key === "Enter") {
         e.preventDefault();
         if (chatInput === document.activeElement) {
             if (chatInput.value) {
@@ -43942,12 +43942,12 @@ function drawUsernameLocal (player) {
   canvas.font = "bolder 16px Tiny5";
   canvas.textAlign = "center";
   canvas.fillStyle = "black";
-  canvas.fillText(player.username, playerX - cameraX +10, playerY  - cameraY -10);
+  canvas.fillText(player.username, playerX - cameraX +10, playerY  - cameraY -12);
   canvas.beginPath();
   canvas.font = "bolder 12px Tiny5";
   canvas.textAlign = "center";
   canvas.fillStyle = "black";
-  canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)) , playerX - cameraX + 10, playerY  - cameraY - 30.5);
+  canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)) , playerX - cameraX + 10, playerY  - cameraY - 32.5);
 }
 
 function drawUsername () {
@@ -43985,14 +43985,18 @@ function drawChat () {
     else if (player.room === myPlayer.room) {
       if (player.chatMessage !== "none") {
         let smoothPlayer = Object.values(smoothPlayers).find(Splayer => Splayer.username === player.username)
-        canvas.drawImage(chatBubble, smoothPlayer.smoothX - cameraX -85, smoothPlayer.smoothY - cameraY -115, 200, 60)
-        canvas.beginPath();
-        canvas.font = "bolder 16px Tiny5";
-        canvas.textAlign = "center";
-        canvas.fillStyle = "black";
-        canvas.fillText(player.chatMessage, smoothPlayer.smoothX - cameraX +15, smoothPlayer.smoothY - cameraY -90);
+        // canvas.drawImage(chatBubble, smoothPlayer.smoothX - cameraX -85, smoothPlayer.smoothY - cameraY -115, 200, 60)
+        // canvas.beginPath();
+        // canvas.font = "bolder 16px Tiny5";
+        // canvas.textAlign = "center";
+        // canvas.fillStyle = "black";
+        // canvas.fillText(player.chatMessage, smoothPlayer.smoothX - cameraX +15, smoothPlayer.smoothY - cameraY -90);
 
-        console.log(player)
+        if (player.chatMessage.length > 20) {
+          drawChatBubble(chatBubbleBigger, player, smoothPlayer.smoothX - cameraX, -190, smoothPlayer.smoothY - cameraY, -115, 400, 60, 5, 90 )
+        } else {
+          drawChatBubble(chatBubble, player, smoothPlayer.smoothX - cameraX, -90, smoothPlayer.smoothY - cameraY, -115, 200, 60, 15, 90 )
+        }
 
         if (player.chatTimer === 80) {
           updateHistoryChat(player.chatMessage, player)
