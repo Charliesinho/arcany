@@ -6839,7 +6839,7 @@ let mapsInfo = {
       spawnTimer: 10000,
       enemyStateInt: 2000,
       drop: "slimeGuts",
-      dropRate: 20,
+      dropRate: 80,
     },
     {
       name: "purpleSlime",
@@ -6874,7 +6874,7 @@ let mapsInfo = {
       spawnTimer: 10000,
       enemyStateInt: 2000,
       drop: "slimeGuts",
-      dropRate: 20,
+      dropRate: 80,
     }
   ],
   },
@@ -25183,7 +25183,7 @@ let originalMapsInfo = {
       spawnTimer: 10000,
       enemyStateInt: 2000,
       drop: "slimeGuts",
-      dropRate: 20,
+      dropRate: 80,
     },
     {
       name: "purpleSlime",
@@ -25218,7 +25218,7 @@ let originalMapsInfo = {
       spawnTimer: 10000,
       enemyStateInt: 2000,
       drop: "slimeGuts",
-      dropRate: 20,
+      dropRate: 80,
     }
   ],
   },
