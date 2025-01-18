@@ -323,7 +323,7 @@ async function main() {
 
                     else if (fishingLevelNum < 3) {
 
-                        if (number < 80) {
+                        if (number < 60) {
                             player.inventory.push(sardin);
                             io.to(socket.id).emit('obtained', sardin);
                             const fishingLevel = player.fishing + 100;
@@ -332,7 +332,7 @@ async function main() {
                             await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
                         } 
                         
-                        else if (number < 90) {
+                        else if (number < 80) {
                             player.inventory.push(ballo);
                             io.to(socket.id).emit('obtained', ballo);
                             const fishingLevel = player.fishing + 500;
@@ -342,8 +342,8 @@ async function main() {
                         } 
                         
                         else {
-                            player.inventory.push(stick);
-                            io.to(socket.id).emit('obtained', stick);
+                            player.inventory.push(chestKeyCommon);
+                            io.to(socket.id).emit('obtained', chestKeyCommon);
                             await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
                         }
                     }
@@ -352,7 +352,7 @@ async function main() {
 
                     else if (fishingLevelNum < 6) {
 
-                        if (number < 50) {
+                        if (number < 45) {
                             player.inventory.push(sardin);
                             io.to(socket.id).emit('obtained', sardin);
                             const fishingLevel = player.fishing + 100;
@@ -361,7 +361,7 @@ async function main() {
                             await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
                         } 
                         
-                        else if (number < 75) {
+                        else if (number < 65) {
                             player.inventory.push(ballo);
                             io.to(socket.id).emit('obtained', ballo);
                             const fishingLevel = player.fishing + 500;
@@ -370,7 +370,7 @@ async function main() {
                             await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
                         } 
 
-                        else if (number < 85) {
+                        else if (number < 75) {
                             player.inventory.push(bass);
                             io.to(socket.id).emit('obtained', bass);
                             const fishingLevel = player.fishing + 1000;
@@ -380,8 +380,8 @@ async function main() {
                         } 
                         
                         else {
-                            player.inventory.push(stick);
-                            io.to(socket.id).emit('obtained', stick);
+                            player.inventory.push(chestKeyCommon);
+                            io.to(socket.id).emit('obtained', chestKeyCommon);
                             await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
                         }
                     }
@@ -399,7 +399,7 @@ async function main() {
                             await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
                         } 
                         
-                        else if (number < 50) {
+                        else if (number < 40) {
                             player.inventory.push(ballo);
                             io.to(socket.id).emit('obtained', ballo);
                             const fishingLevel = player.fishing + 500;
@@ -408,7 +408,7 @@ async function main() {
                             await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
                         } 
 
-                        else if (number < 87) {
+                        else if (number < 60) {
                             player.inventory.push(bass);
                             io.to(socket.id).emit('obtained', bass);
                             const fishingLevel = player.fishing + 1000;
@@ -417,7 +417,7 @@ async function main() {
                             await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
                         } 
 
-                        else if (number < 97) {
+                        else if (number < 70) {
                             player.inventory.push(octopus);
                             io.to(socket.id).emit('obtained', octopus);
                             const fishingLevel = player.fishing + 1500;
@@ -427,8 +427,9 @@ async function main() {
                         } 
                         
                         else {
-                            player.inventory.push(stick);
-                            io.to(socket.id).emit('obtained', stick);
+                            player.inventory.push(chestKeyCommon);
+                            io.to(socket.id).emit('obtained', chestKeyCommon);
+                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
                         }
                     }
 
@@ -700,7 +701,7 @@ async function main() {
                         staff = arcaneRepeaterInv; 
                         xp = 1500;
                     } 
-                    else if (arrayOfNames.includes("restfieldBlanket") && arrayOfNames.includes("restfieldBlanket")){
+                    else if (arrayOfNames.includes("restfieldBlanket")){
                         staff = restfieldGhostClothes; 
                         xp = 500;
                     }
@@ -973,8 +974,9 @@ async function main() {
                                 io.to(socket.id).emit('obtained', chestKeyCommon);
                             } 
                             else if (number >= 60 && number < 80) {
-                                player.inventory.push(octopus);                                           
-                                io.to(socket.id).emit('obtained', octopus);
+                                player.souls.push(restfieldSkeletonSoulInventory);                 
+                                await Player.findOneAndUpdate({socket: socket.id}, {souls: player.souls}, {new: true});                          
+                                io.to(socket.id).emit('obtained', restfieldSkeletonSoulInventory);
                             } 
                             else if (number >= 80 && number < 90) {
                                 player.inventory.push(reaperInventory);                                           
@@ -985,6 +987,17 @@ async function main() {
                                 await Player.findOneAndUpdate({socket: socket.id}, {souls: player.souls}, {new: true});                          
                                 io.to(socket.id).emit('obtained', reaperSoulInventory);
                             }
+                        }
+                    }
+                    if (item === "blueClothes") {
+                        const key = player.inventory.find(item => item.name === "chestKeyCommon");
+
+                        if (key) {
+                            player.inventory.splice(player.inventory.indexOf(key), 1);
+            
+                            player.inventory.push(fishermanClothes);                                           
+                            io.to(socket.id).emit('obtained', fishermanClothes);
+                            
                         }
                     }
                     
@@ -1209,7 +1222,7 @@ async function main() {
                     await pushItem(blackVampiresClothes, socket)
                     await pushItem(chestKeyCommon, socket)
 
-                    await Player.findOneAndUpdate({socket: socket.id}, {souls: [restfieldSkeletonSoulInventory, ghostSoulInventory, restfieldZombieSoulInventory, redDemonSoulInventory, pinkDemonSoulInventory, frogSoulInventory,arcanyDemonSoulInventory,vampiresSoulInventory,reaperSoulInventory]}, {new: true});
+                    await Player.findOneAndUpdate({socket: socket.id}, {souls: [restfieldZombieSoulInventory, redDemonSoulInventory, pinkDemonSoulInventory, vampiresSoulInventory]}, {new: true});
                     const playerData = await Player.findOne({username: username}).exec();
 
                     myPlayer[socket.id] = playerData;
@@ -1658,7 +1671,7 @@ const miniMushroom = {
     image: "./inventory/miniMushroom.png",
 };
 const bone = {
-    type: "quest",
+    type: "material",
     name: "bone",
     level: 3,
     value: 4,
