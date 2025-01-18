@@ -583,36 +583,36 @@ async function main() {
                     if (arrayOfTypes.includes("fish") && arrayOfTypes.includes("meat")) {
                         if (totalLevel < 4) {
                             plate = commonPlate;
-                            xp = 30;
+                            xp = 100;
                         }
                          else if (totalLevel < 6) {
                             plate = mediumPlate;
-                            xp = 50;
+                            xp = 200;
                         }
                          else if (totalLevel <= 10) {
                             plate = rarePlate;
-                            xp = 100;
+                            xp = 300;
                         }
                     }
                     else if (arrayOfTypes.includes("fish") && arrayOfTypes.includes("leaf")) {
                         if (totalLevel < 4) {
                             plate = commonSushiPlate;
-                            xp = 30;
+                            xp = 100;
                         }
                          else if (totalLevel < 6) {
                             plate = mediumSushiPlate;
-                            xp = 50;
+                            xp = 200;
                         }
                          else if (totalLevel <= 10) {
                             plate = rareSushiPlate;
-                            xp = 100;
+                            xp = 300;
                         }
                     }
                     
                     else if (arrayOfTypes.includes("meat") && !arrayOfTypes.includes("leaf")) {
                         if (totalLevel < 4) {
                             plate = commonMeatPlate;
-                            xp = 30;
+                            xp = 100;
                         }
                         //  else if (totalLevel < 6) {
                         //     plate = uncommonFish;
@@ -630,19 +630,19 @@ async function main() {
                     else if (arrayOfTypes.includes("fish")) {
                         if (totalLevel < 4) {
                             plate = commonFish;
-                            xp = 30;
+                            xp = 100;
                         }
                          else if (totalLevel < 6) {
                             plate = uncommonFish;
-                            xp = 50;
+                            xp = 200;
                         }
                          else if (totalLevel < 10) {
                             plate = rareFish;
-                            xp = 100;
+                            xp = 300;
                         }
                         else if (totalLevel === 10) {
                             plate = octopusPlate;
-                            xp = 200;
+                            xp = 500;
                         }
                     } 
                     else {

@@ -2510,10 +2510,10 @@ function interactInventory(item, index) {
             return;
           }
 
-          // if (item.level > cookingLevelSimple) {
-          //   errorDisplay("You need to be at least Cooking level " + item.level + " to use this item.")
-          //   return;
-          // }
+          if (item.level > cookingLevelSimple) {
+            errorDisplay("You need to be at least Cooking level " + item.level + " to use this item.")
+            return;
+          }
 
           consumeAvailable = false;
 
@@ -5143,6 +5143,7 @@ let fishingArea = {
   maxX: 0,
   maxY: 0,
 };
+
 let fishAvailable = false;
 let scoreAvailable = false;
 
@@ -14447,7 +14448,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 25,
+        xp: 50,
         speedX: 15,
         speedY: 15,
         spawn: {
@@ -14483,7 +14484,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 25,
+        xp: 50,
         speedX: 15,
         speedY: 15,
         spawn: {
@@ -14519,7 +14520,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 25,
+        xp: 50,
         speedX: 15,
         speedY: 15,
         spawn: {
@@ -14555,7 +14556,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 25,
+        xp: 50,
         speedX: 15,
         speedY: 15,
         spawn: {
@@ -14591,7 +14592,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 25,
+        xp: 50,
         speedX: 15,
         speedY: 15,
         spawn: {
@@ -14627,7 +14628,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 25,
+        xp: 50,
         speedX: 15,
         speedY: 15,
         spawn: {
@@ -14664,7 +14665,7 @@ let mapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 5,
-        xp: 100,
+        xp: 500,
         speedX: 0,
         speedY: 0,
         spawn: {
@@ -19026,7 +19027,7 @@ let mapsInfo = {
       frames: 0,
       framesTimer: 0,
       level: 1,
-      xp: 25,
+      xp: 100,
       speedX: 15,
       speedY: 15,
       spawn: {
@@ -19061,7 +19062,7 @@ let mapsInfo = {
       frames: 0,
       framesTimer: 0,
       level: 1,
-      xp: 25,
+      xp: 100,
       speedX: 15,
       speedY: 15,
       spawn: {
@@ -19096,7 +19097,7 @@ let mapsInfo = {
       frames: 0,
       framesTimer: 0,
       level: 1,
-      xp: 25,
+      xp: 100,
       speedX: 15,
       speedY: 15,
       spawn: {
@@ -19131,7 +19132,7 @@ let mapsInfo = {
       frames: 0,
       framesTimer: 0,
       level: 1,
-      xp: 25,
+      xp: 100,
       speedX: 15,
       speedY: 15,
       spawn: {
@@ -19166,7 +19167,7 @@ let mapsInfo = {
       frames: 0,
       framesTimer: 0,
       level: 1,
-      xp: 25,
+      xp: 100,
       speedX: 15,
       speedY: 15,
       spawn: {
@@ -19201,7 +19202,7 @@ let mapsInfo = {
       frames: 0,
       framesTimer: 0,
       level: 1,
-      xp: 25,
+      xp: 100,
       speedX: 15,
       speedY: 15,
       spawn: {
@@ -19237,7 +19238,7 @@ let mapsInfo = {
       frames: 0,
       framesTimer: 0,
       level: 5,
-      xp: 500,
+      xp: 2000,
       speedX: 5,
       speedY: 5,
       spawn: {
