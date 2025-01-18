@@ -2510,10 +2510,10 @@ function interactInventory(item, index) {
             return;
           }
 
-          if (item.level > cookingLevelSimple) {
-            errorDisplay("You need to be at least Cooking level " + item.level + " to use this item.")
-            return;
-          }
+          // if (item.level > cookingLevelSimple) {
+          //   errorDisplay("You need to be at least Cooking level " + item.level + " to use this item.")
+          //   return;
+          // }
 
           consumeAvailable = false;
 
