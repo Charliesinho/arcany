@@ -564,48 +564,36 @@ async function main() {
                     myPlayer[socket.id] = player;   
 
                     let arrayOfTypes = []
-                    let arrayOfRarity = []
+                    let arrayOfNames = []
+                    let totalLevel = items[0].level + items[1].level
 
                     for (const item of items) {
                         if (!arrayOfTypes.includes(item.type)) {
                             arrayOfTypes.push(item.type)
                         }
-                        if (!arrayOfRarity.includes(item.rarity)) {
-                            arrayOfRarity.push(item.rarity)
+                        if (!arrayOfNames.includes(item.name)) {
+                            arrayOfNames.push(item.name)
                         }
                     }
 
                     let plate;
                     let xp = 0;
 
-                    if (arrayOfTypes.includes("fish") && arrayOfTypes.includes("stick")) {
-                        if (arrayOfRarity.includes("rare")) {
+                    if (arrayOfTypes.includes("fish")) {
+                        if (arrayOfNames.includes("sardine")) {
                             plate = rareFishStick;
                             xp = 500;
                         }
-                        else if (arrayOfRarity.includes("uncommon")) {
+                        else if (arrayOfNames.includes("uncommon")) {
                             plate = uncommonFishStick;
                             xp = 200;
                         }
-                        else if (arrayOfRarity.includes("common")) {
+                        else if (arrayOfNames.includes("common")) {
                             plate = commonFishStick;
                             xp = 100;
                         }
                     }
-                    else if (arrayOfTypes.includes("fish")) {
-                        if (arrayOfRarity.includes("rare")) {
-                            plate = rareFish;
-                            xp = 500;
-                        }
-                        else if (arrayOfRarity.includes("uncommon")) {
-                            plate = uncommonFish;
-                            xp = 200;
-                        }
-                        else if (arrayOfRarity.includes("common")) {
-                            plate = commonFish;
-                            xp = 100;
-                        }
-                    }
+                    
 
                     player.inventory.push(plate);        
                     player.cooking = player.cooking + xp;                                 
@@ -1483,15 +1471,6 @@ const rareFishStick = {
     rarity: "rare",
     image: "./inventory/rareFishStick.gif",
 };
-const commonFish = {
-    type: "food",
-    name: "commonFish",
-    level: 1,
-    value: 5,
-    power: 1,
-    rarity: "common",
-    image: "./inventory/commonFish.png",
-};
 const arcaneStaffCommon = {
     type: "weapon",
     name: "arcaneStaffCommon",
@@ -1562,24 +1541,6 @@ const nuclearStaffCommon = {
     value: 50,
     rarity: "common",
     image: "./inventory/nuclearStaffCommon.png",
-};
-const uncommonFish = {
-    type: "food",
-    name: "uncommonFish",
-    level: 2,
-    value: 5,
-    power: 2,
-    rarity: "uncommon",
-    image: "./inventory/uncommonFish.png",
-};
-const rareFish = {
-    type: "food",
-    name: "rareFish",
-    level: 3,
-    value: 5,
-    power: 4,
-    rarity: "rare",
-    image: "./inventory/rareFish.gif",
 };
 const stick = {
     type: "stick",
@@ -1654,7 +1615,7 @@ const octopus = {
     image: "./inventory/octopus.png",
 };
 const treeLeaf = {
-    type: "quest",
+    type: "leaf",
     name: "treeLeaf",
     level: 1,
     value: 4,
@@ -1720,6 +1681,120 @@ const runeRange = {
     rarity: "rare",
     image: "./inventory/runeRange.png",
 };
+
+//food
+const commonPlate = {
+    type: "food",
+    name: "commonPlate",
+    level: 3,
+    value: 5,
+    power: 1,
+    rarity: "rare",
+    image: "./inventory/commonPlate.png",
+};
+const mediumPlate = {
+    type: "food",
+    name: "mediumPlate",
+    level: 3,
+    value: 5,
+    power: 2,
+    rarity: "rare",
+    image: "./inventory/mediumPlate.png",
+};
+const rarePlate = {
+    type: "food",
+    name: "rarePlate",
+    level: 3,
+    value: 5,
+    power: 4,
+    rarity: "rare",
+    image: "./inventory/rarePlate.png",
+};
+
+const commonSushiPlate = {
+    type: "food",
+    name: "commonSushiPlate",
+    level: 3,
+    value: 5,
+    power: 1,
+    rarity: "rare",
+    image: "./inventory/commonSushiPlate.png",
+};
+const mediumSushiPlate = {
+    type: "food",
+    name: "mediumSushiPlate",
+    level: 3,
+    value: 5,
+    power: 2,
+    rarity: "rare",
+    image: "./inventory/mediumSushiPlate.png",
+};
+const rareSushiPlate = {
+    type: "food",
+    name: "rareSushiPlate",
+    level: 3,
+    value: 5,
+    power: 4,
+    rarity: "rare",
+    image: "./inventory/rareSushiPlate.png",
+};
+
+const commonFish = {
+    type: "food",
+    name: "commonFish",
+    level: 3,
+    value: 5,
+    power: 1,
+    rarity: "rare",
+    image: "./inventory/commonFish.png",
+};
+const uncommonFish = {
+    type: "food",
+    name: "uncommonFish",
+    level: 3,
+    value: 5,
+    power: 2,
+    rarity: "rare",
+    image: "./inventory/uncommonFish.png",
+};
+const rareFish = {
+    type: "food",
+    name: "rareFish",
+    level: 3,
+    value: 5,
+    power: 3,
+    rarity: "rare",
+    image: "./inventory/rareFish.png",
+};
+const octopusPlate = {
+    type: "food",
+    name: "octopusPlate",
+    level: 3,
+    value: 5,
+    power: 4,
+    rarity: "rare",
+    image: "./inventory/octopusPlate.gif",
+};
+
+const mediumMeatPlate = {
+    type: "food",
+    name: "mediumMeatPlate",
+    level: 3,
+    value: 5,
+    power: 1,
+    rarity: "rare",
+    image: "./inventory/mediumMeatPlate.png",
+};
+const commonMeatPlate = {
+    type: "food",
+    name: "commonMeatPlate",
+    level: 3,
+    value: 5,
+    power: 1,
+    rarity: "rare",
+    image: "./inventory/commonMeatPlate.png",
+};
+
 
 
 
@@ -1908,6 +1983,15 @@ const itemsObj = {
     restfieldBlanket,
     restfieldZombieSoulInventory,
     restfieldZombieInventory,
-    slimeGuts
+    slimeGuts,
+    commonPlate,
+    mediumPlate,
+    rarePlate,
+    commonSushiPlate,
+    mediumSushiPlate,
+    rareSushiPlate,
+    octopusPlate,
+    mediumMeatPlate,
+    commonMeatPlate
 };
 
