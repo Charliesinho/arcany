@@ -43795,11 +43795,11 @@ function drawUsernameLocal (player) {
 function drawUsername () {
   for (const player of players) {
     if (player.username !== myPlayer.username && player.room === myPlayer.room) {
-      let smoothPlayer = Object.values(smoothPlayers).find(Splayer => Splayer.username === player.username)
-      drawUsernameOnline(player, smoothPlayer)
+      // let smoothPlayer = Object.values(smoothPlayers).find(Splayer => Splayer.username === player.username)
+      // drawUsernameOnline(player, smoothPlayer)
     }
     else {
-      // drawUsernameLocal(player)
+      drawUsernameLocal(player)
     }
   }
 }
