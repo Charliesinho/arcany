@@ -1,7 +1,7 @@
 //Change this to push >
 
-// const socket = io(`ws://localhost:5000`);
-const socket = io(`https://arcanyGame.up.railway.app/`);
+const socket = io(`ws://localhost:5000`);
+// const socket = io(`https://arcanyGame.up.railway.app/`);
 
 //Change this to push <
 
@@ -4484,6 +4484,19 @@ let wallsVisibility = 0;
 
 let movementUpdateInterval = null;
 
+if (!movementUpdateInterval) {
+  movementUpdateInterval = setInterval(() => {
+    const updateData = {
+      location: [playerX, playerY],
+      inputs,
+      animPlayer,
+      lastLookPlayer,
+    };
+    socket.emit("playerUpdate", updateData);
+    console.log("Update sent");
+  }, 100);
+}
+
 window.addEventListener("keydown", (e) => {
 
   if (!noMovement) {
@@ -4556,8 +4569,8 @@ window.addEventListener("keydown", (e) => {
   //Dialog grasslands open <
   
     // socket.emit("inputs", inputs);
-    socket.emit("animPlayer", animPlayer);
-    socket.emit("lastLookPlayer", lastLookPlayer);
+    // socket.emit("animPlayer", animPlayer);
+    // socket.emit("lastLookPlayer", lastLookPlayer);
 
   }
 
@@ -4763,13 +4776,6 @@ window.addEventListener("keydown", (e) => {
   //   })
   // }
 
-  movementUpdateInterval = setInterval(() => {
-    playerLocation = [playerX, playerY];
-    socket.emit("playerLocation", playerLocation);
-    socket.emit("inputs", inputs);
-    socket.emit("animPlayer", animPlayer);
-  }, 600)
-
 });
 
 window.addEventListener("keyup", (e) => {
@@ -4794,12 +4800,6 @@ window.addEventListener("keyup", (e) => {
     footsteps.pause();
     footsteps.loop = false;
   }
-
-  clearInterval(movementUpdateInterval);
-  socket.emit("playerLocation", playerLocation);
-  socket.emit("inputs", inputs);
-  socket.emit("animPlayer", animPlayer);
-
 });
 
 //Player movement <
@@ -42972,7 +42972,7 @@ function updateSmoothOnlinePlayerPosition(smoothPlayer) {
 function mapSetup () {
   if (myPlayer) {
     // Canvas cleanup
-    canvas.clearRect(0, 0, 4500, 4500);
+    canvas.clearRect(0, 0, canvasLobby.width, canvasLobby.height);
     canvas.imageSmoothingEnabled = false;
 
     // Bug fix for humanSkin not loading
@@ -43618,250 +43618,76 @@ function drawLocalPlayer () {
   }
 }
 
-function drawOnlinePlayers (layer) {
-  initializeSmoothOnlinePlayers()
+function drawOnlinePlayers(layer) {
+  initializeSmoothOnlinePlayers();
+
+  // Loop through players and draw them
   for (const player of players) {
-    // console.log(player.room, myPlayer.room)
     if (player.username !== myPlayer.username && player.room === myPlayer.room) {
-      let smoothPlayer = Object.values(smoothPlayers).find(Splayer => Splayer.username === player.username)
-      updateSmoothOnlinePlayerPosition(smoothPlayer)
+      let smoothPlayer = smoothPlayers[player.username]; // direct lookup for smoothPlayer
+      if (!smoothPlayer) continue; // Skip if smoothPlayer doesn't exist
 
-      let armor = drawPlayerArmor(player);
-      let artifact = drawPlayerArtifact(player);
+      // Update smooth player position
+      updateSmoothOnlinePlayerPosition(smoothPlayer);
 
-      if (layer === "back" && player.y < playerY) {
-        drawPlayerWeaponSheated(player)
-        drawPlayerOnline()
+      // Cache armor and artifact for the player
+      const armor = drawPlayerArmor(player);
+      const artifact = drawPlayerArtifact(player);
+
+      // Precompute frame and cut data
+      frameCurrentPlayer = frameCurrentPlayer % 6;
+      playerCutX = frameCurrentPlayer * playerWidth;
+
+      // Determine animation and lastLooked direction
+      let yOffset = 0;  // Default offset
+      if (player.anim === "sittingDown") {
+        yOffset = player.lastLooked === "right" ? 200 : 250;
+      } else if (player.anim === "idleRight" || player.anim === "runRight") {
+        yOffset = 0; // Running or idle to the right
+      } else if (player.anim === "idleLeft" || player.anim === "runLeft") {
+        yOffset = 50; // Running or idle to the left
+      } else if (player.anim === "moveUp" || player.anim === "moveDown") {
+        yOffset = player.lastLooked === "right" ? 100 : 150; // Up or down movement
       }
-      else if (layer === "front" && player.y >= playerY) {
-        drawPlayerWeaponSheated(player)
-        drawPlayerOnline()
-      }
 
-      
+      // Draw armor and artifact
+      drawPlayerAssets(smoothPlayer, yOffset, armor, artifact);
 
-      function drawPlayerOnline () {
-        if (player.anim === "sittingDown" && player.lastLooked === "right") {
-          console.log(player.anim)
-          frameCurrentPlayer = frameCurrentPlayer % 6;
-    
-          playerCutX = frameCurrentPlayer * playerWidth;
-  
-          canvas.drawImage(
-            armor,
-            playerCutX,
-            playerCutY + 200,
-            playerWidth,
-            playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
-            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-          canvas.drawImage(
-            artifact,
-            playerCutX,
-            playerCutY + 200,
-            playerWidth,
-            playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
-            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-        }
-        else if (player.anim === "sittingDown" && player.lastLooked === "left"){
-          frameCurrentPlayer = frameCurrentPlayer % 6;
-    
-          playerCutX = frameCurrentPlayer * playerWidth;
-  
-          canvas.drawImage(
-            armor,
-            playerCutX,
-            playerCutY + 250,
-            playerWidth,
-            playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
-            smoothPlayer.smoothY - cameraY + 125 - cameraShakeY - 130,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-          canvas.drawImage(
-            artifact,
-            playerCutX,
-            playerCutY + 250,
-            playerWidth,
-            playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
-            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-        }
-        else if (player.anim === "idleRight" && player.lastLooked === "right") {
-          frameCurrentPlayer = frameCurrentPlayer % 6;
-      
-          playerCutX = frameCurrentPlayer * playerWidth;
-    
-          canvas.drawImage(
-            armor,
-            playerCutX,
-            playerCutY,
-            playerWidth,
-            playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
-            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-          canvas.drawImage(
-            artifact,
-            playerCutX,
-            playerCutY,
-            playerWidth,
-            playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
-            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-        }
-        else if (player.anim === "idleRight" && player.lastLooked === "left") {
-          frameCurrentPlayer = frameCurrentPlayer % 6;
-          playerCutX = frameCurrentPlayer * playerWidth;
-          canvas.drawImage(
-            armor,
-            playerCutX,
-            playerCutY + 50,
-            playerWidth,
-            playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
-            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-          canvas.drawImage(
-            artifact,
-            playerCutX,
-            playerCutY + 50,
-            playerWidth,
-            playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
-            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-        }
-        else if (player.anim === "runRight") {
-          frameCurrentPlayer = frameCurrentPlayer % 6;
-          playerCutX = frameCurrentPlayer * playerWidth;
-          canvas.drawImage(
-            armor,
-            playerCutX,
-            playerCutY + 100,
-            playerWidth,
-            playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
-            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-          canvas.drawImage(
-            artifact,
-            playerCutX,
-            playerCutY + 100,
-            playerWidth,
-            playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
-            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-        }
-        else if (player.anim === "runLeft") {
-          frameCurrentPlayer = frameCurrentPlayer % 6;
-          playerCutX = frameCurrentPlayer * playerWidth;
-          canvas.drawImage(
-            armor,
-            playerCutX,
-            playerCutY + 150,
-            playerWidth,
-            playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
-            smoothPlayer.smoothY - cameraY + 125 - cameraShakeY - 130,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-          canvas.drawImage(
-            artifact,
-            playerCutX,
-            playerCutY + 150,
-            playerWidth,
-            playerHeight,
-            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
-            smoothPlayer.smoothY - cameraY + 125 - cameraShakeY - 130,
-            playerWidth - playerZoomX,
-            playerHeight - playerZoomY,
-          );
-        }
-        else if (player.anim === "moveUp" || player.anim === "moveDown") {
-          frameCurrentPlayer = frameCurrentPlayer % 6;
-          playerCutX = frameCurrentPlayer * playerWidth;
-        
-          if (player.lastLooked === "right") {
-            // Play running animation as if moving right
-            canvas.drawImage(
-              armor,
-              playerCutX,
-              playerCutY + 100, // Same as runRight
-              playerWidth,
-              playerHeight,
-              smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
-              smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
-              playerWidth - playerZoomX,
-              playerHeight - playerZoomY,
-            );
-            canvas.drawImage(
-              artifact,
-              playerCutX,
-              playerCutY + 100, // Same as runRight
-              playerWidth,
-              playerHeight,
-              smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
-              smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
-              playerWidth - playerZoomX,
-              playerHeight - playerZoomY,
-            );
-          } 
-          else if (player.lastLooked === "left") {
-            // Play running animation as if moving left
-            canvas.drawImage(
-              armor,
-              playerCutX,
-              playerCutY + 150, // Same as runLeft
-              playerWidth,
-              playerHeight,
-              smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
-              smoothPlayer.smoothY - cameraY + 125 - cameraShakeY - 130,
-              playerWidth - playerZoomX,
-              playerHeight - playerZoomY,
-            );
-            canvas.drawImage(
-              artifact,
-              playerCutX,
-              playerCutY + 150, // Same as runLeft
-              playerWidth,
-              playerHeight,
-              smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
-              smoothPlayer.smoothY - cameraY + 125 - cameraShakeY - 130,
-              playerWidth - playerZoomX,
-              playerHeight - playerZoomY,
-            );
-        }}
+      // Layered drawing (back/front logic)
+      if (layer === "back" && player.y < playerY || layer === "front" && player.y >= playerY) {
+        drawPlayerWeaponSheated(player);
       }
     }
   }
 }
+
+// Consolidated function for drawing the player with armor and artifact
+function drawPlayerAssets(smoothPlayer, yOffset, armor, artifact) {
+  canvas.drawImage(
+    armor,
+    playerCutX,
+    playerCutY + yOffset,
+    playerWidth,
+    playerHeight,
+    smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+    smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
+    playerWidth - playerZoomX,
+    playerHeight - playerZoomY
+  );
+
+  canvas.drawImage(
+    artifact,
+    playerCutX,
+    playerCutY + yOffset,
+    playerWidth,
+    playerHeight,
+    smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+    smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
+    playerWidth - playerZoomX,
+    playerHeight - playerZoomY
+  );
+}
+
 
 function drawPlayerArmor (player) {
   if (player.armor[0]) {   
@@ -43973,7 +43799,7 @@ function drawUsername () {
       drawUsernameOnline(player, smoothPlayer)
     }
     else {
-      drawUsernameLocal(player)
+      // drawUsernameLocal(player)
     }
   }
 }
@@ -45888,9 +45714,9 @@ function lobbyLoop() {
   // Player settings
   drawEnemy()
   playerCollision()
-  drawOnlinePlayers("back")
+  // drawOnlinePlayers("back")
   drawLocalPlayer()
-  drawOnlinePlayers("front")
+  // drawOnlinePlayers("front")
   drawLocalBullets()
   
   

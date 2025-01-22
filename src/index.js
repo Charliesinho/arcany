@@ -39,8 +39,8 @@ let myPlayer = {};
 function tick() {
     for (const player of players) {
         const inputs = inputsMap[player.id];
-        const anim = animPlayerStore[player.id];
-        const lastLooked = lastLookPlayerStore[player.id];
+        // const anim = player.anim;
+        // const lastLooked = lastLookPlayerStore[player.id];
         const weaponAngle = weaponAngleStore[player.id];
         let chatMessage = chatMessageStore[player.id];
         const blockMovement = blockMovementStore[player.id];
@@ -94,8 +94,9 @@ function tick() {
         // }      
 
 
-        player.anim = anim;
-        player.lastLooked = lastLooked;
+        // player.anim = anim;
+        // player.lastLooked = lastLooked;
+        // console.log(player.anim)
         player.weaponAngle = weaponAngle;
         player.chatMessage = chatMessage;
         player.username = username;
@@ -111,57 +112,57 @@ function tick() {
         io.emit("player", player);
     }
 
-    for (const projectile of projectiles) {
+    // for (const projectile of projectiles) {
 
-        projectile.x += Math.cos(projectile.angle) * projectileSpeed;
-        projectile.y += Math.sin(projectile.angle) * projectileSpeed;
-        projectile.timeLeft -= 5;
+    //     projectile.x += Math.cos(projectile.angle) * projectileSpeed;
+    //     projectile.y += Math.sin(projectile.angle) * projectileSpeed;
+    //     projectile.timeLeft -= 5;
 
-        for (const player of players) {
-            const username = usernames[player.id]; 
+    //     for (const player of players) {
+    //         const username = usernames[player.id]; 
 
-            if (player.id === projectile.playerId) continue;
-            const distance = Math.sqrt(
-                (player.x + 15 - projectile.x) ** 2 + (player.y + 15 - projectile.y) ** 2
-                );
-                if (distance <= 15) {
+    //         if (player.id === projectile.playerId) continue;
+    //         const distance = Math.sqrt(
+    //             (player.x + 15 - projectile.x) ** 2 + (player.y + 15 - projectile.y) ** 2
+    //             );
+    //             if (distance <= 15) {
                     
-                    if (player.health > 1) {
-                        player.health -= 1;
-                        updateHealth(username, player.health, player.id);
-                    } else {
-                        player.x = 1280;
-                        player.y = 1220;
-                        player.health = 3;
-                        updateHealth(username, player.health, player.id);
-                    }
-                    projectile.timeLeft = -1;
-                    break;
-                }
-        }
+    //                 if (player.health > 1) {
+    //                     player.health -= 1;
+    //                     updateHealth(username, player.health, player.id);
+    //                 } else {
+    //                     player.x = 1280;
+    //                     player.y = 1220;
+    //                     player.health = 3;
+    //                     updateHealth(username, player.health, player.id);
+    //                 }
+    //                 projectile.timeLeft = -1;
+    //                 break;
+    //             }
+    //     }
 
-        for (const enemy of enemies)
-        {
-            const distance = Math.sqrt(
-                (enemy.x + 20 - projectile.x) ** 2 + (enemy.y + 20 - projectile.y) ** 2
-                );
-                if (distance <= 20) {
+    //     for (const enemy of enemies)
+    //     {
+    //         const distance = Math.sqrt(
+    //             (enemy.x + 20 - projectile.x) ** 2 + (enemy.y + 20 - projectile.y) ** 2
+    //             );
+    //             if (distance <= 20) {
                     
-                    if (enemy.health > 1) {
-                        enemy.health -= 1;
-                        updateEnemyHealth(enemy);
-                    } else {
-                        enemy.enabled = false;
-                        enemy.health = 4;
-                        updateEnemyHealth(enemy);
-                    }
-                    projectile.timeLeft = -1;
-                    break;
-                }
-        }
-    }
+    //                 if (enemy.health > 1) {
+    //                     enemy.health -= 1;
+    //                     updateEnemyHealth(enemy);
+    //                 } else {
+    //                     enemy.enabled = false;
+    //                     enemy.health = 4;
+    //                     updateEnemyHealth(enemy);
+    //                 }
+    //                 projectile.timeLeft = -1;
+    //                 break;
+    //             }
+    //     }
+    // }
 
-    projectiles = projectiles.filter((projectile) => projectile.timeLeft > 0);
+    // projectiles = projectiles.filter((projectile) => projectile.timeLeft > 0);
 
     // io.to("islandOne").emit("enemies", enemies);
     // io.to("baseMap1").emit('players', players);
@@ -275,19 +276,35 @@ async function main() {
             
         });
 
-        socket.on("playerLocation", (playerLocation) => {
-            async function locate() {
+        // socket.on("playerLocation", (playerLocation) => {
+        //     async function locate() {
+        //     for (const player of players) {
+        //         if (player.id === socket.id) {
+        //               player.x = playerLocation[0];
+        //               player.y = playerLocation[1];
+        //             //   console.log("recieving:", playerLocation[0])
+        //         }
+        //     }
+        //     }
+        //     locate()
+        // })
+        
+        socket.on("playerUpdate", (data) => {
+            const { location, inputs, animPlayer, lastLookPlayer } = data;
+        
             for (const player of players) {
-                if (player.id === socket.id) {
-                      player.x = playerLocation[0];
-                      player.y = playerLocation[1];
-                    //   console.log("recieving:", playerLocation[0])
-                }
+            if (player.id === socket.id) {
+               
+                player.x = location[0];
+                player.y = location[1];
+                player.inputs = inputs;
+                player.anim = animPlayer;
+                player.lastLooked = lastLookPlayer;
+                break;
             }
             }
-            locate()
-        })
-
+        });
+  
         socket.on("fishing", () => {
                  
 
@@ -1326,17 +1343,17 @@ async function main() {
             // enemies[socket.id] = enemies;
         })
     
-        socket.on("inputs", (inputs) => {
-            inputsMap[socket.id] = inputs;
-        });
+        // socket.on("inputs", (inputs) => {
+        //     inputsMap[socket.id] = inputs;
+        // });
 
-        socket.on("animPlayer", (animPlayerSocket) => {
-            animPlayerStore[socket.id] = animPlayerSocket;            
-        });
+        // socket.on("animPlayer", (animPlayerSocket) => {
+        //     animPlayerStore[socket.id] = animPlayerSocket;            
+        // });
 
-        socket.on("lastLookPlayer", (lastLookPlayer) => {                    
-            lastLookPlayerStore[socket.id] = lastLookPlayer;  
-        });
+        // socket.on("lastLookPlayer", (lastLookPlayer) => {                    
+        //     lastLookPlayerStore[socket.id] = lastLookPlayer;  
+        // });
 
         socket.on("weaponAngle", (weaponAngle) => {                    
             weaponAngleStore[socket.id] = weaponAngle;  
