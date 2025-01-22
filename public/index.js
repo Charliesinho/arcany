@@ -1,7 +1,7 @@
 //Change this to push >
 
-// const socket = io(`ws://localhost:5000`);
-const socket = io(`https://arcanyGame.up.railway.app/`);
+const socket = io(`ws://localhost:5000`);
+// const socket = io(`https://arcanyGame.up.railway.app/`);
 
 //Change this to push <
 
@@ -4475,12 +4475,14 @@ let dashingAllowed = false;
 
 let wallsVisibility = 0;
 
-setInterval(() => {
-  playerLocation = [playerX, playerY];
-  socket.emit("playerLocation", playerLocation);
-  socket.emit("inputs", inputs);
-  socket.emit("animPlayer", animPlayer);
-}, 100);
+// setInterval(() => {
+//   playerLocation = [playerX, playerY];
+//   socket.emit("playerLocation", playerLocation);
+//   socket.emit("inputs", inputs);
+//   socket.emit("animPlayer", animPlayer);
+// }, 100);
+
+let movementUpdateInterval = null;
 
 window.addEventListener("keydown", (e) => {
 
@@ -4761,6 +4763,13 @@ window.addEventListener("keydown", (e) => {
   //   })
   // }
 
+  movementUpdateInterval = setInterval(() => {
+    playerLocation = [playerX, playerY];
+    socket.emit("playerLocation", playerLocation);
+    socket.emit("inputs", inputs);
+    socket.emit("animPlayer", animPlayer);
+  }, 600)
+
 });
 
 window.addEventListener("keyup", (e) => {
@@ -4785,6 +4794,12 @@ window.addEventListener("keyup", (e) => {
     footsteps.pause();
     footsteps.loop = false;
   }
+
+  clearInterval(movementUpdateInterval);
+  socket.emit("playerLocation", playerLocation);
+  socket.emit("inputs", inputs);
+  socket.emit("animPlayer", animPlayer);
+
 });
 
 //Player movement <
@@ -42539,247 +42554,247 @@ canvasLobby.addEventListener('click', function(event) {
 
 // UI DEV COMMENT >
 
-// placeWalls.addEventListener("click", function() {
-//  if (currentDevAction !== "wall") {
-//   currentDevAction = "wall";
-//   roomsDiv.style.display = "none"
-//   dialogsDiv.style.display = "none"
-//   deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeDialog.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeChest.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeWalls.style.backgroundColor = "rgba(170, 233, 170, 1)"
-//  } else {
-//   currentDevAction = "none";
-//   placeWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//  }
-// });
+placeWalls.addEventListener("click", function() {
+ if (currentDevAction !== "wall") {
+  currentDevAction = "wall";
+  roomsDiv.style.display = "none"
+  dialogsDiv.style.display = "none"
+  deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeDialog.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeChest.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeWalls.style.backgroundColor = "rgba(170, 233, 170, 1)"
+ } else {
+  currentDevAction = "none";
+  placeWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
+ }
+});
 
-// deleteWalls.addEventListener("click", function() {
-//   if (currentDevAction !== "delete") {
-//     currentDevAction = "delete";
-//     roomsDiv.style.display = "none"
-//     dialogsDiv.style.display = "none"
-//     placeWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//     placeDialog.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//     placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//     placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//     placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//     placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//     placeChest.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//     placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//     deleteWalls.style.backgroundColor = "rgba(170, 233, 170, 1)"
-//   } else {
-//     currentDevAction = "none";
-//     deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   }
-//  });
+deleteWalls.addEventListener("click", function() {
+  if (currentDevAction !== "delete") {
+    currentDevAction = "delete";
+    roomsDiv.style.display = "none"
+    dialogsDiv.style.display = "none"
+    placeWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    placeDialog.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    placeChest.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    deleteWalls.style.backgroundColor = "rgba(170, 233, 170, 1)"
+  } else {
+    currentDevAction = "none";
+    deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  }
+ });
 
-// placeFishingArea.addEventListener("click", function() {
-//   if (currentDevAction !== "fish") {
-//     currentDevAction = "fish";
-//     roomsDiv.style.display = "none"
-//     dialogsDiv.style.display = "none"
-//     deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//     placeDialog.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//     placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//     placeWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//     placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//     placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//     placeChest.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//     placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//     placeFishingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
-//   } else {
-//     currentDevAction = "none";
-//     placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   }
-//  });
+placeFishingArea.addEventListener("click", function() {
+  if (currentDevAction !== "fish") {
+    currentDevAction = "fish";
+    roomsDiv.style.display = "none"
+    dialogsDiv.style.display = "none"
+    deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    placeDialog.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    placeWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    placeChest.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    placeFishingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
+  } else {
+    currentDevAction = "none";
+    placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  }
+ });
 
-//  placeEnchantingArea.addEventListener("click", function() {
-// if (currentDevAction !== "enchanting") {
-//   currentDevAction = "enchanting";
-//   roomsDiv.style.display = "none"
-//   dialogsDiv.style.display = "none"
-//   deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeDialog.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeChest.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeEnchantingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
-// } else {
-//   currentDevAction = "none";
-//   placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-// }
-// });
+ placeEnchantingArea.addEventListener("click", function() {
+if (currentDevAction !== "enchanting") {
+  currentDevAction = "enchanting";
+  roomsDiv.style.display = "none"
+  dialogsDiv.style.display = "none"
+  deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeDialog.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeChest.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeEnchantingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
+} else {
+  currentDevAction = "none";
+  placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+}
+});
 
-// placeCookingArea.addEventListener("click", function() {
-// if (currentDevAction !== "cook") {
-//   currentDevAction = "cook";
-//   roomsDiv.style.display = "none"
-//   placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   dialogsDiv.style.display = "none"
-//   deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeDialog.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeChest.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeCookingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
-// } else {
-//   currentDevAction = "none";
-//   placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-// }
-// });
+placeCookingArea.addEventListener("click", function() {
+if (currentDevAction !== "cook") {
+  currentDevAction = "cook";
+  roomsDiv.style.display = "none"
+  placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  dialogsDiv.style.display = "none"
+  deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeDialog.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeChest.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeCookingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
+} else {
+  currentDevAction = "none";
+  placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+}
+});
 
-// placeCraftingArea.addEventListener("click", function() {
-// if (currentDevAction !== "craft") {
-//   currentDevAction = "craft";
-//   roomsDiv.style.display = "none"
-//   dialogsDiv.style.display = "none"
-//   placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeDialog.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeChest.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeCraftingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
-// } else {
-//   currentDevAction = "none";
-//   placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-// }
-// });
+placeCraftingArea.addEventListener("click", function() {
+if (currentDevAction !== "craft") {
+  currentDevAction = "craft";
+  roomsDiv.style.display = "none"
+  dialogsDiv.style.display = "none"
+  placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeDialog.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeChest.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeCraftingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
+} else {
+  currentDevAction = "none";
+  placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+}
+});
 
-// placeTransition.addEventListener("click", function() {
-// if (currentDevAction !== "transition") {
-//   currentDevAction = "transition";
-//   roomsDiv.style.display = "block"
-//   placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   dialogsDiv.style.display = "none"
-//   deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeDialog.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeChest.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeTransition.style.backgroundColor = "rgba(170, 233, 170, 1)"
-// } else {
-//   roomsDiv.style.display = "none"
-//   currentDevAction = "none";
-//   placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
-// }
-// });
+placeTransition.addEventListener("click", function() {
+if (currentDevAction !== "transition") {
+  currentDevAction = "transition";
+  roomsDiv.style.display = "block"
+  placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  dialogsDiv.style.display = "none"
+  deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeDialog.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeChest.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeTransition.style.backgroundColor = "rgba(170, 233, 170, 1)"
+} else {
+  roomsDiv.style.display = "none"
+  currentDevAction = "none";
+  placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
+}
+});
 
-// placeChest.addEventListener("click", function() {
-// if (currentDevAction !== "chest") {
-//   currentDevAction = "chest";
-//   roomsDiv.style.display = "none"
-//   placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   dialogsDiv.style.display = "none"
-//   placeDialog.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   placeChest.style.backgroundColor = "rgba(170, 233, 170, 1)"
-// } else {
-//   currentDevAction = "none";
-//   placeChest.style.backgroundColor = "rgb(255 255 255 / 29%)"
-// }
-// });
+placeChest.addEventListener("click", function() {
+if (currentDevAction !== "chest") {
+  currentDevAction = "chest";
+  roomsDiv.style.display = "none"
+  placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  dialogsDiv.style.display = "none"
+  placeDialog.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeChest.style.backgroundColor = "rgba(170, 233, 170, 1)"
+} else {
+  currentDevAction = "none";
+  placeChest.style.backgroundColor = "rgb(255 255 255 / 29%)"
+}
+});
 
-// placeChestStick.style.backgroundColor = "rgba(170, 233, 170, 1)" //Initially selected
+placeChestStick.style.backgroundColor = "rgba(170, 233, 170, 1)" //Initially selected
 
-// placeChestStick.addEventListener("click", function() {
-//   if (currentChestItem !== "stick") {
-//     currentChestItem = "stick";
-//     placeChestGem.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//     placeChestVeg.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//     placeChestStick.style.backgroundColor = "rgba(170, 233, 170, 1)"
-//   }
-// });
+placeChestStick.addEventListener("click", function() {
+  if (currentChestItem !== "stick") {
+    currentChestItem = "stick";
+    placeChestGem.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    placeChestVeg.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    placeChestStick.style.backgroundColor = "rgba(170, 233, 170, 1)"
+  }
+});
 
-// placeChestVeg.addEventListener("click", function() {
-//   if (currentChestItem !== "vegetable") {
-//     currentChestItem = "vegetable";
-//     placeChestGem.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//     placeChestStick.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//     placeChestVeg.style.backgroundColor = "rgba(170, 233, 170, 1)"
-//   }
-// });
+placeChestVeg.addEventListener("click", function() {
+  if (currentChestItem !== "vegetable") {
+    currentChestItem = "vegetable";
+    placeChestGem.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    placeChestStick.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    placeChestVeg.style.backgroundColor = "rgba(170, 233, 170, 1)"
+  }
+});
 
-// placeChestGem.addEventListener("click", function() {
-//   if (currentChestItem !== "gem") {
-//     currentChestItem = "gem";
-//     placeChestVeg.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//     placeChestStick.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//     placeChestGem.style.backgroundColor = "rgba(170, 233, 170, 1)"
-//   }
-// });
+placeChestGem.addEventListener("click", function() {
+  if (currentChestItem !== "gem") {
+    currentChestItem = "gem";
+    placeChestVeg.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    placeChestStick.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    placeChestGem.style.backgroundColor = "rgba(170, 233, 170, 1)"
+  }
+});
 
-// placeDialog.addEventListener("click", function() {
-//   if (currentDevAction !== "dialog") {
-//     currentDevAction = "dialog";
-//     roomsDiv.style.display = "none"
-//     dialogsDiv.style.display = "block"
-//     deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//     placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//     placeWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//     placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//     placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//     placeChest.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//     placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//     placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//     placeDialog.style.backgroundColor = "rgba(170, 233, 170, 1)"
-//   } else {
-//     currentDevAction = "none";
-//     placeDialog.style.backgroundColor = "rgb(255 255 255 / 29%)"
-//   }
-// });
+placeDialog.addEventListener("click", function() {
+  if (currentDevAction !== "dialog") {
+    currentDevAction = "dialog";
+    roomsDiv.style.display = "none"
+    dialogsDiv.style.display = "block"
+    deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    placeWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    placeChest.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    placeDialog.style.backgroundColor = "rgba(170, 233, 170, 1)"
+  } else {
+    currentDevAction = "none";
+    placeDialog.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  }
+});
 
-// showWalls.addEventListener("click", function() {
-// if (wallsVisibility === 0) {
-//   wallsVisibility = 0.5;
-//   showWalls.style.backgroundColor = "rgba(170, 233, 170, 1)"
-// } else {
-//   wallsVisibility = 0;
-//   showWalls.style.backgroundColor = "black"
-// }
-// mapsInfo[currentLand].colliders.forEach(wall => {
-//   if (wall.type === "wall") {
-//     wall.color = `rgb(0, 0, 0, ${wallsVisibility})`;
-//   } else if (wall.type === "fish") {
-//     wall.color = `rgb(51, 102, 255, ${wallsVisibility})`
-//   } else if (wall.type === "cook") {
-//     wall.color = `rgb(153, 255, 102, ${wallsVisibility})`
-//   } else if (wall.type === "craft") {
-//   } else if (wall.type === "enchanting") {
-//     wall.color = `rgb(204, 0, 255, ${wallsVisibility})`
-//   } else if (wall.type === "chest") {
-//     wall.color = `rgb(255, 255, 204, ${wallsVisibility})`
-//   } else if (wall.type === "transition") {
-//     wall.color = `rgb(204, 0, 204, ${wallsVisibility})`
-//   } else if (wall.type === "dialog") {
-//     wall.color = `rgb(179, 255, 213, ${wallsVisibility})`
-//   }
-// })
-// });
+showWalls.addEventListener("click", function() {
+if (wallsVisibility === 0) {
+  wallsVisibility = 0.5;
+  showWalls.style.backgroundColor = "rgba(170, 233, 170, 1)"
+} else {
+  wallsVisibility = 0;
+  showWalls.style.backgroundColor = "black"
+}
+mapsInfo[currentLand].colliders.forEach(wall => {
+  if (wall.type === "wall") {
+    wall.color = `rgb(0, 0, 0, ${wallsVisibility})`;
+  } else if (wall.type === "fish") {
+    wall.color = `rgb(51, 102, 255, ${wallsVisibility})`
+  } else if (wall.type === "cook") {
+    wall.color = `rgb(153, 255, 102, ${wallsVisibility})`
+  } else if (wall.type === "craft") {
+  } else if (wall.type === "enchanting") {
+    wall.color = `rgb(204, 0, 255, ${wallsVisibility})`
+  } else if (wall.type === "chest") {
+    wall.color = `rgb(255, 255, 204, ${wallsVisibility})`
+  } else if (wall.type === "transition") {
+    wall.color = `rgb(204, 0, 204, ${wallsVisibility})`
+  } else if (wall.type === "dialog") {
+    wall.color = `rgb(179, 255, 213, ${wallsVisibility})`
+  }
+})
+});
 
-// exportWalls.addEventListener("click", function() {
-// exportObjectAsText(mapsInfo[currentLand].colliders, "walls")
-// });
+exportWalls.addEventListener("click", function() {
+exportObjectAsText(mapsInfo[currentLand].colliders, "walls")
+});
 
 // UI DEV COMMENT <
 
