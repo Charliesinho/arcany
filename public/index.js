@@ -1,7 +1,7 @@
 //Change this to push >
 
-// const socket = io(`ws://localhost:5000`);
-const socket = io(`https://arcanyGame.up.railway.app/`);
+const socket = io(`ws://localhost:5000`);
+// const socket = io(`https://arcanyGame.up.railway.app/`);
 
 //Change this to push <
 
@@ -2970,13 +2970,13 @@ let combatLevelSimple = 0;
 
 let dialogBoxes;
 
-function initDraggables() {
-  dragula([document.querySelector(".dragParent"), document.querySelector(".dragParent1")])
-}
+// function initDraggables() {
+//   dragula([document.querySelector(".dragParent"), document.querySelector(".dragParent1")])
+// }
 
-setTimeout(() => {
-  initDraggables()
-}, 1000);
+// setTimeout(() => {
+//   initDraggables()
+// }, 1000);
 
 let maxHealth = 6;
 let currentHealth = 6;
@@ -3195,15 +3195,18 @@ let updateDialogs = true;
 
 socket.on("player", (serverPlayer) => {
 
-  const index = players.findIndex((player) => player.id === serverPlayer.id);
+  // console.log("players: ", serverPlayer)
 
-  if (index !== -1) {
-    // If the player already exists, update its data
-    players[index] = serverPlayer;
-  } else {
-    // If the player is new, add it to the array
-    players.push(serverPlayer);
-  }
+  serverPlayer.forEach((playerUnique) => {
+    const index = players.findIndex((player) => player.id === playerUnique.id);
+    
+    if (index !== -1) {
+      players[index] = playerUnique;
+    } else {
+      players.push(playerUnique);
+    }
+  });
+
   // players = serverPlayers;
   myPlayer = players.find((player) => player.id === socket.id);
 
@@ -4362,7 +4365,8 @@ socket.on("loginAttempt", (msg) => {
     audioIntro.pause();
     loggedIn.play();
     // intervalCanvasBase = setInterval(lobbyLoop, 16.67); //Initial canvas
-    intervalCanvasBase = setInterval(lobbyLoop, 16.67); //Initial canvas
+    intervalCanvasBase = requestAnimationFrame(lobbyLoop)
+    // intervalCanvasBase = setInterval(lobbyLoop, 16.67); //Initial canvas
     console.log("logged in")
 
     loginScreen.classList.add('downLogIn');
@@ -4493,7 +4497,6 @@ if (!movementUpdateInterval) {
       lastLookPlayer,
     };
     socket.emit("playerUpdate", updateData);
-    console.log("Update sent");
   }, 100);
 }
 
@@ -5426,12 +5429,12 @@ function transition (format) {
   }
 }
 function changeMap (dynamicFunctionName) {
-  clearInterval(intervalCanvasBase)
+  cancelAnimationFrame(intervalCanvasBase)
   const canvasFunction = window[dynamicFunctionName];
   if (typeof canvasFunction === "function") {
     stopAllSound()
     mapsInfo[currentSelectedMap].areaSounds();
-    intervalCanvasBase = setInterval(canvasFunction, 16.67);
+    intervalCanvasBase = requestAnimationFrame(canvasFunction);
     if (mapsInfo[currentSelectedMap].areaName) areaNameDisplay(mapsInfo[currentSelectedMap].areaName)
     setTimeout(() => {
       transitionTimeout = false;
@@ -43618,74 +43621,248 @@ function drawLocalPlayer () {
   }
 }
 
-function drawOnlinePlayers(layer) {
-  initializeSmoothOnlinePlayers();
-
-  // Loop through players and draw them
+function drawOnlinePlayers (layer) {
+  initializeSmoothOnlinePlayers()
   for (const player of players) {
+    // console.log(player.room, myPlayer.room)
     if (player.username !== myPlayer.username && player.room === myPlayer.room) {
-      let smoothPlayer = smoothPlayers[player.username]; // direct lookup for smoothPlayer
-      if (!smoothPlayer) continue; // Skip if smoothPlayer doesn't exist
+      let smoothPlayer = Object.values(smoothPlayers).find(Splayer => Splayer.username === player.username)
+      updateSmoothOnlinePlayerPosition(smoothPlayer)
 
-      // Update smooth player position
-      updateSmoothOnlinePlayerPosition(smoothPlayer);
+      let armor = drawPlayerArmor(player);
+      let artifact = drawPlayerArtifact(player);
 
-      // Cache armor and artifact for the player
-      const armor = drawPlayerArmor(player);
-      const artifact = drawPlayerArtifact(player);
-
-      // Precompute frame and cut data
-      frameCurrentPlayer = frameCurrentPlayer % 6;
-      playerCutX = frameCurrentPlayer * playerWidth;
-
-      // Determine animation and lastLooked direction
-      let yOffset = 0;  // Default offset
-      if (player.anim === "sittingDown") {
-        yOffset = player.lastLooked === "right" ? 200 : 250;
-      } else if (player.anim === "idleRight" || player.anim === "runRight") {
-        yOffset = 0; // Running or idle to the right
-      } else if (player.anim === "idleLeft" || player.anim === "runLeft") {
-        yOffset = 50; // Running or idle to the left
-      } else if (player.anim === "moveUp" || player.anim === "moveDown") {
-        yOffset = player.lastLooked === "right" ? 100 : 150; // Up or down movement
+      if (layer === "back" && player.y < playerY) {
+        drawPlayerWeaponSheated(player)
+        drawPlayerOnline()
+      }
+      else if (layer === "front" && player.y >= playerY) {
+        drawPlayerWeaponSheated(player)
+        drawPlayerOnline()
       }
 
-      // Draw armor and artifact
-      drawPlayerAssets(smoothPlayer, yOffset, armor, artifact);
+      
 
-      // Layered drawing (back/front logic)
-      if (layer === "back" && player.y < playerY || layer === "front" && player.y >= playerY) {
-        drawPlayerWeaponSheated(player);
+      function drawPlayerOnline () {
+        if (player.anim === "sittingDown" && player.lastLooked === "right") {
+          frameCurrentPlayer = frameCurrentPlayer % 6;
+    
+          playerCutX = frameCurrentPlayer * playerWidth;
+  
+          canvas.drawImage(
+            armor,
+            playerCutX,
+            playerCutY + 200,
+            playerWidth,
+            playerHeight,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+          canvas.drawImage(
+            artifact,
+            playerCutX,
+            playerCutY + 200,
+            playerWidth,
+            playerHeight,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+        }
+        else if (player.anim === "sittingDown" && player.lastLooked === "left"){
+          frameCurrentPlayer = frameCurrentPlayer % 6;
+    
+          playerCutX = frameCurrentPlayer * playerWidth;
+  
+          canvas.drawImage(
+            armor,
+            playerCutX,
+            playerCutY + 250,
+            playerWidth,
+            playerHeight,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 125 - cameraShakeY - 130,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+          canvas.drawImage(
+            artifact,
+            playerCutX,
+            playerCutY + 250,
+            playerWidth,
+            playerHeight,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+        }
+        else if (player.anim === "idleRight" && player.lastLooked === "right") {
+          frameCurrentPlayer = frameCurrentPlayer % 6;
+      
+          playerCutX = frameCurrentPlayer * playerWidth;
+    
+          canvas.drawImage(
+            armor,
+            playerCutX,
+            playerCutY,
+            playerWidth,
+            playerHeight,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+          canvas.drawImage(
+            artifact,
+            playerCutX,
+            playerCutY,
+            playerWidth,
+            playerHeight,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+        }
+        else if (player.anim === "idleRight" && player.lastLooked === "left") {
+          frameCurrentPlayer = frameCurrentPlayer % 6;
+          playerCutX = frameCurrentPlayer * playerWidth;
+          canvas.drawImage(
+            armor,
+            playerCutX,
+            playerCutY + 50,
+            playerWidth,
+            playerHeight,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+          canvas.drawImage(
+            artifact,
+            playerCutX,
+            playerCutY + 50,
+            playerWidth,
+            playerHeight,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+        }
+        else if (player.anim === "runRight") {
+          frameCurrentPlayer = frameCurrentPlayer % 6;
+          playerCutX = frameCurrentPlayer * playerWidth;
+          canvas.drawImage(
+            armor,
+            playerCutX,
+            playerCutY + 100,
+            playerWidth,
+            playerHeight,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+          canvas.drawImage(
+            artifact,
+            playerCutX,
+            playerCutY + 100,
+            playerWidth,
+            playerHeight,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+        }
+        else if (player.anim === "runLeft") {
+          frameCurrentPlayer = frameCurrentPlayer % 6;
+          playerCutX = frameCurrentPlayer * playerWidth;
+          canvas.drawImage(
+            armor,
+            playerCutX,
+            playerCutY + 150,
+            playerWidth,
+            playerHeight,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 125 - cameraShakeY - 130,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+          canvas.drawImage(
+            artifact,
+            playerCutX,
+            playerCutY + 150,
+            playerWidth,
+            playerHeight,
+            smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+            smoothPlayer.smoothY - cameraY + 125 - cameraShakeY - 130,
+            playerWidth - playerZoomX,
+            playerHeight - playerZoomY,
+          );
+        }
+        else if (player.anim === "moveUp" || player.anim === "moveDown") {
+          frameCurrentPlayer = frameCurrentPlayer % 6;
+          playerCutX = frameCurrentPlayer * playerWidth;
+        
+          if (player.lastLooked === "right") {
+            // Play running animation as if moving right
+            canvas.drawImage(
+              armor,
+              playerCutX,
+              playerCutY + 100, // Same as runRight
+              playerWidth,
+              playerHeight,
+              smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+              smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
+              playerWidth - playerZoomX,
+              playerHeight - playerZoomY,
+            );
+            canvas.drawImage(
+              artifact,
+              playerCutX,
+              playerCutY + 100, // Same as runRight
+              playerWidth,
+              playerHeight,
+              smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+              smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
+              playerWidth - playerZoomX,
+              playerHeight - playerZoomY,
+            );
+          } 
+          else if (player.lastLooked === "left") {
+            // Play running animation as if moving left
+            canvas.drawImage(
+              armor,
+              playerCutX,
+              playerCutY + 150, // Same as runLeft
+              playerWidth,
+              playerHeight,
+              smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+              smoothPlayer.smoothY - cameraY + 125 - cameraShakeY - 130,
+              playerWidth - playerZoomX,
+              playerHeight - playerZoomY,
+            );
+            canvas.drawImage(
+              artifact,
+              playerCutX,
+              playerCutY + 150, // Same as runLeft
+              playerWidth,
+              playerHeight,
+              smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
+              smoothPlayer.smoothY - cameraY + 125 - cameraShakeY - 130,
+              playerWidth - playerZoomX,
+              playerHeight - playerZoomY,
+            );
+        }}
       }
     }
   }
-}
-
-// Consolidated function for drawing the player with armor and artifact
-function drawPlayerAssets(smoothPlayer, yOffset, armor, artifact) {
-  canvas.drawImage(
-    armor,
-    playerCutX,
-    playerCutY + yOffset,
-    playerWidth,
-    playerHeight,
-    smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
-    smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
-    playerWidth - playerZoomX,
-    playerHeight - playerZoomY
-  );
-
-  canvas.drawImage(
-    artifact,
-    playerCutX,
-    playerCutY + yOffset,
-    playerWidth,
-    playerHeight,
-    smoothPlayer.smoothX - cameraX + 65 - cameraShakeX - 85,
-    smoothPlayer.smoothY - cameraY + 120 - cameraShakeY - 130,
-    playerWidth - playerZoomX,
-    playerHeight - playerZoomY
-  );
 }
 
 
@@ -43743,10 +43920,10 @@ function drawPlayerWeaponOut (player) {
 function drawPlayerWeaponSheated(player) {
   if (player.weapon[0]) {
     let smoothPlayer = Object.values(smoothPlayers).find(Splayer => Splayer.username === player.username)
-    canvas.save(); // Save the current canvas state
-    canvas.translate(smoothPlayer.smoothX - cameraX, smoothPlayer.smoothY - cameraY +90);  // Translate to the player's position
-    canvas.rotate(player.weaponAngle); // Rotate based on the mouse angle
-    canvas.rotate(-190); // Rotate based on the mouse angle
+    canvas.save();
+    canvas.translate(smoothPlayer.smoothX - cameraX, smoothPlayer.smoothY - cameraY +90);
+    canvas.rotate(player.weaponAngle);
+    canvas.rotate(-170);
     if (player.weapon[0].name === "solarStaffCommon") {
       canvas.drawImage(solarStaffCommon ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
     }
@@ -43795,8 +43972,8 @@ function drawUsernameLocal (player) {
 function drawUsername () {
   for (const player of players) {
     if (player.username !== myPlayer.username && player.room === myPlayer.room) {
-      // let smoothPlayer = Object.values(smoothPlayers).find(Splayer => Splayer.username === player.username)
-      // drawUsernameOnline(player, smoothPlayer)
+      let smoothPlayer = Object.values(smoothPlayers).find(Splayer => Splayer.username === player.username)
+      drawUsernameOnline(player, smoothPlayer)
     }
     else {
       drawUsernameLocal(player)
@@ -44099,7 +44276,7 @@ function drawMap(layer) {
     } else {
       drawMapSprite(mapInfo.backgroundImage, isSpriteSheet, frameWidth, frameHeight);
     }
-    drawQuestMarkers();
+    // drawQuestMarkers();
   } 
   else {
     if (currentLand === "restfieldPath" || currentLand === "slimeForestPath") {
@@ -45589,6 +45766,52 @@ function enemyDeathParticles (enemy) {
 
 // Particle system <
 
+let lastTime = performance.now();       // High-precision timestamp
+const fps = 60;                         // Target frames per second
+const frameDuration = 1000 / fps;       // Duration of each frame (~16.67ms)
+
+function updateGame() {
+  mapSetup();
+
+  // Background map Image and objects
+  drawMap("back")
+  drawObjects("back")
+
+
+  // Particle settings
+  particlesActor()
+  shootingParticles()
+  dashParticles()
+  // // playerTrailParticles()
+
+
+  // Player settings
+  drawEnemy()
+  playerCollision()
+  drawOnlinePlayers("back")
+  drawLocalPlayer()
+  drawOnlinePlayers("front")
+  drawLocalBullets()
+  
+  // Foreground map Image and objects
+  drawMap("front")
+  drawObjects("front")
+  drawUsername()
+  drawChat()
+
+
+  // Dev Colliders
+  drawDevWallsPlacement()
+  drawColliders("player", "", "", "", "")
+}
+
+function checkFPS(currentTime) {
+  const deltaTime = currentTime - lastTime;
+  if (deltaTime >= frameDuration) {
+    lastTime = currentTime - (deltaTime % frameDuration);
+    return true
+  }
+}
 
 function islandOneLoop() {
 
@@ -45688,683 +45911,88 @@ function islandOneArcaneLoop() {
 
 }
 
-function lobbyLoop() {
-
-
-  // Map name        ↓
+function lobbyLoop(currentTime) {
   currentLand = "lobby";
-
-
-  // Map setup ( Mandatory )
-  mapSetup();
-
-
-  // Background map Image and objects
-  drawMap("back")
-  drawObjects("back")
-
-
-  // Particle settings
-  particlesActor()
-  shootingParticles()
-  dashParticles()
-  // // playerTrailParticles()
-
-
-  // Player settings
-  drawEnemy()
-  playerCollision()
-  // drawOnlinePlayers("back")
-  drawLocalPlayer()
-  // drawOnlinePlayers("front")
-  drawLocalBullets()
-  
-  
-  // Enemy settings
-  // // drawSlimeEnemy()
-  
-  
-  // Foreground map Image and objects
-  drawMap("front")
-  drawObjects("front")
-  drawUsername()
-  drawChat()
-
-
-  // Dev Colliders
-  drawDevWallsPlacement()
-  drawColliders("player", "", "", "", "")
-
+  if (checkFPS(currentTime)) updateGame();
+  intervalCanvasBase = requestAnimationFrame(lobbyLoop)
 }
 
-function lobbyCombatAreaLoop() {
-
-
-  // Map name        ↓
+function lobbyCombatAreaLoop(currentTime) {
   currentLand = "lobbyCombatArea";
-
-
-  // Map setup ( Mandatory )
-  mapSetup();
-
-
-  // Background map Image and objects
-  drawMap("back")
-  drawObjects("back")
-
-
-  // Particle settings
-  particlesActor()
-  shootingParticles()
-  dashParticles()
-  // // playerTrailParticles()
-  
-
-
-  // Player settings
-  drawEnemy()
-  playerCollision()
-  drawOnlinePlayers("back")
-  drawLocalPlayer()
-  drawOnlinePlayers("front")
-  drawLocalBullets()
-  
-  
-  // Enemy settings
-  // // drawSlimeEnemy()
-  
-  
-  // Foreground map Image and objects
-  drawMap("front")
-  drawObjects("front")
-  drawUsername()
-  drawChat()
-
-
-  // Dev Colliders
-  drawDevWallsPlacement()
-  drawColliders("player", "", "", "", "")
-
+  if (checkFPS(currentTime)) updateGame();
+  intervalCanvasBase = requestAnimationFrame(lobbyCombatAreaLoop)
 }
 
-function slimeForestPathLoop() {
-
-
-  // Map name        ↓
+function slimeForestPathLoop(currentTime) { 
   currentLand = "slimeForestPath";
-
-
-  // Map setup ( Mandatory )
-  mapSetup();
-
-
-  // Background map Image and objects
-  drawMap("back")
-  drawObjects("back")
-
-
-  // Particle settings
-  particlesActor()
-  //shootingParticles()
-  dashParticles()
-  // // playerTrailParticles()
-
-
-  // Player settings
-  playerCollision()
-  drawOnlinePlayers("back")
-  drawLocalPlayer()
-  drawOnlinePlayers("front")
-  drawLocalBullets()
-  
-  
-  // Enemy settings
-  // // drawSlimeEnemy()
-  
-  
-  // Foreground map Image and objects
-  drawMap("front")
-  drawObjects("front")
-  drawUsername()
-  drawChat()
-
-
-  // Dev Colliders
-  drawDevWallsPlacement()
-  drawColliders("player", "", "", "", "")
-
+  if (checkFPS(currentTime)) updateGame();
+  intervalCanvasBase = requestAnimationFrame(slimeForestPathLoop)
 }
 
-function grasslandsTowerLoop() {
-
-
-  // Map name        ↓
+function grasslandsTowerLoop(currentTime) {
   currentLand = "grasslandsTower";
-
-
-  // Map setup ( Mandatory )
-  mapSetup();
-
-
-  // Background map Image and objects
-  drawMap("back")
-  drawObjects("back")
-
-
-  // Particle settings
-  particlesActor()
-  //shootingParticles()
-  dashParticles()
-  // // playerTrailParticles()
-
-
-  // Player settings
-  playerCollision()
-  drawOnlinePlayers("back")
-  drawLocalPlayer()
-  drawOnlinePlayers("front")
-  drawLocalBullets()
-  
-  
-  // Enemy settings
-  // // drawSlimeEnemy()
-  
-  
-  // Foreground map Image and objects
-  drawMap("front")
-  drawObjects("front")
-  drawUsername()
-  drawChat()
-
-
-  // Dev Colliders
-  drawDevWallsPlacement()
-  drawColliders("player", "", "", "", "")
-
+  if (checkFPS(currentTime)) updateGame();
+  intervalCanvasBase = requestAnimationFrame(grasslandsTowerLoop)
 }
 
 function slimeForestPathArcaneLoop() {
-
-
-  // Map name        ↓
   currentLand = "slimeForestPathArcane";
-
-
-  // Map setup ( Mandatory )
-  mapSetup();
-
-
-  // Background map Image and objects
-  drawMap("back")
-  drawObjects("back")
-
-
-  // Particle settings
-  particlesActor()
-  //shootingParticles()
-  dashParticles()
-  // // playerTrailParticles()
-
-
-  // Player settings
-  playerCollision()
-  drawOnlinePlayers("back")
-  drawLocalPlayer()
-  drawOnlinePlayers("front")
-  drawLocalBullets()
-  
-  
-  // Enemy settings
-  // // drawSlimeEnemy()
-  
-  
-  // Foreground map Image and objects
-  drawMap("front")
-  drawObjects("front")
-  drawUsername()
-  drawChat()
-
-
-  // Dev Colliders
-  drawDevWallsPlacement()
-  drawColliders("player", "", "", "", "")
-
+  if (checkFPS(currentTime)) updateGame();
+  intervalCanvasBase = requestAnimationFrame(slimeForestPathArcaneLoop)
 }
 
-function mushroomForestLoop() {
-
-
-  // Map name        ↓
+function mushroomForestLoop(currentTime) {
   currentLand = "mushroomForest";
-
-
-  // Map setup ( Mandatory )
-  mapSetup();
-
-
-  // Background map Image and objects
-  drawMap("back")
-  drawObjects("back")
-
-
-  // Particle settings
-  particlesActor()
-  //shootingParticles()
-  dashParticles()
-  // // playerTrailParticles()
-
-
-  // Player settings
-  drawEnemy()
-  playerCollision()
-  drawOnlinePlayers("back")
-  drawLocalPlayer()
-  drawOnlinePlayers("front")
-  drawLocalBullets()
-  
-  
-  // Enemy settings
-  // // drawSlimeEnemy()
-  
-  
-  // Foreground map Image and objects
-  drawMap("front")
-  drawObjects("front")
-  drawUsername()
-  drawChat()
-
-
-  // Dev Colliders
-  drawDevWallsPlacement()
-  drawColliders("player", "", "", "", "")
-
+  if (checkFPS(currentTime)) updateGame();
+  intervalCanvasBase = requestAnimationFrame(mushroomForestLoop)
 }
 
-function mushroomForestArcaneLoop() {
-
-
-  // Map name        ↓
+function mushroomForestArcaneLoop(currentTime) {
   currentLand = "mushroomForestArcane";
-
-
-  // Map setup ( Mandatory )
-  mapSetup();
-
-
-  // Background map Image and objects
-  drawMap("back")
-  drawObjects("back")
-
-
-  // Particle settings
-  particlesActor()
-  //shootingParticles()
-  dashParticles()
-  // // playerTrailParticles()
-
-
-  // Player settings
-  drawEnemy()
-  playerCollision()
-  drawOnlinePlayers("back")
-  drawLocalPlayer()
-  drawOnlinePlayers("front")
-  drawLocalBullets()
-  
-  
-  // Enemy settings
-  // // drawSlimeEnemy()
-  
-  
-  // Foreground map Image and objects
-  drawMap("front")
-  drawObjects("front")
-  drawUsername()
-  drawChat()
-
-
-  // Dev Colliders
-  drawDevWallsPlacement()
-  drawColliders("player", "", "", "", "")
-
+  if (checkFPS(currentTime)) updateGame();
+  intervalCanvasBase = requestAnimationFrame(mushroomForestArcaneLoop)
 }
 
-function restfieldPathLoop() {
-
-
-  // Map name        ↓
+function restfieldPathLoop(currentTime) {
   currentLand = "restfieldPath";
-
-
-  // Map setup ( Mandatory )
-  mapSetup();
-
-
-  // Background map Image and objects
-  drawMap("back")
-  drawObjects("back")
-
-
-  // Particle settings
-  particlesActor()
-  //shootingParticles()
-  dashParticles()
-  // // playerTrailParticles()
-
-
-  // Player settings
-  drawEnemy()
-  playerCollision()
-  drawOnlinePlayers("back")
-  drawLocalPlayer()
-  drawOnlinePlayers("front")
-  drawLocalBullets()
-  
-  
-  // Enemy settings
-  // // drawSlimeEnemy()
-  
-  
-  // Foreground map Image and objects
-  drawMap("front")
-  drawObjects("front")
-  drawUsername()
-  drawChat()
-
-
-  // Dev Colliders
-  drawDevWallsPlacement()
-  drawColliders("player", "", "", "", "")
-
+  if (checkFPS(currentTime)) updateGame();
+  intervalCanvasBase = requestAnimationFrame(restfieldPathLoop)
 }
 
-function restFiledTownLoop() {
-
-
-  // Map name        ↓
+function restFiledTownLoop(currentTime) {
   currentLand = "restFiledTown";
-
-
-  // Map setup ( Mandatory )
-  mapSetup();
-
-
-  // Background map Image and objects
-  drawMap("back")
-  drawObjects("back")
-
-
-  // Particle settings
-  particlesActor()
-  //shootingParticles()
-  dashParticles()
-  // // playerTrailParticles()
-
-
-  // Player settings
-  drawEnemy()
-  playerCollision()
-  drawOnlinePlayers("back")
-  drawLocalPlayer()
-  drawOnlinePlayers("front")
-  drawLocalBullets()
-  
-  
-  // Enemy settings
-  // // drawSlimeEnemy()
-  
-  
-  // Foreground map Image and objects
-  drawMap("front")
-  drawObjects("front")
-  drawUsername()
-  drawChat()
-
-
-  // Dev Colliders
-  drawDevWallsPlacement()
-  drawColliders("player", "", "", "", "")
-
+  if (checkFPS(currentTime)) updateGame();
+  intervalCanvasBase = requestAnimationFrame(restFiledTownLoop)
 }
 
-function restfieldTownCemeteryLoop() {
-
-
-  // Map name        ↓
+function restfieldTownCemeteryLoop(currentTime) {
   currentLand = "restfieldTownCemetery";
-
-  // Map setup ( Mandatory )
-  mapSetup();
-
-
-  // Background map Image and objects
-  drawMap("back")
-  drawObjects("back")
-
-
-  // Particle settings
-  particlesActor()
-  //shootingParticles()
-  dashParticles()
-  // // playerTrailParticles()
-
-
-  // Player settings
-  drawEnemy()
-  playerCollision()
-  drawOnlinePlayers("back")
-  drawLocalPlayer()
-  drawOnlinePlayers("front")
-  drawLocalBullets()
-  
-  
-  // Enemy settings
-  // // drawSlimeEnemy()
-  
-  
-  // Foreground map Image and objects
-  drawMap("front")
-  drawObjects("front")
-  drawUsername()
-  drawChat()
-
-
-  // Dev Colliders
-  drawDevWallsPlacement()
-  drawColliders("player", "", "", "", "")
-
+  if (checkFPS(currentTime)) updateGame();
+  intervalCanvasBase = requestAnimationFrame(restfieldTownCemeteryLoop)
 }
 
-function restfieldTrialLoop() {
-
-
-  // Map name        ↓
+function restfieldTrialLoop(currentTime) {
   currentLand = "restfieldTrial";
-
-  // Map setup ( Mandatory )
-  mapSetup();
-
-
-  // Background map Image and objects
-  drawMap("back")
-  drawObjects("back")
-
-
-  // Particle settings
-  particlesActor()
-  //shootingParticles()
-  dashParticles()
-  // // playerTrailParticles()
-
-
-  // Player settings
-  drawEnemy()
-  playerCollision()
-  drawOnlinePlayers("back")
-  drawLocalPlayer()
-  drawOnlinePlayers("front")
-  drawLocalBullets()
-  
-  
-  // Enemy settings
-  // // drawSlimeEnemy()
-  
-  
-  // Foreground map Image and objects
-  drawMap("front")
-  drawObjects("front")
-  drawUsername()
-  drawChat()
-
-
-  // Dev Colliders
-  drawDevWallsPlacement()
-  drawColliders("player", "", "", "", "")
-
+  if (checkFPS(currentTime)) updateGame();
+  intervalCanvasBase = requestAnimationFrame(restfieldTrialLoop)
 }
 
-function restfieldMallLoop() {
-
-
-  // Map name        ↓
+function restfieldMallLoop(currentTime) {
   currentLand = "restfieldMall";
-
-  // Map setup ( Mandatory )
-  mapSetup();
-
-
-  // Background map Image and objects
-  drawMap("back")
-  drawObjects("back")
-
-
-  // Particle settings
-  particlesActor()
-  //shootingParticles()
-  dashParticles()
-  // // playerTrailParticles()
-
-
-  // Player settings
-  drawEnemy()
-  playerCollision()
-  drawOnlinePlayers("back")
-  drawLocalPlayer()
-  drawOnlinePlayers("front")
-  drawLocalBullets()
-  
-  
-  // Enemy settings
-  // // drawSlimeEnemy()
-  
-  
-  // Foreground map Image and objects
-  drawMap("front")
-  drawObjects("front")
-  drawUsername()
-  drawChat()
-
-
-  // Dev Colliders
-  drawDevWallsPlacement()
-  drawColliders("player", "", "", "", "")
-
+  if (checkFPS(currentTime)) updateGame();
+  intervalCanvasBase = requestAnimationFrame(restfieldMallLoop)
 }
 
-function restfieldMallInsideLoop() {
-
-
-  // Map name        ↓
+function restfieldMallInsideLoop(currentTime) {
   currentLand = "restfieldMallInside";
-
-  // Map setup ( Mandatory )
-  mapSetup();
-
-
-  // Background map Image and objects
-  drawMap("back")
-  drawObjects("back")
-
-
-  // Particle settings
-  particlesActor()
-  //shootingParticles()
-  dashParticles()
-  // // playerTrailParticles()
-
-
-  // Player settings
-  drawEnemy()
-  playerCollision()
-  drawOnlinePlayers("back")
-  drawLocalPlayer()
-  drawOnlinePlayers("front")
-  drawLocalBullets()
-  
-  
-  // Enemy settings
-  // // drawSlimeEnemy()
-  
-  
-  // Foreground map Image and objects
-  drawMap("front")
-  drawObjects("front")
-  drawUsername()
-  drawChat()
-
-
-  // Dev Colliders
-  drawDevWallsPlacement()
-  drawColliders("player", "", "", "", "")
-
+  if (checkFPS(currentTime)) updateGame();
+  intervalCanvasBase = requestAnimationFrame(restfieldMallInsideLoop)
 }
 
-function restfieldMallTreasureLoop() {
-
-
-  // Map name        ↓
+function restfieldMallTreasureLoop(currentTime) {
   currentLand = "restfieldMallTreasure";
-
-  // Map setup ( Mandatory )
-  mapSetup();
-
-
-  // Background map Image and objects
-  drawMap("back")
-  drawObjects("back")
-
-
-  // Particle settings
-  particlesActor()
-  //shootingParticles()
-  dashParticles()
-  // // playerTrailParticles()
-
-
-  // Player settings
-  drawEnemy()
-  playerCollision()
-  drawOnlinePlayers("back")
-  drawLocalPlayer()
-  drawOnlinePlayers("front")
-  drawLocalBullets()
-  
-  
-  // Enemy settings
-  // // drawSlimeEnemy()
-  
-  
-  // Foreground map Image and objects
-  drawMap("front")
-  drawObjects("front")
-  drawUsername()
-  drawChat()
-
-
-  // Dev Colliders
-  drawDevWallsPlacement()
-  drawColliders("player", "", "", "", "")
-
+  if (checkFPS(currentTime)) updateGame();
+  intervalCanvasBase = requestAnimationFrame(restfieldMallTreasureLoop)
 }
 
 

@@ -46,29 +46,27 @@ function tick() {
         const blockMovement = blockMovementStore[player.id];
         const username = usernames[player.id];  
         const clientPlayer = myPlayer[player.id];
-        
-       
-            if (player.id === clientPlayer.socket) {                
-                player.health = clientPlayer.health;    
-                player.inventory = clientPlayer.inventory;
-                player.souls = clientPlayer.souls;
-                player.artifacts = clientPlayer.artifacts;
-                player.currency = clientPlayer.currency;
-                player.access = clientPlayer.access;
+         
+        if (player.id === clientPlayer.socket) {                
+            player.health = clientPlayer.health;    
+            player.inventory = clientPlayer.inventory;
+            player.souls = clientPlayer.souls;
+            player.artifacts = clientPlayer.artifacts;
+            player.currency = clientPlayer.currency;
+            player.access = clientPlayer.access;
 
-                player.weapon = clientPlayer.weapon;
-                player.armor = clientPlayer.armor;
-                player.artifact = clientPlayer.artifact;
+            player.weapon = clientPlayer.weapon;
+            player.armor = clientPlayer.armor;
+            player.artifact = clientPlayer.artifact;
 
-                player.fishingLevel = clientPlayer.fishing;
-                player.cookingLevel = clientPlayer.cooking;
-                player.craftingLevel = clientPlayer.crafting;
-                player.combatLevel = clientPlayer.combat;
-                player.enchantingLevel = clientPlayer.enchanting;
-                player.questsOngoing = clientPlayer.questsOngoing;
-                player.questsCompleted = clientPlayer.questsCompleted;
-            }
-        
+            player.fishingLevel = clientPlayer.fishing;
+            player.cookingLevel = clientPlayer.cooking;
+            player.craftingLevel = clientPlayer.crafting;
+            player.combatLevel = clientPlayer.combat;
+            player.enchantingLevel = clientPlayer.enchanting;
+            player.questsOngoing = clientPlayer.questsOngoing;
+            player.questsCompleted = clientPlayer.questsCompleted;
+        }
         
         if (player.chatTimer > 1) {
 
@@ -79,97 +77,19 @@ function tick() {
             chatMessageStore[player.id] = "none";
         }
 
-        // if (blockMovement === false) {
-        //     if (inputs.up) {
-        //         player.y -= speed;
-        //     } else if (inputs.down) {
-        //         player.y += speed;
-        //     }
-    
-        //     if (inputs.left) {
-        //         player.x -= speed;
-        //     } else if (inputs.right) {
-        //         player.x += speed;
-        //     }
-        // }      
-
-
         // player.anim = anim;
+
         // player.lastLooked = lastLooked;
-        // console.log(player.anim)
         player.weaponAngle = weaponAngle;
         player.chatMessage = chatMessage;
         player.username = username;
 
-        if (player.invincible) {
-            player.iFrames--;
-            if (player.iFrames <= 0) {
-                player.iFrames = 75;
-                player.invincible = false;
-            }
-        }
-
-        io.emit("player", player);
     }
+    io.emit("player", players);
 
-    // for (const projectile of projectiles) {
-
-    //     projectile.x += Math.cos(projectile.angle) * projectileSpeed;
-    //     projectile.y += Math.sin(projectile.angle) * projectileSpeed;
-    //     projectile.timeLeft -= 5;
-
-    //     for (const player of players) {
-    //         const username = usernames[player.id]; 
-
-    //         if (player.id === projectile.playerId) continue;
-    //         const distance = Math.sqrt(
-    //             (player.x + 15 - projectile.x) ** 2 + (player.y + 15 - projectile.y) ** 2
-    //             );
-    //             if (distance <= 15) {
-                    
-    //                 if (player.health > 1) {
-    //                     player.health -= 1;
-    //                     updateHealth(username, player.health, player.id);
-    //                 } else {
-    //                     player.x = 1280;
-    //                     player.y = 1220;
-    //                     player.health = 3;
-    //                     updateHealth(username, player.health, player.id);
-    //                 }
-    //                 projectile.timeLeft = -1;
-    //                 break;
-    //             }
-    //     }
-
-    //     for (const enemy of enemies)
-    //     {
-    //         const distance = Math.sqrt(
-    //             (enemy.x + 20 - projectile.x) ** 2 + (enemy.y + 20 - projectile.y) ** 2
-    //             );
-    //             if (distance <= 20) {
-                    
-    //                 if (enemy.health > 1) {
-    //                     enemy.health -= 1;
-    //                     updateEnemyHealth(enemy);
-    //                 } else {
-    //                     enemy.enabled = false;
-    //                     enemy.health = 4;
-    //                     updateEnemyHealth(enemy);
-    //                 }
-    //                 projectile.timeLeft = -1;
-    //                 break;
-    //             }
-    //     }
-    // }
-
-    // projectiles = projectiles.filter((projectile) => projectile.timeLeft > 0);
-
-    // io.to("islandOne").emit("enemies", enemies);
-    // io.to("baseMap1").emit('players', players);
-    // io.to("baseMap").emit("projectiles", projectiles);
 }
 
-setInterval(tick, 600);
+setInterval(tick, 300);
 
 async function updateHealth(username, health, id) {    
     const playerHealth = await Player.findOneAndUpdate({username: username}, {health: health}, {new: true}); 
