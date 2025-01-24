@@ -18,6 +18,9 @@ setTimeout(() => {
   }, 20);
 }, 1000);
 
+const residency = new Image();
+residency.src = "./islands/residency.png"
+
 const lobbyMap = new Image();
 lobbyMap.src = "./islands/lobby.png";
 
@@ -1392,10 +1395,14 @@ function updateHistoryChat(value, sender) {
     setTimeout(() => recentMessages.delete(messageKey), 2000);
 }
 
+let keyBlocker = true;
+
 window.addEventListener("keydown", (e) => {
-    if (e?.key === "Enter") {
-        e.preventDefault();
-        if (chatInput === document.activeElement) {
+  if(keyBlocker) return
+  
+  if (e?.key === "Enter") {
+    e.preventDefault();
+    if (chatInput === document.activeElement) {
             if (chatInput.value) {
                 const chatMessage = chatInput.value;
                 e.preventDefault();  
@@ -1408,31 +1415,22 @@ window.addEventListener("keydown", (e) => {
                 blockMovement = false;
                 noMovement = false
             }
-        } else {
+    } else {
           if(!chatIsActivate) showChatFunction()
             chatInput.focus();
             blockMovement = true;
             noMovement = true
             setTimeout(() => { 
             }, 500);
-        }
     }
-    // if (e?.key?.toLowerCase() === "o") {
-    //   clearInterval(intervalCanvasBase)
-
-    //   canvas.clearRect(0, 0, canvasLobby.width, canvasLobby.height);
-
-    //   setTimeout(() => {
-    //     console.log("canvas restarted")
-    //     intervalCanvasBase = setInterval(lobbyLoop, 16.67);
-    //   }, 2000);
-    // }
+    }
 
 });
 
 window.addEventListener("keydown", (e) => {
+   if(keyBlocker) return
+
     if (e?.key?.toLowerCase() === "1" || e?.key?.toLowerCase() === "&") {
-        e.preventDefault();
         if (animPlayer !== "sittingDown"){
           animPlayer = "sittingDown"
           socket.emit("animPlayer", animPlayer);
@@ -1884,13 +1882,6 @@ hideAndSickButton.addEventListener("click", () => {
   }
   
   
-})
-
-window.addEventListener("keydown", (e) => {
-  // if (e?.key?.toLowerCase() === "o") {
-  //   scores.style.display =  scores.style.display === "flex" ? "none" : "flex";
-  //   socket.emit("getScores", "")
-  // }
 })
 
 socket.on("scoresData", (scoresArray) => {
@@ -3205,9 +3196,12 @@ socket.on("player", (serverPlayer) => {
 
   players = players.filter((player) => player.room && myPlayer && myPlayer.room && player.room === myPlayer.room);
 
-  console.log(myPlayer)
   if (myPlayer.username === 'none') {
     return;
+  }
+
+  if(keyBlocker) {
+    keyBlocker = false
   }
 
   currentHealth = myPlayer.health
@@ -4333,7 +4327,7 @@ if (!movementUpdateInterval) {
 }
 
 window.addEventListener("keydown", (e) => {
-
+  if(keyBlocker) return
   if (!noMovement) {
     let keyCheck = e?.key?.toLowerCase()
     if (keyCheck === "w" || keyCheck === "z" ) {
@@ -4409,18 +4403,6 @@ window.addEventListener("keydown", (e) => {
 
   }
 
-  // Testing >
-  // if (e?.key?.toLowerCase() === "f") {
-  //   transitionLiquid()
-  // }
-  // if (e?.key?.toLowerCase() === "g") {
-  //   if (!cutscene) {
-  //     cutscene = true
-  //   } else {
-  //     cutscene = false;
-  //   }
-  // }
- 
 
   //Fishing Minigame >
 
@@ -4614,6 +4596,7 @@ window.addEventListener("keydown", (e) => {
 });
 
 window.addEventListener("keyup", (e) => {
+  if(keyBlocker) return
   let keyCheck = e?.key?.toLowerCase()
   if (keyCheck === "w" || keyCheck === "z") {
     movingUp = false;
@@ -4631,7 +4614,9 @@ window.addEventListener("keyup", (e) => {
     movingRight === false &&
     movingLeft === false
   ) {
-    animPlayer = "idleRight";
+    if( animPlayer !== "sittingDown"){
+       animPlayer = "idleRight";
+    }
     footsteps.pause();
     footsteps.loop = false;
   }
@@ -5412,7 +5397,7 @@ function grassLandsSoundtrack () {
   grasslandsEnviroment.play();
   // grassLandsSong.play()
 }
-
+ 
 function towerSoundSoundtrack () {
   towerSound.play();
 }
@@ -5454,6 +5439,18 @@ let currentLand= "none";
 console.log("current land: ", currentLand)
 
 let mapsInfo = {
+residency: {
+    areaName: "CASTLESIDE TOWN",
+    areaSounds: lobbySoundtrack,
+    backgroundImage: residency,
+  
+    playerPos: {
+      x: 2130,
+      y: 785
+    },
+    colliders:  [],
+    enemies: [],
+  },
 
   islandOne: {
     areaName: "SLIME FOREST RUINS",
@@ -6730,6 +6727,7 @@ let mapsInfo = {
   ],
   },
 
+  
   lobby: {
     areaName: "CASTLESIDE TOWN",
     areaSounds: lobbySoundtrack,
@@ -45202,6 +45200,54 @@ function enemyDeathParticles (enemy) {
 
 // Particle system <
 
+function residencyLoop() {
+
+
+  // Map name        ↓
+  currentLand = "residency";
+
+
+  // Map setup ( Mandatory )
+  mapSetup();
+
+
+  // Background map Image and objects
+  drawMap("back")
+  drawObjects("back")
+
+
+  // Particle settings
+  particlesActor()
+  shootingParticles()
+  dashParticles()
+  // // playerTrailParticles()
+
+
+  // Player settings
+  drawEnemy()
+  playerCollision()
+  // drawOnlinePlayers("back")
+  drawLocalPlayer()
+  // drawOnlinePlayers("front")
+  drawLocalBullets()
+  
+  
+  // Enemy settings
+  // // drawSlimeEnemy()
+  
+  
+  // Foreground map Image and objects
+  drawMap("front")
+  drawObjects("front")
+  drawUsername()
+  drawChat()
+
+
+  // Dev Colliders
+  drawDevWallsPlacement()
+  drawColliders("player", "", "", "", "")
+
+}
 
 function islandOneLoop() {
 
@@ -45300,6 +45346,7 @@ function islandOneArcaneLoop() {
   drawColliders("player", "", "", "", "")
 
 }
+
 
 function lobbyLoop() {
 

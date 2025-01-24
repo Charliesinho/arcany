@@ -776,7 +776,12 @@ async function main() {
                     else if (arrayOfNames.includes("restfieldBlanket")){
                         staff = restfieldGhostClothes; 
                         xp = 500;
+                    } 
+                    else{
+                        staff = trashCrafting,
+                        xp = 0;
                     }
+
                     
 
                     player.inventory.push(staff); 
@@ -1251,9 +1256,12 @@ async function main() {
                     // await pushItem(arcaneGem, socket)
                     // await pushItem(arcaneGem, socket)
                     // await pushItem(arcaneGem, socket)
-                    // await pushItem(stick, socket)
-                    // await pushItem(stick, socket)
-                    // await pushItem(stick, socket)
+                     await pushItem(stick, socket)
+                     await pushItem(stick, socket)
+                    await pushItem(stick, socket)
+                    await pushItem(arcaneGem, socket)
+                    await pushItem(arcaneGem2, socket)
+                    await pushItem(arcaneGem3, socket)
                     // await pushItem(arcaneRepeaterInv, socket)
                     // await pushItem(arcaneLancerInv, socket)
                     //await pushItem(arcaneStaffCommon, socket)
@@ -1504,6 +1512,14 @@ async function pushItem(item, socket) {
 
 // ITEMS
 
+const trashCrafting = {
+    type: "trash",
+    name: "trashCrafting",
+    level: 1,
+    value: 5,
+    rarity: "common",
+    image: "./inventory/trashCrafting.png",
+};
 const arcaneGem = {
     type: "gem",
     name: "arcaneGem",
@@ -2127,6 +2143,7 @@ const itemsObj = {
     octopusPlate,
     mediumMeatPlate,
     commonMeatPlate,
-    trashPlate
+    trashPlate,
+    trashCrafting
 };
 
