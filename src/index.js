@@ -1238,9 +1238,11 @@ async function main() {
                     
 
                     const loginAttempt = "success";
-                     //await pushItem(runeBullets, socket)
-                     await pushItem(restfieldBlanket, socket)
-                     await pushItem(restfieldBlanket, socket)
+                    await pushItem(runeBullets, socket)
+                    await pushItem(runeFireRate, socket)
+                    await pushItem(runeRange, socket)
+                    //await pushItem(restfieldBlanket, socket)
+                    //await pushItem(restfieldBlanket, socket)
                     //await pushItem(treeLeaf, socket)
                     //await pushItem(treeLeaf, socket)
                     // await pushItem(smallCommonMeat, socket)
@@ -1253,11 +1255,8 @@ async function main() {
                     // await pushItem(fishermanClothes, socket)
                     // await pushItem(tropicalHat, socket)
                     // await pushItem(skullHelmet, socket)
-                    // await pushItem(arcaneGem, socket)
-                    // await pushItem(arcaneGem, socket)
-                    // await pushItem(arcaneGem, socket)
-                     await pushItem(stick, socket)
-                     await pushItem(stick, socket)
+                    //await pushItem(stick, socket)
+                    //await pushItem(stick, socket)
                     await pushItem(stick, socket)
                     await pushItem(arcaneGem, socket)
                     await pushItem(arcaneGem2, socket)

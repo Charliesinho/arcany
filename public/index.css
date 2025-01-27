@@ -1591,7 +1591,7 @@ body {
 
 .levelUpParent {
     position: absolute;
-    top: 50%;
+    top: 25%;
     left: 50%;
     z-index: 101;
     transform: translate(-50%, -50%);
@@ -2050,6 +2050,30 @@ body {
     background-color: #00000000;
 }
 
+.resetButton{
+    display: flex;
+    position: absolute;
+    right: 15px;
+    bottom: 17px;
+    width: 75px;
+    height: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-content: center;
+    text-align: center;
+    border-radius: 6px;
+    box-shadow: 0px 2px 0px 2px black;
+    border: solid 2px black;
+    background-color: white;
+    transition: all 0.25s ease;
+    pointer-events: all;
+}
+.resetButton:hover{
+    background-color: rgb(0, 0, 0);
+    color: white;
+    box-shadow: 0px 0px 0px 0px black;
+    bottom: 15px;
+}
 ::-webkit-scrollbar {
     width: 0px;
   }

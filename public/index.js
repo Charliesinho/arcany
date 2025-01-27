@@ -677,7 +677,7 @@ const tradeButton = document.getElementById('tradeButton');
 const tradeScreen = document.getElementById('tradeScreen');
 const playerTradeId = document.getElementById('playerTradeId');
 
-
+const resetButton = document.querySelectorAll('.resetButton')
 const errorPopUp = document.getElementById('errorPopUp');
 
 const cookingItem = document.querySelector(".cookingItem");
@@ -1254,6 +1254,7 @@ tradeSend.addEventListener("click", function(){
     socket.emit("toTrade", tradingItems);
     resetTrading();
     trading = false;
+    noMovement = false;
   }, 500);
 })
 
@@ -1927,6 +1928,8 @@ socket.on("scoresData", (scoresArray) => {
 
 //Cooking >
 
+
+
 let paddleXPos = (container.clientWidth / 2) - (paddle.clientWidth / 2);
 paddle.style.left = `${paddleXPos}px`;
 cookingPotMin.style.left = `${paddleXPos}px`;
@@ -2190,6 +2193,14 @@ document.addEventListener('keydown', movePaddleWithKeys);
 //Cooking <
 
 //Crafting >
+for (let i = 0; i < resetButton.length; i++) {
+  resetButton[i].addEventListener("click", function(){
+  resetEnchant()
+  cancelCrafting()
+  closeCooking()
+ 
+  })
+}
 
 let craftSuccessBar = 0;
 let craftFailedBar = 0;
@@ -2392,26 +2403,34 @@ function cancelCrafting() {
 let enchantingCode = "";
 
 rune0.addEventListener("click", function(){
-  checkCodeEnachant("0")
+  checkCodeEnachant("0", rune0);
+  // rune0.style.filter = "saturate(2)";
 });
 rune1.addEventListener("click", function(){
-  checkCodeEnachant("1")
+  checkCodeEnachant("1", rune1);
+  // rune1.style.filter = "saturate(2)";
 })
 rune2.addEventListener("click", function(){
-  checkCodeEnachant("2")
+  checkCodeEnachant("2", rune2);
+  // rune2.style.filter = "saturate(2)";
 })
 rune3.addEventListener("click", function(){
-  checkCodeEnachant("3")
+  checkCodeEnachant("3", rune3);
+  // rune3.style.filter = "saturate(2)";
 })
 rune4.addEventListener("click", function(){
-  checkCodeEnachant("4")
+  checkCodeEnachant("4", rune4);
+  // rune4.style.filter = "saturate(2)";
 })
 rune5.addEventListener("click", function(){
-  checkCodeEnachant("5")
+  checkCodeEnachant("5", rune5);
+  // rune5.style.filter = "saturate(2)";
 })
 
-function checkCodeEnachant (number) {
+function checkCodeEnachant (number, rune) {
   if (enchantingArray.length === 2) {
+
+    rune.style.filter = "saturate(2)";
 
     let code = enchantingArray[1].code;
 
@@ -2444,6 +2463,12 @@ function checkCodeEnachant (number) {
         enchantedItems = []
         enchantingItem1.src = "./Textures/itemPlaceholder.png";
         enchantingItem2.src = "./Textures/itemPlaceholder.png";
+        rune0.style.filter = "saturate(0)";
+        rune1.style.filter = "saturate(0)";
+        rune2.style.filter = "saturate(0)";
+        rune3.style.filter = "saturate(0)";
+        rune4.style.filter = "saturate(0)";
+        rune5.style.filter = "saturate(0)";
       }, 500);
     }
   }
@@ -2455,6 +2480,12 @@ function resetEnchant () {
   enchantedItems = []
   enchantingItem1.src = "./Textures/itemPlaceholder.png";
   enchantingItem2.src = "./Textures/itemPlaceholder.png";
+  rune0.style.filter = "saturate(0)";
+  rune1.style.filter = "saturate(0)";
+  rune2.style.filter = "saturate(0)";
+  rune3.style.filter = "saturate(0)";
+  rune4.style.filter = "saturate(0)";
+  rune5.style.filter = "saturate(0)";
 }
 
 // Enchanting <
@@ -2525,11 +2556,11 @@ function interactInventory(item, index) {
             cookingItem3.src = item.image;
             noMovement = true
 
-            setTimeout(() => {
+            
               startCookAudio.play();
               currentlyCooking = true;
               cookingInterval = setInterval(moveLogos, 10);
-            }, 1000);
+          
           }
           
 
@@ -3173,6 +3204,78 @@ function updateQuestInfo(quest) {
   questReward.innerHTML = quest.rewardType;
 }
 
+function updateProgressBars() {
+  // Update Fishing progress bar
+  const fishingLevel = levelFormula(myPlayer.fishingLevel); // Current level
+  const xpFishingCurrentLevel = xpForLevel(fishingLevel - 1); // Minimum XP for this level
+  const xpFishingNextLevel = xpForLevel(fishingLevel); // Minimum XP for the next level
+
+  const fishingProgress = Math.min(
+    ((myPlayer.fishingLevel - xpFishingCurrentLevel) / (xpFishingNextLevel - xpFishingCurrentLevel)) * 70,
+    70
+  );
+
+  console.log(myPlayer.fishingLevel, xpFishingCurrentLevel, xpFishingNextLevel)
+  fishingXPbar.style.width = `${fishingProgress}px`;
+
+  // Update Cooking progress bar
+  const cookingLevel = levelFormula(myPlayer.cookingLevel);
+  const xpCookingCurrentLevel = xpForLevel(cookingLevel - 1);
+  const xpCookingNextLevel = xpForLevel(cookingLevel);
+
+  const cookingProgress = Math.min(
+    ((myPlayer.cookingLevel - xpCookingCurrentLevel) / (xpCookingNextLevel - xpCookingCurrentLevel)) * 70,
+    70
+  );
+
+  cookingXPbar.style.width = `${cookingProgress}px`;
+
+  // Update Combat progress bar
+  const combatLevel = levelFormula(myPlayer.combatLevel);
+  const xpCombatCurrentLevel = xpForLevel(combatLevel - 1);
+  const xpCombatNextLevel = xpForLevel(combatLevel);
+
+  const combatProgress = Math.min(
+    ((myPlayer.combatLevel - xpCombatCurrentLevel) / (xpCombatNextLevel - xpCombatCurrentLevel)) * 70,
+    70
+  );
+
+  combatXPbar.style.width = `${combatProgress}px`;
+ 
+  // Update Combat progress bar
+  const craftingLevel = levelFormula(myPlayer.craftingLevel);
+  const xpcraftingCurrentLevel = xpForLevel(craftingLevel - 1);
+  const xpcraftingNextLevel = xpForLevel(craftingLevel);
+
+  const craftingProgress = Math.min(
+    ((myPlayer.craftingLevel - xpcraftingCurrentLevel) / (xpcraftingNextLevel - xpcraftingCurrentLevel)) * 70,
+    70
+  );
+
+  craftingXPbar.style.width = `${craftingProgress}px`;
+  
+  // Update Combat progress bar
+  const enchantingLevel = levelFormula(myPlayer.enchantingLevel);
+  const xpenchantingCurrentLevel = xpForLevel(enchantingLevel - 1);
+  const xpenchantingNextLevel = xpForLevel(enchantingLevel);
+
+  const enchantingProgress = Math.min(
+    ((myPlayer.enchantingLevel - xpenchantingCurrentLevel) / (xpenchantingNextLevel - xpenchantingCurrentLevel)) * 70,
+    70
+  );
+
+  enchantingXPbar.style.width = `${enchantingProgress}px`;
+}
+
+function levelFormula(xp){
+  return Math.floor((1 + Math.sqrt(1 + (4 * xp)/7))/2);
+}
+
+function xpForLevel(level) {
+  if (level < 1) return 0;
+  return 8 * Math.pow(level, 2) - 8 * level;
+}
+
 questClose.addEventListener("click", () => {
   const questUi = document.querySelector(".questInfo");
   questUi.style.display = "none";
@@ -3753,32 +3856,27 @@ socket.on("player", (serverPlayer) => {
 
   health()
   updateQuestUI()
+  updateProgressBars()
   if (updateDialogs) {
     addMapsInfoToDiv()
     updateDialogs = false
   }
 
   playerCoinsAmount.innerHTML = myPlayer.currency 
- 
+
   //Adapt shop to player >
   //Adapt shop to player <
-
 
   // Combat level >
   xp = myPlayer.combatLevel;
   currentCombatLevel = levelFormula(xp);
-
-  function levelFormula(xp){
-     return Math.floor((1 + Math.sqrt(1 + (4 * xp)/7))/2);
-  }
- 
+  
   combatLevel.innerHTML = "LVL "+ currentCombatLevel;
 
   if (changeCombatLevel) {
     updateCombatLevel = currentCombatLevel;
     changeCombatLevel = false;
   }
-  
   if (currentCombatLevel !== updateCombatLevel && myPlayer.combatLevel !== 0){
 
     updateCombatLevel = currentCombatLevel
@@ -3793,16 +3891,11 @@ socket.on("player", (serverPlayer) => {
     }, 5000);
    
   }
- 
   // Combat level 
 
   // Enchanting level >
   xp = myPlayer.enchantingLevel;
   currentEnchantingLevel = levelFormula(xp);
-
-  function levelFormula(xp){
-     return Math.floor((1 + Math.sqrt(1 + (4 * xp)/7))/2);
-  }
  
   enchantingLevel.innerHTML = "LVL "+ currentEnchantingLevel;
 
@@ -3810,7 +3903,6 @@ socket.on("player", (serverPlayer) => {
     updateEnchantingLevel = currentEnchantingLevel;
     changeEnchantingLevel = false;
   }
-  
   if (currentEnchantingLevel !== updateEnchantingLevel && myPlayer.enchantingLevel !== 0){
 
     updateEnchantingLevel = currentEnchantingLevel
@@ -3826,24 +3918,18 @@ socket.on("player", (serverPlayer) => {
    
   }
  
-
   // Enchanting level <
 
   // Cooking Cooking level >
   xp = myPlayer.cookingLevel;
   currentCookingLevel = levelFormula(xp);
 
-  function levelFormula(xp){
-     return Math.floor((1 + Math.sqrt(1 + (4 * xp)/7))/2);
-  }
- 
   cookingLevel.innerHTML = "LVL "+ currentCookingLevel;
 
   if (changeCookingLevel) {
     updateCookingLevel = currentCookingLevel;
     changeCookingLevel = false;
   }
-  
   if (currentCookingLevel !== updateCookingLevel && myPlayer.cookingLevel !== 0){
 
     updateCookingLevel = currentCookingLevel
@@ -3866,17 +3952,12 @@ socket.on("player", (serverPlayer) => {
   xp = myPlayer.craftingLevel;
   currentCraftingLevel = levelFormula(xp);
 
-  function levelFormula(xp){
-     return Math.floor((1 + Math.sqrt(1 + (4 * xp)/7))/2);
-  }
- 
   craftingLevel.innerHTML = "LVL "+ currentCraftingLevel;
 
   if (changeCraftingLevel) {
     updateCraftingLevel = currentCraftingLevel;
     changeCraftingLevel = false;
   }
-  
   if (currentCraftingLevel !== updateCraftingLevel && myPlayer.craftingLevel !== 0){
 
     updateCraftingLevel = currentCraftingLevel
@@ -3898,17 +3979,12 @@ socket.on("player", (serverPlayer) => {
   xp = myPlayer.fishingLevel;
   currentFishingLevel = levelFormula(xp);
 
-  function levelFormula(xp){
-     return Math.floor((1 + Math.sqrt(1 + (4 * xp)/7))/2);
-  }
- 
   fishingLevel.innerHTML = "LVL "+ currentFishingLevel;
 
   if (changeFishingLevel) {
     updateFishingLevel = currentFishingLevel;
     changeFishingLevel = false;
   }
-  
   if (currentFishingLevel !== updateFishingLevel && myPlayer.fishingLevel !== 0){
 
     updateFishingLevel = currentFishingLevel
@@ -3923,28 +3999,10 @@ socket.on("player", (serverPlayer) => {
     }, 5000);
    
   }
-
   // Fishing level <
 
-  // General Level
-  // let generalLevelNum = Math.floor((combatLevelSimple + fishingLevelSimple + cookingLevelSimple + 1 + 1) / 5);
-  // maxHealth = 4 + generalLevelNum * 2;
-  // uiProfileLevel.innerHTML = "LVL" + " " + generalLevelNum;
-  // uiProfileName.innerHTML = myPlayer.username
+  //BAR PROGRESSION
 
-  // if (Math.floor((combatLevelSimple + fishingLevelSimple + cookingLevelSimple + 1 + 1) / 5) === 1) {
-  //   uiProfileRank.src = "./ui/Rank/rankOne.png"
-  // } 
-  // else if (Math.floor((combatLevelSimple + fishingLevelSimple + cookingLevelSimple + 1 + 1) / 5) === 2) {
-  //   uiProfileRank.src = "./ui/Rank/rankTwo.png"
-  // }
-  // else if (Math.floor((combatLevelSimple + fishingLevelSimple + cookingLevelSimple + 1 + 1) / 5) === 3) {
-  //   uiProfileRank.src = "./ui/Rank/rankThree.png"
-  // }
-
-  // fishingXPbar.style.width = `${Math.min(((myPlayer.fishingLevel - (fishingLevelNum < 1 ? 0 : fishingLevelNum < 3 ? 1000 : fishingLevelNum < 6 ? 3000 : fishingLevelNum < 12 ? 6000 : 12000)) / (fishingLevelNum < 1 ? 1000 : fishingLevelNum < 3 ? 2000 : fishingLevelNum < 6 ? 3000 : fishingLevelNum < 12 ? 6000 : fishingLevelNum)) * 70, 70)}px`;
-  // cookingXPbar.style.width = `${Math.min(((myPlayer.cookingLevel - (cookingLevelNum < 1 ? 0 : cookingLevelNum < 3 ? 1000 : cookingLevelNum < 6 ? 3000 : cookingLevelNum < 12 ? 6000 : 12000)) / (cookingLevelNum < 1 ? 1000 : cookingLevelNum < 3 ? 2000 : cookingLevelNum < 6 ? 3000 : cookingLevelNum < 12 ? 6000 : fishingLevelNum)) * 70, 70)}px`;
-  // // combatXPbar.style.width = `${Math.min(((myPlayer.combatLevel - (combatLevelNum < 1 ? 0 : combatLevelNum < 3 ? 1000 : combatLevelNum < 6 ? 3000 : combatLevelNum < 12 ? 6000 : 12000)) / (combatLevelNum < 1 ? 1000 : combatLevelNum < 3 ? 2000 : combatLevelNum < 6 ? 3000 : combatLevelNum < 12 ? 6000 : fishingLevelNum)) * 70, 70)}px`;
 
 
   if (myPlayer.souls.length) {
@@ -4326,10 +4384,14 @@ if (!movementUpdateInterval) {
   }, 100);
 }
 
+let fishingInterval;
+let fishingTimeout;
+
 window.addEventListener("keydown", (e) => {
   if(keyBlocker) return
+  let keyCheck = e?.key?.toLowerCase()
+
   if (!noMovement) {
-    let keyCheck = e?.key?.toLowerCase()
     if (keyCheck === "w" || keyCheck === "z" ) {
       footsteps.play();
       footsteps.loop = true;
@@ -4403,8 +4465,23 @@ window.addEventListener("keydown", (e) => {
 
   }
 
-
   //Fishing Minigame >
+
+  if (fishing === true && (keyCheck === "w" || keyCheck === "z" || keyCheck === "q" || keyCheck === "s" || keyCheck === "d" || keyCheck === "a" ) ) {
+    // Exit the fishing minigame
+    fishingBarHit.classList.remove('startFish');
+    // fishingBarHit.classList.add('noFish');
+    fishingBar.style.marginLeft = "-50%";
+    fishingGame.style.display = "none";
+    fishing = false;
+    noMovement = false;
+    audioSplash.pause();
+    audioSplash.currentTime = 0;
+    clearInterval(fishingInterval);
+    clearTimeout(fishingTimeout);
+
+    return;
+  }
 
   if(e?.key?.toLowerCase() === "e" && fishAvailable === true && fishing === false) {
 
@@ -4422,27 +4499,27 @@ window.addEventListener("keydown", (e) => {
 
       fishingBarHit.classList.remove('startFish');
 
-      const interval = setInterval(() => {
+      fishingInterval = setInterval(() => {
 
         marginFish += .5;
-
+      
         if (marginFish < 100) {
-
+      
           fishingBar.style.marginLeft = marginFish + "%";
         } else {
           marginFish = -50;
-          clearInterval(interval);
+          clearInterval(fishingInterval);
           fishingBar.style.marginLeft = marginFish + "%";
           noMovement = false
-
+      
           setTimeout(() => {
-
+      
             fishingGame.style.display = "none";
             fishing = false;
             fishingBarHit.classList.remove('noFish');
-
+      
           }, 800);
-
+      
           setTimeout(() => {
             fishingBarHit.classList.add('noFish');
           }, 300);
@@ -4451,12 +4528,11 @@ window.addEventListener("keydown", (e) => {
 
     };
 
-    setTimeout(() => {
+    fishingTimeout = setTimeout(() => {
       fishingStart();
     }, number);
-
-
   };
+
   if(e?.key?.toLowerCase() === "e" && fishAvailable === true && fishing === true) {
 
     if (marginFish < 65 && marginFish > 35) {
