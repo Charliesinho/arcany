@@ -1,7 +1,7 @@
 //Change this to push >
 
 const socket = io(`ws://localhost:5000`);
-// const socket = io(`https://arcanyGame.up.railway.app/`);
+//const socket = io(`https://arcanyGame.up.railway.app/`);
 
 //Change this to push <
 
@@ -2510,10 +2510,10 @@ function interactInventory(item, index) {
             return;
           }
 
-          if (item.level > cookingLevelSimple) {
-            errorDisplay("You need to be at least Cooking level " + item.level + " to use this item.")
-            return;
-          }
+          // if (item.level > cookingLevelSimple) {
+          //   errorDisplay("You need to be at least Cooking level " + item.level + " to use this item.")
+          //   return;
+          // }
 
           consumeAvailable = false;
 
@@ -2564,10 +2564,10 @@ function interactInventory(item, index) {
             return;
           }
 
-          if (item.level > craftingLevelSimple) {
-            errorDisplay("You need to be at least Crafting level " + item.level + " to use this item.")
-            return;
-          }
+          // if (item.level > craftingLevelSimple) {
+          //   errorDisplay("You need to be at least Crafting level " + item.level + " to use this item.")
+          //   return;
+          // }
           
           consumeAvailable = false;
           
@@ -2655,10 +2655,10 @@ function interactInventory(item, index) {
           
           pop.play()
 
-          if (item.level > enchantingLevelSimple) {
-            errorDisplay("You need to be at least Enchanting level " + item.level + " to use this item.")
-            return;
-          }
+          // if (item.level > enchantingLevelSimple) {
+          //   errorDisplay("You need to be at least Enchanting level " + item.level + " to use this item.")
+          //   return;
+          // }
           
          
           if (enchantingArray[0]?.type !== item.type) {
@@ -2713,15 +2713,15 @@ function interactInventory(item, index) {
           inventorySlots[`inventorySlot${index}`].src = `data:,`;
           inventorySlots[`inventorySlot${index}`].removeEventListener("mousedown", (e) => interactInventory(item, index));
 
-          if (item.type === "weapon" && item.level > combatLevelSimple) {
-            errorDisplay("You need to be at least Combat level " + item.level + " to use this item.")
-            return;
-          } else {
+          // if (item.type === "weapon" && item.level > combatLevelSimple) {
+          //   errorDisplay("You need to be at least Combat level " + item.level + " to use this item.")
+          //   return;
+          // } else {
             item.maxPower = maxHealth;
             item.index = myPlayer.inventory.indexOf(item);
   
             socket.emit("consumable", item);
-          }
+          // }
 
           
         }
@@ -2943,30 +2943,26 @@ let generalLevelCooking = 0;
 let generalLevelEnchanting = 0;
 let generalLevelCombat= 0;
 
-let oldFishingLevel = 0;
-let newFishingLevel = 0;
-let changeFishingLevel = true;
-let fishingLevelSimple = 0;
-
-let oldCookingLevel = 0;
-let newCookingLevel = 0;
+let currentCookingLevel;
+let updateCookingLevel;
 let changeCookingLevel = true;
-let cookingLevelSimple = 0;
 
-let oldCraftingLevel = 0;
-let newCraftingLevel = 0;
+let currentFishingLevel;
+let updateFishingLevel;
+let changeFishingLevel = true;
+
+let currentCraftingLevel;
+let updateCraftingLevel;
 let changeCraftingLevel = true;
-let craftingLevelSimple = 0;
 
-let oldEnchantingLevel = 0;
-let newEnchantingLevel = 0;
+let currentEnchantingLevel;
+let updateEnchantingLevel;
 let changeEnchantingLevel = true;
-let enchantingLevelSimple = 0;
 
-let oldCombatLevel = 0;
-let newCombatLevel = 0;
+let xp;
+let currentCombatLevel;
+let updateCombatLevel;
 let changeCombatLevel = true;
-let combatLevelSimple = 0;
 
 let dialogBoxes;
 
@@ -3212,7 +3208,8 @@ socket.on("player", (serverPlayer) => {
 
   players = players.filter((player) => player.room && myPlayer && myPlayer.room && player.room === myPlayer.room);
 
-  if (!myPlayer) {
+  console.log(myPlayer)
+  if (myPlayer.username === 'none') {
     return;
   }
 
@@ -3771,354 +3768,192 @@ socket.on("player", (serverPlayer) => {
   }
 
   playerCoinsAmount.innerHTML = myPlayer.currency 
-  // console.log(myPlayer)
-
+ 
   //Adapt shop to player >
-  
   //Adapt shop to player <
 
-   // Combat level >
 
-   let combatLevelNum = Math.trunc(myPlayer.combatLevel / 1000);
+  // Combat level >
+  xp = myPlayer.combatLevel;
+  currentCombatLevel = levelFormula(xp);
 
-   if (changeCombatLevel === true && myPlayer.combatLevel !== 0) {
-     if (combatLevelNum < 1) {
-       newCombatLevel = 1;
-     }
-     else if (combatLevelNum < 3) {
-       newCombatLevel = 2;
-     }
-     else if (combatLevelNum < 6) {
-       newCombatLevel = 3;
-     }
-     else if (combatLevelNum < 12) {
-       newCombatLevel = 4;
-     }
-     else {
-       newCombatLevel = 5;
-     }
- 
-     changeCombatLevel = false;
-   }
- 
-   if (combatLevelNum < 1) {
-    combatLevel.innerHTML = "LVL 1";
-    combatLevelSimple = 1;
-   }
-   else if (combatLevelNum < 3) {
-    combatLevel.innerHTML = "LVL 2";
-    combatLevelSimple = 2;
-   }
-   else if (combatLevelNum < 6) {
-    combatLevel.innerHTML = "LVL 3";
-    combatLevelSimple = 3;
-   }
-   else if (combatLevelNum < 12) {
-    combatLevel.innerHTML = "LVL 4";
-    combatLevelSimple = 4;
-   }
-   else {
-    combatLevel.innerHTML = "MAX";
-    combatLevelSimple = 5;
-    combatLevel.style.color = "#9b4fb9"
-   }
- 
-   if (combatLevelSimple > newCombatLevel && myPlayer.combatLevel !== 0) {
-     changeCombatLevel = true;
-     levelUp.src = "./Textures/levelUpCombat.gif"
-     levelUp.classList.add('fadeInAnim');
-     levelUp.style.display = "block";
-     levelUpAudio.play();
- 
-     setTimeout(() => {
-       levelUp.style.display = "none";
-       levelUp.classList.remove('fadeInAnim');
-     }, 5000);
-   }
- 
-   generalLevelCombat = combatLevelSimple;
- 
-   // Combat level <
-
-  // Enchanting level >
-
-  let enchantingLevelNum = Math.trunc(myPlayer.enchantingLevel / 1000);
-
-  enchantingXPbar.style.width = `${Math.min(((myPlayer.enchantingLevel - (enchantingLevelNum < 1 ? 0 : enchantingLevelNum < 3 ? 1000 : enchantingLevelNum < 6 ? 3000 : enchantingLevelNum < 12 ? 6000 : 12000)) / (enchantingLevelNum < 1 ? 1000 : enchantingLevelNum < 3 ? 2000 : enchantingLevelNum < 6 ? 3000 : enchantingLevelNum < 12 ? 6000 : Infinity)) * 75, 75)}px`;
-
-  if (changeEnchantingLevel === true && myPlayer.enchantingLevel !== 0) {
-    if (enchantingLevelNum < 1) {
-      newEnchantingLevel = 1;
-    }
-    else if (enchantingLevelNum < 3) {
-      newEnchantingLevel = 2;
-    }
-    else if (enchantingLevelNum < 6) {
-      newEnchantingLevel = 3;
-    }
-    else if (enchantingLevelNum < 12) {
-      newEnchantingLevel = 4;
-    }
-    else {
-      newEnchantingLevel = 5;
-    }
-
-    changeEnchantingLevel = false;
+  function levelFormula(xp){
+     return Math.floor((1 + Math.sqrt(1 + (4 * xp)/7))/2);
   }
+ 
+  combatLevel.innerHTML = "LVL "+ currentCombatLevel;
 
-  if (enchantingLevelNum < 1) {
-   enchantingLevel.innerHTML = "LVL 1";
-   enchantingLevelSimple = 1;
+  if (changeCombatLevel) {
+    updateCombatLevel = currentCombatLevel;
+    changeCombatLevel = false;
   }
-  else if (enchantingLevelNum < 3) {
-   enchantingLevel.innerHTML = "LVL 2";
-   enchantingLevelSimple = 2;
-  }
-  else if (enchantingLevelNum < 6) {
-   enchantingLevel.innerHTML = "LVL 3";
-   enchantingLevelSimple = 3;
-  }
-  else if (enchantingLevelNum < 12) {
-   enchantingLevel.innerHTML = "LVL 4";
-   enchantingLevelSimple = 4;
-  }
-  else {
-   enchantingLevel.innerHTML = "LVL 5";
-   enchantingLevelSimple = 5;
-   enchantingLevel.style.color = "#9b4fb9"
-  }
+  
+  if (currentCombatLevel !== updateCombatLevel && myPlayer.combatLevel !== 0){
 
-  if (enchantingLevelSimple > newEnchantingLevel && myPlayer.enchantingLevel !== 0) {
-    changeEnchantingLevel = true;
-    levelUp.src = "./Textures/levelUpEnchanting.gif"
+    updateCombatLevel = currentCombatLevel
+    levelUp.src = "./Textures/levelUpCombat.gif"
     levelUp.classList.add('fadeInAnim');
-    levelUp.style.display = "block";
+    levelUp.style.display = "block"; 
     levelUpAudio.play();
 
     setTimeout(() => {
       levelUp.style.display = "none";
       levelUp.classList.remove('fadeInAnim');
     }, 5000);
+   
   }
+ 
+  // Combat level 
 
-  generalLevelEnchanting = enchantingLevelSimple;
+  // Enchanting level >
+  xp = myPlayer.enchantingLevel;
+  currentEnchantingLevel = levelFormula(xp);
+
+  function levelFormula(xp){
+     return Math.floor((1 + Math.sqrt(1 + (4 * xp)/7))/2);
+  }
+ 
+  enchantingLevel.innerHTML = "LVL "+ currentEnchantingLevel;
+
+  if (changeEnchantingLevel) {
+    updateEnchantingLevel = currentEnchantingLevel;
+    changeEnchantingLevel = false;
+  }
+  
+  if (currentEnchantingLevel !== updateEnchantingLevel && myPlayer.enchantingLevel !== 0){
+
+    updateEnchantingLevel = currentEnchantingLevel
+    levelUp.src = "./Textures/levelUpEnchanting.gif"
+    levelUp.classList.add('fadeInAnim');
+    levelUp.style.display = "block"; 
+    levelUpAudio.play();
+
+    setTimeout(() => {
+      levelUp.style.display = "none";
+      levelUp.classList.remove('fadeInAnim');
+    }, 5000);
+   
+  }
+ 
 
   // Enchanting level <
 
-  // Cooking level >
+  // Cooking Cooking level >
+  xp = myPlayer.cookingLevel;
+  currentCookingLevel = levelFormula(xp);
 
-  let cookingLevelNum = Math.trunc(myPlayer.cookingLevel / 1000);
+  function levelFormula(xp){
+     return Math.floor((1 + Math.sqrt(1 + (4 * xp)/7))/2);
+  }
+ 
+  cookingLevel.innerHTML = "LVL "+ currentCookingLevel;
 
-  if (changeCookingLevel === true && myPlayer.cookingLevel !== 0) {
-    if (cookingLevelNum < 1) {
-      newCookingLevel = 1;
-    }
-    else if (cookingLevelNum < 3) {
-      newCookingLevel = 2;
-    }
-    else if (cookingLevelNum < 6) {
-      newCookingLevel = 3;
-    }
-    else if (cookingLevelNum < 12) {
-      newCookingLevel = 4;
-    }
-    else {
-      newCookingLevel = 5;
-    }
-
+  if (changeCookingLevel) {
+    updateCookingLevel = currentCookingLevel;
     changeCookingLevel = false;
   }
+  
+  if (currentCookingLevel !== updateCookingLevel && myPlayer.cookingLevel !== 0){
 
-  if (cookingLevelNum < 1) {
-    cookingLevel.innerHTML = "LVL 1";
-    cookingLevelSimple = 1;
-  }
-  else if (cookingLevelNum < 3) {
-    cookingLevel.innerHTML = "LVL 2";
-    cookingLevelSimple = 2;
-  }
-  else if (cookingLevelNum < 6) {
-    cookingLevel.innerHTML = "LVL 3";
-    cookingLevelSimple = 3;
-  }
-  else if (cookingLevelNum < 12) {
-    cookingLevel.innerHTML = "LVL 4";
-    cookingLevelSimple = 4;
-  }
-  else {
-    cookingLevel.innerHTML = "MAX";
-    cookingLevelSimple = 5;
-    cookingLevel.style.color = "#9b4fb9"
-  }
-
-  if (cookingLevelSimple > newCookingLevel && myPlayer.cookingLevel !== 0) {
-    changeCookingLevel = true;
+    updateCookingLevel = currentCookingLevel
     levelUp.src = "./Textures/levelUpCooking.gif"
     levelUp.classList.add('fadeInAnim');
-    levelUp.style.display = "block";
+    levelUp.style.display = "block"; 
     levelUpAudio.play();
 
     setTimeout(() => {
       levelUp.style.display = "none";
       levelUp.classList.remove('fadeInAnim');
     }, 5000);
+   
   }
-
-  generalLevelCooking = cookingLevelSimple;
 
   // Cooking level <
 
   // Crafting level >
 
-  let craftingLevelNum = Math.trunc(myPlayer.craftingLevel / 1000);
+  xp = myPlayer.craftingLevel;
+  currentCraftingLevel = levelFormula(xp);
 
-  craftingXPbar.style.width = `${Math.min(((myPlayer.craftingLevel - (craftingLevelNum < 1 ? 0 : craftingLevelNum < 3 ? 1000 : craftingLevelNum < 6 ? 3000 : craftingLevelNum < 12 ? 6000 : 12000)) / (craftingLevelNum < 1 ? 1000 : craftingLevelNum < 3 ? 2000 : craftingLevelNum < 6 ? 3000 : craftingLevelNum < 12 ? 6000 : Infinity)) * 75, 75)}px`;
+  function levelFormula(xp){
+     return Math.floor((1 + Math.sqrt(1 + (4 * xp)/7))/2);
+  }
+ 
+  craftingLevel.innerHTML = "LVL "+ currentCraftingLevel;
 
-
-  if (changeCraftingLevel === true && myPlayer.craftingLevel !== 0) {
-    if (craftingLevelNum < 1) {
-      newCraftingLevel = 1;
-    }
-    else if (craftingLevelNum < 3) {
-      newCraftingLevel = 2;
-    }
-    else if (craftingLevelNum < 6) {
-      newCraftingLevel = 3;
-    }
-    else if (craftingLevelNum < 12) {
-      newCraftingLevel = 4;
-    }
-    else {
-      newCraftingLevel = 5;
-    }
-
+  if (changeCraftingLevel) {
+    updateCraftingLevel = currentCraftingLevel;
     changeCraftingLevel = false;
   }
+  
+  if (currentCraftingLevel !== updateCraftingLevel && myPlayer.craftingLevel !== 0){
 
-  if (craftingLevelNum < 1) {
-    craftingLevel.innerHTML = "LVL 1";
-    craftingLevelSimple = 1;
-  }
-  else if (craftingLevelNum < 3) {
-    craftingLevel.innerHTML = "LVL 2";
-    craftingLevelSimple = 2;
-  }
-  else if (craftingLevelNum < 6) {
-    craftingLevel.innerHTML = "LVL 3";
-    craftingLevelSimple = 3;
-  }
-  else if (craftingLevelNum < 12) {
-    craftingLevel.innerHTML = "LVL 4";
-    craftingLevelSimple = 4;
-  }
-  else {
-    craftingLevel.innerHTML = "MAX";
-    craftingLevelSimple = 5;
-    craftingLevel.style.color = "#9b4fb9"
-  }
-
-  if (craftingLevelSimple > newCraftingLevel && myPlayer.craftingLevel !== 0) {
-    changeCraftingLevel = true;
+    updateCraftingLevel = currentCraftingLevel
     levelUp.src = "./Textures/levelUpCrafting.gif"
     levelUp.classList.add('fadeInAnim');
-    levelUp.style.display = "block";
+    levelUp.style.display = "block"; 
     levelUpAudio.play();
 
     setTimeout(() => {
       levelUp.style.display = "none";
       levelUp.classList.remove('fadeInAnim');
     }, 5000);
+   
   }
-
-  generalLevel = craftingLevelSimple;
 
   // Fishing level <
 
   // Fishing level >
+  xp = myPlayer.fishingLevel;
+  currentFishingLevel = levelFormula(xp);
 
-  let fishingLevelNum = Math.trunc(myPlayer.fishingLevel / 1000);
+  function levelFormula(xp){
+     return Math.floor((1 + Math.sqrt(1 + (4 * xp)/7))/2);
+  }
+ 
+  fishingLevel.innerHTML = "LVL "+ currentFishingLevel;
 
-  fishingXPbar.style.width = `${Math.min(((myPlayer.fishingLevel - (fishingLevelNum < 1 ? 0 : fishingLevelNum < 3 ? 1000 : fishingLevelNum < 6 ? 3000 : fishingLevelNum < 12 ? 6000 : 12000)) / (fishingLevelNum < 1 ? 1000 : fishingLevelNum < 3 ? 2000 : fishingLevelNum < 6 ? 3000 : fishingLevelNum < 12 ? 6000 : Infinity)) * 75, 75)}px`;
-
-
-  if (changeFishingLevel === true && myPlayer.fishingLevel !== 0) {
-    if (fishingLevelNum < 1) {
-      newFishingLevel = 1;
-    }
-    else if (fishingLevelNum < 3) {
-      newFishingLevel = 2;
-    }
-    else if (fishingLevelNum < 6) {
-      newFishingLevel = 3;
-    }
-    else if (fishingLevelNum < 12) {
-      newFishingLevel = 4;
-    }
-    else {
-      newFishingLevel = 5;
-    }
-
+  if (changeFishingLevel) {
+    updateFishingLevel = currentFishingLevel;
     changeFishingLevel = false;
   }
+  
+  if (currentFishingLevel !== updateFishingLevel && myPlayer.fishingLevel !== 0){
 
-  if (fishingLevelNum < 1) {
-    fishingLevel.innerHTML = "LVL 1";
-    fishingLevelSimple = 1;
-  }
-  else if (fishingLevelNum < 3) {
-    fishingLevel.innerHTML = "LVL 2";
-    fishingLevelSimple = 2;
-  }
-  else if (fishingLevelNum < 6) {
-    fishingLevel.innerHTML = "LVL 3";
-    fishingLevelSimple = 3;
-  }
-  else if (fishingLevelNum < 12) {
-    fishingLevel.innerHTML = "LVL 4";
-    fishingLevelSimple = 4;
-  }
-  else {
-    fishingLevel.innerHTML = "MAX";
-    fishingLevelSimple = 5;
-    fishingLevel.style.color = "#9b4fb9"
-  }
-
-  if (fishingLevelSimple > newFishingLevel && myPlayer.fishingLevel !== 0) {
-    changeFishingLevel = true;
+    updateFishingLevel = currentFishingLevel
     levelUp.src = "./Textures/levelUpFishing.gif"
     levelUp.classList.add('fadeInAnim');
-    levelUp.style.display = "block";
+    levelUp.style.display = "block"; 
     levelUpAudio.play();
 
     setTimeout(() => {
       levelUp.style.display = "none";
       levelUp.classList.remove('fadeInAnim');
     }, 5000);
+   
   }
-
-  generalLevel = fishingLevelSimple;
 
   // Fishing level <
 
   // General Level
-  let generalLevelNum = Math.floor((combatLevelSimple + fishingLevelSimple + cookingLevelSimple + 1 + 1) / 5);
-  maxHealth = 4 + generalLevelNum * 2;
-  uiProfileLevel.innerHTML = "LVL" + " " + generalLevelNum;
-  uiProfileName.innerHTML = myPlayer.username
+  // let generalLevelNum = Math.floor((combatLevelSimple + fishingLevelSimple + cookingLevelSimple + 1 + 1) / 5);
+  // maxHealth = 4 + generalLevelNum * 2;
+  // uiProfileLevel.innerHTML = "LVL" + " " + generalLevelNum;
+  // uiProfileName.innerHTML = myPlayer.username
 
-  if (Math.floor((combatLevelSimple + fishingLevelSimple + cookingLevelSimple + 1 + 1) / 5) === 1) {
-    uiProfileRank.src = "./ui/Rank/rankOne.png"
-  } 
-  else if (Math.floor((combatLevelSimple + fishingLevelSimple + cookingLevelSimple + 1 + 1) / 5) === 2) {
-    uiProfileRank.src = "./ui/Rank/rankTwo.png"
-  }
-  else if (Math.floor((combatLevelSimple + fishingLevelSimple + cookingLevelSimple + 1 + 1) / 5) === 3) {
-    uiProfileRank.src = "./ui/Rank/rankThree.png"
-  }
+  // if (Math.floor((combatLevelSimple + fishingLevelSimple + cookingLevelSimple + 1 + 1) / 5) === 1) {
+  //   uiProfileRank.src = "./ui/Rank/rankOne.png"
+  // } 
+  // else if (Math.floor((combatLevelSimple + fishingLevelSimple + cookingLevelSimple + 1 + 1) / 5) === 2) {
+  //   uiProfileRank.src = "./ui/Rank/rankTwo.png"
+  // }
+  // else if (Math.floor((combatLevelSimple + fishingLevelSimple + cookingLevelSimple + 1 + 1) / 5) === 3) {
+  //   uiProfileRank.src = "./ui/Rank/rankThree.png"
+  // }
 
-  fishingXPbar.style.width = `${Math.min(((myPlayer.fishingLevel - (fishingLevelNum < 1 ? 0 : fishingLevelNum < 3 ? 1000 : fishingLevelNum < 6 ? 3000 : fishingLevelNum < 12 ? 6000 : 12000)) / (fishingLevelNum < 1 ? 1000 : fishingLevelNum < 3 ? 2000 : fishingLevelNum < 6 ? 3000 : fishingLevelNum < 12 ? 6000 : fishingLevelNum)) * 70, 70)}px`;
-  cookingXPbar.style.width = `${Math.min(((myPlayer.cookingLevel - (cookingLevelNum < 1 ? 0 : cookingLevelNum < 3 ? 1000 : cookingLevelNum < 6 ? 3000 : cookingLevelNum < 12 ? 6000 : 12000)) / (cookingLevelNum < 1 ? 1000 : cookingLevelNum < 3 ? 2000 : cookingLevelNum < 6 ? 3000 : cookingLevelNum < 12 ? 6000 : fishingLevelNum)) * 70, 70)}px`;
-  combatXPbar.style.width = `${Math.min(((myPlayer.combatLevel - (combatLevelNum < 1 ? 0 : combatLevelNum < 3 ? 1000 : combatLevelNum < 6 ? 3000 : combatLevelNum < 12 ? 6000 : 12000)) / (combatLevelNum < 1 ? 1000 : combatLevelNum < 3 ? 2000 : combatLevelNum < 6 ? 3000 : combatLevelNum < 12 ? 6000 : fishingLevelNum)) * 70, 70)}px`;
+  // fishingXPbar.style.width = `${Math.min(((myPlayer.fishingLevel - (fishingLevelNum < 1 ? 0 : fishingLevelNum < 3 ? 1000 : fishingLevelNum < 6 ? 3000 : fishingLevelNum < 12 ? 6000 : 12000)) / (fishingLevelNum < 1 ? 1000 : fishingLevelNum < 3 ? 2000 : fishingLevelNum < 6 ? 3000 : fishingLevelNum < 12 ? 6000 : fishingLevelNum)) * 70, 70)}px`;
+  // cookingXPbar.style.width = `${Math.min(((myPlayer.cookingLevel - (cookingLevelNum < 1 ? 0 : cookingLevelNum < 3 ? 1000 : cookingLevelNum < 6 ? 3000 : cookingLevelNum < 12 ? 6000 : 12000)) / (cookingLevelNum < 1 ? 1000 : cookingLevelNum < 3 ? 2000 : cookingLevelNum < 6 ? 3000 : cookingLevelNum < 12 ? 6000 : fishingLevelNum)) * 70, 70)}px`;
+  // // combatXPbar.style.width = `${Math.min(((myPlayer.combatLevel - (combatLevelNum < 1 ? 0 : combatLevelNum < 3 ? 1000 : combatLevelNum < 6 ? 3000 : combatLevelNum < 12 ? 6000 : 12000)) / (combatLevelNum < 1 ? 1000 : combatLevelNum < 3 ? 2000 : combatLevelNum < 6 ? 3000 : combatLevelNum < 12 ? 6000 : fishingLevelNum)) * 70, 70)}px`;
 
 
   if (myPlayer.souls.length) {
@@ -6909,31 +6744,6 @@ let mapsInfo = {
     },
     colliders:  [
       {
-        "type": "chest",
-        "item": "stick",
-        "x": 2528,
-        "y": 2234.5,
-        "width": 227,
-        "height": 178,
-        "color": "rgb(255, 255, 204, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 2590,
-        "y": 2267.5,
-        "width": 85,
-        "height": 109,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "craft",
-        "x": 1726,
-        "y": 1613.5,
-        "width": 444,
-        "height": 269,
-        "color": "rgb(153, 102, 51, 0)"
-      },
-      {
         "type": "dialog",
         "name": "Fishing Quest",
         "x": 2106,
@@ -8864,118 +8674,6 @@ let mapsInfo = {
       },
       {
         "type": "wall",
-        "x": 1251.5,
-        "y": 2056.5,
-        "width": 195,
-        "height": 42,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1400.5,
-        "y": 2041.5,
-        "width": 71,
-        "height": 29,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1446.5,
-        "y": 2020.5,
-        "width": 132,
-        "height": 24,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1548.5,
-        "y": 2007.5,
-        "width": 55,
-        "height": 14,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1576.5,
-        "y": 1978.5,
-        "width": 57,
-        "height": 29,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1573.5,
-        "y": 1928.5,
-        "width": 62,
-        "height": 62,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1113.5,
-        "y": 1911.5,
-        "width": 144,
-        "height": 23,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1259.5,
-        "y": 1874.5,
-        "width": 195,
-        "height": 38,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1455.5,
-        "y": 1919.5,
-        "width": 129,
-        "height": 29,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1072.5,
-        "y": 1942.5,
-        "width": 54,
-        "height": 66,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1113.5,
-        "y": 1895.5,
-        "width": 145,
-        "height": 35,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1455.5,
-        "y": 1914.5,
-        "width": 132,
-        "height": 32,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1458.5,
-        "y": 1892.5,
-        "width": 129,
-        "height": 51,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1121.5,
-        "y": 2013.5,
-        "width": 172,
-        "height": 42,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
         "x": 3052,
         "y": 1812.5,
         "width": 465,
@@ -9397,9 +9095,171 @@ let mapsInfo = {
         "width": 70,
         "height": 52,
         "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1165,
+        "y": 1869.5,
+        "width": 405,
+        "height": 57,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1108,
+        "y": 1870.5,
+        "width": 84,
+        "height": 50,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1085,
+        "y": 1914.5,
+        "width": 93,
+        "height": 33,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1071,
+        "y": 1940.5,
+        "width": 566,
+        "height": 65,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1538,
+        "y": 1899.5,
+        "width": 86,
+        "height": 57,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1280,
+        "y": 1827.5,
+        "width": 151,
+        "height": 65,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1291,
+        "y": 1975.5,
+        "width": 135,
+        "height": 75,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 919,
+        "y": 2444.5,
+        "width": 58,
+        "height": 129,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 875,
+        "y": 2561.5,
+        "width": 57,
+        "height": 111,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 682,
+        "y": 3015.5,
+        "width": 55,
+        "height": 612,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 246,
+        "y": 3674.5,
+        "width": 568,
+        "height": 64,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 517,
+        "y": 3471.5,
+        "width": 215,
+        "height": 245,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1121,
+        "y": 1961.5,
+        "width": 182,
+        "height": 86,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1267,
+        "y": 2012.5,
+        "width": 169,
+        "height": 82,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1373,
+        "y": 1975.5,
+        "width": 233,
+        "height": 77,
+        "color": "rgb(0, 0, 0, 0)"
+      }, {
+        "type": "craft",
+        "x": 1630.5,
+        "y": 1607.5,
+        "width": 622,
+        "height": 280,
+        "color": "rgb(0, 0, 0, 0)"
       }
     ],
     enemies: [
+      {
+        name: "treeSimpleEnemy",
+        imgw: 31,
+        imgh: 27,
+        imgcw: 31,
+        imgch: 0,
+        frames: 0,
+        framesTimer: 0,
+        level: 1,
+        xp: 50,
+        speedX: 5,
+        speedY: 5,
+        spawn: {
+          x: 1800,
+          y: 850
+        },
+        w: 100,
+        h: 100,
+        currentStateName: "idle",
+        currentState: null,
+        attackInterval: true,
+        states: [moveState,],
+        damaged: 0,
+        health: 10,
+        angle: 0,
+        maxHealth: 10,
+        baseSpawn: {
+          x: 1800,
+          y: 850
+        },
+        spawnTimer: 20000,
+        enemyStateInt: 2000,
+        drop: "treeLeaf",
+        dropRate: 30,
+      },
     ],
   },
 
@@ -11584,42 +11444,6 @@ let mapsInfo = {
     },
     colliders: [
       {
-        "type": "dialog",
-        "name": "Mushroom Town Quest",
-        "x": 2451.5,
-        "y": 1984.5,
-        "width": 186,
-        "height": 147,
-        "color": "rgb(179, 255, 213, 0)"
-      },
-      {
-        "type": "wall",
-        "condition": "slimeForestPath",
-        "x": 2617,
-        "y": 1885.5,
-        "width": 309,
-        "height": 511,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "condition": "slimeForestPath",
-        "x": 2335.5,
-        "y": 1950.5,
-        "width": 144,
-        "height": 96,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "chest",
-        "item": "gemArcane",
-        "x": 1994,
-        "y": 1825.5,
-        "width": 225,
-        "height": 156,
-        "color": "rgb(255, 255, 204, 0)"
-      },
-      {
         "type": "wall",
         "x": 2054,
         "y": 1513.5,
@@ -12405,14 +12229,6 @@ let mapsInfo = {
       },
       {
         "type": "wall",
-        "x": 1125,
-        "y": 1591.5,
-        "width": 50,
-        "height": 119,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
         "x": 939,
         "y": 1481.5,
         "width": 43,
@@ -12441,14 +12257,6 @@ let mapsInfo = {
         "y": 2199.5,
         "width": 53,
         "height": 87,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1210,
-        "y": 2166.5,
-        "width": 55,
-        "height": 119,
         "color": "rgb(0, 0, 0, 0)"
       },
       {
@@ -12559,94 +12367,6 @@ let mapsInfo = {
       },
       {
         "type": "wall",
-        "x": 1086,
-        "y": 1810,
-        "width": 77,
-        "height": 120,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1155,
-        "y": 1780,
-        "width": 73,
-        "height": 99,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1216,
-        "y": 1880,
-        "width": 61,
-        "height": 115,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1289,
-        "y": 1795,
-        "width": 88,
-        "height": 124,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 975,
-        "y": 1773,
-        "width": 58,
-        "height": 125,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1042,
-        "y": 1690,
-        "width": 62,
-        "height": 130,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 852,
-        "y": 1830,
-        "width": 70,
-        "height": 117,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 729,
-        "y": 1789,
-        "width": 91,
-        "height": 118,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 652,
-        "y": 1855,
-        "width": 65,
-        "height": 122,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 547,
-        "y": 1777,
-        "width": 79,
-        "height": 117,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 756,
-        "y": 1550,
-        "width": 66,
-        "height": 106,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
         "x": 411,
         "y": 1813,
         "width": 75,
@@ -12735,14 +12455,6 @@ let mapsInfo = {
       },
       {
         "type": "wall",
-        "x": 552,
-        "y": 2165,
-        "width": 56,
-        "height": 98,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
         "x": 453,
         "y": 2344,
         "width": 629,
@@ -12755,38 +12467,6 @@ let mapsInfo = {
         "y": 2265,
         "width": 583,
         "height": 88,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 795.5,
-        "y": 2137,
-        "width": 54,
-        "height": 113,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 930.5,
-        "y": 2109,
-        "width": 47,
-        "height": 97,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1064.5,
-        "y": 2146,
-        "width": 63,
-        "height": 88,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1227.5,
-        "y": 2193,
-        "width": 202,
-        "height": 75,
         "color": "rgb(0, 0, 0, 0)"
       },
       {
@@ -12872,14 +12552,6 @@ let mapsInfo = {
         "color": "rgb(0, 0, 0, 0)"
       },
       {
-        "type": "wall",
-        "x": 1208,
-        "y": 1833.5,
-        "width": 167,
-        "height": 146,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
         "type": "transition",
         "format": "liquid",
         "destination": "mushroomForest",
@@ -12908,6 +12580,38 @@ let mapsInfo = {
         "width": 809,
         "height": 321,
         "color": "rgb(204, 0, 204, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 175,
+        "y": 2370.5,
+        "width": 613,
+        "height": 138,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 81.5,
+        "y": 1640,
+        "width": 1282,
+        "height": 304,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1298.5,
+        "y": 1771,
+        "width": 150,
+        "height": 152,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 76.5,
+        "y": 2167,
+        "width": 1386,
+        "height": 265,
+        "color": "rgb(0, 0, 0, 0)"
       }
     ],
     enemies: [],
@@ -13122,7 +12826,7 @@ let mapsInfo = {
         "y": 834.5,
         "width": 296,
         "height": 250,
-        "color": "rgb(0, 0, 0, 0)"
+        "color": "rgb(0, 0, 0, 0.5)"
       },
       {
         "type": "wall",
@@ -14352,78 +14056,6 @@ let mapsInfo = {
       },
       {
         "type": "wall",
-        "x": 1986,
-        "y": 3860,
-        "width": 85,
-        "height": 123,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 2050,
-        "y": 3559,
-        "width": 54,
-        "height": 129,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 981,
-        "y": 3808,
-        "width": 243,
-        "height": 164,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 879,
-        "y": 3776.5,
-        "width": 186,
-        "height": 79,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 625,
-        "y": 3669.5,
-        "width": 314,
-        "height": 133,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 545,
-        "y": 3569.5,
-        "width": 149,
-        "height": 133,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 443,
-        "y": 3501.5,
-        "width": 163,
-        "height": 107,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 338,
-        "y": 3443.5,
-        "width": 158,
-        "height": 85,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": -43,
-        "y": 3432.5,
-        "width": 441,
-        "height": 43,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
         "x": -101,
         "y": 3196.5,
         "width": 85,
@@ -14445,7 +14077,7 @@ let mapsInfo = {
         "y": 850.5,
         "width": 180,
         "height": 80,
-        "color": "rgb(255, 255, 204, 0.0)"
+        "color": "rgb(255, 255, 204, 0)"
       },
       {
         "type": "wall",
@@ -14453,7 +14085,120 @@ let mapsInfo = {
         "y": 827.5,
         "width": 103,
         "height": 61,
-        "color": "rgb(0, 0, 0, 0.0)"
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -93,
+        "y": 424,
+        "width": 93,
+        "height": 1198,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -108,
+        "y": 1295,
+        "width": 363,
+        "height": 124,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -83,
+        "y": 307,
+        "width": 565,
+        "height": 325,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 176,
+        "y": 121,
+        "width": 1575,
+        "height": 225,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1368,
+        "y": -238,
+        "width": 542,
+        "height": 397,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1769,
+        "y": -77,
+        "width": 1326,
+        "height": 152,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2536,
+        "y": -187,
+        "width": 310,
+        "height": 152,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -107,
+        "y": 3421,
+        "width": 92,
+        "height": 603,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -48,
+        "y": 3984,
+        "width": 1460,
+        "height": 82,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -42,
+        "y": 3648,
+        "width": 123,
+        "height": 129,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 188,
+        "y": 3729,
+        "width": 71,
+        "height": 102,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 329,
+        "y": 3752,
+        "width": 102,
+        "height": 130,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 560,
+        "y": 3438,
+        "width": 87,
+        "height": 111,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "chest",
+        "item": "gem",
+        "x": -54,
+        "y": 3665,
+        "width": 316,
+        "height": 289,
+        "color": "rgb(255, 255, 204, 0)"
       }
     ],
     enemies: [
@@ -25253,31 +24998,6 @@ let originalMapsInfo = {
     },
     colliders:  [
       {
-        "type": "chest",
-        "item": "stick",
-        "x": 2528,
-        "y": 2234.5,
-        "width": 227,
-        "height": 178,
-        "color": "rgb(255, 255, 204, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 2590,
-        "y": 2267.5,
-        "width": 85,
-        "height": 109,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "craft",
-        "x": 1726,
-        "y": 1613.5,
-        "width": 444,
-        "height": 269,
-        "color": "rgb(153, 102, 51, 0)"
-      },
-      {
         "type": "dialog",
         "name": "Fishing Quest",
         "x": 2106,
@@ -27208,118 +26928,6 @@ let originalMapsInfo = {
       },
       {
         "type": "wall",
-        "x": 1251.5,
-        "y": 2056.5,
-        "width": 195,
-        "height": 42,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1400.5,
-        "y": 2041.5,
-        "width": 71,
-        "height": 29,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1446.5,
-        "y": 2020.5,
-        "width": 132,
-        "height": 24,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1548.5,
-        "y": 2007.5,
-        "width": 55,
-        "height": 14,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1576.5,
-        "y": 1978.5,
-        "width": 57,
-        "height": 29,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1573.5,
-        "y": 1928.5,
-        "width": 62,
-        "height": 62,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1113.5,
-        "y": 1911.5,
-        "width": 144,
-        "height": 23,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1259.5,
-        "y": 1874.5,
-        "width": 195,
-        "height": 38,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1455.5,
-        "y": 1919.5,
-        "width": 129,
-        "height": 29,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1072.5,
-        "y": 1942.5,
-        "width": 54,
-        "height": 66,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1113.5,
-        "y": 1895.5,
-        "width": 145,
-        "height": 35,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1455.5,
-        "y": 1914.5,
-        "width": 132,
-        "height": 32,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1458.5,
-        "y": 1892.5,
-        "width": 129,
-        "height": 51,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1121.5,
-        "y": 2013.5,
-        "width": 172,
-        "height": 42,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
         "x": 3052,
         "y": 1812.5,
         "width": 465,
@@ -27740,6 +27348,126 @@ let originalMapsInfo = {
         "y": 1754.5,
         "width": 70,
         "height": 52,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1165,
+        "y": 1869.5,
+        "width": 405,
+        "height": 57,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1108,
+        "y": 1870.5,
+        "width": 84,
+        "height": 50,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1085,
+        "y": 1914.5,
+        "width": 93,
+        "height": 33,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1071,
+        "y": 1940.5,
+        "width": 566,
+        "height": 65,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1538,
+        "y": 1899.5,
+        "width": 86,
+        "height": 57,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1280,
+        "y": 1827.5,
+        "width": 151,
+        "height": 65,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1291,
+        "y": 1975.5,
+        "width": 135,
+        "height": 75,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 919,
+        "y": 2444.5,
+        "width": 58,
+        "height": 129,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 875,
+        "y": 2561.5,
+        "width": 57,
+        "height": 111,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 682,
+        "y": 3015.5,
+        "width": 55,
+        "height": 612,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 246,
+        "y": 3674.5,
+        "width": 568,
+        "height": 64,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 517,
+        "y": 3471.5,
+        "width": 215,
+        "height": 245,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1121,
+        "y": 1961.5,
+        "width": 182,
+        "height": 86,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1267,
+        "y": 2012.5,
+        "width": 169,
+        "height": 82,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1373,
+        "y": 1975.5,
+        "width": 233,
+        "height": 77,
         "color": "rgb(0, 0, 0, 0)"
       }
     ],
@@ -29928,42 +29656,6 @@ let originalMapsInfo = {
     },
     colliders: [
       {
-        "type": "dialog",
-        "name": "Mushroom Town Quest",
-        "x": 2451.5,
-        "y": 1984.5,
-        "width": 186,
-        "height": 147,
-        "color": "rgb(179, 255, 213, 0)"
-      },
-      {
-        "type": "wall",
-        "condition": "slimeForestPath",
-        "x": 2617,
-        "y": 1885.5,
-        "width": 309,
-        "height": 511,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "condition": "slimeForestPath",
-        "x": 2335.5,
-        "y": 1950.5,
-        "width": 144,
-        "height": 96,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "chest",
-        "item": "gemArcane",
-        "x": 1994,
-        "y": 1825.5,
-        "width": 225,
-        "height": 156,
-        "color": "rgb(255, 255, 204, 0)"
-      },
-      {
         "type": "wall",
         "x": 2054,
         "y": 1513.5,
@@ -30749,14 +30441,6 @@ let originalMapsInfo = {
       },
       {
         "type": "wall",
-        "x": 1125,
-        "y": 1591.5,
-        "width": 50,
-        "height": 119,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
         "x": 939,
         "y": 1481.5,
         "width": 43,
@@ -30785,14 +30469,6 @@ let originalMapsInfo = {
         "y": 2199.5,
         "width": 53,
         "height": 87,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1210,
-        "y": 2166.5,
-        "width": 55,
-        "height": 119,
         "color": "rgb(0, 0, 0, 0)"
       },
       {
@@ -30903,94 +30579,6 @@ let originalMapsInfo = {
       },
       {
         "type": "wall",
-        "x": 1086,
-        "y": 1810,
-        "width": 77,
-        "height": 120,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1155,
-        "y": 1780,
-        "width": 73,
-        "height": 99,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1216,
-        "y": 1880,
-        "width": 61,
-        "height": 115,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1289,
-        "y": 1795,
-        "width": 88,
-        "height": 124,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 975,
-        "y": 1773,
-        "width": 58,
-        "height": 125,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1042,
-        "y": 1690,
-        "width": 62,
-        "height": 130,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 852,
-        "y": 1830,
-        "width": 70,
-        "height": 117,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 729,
-        "y": 1789,
-        "width": 91,
-        "height": 118,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 652,
-        "y": 1855,
-        "width": 65,
-        "height": 122,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 547,
-        "y": 1777,
-        "width": 79,
-        "height": 117,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 756,
-        "y": 1550,
-        "width": 66,
-        "height": 106,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
         "x": 411,
         "y": 1813,
         "width": 75,
@@ -31079,14 +30667,6 @@ let originalMapsInfo = {
       },
       {
         "type": "wall",
-        "x": 552,
-        "y": 2165,
-        "width": 56,
-        "height": 98,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
         "x": 453,
         "y": 2344,
         "width": 629,
@@ -31099,38 +30679,6 @@ let originalMapsInfo = {
         "y": 2265,
         "width": 583,
         "height": 88,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 795.5,
-        "y": 2137,
-        "width": 54,
-        "height": 113,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 930.5,
-        "y": 2109,
-        "width": 47,
-        "height": 97,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1064.5,
-        "y": 2146,
-        "width": 63,
-        "height": 88,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 1227.5,
-        "y": 2193,
-        "width": 202,
-        "height": 75,
         "color": "rgb(0, 0, 0, 0)"
       },
       {
@@ -31216,14 +30764,6 @@ let originalMapsInfo = {
         "color": "rgb(0, 0, 0, 0)"
       },
       {
-        "type": "wall",
-        "x": 1208,
-        "y": 1833.5,
-        "width": 167,
-        "height": 146,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
         "type": "transition",
         "format": "liquid",
         "destination": "mushroomForest",
@@ -31252,6 +30792,38 @@ let originalMapsInfo = {
         "width": 809,
         "height": 321,
         "color": "rgb(204, 0, 204, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 175,
+        "y": 2370.5,
+        "width": 613,
+        "height": 138,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 81.5,
+        "y": 1640,
+        "width": 1282,
+        "height": 304,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1298.5,
+        "y": 1771,
+        "width": 150,
+        "height": 152,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 76.5,
+        "y": 2167,
+        "width": 1386,
+        "height": 265,
+        "color": "rgb(0, 0, 0, 0)"
       }
     ],
     enemies: [],
@@ -31466,7 +31038,7 @@ let originalMapsInfo = {
         "y": 834.5,
         "width": 296,
         "height": 250,
-        "color": "rgb(0, 0, 0, 0)"
+        "color": "rgb(0, 0, 0, 0.5)"
       },
       {
         "type": "wall",
@@ -32696,78 +32268,6 @@ let originalMapsInfo = {
       },
       {
         "type": "wall",
-        "x": 1986,
-        "y": 3860,
-        "width": 85,
-        "height": 123,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 2050,
-        "y": 3559,
-        "width": 54,
-        "height": 129,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 981,
-        "y": 3808,
-        "width": 243,
-        "height": 164,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 879,
-        "y": 3776.5,
-        "width": 186,
-        "height": 79,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 625,
-        "y": 3669.5,
-        "width": 314,
-        "height": 133,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 545,
-        "y": 3569.5,
-        "width": 149,
-        "height": 133,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 443,
-        "y": 3501.5,
-        "width": 163,
-        "height": 107,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": 338,
-        "y": 3443.5,
-        "width": 158,
-        "height": 85,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
-        "x": -43,
-        "y": 3432.5,
-        "width": 441,
-        "height": 43,
-        "color": "rgb(0, 0, 0, 0)"
-      },
-      {
-        "type": "wall",
         "x": -101,
         "y": 3196.5,
         "width": 85,
@@ -32789,7 +32289,7 @@ let originalMapsInfo = {
         "y": 850.5,
         "width": 180,
         "height": 80,
-        "color": "rgb(255, 255, 204, 0.0)"
+        "color": "rgb(255, 255, 204, 0)"
       },
       {
         "type": "wall",
@@ -32797,7 +32297,120 @@ let originalMapsInfo = {
         "y": 827.5,
         "width": 103,
         "height": 61,
-        "color": "rgb(0, 0, 0, 0.0)"
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -93,
+        "y": 424,
+        "width": 93,
+        "height": 1198,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -108,
+        "y": 1295,
+        "width": 363,
+        "height": 124,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -83,
+        "y": 307,
+        "width": 565,
+        "height": 325,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 176,
+        "y": 121,
+        "width": 1575,
+        "height": 225,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1368,
+        "y": -238,
+        "width": 542,
+        "height": 397,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 1769,
+        "y": -77,
+        "width": 1326,
+        "height": 152,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 2536,
+        "y": -187,
+        "width": 310,
+        "height": 152,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -107,
+        "y": 3421,
+        "width": 92,
+        "height": 603,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -48,
+        "y": 3984,
+        "width": 1460,
+        "height": 82,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": -42,
+        "y": 3648,
+        "width": 123,
+        "height": 129,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 188,
+        "y": 3729,
+        "width": 71,
+        "height": 102,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 329,
+        "y": 3752,
+        "width": 102,
+        "height": 130,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "wall",
+        "x": 560,
+        "y": 3438,
+        "width": 87,
+        "height": 111,
+        "color": "rgb(0, 0, 0, 0)"
+      },
+      {
+        "type": "chest",
+        "item": "gem",
+        "x": -54,
+        "y": 3665,
+        "width": 316,
+        "height": 289,
+        "color": "rgb(255, 255, 204, 0)"
       }
     ],
     enemies: [
@@ -32810,7 +32423,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 25,
+        xp: 50,
         speedX: 15,
         speedY: 15,
         spawn: {
@@ -32846,7 +32459,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 25,
+        xp: 50,
         speedX: 15,
         speedY: 15,
         spawn: {
@@ -32882,7 +32495,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 25,
+        xp: 50,
         speedX: 15,
         speedY: 15,
         spawn: {
@@ -32918,7 +32531,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 25,
+        xp: 50,
         speedX: 15,
         speedY: 15,
         spawn: {
@@ -32954,7 +32567,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 25,
+        xp: 50,
         speedX: 15,
         speedY: 15,
         spawn: {
@@ -32990,7 +32603,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 1,
-        xp: 25,
+        xp: 50,
         speedX: 15,
         speedY: 15,
         spawn: {
@@ -33027,7 +32640,7 @@ let originalMapsInfo = {
         frames: 0,
         framesTimer: 0,
         level: 5,
-        xp: 100,
+        xp: 500,
         speedX: 0,
         speedY: 0,
         spawn: {
@@ -37389,7 +37002,7 @@ let originalMapsInfo = {
       frames: 0,
       framesTimer: 0,
       level: 1,
-      xp: 25,
+      xp: 100,
       speedX: 15,
       speedY: 15,
       spawn: {
@@ -37424,7 +37037,7 @@ let originalMapsInfo = {
       frames: 0,
       framesTimer: 0,
       level: 1,
-      xp: 25,
+      xp: 100,
       speedX: 15,
       speedY: 15,
       spawn: {
@@ -37459,7 +37072,7 @@ let originalMapsInfo = {
       frames: 0,
       framesTimer: 0,
       level: 1,
-      xp: 25,
+      xp: 100,
       speedX: 15,
       speedY: 15,
       spawn: {
@@ -37494,7 +37107,7 @@ let originalMapsInfo = {
       frames: 0,
       framesTimer: 0,
       level: 1,
-      xp: 25,
+      xp: 100,
       speedX: 15,
       speedY: 15,
       spawn: {
@@ -37529,7 +37142,7 @@ let originalMapsInfo = {
       frames: 0,
       framesTimer: 0,
       level: 1,
-      xp: 25,
+      xp: 100,
       speedX: 15,
       speedY: 15,
       spawn: {
@@ -37564,7 +37177,7 @@ let originalMapsInfo = {
       frames: 0,
       framesTimer: 0,
       level: 1,
-      xp: 25,
+      xp: 100,
       speedX: 15,
       speedY: 15,
       spawn: {
@@ -37600,7 +37213,7 @@ let originalMapsInfo = {
       frames: 0,
       framesTimer: 0,
       level: 5,
-      xp: 500,
+      xp: 2000,
       speedX: 5,
       speedY: 5,
       spawn: {

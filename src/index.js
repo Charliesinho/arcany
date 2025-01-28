@@ -1153,15 +1153,15 @@ async function main() {
                     
 
                     const loginAttempt = "success";
-                    // await pushItem(runeBullets, socket)
-                    // await pushItem(runeFireRate, socket)
+                     //await pushItem(runeBullets, socket)
+                     await pushItem(restfieldBlanket, socket)
+                     await pushItem(restfieldBlanket, socket)
                     //await pushItem(treeLeaf, socket)
                     //await pushItem(treeLeaf, socket)
                     // await pushItem(smallCommonMeat, socket)
                     // await pushItem(ballo, socket)
                     // await pushItem(sardin, socket)
-                    //  await pushItem(octopus, socket)
-                    //  await pushItem(octopus, socket)
+                    //await pushItem(octopus, socket)
                     // await pushItem(bass, socket)
                     // await pushItem(reaperClothes, socket)
                     // await pushItem(blackVampiresClothes, socket)
