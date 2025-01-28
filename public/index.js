@@ -543,6 +543,18 @@ const balloTag = document.querySelector('.balloTag');
 const bassTag = document.querySelector('.bassTag');
 const corkTag = document.querySelector('.corkTag');
 const octopusTag = document.querySelector('.octopusTag');
+const nemiTag = document.querySelector('.nemiTag');
+const rekiTag = document.querySelector('.rekiTag');
+const fishBonesTag = document.querySelector('.fishBonesTag');
+const bloomTag = document.querySelector('.bloomTag');
+const hanamiTag = document.querySelector('.hanamiTag');
+const burpyTag = document.querySelector('.burpyTag');
+const barracudaTag = document.querySelector('.barracudaTag');
+const frostplumTag = document.querySelector('.frostplumTag');
+const bulbberTag = document.querySelector('.bulbberTag');
+const rayTag = document.querySelector('.rayTag');
+const minrowTag = document.querySelector('.minrowTag');
+const codyTag = document.querySelector('.codyTag');
 
 const miniMushroomTag = document.querySelector('.miniMushroomTag');
 const boneTag = document.querySelector('.boneTag');
@@ -1626,32 +1638,104 @@ let objFishes = {
   crab: {
     name: "CRAB",
     desc: "The Crab can be found in the south coast of the Grasslands. You can cook it into a delicious meal, just be careful with their claws!",
-    lvl: "LEVEL REQUIRED 1",
+    lvl: "LEVEL REQUIRED 5",
     img: "./inventory/crab.png"
   },
   ballo: {
     name: "BALLO",
     desc: "The Ballo is a fairly big fish that loves river waters. His green color helps him blend into the water, allowing him to hunt sardins very easily.",
-    lvl: "LEVEL REQUIRED 2",
+    lvl: "LEVEL REQUIRED 17",
     img: "./inventory/ballo.jpg"
   },
   bass: {
     name: "BASS",
     desc: "The Bass used to be yellow, however after the great collapse he slowly turned purple. Not sure if it is safe to eat but you might as well try, it's gorgeous though!",
-    lvl: "LEVEL REQUIRED 3",
+    lvl: "LEVEL REQUIRED 11",
     img: "./inventory/bass.png"
   },
   cork: {
     name: "CORK",
     desc: "The Cork is a type of scavanger fish, he like to eat dead things that fall in the water, for this reason is very common to find these in Restfield, just make sure to cook it before eating it!",
-    lvl: "LEVEL REQUIRED 3",
+    lvl: "LEVEL REQUIRED 11",
     img: "./inventory/cork.png"
+  },
+  nemi: {
+    name: "NEMI",
+    desc: "It is believed that the Octopus is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
+    lvl: "LEVEL REQUIRED 1",
+    img: "./inventory/nemi.png"
   },
   octopus: {
     name: "OCTOPUS",
     desc: "It is believed that the Octopus is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
-    lvl: "LEVEL REQUIRED 5",
+    lvl: "LEVEL REQUIRED 27",
     img: "./inventory/octopus.png"
+  },
+  reki: {
+    name: "REKI",
+    desc: "It is believed that the reki is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
+    lvl: "LEVEL REQUIRED 35",
+    img: "./inventory/reki.png"
+  },
+  fishBones: {
+    name: "FISH BONES",
+    desc: "It is believed that the fishBones is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
+    lvl: "LEVEL REQUIRED 5",
+    img: "./inventory/fishBones.png"
+  },
+  bloom: {
+    name: "BLOOM",
+    desc: "It is believed that the bloom is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
+    lvl: "LEVEL REQUIRED 21",
+    img: "./inventory/bloom.png"
+  },
+  hanami: {
+    name: "HANAMI",
+    desc: "It is believed that the hanami is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
+    lvl: "LEVEL REQUIRED 5",
+    img: "./inventory/hanami.png"
+  },
+  burpy: {
+    name: "BURPY",
+    desc: "It is believed that the burpy is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
+    lvl: "LEVEL REQUIRED 60",
+    img: "./inventory/burpy.png"
+  },
+  barracuda: {
+    name: "BARRACUDA",
+    desc: "It is believed that the barracuda is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
+    lvl: "LEVEL REQUIRED 17",
+    img: "./inventory/barracuda.png"
+  },
+  frostplum: {
+    name: "FROSTPLUM",
+    desc: "It is believed that the frostplum is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
+    lvl: "LEVEL REQUIRED 27",
+    img: "./inventory/frostplum.png"
+  },
+  bulbber: {
+    name: "BULBBER",
+    desc: "It is believed that the bulbber is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
+    lvl: "LEVEL REQUIRED 21",
+    img: "./inventory/bulbber.png"
+  },
+  ray: {
+    name: "RAY",
+    desc: "It is believed that the ray is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
+    lvl: "LEVEL REQUIRED 35",
+    img: "./inventory/ray.png"
+  },
+  minrow: {
+    name: "MINROW",
+    desc: "It is believed that the minrow is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
+    lvl: "LEVEL REQUIRED 80",
+    img: "./inventory/minrow.png"
+  },
+  cody: {
+    name: "CODY",
+    desc: "It is believed that the cody is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
+    lvl: "LEVEL REQUIRED 60",
+    img: "./inventory/cody.png"
   }
 };
 nameBookFish.innerHTML = objFishes["sardine"].name
@@ -1696,6 +1780,90 @@ lvlBookFish.innerHTML = objFishes[item].lvl
 });
 octopusTag.addEventListener("click", (e) =>{
 let item = "octopus"
+nameBookFish.innerHTML = objFishes[item].name
+ImgBookFish.src = objFishes[item].img
+descriptionBookFish.innerHTML = objFishes[item].desc
+lvlBookFish.innerHTML = objFishes[item].lvl
+});
+nemiTag.addEventListener("click", (e) =>{
+let item = "nemi"
+nameBookFish.innerHTML = objFishes[item].name
+ImgBookFish.src = objFishes[item].img
+descriptionBookFish.innerHTML = objFishes[item].desc
+lvlBookFish.innerHTML = objFishes[item].lvl
+});
+rekiTag.addEventListener("click", (e) =>{
+let item = "reki"
+nameBookFish.innerHTML = objFishes[item].name
+ImgBookFish.src = objFishes[item].img
+descriptionBookFish.innerHTML = objFishes[item].desc
+lvlBookFish.innerHTML = objFishes[item].lvl
+});
+fishBonesTag.addEventListener("click", (e) =>{
+let item = "fishBones"
+nameBookFish.innerHTML = objFishes[item].name
+ImgBookFish.src = objFishes[item].img
+descriptionBookFish.innerHTML = objFishes[item].desc
+lvlBookFish.innerHTML = objFishes[item].lvl
+});
+bloomTag.addEventListener("click", (e) =>{
+let item = "bloom"
+nameBookFish.innerHTML = objFishes[item].name
+ImgBookFish.src = objFishes[item].img
+descriptionBookFish.innerHTML = objFishes[item].desc
+lvlBookFish.innerHTML = objFishes[item].lvl
+});
+hanamiTag.addEventListener("click", (e) =>{
+let item = "hanami"
+nameBookFish.innerHTML = objFishes[item].name
+ImgBookFish.src = objFishes[item].img
+descriptionBookFish.innerHTML = objFishes[item].desc
+lvlBookFish.innerHTML = objFishes[item].lvl
+});
+burpyTag.addEventListener("click", (e) =>{
+let item = "burpy"
+nameBookFish.innerHTML = objFishes[item].name
+ImgBookFish.src = objFishes[item].img
+descriptionBookFish.innerHTML = objFishes[item].desc
+lvlBookFish.innerHTML = objFishes[item].lvl
+});
+barracudaTag.addEventListener("click", (e) =>{
+let item = "barracuda"
+nameBookFish.innerHTML = objFishes[item].name
+ImgBookFish.src = objFishes[item].img
+descriptionBookFish.innerHTML = objFishes[item].desc
+lvlBookFish.innerHTML = objFishes[item].lvl
+});
+frostplumTag.addEventListener("click", (e) =>{
+let item = "frostplum"
+nameBookFish.innerHTML = objFishes[item].name
+ImgBookFish.src = objFishes[item].img
+descriptionBookFish.innerHTML = objFishes[item].desc
+lvlBookFish.innerHTML = objFishes[item].lvl
+});
+bulbberTag.addEventListener("click", (e) =>{
+let item = "bulbber"
+nameBookFish.innerHTML = objFishes[item].name
+ImgBookFish.src = objFishes[item].img
+descriptionBookFish.innerHTML = objFishes[item].desc
+lvlBookFish.innerHTML = objFishes[item].lvl
+});
+rayTag.addEventListener("click", (e) =>{
+let item = "ray"
+nameBookFish.innerHTML = objFishes[item].name
+ImgBookFish.src = objFishes[item].img
+descriptionBookFish.innerHTML = objFishes[item].desc
+lvlBookFish.innerHTML = objFishes[item].lvl
+});
+minrowTag.addEventListener("click", (e) =>{
+let item = "minrow"
+nameBookFish.innerHTML = objFishes[item].name
+ImgBookFish.src = objFishes[item].img
+descriptionBookFish.innerHTML = objFishes[item].desc
+lvlBookFish.innerHTML = objFishes[item].lvl
+});
+codyTag.addEventListener("click", (e) =>{
+let item = "cody"
 nameBookFish.innerHTML = objFishes[item].name
 ImgBookFish.src = objFishes[item].img
 descriptionBookFish.innerHTML = objFishes[item].desc

@@ -617,6 +617,8 @@ body {
     justify-content: flex-start;
     gap: 25px;
     overflow: hidden;
+    overflow: auto;
+    
 }
 .rightPage{
     position: relative;

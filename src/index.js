@@ -1093,6 +1093,7 @@ async function main() {
                 
                 if (player.inventory.length <= 20) {
                     let itemToGive = itemsObj[item];
+                    if (!itemToGive)return
                     player.inventory.push(itemToGive);
                     
                     await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
@@ -1238,9 +1239,9 @@ async function main() {
                     
 
                     const loginAttempt = "success";
-                    await pushItem(runeBullets, socket)
-                    await pushItem(runeFireRate, socket)
-                    await pushItem(runeRange, socket)
+                    //await pushItem(runeBullets, socket)
+                    //await pushItem(runeFireRate, socket)
+                    //await pushItem(runeRange, socket)
                     //await pushItem(restfieldBlanket, socket)
                     //await pushItem(restfieldBlanket, socket)
                     //await pushItem(treeLeaf, socket)
@@ -1257,10 +1258,10 @@ async function main() {
                     // await pushItem(skullHelmet, socket)
                     //await pushItem(stick, socket)
                     //await pushItem(stick, socket)
-                    await pushItem(stick, socket)
-                    await pushItem(arcaneGem, socket)
-                    await pushItem(arcaneGem2, socket)
-                    await pushItem(arcaneGem3, socket)
+                    //await pushItem(stick, socket)
+                    //await pushItem(arcaneGem, socket)
+                    //await pushItem(arcaneGem2, socket)
+                    //await pushItem(arcaneGem3, socket)
                     // await pushItem(arcaneRepeaterInv, socket)
                     // await pushItem(arcaneLancerInv, socket)
                     //await pushItem(arcaneStaffCommon, socket)
