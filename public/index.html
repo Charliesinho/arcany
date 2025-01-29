@@ -49,7 +49,7 @@
       <img id="bossBarImg" src="./Textures/bossBarMoosh.png" />
     </div>
     
-    <div id="uiDev" style="display: flex;">
+    <div id="uiDev" style="display: none;">
       <button id="placeWalls" class="buttonDev pointerActivator">🧱</button>
       <button id="placeFishingArea" class="buttonDev pointerActivator">🐟</button>
       <button id="placeCraftingArea" class="buttonDev pointerActivator">🛠️</button>
@@ -348,15 +348,19 @@
               <img src="./inventory/fishBones.png" class=" fishIcon">
               <p>Fish Bones</p>
             </div>
+            <div class="bookTag pointerActivator lowTag">
+              <img src="./inventory/low.png" class=" fishIcon">
+              <p>Low</p>
+            </div>
             <div class="bookTag pointerActivator sardinTag">
               <img src="./inventory/sarding.png"  class=" fishIcon">
               <p>Sardin</p>
-            </div>
-            
+            </div>  
             <div class="bookTag pointerActivator nemiTag">
               <img src="./inventory/nemi.png" class=" fishIcon">
               <p>Nemi</p>
             </div>
+
             <div class="bookTag pointerActivator crabTag">
               <img src="./inventory/crab.png" class=" fishIcon">
               <p>Crab</p>
@@ -364,6 +368,10 @@
             <div class="bookTag pointerActivator hanamiTag">
               <img src="./inventory/hanami.png" class=" fishIcon">
               <p>Hanami</p>
+            </div>
+            <div class="bookTag pointerActivator willyTag">
+              <img src="./inventory/willy.png" class=" fishIcon">
+              <p>Willy</p>
             </div>
             <div class="bookTag pointerActivator corkTag">
               <img src="./inventory/cork.png" class=" fishIcon">
@@ -417,6 +425,9 @@
               <img src="./inventory/minrow.png" class=" fishIcon">
               <p>Minrow</p>
             </div>
+            
+            
+            
             
             
             
@@ -653,6 +664,13 @@
     <img class="pointerActivator" id='chatIcon' src="./icons/uiIcon/chatIcon.png">
     <img class="pointerActivator" id="sitDownIcon" src="./icons/uiIcon/sittingDownIcon.png"></img>
     <img class="pointerActivator" id="hideAndSick" src="./icons/uiIcon/hideAndSickIcon.png"></img>
+    <img class="pointerActivator" id="fishingAvailable" src="./inventory/sarding.png"></img>
+
+    <div id="fishSelector">
+      <p>hello</p>
+    </div>
+
+    
 
     <form id="chat">
       <div id="chatHistory"></div>
@@ -735,7 +753,6 @@
         <!-- <img class="rockExploreMinigame" src="./exploreMinigame/rock.png" /> -->
       </div>
 
-      
       
       <div id="cookingContainer">
         <div id="paddle"></div>  

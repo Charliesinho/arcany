@@ -484,6 +484,8 @@ let cameraShakeY = -180;
 const chatButton = document.getElementById('chatIcon');
 const sitDownIconButton = document.getElementById('sitDownIcon');
 const hideAndSickButton = document.getElementById('hideAndSick');
+const fishingAvailableButton = document.getElementById('fishingAvailable');
+const fishSelectorButton = document.getElementById('fishSelector');
 const chat = document.getElementById('chat');
 const chatInput = document.getElementById("chatInput");
 let blockMovement = true;
@@ -555,6 +557,8 @@ const bulbberTag = document.querySelector('.bulbberTag');
 const rayTag = document.querySelector('.rayTag');
 const minrowTag = document.querySelector('.minrowTag');
 const codyTag = document.querySelector('.codyTag');
+const willyTag = document.querySelector('.willyTag');
+const lowTag = document.querySelector('.lowTag');
 
 const miniMushroomTag = document.querySelector('.miniMushroomTag');
 const boneTag = document.querySelector('.boneTag');
@@ -1629,119 +1633,151 @@ treeLeafTag.addEventListener("click", (e) =>{
 });
 
 let objFishes = {
+  low: {
+    name: "LOW",
+    desc: "It is believed that the low is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
+    lvl: "LEVEL REQUIRED 1",
+    lvlNum: 1,
+    img: "./inventory/low.png"
+  },
   sardine: {
     name: "SARDINE",
     desc: "Sardine of Grassland. You can find it in CastleSide. Seems to really like rivers but their small size dont allow them to have a very big brain... Do as you please with that information.",
-    lvl: "LEVEL REQUIRED 1",
-    img: "./inventory/sarding.png"
-  },
-  crab: {
-    name: "CRAB",
-    desc: "The Crab can be found in the south coast of the Grasslands. You can cook it into a delicious meal, just be careful with their claws!",
     lvl: "LEVEL REQUIRED 5",
-    img: "./inventory/crab.png"
-  },
-  ballo: {
-    name: "BALLO",
-    desc: "The Ballo is a fairly big fish that loves river waters. His green color helps him blend into the water, allowing him to hunt sardins very easily.",
-    lvl: "LEVEL REQUIRED 17",
-    img: "./inventory/ballo.jpg"
-  },
-  bass: {
-    name: "BASS",
-    desc: "The Bass used to be yellow, however after the great collapse he slowly turned purple. Not sure if it is safe to eat but you might as well try, it's gorgeous though!",
-    lvl: "LEVEL REQUIRED 11",
-    img: "./inventory/bass.png"
-  },
-  cork: {
-    name: "CORK",
-    desc: "The Cork is a type of scavanger fish, he like to eat dead things that fall in the water, for this reason is very common to find these in Restfield, just make sure to cook it before eating it!",
-    lvl: "LEVEL REQUIRED 11",
-    img: "./inventory/cork.png"
+    lvlNum: 5,
+    img: "./inventory/sarding.png"
   },
   nemi: {
     name: "NEMI",
     desc: "It is believed that the Octopus is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
-    lvl: "LEVEL REQUIRED 1",
+    lvl: "LEVEL REQUIRED 7",
+    lvlNum: 7,
     img: "./inventory/nemi.png"
   },
-  octopus: {
-    name: "OCTOPUS",
-    desc: "It is believed that the Octopus is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
-    lvl: "LEVEL REQUIRED 27",
-    img: "./inventory/octopus.png"
-  },
-  reki: {
-    name: "REKI",
-    desc: "It is believed that the reki is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
-    lvl: "LEVEL REQUIRED 35",
-    img: "./inventory/reki.png"
-  },
-  fishBones: {
-    name: "FISH BONES",
-    desc: "It is believed that the fishBones is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
-    lvl: "LEVEL REQUIRED 5",
-    img: "./inventory/fishBones.png"
-  },
-  bloom: {
-    name: "BLOOM",
-    desc: "It is believed that the bloom is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
-    lvl: "LEVEL REQUIRED 21",
-    img: "./inventory/bloom.png"
+  crab: {
+    name: "CRAB",
+    desc: "The Crab can be found in the south coast of the Grasslands. You can cook it into a delicious meal, just be careful with their claws!",
+    lvl: "LEVEL REQUIRED 10",
+    lvlNum: 10,
+    img: "./inventory/crab.png"
   },
   hanami: {
     name: "HANAMI",
     desc: "It is believed that the hanami is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
-    lvl: "LEVEL REQUIRED 5",
+    lvl: "LEVEL REQUIRED 12",
+    lvlNum: 12,
     img: "./inventory/hanami.png"
+  },
+  willy: {
+    name: "WILLY",
+    desc: "It is believed that the willy is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
+    lvl: "LEVEL REQUIRED 17",
+    lvlNum: 17,
+    img: "./inventory/willy.png"
+  },
+  cork: {
+    name: "CORK",
+    desc: "The Cork is a type of scavanger fish, he like to eat dead things that fall in the water, for this reason is very common to find these in Restfield, just make sure to cook it before eating it!",
+    lvl: "LEVEL REQUIRED 23",
+    lvlNum: 23,
+    img: "./inventory/cork.png"
+  },
+  bass: {
+    name: "BASS",
+    desc: "The Bass used to be yellow, however after the great collapse he slowly turned purple. Not sure if it is safe to eat but you might as well try, it's gorgeous though!",
+    lvl: "LEVEL REQUIRED 25",
+    lvlNum: 25,
+    img: "./inventory/bass.png"
+  },
+  barracuda: {
+    name: "BARRACUDA",
+    desc: "It is believed that the barracuda is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
+    lvl: "LEVEL REQUIRED 30",
+    lvlNum: 30,
+    img: "./inventory/barracuda.png"
+  },
+  ballo: {
+    name: "BALLO",
+    desc: "The Ballo is a fairly big fish that loves river waters. His green color helps him blend into the water, allowing him to hunt sardins very easily.",
+    lvl: "LEVEL REQUIRED 34",
+    lvlNum: 34,
+    img: "./inventory/ballo.jpg"
+  },
+  bloom: {
+    name: "BLOOM",
+    desc: "It is believed that the bloom is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
+    lvl: "LEVEL REQUIRED 37",
+    lvlNum: 37,
+    img: "./inventory/bloom.png"
+  },
+  bulbber: {
+    name: "BULBBER",
+    desc: "It is believed that the bulbber is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
+    lvl: "LEVEL REQUIRED 40",
+    lvlNum: 40,
+    img: "./inventory/bulbber.png"
+  },
+  octopus: {
+    name: "OCTOPUS",
+    desc: "It is believed that the Octopus is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
+    lvl: "LEVEL REQUIRED 47",
+    lvlNum: 47,
+    img: "./inventory/octopus.png"
+  },
+  frostplum: {
+    name: "FROSTPLUM",
+    desc: "It is believed that the frostplum is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
+    lvl: "LEVEL REQUIRED 50",
+    lvlNum: 50,
+    img: "./inventory/frostplum.png"
+  },
+  reki: {
+    name: "REKI",
+    desc: "It is believed that the reki is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
+    lvl: "LEVEL REQUIRED 55",
+    lvlNum: 55,
+    img: "./inventory/reki.png"
+  },
+  ray: {
+    name: "RAY",
+    desc: "It is believed that the ray is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
+    lvl: "LEVEL REQUIRED 57",
+    lvlNum: 57,
+    img: "./inventory/ray.png"
   },
   burpy: {
     name: "BURPY",
     desc: "It is believed that the burpy is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
     lvl: "LEVEL REQUIRED 60",
+    lvlNum: 60,
     img: "./inventory/burpy.png"
-  },
-  barracuda: {
-    name: "BARRACUDA",
-    desc: "It is believed that the barracuda is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
-    lvl: "LEVEL REQUIRED 17",
-    img: "./inventory/barracuda.png"
-  },
-  frostplum: {
-    name: "FROSTPLUM",
-    desc: "It is believed that the frostplum is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
-    lvl: "LEVEL REQUIRED 27",
-    img: "./inventory/frostplum.png"
-  },
-  bulbber: {
-    name: "BULBBER",
-    desc: "It is believed that the bulbber is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
-    lvl: "LEVEL REQUIRED 21",
-    img: "./inventory/bulbber.png"
-  },
-  ray: {
-    name: "RAY",
-    desc: "It is believed that the ray is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
-    lvl: "LEVEL REQUIRED 35",
-    img: "./inventory/ray.png"
-  },
-  minrow: {
-    name: "MINROW",
-    desc: "It is believed that the minrow is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
-    lvl: "LEVEL REQUIRED 80",
-    img: "./inventory/minrow.png"
   },
   cody: {
     name: "CODY",
     desc: "It is believed that the cody is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
-    lvl: "LEVEL REQUIRED 60",
+    lvl: "LEVEL REQUIRED 67",
+    lvlNum: 67,
     img: "./inventory/cody.png"
-  }
+  }, 
+  minrow: {
+    name: "MINROW",
+    desc: "It is believed that the minrow is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
+    lvl: "LEVEL REQUIRED 75",
+    lvlNum: 75,
+    img: "./inventory/minrow.png"
+  },
+  fishBones: {
+    name: "FISH BONES",
+    desc: "It is believed that the fishBones is a magical creature, given his vibrant colors and his big size, however is extremely rare to find. When cooked, his delicious and calming taste can make even a dragon tamable.",
+    lvl: "LEVEL REQUIRED 5",
+    lvlNum: 5,
+    img: "./inventory/fishBones.png"
+  },
 };
-nameBookFish.innerHTML = objFishes["sardine"].name
-ImgBookFish.src = objFishes["sardine"].img
-descriptionBookFish.innerHTML = objFishes["sardine"].desc
-lvlBookFish.innerHTML = objFishes["sardine"].lvl
+nameBookFish.innerHTML = objFishes["low"].name
+ImgBookFish.src = objFishes["low"].img
+descriptionBookFish.innerHTML = objFishes["low"].desc
+lvlBookFish.innerHTML = objFishes["low"].lvl
 
 sardinTag.addEventListener("click", (e) =>{
 let item = "sardine"
@@ -1869,6 +1905,20 @@ ImgBookFish.src = objFishes[item].img
 descriptionBookFish.innerHTML = objFishes[item].desc
 lvlBookFish.innerHTML = objFishes[item].lvl
 });
+willyTag.addEventListener("click", (e) =>{
+let item = "willy"
+nameBookFish.innerHTML = objFishes[item].name
+ImgBookFish.src = objFishes[item].img
+descriptionBookFish.innerHTML = objFishes[item].desc
+lvlBookFish.innerHTML = objFishes[item].lvl
+});
+lowTag.addEventListener("click", (e) =>{
+let item = "low"
+nameBookFish.innerHTML = objFishes[item].name
+ImgBookFish.src = objFishes[item].img
+descriptionBookFish.innerHTML = objFishes[item].desc
+lvlBookFish.innerHTML = objFishes[item].lvl
+});
 
 let objHistory = {
   castelSide: {
@@ -1887,10 +1937,10 @@ From then on, the castle's cemetery became a place of terror. The dead stirred, 
     img: "./ui/uiBooks/historyBookContent/restfieldLore.jpeg",
   }
 }
-  nameBookHistory.innerHTML = objHistory["castelSide"].name
-  descriptionBookHistory.innerHTML = objHistory["castelSide"].history
-  ImgBookHistory.src = objHistory["castelSide"].img
-  historyBookCastelSide.style.color = 'black'
+nameBookHistory.innerHTML = objHistory["castelSide"].name
+descriptionBookHistory.innerHTML = objHistory["castelSide"].history
+ImgBookHistory.src = objHistory["castelSide"].img
+historyBookCastelSide.style.color = 'black'
 
 historyBookCastelSide.addEventListener("click", (e) =>{
   let item = "castelSide"
@@ -1954,10 +2004,10 @@ enchantingBookBookNuclear.addEventListener("click", (e) =>{
 });
 
 nameBookEnchantment.innerHTML = objEnchanting["runeRange"].name
-  ImgBookEnchantment.src = objEnchanting["runeRange"].img
-  enchantmentBook.src = objEnchanting["runeRange"].enchantingImg
-  descriptionBookEnchantment.innerHTML = objEnchanting["runeRange"].desc
-  lvlBookEnchantment.innerHTML = objEnchanting["runeRange"].lvl
+ImgBookEnchantment.src = objEnchanting["runeRange"].img
+enchantmentBook.src = objEnchanting["runeRange"].enchantingImg
+descriptionBookEnchantment.innerHTML = objEnchanting["runeRange"].desc
+lvlBookEnchantment.innerHTML = objEnchanting["runeRange"].lvl
 
 runeRangeTag.addEventListener("click", (e) =>{
   let item = "runeRange"
@@ -2043,11 +2093,24 @@ sitDownIconButton.addEventListener("click", () => {
   
 })
 let hideAndSickvar = false
+let fishingAvailablevar = false
+
 hideAndSickButton.addEventListener("click", () => {
   if (hideAndSickvar === false){
     hideAndSickvar = true
   } else {
     hideAndSickvar = false
+  }
+  
+  
+})
+fishingAvailableButton.addEventListener("click", () => {
+  if (fishingAvailablevar === false){
+    fishSelectorButton.style.display = 'flex'
+    fishingAvailablevar = true
+  } else {
+    fishSelectorButton.style.display = 'none'
+    fishingAvailablevar = false
   }
   
   
@@ -3444,6 +3507,28 @@ function xpForLevel(level) {
   return 8 * Math.pow(level, 2) - 8 * level;
 }
 
+function displayFishImages() {
+  // Clear existing content before adding new elements
+  fishSelectorButton.innerHTML = "";
+  
+  Object.values(objFishes).forEach(fish => {
+      const img = document.createElement("img");
+      img.src = fish.img;
+      img.alt = fish.name;
+      img.title = fish.name;
+
+      img.classList.add("fishSelectorIcon");
+      img.classList.add("pointerActivator");
+      
+
+      if(fish.lvlNum <= currentFishingLevel){
+
+        fishSelectorButton.appendChild(img);
+      }
+
+  });
+}
+
 questClose.addEventListener("click", () => {
   const questUi = document.querySelector(".questInfo");
   questUi.style.display = "none";
@@ -4152,6 +4237,7 @@ socket.on("player", (serverPlayer) => {
   if (changeFishingLevel) {
     updateFishingLevel = currentFishingLevel;
     changeFishingLevel = false;
+    displayFishImages()
   }
   if (currentFishingLevel !== updateFishingLevel && myPlayer.fishingLevel !== 0){
 
@@ -4263,7 +4349,7 @@ socket.on("player", (serverPlayer) => {
 
   if (myPlayer.inventory.length !== 0) {
       // console.log(myPlayer.inventory)
-      for (let i = 0; i < 21; i++) {
+      for (let i = 0; i < 20; i++) {
 
 
         if (myPlayer.inventory[i]) {
@@ -4430,6 +4516,7 @@ socket.on("loginAttempt", (msg) => {
     chatButton.style.display = "block";
     sitDownIconButton.style.display = "block";
     hideAndSickButton.style.display = "block";
+    fishingAvailableButton.style.display = "block";
     
 
     setTimeout(() => {

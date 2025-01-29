@@ -305,157 +305,75 @@ async function main() {
             }
         });
   
-        socket.on("fishing", () => {
-                 
-
-            const number = Math.floor(Math.random() * (100 - 1 + 1) + 1);
-
+        socket.on("fishing", async () => {
+            let availableFish = [];
+            const allFish = [
+                sardin,
+                ballo,
+                bass,
+                octopus,
+                nemi, 
+                hanami,
+                fishBones,
+                low,
+                willy,
+                cork,
+                barracuda,
+                bloom,
+                bulbber,
+                frostplum,
+                reki,
+                ray,
+                burpy,
+                cody,
+                minrow,
+            ];
+        
             async function fishing() {
+                const player = await Player.findOne({ socket: socket.id }).exec();
 
-                const player = await Player.findOne({socket: socket.id}).exec();
+                let xp = player.fishing
 
-                let fishingLevelNum = Math.trunc(player.fishing / 1000);
+                function levelFormula(xp){
+                    return Math.floor((1 + Math.sqrt(1 + (4 * xp)/7))/2);
+                  }
                 
-                if (player.inventory.length <= 21) {
-
-                    //Level 1
-
-                    if (fishingLevelNum < 1) {
-
-                        if (number < 80) {
-                            player.inventory.push(sardin);
-                            io.to(socket.id).emit('obtained', sardin);
-                            const fishingLevel = player.fishing + 100;
-                            player.fishing += 100;
-                            await Player.findOneAndUpdate({socket: socket.id}, {fishing: fishingLevel}, {new: true}).exec();
-                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
-                        } else {
-                            player.inventory.push(stick);
-                            io.to(socket.id).emit('obtained', stick);
-                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
-                        }
+                let fishingLevelNum = levelFormula(xp) ;
+                
+        
+                for (let fish of allFish) {
+                    console.log("Fish Level:", fish.level, "Player Level:", fishingLevelNum);
+                    if (fish.level <= fishingLevelNum) {
+                        availableFish.push(fish);
                     }
-
-                    //Level 2
-
-                    else if (fishingLevelNum < 3) {
-
-                        if (number < 60) {
-                            player.inventory.push(sardin);
-                            io.to(socket.id).emit('obtained', sardin);
-                            const fishingLevel = player.fishing + 100;
-                            player.fishing += 100;
-                            await Player.findOneAndUpdate({socket: socket.id}, {fishing: fishingLevel}, {new: true}).exec();
-                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
-                        } 
-                        
-                        else if (number < 80) {
-                            player.inventory.push(ballo);
-                            io.to(socket.id).emit('obtained', ballo);
-                            const fishingLevel = player.fishing + 500;
-                            player.fishing += 500;
-                            await Player.findOneAndUpdate({socket: socket.id}, {fishing: fishingLevel}, {new: true}).exec();
-                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
-                        } 
-                        
-                        else {
-                            player.inventory.push(chestKeyCommon);
-                            io.to(socket.id).emit('obtained', chestKeyCommon);
-                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
-                        }
-                    }
-
-                    //Level 3
-
-                    else if (fishingLevelNum < 6) {
-
-                        if (number < 60) {
-                            player.inventory.push(sardin);
-                            io.to(socket.id).emit('obtained', sardin);
-                            const fishingLevel = player.fishing + 100;
-                            player.fishing += 100;
-                            await Player.findOneAndUpdate({socket: socket.id}, {fishing: fishingLevel}, {new: true}).exec();
-                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
-                        } 
-                        
-                        else if (number < 70) {
-                            player.inventory.push(ballo);
-                            io.to(socket.id).emit('obtained', ballo);
-                            const fishingLevel = player.fishing + 500;
-                            player.fishing += 500;
-                            await Player.findOneAndUpdate({socket: socket.id}, {fishing: fishingLevel}, {new: true}).exec();
-                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
-                        } 
-
-                        else if (number < 80) {
-                            player.inventory.push(bass);
-                            io.to(socket.id).emit('obtained', bass);
-                            const fishingLevel = player.fishing + 1000;
-                            player.fishing += 1000;
-                            await Player.findOneAndUpdate({socket: socket.id}, {fishing: fishingLevel}, {new: true}).exec();
-                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
-                        } 
-                        
-                        else {
-                            player.inventory.push(chestKeyCommon);
-                            io.to(socket.id).emit('obtained', chestKeyCommon);
-                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
-                        }
-                    }
-
-                    //Level 4
-
-                    else if (fishingLevelNum < 12 || fishingLevelNum >= 12) {
-
-                        if (number < 50) {
-                            player.inventory.push(sardin);
-                            io.to(socket.id).emit('obtained', sardin);
-                            const fishingLevel = player.fishing + 100;
-                            player.fishing += 100;
-                            await Player.findOneAndUpdate({socket: socket.id}, {fishing: fishingLevel}, {new: true}).exec();
-                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
-                        } 
-                        
-                        else if (number < 60) {
-                            player.inventory.push(ballo);
-                            io.to(socket.id).emit('obtained', ballo);
-                            const fishingLevel = player.fishing + 500;
-                            player.fishing += 500;
-                            await Player.findOneAndUpdate({socket: socket.id}, {fishing: fishingLevel}, {new: true}).exec();
-                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
-                        } 
-
-                        else if (number < 70) {
-                            player.inventory.push(bass);
-                            io.to(socket.id).emit('obtained', bass);
-                            const fishingLevel = player.fishing + 1000;
-                            player.fishing += 1000;
-                            await Player.findOneAndUpdate({socket: socket.id}, {fishing: fishingLevel}, {new: true}).exec();
-                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
-                        } 
-
-                        else if (number < 80) {
-                            player.inventory.push(octopus);
-                            io.to(socket.id).emit('obtained', octopus);
-                            const fishingLevel = player.fishing + 1500;
-                            player.fishing += 1500;
-                            await Player.findOneAndUpdate({socket: socket.id}, {fishing: fishingLevel}, {new: true}).exec();
-                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
-                        } 
-                        
-                        else {
-                            player.inventory.push(chestKeyCommon);
-                            io.to(socket.id).emit('obtained', chestKeyCommon);
-                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
-                        }
-                    }
-
-                    myPlayer[socket.id] = player; 
-    
                 }
-              }
-              fishing();
+        
+                // Make sure `availableFish` is not empty
+                if (availableFish.length > 0) {
+                    const randomIndex = Math.floor(Math.random() * availableFish.length);
+                    const selectedFish = availableFish[randomIndex];
+        
+                    if (player.inventory.length <= 20) {
+                        console.log('hello', selectedFish); 
+
+                        player.inventory.push(selectedFish);
+                        player.fishing += selectedFish.xp
+
+                        io.to(socket.id).emit("obtained", selectedFish);
+
+                        await Player.findOneAndUpdate({socket: socket.id}, {fishing: player.fishing}, {new: true}).exec();
+                        await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
+        
+                        myPlayer[socket.id] = player;
+                    }
+                } else {
+                    console.log("No fish available for this level.");
+                }
+            }
+        
+            fishing();
         });
+        
 
         socket.on("consumable", (item) => {
             async function consume() {
@@ -1239,29 +1157,28 @@ async function main() {
                     
 
                     const loginAttempt = "success";
-                    //await pushItem(runeBullets, socket)
-                    //await pushItem(runeFireRate, socket)
-                    //await pushItem(runeRange, socket)
-                    //await pushItem(restfieldBlanket, socket)
-                    //await pushItem(restfieldBlanket, socket)
-                    //await pushItem(treeLeaf, socket)
-                    //await pushItem(treeLeaf, socket)
-                    // await pushItem(smallCommonMeat, socket)
+                    // await pushItem(hanami, socket)
+                    // await pushItem(fishBones, socket)
+                    // await pushItem(low, socket)
+                    // await pushItem(willy, socket)
+                    // await pushItem(barracuda, socket)
+                    // await pushItem(bloom, socket)
+                    // await pushItem(bulbber, socket)
                     // await pushItem(ballo, socket)
                     // await pushItem(sardin, socket)
-                    //await pushItem(octopus, socket)
+                    // await pushItem(octopus, socket)
                     // await pushItem(bass, socket)
-                    // await pushItem(reaperClothes, socket)
-                    // await pushItem(blackVampiresClothes, socket)
+                    // await pushItem(frostplum, socket)
+                    // await pushItem(reki, socket)
                     // await pushItem(fishermanClothes, socket)
-                    // await pushItem(tropicalHat, socket)
-                    // await pushItem(skullHelmet, socket)
-                    //await pushItem(stick, socket)
-                    //await pushItem(stick, socket)
-                    //await pushItem(stick, socket)
-                    //await pushItem(arcaneGem, socket)
-                    //await pushItem(arcaneGem2, socket)
-                    //await pushItem(arcaneGem3, socket)
+                    // await pushItem(ray, socket)
+                    // await pushItem(burpy, socket)
+                    // await pushItem(cody, socket)
+                    // await pushItem(minrow, socket)
+                    // await pushItem(nemi, socket)
+                    // await pushItem(arcaneGem, socket)
+                    // await pushItem(arcaneGem2, socket)
+                    // await pushItem(arcaneGem3, socket)
                     // await pushItem(arcaneRepeaterInv, socket)
                     // await pushItem(arcaneLancerInv, socket)
                     //await pushItem(arcaneStaffCommon, socket)
@@ -1714,38 +1631,210 @@ const chestKeyRestfield = {
     rarity: "rare",
     image: "./inventory/chestKeyRestfield.png",
 };
+
+const low = {
+    type: "fish",
+    name: "low",
+    level: 1,
+    zone: "solar",
+    xp: 5,
+    value: 4,
+    rarity: "rare",
+    image: "./inventory/low.png",
+};
 const sardin = {
     type: "fish",
     name: "sardin",
-    level: 1,
+    level: 5,
+    zone: "solar",
+    xp: 10,
     value: 1,
     rarity: "common",
     image: "./inventory/sarding.png",
 };
-const ballo = {
-     type: "fish",
-     name: "ballo",
-     level: 2,
-     value: 2,
-     rarity: "uncommon",
-     image: "./inventory/ballo.jpg",
+const nemi = {
+    type: "fish",
+    name: "nemi",
+    level: 7,
+    zone: "solar",
+    xp: 15,
+    value: 4,
+    rarity: "rare",
+    image: "./inventory/nemi.png",
+};
+const crab = {
+    type: "fish",
+    name: "crab",
+    level: 10,
+    zone: "ocean",
+    xp: 20,
+    value: 4,
+    rarity: "rare",
+    image: "./inventory/crab.png",
+};
+const hanami = {
+    type: "fish",
+    name: "hanami",
+    level: 12,
+    zone: "solar",
+    xp: 25,
+    value: 4,
+    rarity: "rare",
+    image: "./inventory/hanami.png",
+};
+const willy = {
+    type: "fish",
+    name: "willy",
+    level: 17,
+    zone: "solar",
+    xp: 30,
+    value: 4,
+    rarity: "rare",
+    image: "./inventory/willy.png",
+};
+const cork = {
+    type: "fish",
+    name: "cork",
+    level: 17,
+    zone: "solar",
+    xp: 35,
+    value: 4,
+    rarity: "rare",
+    image: "./inventory/willy.png",
 };
 const bass = {
     type: "fish",
     name: "bass",
-    level: 3,
+    level: 25,
+    zone: "solar",
+    xp: 40,
     value: 3,
     rarity: "rare",
     image: "./inventory/bass.png",
 };
+const barracuda = {
+    type: "fish",
+    name: "barracuda",
+    level: 30,
+    zone: "solar",
+    xp: 50,
+    value: 4,
+    rarity: "rare",
+    image: "./inventory/barracuda.png",
+};
+const ballo = {
+     type: "fish",
+     name: "ballo",
+     level: 34,
+     zone: "solar",
+     xp: 55,
+     value: 2,
+     rarity: "uncommon",
+     image: "./inventory/ballo.jpg",
+};
+const bloom = {
+    type: "fish",
+    name: "bloom",
+    level: 37,
+    zone: "solar",
+    xp: 60,
+    value: 4,
+    rarity: "rare",
+    image: "./inventory/bloom.png",
+};
+const bulbber = {
+    type: "fish",
+    name: "bulbber",
+    level: 40,
+    zone: "solar",
+    xp: 65,
+    value: 4,
+    rarity: "rare",
+    image: "./inventory/bulbber.png",
+};
 const octopus = {
     type: "fish",
     name: "octopus",
-    level: 5,
+    level: 47,
+    zone: "solar",
+    xp: 70,
     value: 4,
     rarity: "rare",
     image: "./inventory/octopus.png",
 };
+const frostplum = {
+    type: "fish",
+    name: "frostplum",
+    level: 50,
+    zone: "solar",
+    xp: 75,
+    value: 4,
+    rarity: "rare",
+    image: "./inventory/frostplum.png",
+};
+const reki = {
+    type: "fish",
+    name: "reki",
+    level: 55,
+    zone: "solar",
+    xp: 80,
+    value: 4,
+    rarity: "rare",
+    image: "./inventory/reki.png",
+};
+const ray = {
+    type: "fish",
+    name: "ray",
+    level: 57,
+    zone: "solar",
+    xp: 90,
+    value: 4,
+    rarity: "rare",
+    image: "./inventory/ray.png",
+};
+const burpy = {
+    type: "fish",
+    name: "burpy",
+    level: 60,
+    zone: "solar",
+    xp: 95,
+    value: 4,
+    rarity: "rare",
+    image: "./inventory/burpy.png",
+};
+const cody = {
+    type: "fish",
+    name: "cody",
+    level: 67,
+    zone: "solar",
+    xp: 100,
+    value: 4,
+    rarity: "rare",
+    image: "./inventory/cody.png",
+};
+const minrow = {
+    type: "fish",
+    name: "minrow",
+    level: 75,
+    zone: "solar",
+    xp: 105,
+    value: 4,
+    rarity: "rare",
+    image: "./inventory/minrow.png",
+};
+
+const fishBones = {
+    type: "fish",
+    name: "fishBones",
+    level: 1,
+    zone: "solar",
+    xp: 5,
+    value: 4,
+    rarity: "rare",
+    image: "./inventory/fishBones.png",
+};
+
+
 const treeLeaf = {
     type: "leaf",
     name: "treeLeaf",
@@ -2110,6 +2199,21 @@ const itemsObj = {
     ballo,
     bass,
     octopus,
+    nemi, 
+    hanami,
+    fishBones,
+    low,
+    willy,
+    cork,
+    barracuda,
+    bloom,
+    bulbber,
+    frostplum,
+    reki,
+    ray,
+    burpy,
+    cody,
+    minrow,
     mushroomClothesRed,
     mushroomClothesOrange,
     tropicalHatInventory,
