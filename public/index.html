@@ -53,7 +53,7 @@
 
     </div>
     
-    <div id="uiDev" style="display: flex;">
+    <div id="uiDev" style="display: none;">
       <button id="placeWalls" class="buttonDev pointerActivator">🧱</button>
       <button id="placeFishingArea" class="buttonDev pointerActivator">🐟</button>
       <button id="placeCraftingArea" class="buttonDev pointerActivator">🛠️</button>
@@ -346,33 +346,97 @@
         </div>
 
         <div id="fishOne"  class="bookOrganisation">
-          <div class="leftPage">
+          <div class="leftPage" >
             <p class="tittleBookSection">INGREDIENT</p>
 
+            <div class="bookTag pointerActivator fishBonesTag">
+              <img src="./inventory/fishBones.png" class=" fishIcon">
+              <p>Fish Bones</p>
+            </div>
+            <div class="bookTag pointerActivator lowTag">
+              <img src="./inventory/low.png" class=" fishIcon">
+              <p>Low</p>
+            </div>
             <div class="bookTag pointerActivator sardinTag">
               <img src="./inventory/sarding.png"  class=" fishIcon">
               <p>Sardin</p>
+            </div>  
+            <div class="bookTag pointerActivator nemiTag">
+              <img src="./inventory/nemi.png" class=" fishIcon">
+              <p>Nemi</p>
             </div>
+
             <div class="bookTag pointerActivator crabTag">
               <img src="./inventory/crab.png" class=" fishIcon">
               <p>Crab</p>
             </div>
-            <div class="bookTag pointerActivator balloTag">
-              <img src="./inventory/ballo.jpg" class=" fishIcon">
-              <p>Ballo</p>
+            <div class="bookTag pointerActivator hanamiTag">
+              <img src="./inventory/hanami.png" class=" fishIcon">
+              <p>Hanami</p>
             </div>
-            <div class="bookTag pointerActivator bassTag">
-              <img src="./inventory/bass.png" class=" fishIcon">
-              <p>Bass</p>
+            <div class="bookTag pointerActivator willyTag">
+              <img src="./inventory/willy.png" class=" fishIcon">
+              <p>Willy</p>
             </div>
             <div class="bookTag pointerActivator corkTag">
               <img src="./inventory/cork.png" class=" fishIcon">
               <p>Cork</p>
             </div>
+            <div class="bookTag pointerActivator bassTag">
+              <img src="./inventory/bass.png" class=" fishIcon">
+              <p>Bass</p>
+            </div>
+            <div class="bookTag pointerActivator barracudaTag">
+              <img src="./inventory/barracuda.png" class=" fishIcon">
+              <p>Barracuda</p>
+            </div>
+            <div class="bookTag pointerActivator balloTag">
+              <img src="./inventory/ballo.jpg" class=" fishIcon">
+              <p>Ballo</p>
+            </div>
+            <div class="bookTag pointerActivator bloomTag">
+              <img src="./inventory/bloom.png" class=" fishIcon">
+              <p>Bloom</p>
+            </div>
+            <div class="bookTag pointerActivator bulbberTag">
+              <img src="./inventory/bulbber.png" class=" fishIcon">
+              <p>Bulbber</p>
+            </div>
             <div class="bookTag pointerActivator octopusTag">
               <img src="./inventory/octopus.png" class=" fishIcon">
               <p>Octopus</p>
             </div>
+            <div class="bookTag pointerActivator frostplumTag">
+              <img src="./inventory/frostplum.png" class=" fishIcon">
+              <p>Frostplum</p>
+            </div>
+            <div class="bookTag pointerActivator rekiTag">
+              <img src="./inventory/reki.png" class=" fishIcon">
+              <p>Reki</p>
+            </div>
+            <div class="bookTag pointerActivator rayTag">
+              <img src="./inventory/ray.png" class=" fishIcon">
+              <p>Ray</p>
+            </div>
+            <div class="bookTag pointerActivator burpyTag">
+              <img src="./inventory/burpy.png" class=" fishIcon">
+              <p>Burpy</p>
+            </div>
+            <div class="bookTag pointerActivator codyTag">
+              <img src="./inventory/cody.png" class=" fishIcon">
+              <p>Cody</p>
+            </div>
+            <div class="bookTag pointerActivator minrowTag">
+              <img src="./inventory/minrow.png" class=" fishIcon">
+              <p>Minrow</p>
+            </div>
+            
+            
+            
+            
+            
+            
+            
           </div>
 
           <div class="rightPage">
@@ -605,6 +669,13 @@
     <img class="pointerActivator" id='chatIcon' src="./icons/uiIcon/chatIcon.png">
     <img class="pointerActivator" id="sitDownIcon" src="./icons/uiIcon/sittingDownIcon.png"></img>
     <img class="pointerActivator" id="hideAndSick" src="./icons/uiIcon/hideAndSickIcon.png"></img>
+    <img class="pointerActivator" id="fishingAvailable" src="./inventory/sarding.png"></img>
+
+    <div id="fishSelector">
+      <p>hello</p>
+    </div>
+
+    
 
     <form id="chat">
       <div id="chatHistory"></div>
@@ -687,7 +758,6 @@
         <!-- <img class="rockExploreMinigame" src="./exploreMinigame/rock.png" /> -->
       </div>
 
-      
       
       <div id="cookingContainer">
         <div id="paddle"></div>  

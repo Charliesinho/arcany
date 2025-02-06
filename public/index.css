@@ -674,6 +674,8 @@ body {
     justify-content: flex-start;
     gap: 25px;
     overflow: hidden;
+    overflow: auto;
+    
 }
 .rightPage{
     position: relative;
@@ -1156,6 +1158,38 @@ body {
     z-index: 2;
     width: 43px;
     height: auto;
+}
+#fishingAvailable{
+    display: none;
+    position: absolute;
+    bottom: 4px;
+    left: 215px;
+    z-index: 2;
+    width: 70px;
+    height: auto;
+}
+#fishSelector{
+    display: none;
+    position: absolute;
+    /* width: 300px; */
+    max-width: 248px;
+    max-height: 300px;
+    height: auto;
+    position: absolute;
+    bottom: 90px;
+    left: 12px;
+    /* transform: translate(-50%, -50%); */
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.fishSelectorIcon{
+    width: 50px;
+    height: 50px;
+    margin: 0px;
+    background-color: #FFE2C1;
+    border: solid 2px #4F3E2E;
+    border-radius: 5px;
+    box-shadow: 0px 3px 0px #4F3E2E;
 }
 
 #chat {
