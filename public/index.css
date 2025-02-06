@@ -129,24 +129,25 @@ body {
 }
 
 .animIntro {
+    opacity: 1;
     animation: animIntro 1s ease forwards;
 }
 
 @keyframes animIntro {
     0% {
-        top: 0;
+        opacity: 1;
         display: flex;
     }
     5% {
-        top: -10px;
+        opacity: 1;
         display: flex;
     }
     99% {
-        top: 100vh;
+        opacity: 0;
         display: flex;
     }
     100% {
-        top: 100vh;
+        opacity: 0;
         display: none;
     }
 }
@@ -155,6 +156,7 @@ body {
     height: calc(100vh - 0px);
     width: calc(100vw);
     image-rendering: pixelated;
+    transition: all 10s ease;
 }
 
 #blackScreen {
@@ -312,6 +314,60 @@ body {
     background: #b8b8b870;
 }
 
+
+#uiBuilding {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    align-items: center;
+    /* padding: 0 !important; */
+    padding: 10px;
+    /* background: white; */
+    border-radius: 5px;
+    display: none;
+    gap: 10px;
+    max-width: 720px;
+    /* height: 143px; */
+    overflow-x: auto;
+    border: solid 1px black;
+    z-index: 1;
+}
+
+.buildObject {
+}
+
+.buildObjectParent {
+    flex-shrink: 0;
+    position: relative;
+    top: 0;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url(./ui/uiInventoryBackground.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    filter: sepia(1) brightness(0.8) contrast(1.1);
+    transition: all .2s ease;
+    box-shadow: none;
+    border: solid 1px black;
+    border-radius: 5px;
+}
+
+.buildObjectParent:hover {
+    filter: none;
+    top: -5px;
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.142);
+}
+
+.buildObjectParent:active {
+    filter: saturate(1.3) brightness(1.2);
+    top: -10px;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.142);
+}
+
 #playerTradeId{
     margin-top: 30px;
     /* height: 40px; */
@@ -399,6 +455,7 @@ body {
 }
 .uiLabel{
     width: 80px;
+    z-index: 1;
 }
 #uiButtonOpener{
     position: absolute;
@@ -1491,6 +1548,7 @@ body {
     top: 50%;
     left: 75vw;
     transform: translate(-50%, 0%) rotate(-90deg);
+    z-index: 1;
 
     width: 350px;
     background-color: transparent;
@@ -1591,7 +1649,7 @@ body {
 
 .levelUpParent {
     position: absolute;
-    top: 50%;
+    top: 25%;
     left: 50%;
     z-index: 101;
     transform: translate(-50%, -50%);
@@ -2050,6 +2108,30 @@ body {
     background-color: #00000000;
 }
 
+.resetButton{
+    display: flex;
+    position: absolute;
+    right: 15px;
+    bottom: 17px;
+    width: 75px;
+    height: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-content: center;
+    text-align: center;
+    border-radius: 6px;
+    box-shadow: 0px 2px 0px 2px black;
+    border: solid 2px black;
+    background-color: white;
+    transition: all 0.25s ease;
+    pointer-events: all;
+}
+.resetButton:hover{
+    background-color: rgb(0, 0, 0);
+    color: white;
+    box-shadow: 0px 0px 0px 0px black;
+    bottom: 15px;
+}
 ::-webkit-scrollbar {
     width: 0px;
   }
@@ -2514,6 +2596,7 @@ body {
     justify-content: space-between;
     background: url(./Textures/questBack.png);
     background-size: cover;
+    z-index: 1;
 }
 
 .questTitle {

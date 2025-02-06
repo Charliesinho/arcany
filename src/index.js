@@ -696,7 +696,12 @@ async function main() {
                     else if (arrayOfNames.includes("restfieldBlanket")){
                         staff = restfieldGhostClothes; 
                         xp = 500;
+                    } 
+                    else{
+                        staff = trashCrafting,
+                        xp = 0;
                     }
+
                     
 
                     player.inventory.push(staff); 
@@ -1153,27 +1158,29 @@ async function main() {
                     
 
                     const loginAttempt = "success";
-                     //await pushItem(runeBullets, socket)
-                     await pushItem(restfieldBlanket, socket)
-                     await pushItem(restfieldBlanket, socket)
-                    //await pushItem(treeLeaf, socket)
-                    //await pushItem(treeLeaf, socket)
-                    // await pushItem(smallCommonMeat, socket)
-                    // await pushItem(ballo, socket)
-                    // await pushItem(sardin, socket)
-                    //await pushItem(octopus, socket)
-                    // await pushItem(bass, socket)
-                    // await pushItem(reaperClothes, socket)
-                    // await pushItem(blackVampiresClothes, socket)
-                    // await pushItem(fishermanClothes, socket)
-                    // await pushItem(tropicalHat, socket)
-                    // await pushItem(skullHelmet, socket)
-                    // await pushItem(arcaneGem, socket)
-                    // await pushItem(arcaneGem, socket)
-                    // await pushItem(arcaneGem, socket)
+                    // await pushItem(runeBullets, socket)
+                    // await pushItem(runeFireRate, socket)
+                    // await pushItem(runeRange, socket)
+                    // //await pushItem(restfieldBlanket, socket)
+                    // //await pushItem(restfieldBlanket, socket)
+                    // //await pushItem(treeLeaf, socket)
+                    // //await pushItem(treeLeaf, socket)
+                    // // await pushItem(smallCommonMeat, socket)
+                    // // await pushItem(ballo, socket)
+                    // // await pushItem(sardin, socket)
+                    // //await pushItem(octopus, socket)
+                    // // await pushItem(bass, socket)
+                    // // await pushItem(reaperClothes, socket)
+                    // // await pushItem(blackVampiresClothes, socket)
+                    // // await pushItem(fishermanClothes, socket)
+                    // // await pushItem(tropicalHat, socket)
+                    // // await pushItem(skullHelmet, socket)
+                    // //await pushItem(stick, socket)
+                    // //await pushItem(stick, socket)
                     // await pushItem(stick, socket)
-                    // await pushItem(stick, socket)
-                    // await pushItem(stick, socket)
+                    // await pushItem(arcaneGem, socket)
+                    // await pushItem(arcaneGem2, socket)
+                    // await pushItem(arcaneGem3, socket)
                     // await pushItem(arcaneRepeaterInv, socket)
                     // await pushItem(arcaneLancerInv, socket)
                     //await pushItem(arcaneStaffCommon, socket)
@@ -1424,6 +1431,14 @@ async function pushItem(item, socket) {
 
 // ITEMS
 
+const trashCrafting = {
+    type: "trash",
+    name: "trashCrafting",
+    level: 1,
+    value: 5,
+    rarity: "common",
+    image: "./inventory/trashCrafting.png",
+};
 const arcaneGem = {
     type: "gem",
     name: "arcaneGem",
@@ -2047,6 +2062,7 @@ const itemsObj = {
     octopusPlate,
     mediumMeatPlate,
     commonMeatPlate,
-    trashPlate
+    trashPlate,
+    trashCrafting
 };
 
