@@ -492,7 +492,7 @@ let blockMovement = true;
 socket.emit("blockMovement", blockMovement);
 
 //Labguage Button <
-const en = document.getElementById("en ");
+const en = document.getElementById("en");
 const sp = document.getElementById("sp");
 const fr = document.getElementById("fr");
 const pt = document.getElementById("pt");
@@ -5800,7 +5800,7 @@ let currentLand= "none";
 console.log("current land: ", currentLand)
 
 let mapsInfo = {
-residency: {
+  residency: {
     areaName: "CASTLESIDE TOWN",
     areaSounds: lobbySoundtrack,
     backgroundImage: residency,
