@@ -48,6 +48,42 @@ const lightPoleOne = new Image();
 lightPoleOne.src = "./objects/lightPoleOne.png"
 const mediumTorch = new Image();
 mediumTorch.src = "./objects/mediumTorch.png"
+const dirtFloorBig = new Image();
+dirtFloorBig.src = "./objects/dirtFloorBig.png"
+const plazaFountain = new Image();
+plazaFountain.src = "./objects/plazaFountain.png"
+const cookingStand = new Image();
+cookingStand.src = "./objects/cookingStand.png"
+const enchantingTower = new Image();
+enchantingTower.src = "./objects/enchantingTower.png"
+const enchantingTable = new Image();
+enchantingTable.src = "./objects/enchantingTable.png"
+const flagLine = new Image();
+flagLine.src = "./objects/flagLine.png"
+const plantPatch = new Image();
+plantPatch.src = "./objects/plantPatch.png"
+const woodFence = new Image();
+woodFence.src = "./objects/woodFence.png"
+const woodFenceVer = new Image();
+woodFenceVer.src = "./objects/woodFenceVer.png"
+const woodSmallWallHor = new Image();
+woodSmallWallHor.src = "./objects/woodSmallWallHor.png"
+const woodSmallWallVert = new Image();
+woodSmallWallVert.src = "./objects/woodSmallWallVert.png"
+const woodWallDoor = new Image();
+woodWallDoor.src = "./objects/woodWallDoor.png"
+const woodWallHor = new Image();
+woodWallHor.src = "./objects/woodWallHor.png"
+const woodWallVer = new Image();
+woodWallVer.src = "./objects/woodWallVer.png"
+const woodWindowWall = new Image();
+woodWindowWall.src = "./objects/woodWindowWall.png"
+const fishPond = new Image();
+fishPond.src = "./objects/fishPond.png"
+const dryGrass = new Image();
+dryGrass.src = "./objects/dryGrass.png"
+const smallLake = new Image();
+smallLake.src = "./objects/smallLake.png"
 
 const residency = new Image();
 residency.src = "./islands/residency.png"
@@ -437,9 +473,11 @@ grasslandsLoop1.volume = 0.0;
 const grasslandsEnviroment = new Audio("./audios/forestSounds.wav");
 grasslandsEnviroment.loop = true;
 
-const restfield = new Audio("./audios/restfield.mp3");
+const nighttimeForest = new Audio("./audios/nighttimeForest.wav");
+nighttimeForest.loop = true;
+
+const restfield = new Audio("./audios/restfield.wav");
 restfield.loop = true;
-restfield.volume = 0.05;
 
 const towerSound = new Audio("./audios/towerSound.wav");
 towerSound.loop = true;
@@ -5729,62 +5767,65 @@ liquidTransition.addEventListener("click", function() {
 
 // Sounds >
 
+let dayTimeVolume = 1;
+let nightTimeVolume = 0;
+
+let currentSoundtrack;
+let currentNightSoundtrack;
+
 function stopAllSound() {
-  grasslandsLoop1.pause();
-  grasslandsLoop1.currentTime = 0;
+  currentSoundtrack.pause();
+  currentSoundtrack.currentTime = 0;
   
   suspense1.pause();
   suspense1.currentTime = 0;
 
-  grasslandsEnviroment.pause();
-  grasslandsEnviroment.currentTime = 0;
-  
-  restfield.pause();
-  restfield.currentTime = 0;
- 
   fightMusic1.pause();
   fightMusic1.currentTime = 0;
-  
-  towerSound.pause();
-  towerSound.currentTime = 0;
   
   SokosBoss.pause();
   SokosBoss.currentTime = 0;
 
-  ArcaneEnv.pause();
-  ArcaneEnv.currentTime = 0;
-
-  lobbySong.pause();
-  lobbySong.currentTime = 0;
-
-  grassLandsSong.pause();
-  grassLandsSong.currentTime = 0;
 }
 
-
 function arcaneSoundtrack () {
-  ArcaneEnv.play()
+  currentSoundtrack = ArcaneEnv.play()
+  currentNightSoundtrack = nighttimeForest;
+  currentSoundtrack.play();
+  currentNightSoundtrack.play();
+  currentNightSoundtrack.volume = currentNightSoundtrackVolume;
 }
 
 function lobbySoundtrack () {
-  // grasslandsLoop1.play();
-  grasslandsEnviroment.play();
-  console.log("playing lobby song")
-  // lobbySong.play()
+  currentSoundtrack = grasslandsEnviroment
+  currentNightSoundtrack = nighttimeForest;
+  currentSoundtrack.play();
+  currentNightSoundtrack.play();
+  currentNightSoundtrack.volume = currentNightSoundtrackVolume;
 }
 
 function restfieldSoundtrack () {
-  restfield.play();
+  currentSoundtrack = restfield;
+  currentNightSoundtrack = nighttimeForest;
+  currentSoundtrack.play();
+  currentNightSoundtrack.play();
+  currentNightSoundtrack.volume = currentNightSoundtrackVolume;
 }
 
 function grassLandsSoundtrack () {
-  grasslandsLoop1.play();
-  grasslandsEnviroment.play();
-  // grassLandsSong.play()
+  currentSoundtrack = grasslandsEnviroment;
+  currentNightSoundtrack = nighttimeForest;
+  currentSoundtrack.play();
+  currentNightSoundtrack.play();
+  currentNightSoundtrack.volume = currentNightSoundtrackVolume;
 }
  
 function towerSoundSoundtrack () {
-  towerSound.play();
+  currentSoundtrack = towerSound;
+  currentNightSoundtrack = nighttimeForest;
+  currentSoundtrack.play();
+  currentNightSoundtrack.play();
+  currentNightSoundtrack.volume = currentNightSoundtrackVolume;
 }
 
 function areaNameDisplay (name) {
@@ -5915,6 +5956,116 @@ let mapObject = [
     w: 23
   },
   {
+    name: "enchantingTower",
+    backgroundObj: false,
+    img: enchantingTower,
+    x: 0,
+    y: 0,
+    h: 357,
+    w: 119
+  },
+  {
+    name: "enchantingTable",
+    backgroundObj: false,
+    img: enchantingTable,
+    x: 0,
+    y: 0,
+    h: 72,
+    w: 75,
+    animated: true,
+  },
+  {
+    name: "plantPatch",
+    backgroundObj: true,
+    img: plantPatch,
+    x: 0,
+    y: 0,
+    h: 15,
+    w: 16
+  },
+  {
+    name: "woodFenceVer",
+    backgroundObj: false,
+    img: woodFenceVer,
+    x: 0,
+    y: 0,
+    h: 35,
+    w: 7
+  },
+  {
+    name: "woodFence",
+    backgroundObj: false,
+    img: woodFence,
+    x: 0,
+    y: 0,
+    h: 22,
+    w: 28
+  },
+  {
+    name: "woodSmallWallHor",
+    backgroundObj: false,
+    img: woodSmallWallHor,
+    x: 0,
+    y: 0,
+    h: 22,
+    w: 31
+  },
+  {
+    name: "woodSmallWallVert",
+    backgroundObj: false,
+    img: woodSmallWallVert,
+    x: 0,
+    y: 0,
+    h: 37,
+    w: 7
+  },
+  {
+    name: "woodWallDoor",
+    backgroundObj: false,
+    img: woodWallDoor,
+    x: 0,
+    y: 0,
+    h: 52,
+    w: 67
+  },
+  {
+    name: "woodWallHor",
+    backgroundObj: false,
+    img: woodWallHor,
+    x: 0,
+    y: 0,
+    h: 52,
+    w: 67
+  },
+  {
+    name: "woodWindowWall",
+    backgroundObj: false,
+    img: woodWindowWall,
+    x: 0,
+    y: 0,
+    h: 52,
+    w: 67
+  },
+  {
+    name: "woodWallVer",
+    backgroundObj: false,
+    img: woodWallVer,
+    x: 0,
+    y: 0,
+    h: 92,
+    w: 7
+  },
+  {
+    name: "flagLine",
+    backgroundObj: "front",
+    img: flagLine,
+    x: 0,
+    y: 0,
+    h: 26,
+    w: 123,
+    animated: true,
+  },
+  {
     name: "treeOne",
     backgroundObj: false,
     img: treeOne,
@@ -5994,7 +6145,8 @@ let mapObject = [
     y: 0,
     h: 18,
     w: 21,
-    lightSource: true
+    lightSource: true,
+    animated: true,
   },
   {
     name: "cookingPotObj",
@@ -6002,8 +6154,53 @@ let mapObject = [
     img: cookingPotObj,
     x: 0,
     y: 0,
-    h: 31,
-    w: 54
+    h: 30,
+    w: 26,
+    lightSource: true,
+    animated: true,
+  },
+  {
+    name: "fishPond",
+    backgroundObj: false,
+    img: fishPond,
+    x: 0,
+    y: 0,
+    h: 30,
+    w: 30,
+    lightSource: false,
+    animated: true,
+  },
+  {
+    name: "smallLake",
+    backgroundObj: true,
+    img: smallLake,
+    x: 0,
+    y: 0,
+    h: 112,
+    w: 112,
+    lightSource: false,
+    animated: true,
+  },
+  {
+    name: "dryGrass",
+    backgroundObj: false,
+    img: dryGrass,
+    x: 0,
+    y: 0,
+    h: 15,
+    w: 15,
+    lightSource: false,
+    animated: true,
+  },
+  {
+    name: "plazaFountain",
+    backgroundObj: false,
+    img: plazaFountain,
+    x: 0,
+    y: 0,
+    h: 84,
+    w: 131,
+    animated: true,
   },
   {
     name: "grassOne",
@@ -6013,6 +6210,24 @@ let mapObject = [
     y: 0,
     h: 7,
     w: 10
+  },
+  {
+    name: "cookingStand",
+    backgroundObj: false,
+    img: cookingStand,
+    x: 0,
+    y: 0,
+    h: 79,
+    w: 105
+  },
+  {
+    name: "dirtFloorBig",
+    backgroundObj: true,
+    img: dirtFloorBig,
+    x: 0,
+    y: 0,
+    h: 47,
+    w: 57
   },
   {
     name: "lightPoleOne",
@@ -43299,26 +43514,64 @@ function updateSmoothOnlinePlayerPosition(smoothPlayer) {
 }
 
 const DayCycleFilters = [
-  'hue-rotate(0deg) brightness(1)',  
-  'hue-rotate(-48deg) brightness(1)', 
-  'hue-rotate(70deg) brightness(0.5)', 
-  'hue-rotate(-48deg) brightness(1)'
+  'sepia(0%) hue-rotate(0deg) saturate(1) contrast(1) brightness(1)',  
+  'sepia(64%) hue-rotate(-39deg) saturate(2) contrast(.9) brightness(.9)', 
+  'sepia(78%) hue-rotate(161deg) saturate(1.5) contrast(1) brightness(.6)', 
+  'sepia(64%) hue-rotate(-39deg) saturate(2) contrast(.9) brightness(.9)'
 ];
 
 let DayCycleState = 0;
 
+let currentSoundtrackVolume = 1;
+let currentNightSoundtrackVolume = 0;
+
 setInterval(() => {
   canvasLobby.style.filter = DayCycleFilters[DayCycleState];
 
-  if (DayCycleState === 2) {  // Night time state (opacity set to 0)
-    targetAlphaCycle = 1;  // Fade out to 0 opacity
+  let targetDayVolume, targetNightVolume;
+
+  if (DayCycleState === 0 || DayCycleState === 3) {
+    targetDayVolume = 1;
+    targetNightVolume = 0;
+  } else if (DayCycleState === 2) {
+    targetDayVolume = 0;
+    targetNightVolume = 1;
   } else {
-    targetAlphaCycle = 0;  // Fade in to full opacity
+    targetDayVolume = 0;
+    targetNightVolume = 0;
+  }
+
+  const volumeInterval = setInterval(() => {
+    const step = 0.01; 
+
+    if (Math.abs(currentSoundtrackVolume - targetDayVolume) > step) {
+      currentSoundtrackVolume += (targetDayVolume - currentSoundtrackVolume) / 20; // Smooth adjustment
+      currentSoundtrack.volume = currentSoundtrackVolume;
+    }
+
+    if (Math.abs(currentNightSoundtrackVolume - targetNightVolume) > step) {
+      currentNightSoundtrackVolume += (targetNightVolume - currentNightSoundtrackVolume) / 20;
+      currentNightSoundtrack.volume = currentNightSoundtrackVolume;
+    }
+
+    if (
+      Math.abs(currentSoundtrackVolume - targetDayVolume) <= step &&
+      Math.abs(currentNightSoundtrackVolume - targetNightVolume) <= step
+    ) {
+      clearInterval(volumeInterval);
+    }
+  }, 50); 
+
+  if (DayCycleState === 2) { 
+    targetAlphaCycle = 1; 
+  } else {
+    targetAlphaCycle = 0; 
   }
 
   DayCycleState = (DayCycleState + 1) % DayCycleFilters.length;
 
-}, 20000); 
+}, 120000);
+
 
 function mapSetup () {
   if (myPlayer) {
@@ -44657,7 +44910,15 @@ function drawDevWallsPlacement () {
   else if (currentDevAction === "building") {
     const obj = mapObject.find(item => item.name === currentObjToPlace);
     if (!obj) return
-    drawOnTop(obj.img, hoveredXCoord + 200, hoveredYCoord + 200, obj.w, obj.h, cameraX, cameraY)
+    drawOnTop(
+      obj.img, 
+      hoveredXCoord + 200, 
+      hoveredYCoord + 200, 
+      obj.w, obj.h, 
+      cameraX, 
+      cameraY,
+      obj.animated
+    )
   }
   else {
     canvas.fillStyle = `rgba(210, 45, 45, ${wallsVisibility})`;
@@ -46200,14 +46461,14 @@ function nightTimeCanvas() {
   }
 
   if (Math.abs(currentAlphaCycle - targetAlphaCycle) > 0.01) {
-    currentAlphaCycle += (targetAlphaCycle - currentAlphaCycle) / 100;
+    currentAlphaCycle += (targetAlphaCycle - currentAlphaCycle) / 300;
   } else {
     currentAlphaCycle = targetAlphaCycle;
   }
 
   b_ctx.globalAlpha = currentAlphaCycle;
 
-  b_ctx.fillStyle = 'rgba(0, 0, 0, 1)';
+  b_ctx.fillStyle = 'rgba(6, 14, 52, 0.91)';
   b_ctx.fillRect(0, 0, 4500, 4500);
 
   function addLight(ctx, x, y) {
@@ -46218,14 +46479,20 @@ function nightTimeCanvas() {
     ctx.closePath();
     
     ctx.beginPath();
-    ctx.arc(x, y, 210 + value, 0, Math.PI * 2);  // Create a white circle with radius 500
+    ctx.arc(x, y, 220 + value, 0, Math.PI * 2);  // Create a white circle with radius 500
     ctx.fillStyle = 'rgba(248, 248, 248, 0.50)';
     ctx.fill();  // Fill the circle with white
     ctx.closePath();
     
     ctx.beginPath();
-    ctx.arc(x, y, 220 + value, 0, Math.PI * 2);  // Create a white circle with radius 500
+    ctx.arc(x, y, 240 + value, 0, Math.PI * 2);  // Create a white circle with radius 500
     ctx.fillStyle = 'rgba(248, 248, 248, 0.15)';
+    ctx.fill();  // Fill the circle with white
+    ctx.closePath();
+    
+    ctx.beginPath();
+    ctx.arc(x, y, 260 + value, 0, Math.PI * 2);  // Create a white circle with radius 500
+    ctx.fillStyle = 'rgba(248, 248, 248, 0.05)';
     ctx.fill();  // Fill the circle with white
     ctx.closePath();
   }
