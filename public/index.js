@@ -492,7 +492,7 @@ let blockMovement = true;
 socket.emit("blockMovement", blockMovement);
 
 //Labguage Button <
-const en = document.getElementById("en");
+const en = document.getElementById("en ");
 const sp = document.getElementById("sp");
 const fr = document.getElementById("fr");
 const pt = document.getElementById("pt");
@@ -1375,6 +1375,10 @@ function showChatFunction(){
   if(!chatIsActivate){
     chat.style.display = "block";
     chatIsActivate = true;
+    
+fishSelectorButton.style.display = 'none'
+    fishingAvailablevar = false
+
   }else if(chatIsActivate){
     chat.style.display = "none";
     chatButton.style.bottom = "10px"
@@ -1385,6 +1389,8 @@ function showChatFunction(){
     chatInput.disabled = false;
     blockMovement = false;
     noMovement = false
+
+    
   }
 }
 
@@ -2089,9 +2095,14 @@ sitDownIconButton.addEventListener("click", () => {
     animPlayer = "sittingDown"
     socket.emit("animPlayer", animPlayer);
     socket.emit("lastLookPlayer", lastLookPlayer);
+  } else {
+    animPlayer = "idleRight"
+    socket.emit("animPlayer", animPlayer);
+    socket.emit("lastLookPlayer", lastLookPlayer);
   }
   
 })
+
 let hideAndSickvar = false
 let fishingAvailablevar = false
 
@@ -2108,6 +2119,15 @@ fishingAvailableButton.addEventListener("click", () => {
   if (fishingAvailablevar === false){
     fishSelectorButton.style.display = 'flex'
     fishingAvailablevar = true
+
+    chatIsActivate = false
+    chat.style.display = "none";
+    chatButton.style.bottom = "10px"
+    chatInput.value = "";
+    chatInput.disabled = true;
+    chatInput.disabled = false;
+    blockMovement = false;
+    noMovement = false
   } else {
     fishSelectorButton.style.display = 'none'
     fishingAvailablevar = false
@@ -3507,10 +3527,14 @@ function xpForLevel(level) {
   return 8 * Math.pow(level, 2) - 8 * level;
 }
 
+let fishSelected = ''
+
 function displayFishImages() {
   // Clear existing content before adding new elements
   fishSelectorButton.innerHTML = "";
   
+
+
   Object.values(objFishes).forEach(fish => {
       const img = document.createElement("img");
       img.src = fish.img;
@@ -3522,7 +3546,15 @@ function displayFishImages() {
       
 
       if(fish.lvlNum <= currentFishingLevel){
-
+        img.addEventListener('click', () => {
+          if(fishSelected === fish.name){
+            fishSelected = ''
+          } else {
+            fishSelected = fish.name
+            fishingAvailableButton.src = fish.img
+          }
+          console.log(fish.name)
+        })
         fishSelectorButton.appendChild(img);
       }
 
@@ -4513,9 +4545,7 @@ socket.on("loginAttempt", (msg) => {
     menuUi.style.display = "flex";
     uiButtonParent.style.display = "flex";
     menuUiProfile.style.display = "flex";
-    chatButton.style.display = "block";
-    sitDownIconButton.style.display = "block";
-    hideAndSickButton.style.display = "block";
+    toolBar.style.display = "flex"
     fishingAvailableButton.style.display = "block";
     
 
@@ -4792,7 +4822,7 @@ window.addEventListener("keydown", (e) => {
 
     if (marginFish < 65 && marginFish > 35) {
 
-      socket.emit("fishing", "trying");
+      socket.emit("fishing", fishSelected);
       cameraShake();
       marginFish = 100;
       audioClick.play();

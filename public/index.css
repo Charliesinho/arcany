@@ -264,16 +264,6 @@ body {
     }
 }
 
-#tradeButton {
-    position: absolute;
-    left: 165px;
-    bottom: 10px;
-    height: 50px;
-    width: 50px;
-    background: url("./icons/cards.png");
-    background-size: cover;
-}
-
 #tradeScreen {
     position: absolute;
     width: 500px;
@@ -1074,43 +1064,20 @@ body {
     background: rgb(255, 248, 146) !important;
 }
 
-#chatIcon{
+#toolBar{
     display: none;
     position: absolute;
-    bottom: 10px;
+    bottom: 20px;
     left: 10px;
-    z-index: 2;
-    width: 50px;
-    height: auto;
+    align-items: center;
+    gap: 10px;
 }
 
-#sitDownIcon{
-    display: none;
-    position: absolute;
-    bottom: 15px;
-    left: 70px;
-    z-index: 2;
-    width: 35px;
-    height: auto;
+.toolBarIcon{
+    width: 50px;
 }
-#hideAndSick{
-    display: none;
-    position: absolute;
-    bottom: 14px;
-    left: 115px;
-    z-index: 2;
-    width: 43px;
-    height: auto;
-}
-#fishingAvailable{
-    display: none;
-    position: absolute;
-    bottom: 4px;
-    left: 215px;
-    z-index: 2;
-    width: 70px;
-    height: auto;
-}
+
+
 #fishSelector{
     display: none;
     position: absolute;
@@ -1119,13 +1086,14 @@ body {
     max-height: 300px;
     height: auto;
     position: absolute;
-    bottom: 90px;
-    left: 12px;
+    bottom: 70px;
+    left: 5px;
     /* transform: translate(-50%, -50%); */
     gap: 10px;
     flex-wrap: wrap;
 }
 .fishSelectorIcon{
+    position: relative;
     width: 50px;
     height: 50px;
     margin: 0px;
@@ -1133,13 +1101,29 @@ body {
     border: solid 2px #4F3E2E;
     border-radius: 5px;
     box-shadow: 0px 3px 0px #4F3E2E;
+    transition: all 0.25s ease;
+    top: 0px;
+
+}
+.fishSelectorIcon:hover{
+    width: 50px;
+    height: 50px;
+    margin: 0px;
+    background-color: #4F3E2E;
+    border: solid 2px #4F3E2E;
+    border-radius: 5px;
+    box-shadow: 0px 0px 0px #4F3E2E;
+    top: 2px;
+ 
+
+
 }
 
 #chat {
     display: none;
     position: absolute;
     z-index: 1;
-    bottom: 60px;
+    bottom: 75px;
     left: 10px;
     color: rgb(255, 255, 255);
     /* display: flex; */
