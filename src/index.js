@@ -225,10 +225,10 @@ async function main() {
             }
         });
   
-        socket.on("fishing", async () => {
+        socket.on("fishing", async (fishSelected) => {
             let availableFish = [];
             const allFish = [
-                sardin,
+                sardine,
                 ballo,
                 bass,
                 octopus,
@@ -262,18 +262,27 @@ async function main() {
                 
         
                 for (let fish of allFish) {
-                    console.log("Fish Level:", fish.level, "Player Level:", fishingLevelNum);
                     if (fish.level <= fishingLevelNum) {
                         availableFish.push(fish);
                     }
                 }
-        
-                // Make sure `availableFish` is not empty
+
                 if (availableFish.length > 0) {
                     const randomIndex = Math.floor(Math.random() * availableFish.length);
-                    const selectedFish = availableFish[randomIndex];
-        
-                    if (player.inventory.length <= 20) {
+                    let selectedFish;
+
+                    if(fishSelected === ''){
+                        selectedFish = availableFish[randomIndex];
+                    } else {
+                        let fishToChoose = fishSelected.toLowerCase()
+                        for(let fish of allFish){
+                            if(fish.name === fishToChoose){
+                                selectedFish = fish
+                            }
+                        }
+                    }
+        console.log(selectedFish, fishSelected, fishSelected.toLowerCase())
+                    if (player.inventory.length <= 21) {
                         console.log('hello', selectedFish); 
 
                         player.inventory.push(selectedFish);
@@ -782,7 +791,7 @@ async function main() {
 
                 const player = await Player.findOne({socket: socket.id}).exec();
 
-                if (player.inventory.length <= 20) {
+                if (player.inventory.length <= 21) {
                     
                     if (item === "stick") {
                         const key = player.inventory.find(item => item.name === "chestKeyCommon");
@@ -1563,9 +1572,9 @@ const low = {
     rarity: "rare",
     image: "./inventory/low.png",
 };
-const sardin = {
+const sardine = {
     type: "fish",
-    name: "sardin",
+    name: "sardine",
     level: 5,
     zone: "solar",
     xp: 10,
@@ -2116,7 +2125,7 @@ const itemsObj = {
     chestKey,
     chestKeyRestfield,
     chestKeyCommon,
-    sardin,
+    sardine,
     ballo,
     bass,
     octopus,
