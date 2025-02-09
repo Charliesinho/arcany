@@ -308,43 +308,47 @@ body {
 
 #uiBuilding {
     position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translate(-50%, 0);
+    bottom: 103px;
+    left: 0px;
+    /* transform: translate(0%, -50%); */
     align-items: center;
     /* padding: 0 !important; */
     padding: 10px;
     /* background: white; */
     border-radius: 5px;
     display: none;
+    flex-direction: column;
     gap: 10px;
-    max-width: 720px;
+    max-height: 559px;
     /* height: 143px; */
-    overflow-x: auto;
-    border: solid 1px black;
+    overflow-y: auto;
+    /* border: solid 1px black; */
     z-index: 1;
 }
 
 .buildObject {
+    height: 24px;
+    width: 24px;
 }
 
 .buildObjectParent {
     flex-shrink: 0;
     position: relative;
     top: 0;
-    width: 80px;
-    height: 80px;
+    width: 50px;
+    height: 50px;
+    padding: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: url(./ui/uiInventoryBackground.png);
-    background-size: contain;
+    background: url(./icons/uiIcon/bg.png);
+    background-size: cover;
     background-repeat: no-repeat;
-    filter: sepia(1) brightness(0.8) contrast(1.1);
+    /* filter: sepia(1) brightness(0.8) contrast(1.1); */
     transition: all .2s ease;
     box-shadow: none;
-    border: solid 1px black;
-    border-radius: 5px;
+    /* border: solid 1px black; */
+    /* border-radius: 5px; */
     overflow: hidden;
 }
 
@@ -1130,11 +1134,23 @@ body {
     bottom: 20px;
     left: 10px;
     align-items: center;
-    gap: 10px;
+    gap: 5px;
+    z-index: 1;
 }
 
 .toolBarIcon{
     width: 50px;
+    height: 50px;
+    background: url(./icons/uiIcon/bg.png);
+    background-size: contain;
+    padding: 10px;
+    position: relative;
+    top: 0px;
+    transition: all .1s ease;
+}
+
+.toolBarIcon:active{
+    top: -10px;
 }
 
 
@@ -1146,53 +1162,49 @@ body {
     max-height: 300px;
     height: auto;
     position: absolute;
-    bottom: 70px;
-    left: 5px;
+    bottom: 87px;
+    left: 1px;
     /* transform: translate(-50%, -50%); */
-    gap: 10px;
+    gap: 5px;
     flex-wrap: wrap;
     z-index: 1;
 }
 .fishSelectorIcon{
     position: relative;
     width: 50px;
+    padding: 10px;
     height: 50px;
     margin: 0px;
-    background-color: #FFE2C1;
-    border: solid 2px #4F3E2E;
+    background: url(./icons/uiIcon/bg.png);
+    background-size: cover;
+    /* border: solid 2px #4F3E2E; */
     border-radius: 5px;
-    box-shadow: 0px 3px 0px #4F3E2E;
+    box-shadow: 0px 3px 0px #4F3E2E, inset 0px -3px 0px #4F3E2E;
     transition: all 0.25s ease;
     top: 0px;
-
 }
 .fishSelectorIcon:hover{
-    width: 50px;
-    height: 50px;
-    margin: 0px;
     background-color: #4F3E2E;
-    border: solid 2px #4F3E2E;
-    border-radius: 5px;
+    /* border: solid 2px #4F3E2E; */
     box-shadow: 0px 0px 0px #4F3E2E;
     top: 2px;
- 
-
-
 }
 
 #chat {
     display: none;
     position: absolute;
     z-index: 1;
-    bottom: 75px;
+    bottom: 107px;
     left: 10px;
     color: rgb(255, 255, 255);
-    /* display: flex; */
+    /* display: flex
+; */
     /* height: 300px; */
+    border-radius: 3px;
     background: var(--backgroundObjects);
     opacity: .3;
     transition: all .2s ease;
-    animation: showChat 0.5s ease forwards ;
+    animation: showChat 0.5s ease forwards;
 }
 
 

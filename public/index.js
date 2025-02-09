@@ -1,7 +1,7 @@
 //Change this to push >
 
-const socket = io(`ws://localhost:5000`);
-//const socket = io(`https://arcanyGame.up.railway.app/`);
+// const socket = io(`ws://localhost:5000`);
+const socket = io(`https://arcanyGame.up.railway.app/`);
 
 //Change this to push <
 
@@ -84,6 +84,48 @@ const dryGrass = new Image();
 dryGrass.src = "./objects/dryGrass.png"
 const smallLake = new Image();
 smallLake.src = "./objects/smallLake.png"
+const booksOne = new Image();
+booksOne.src = "./objects/booksOne.png"
+const redSmallCarpet = new Image();
+redSmallCarpet.src = "./objects/redSmallCarpet.png"
+const chairLeft = new Image();
+chairLeft.src = "./objects/chairLeft.png"
+const chairRight = new Image();
+chairRight.src = "./objects/chairRight.png"
+const decoOne = new Image();
+decoOne.src = "./objects/decoOne.png"
+const hangingPlant = new Image();
+hangingPlant.src = "./objects/hangingPlant.png"
+const hangingPlantRed = new Image();
+hangingPlantRed.src = "./objects/hangingPlantRed.png"
+const lanternOne = new Image();
+lanternOne.src = "./objects/lanternOne.png"
+const paintFour = new Image();
+paintFour.src = "./objects/paintFour.png"
+const paintOne = new Image();
+paintOne.src = "./objects/paintOne.png"
+const paintThree = new Image();
+paintThree.src = "./objects/paintThree.png"
+const paintTwo = new Image();
+paintTwo.src = "./objects/paintTwo.png"
+const potPlantFour = new Image();
+potPlantFour.src = "./objects/potPlantFour.png"
+const potPlantThree = new Image();
+potPlantThree.src = "./objects/potPlantThree.png"
+const potPlantTwo = new Image();
+potPlantTwo.src = "./objects/potPlantTwo.png"
+const potPlantOne = new Image();
+potPlantOne.src = "./objects/potPlantOne.png"
+const shelves = new Image();
+shelves.src = "./objects/shelves.png"
+const stoneFloor = new Image();
+stoneFloor.src = "./objects/stoneFloor.png"
+const vineTwo = new Image();
+vineTwo.src = "./objects/vineTwo.png"
+const woodFloor = new Image();
+woodFloor.src = "./objects/woodFloor.png"
+const woodTable = new Image();
+woodTable.src = "./objects/woodTable.png"
 
 const residency = new Image();
 residency.src = "./islands/residency.png"
@@ -594,8 +636,6 @@ const menuUiButtonSoulCollection = document.getElementById("uiButtonSoulCollecti
 const menuUiButtonQuest = document.getElementById("uiButtonQuest");
 const menuUiButtonBooks = document.getElementById("uiButtonBooks");
 
-const uiBuilding = document.getElementById('uiBuilding');
-
 const deleteInventoryButton = document.getElementById("deleteInventoryButton");
 const trashIcon = document.getElementById("trashIcon")
 
@@ -817,10 +857,10 @@ const timer = document.querySelector("#timer");
 
 const uiProfileRank = document.getElementById("uiProfileRank");
 
-const placeWalls = document.getElementById("placeWalls");
+const placeWalls = document.getElementById("wallsButton");
 const deleteWalls = document.getElementById("deleteWalls");
 const placeEnchantingArea = document.getElementById("placeEnchantingArea");
-const startBuildingBut = document.getElementById("startBuildingBut");
+const startBuildingBut = document.getElementById("buildButton");
 const showWalls = document.getElementById("showWalls");
 const exportWalls = document.getElementById("exportWalls");
 const placeFishingArea = document.getElementById("placeFishingArea");
@@ -833,6 +873,7 @@ const dialogsDiv = document.getElementById('dialogsDev');
 const arcaneTransition = document.getElementById('arcaneTransition');
 const liquidTransition = document.getElementById('liquidTransition');
 const placeDialog = document.getElementById('placeDialog');
+const uiBuilding = document.getElementById('uiBuilding');
 
 const exploreMap = document.getElementById("exploreMap");
 const scores = document.getElementById("scores");
@@ -909,10 +950,10 @@ const catchGif = document.getElementById("catchGif");
 
 //Ui interaction >
 
-uiBuilding.addEventListener('wheel', (event) => {
-  event.preventDefault(); // Stop vertical scrolling
-  uiBuilding.scrollLeft += event.deltaY; // Scroll horizontally
-});
+// uiBuilding.addEventListener('wheel', (event) => {
+//   event.preventDefault(); // Stop vertical scrolling
+//   uiBuilding.scrollLeft += event.deltaY; // Scroll horizontally
+// });
 
 logOutButton.addEventListener("click", function(){
   location.reload();
@@ -3655,6 +3696,7 @@ questClose.addEventListener("click", () => {
 })
 
 let updateDialogs = true;
+let mapObject;
 
 socket.on("player", (serverPlayer) => {
 
@@ -3688,547 +3730,1047 @@ socket.on("player", (serverPlayer) => {
     currentHealth = maxHealth
   }
 
-  dialogBoxes = {
-
-
-    // CASTLESIDE
-    "Fishing Quest": {
-    dialogName: "quest",
-    questRequirements: [],
-    type: "counter",
-    questName: "Fishing quest",
-    questDecription: "The dude said that if I bring him ten sardines then he will give me a reward",
-    questCard: "./Cards/fish.png",
-    rewardType: "soul",
-    rewardItem: "frogSoulInventory",
-    completionItem: "sardin",
-    completionAmount: 10,
-    markerX: 1922 + 364,
-    markerY: 1879 + 347 / 2,
-    
-    dialogText:
-    [
-      {
-        NPC: "Fisherman",
-        text: "Hello Adventurer! Oh you are looking for a task?",
-      },
-      {
-        NPC: "Fisherman",
-        text: "Umm... Well.. Lets see...",
-      },
-      {
-        NPC: "Fisherman",
-        text: "Well I can give you something I found just for your efforts, go catch 10 sardines and bring them back to me.",
-      },
-      {
-        NPC: myPlayer ? myPlayer.username : "User",
-        text: "Alright that sounds simple enough!",
-      },
-    ],
+  if (!dialogBoxes && !mapObject) {
+    dialogBoxes = {
   
-    progressText:
-    [
-      {
-        NPC: "Fisherman",
-        text: "So? I am waiting on those fish!",
-      },
-      {
-        NPC: "Fisherman",
-        text: "Do you have them?",
-        check: true,
-      },
-    ],
   
-    rewardText:
-    [
-      {
-        NPC: "Fisherman",
-        text: "Really nice job!",
-      },
-      {
-        NPC: myPlayer ? myPlayer.username : "User",
-        text: "Thank you!",
-      },
-    ],
-    },
-    "Deep Forestry Quest": {
-    dialogName: "quest",
-    questRequirements: [],
-    type: "counter",
-  
-    questName: "Deep Forestry Quest",
-    questDecription: "The guy in the forest said that for a few sticks he can give me a hat, would be nice for the sun!",
-    questCard: "./Cards/clothes.png",
-    rewardType: "item",
-    rewardItem: "tropicalHatInventory",
-    completionItem: "stick",
-    completionAmount: 2,
-    markerX: 1974 - 200,
-    markerY: 1443 + 600,
-    
-    dialogText:
-    [
-      {
-        NPC: "Explorer",
-        text: "Hello Adventurer! Listen I am having a bad time.",
-      },
-      {
-        NPC: "Explorer",
-        text: "I want to explore but I keep getting sunburnt so I need to get under the trees, and I already got lost 3 times because of that.",
-      },
-      {
-        NPC: "Explorer",
-        text: "I can make a hat for you and me if you bring me 2 sticks of wood! The sun can be harsh this time of the year...",
-      },
-      {
-        NPC: myPlayer ? myPlayer.username : "User",
-        text: "I am sure I saw sticks in the lake!",
-      },
-    ],
-  
-    progressText:
-    [
-      {
-        NPC: "Explorer",
-        text: "Please tell me you have the sticks",
-      },
-      {
-        NPC: "Explorer",
-        text: "...",
-        check: true,
-      },
-    ],
-  
-    rewardText:
-    [
-      {
-        NPC: "Explorer",
-        text: "Finally! Here you go",
-      },
-      {
-        NPC: myPlayer ? myPlayer.username : "User",
-        text: "Oh wow, stylish!",
-      },
-    ],
-    },
-    "Tree Issues Quest": {
-    dialogName: "quest",
-    questRequirements: [],
-    type: "counter",
-  
-    questName: "Tree Issues Quest",
-    questDecription: "This dude by the crystal mentioned that he is trying to figure out why the trees are alive in that area, I need to get some leaves from those trees.",
-    questCard: "./Cards/fight.png",
-    rewardType: "soul",
-    rewardItem: "arcanyDemonSoulInventory",
-    completionItem: "treeLeaf",
-    completionAmount: 5,
-    markerX: 1573 + 250,
-    markerY: 1851 + 200,
-    
-    dialogText:
-    [
-      {
-        NPC: "Scientist",
-        text: "Oh hey there! Can you help me with something?",
-      },
-      {
-        NPC: "Scientist",
-        text: "This crystal has some connection with the environment but I cant figure out why...",
-      },
-      {
-        NPC: "Scientist",
-        text: "If you bring me 5 leaves from those trees I can investigate further",
-      },
-      {
-        NPC: myPlayer ? myPlayer.username : "User",
-        text: "And my reward?",
-      },
-      {
-        NPC: "Scientist",
-        text: "These kids... yes yes of course you will have a reward!",
-      },
-    ],
-  
-    progressText:
-    [
-      {
-        NPC: "Scientist",
-        text: "So, how is it going?",
-      },
-      {
-        NPC: "Scientist",
-        text: "These trees really dont like that I am here!",
-        check: true,
-      },
-    ],
-  
-    rewardText:
-    [
-      {
-        NPC: "Scientist",
-        text: "Amazing! Here you go",
-      },
-    ],
-    },
-    "Mushroom Town Quest": {
-    dialogName: "quest",
-    questRequirements: [],
-    type: "counter",
-  
-    questName: "Mushroom Town Quest",
-    questDecription: "The mage of the tower told me that he will open the path to the mushroom town if I can bring him 10 slime guts.",
-    questCard: "./Cards/fight.png",
-    rewardType: "quest",
-    rewardItem: "mushroomAccess",
-    completionItem: "slimeGuts",
-    completionAmount: 10,
-    markerX: 1573 + 1080,
-    markerY: 1851 + 200,
-    
-    dialogText:
-    [
-      {
-        NPC: "Tordmun",
-        text: "Hello there friend! Do you have a minute?",
-      },
-      {
-        NPC: "Tordmun",
-        text: "I would need some help regarding my investigation...",
-      },
-      {
-        NPC: "Tordmun",
-        text: "You see... I am Tormund and this tower is were I live",
-      },
-      {
-        NPC: "Tordmun",
-        text: "On the top of it you will find an ENCHANTING TABLE!!",
-      },
-      {
-        NPC: "Tordmun",
-        text: "I have been working on it since the great collapse",
-      },
-      {
-        NPC: "Tordmun",
-        text: "It gathers energy from the sumit of mount Nakro, were the beast resides",
-      },
-      {
-        NPC: "Tordmun",
-        text: "...",
-      },
-      {
-        NPC: "Tordmun",
-        text: "Perhaps I have overspoken...",
-      },
-      {
-        NPC: "Tordmun",
-        text: "Anyway...",
-      },
-      {
-        NPC: "Tordmun",
-        text: "To get the machine to function I will just need 10 slime guts, dont worry they don't feel anything...",
-      },
-      {
-        NPC: "Tordmun",
-        text: "They come from somewhere else, I am still trying to find out where...",
-      },
-      {
-        NPC: "Tordmun",
-        text: "Bring them to me so I can get the machine working and in return I will not only clear these rocks here for you to pass",
-      },
-      {
-        NPC: "Tordmun",
-        text: "But I will also give you access to my table so you can enchant your weapons!",
-      },
-      {
-        NPC: "Tordmun",
-        text: "Off you go then.",
-      },
-    ],
-  
-    progressText:
-    [
-      {
-        NPC: "Tordmun",
-        text: "So, how is it going?",
-      },
-      {
-        NPC: "Tordmun",
-        text: "Remember you can always craft a weapon by getting a gem from this chest!",
-      },
-      {
-        NPC: "Tordmun",
-        text: "... I forgot were the key is though ...",
-        check: true,
-      },
-    ],
-  
-    rewardText:
-    [
-      {
-        NPC: "Tordmun",
-        text: "Good job!!",
-      },
-      {
-        NPC: "Tordmun",
-        text: "Now you can enchant your weapons!",
-      },
-      {
-        NPC: "Tordmun",
-        text: "However to do so you will need a gem shard from mount Nakro, you can find them all over the world",
-      },
-      {
-        NPC: "Tordmun",
-        text: "Each gem will give you a modifier, more bullets, more speed or even more distance for your weapon!",
-      },
-      {
-        NPC: "Tordmun",
-        text: "...",
-      },
-      {
-        NPC: "Tordmun",
-        text: "You will also need to pay a fee to enchant your weapon...",
-      },
-      {
-        NPC: "Tordmun",
-        text: "Dont look at me like that!",
-      },
-      {
-        NPC: "Tordmun",
-        text: "... I will go now.",
-      },
-    ],
-    },
-
-    // RESTFIELD
-    "A locked door Quest": {
-    dialogName: "quest",
-    questRequirements: [],
-    type: "counter",
-  
-    questName: "A locked door Quest",
-    questDecription: "The witch at the door of Restfield wants me to help her cook something, I will need 3 mushrooms for that.",
-    questCard: "./Cards/fight.png",
-    rewardType: "quest",
-    rewardItem: "restfieldAccess",
-    completionItem: "miniMushroom",
-    completionAmount: 3,
-    markerX: 1281,
-    markerY: 1829,
-    
-    dialogText:
-    [
-      {
-        NPC: "Witch",
-        text: "Hey there little one! Can you help me out an old witch?... Okay maybe not so old",
-      },
-      {
-        NPC: "Witch",
-        text: "I am trying to finish my cacerol but I am missing one ingredient...",
-      },
-      {
-        NPC: "Witch",
-        text: "TINY MUSHROOMS!!!!!",
-      },
-      {
-        NPC: "Witch",
-        text: "....",
-      },
-      {
-        NPC: "Witch",
-        text: "Sorry...",
-      },
-      {
-        NPC: "Witch",
-        text: "I saw a little mushroom kingdom close to here, they seem to have plenty.",
-      },
-      {
-        NPC: myPlayer ? myPlayer.username : "User",
-        text: "Would I need to kill them?",
-      },
-      {
-        NPC: "Witch",
-        text: "Well...",
-      },
-      {
-        NPC: "Witch",
-        text: "Um...",
-      },
-      {
-        NPC: "Witch",
-        text: "Yes. BUT if you do so I can open this massive door for you!",
-      },
-    ],
-  
-    progressText:
-    [
-      {
-        NPC: "Witch",
-        text: "So, any luck? I am getting older by the minute out here",
-      },
-      {
-        NPC: "Witch",
-        text: "...",
-        check: true,
-      },
-    ],
-  
-    rewardText:
-    [
-      {
-        NPC: "Witch",
-        text: "Amazing! Welcome to RESTFIELD!",
-      },
-    ],
-    },
-    "Jonny the sneaky One Quest": {
-    dialogName: "quest",
-    questRequirements: [],
-    type: "counter",
-  
-    questName: "Jonny the sneaky One Quest",
-    questDecription: `Restfield Cemetery is full of ghosts. Garald's family is buried there, and his only dream is to pray at his mom’s grave one last time. However, his brother Jonny is a sneaky one and constantly scares him.Help Garald gather 10 ghost blankets so he can disguise himself as one of them and finally pray for his mom.`,
-    questCard: "./Cards/fight.png",
-    rewardType: "soul",
-    rewardItem: "ghostSoulInventory",
-    completionItem: "restfieldBlanket",
-    completionAmount: 10,
-    markerX: 550,
-    markerY: 2090,
-    
-    dialogText:
-    [
-      {
-        NPC: "Gerald",
-        text: "This... this place. They... they appear from everywhere.",
-      },
-      {
-        NPC: "Gerald",
-        text: "All my family is buried in Restfield Cemetery, including my brother, Jonny. Ever since he died, I haven’t been able to go there—he used to spend all his time scaring me.",
-      },
-      {
-        NPC: "Gerald",
-        text: "I’m scared. I’m old now, you know. I can’t defend myself anymore.",
-      },
-      {
-        NPC: "Gerald",
-        text: "If only I had 10 of those blankets they drop... Maybe, just maybe, I could craft something that would make me like them. Then I could finally visit my mom’s grave.",
-      },
-      {
-        NPC: "Gerald",
-        text: "Just one last time.",
-      },
+      // CASTLESIDE
+      "Fishing Quest": {
+      dialogName: "quest",
+      questRequirements: [],
+      type: "counter",
+      questName: "Fishing quest",
+      questDecription: "The dude said that if I bring him ten sardines then he will give me a reward",
+      questCard: "./Cards/fish.png",
+      rewardType: "soul",
+      rewardItem: "frogSoulInventory",
+      completionItem: "sardin",
+      completionAmount: 10,
+      markerX: 1922 + 364,
+      markerY: 1879 + 347 / 2,
       
-    ],
+      dialogText:
+      [
+        {
+          NPC: "Fisherman",
+          text: "Hello Adventurer! Oh you are looking for a task?",
+        },
+        {
+          NPC: "Fisherman",
+          text: "Umm... Well.. Lets see...",
+        },
+        {
+          NPC: "Fisherman",
+          text: "Well I can give you something I found just for your efforts, go catch 10 sardines and bring them back to me.",
+        },
+        {
+          NPC: myPlayer ? myPlayer.username : "User",
+          text: "Alright that sounds simple enough!",
+        },
+      ],
+    
+      progressText:
+      [
+        {
+          NPC: "Fisherman",
+          text: "So? I am waiting on those fish!",
+        },
+        {
+          NPC: "Fisherman",
+          text: "Do you have them?",
+          check: true,
+        },
+      ],
+    
+      rewardText:
+      [
+        {
+          NPC: "Fisherman",
+          text: "Really nice job!",
+        },
+        {
+          NPC: myPlayer ? myPlayer.username : "User",
+          text: "Thank you!",
+        },
+      ],
+      },
+      "Deep Forestry Quest": {
+      dialogName: "quest",
+      questRequirements: [],
+      type: "counter",
+    
+      questName: "Deep Forestry Quest",
+      questDecription: "The guy in the forest said that for a few sticks he can give me a hat, would be nice for the sun!",
+      questCard: "./Cards/clothes.png",
+      rewardType: "item",
+      rewardItem: "tropicalHatInventory",
+      completionItem: "stick",
+      completionAmount: 2,
+      markerX: 1974 - 200,
+      markerY: 1443 + 600,
+      
+      dialogText:
+      [
+        {
+          NPC: "Explorer",
+          text: "Hello Adventurer! Listen I am having a bad time.",
+        },
+        {
+          NPC: "Explorer",
+          text: "I want to explore but I keep getting sunburnt so I need to get under the trees, and I already got lost 3 times because of that.",
+        },
+        {
+          NPC: "Explorer",
+          text: "I can make a hat for you and me if you bring me 2 sticks of wood! The sun can be harsh this time of the year...",
+        },
+        {
+          NPC: myPlayer ? myPlayer.username : "User",
+          text: "I am sure I saw sticks in the lake!",
+        },
+      ],
+    
+      progressText:
+      [
+        {
+          NPC: "Explorer",
+          text: "Please tell me you have the sticks",
+        },
+        {
+          NPC: "Explorer",
+          text: "...",
+          check: true,
+        },
+      ],
+    
+      rewardText:
+      [
+        {
+          NPC: "Explorer",
+          text: "Finally! Here you go",
+        },
+        {
+          NPC: myPlayer ? myPlayer.username : "User",
+          text: "Oh wow, stylish!",
+        },
+      ],
+      },
+      "Tree Issues Quest": {
+      dialogName: "quest",
+      questRequirements: [],
+      type: "counter",
+    
+      questName: "Tree Issues Quest",
+      questDecription: "This dude by the crystal mentioned that he is trying to figure out why the trees are alive in that area, I need to get some leaves from those trees.",
+      questCard: "./Cards/fight.png",
+      rewardType: "soul",
+      rewardItem: "arcanyDemonSoulInventory",
+      completionItem: "treeLeaf",
+      completionAmount: 5,
+      markerX: 1573 + 250,
+      markerY: 1851 + 200,
+      
+      dialogText:
+      [
+        {
+          NPC: "Scientist",
+          text: "Oh hey there! Can you help me with something?",
+        },
+        {
+          NPC: "Scientist",
+          text: "This crystal has some connection with the environment but I cant figure out why...",
+        },
+        {
+          NPC: "Scientist",
+          text: "If you bring me 5 leaves from those trees I can investigate further",
+        },
+        {
+          NPC: myPlayer ? myPlayer.username : "User",
+          text: "And my reward?",
+        },
+        {
+          NPC: "Scientist",
+          text: "These kids... yes yes of course you will have a reward!",
+        },
+      ],
+    
+      progressText:
+      [
+        {
+          NPC: "Scientist",
+          text: "So, how is it going?",
+        },
+        {
+          NPC: "Scientist",
+          text: "These trees really dont like that I am here!",
+          check: true,
+        },
+      ],
+    
+      rewardText:
+      [
+        {
+          NPC: "Scientist",
+          text: "Amazing! Here you go",
+        },
+      ],
+      },
+      "Mushroom Town Quest": {
+      dialogName: "quest",
+      questRequirements: [],
+      type: "counter",
+    
+      questName: "Mushroom Town Quest",
+      questDecription: "The mage of the tower told me that he will open the path to the mushroom town if I can bring him 10 slime guts.",
+      questCard: "./Cards/fight.png",
+      rewardType: "quest",
+      rewardItem: "mushroomAccess",
+      completionItem: "slimeGuts",
+      completionAmount: 10,
+      markerX: 1573 + 1080,
+      markerY: 1851 + 200,
+      
+      dialogText:
+      [
+        {
+          NPC: "Tordmun",
+          text: "Hello there friend! Do you have a minute?",
+        },
+        {
+          NPC: "Tordmun",
+          text: "I would need some help regarding my investigation...",
+        },
+        {
+          NPC: "Tordmun",
+          text: "You see... I am Tormund and this tower is were I live",
+        },
+        {
+          NPC: "Tordmun",
+          text: "On the top of it you will find an ENCHANTING TABLE!!",
+        },
+        {
+          NPC: "Tordmun",
+          text: "I have been working on it since the great collapse",
+        },
+        {
+          NPC: "Tordmun",
+          text: "It gathers energy from the sumit of mount Nakro, were the beast resides",
+        },
+        {
+          NPC: "Tordmun",
+          text: "...",
+        },
+        {
+          NPC: "Tordmun",
+          text: "Perhaps I have overspoken...",
+        },
+        {
+          NPC: "Tordmun",
+          text: "Anyway...",
+        },
+        {
+          NPC: "Tordmun",
+          text: "To get the machine to function I will just need 10 slime guts, dont worry they don't feel anything...",
+        },
+        {
+          NPC: "Tordmun",
+          text: "They come from somewhere else, I am still trying to find out where...",
+        },
+        {
+          NPC: "Tordmun",
+          text: "Bring them to me so I can get the machine working and in return I will not only clear these rocks here for you to pass",
+        },
+        {
+          NPC: "Tordmun",
+          text: "But I will also give you access to my table so you can enchant your weapons!",
+        },
+        {
+          NPC: "Tordmun",
+          text: "Off you go then.",
+        },
+      ],
+    
+      progressText:
+      [
+        {
+          NPC: "Tordmun",
+          text: "So, how is it going?",
+        },
+        {
+          NPC: "Tordmun",
+          text: "Remember you can always craft a weapon by getting a gem from this chest!",
+        },
+        {
+          NPC: "Tordmun",
+          text: "... I forgot were the key is though ...",
+          check: true,
+        },
+      ],
+    
+      rewardText:
+      [
+        {
+          NPC: "Tordmun",
+          text: "Good job!!",
+        },
+        {
+          NPC: "Tordmun",
+          text: "Now you can enchant your weapons!",
+        },
+        {
+          NPC: "Tordmun",
+          text: "However to do so you will need a gem shard from mount Nakro, you can find them all over the world",
+        },
+        {
+          NPC: "Tordmun",
+          text: "Each gem will give you a modifier, more bullets, more speed or even more distance for your weapon!",
+        },
+        {
+          NPC: "Tordmun",
+          text: "...",
+        },
+        {
+          NPC: "Tordmun",
+          text: "You will also need to pay a fee to enchant your weapon...",
+        },
+        {
+          NPC: "Tordmun",
+          text: "Dont look at me like that!",
+        },
+        {
+          NPC: "Tordmun",
+          text: "... I will go now.",
+        },
+      ],
+      },
   
-    progressText:
-    [
+      // RESTFIELD
+      "A locked door Quest": {
+      dialogName: "quest",
+      questRequirements: [],
+      type: "counter",
+    
+      questName: "A locked door Quest",
+      questDecription: "The witch at the door of Restfield wants me to help her cook something, I will need 3 mushrooms for that.",
+      questCard: "./Cards/fight.png",
+      rewardType: "quest",
+      rewardItem: "restfieldAccess",
+      completionItem: "miniMushroom",
+      completionAmount: 3,
+      markerX: 1281,
+      markerY: 1829,
+      
+      dialogText:
+      [
+        {
+          NPC: "Witch",
+          text: "Hey there little one! Can you help me out an old witch?... Okay maybe not so old",
+        },
+        {
+          NPC: "Witch",
+          text: "I am trying to finish my cacerol but I am missing one ingredient...",
+        },
+        {
+          NPC: "Witch",
+          text: "TINY MUSHROOMS!!!!!",
+        },
+        {
+          NPC: "Witch",
+          text: "....",
+        },
+        {
+          NPC: "Witch",
+          text: "Sorry...",
+        },
+        {
+          NPC: "Witch",
+          text: "I saw a little mushroom kingdom close to here, they seem to have plenty.",
+        },
+        {
+          NPC: myPlayer ? myPlayer.username : "User",
+          text: "Would I need to kill them?",
+        },
+        {
+          NPC: "Witch",
+          text: "Well...",
+        },
+        {
+          NPC: "Witch",
+          text: "Um...",
+        },
+        {
+          NPC: "Witch",
+          text: "Yes. BUT if you do so I can open this massive door for you!",
+        },
+      ],
+    
+      progressText:
+      [
+        {
+          NPC: "Witch",
+          text: "So, any luck? I am getting older by the minute out here",
+        },
+        {
+          NPC: "Witch",
+          text: "...",
+          check: true,
+        },
+      ],
+    
+      rewardText:
+      [
+        {
+          NPC: "Witch",
+          text: "Amazing! Welcome to RESTFIELD!",
+        },
+      ],
+      },
+      "Jonny the sneaky One Quest": {
+      dialogName: "quest",
+      questRequirements: [],
+      type: "counter",
+    
+      questName: "Jonny the sneaky One Quest",
+      questDecription: `Restfield Cemetery is full of ghosts. Garald's family is buried there, and his only dream is to pray at his mom’s grave one last time. However, his brother Jonny is a sneaky one and constantly scares him.Help Garald gather 10 ghost blankets so he can disguise himself as one of them and finally pray for his mom.`,
+      questCard: "./Cards/fight.png",
+      rewardType: "soul",
+      rewardItem: "ghostSoulInventory",
+      completionItem: "restfieldBlanket",
+      completionAmount: 10,
+      markerX: 550,
+      markerY: 2090,
+      
+      dialogText:
+      [
+        {
+          NPC: "Gerald",
+          text: "This... this place. They... they appear from everywhere.",
+        },
+        {
+          NPC: "Gerald",
+          text: "All my family is buried in Restfield Cemetery, including my brother, Jonny. Ever since he died, I haven’t been able to go there—he used to spend all his time scaring me.",
+        },
+        {
+          NPC: "Gerald",
+          text: "I’m scared. I’m old now, you know. I can’t defend myself anymore.",
+        },
+        {
+          NPC: "Gerald",
+          text: "If only I had 10 of those blankets they drop... Maybe, just maybe, I could craft something that would make me like them. Then I could finally visit my mom’s grave.",
+        },
+        {
+          NPC: "Gerald",
+          text: "Just one last time.",
+        },
+        
+      ],
+    
+      progressText:
+      [
+        {
+          NPC: "Gerald",
+          text: "So, how is Jonny? Did you found him?",
+        },
+        {
+          NPC: "Gearld",
+          text: "...",
+          check: true,
+        },
+      ],
+    
+      rewardText:
+      [
+        {
+          NPC: "Gerald",
+          text: "Amazing! Mommy I am comming!",
+        },
+      ],
+      },
+    
+    
+    
+    dialogCastelDoor: {
+      dialogName: "dialogCastelDoor",
+      questRequirements: [],
+      type: "dialog",
+      dialogText:
+      [{
+          NPC: myPlayer ? myPlayer.username : "User",
+          text: "This door seems to be locked, I need to find a way to open it.",
+        },
+      ],
+    },
+    
+    dialogFishingPole: {
+      dialogName: "dialogFishingPole",
+      questRequirements: [],
+      type: "dialog",
+      dialogText:
+      [{
+          NPC: "Sign",
+          text: "You will find all kinds of fish species here. Get close to the water and press 'E' to fish.",
+        },
+      ],
+    },
+    
+    dialogCombatAreaPole: {
+      dialogName: "dialogCombatAreaPole",
+      questRequirements: [],
+      type: "dialog",
+      dialogText:
+      [{
+          NPC: "Sign",
+          text: "You are entering a combat zone. All kinds of monsters are present, so stay alert.",
+        },
+      ],
+    },
+    
+    dialogWayPoint: {
+      dialogName: "dialogWayPoint",
+      questRequirements: [],
+      type: "dialog",
+      dialogText:
+      [{
+        NPC: "Mel",
+        text: "It seems like I came from here. What is this... a crystal? Why does it look so strange?",
+      },
+    ],
+    },
+    
+    dialogCoffeeMachine: {
+    dialogName: "dialogCoffeeMachine",
+    questRequirements: [],
+    type: "dialog",
+    dialogText:
+    [{
+        NPC: "Coffee Machine",
+        text: "Apologies! Out of beans. Maintenance required.",
+      },
+    ],
+    },
+    
+    dialogCristalPortal: {
+    dialogName: "dialogCristalPortal",
+    questRequirements: [],
+    type: "dialog",
+    dialogText:
+    [{
+        NPC: "Mel",
+        text: "What a strange crystal... What could it be for?",
+      },
+    ],
+    },
+    dialogSlimeBoxes: {
+    dialogName: "dialogSlimeBoxes",
+    questRequirements: [],
+    type: "dialog",
+    dialogText:
+    [{
+        NPC: "Mel",
+        text: "What a strange texture...",
+      },
+    ],
+    },
+    
+    };
+  
+    mapObject = [
       {
-        NPC: "Gerald",
-        text: "So, how is Jonny? Did you found him?",
+        name: "dirtFloor",
+        backgroundObj: true,
+        img: dirtFloor,
+        x: 0,
+        y: 0,
+        h: 22,
+        w: 23
       },
       {
-        NPC: "Gearld",
-        text: "...",
-        check: true,
+        name: "booksOne",
+        backgroundObj: "front",
+        img: booksOne,
+        x: 0,
+        y: 0,
+        h: booksOne.height,
+        w: booksOne.width
       },
-    ],
-  
-    rewardText:
-    [
       {
-        NPC: "Gerald",
-        text: "Amazing! Mommy I am comming!",
+        name: "redSmallCarpet",
+        backgroundObj: "back",
+        img: redSmallCarpet,
+        x: 0,
+        y: 0,
+        h: redSmallCarpet.height,
+        w: redSmallCarpet.width
       },
-    ],
-    },
-  
-  
-  
-  dialogCastelDoor: {
-    dialogName: "dialogCastelDoor",
-    questRequirements: [],
-    type: "dialog",
-    dialogText:
-    [{
-        NPC: myPlayer ? myPlayer.username : "User",
-        text: "This door seems to be locked, I need to find a way to open it.",
+      {
+        name: "chairLeft",
+        backgroundObj: "back",
+        img: chairLeft,
+        x: 0,
+        y: 0,
+        h: chairLeft.height,
+        w: chairLeft.width
       },
-    ],
-  },
-  
-  dialogFishingPole: {
-    dialogName: "dialogFishingPole",
-    questRequirements: [],
-    type: "dialog",
-    dialogText:
-    [{
-        NPC: "Sign",
-        text: "You will find all kinds of fish species here. Get close to the water and press 'E' to fish.",
+      {
+        name: "chairRight",
+        backgroundObj: "back",
+        img: chairRight,
+        x: 0,
+        y: 0,
+        h: chairRight.height,
+        w: chairRight.width
       },
-    ],
-  },
-  
-  dialogCombatAreaPole: {
-    dialogName: "dialogCombatAreaPole",
-    questRequirements: [],
-    type: "dialog",
-    dialogText:
-    [{
-        NPC: "Sign",
-        text: "You are entering a combat zone. All kinds of monsters are present, so stay alert.",
+      {
+        name: "decoOne",
+        backgroundObj: "front",
+        img: decoOne,
+        x: 0,
+        y: 0,
+        h: decoOne.height,
+        w: decoOne.width
       },
-    ],
-  },
-  
-  dialogWayPoint: {
-    dialogName: "dialogWayPoint",
-    questRequirements: [],
-    type: "dialog",
-    dialogText:
-    [{
-      NPC: "Mel",
-      text: "It seems like I came from here. What is this... a crystal? Why does it look so strange?",
-    },
-  ],
-  },
-  
-  dialogCoffeeMachine: {
-  dialogName: "dialogCoffeeMachine",
-  questRequirements: [],
-  type: "dialog",
-  dialogText:
-  [{
-      NPC: "Coffee Machine",
-      text: "Apologies! Out of beans. Maintenance required.",
-    },
-  ],
-  },
-  
-  dialogCristalPortal: {
-  dialogName: "dialogCristalPortal",
-  questRequirements: [],
-  type: "dialog",
-  dialogText:
-  [{
-      NPC: "Mel",
-      text: "What a strange crystal... What could it be for?",
-    },
-  ],
-  },
-  dialogSlimeBoxes: {
-  dialogName: "dialogSlimeBoxes",
-  questRequirements: [],
-  type: "dialog",
-  dialogText:
-  [{
-      NPC: "Mel",
-      text: "What a strange texture...",
-    },
-  ],
-  },
-  
-  };
+      {
+        name: "hangingPlant",
+        backgroundObj: "front",
+        img: hangingPlant,
+        x: 0,
+        y: 0,
+        h: hangingPlant.height,
+        w: hangingPlant.width
+      },
+      {
+        name: "lanternOne",
+        backgroundObj: "front",
+        img: lanternOne,
+        x: 0,
+        y: 0,
+        h: lanternOne.height,
+        w: lanternOne.width
+      },
+      {
+        name: "hangingPlantRed",
+        backgroundObj: "front",
+        img: hangingPlantRed,
+        x: 0,
+        y: 0,
+        h: hangingPlantRed.height,
+        w: hangingPlantRed.width
+      },
+      {
+        name: "paintFour",
+        backgroundObj: "front",
+        img: paintFour,
+        x: 0,
+        y: 0,
+        h: paintFour.height,
+        w: paintFour.width
+      },
+      {
+        name: "paintOne",
+        backgroundObj: "front",
+        img: paintOne,
+        x: 0,
+        y: 0,
+        h: paintOne.height,
+        w: paintOne.width
+      },
+      {
+        name: "paintThree",
+        backgroundObj: "front",
+        img: paintThree,
+        x: 0,
+        y: 0,
+        h: paintThree.height,
+        w: paintThree.width
+      },
+      {
+        name: "paintTwo",
+        backgroundObj: "front",
+        img: paintTwo,
+        x: 0,
+        y: 0,
+        h: paintTwo.height,
+        w: paintTwo.width
+      },
+      {
+        name: "potPlantFour",
+        backgroundObj: false,
+        img: potPlantFour,
+        x: 0,
+        y: 0,
+        h: potPlantFour.height,
+        w: potPlantFour.width
+      },
+      {
+        name: "potPlantThree",
+        backgroundObj: false,
+        img: potPlantThree,
+        x: 0,
+        y: 0,
+        h: potPlantThree.height,
+        w: potPlantThree.width
+      },
+      {
+        name: "potPlantTwo",
+        backgroundObj: false,
+        img: potPlantTwo,
+        x: 0,
+        y: 0,
+        h: potPlantTwo.height,
+        w: potPlantTwo.width
+      },
+      {
+        name: "potPlantOne",
+        backgroundObj: false,
+        img: potPlantOne,
+        x: 0,
+        y: 0,
+        h: potPlantOne.height,
+        w: potPlantOne.width
+      },
+      {
+        name: "shelves",
+        backgroundObj: false,
+        img: shelves,
+        x: 0,
+        y: 0,
+        h: shelves.height,
+        w: shelves.width
+      },
+      {
+        name: "woodTable",
+        backgroundObj: false,
+        img: woodTable,
+        x: 0,
+        y: 0,
+        h: woodTable.height,
+        w: woodTable.width
+      },
+      {
+        name: "stoneFloor",
+        backgroundObj: true,
+        img: stoneFloor,
+        x: 0,
+        y: 0,
+        h: stoneFloor.height,
+        w: stoneFloor.width
+      },
+      {
+        name: "woodFloor",
+        backgroundObj: true,
+        img: woodFloor,
+        x: 0,
+        y: 0,
+        h: woodFloor.height,
+        w: woodFloor.width
+      },
+      {
+        name: "vineTwo",
+        backgroundObj: "front",
+        img: vineTwo,
+        x: 0,
+        y: 0,
+        h: vineTwo.height,
+        w: vineTwo.width
+      },
+      {
+        name: "enchantingTower",
+        backgroundObj: false,
+        img: enchantingTower,
+        x: 0,
+        y: 0,
+        h: 357,
+        w: 119
+      },
+      {
+        name: "enchantingTable",
+        backgroundObj: false,
+        img: enchantingTable,
+        x: 0,
+        y: 0,
+        h: 72,
+        w: 75,
+        animated: true,
+      },
+      {
+        name: "plantPatch",
+        backgroundObj: true,
+        img: plantPatch,
+        x: 0,
+        y: 0,
+        h: 15,
+        w: 16
+      },
+      {
+        name: "woodFenceVer",
+        backgroundObj: false,
+        img: woodFenceVer,
+        x: 0,
+        y: 0,
+        h: 35,
+        w: 7
+      },
+      {
+        name: "woodFence",
+        backgroundObj: false,
+        img: woodFence,
+        x: 0,
+        y: 0,
+        h: 22,
+        w: 28
+      },
+      {
+        name: "woodSmallWallHor",
+        backgroundObj: false,
+        img: woodSmallWallHor,
+        x: 0,
+        y: 0,
+        h: 22,
+        w: 31
+      },
+      {
+        name: "woodSmallWallVert",
+        backgroundObj: false,
+        img: woodSmallWallVert,
+        x: 0,
+        y: 0,
+        h: 37,
+        w: 7
+      },
+      {
+        name: "woodWallDoor",
+        backgroundObj: false,
+        img: woodWallDoor,
+        x: 0,
+        y: 0,
+        h: 52,
+        w: 67
+      },
+      {
+        name: "woodWallHor",
+        backgroundObj: false,
+        img: woodWallHor,
+        x: 0,
+        y: 0,
+        h: 52,
+        w: 67
+      },
+      {
+        name: "woodWindowWall",
+        backgroundObj: false,
+        img: woodWindowWall,
+        x: 0,
+        y: 0,
+        h: 52,
+        w: 67
+      },
+      {
+        name: "woodWallVer",
+        backgroundObj: false,
+        img: woodWallVer,
+        x: 0,
+        y: 0,
+        h: 92,
+        w: 7
+      },
+      {
+        name: "flagLine",
+        backgroundObj: "front",
+        img: flagLine,
+        x: 0,
+        y: 0,
+        h: 26,
+        w: 123,
+        animated: true,
+      },
+      {
+        name: "treeOne",
+        backgroundObj: false,
+        img: treeOne,
+        x: 0,
+        y: 0,
+        h: 70,
+        w: 43
+      },
+      {
+        name: "woodPole",
+        backgroundObj: false,
+        img: woodPole,
+        x: 0,
+        y: 0,
+        h: 21,
+        w: 7
+      },
+      {
+        name: "whiteFlowers",
+        backgroundObj: true,
+        img: whiteFlowers,
+        x: 0,
+        y: 0,
+        h: 13,
+        w: 14
+      },
+      {
+        name: "bushOne",
+        backgroundObj: false,
+        img: bushOne,
+        x: 0,
+        y: 0,
+        h: 19,
+        w: 22
+      },
+      {
+        name: "shadowTree",
+        backgroundObj: true,
+        img: shadowTree,
+        x: 0,
+        y: 0,
+        h: 15,
+        w: 48
+      },
+      {
+        name: "vineOne",
+        backgroundObj: "front",
+        img: vineOne,
+        x: 0,
+        y: 0,
+        h: 12,
+        w: 42
+      },
+      {
+        name: "rockOne",
+        backgroundObj: false,
+        img: rockOne,
+        x: 0,
+        y: 0,
+        h: 27,
+        w: 35
+      },
+      {
+        name: "woodSquareDoor",
+        backgroundObj: false,
+        img: woodSquareDoor,
+        x: 0,
+        y: 0,
+        h: 52,
+        w: 43
+      },
+      {
+        name: "chestCommon",
+        backgroundObj: false,
+        img: chestCommon,
+        x: 0,
+        y: 0,
+        h: 18,
+        w: 21,
+        lightSource: true,
+        animated: true,
+      },
+      {
+        name: "cookingPotObj",
+        backgroundObj: false,
+        img: cookingPotObj,
+        x: 0,
+        y: 0,
+        h: 30,
+        w: 26,
+        lightSource: true,
+        animated: true,
+      },
+      {
+        name: "fishPond",
+        backgroundObj: false,
+        img: fishPond,
+        x: 0,
+        y: 0,
+        h: 30,
+        w: 30,
+        lightSource: false,
+        animated: true,
+      },
+      {
+        name: "smallLake",
+        backgroundObj: true,
+        img: smallLake,
+        x: 0,
+        y: 0,
+        h: 112,
+        w: 112,
+        lightSource: false,
+        animated: true,
+      },
+      {
+        name: "dryGrass",
+        backgroundObj: false,
+        img: dryGrass,
+        x: 0,
+        y: 0,
+        h: 15,
+        w: 15,
+        lightSource: false,
+        animated: true,
+      },
+      {
+        name: "plazaFountain",
+        backgroundObj: false,
+        img: plazaFountain,
+        x: 0,
+        y: 0,
+        h: 84,
+        w: 131,
+        animated: true,
+      },
+      {
+        name: "grassOne",
+        backgroundObj: false,
+        img: grassOne,
+        x: 0,
+        y: 0,
+        h: 7,
+        w: 10
+      },
+      {
+        name: "cookingStand",
+        backgroundObj: false,
+        img: cookingStand,
+        x: 0,
+        y: 0,
+        h: 79,
+        w: 105
+      },
+      {
+        name: "dirtFloorBig",
+        backgroundObj: true,
+        img: dirtFloorBig,
+        x: 0,
+        y: 0,
+        h: 47,
+        w: 57
+      },
+      {
+        name: "lightPoleOne",
+        backgroundObj: false,
+        img: lightPoleOne,
+        x: 0,
+        y: 0,
+        h: 52,
+        w: 22,
+        lightSource: true
+      },
+      {
+        name: "mediumTorch",
+        backgroundObj: false,
+        img: mediumTorch,
+        x: 0,
+        y: 0,
+        h: 26,
+        w: 11,
+        animated: true,
+        lightSource: true
+      },
+    ]
+    createImagesFromMapObjects(mapObject)
+  }
+
 
   health()
   updateQuestUI()
@@ -4626,7 +5168,7 @@ socket.on("loginAttempt", (msg) => {
     audioIntro.pause();
     loggedIn.play();
     // intervalCanvasBase = setInterval(lobbyLoop, 16.67); //Initial canvas
-    intervalCanvasBase = requestAnimationFrame(lobbyLoop)
+    intervalCanvasBase = requestAnimationFrame(emptyMapLoop)
     // intervalCanvasBase = setInterval(lobbyLoop, 16.67); //Initial canvas
     console.log("logged in")
 
@@ -5975,312 +6517,9 @@ let currentLand= "none";
 let currentObjToPlace = "";
 console.log("current land: ", currentLand)
 
-let mapObject = [
-  {
-    name: "dirtFloor",
-    backgroundObj: true,
-    img: dirtFloor,
-    x: 0,
-    y: 0,
-    h: 22,
-    w: 23
-  },
-  {
-    name: "enchantingTower",
-    backgroundObj: false,
-    img: enchantingTower,
-    x: 0,
-    y: 0,
-    h: 357,
-    w: 119
-  },
-  {
-    name: "enchantingTable",
-    backgroundObj: false,
-    img: enchantingTable,
-    x: 0,
-    y: 0,
-    h: 72,
-    w: 75,
-    animated: true,
-  },
-  {
-    name: "plantPatch",
-    backgroundObj: true,
-    img: plantPatch,
-    x: 0,
-    y: 0,
-    h: 15,
-    w: 16
-  },
-  {
-    name: "woodFenceVer",
-    backgroundObj: false,
-    img: woodFenceVer,
-    x: 0,
-    y: 0,
-    h: 35,
-    w: 7
-  },
-  {
-    name: "woodFence",
-    backgroundObj: false,
-    img: woodFence,
-    x: 0,
-    y: 0,
-    h: 22,
-    w: 28
-  },
-  {
-    name: "woodSmallWallHor",
-    backgroundObj: false,
-    img: woodSmallWallHor,
-    x: 0,
-    y: 0,
-    h: 22,
-    w: 31
-  },
-  {
-    name: "woodSmallWallVert",
-    backgroundObj: false,
-    img: woodSmallWallVert,
-    x: 0,
-    y: 0,
-    h: 37,
-    w: 7
-  },
-  {
-    name: "woodWallDoor",
-    backgroundObj: false,
-    img: woodWallDoor,
-    x: 0,
-    y: 0,
-    h: 52,
-    w: 67
-  },
-  {
-    name: "woodWallHor",
-    backgroundObj: false,
-    img: woodWallHor,
-    x: 0,
-    y: 0,
-    h: 52,
-    w: 67
-  },
-  {
-    name: "woodWindowWall",
-    backgroundObj: false,
-    img: woodWindowWall,
-    x: 0,
-    y: 0,
-    h: 52,
-    w: 67
-  },
-  {
-    name: "woodWallVer",
-    backgroundObj: false,
-    img: woodWallVer,
-    x: 0,
-    y: 0,
-    h: 92,
-    w: 7
-  },
-  {
-    name: "flagLine",
-    backgroundObj: "front",
-    img: flagLine,
-    x: 0,
-    y: 0,
-    h: 26,
-    w: 123,
-    animated: true,
-  },
-  {
-    name: "treeOne",
-    backgroundObj: false,
-    img: treeOne,
-    x: 0,
-    y: 0,
-    h: 70,
-    w: 43
-  },
-  {
-    name: "woodPole",
-    backgroundObj: false,
-    img: woodPole,
-    x: 0,
-    y: 0,
-    h: 21,
-    w: 7
-  },
-  {
-    name: "whiteFlowers",
-    backgroundObj: true,
-    img: whiteFlowers,
-    x: 0,
-    y: 0,
-    h: 13,
-    w: 14
-  },
-  {
-    name: "bushOne",
-    backgroundObj: false,
-    img: bushOne,
-    x: 0,
-    y: 0,
-    h: 19,
-    w: 22
-  },
-  {
-    name: "shadowTree",
-    backgroundObj: true,
-    img: shadowTree,
-    x: 0,
-    y: 0,
-    h: 15,
-    w: 48
-  },
-  {
-    name: "vineOne",
-    backgroundObj: "front",
-    img: vineOne,
-    x: 0,
-    y: 0,
-    h: 12,
-    w: 42
-  },
-  {
-    name: "rockOne",
-    backgroundObj: false,
-    img: rockOne,
-    x: 0,
-    y: 0,
-    h: 27,
-    w: 35
-  },
-  {
-    name: "woodSquareDoor",
-    backgroundObj: false,
-    img: woodSquareDoor,
-    x: 0,
-    y: 0,
-    h: 52,
-    w: 43
-  },
-  {
-    name: "chestCommon",
-    backgroundObj: false,
-    img: chestCommon,
-    x: 0,
-    y: 0,
-    h: 18,
-    w: 21,
-    lightSource: true,
-    animated: true,
-  },
-  {
-    name: "cookingPotObj",
-    backgroundObj: false,
-    img: cookingPotObj,
-    x: 0,
-    y: 0,
-    h: 30,
-    w: 26,
-    lightSource: true,
-    animated: true,
-  },
-  {
-    name: "fishPond",
-    backgroundObj: false,
-    img: fishPond,
-    x: 0,
-    y: 0,
-    h: 30,
-    w: 30,
-    lightSource: false,
-    animated: true,
-  },
-  {
-    name: "smallLake",
-    backgroundObj: true,
-    img: smallLake,
-    x: 0,
-    y: 0,
-    h: 112,
-    w: 112,
-    lightSource: false,
-    animated: true,
-  },
-  {
-    name: "dryGrass",
-    backgroundObj: false,
-    img: dryGrass,
-    x: 0,
-    y: 0,
-    h: 15,
-    w: 15,
-    lightSource: false,
-    animated: true,
-  },
-  {
-    name: "plazaFountain",
-    backgroundObj: false,
-    img: plazaFountain,
-    x: 0,
-    y: 0,
-    h: 84,
-    w: 131,
-    animated: true,
-  },
-  {
-    name: "grassOne",
-    backgroundObj: false,
-    img: grassOne,
-    x: 0,
-    y: 0,
-    h: 7,
-    w: 10
-  },
-  {
-    name: "cookingStand",
-    backgroundObj: false,
-    img: cookingStand,
-    x: 0,
-    y: 0,
-    h: 79,
-    w: 105
-  },
-  {
-    name: "dirtFloorBig",
-    backgroundObj: true,
-    img: dirtFloorBig,
-    x: 0,
-    y: 0,
-    h: 47,
-    w: 57
-  },
-  {
-    name: "lightPoleOne",
-    backgroundObj: false,
-    img: lightPoleOne,
-    x: 0,
-    y: 0,
-    h: 52,
-    w: 22,
-    lightSource: true
-  },
-  {
-    name: "mediumTorch",
-    backgroundObj: false,
-    img: mediumTorch,
-    x: 0,
-    y: 0,
-    h: 26,
-    w: 11,
-    animated: true,
-    lightSource: true
-  },
-]
+setTimeout(() => {
+  console.log(booksOne.width)
+}, 1000);
 
 let mapsInfo = {
   residency: {
@@ -42936,6 +43175,7 @@ canvasLobby.addEventListener('click', function(event) {
     mapsInfo[currentLand].objects.push(objClone)
     mapsInfo[currentLand].objects.sort((a, b) => {
       if (a.backgroundObj && !b.backgroundObj) return -1; // a goes first
+      if (!a.backgroundObj && b.backgroundObj === "front") return 1;  // b goes first
       if (!a.backgroundObj && b.backgroundObj) return 1;  // b goes first
       return a.y - b.y; // Otherwise, sort by y
     });
@@ -43115,11 +43355,20 @@ function createImagesFromMapObjects(mapObjects) {
     parentDiv.classList.add('pointerActivator');
     parentDiv.classList.add('buildObjectParent');
 
-    const imgElement = document.createElement('img');
-    imgElement.classList.add('buildObject');
+    const divElement = document.createElement('div');
+    divElement.classList.add('buildObject');
 
-    imgElement.src = obj.img.src;
-    imgElement.alt = obj.name;
+    divElement.style.background = `url(${obj.img.src})`;
+    divElement.style.backgroundSize = "cover";
+    divElement.style.backgroundRepeat = "no-repeat";
+    divElement.style.width = `calc(${obj.w * 0.8}px)`;
+    divElement.style.height = `calc(${obj.h * 0.8}px)`;
+    // divElement.alt = obj.name;
+
+    // if (obj.w > 50 || obj.h > 50) {
+    //   divElement.style.width = `calc${obj.w * 0.5}`;
+    //   divElement.style.height = `calc(${obj.h * 0.5}px)`;
+    // }
 
     parentDiv.addEventListener('click', () => {
       currentObjToPlace = obj.name
@@ -43135,34 +43384,33 @@ function createImagesFromMapObjects(mapObjects) {
       clickHover.play()
     });
 
-    parentDiv.appendChild(imgElement);
+    parentDiv.appendChild(divElement);
     uiBuilding.appendChild(parentDiv);
   });
 }
 
-createImagesFromMapObjects(mapObject)
-
 // UI DEV COMMENT >
 
 placeWalls.addEventListener("click", function() {
+  showWallsFunction()
  if (currentDevAction !== "wall") {
   currentDevAction = "wall";
   roomsDiv.style.display = "none"
   dialogsDiv.style.display = "none"
-  deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeDialog.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeChest.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  startBuildingBut.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeWalls.style.backgroundColor = "rgba(170, 233, 170, 1)"
+  // deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  // placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  // placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  // placeDialog.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  // placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  // placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  // placeChest.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  // placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  // startBuildingBut.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  // placeWalls.style.backgroundColor = "rgba(170, 233, 170, 1)"
    uiBuilding.style.display = "none"
  } else {
   currentDevAction = "none";
-  placeWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  // placeWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
  }
 });
 
@@ -43255,25 +43503,26 @@ if (currentDevAction !== "cook") {
 });
 
 startBuildingBut.addEventListener("click", function() {
+  playRandomPop()
 if (currentDevAction !== "building") {
   currentDevAction = "building";
   roomsDiv.style.display = "none"
-  placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  // placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
   dialogsDiv.style.display = "none"
-  deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeDialog.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeChest.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  startBuildingBut.style.backgroundColor = "rgba(170, 233, 170, 1)"
+  // deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  // placeDialog.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  // placeWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  // placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  // placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  // placeChest.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  // placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  // placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  // startBuildingBut.style.backgroundColor = "rgba(170, 233, 170, 1)"
   uiBuilding.style.display = "flex"
 } else {
   currentDevAction = "none";
   uiBuilding.style.display = "none"
-  startBuildingBut.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  // startBuildingBut.style.backgroundColor = "rgb(255 255 255 / 29%)"
 }
 });
 
@@ -43395,7 +43644,8 @@ placeDialog.addEventListener("click", function() {
   }
 });
 
-showWalls.addEventListener("click", function() {
+function showWallsFunction() {
+  playRandomPop()
 if (wallsVisibility === 0) {
   wallsVisibility = 0.5;
   showWalls.style.backgroundColor = "rgba(170, 233, 170, 1)"
@@ -43421,7 +43671,7 @@ mapsInfo[currentLand].colliders.forEach(wall => {
     wall.color = `rgb(179, 255, 213, ${wallsVisibility})`
   }
 })
-});
+};
 
 exportWalls.addEventListener("click", function() {
 exportObjectAsText(mapsInfo[currentLand].colliders, "walls")
@@ -43546,7 +43796,7 @@ function updateSmoothOnlinePlayerPosition(smoothPlayer) {
 const DayCycleFilters = [
   'sepia(0%) hue-rotate(0deg) saturate(1) contrast(1) brightness(1)',  
   'sepia(64%) hue-rotate(-39deg) saturate(2) contrast(.9) brightness(.9)', 
-  'sepia(78%) hue-rotate(161deg) saturate(1.5) contrast(1) brightness(.6)', 
+  'sepia(78%) hue-rotate(-19deg) saturate(1.5) contrast(1) brightness(0.7);', 
   'sepia(64%) hue-rotate(-39deg) saturate(2) contrast(.9) brightness(.9)'
 ];
 
@@ -43688,15 +43938,29 @@ function drawObjects (layer) {
   }
 
   for (const obj of mapsInfo[currentLand].objects) {
-    if (obj.backgroundObj === true) {
-      if (layer === "back") {
-        drawOnTop(obj.img, obj.x, obj.y, obj.w, obj.h, cameraX, cameraY, obj.animated)
-      }
-    } else {
-      if ((!((playerY - cameraY + 120) > (obj.y - cameraY)) && layer === "front") || obj.backgroundObj === "front") {
-        drawOnTop(obj.img, obj.x, obj.y, obj.w, obj.h, cameraX, cameraY, obj.animated)
-      }
 
+    if (obj.backgroundObj === "front") {
+      if (layer === "fronter") {
+        drawOnTop(obj.img, obj.x, obj.y, obj.w, obj.h, cameraX, cameraY, obj.animated)
+      }
+    }
+
+    if (obj.backgroundObj === "back") {
+      if (layer === "backer") {
+        drawOnTop(obj.img, obj.x, obj.y, obj.w, obj.h, cameraX, cameraY, obj.animated)
+      }
+    }
+
+    if (obj.backgroundObj === true) {
+      if (layer === "background") {
+        drawOnTop(obj.img, obj.x, obj.y, obj.w, obj.h, cameraX, cameraY, obj.animated)
+      }
+    } 
+
+    if (obj.backgroundObj !== "front" && obj.backgroundObj !== "back" && obj.backgroundObj !== true) {
+      if ((!((playerY - cameraY + 120) > (obj.y - cameraY)) && layer === "front")) {
+        drawOnTop(obj.img, obj.x, obj.y, obj.w, obj.h, cameraX, cameraY, obj.animated)
+      }
       else if ((playerY - cameraY + 120) >= (obj.y - cameraY) && layer === "back") {
         drawOnTop(obj.img, obj.x, obj.y, obj.w, obj.h, cameraX, cameraY, obj.animated)
       }  
@@ -46503,25 +46767,25 @@ function nightTimeCanvas() {
 
   function addLight(ctx, x, y) {
     ctx.beginPath();
-    ctx.arc(x, y, 200 + value, 0, Math.PI * 2);  // Create a white circle with radius 500
+    ctx.arc(x, y, 300 + value, 0, Math.PI * 2);  // Create a white circle with radius 500
     ctx.fillStyle = 'white';
     ctx.fill();  // Fill the circle with white
     ctx.closePath();
     
     ctx.beginPath();
-    ctx.arc(x, y, 220 + value, 0, Math.PI * 2);  // Create a white circle with radius 500
+    ctx.arc(x, y, 320 + value, 0, Math.PI * 2);  // Create a white circle with radius 500
     ctx.fillStyle = 'rgba(248, 248, 248, 0.50)';
     ctx.fill();  // Fill the circle with white
     ctx.closePath();
     
     ctx.beginPath();
-    ctx.arc(x, y, 240 + value, 0, Math.PI * 2);  // Create a white circle with radius 500
+    ctx.arc(x, y, 340 + value, 0, Math.PI * 2);  // Create a white circle with radius 500
     ctx.fillStyle = 'rgba(248, 248, 248, 0.15)';
     ctx.fill();  // Fill the circle with white
     ctx.closePath();
     
     ctx.beginPath();
-    ctx.arc(x, y, 260 + value, 0, Math.PI * 2);  // Create a white circle with radius 500
+    ctx.arc(x, y, 360 + value, 0, Math.PI * 2);  // Create a white circle with radius 500
     ctx.fillStyle = 'rgba(248, 248, 248, 0.05)';
     ctx.fill();  // Fill the circle with white
     ctx.closePath();
@@ -46547,6 +46811,8 @@ function updateGame() {
 
   // Background map Image and objects
   drawMap("back")
+  drawObjects("background")
+  drawObjects("backer")
   drawObjects("back")
   
   // Particle settings
@@ -46567,6 +46833,7 @@ function updateGame() {
   // Foreground map Image and objects
   drawMap("front")
   drawObjects("front")
+  drawObjects("fronter")
 
   nightTimeCanvas()
   drawUsername()
