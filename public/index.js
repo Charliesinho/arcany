@@ -1242,6 +1242,9 @@ openerScreenButton.addEventListener("click", function() {
     openerScreen.classList.add('animIntro');
     audioIntro.play();
   }, 500);
+  setTimeout(() => {
+    openerScreen.style.display = "none"
+  }, 1000);
   
   setTimeout(() => {
     loginBox.style.marginRight = "0"
