@@ -69,7 +69,7 @@ body {
     z-index: 10;
 
     display: flex;
-    /* flex-direction: column; */
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 30px;
@@ -98,18 +98,25 @@ body {
 
 .openerScreen-childImg > div {
     height: 323px;
-    width: 487px;
+    width: 531.6px;
     border: solid 1px white;
     background-size: cover !important;
     background-position: center !important;
     position: relative;
     top: 100px;
     opacity: 0;
-    animation: cardUp 1s ease 2.5s forwards;
+    animation: cardUp 1s ease 1.5s forwards;
+}
+
+#openerScreen-upper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
 }
 
 .openerScreen-childImg > div:first-child {
-    animation: cardUp 1s ease 3s forwards;
+    animation: cardUp 1s ease 2s forwards;
 }
 
 #openerScreen-button {
@@ -167,6 +174,45 @@ body {
     flex-direction: column;
     display: flex;
     align-items: center;
+}
+
+#openerScreen-lower {
+    display: flex;
+    gap: 30px;
+}
+
+#openerScreen-discord {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    width: 482px;
+    padding: 10px 25px;
+    background-color: rgb(88, 100, 242);
+    border-radius: 5px;
+    filter: hue-rotate(0deg) brightness(1);
+    text-decoration: none;
+    /* transition: all .2s ease; */
+    position: relative;
+    top: 100px;
+    opacity: 0;
+    animation: cardUp 1s ease 2.5s forwards;
+}
+#openerScreen-discord:hover {
+    filter: hue-rotate(-147deg) brightness(1.3);
+}
+#openerScreen-discord > img {
+    width: 50px;
+}
+#openerScreen-discord > p {
+color: white;
+}
+
+.youtubeButton {
+    background-color: #C50607 !important;
+}
+.youtubeButton:hover {
+    background-color: #C50607 !important;
+    filter: hue-rotate(124deg) brightness(1.6) !important;
 }
 
 #openerScreen-content > div {
