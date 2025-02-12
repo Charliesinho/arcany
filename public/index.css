@@ -72,39 +72,94 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 40px;
+    /* gap: 40px; */
+}
+
+#openerScreen-child {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
 }
 
 #openerScreen-button {
     line-height: 25px;
     /* height: 100px; */
-    width: 530px;
-    padding: 29px;
+    width: 248px;
+    padding: 14px;
     color: #ffffff;
-    font-size: 23px;
-    font-weight: bolder;
-    border: solid 1px rgb(93 51 51);
-    background-color: rgb(175 132 121);
-    border-radius: 5px;
-    box-shadow: 0 10px rgb(83 52 52);
+    font-size: 20px;
+    font-weight: 400;
+    border: solid 0px rgb(93 51 51);
+    background-color: rgb(129 103 205 / 0%);
+    border-radius: -2px;
+    box-shadow: 0 3px rgb(255 255 255);
     position: relative;
     top: 0;
     transition: all .2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
 }
 
 #openerScreen-button:hover {
     
-    border: none;
-    background-color: rgb(171, 255, 93);
-    border-radius: 5px;
-    box-shadow: 0 0px rgb(255, 255, 255);
-    color: #252525;
+    /* background-color: rgb(171, 255, 93); */
+    /* background-color: rgb(255, 93, 93); */
+    /* border: solid 0px rgb(125, 188, 66); */
+    color: #ff4545;
+    width: 300px;
 
-    top: 10px;
+    /* top: 10px; */
+}
+
+#openerScreen-icon {
+    width: 36px;
+    position: relative;
+    top: -3px;
+}
+
+#openerScreen-title {
+    width: 530px;
+    border: solid 1px white;
+    border-bottom: none;
+}
+
+#openerScreen-content {
+    width: 530px;
+    height: 64%;
+    background: linear-gradient(180deg, rgb(14, 13, 89) 0%, rgb(42 11 67) 100%);
+    outline: solid 1px #ffffff5c;
+    outline-offset: -11px;
+    border: solid 1px white;
+    border-top: none;
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+}
+
+#openerScreen-content > div {
+    padding: 43px;
+}
+
+#openerScreen-content  p {
+    text-align: justify;
+    color: #d8b2ff;
+    line-height: 21px;
+}
+
+#openerScreen-content  h2 {
+    text-align: center;
+    color: #e0b3ff;
+    font-weight: 400;
+    text-shadow: 0 0 10px #ff45ff;
+    font-size: 28px;
 }
 
 #languageSetting{
-    display: flex;
+    display: none;
     width: 385px;
     justify-content: space-between;
     position: relative;
