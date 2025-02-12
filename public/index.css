@@ -46,6 +46,16 @@ body {
     
 }
 
+html, body {
+    width: 1920px;
+    height: 1080px;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Prevents scrolling */
+    transform-origin: top left; /* Ensures scaling is consistent */
+  }
+  
+
 .custom-cursor {
     position: absolute;
     z-index: 101;
