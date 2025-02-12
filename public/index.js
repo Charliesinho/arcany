@@ -1,7 +1,9 @@
 //Change this to push >
 
 // const socket = io(`ws://localhost:5000`);
-const socket = io(`https://arcanyGame.up.railway.app/`);
+// const socket = io(`https://arcanyGame.up.railway.app/`);
+const socket = io(window.location.origin);
+
 
 //Change this to push <
 
@@ -17,6 +19,34 @@ setTimeout(() => {
     }
   }, 20);
 }, 1000);
+
+let loadingProgress = 0;
+
+function updateProgress() {
+  loadingProgress += 10;
+  console.log(`Loading: ${loadingProgress}%`);
+
+  if (loadingProgress >= 100) {
+    // console.log("Finished loading");
+    clearInterval(loadingInterval);
+  }
+}
+
+let loadingInterval = setInterval(updateProgress, 200);
+
+window.addEventListener("load", () => {
+  loadingProgress = 100;
+  console.log("Finished loading");
+  document.getElementById("introLogo-img").style.display = "none";
+  document.getElementById("introLogo-video").play();
+  
+  setTimeout(() => {
+    document.getElementById("introLogo").style.display = "none";
+  }, 6000);
+  
+  clearInterval(loadingInterval);
+});
+
 
 //OBJECTS
 
@@ -5171,7 +5201,7 @@ socket.on("loginAttempt", (msg) => {
     audioIntro.pause();
     loggedIn.play();
     // intervalCanvasBase = setInterval(lobbyLoop, 16.67); //Initial canvas
-    intervalCanvasBase = requestAnimationFrame(emptyMapLoop)
+    intervalCanvasBase = requestAnimationFrame(lobbyLoop)
     // intervalCanvasBase = setInterval(lobbyLoop, 16.67); //Initial canvas
     console.log("logged in")
 
