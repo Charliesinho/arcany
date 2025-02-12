@@ -69,18 +69,47 @@ body {
     z-index: 10;
 
     display: flex;
-    flex-direction: column;
+    /* flex-direction: column; */
     justify-content: center;
     align-items: center;
-    /* gap: 40px; */
+    gap: 30px;
 }
 
-#openerScreen-child {
+.openerScreen-child {
     height: 100%;
     display: flex;
     align-items: center;
     flex-direction: column;
     justify-content: center;
+    position: relative;
+    top: 100px;
+    opacity: 0;
+    animation: cardUp 1s ease 1s forwards;
+}
+
+.openerScreen-childImg {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    gap: 30px;
+}
+
+.openerScreen-childImg > div {
+    height: 323px;
+    width: 487px;
+    border: solid 1px white;
+    background-size: cover !important;
+    background-position: center !important;
+    position: relative;
+    top: 100px;
+    opacity: 0;
+    animation: cardUp 1s ease 2.5s forwards;
+}
+
+.openerScreen-childImg > div:first-child {
+    animation: cardUp 1s ease 3s forwards;
 }
 
 #openerScreen-button {
@@ -129,7 +158,7 @@ body {
 
 #openerScreen-content {
     width: 530px;
-    height: 64%;
+    height: 574px;
     background: linear-gradient(180deg, rgb(14, 13, 89) 0%, rgb(42 11 67) 100%);
     outline: solid 1px #ffffff5c;
     outline-offset: -11px;
