@@ -5216,10 +5216,10 @@ socket.on("loginAttempt", (msg) => {
     loggedIn.play();
     // intervalCanvasBase = setInterval(lobbyLoop, 16.67); //Initial canvas
     intervalCanvasBase = requestAnimationFrame(lobbyLoop)
+    lobbySoundtrack()
     // intervalCanvasBase = setInterval(lobbyLoop, 16.67); //Initial canvas
     console.log("logged in")
 
-    loginScreen.classList.add('downLogIn');
     chatInput.style.display = "block";
     playerHeartParent.style.display = "block";
     uiProfileCurrentClothing.style.visibility = "visible";
@@ -5228,22 +5228,20 @@ socket.on("loginAttempt", (msg) => {
     menuUiProfile.style.display = "flex";
     toolBar.style.display = "flex"
     fishingAvailableButton.style.display = "block";
+    loginBox.style.display = "none";
+    loginButton.style.display = "none";
+    createButton.style.display = "none";
+    loginArt.style.display = "none";
+
+    blockMovement = false;
+    socket.emit("blockMovement", blockMovement);
+
+    shootingBlock = false;
     
 
     setTimeout(() => {
-      loginBox.style.display = "none";
-      loginButton.style.display = "none";
-      createButton.style.display = "none";
-      loginArt.style.display = "none";
 
-      blockMovement = false;
-      socket.emit("blockMovement", blockMovement);
-
-      shootingBlock = false;
-
-      lobbySoundtrack()
-
-    }, 2000);
+    }, 500);
 
   } else if (msg === "failed") {
     passwordInput.style.background = "#ff5471";
@@ -5685,36 +5683,27 @@ function shootDefaultArcane () {
   audioShootNature.play()
 
   // socket.emit("projectile", angle);
-  cameraShake();
+  // cameraShake();
 
   // console.log(myPlayer?.weapon[0])
  
-  for (let i = 1; i <= myPlayer?.weapon[0].bullets; i++) {
-    angle = i === 0 ? angle
-    : i === 1 ? angle + 0.1
-    : i === 2 ? angle - 0.1
-    : i === 3 ? angle + 0.05
-    : i === 4 ? angle - 0.05
-    : i === 5 ? angle + 0.15
-    : i === 6 ? angle - 0.15
-    : i === 7 ? angle + 0.2
-    : i === 8 ? angle - 0.2
-    : i === 9 ? angle + 0.25
-    : i === 10 ? angle - 0.25
-    : i === 11 ? angle + 0.3
-    : i === 12 ? angle - 0.3
-    : angle;
-
+  for (let i = 0; i < myPlayer?.weapon[0].bullets; i++) {
+    let spread = 0.1; // Adjust this value to control bullet spread
+    let offset = Math.ceil(i / 2) * spread; // Increase spread step by step
+    let bulletAngle = (i % 2 === 0) ? angle - offset : angle + offset; // Alternating spread
 
     projectilesClient.push({
-        angle,
+        angle: bulletAngle,
         x: playerX + 20,
         y: playerY + 50,
         timeLeft: myPlayer?.weapon[0].range,
         playerId: socket.id,
         damage: myPlayer?.weapon[0].damage,
-      }) 
-  }
+    });
+}
+
+
+  console.log(myPlayer?.weapon[0].bullets)
 
   shooting = true;
 
@@ -44068,29 +44057,6 @@ function drawOnTop (img, x, y, width, height, cx, cy, anim) {
   }
 }
 
-function buildPlaceParticles(obj) {
-  console.log(obj)
-  for (let i = 0; i < 20; i++) {
-    const angle = Math.random() * Math.PI * 2;
-    const speed = Math.floor(Math.random() * (20 - 8 + 1)) + 5;; // Random speed (adjust as needed)
-    const size = 25; // Random size between 3 and 8
-    const particleX = obj.x - (obj.w * 2);
-    const particleY = obj.y - 100;
-
-    const randomNumber = Math.floor(Math.random() * 2) + 1;
-    
-    if (randomNumber === 1) {
-
-      particles.push({ x: 1, y: 1, size: size, color: 'white', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partWalk"].speedDec, sizeDecrease: particlesSystem["partWalk"].sizeDec, name: particlesSystem["partSlime"].name });
-            
-    } else {
-
-      particles.push({ x: 1, y: 1, size: size, color: 'white', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partWalk"].speedDec, sizeDecrease: particlesSystem["partWalk"].sizeDec, name: particlesSystem["partSlime"].name });
-    }
-
-  }
-}
-
 function localPlayerMovement () {
   if (movingLeft && allowedMoveUpLeft) {
     inputs["left"] = true;
@@ -46778,20 +46744,44 @@ function playerTrailParticles () {
 function push360Particles (color, amount, x, y) {
   for (let i = 0; i < amount; i++) {
     const speed = Math.floor(Math.random() * (1 - 1 + 8)) + 1;
-    const angleDegrees = Math.random() * 360;
-    const size = 15 ;
+    const angleDegrees = Math.random() * Math.PI * 2;
+    const size = 20 ;
     const particleX = x;
     const particleY = y;
+    // console.log(angleDegrees)
     
-    particles.push({ x: 1, y: 1, size: size, color: color, speed: speed, angle: angleDegrees, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partWalk"].speedDec, sizeDecrease: particlesSystem["partWalk"].sizeDec, name: particlesSystem["partWalk"].name });   
+    particles.push({ x: 1, y: 1, size: size, color: color, speed: speed, angle: angleDegrees, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partWalk"].speedDec, sizeDecrease: particlesSystem["partWalk"].sizeDec, name: particlesSystem["partSlime"].name });   
+  }
+}
+
+function buildPlaceParticles(obj) {
+  // console.log(obj)
+  for (let i = 0; i < 20; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = Math.floor(Math.random() * (20 - 8 + 1)) + 5;; // Random speed (adjust as needed)
+    const size = 25; // Random size between 3 and 8
+    const particleX = obj.x - (obj.w * 2);
+    const particleY = obj.y - 100;
+
+    const randomNumber = Math.floor(Math.random() * 2) + 1;
+    
+    if (randomNumber === 1) {
+
+      particles.push({ x: 1, y: 1, size: size, color: 'white', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partWalk"].speedDec, sizeDecrease: particlesSystem["partWalk"].sizeDec, name: particlesSystem["partSlime"].name });
+            
+    } else {
+
+      particles.push({ x: 1, y: 1, size: size, color: 'white', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partWalk"].speedDec, sizeDecrease: particlesSystem["partWalk"].sizeDec, name: particlesSystem["partSlime"].name });
+    }
+
   }
 }
 
 function enemyDeathParticles (enemy) {
   for (let i = 0; i < 20; i++) {
-    const angle = angleMouse + (Math.random() * 0.5 * 2 - 0.2) ;; // Random angle
-    const speed = Math.floor(Math.random() * (20 - 8 + 1)) + 5;; // Random speed (adjust as needed)
-    const size = 25; // Random size between 3 and 8
+    const angle = Math.random() * Math.PI * 2; // Random angle
+    const speed = Math.floor(Math.random() * (20 - 16 + 1)) + 1;; // Random speed (adjust as needed)
+    const size = 30; // Random size between 3 and 8
     const particleX = enemy.spawn.x + 180;
     const particleY = enemy.spawn.y + 190;
 
@@ -46799,11 +46789,11 @@ function enemyDeathParticles (enemy) {
     
     if (randomNumber === 1) {
 
-      particles.push({ x: 1, y: 1, size: size, color: '#6d64b6', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partSlime"].speedDec, sizeDecrease: particlesSystem["partSlime"].sizeDec, name: particlesSystem["partSlime"].name });
+      particles.push({ x: 1, y: 1, size: size, color: 'whie', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partSlime"].speedDec, sizeDecrease: particlesSystem["partSlime"].sizeDec, name: particlesSystem["partSlime"].name });
             
     } else {
 
-      particles.push({ x: 1, y: 1, size: size, color: '#afa6ff', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partSlime"].speedDec, sizeDecrease: particlesSystem["partSlime"].sizeDec, name: particlesSystem["partSlime"].name });
+      particles.push({ x: 1, y: 1, size: size, color: 'white', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partSlime"].speedDec, sizeDecrease: particlesSystem["partSlime"].sizeDec, name: particlesSystem["partSlime"].name });
     }
 
   }
