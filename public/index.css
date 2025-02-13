@@ -397,6 +397,7 @@ color: white;
     text-shadow: 0 0 12px black;
     font-weight: 100;
     animation: timer 1s ease forwards;
+    z-index: 1;
 }
 
 @keyframes timer {
@@ -567,6 +568,7 @@ color: white;
     left: 50%;
     gap: 5px;
     transform: translate(-50%, -0%);
+    z-index: 1;
 }
 .heart {
     width: 32px;
@@ -1667,11 +1669,11 @@ color: white;
 }
 
 #catchGif.starsAnim {
-    animation: stars 3s ease;
+    animation: stars 2s ease;
 }
 
 #obtainedItem.obtainedAnim {
-    animation: obtained 3s ease;
+    animation: obtained 2s ease;
 }
 
 #scores {
@@ -1712,25 +1714,37 @@ color: white;
     0% {
         height: 0;
         width: 0;
-        top: 50%;
+        left: 50%;
         opacity: 0;
     }
-    20% {
+    10% {
         height: 190px;
         width: 190px;
-        top: 50%;
+        left: 50%;
+        opacity: 1;
+    }
+    12% {
+        height: 200px;
+        width: 200px;
+        left: 50%;
+        opacity: 1;
+    }
+    14% {
+        height: 190px;
+        width: 190px;
+        left: 50%;
         opacity: 1;
     }
     80% {
         height: 190px;
         width: 190px;
-        top: 50%;
+        left: 50%;
         opacity: 1;
     }
     100% {
         height: 50px;
         width: 50px;
-        top: 100%;
+        left: 100%;
         opacity: 0;
     }
 }
@@ -2915,6 +2929,7 @@ color: white;
     height: 250px;
     left: 50%;
     top: 65%;
+    z-index: 1;
     transform: translate(-50%, 0);
     opacity: 0;
     animation: opacityUp .5s ease forwards;

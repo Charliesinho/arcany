@@ -43861,7 +43861,7 @@ function updateSmoothOnlinePlayerPosition(smoothPlayer) {
 const DayCycleFilters = [
   'sepia(0%) hue-rotate(0deg) saturate(1) contrast(1) brightness(1)',  
   'sepia(64%) hue-rotate(-39deg) saturate(2) contrast(.9) brightness(.9)', 
-  'sepia(78%) hue-rotate(-19deg) saturate(1.5) contrast(1) brightness(0.7);', 
+  'sepia(0%) hue-rotate(0deg) saturate(1) contrast(1) brightness(0.7)', 
   'sepia(64%) hue-rotate(-39deg) saturate(2) contrast(.9) brightness(.9)'
 ];
 
