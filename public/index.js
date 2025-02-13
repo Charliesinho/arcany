@@ -41,6 +41,16 @@ window.addEventListener("load", () => {
   let videoIntro = document.getElementById("introLogo-video")
   videoIntro.volume = 0.2;
   videoIntro.play();
+  let scrollInterval =setInterval(() => {
+    if (window.scrollY > 0) {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth' 
+      });
+    } else {
+      clearInterval(scrollInterval)
+    }
+  }, 20);
   
   setTimeout(() => {
     document.getElementById("introLogo").style.display = "none";
@@ -5050,7 +5060,7 @@ socket.on("player", (serverPlayer) => {
 
   if (myPlayer.inventory.length !== 0) {
       // console.log(myPlayer.inventory)
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < 21; i++) {
 
 
         if (myPlayer.inventory[i]) {
