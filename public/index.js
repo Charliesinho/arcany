@@ -38,11 +38,13 @@ window.addEventListener("load", () => {
   loadingProgress = 100;
   console.log("Finished loading");
   document.getElementById("introLogo-img").style.display = "none";
-  document.getElementById("introLogo-video").play();
+  let videoIntro = document.getElementById("introLogo-video")
+  videoIntro.volume = 0.2;
+  videoIntro.play();
   
   setTimeout(() => {
     document.getElementById("introLogo").style.display = "none";
-  }, 6000);
+  }, 7000);
   
   clearInterval(loadingInterval);
 });
@@ -1259,6 +1261,7 @@ function handleLogin(action) {
   }
 
   socket.emit("loginInfo", loginInfo);
+  document.getElementById("introLogo-img").style.display = "block";
   // socket.emit("loadEnemies", enemies);
 }
 
@@ -5196,6 +5199,7 @@ socket.on("startCooking", (item) => {
 let intervalCanvasBase;
 
 socket.on("loginAttempt", (msg) => {
+  document.getElementById("introLogo-img").style.display = "none";
 
   if(msg === "success") {
     audioIntro.pause();
@@ -5234,9 +5238,12 @@ socket.on("loginAttempt", (msg) => {
   } else if (msg === "failed") {
     passwordInput.style.background = "#ff5471";
     passwordInput.style.color = "white";
+    errorDisplay("Information invalid.")
+    
   } else if (msg === "existing") {
     usernameInput.style.background = "#ff5471";
     usernameInput.style.color = "white";
+    errorDisplay("This user already exists.")
   }
 });
 
