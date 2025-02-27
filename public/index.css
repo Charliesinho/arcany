@@ -468,21 +468,64 @@ color: white;
 #uiBuilding {
     position: absolute;
     bottom: 103px;
-    left: 0px;
+    left: 12px;
     /* transform: translate(0%, -50%); */
-    align-items: center;
+    align-items: flex-end;
     /* padding: 0 !important; */
-    padding: 10px;
+    padding: 18px;
     /* background: white; */
-    border-radius: 5px;
+    border-radius: 3px;
     display: none;
     flex-direction: column;
     gap: 10px;
-    max-height: 559px;
-    /* height: 143px; */
+    max-height: 572px;
+    width: 164px;
     overflow-y: auto;
-    /* border: solid 1px black; */
+    border: solid 3px #b3a496;
+    outline: solid 3px #393939;
     z-index: 1;
+    background: #FFE2C1;
+}
+
+#uiBuildingToolsDiv {
+    position: sticky;
+    top: 0;
+    /* left: -50px; */
+    margin-bottom: -343%;
+    align-self: flex-start;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    width: 76px;
+}
+
+#uiBuildingToolsDiv > h1 {
+    margin: 10px 0 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 18.5px;
+    color: #1d1d1d;
+    background: transparent;
+    border: solid 2.5px #b3a496;
+    outline: solid 2.5px #393939;
+}
+#uiBuildingToolsDiv > img {
+    width: 50px;
+    padding: 3px;
+    position: relative;
+    top: 0;
+    border-radius: 5px;
+    background: transparent;
+    border: solid 2.5px #b3a496;
+    outline: solid 2.5px #393939;
+    transition: all .2s ease;
+}
+
+#uiBuildingToolsDiv > img:hover {
+    top: -3px;
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.142);
+    background-color: rgb(148, 223, 148);
 }
 
 .buildObject {
@@ -503,7 +546,7 @@ color: white;
     background: url(./icons/uiIcon/bg.png);
     background-size: cover;
     background-repeat: no-repeat;
-    /* filter: sepia(1) brightness(0.8) contrast(1.1); */
+    filter: hue-rotate(0deg);
     transition: all .2s ease;
     box-shadow: none;
     /* border: solid 1px black; */
@@ -515,6 +558,7 @@ color: white;
     filter: none;
     top: -5px;
     box-shadow: 0 5px 5px rgba(0, 0, 0, 0.142);
+    filter: hue-rotate(60deg);
 }
 
 .buildObjectParent:active {

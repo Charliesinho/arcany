@@ -626,9 +626,8 @@ metalPan.volume = 0.2;
 
 
 const canvasLobby = document.getElementById("canvas-lobby");
-const widthMinus20vw = window.innerWidth;
-canvasLobby.width = widthMinus20vw;
-canvasLobby.height = window.innerHeight;
+canvasLobby.width =  window.innerWidth * 1.1;
+canvasLobby.height = window.innerHeight * 1.1;
 
 const canvas = canvasLobby.getContext("2d");
 
@@ -899,7 +898,8 @@ const timer = document.querySelector("#timer");
 
 const uiProfileRank = document.getElementById("uiProfileRank");
 
-const placeWalls = document.getElementById("wallsButton");
+const placeWalls = document.getElementById("wallButtonUi");
+const deleteObjButtonUi = document.getElementById("deleteObjButtonUi");
 const deleteWalls = document.getElementById("deleteWalls");
 const placeEnchantingArea = document.getElementById("placeEnchantingArea");
 const startBuildingBut = document.getElementById("buildButton");
@@ -2934,6 +2934,7 @@ let tradedItems = []
 let tradingArray = []
 
 function interactInventory(item, index) {
+  console.log(item)
   if (item.type === "soul") {
 
     if(consumeAvailable === true) {
@@ -5215,7 +5216,7 @@ socket.on("loginAttempt", (msg) => {
     audioIntro.pause();
     loggedIn.play();
     // intervalCanvasBase = setInterval(lobbyLoop, 16.67); //Initial canvas
-    intervalCanvasBase = requestAnimationFrame(lobbyLoop)
+    intervalCanvasBase = requestAnimationFrame(emptyMapLoop)
     lobbySoundtrack()
     // intervalCanvasBase = setInterval(lobbyLoop, 16.67); //Initial canvas
     console.log("logged in")
@@ -6506,17 +6507,17 @@ function cameraFollow () {
 }
 
 canvasLobby.addEventListener("wheel", event => {
-  const delta = Math.sign(event.deltaY);
+  // const delta = Math.sign(event.deltaY);
 
-  if (delta === 1 && canvasLobby.height < 1000) {
-    canvasLobby.width *= 1.1;
-    canvasLobby.height *= 1.1;
-  } else if (delta === 1 && canvasLobby.height >= 1000) {
+  // if (delta === 1 && canvasLobby.height < 1000) {
+  //   canvasLobby.width *= 1.1;
+  //   canvasLobby.height *= 1.1;
+  // } else if (delta === 1 && canvasLobby.height >= 1000) {
 
-  } else if (canvasLobby.height > 600) {
-    canvasLobby.width *= 0.9;
-    canvasLobby.height *= 0.9;
-  }
+  // } else if (canvasLobby.height > 600) {
+  //   canvasLobby.width *= 0.9;
+  //   canvasLobby.height *= 0.9;
+  // }
 });
 // Camera <
 
@@ -43164,16 +43165,17 @@ const rect = canvasLobby.getBoundingClientRect();
 addEventListener("mousemove", (event) => {
   let x;
   let y;
-  hoveredXCoord = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
-  hoveredYCoord = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+  // console.log(event)
+  hoveredXCoord = event.clientX - (event.clientX - (event.screenX)) + cameraX + cameraShakeX + 0;
+  hoveredYCoord = event.clientY - (event.clientY - (event.screenY)) + cameraY + cameraShakeY - 120;
 
-  if ((currentlyPlacingWall || !currentlyPlacingWall) && currentDevAction !== "delete") {
+  if ((currentlyPlacingWall || !currentlyPlacingWall) && currentDevAction !== "delete" && currentDevAction !== "deleteObj") {
     widthCoord = hoveredXCoord - selectedXcoord;
     heightCoord = hoveredYCoord - selectedYcoord;
   } 
   else if (currentDevAction === "delete") {
-    x = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
-    y = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    x = hoveredXCoord;
+    y = hoveredYCoord;
 
     let collidingWitWall = false;
 
@@ -43201,17 +43203,46 @@ addEventListener("mousemove", (event) => {
       currentSelectedWall = null;
     }
   }
+  else if (currentDevAction === "deleteObj") {
+    x = hoveredXCoord;
+    y = hoveredYCoord;
+
+    let collidingWitWall = false;
+
+    mapsInfo[currentLand].objects.forEach(wall => {
+
+      const mouseCollider = {
+        x: x,
+        y: y,
+        width: 20,
+        height: 20
+      }
+
+      
+      if (isColliding(mouseCollider, { x: wall.x, y: wall.y, width: wall.w, height: wall.h })) {
+        currentSelectedWall = mapsInfo[currentLand].objects.indexOf(wall);
+        collidingWitWall = true;
+      }
+      
+    })
+
+    console.log(collidingWitWall)
+
+    if (!collidingWitWall) {
+      currentSelectedWall = null;
+    }
+  }
 });
 
 canvasLobby.addEventListener('click', function(event) {
   if (!currentlyPlacingWall && currentDevAction === "wall" && currentSelectedWall === null) {
-    selectedXcoord = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
-    selectedYcoord = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    selectedXcoord = hoveredXCoord;
+    selectedYcoord = hoveredYCoord;
     currentlyPlacingWall = true;
   } 
   else if (currentSelectedWall === null && currentlyPlacingWall && currentDevAction === "wall") {
-    const x = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
-    const y = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    const x = hoveredXCoord;
+    const y = hoveredYCoord;
     const newWidth = x - selectedXcoord;
     const newHeight = y - selectedYcoord;
     
@@ -43229,6 +43260,10 @@ canvasLobby.addEventListener('click', function(event) {
 
   else if (currentSelectedWall >= 0 && currentDevAction === "delete") {
     mapsInfo[currentLand].colliders.splice(currentSelectedWall, 1)
+    currentSelectedWall = null;
+  }
+  else if (currentSelectedWall >= 0 && currentDevAction === "deleteObj") {
+    mapsInfo[currentLand].objects.splice(currentSelectedWall, 1)
     currentSelectedWall = null;
   }
   
@@ -43500,6 +43535,19 @@ deleteWalls.addEventListener("click", function() {
     deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
   }
  });
+
+deleteObjButtonUi.addEventListener("click", function() {
+if (currentDevAction !== "deleteObj") {
+  currentDevAction = "deleteObj";
+  roomsDiv.style.display = "none"
+  dialogsDiv.style.display = "none"
+} else {
+  currentDevAction = "none";
+  deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
+}
+});
+
+
 
 placeFishingArea.addEventListener("click", function() {
   if (currentDevAction !== "fish") {
@@ -45581,6 +45629,13 @@ function checkEnemyCombat (enemy) {
           socket.emit("giveItem", "chestKeyRestfield");
         }
 
+        setTimeout(() => {
+          frameDuration = 800 / 30;
+        }, 100);
+        setTimeout(() => {
+          frameDuration = 800 / fps;
+        }, 1500);
+
         resetTimer()
         areaNameDisplay("Trial Completed");
         challengeCompleted.play();
@@ -46802,8 +46857,8 @@ function enemyDeathParticles (enemy) {
 // Particle system <
 
 let lastTime = performance.now();       
-const fps = 60;                        
-const frameDuration = 800 / fps;  
+let fps = 60;                        
+let frameDuration = 800 / fps;  
 
 let targetAlphaCycle = 0;
 let currentAlphaCycle = 0;
@@ -46870,7 +46925,6 @@ function nightTimeCanvas() {
   
   canvas.globalCompositeOperation = 'source-over';
 }
-
 
 function updateGame() {
   mapSetup();
