@@ -1,7 +1,7 @@
 //Change this to push >
 
-const socket = io(`ws://localhost:5000`);
-// const socket = io(`https://arcanyGame.up.railway.app/`);
+// const socket = io(`ws://localhost:5000`);
+const socket = io(`https://arcanyGame.up.railway.app/`);
 // const socket = io(window.location.origin);
 
 
@@ -54,7 +54,7 @@ window.addEventListener("load", () => {
   
   setTimeout(() => {
     document.getElementById("introLogo").style.display = "none";
-  }, 7000);
+  }, 5000);
   
   clearInterval(loadingInterval);
 });
@@ -899,7 +899,12 @@ const timer = document.querySelector("#timer");
 const uiProfileRank = document.getElementById("uiProfileRank");
 
 const placeWalls = document.getElementById("wallButtonUi");
+const hammerButtonUi  = document.getElementById("hammerButtonUi");
+const layerOneButtonUi  = document.getElementById("layerOneButtonUi");
+const layerTwoButtonUi  = document.getElementById("layerTwoButtonUi");
+const layerThreeButtonUi  = document.getElementById("layerThreeButtonUi");
 const deleteObjButtonUi = document.getElementById("deleteObjButtonUi");
+const saveObjButtonUi = document.getElementById("saveObjButtonUi");
 const deleteWalls = document.getElementById("deleteWalls");
 const placeEnchantingArea = document.getElementById("placeEnchantingArea");
 const startBuildingBut = document.getElementById("buildButton");
@@ -5209,14 +5214,26 @@ socket.on("startCooking", (item) => {
 
 let intervalCanvasBase;
 
-socket.on("loginAttempt", (msg) => {
+socket.on("updateMap", (map) => {
+  // console.log(map)
+  mapsInfo = {[map.worldData.areaName]: map.worldData}
+  buildPlaceParticles(map.object)
+})
+
+socket.on("loginAttempt", (res) => {
   document.getElementById("introLogo-img").style.display = "none";
 
-  if(msg === "success") {
+  if(res.msg === "success") {
+    let comingMap = res.map
+    // console.log(comingMap)
+    let areaNameComing = comingMap.areaName
+    currentLand = areaNameComing
+    mapsInfo = {[areaNameComing]: comingMap}
     audioIntro.pause();
     loggedIn.play();
-    // intervalCanvasBase = setInterval(lobbyLoop, 16.67); //Initial canvas
-    intervalCanvasBase = requestAnimationFrame(emptyMapLoop)
+    // intervalCanvasBase = requestAnimationFrame(lobbyLoop); //Initial canvas
+    // intervalCanvasBase = requestAnimationFrame(emptyMapLoop)
+    intervalCanvasBase = requestAnimationFrame(generalMapLoop)
     lobbySoundtrack()
     // intervalCanvasBase = setInterval(lobbyLoop, 16.67); //Initial canvas
     console.log("logged in")
@@ -5244,12 +5261,12 @@ socket.on("loginAttempt", (msg) => {
 
     }, 500);
 
-  } else if (msg === "failed") {
+  } else if (res === "failed") {
     passwordInput.style.background = "#ff5471";
     passwordInput.style.color = "white";
     errorDisplay("Information invalid.")
     
-  } else if (msg === "existing") {
+  } else if (res === "existing") {
     usernameInput.style.background = "#ff5471";
     usernameInput.style.color = "white";
     errorDisplay("This user already exists.")
@@ -5515,7 +5532,6 @@ window.addEventListener("keydown", (e) => {
   
   if(e?.key?.toLowerCase() === "e" && scoreAvailable === true) {
     scores.style.display =  scores.style.display === "flex" ? "none" : "flex";
-    console.log(currentLand)
     socket.emit("getScores", currentLand)
   }
 
@@ -6555,7 +6571,7 @@ let particlesSystem = {
 
 let currentLand= "none";
 let currentObjToPlace = "";
-console.log("current land: ", currentLand)
+// console.log("current land: ", currentLand)
 
 setTimeout(() => {
   console.log(booksOne.width)
@@ -7849,6 +7865,7 @@ let mapsInfo = {
       }
     ],
     },
+
     emptyMap: {
       areaName: "EMPTY TERRAIN",
       areaSounds: grassLandsSoundtrack,
@@ -7865,15 +7882,9 @@ let mapsInfo = {
   
       ],
       objects: [
-        {
-          name: "woodPole",
-          backgroundObj: false,
-          img: woodPole,
-          x: 1100,
-          y: 1100,
-          h: 21,
-          w: 7
-        },
+       [],
+       [],
+       []
       ]
     },
   
@@ -43159,15 +43170,18 @@ let currentDevAction = "none"
 let currentlyPlacingWall = false;
 let currentSelectedWall = null;
 let currentSelectedMap = "none"
+let collidingWitWall = false;
+let currentSelectedObjLayer = 0;
 
 const rect = canvasLobby.getBoundingClientRect();
 
 addEventListener("mousemove", (event) => {
   let x;
   let y;
-  // console.log(event)
-  hoveredXCoord = event.clientX - (event.clientX - (event.screenX)) + cameraX + cameraShakeX + 0;
-  hoveredYCoord = event.clientY - (event.clientY - (event.screenY)) + cameraY + cameraShakeY - 120;
+  let escalableDivisor = calculateValue(window.screen.width)
+  // console.log(window.screen.width, escalableDivisor)
+  hoveredXCoord = event.clientX - (event.clientX - (event.screenX * 1.1)) + cameraX + cameraShakeX + 0 + escalableDivisor;
+  hoveredYCoord = event.clientY - (event.clientY - (event.screenY * 1.1)) + cameraY + cameraShakeY - 120 + escalableDivisor / 8;
 
   if ((currentlyPlacingWall || !currentlyPlacingWall) && currentDevAction !== "delete" && currentDevAction !== "deleteObj") {
     widthCoord = hoveredXCoord - selectedXcoord;
@@ -43177,7 +43191,7 @@ addEventListener("mousemove", (event) => {
     x = hoveredXCoord;
     y = hoveredYCoord;
 
-    let collidingWitWall = false;
+    collidingWitWall = false;
 
     mapsInfo[currentLand].colliders.forEach(wall => {
 
@@ -43206,22 +43220,29 @@ addEventListener("mousemove", (event) => {
   else if (currentDevAction === "deleteObj") {
     x = hoveredXCoord;
     y = hoveredYCoord;
-
+    
     let collidingWitWall = false;
+    
+    mapsInfo[currentLand].objects[currentSelectedObjLayer].forEach(wall => {
 
-    mapsInfo[currentLand].objects.forEach(wall => {
+      let wallX = wall.x - (wall.w * generalZoom);
+      let wallY = wall.y - (wall.h * generalZoom);
+      let wallHW = wall.w * generalZoom;
+      let wallYH = wall.h * generalZoom;
 
       const mouseCollider = {
-        x: x,
-        y: y,
+        x: x + 150,
+        y: y + 180,
         width: 20,
         height: 20
       }
 
-      
-      if (isColliding(mouseCollider, { x: wall.x, y: wall.y, width: wall.w, height: wall.h })) {
-        currentSelectedWall = mapsInfo[currentLand].objects.indexOf(wall);
+      if (isColliding(mouseCollider, { x: wallX, y: wallY, width: wallHW, height: wallYH })) {
+        currentSelectedWall = mapsInfo[currentLand].objects[currentSelectedObjLayer].indexOf(wall);
         collidingWitWall = true;
+        canvas.fillStyle = "red";
+        canvas.fillRect(wallX - cameraX, wallY - cameraY, wallHW, wallYH);
+        canvas.fillRect(mouseCollider.x - cameraX, mouseCollider.y - cameraY, 20, 20);
       }
       
     })
@@ -43235,6 +43256,7 @@ addEventListener("mousemove", (event) => {
 });
 
 canvasLobby.addEventListener('click', function(event) {
+  console.log(currentSelectedWall)
   if (!currentlyPlacingWall && currentDevAction === "wall" && currentSelectedWall === null) {
     selectedXcoord = hoveredXCoord;
     selectedYcoord = hoveredYCoord;
@@ -43262,8 +43284,8 @@ canvasLobby.addEventListener('click', function(event) {
     mapsInfo[currentLand].colliders.splice(currentSelectedWall, 1)
     currentSelectedWall = null;
   }
-  else if (currentSelectedWall >= 0 && currentDevAction === "deleteObj") {
-    mapsInfo[currentLand].objects.splice(currentSelectedWall, 1)
+  else if (currentSelectedWall !== null && currentDevAction === "deleteObj") {
+    mapsInfo[currentLand].objects[currentSelectedObjLayer].splice(currentSelectedWall, 1)
     currentSelectedWall = null;
   }
   
@@ -43272,15 +43294,17 @@ canvasLobby.addEventListener('click', function(event) {
     let objClone = _.cloneDeep(obj);
     objClone.x = hoveredXCoord + 200
     objClone.y = hoveredYCoord + 200
-    mapsInfo[currentLand].objects.push(objClone)
-    mapsInfo[currentLand].objects.sort((a, b) => {
+
+    mapsInfo[currentLand].objects[currentSelectedObjLayer].push(objClone)
+    mapsInfo[currentLand].objects[currentSelectedObjLayer].sort((a, b) => {
       if (a.backgroundObj && !b.backgroundObj) return -1; // a goes first
-      if (!a.backgroundObj && b.backgroundObj === "front") return 1;  // b goes first
       if (!a.backgroundObj && b.backgroundObj) return 1;  // b goes first
       return a.y - b.y; // Otherwise, sort by y
     });
+    
     playRandomPop()
-    buildPlaceParticles(objClone)
+    // buildPlaceParticles(objClone)
+    socket.emit("placedObject",{ objects: mapsInfo[currentLand].objects, currentLand: currentLand, object: objClone});
   }
 
 
@@ -43489,25 +43513,18 @@ function createImagesFromMapObjects(mapObjects) {
   });
 }
 
+function calculateValue(resolution) {
+  return Math.max(0, -16.5 * resolution + 33792);
+}
+
 // UI DEV COMMENT >
 
 placeWalls.addEventListener("click", function() {
-  showWallsFunction()
+  showWallsFunction(true)
  if (currentDevAction !== "wall") {
   currentDevAction = "wall";
   roomsDiv.style.display = "none"
   dialogsDiv.style.display = "none"
-  // deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  // placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  // placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  // placeDialog.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  // placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  // placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  // placeChest.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  // placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  // startBuildingBut.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  // placeWalls.style.backgroundColor = "rgba(170, 233, 170, 1)"
-   uiBuilding.style.display = "none"
  } else {
   currentDevAction = "none";
   // placeWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
@@ -43515,6 +43532,7 @@ placeWalls.addEventListener("click", function() {
 });
 
 deleteWalls.addEventListener("click", function() {
+  showWallsFunction(true)
   if (currentDevAction !== "delete") {
     currentDevAction = "delete";
     roomsDiv.style.display = "none"
@@ -43537,6 +43555,7 @@ deleteWalls.addEventListener("click", function() {
  });
 
 deleteObjButtonUi.addEventListener("click", function() {
+  showWallsFunction(false)
 if (currentDevAction !== "deleteObj") {
   currentDevAction = "deleteObj";
   roomsDiv.style.display = "none"
@@ -43547,7 +43566,11 @@ if (currentDevAction !== "deleteObj") {
 }
 });
 
-
+saveObjButtonUi.addEventListener("click", function() {
+  showWallsFunction(false);
+  socket.emit("saveWorld", mapsInfo[currentLand]);
+  errorDisplay("Saving the map")
+});
 
 placeFishingArea.addEventListener("click", function() {
   if (currentDevAction !== "fish") {
@@ -43571,7 +43594,7 @@ placeFishingArea.addEventListener("click", function() {
   }
  });
 
- placeEnchantingArea.addEventListener("click", function() {
+placeEnchantingArea.addEventListener("click", function() {
 if (currentDevAction !== "enchanting") {
   currentDevAction = "enchanting";
   roomsDiv.style.display = "none"
@@ -43615,27 +43638,35 @@ if (currentDevAction !== "cook") {
 }
 });
 
+hammerButtonUi.addEventListener("click", function() {
+  showWallsFunction(false)
+  playRandomPop()
+  if (currentDevAction !== "building") {
+    currentDevAction = "building";
+  } else {
+    currentDevAction = "none";
+  }
+});
+
+layerOneButtonUi.addEventListener("click", function() {
+  currentSelectedObjLayer = 2;
+});
+layerTwoButtonUi.addEventListener("click", function() {
+  currentSelectedObjLayer = 1;
+});
+layerThreeButtonUi.addEventListener("click", function() {
+  currentSelectedObjLayer = 0;
+});
+
 startBuildingBut.addEventListener("click", function() {
   playRandomPop()
-if (currentDevAction !== "building") {
-  currentDevAction = "building";
+if (uiBuilding.style.display !== "flex") {
   roomsDiv.style.display = "none"
-  // placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
   dialogsDiv.style.display = "none"
-  // deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  // placeDialog.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  // placeWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  // placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  // placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  // placeChest.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  // placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  // placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  // startBuildingBut.style.backgroundColor = "rgba(170, 233, 170, 1)"
   uiBuilding.style.display = "flex"
 } else {
   currentDevAction = "none";
   uiBuilding.style.display = "none"
-  // startBuildingBut.style.backgroundColor = "rgb(255 255 255 / 29%)"
 }
 });
 
@@ -43757,9 +43788,10 @@ placeDialog.addEventListener("click", function() {
   }
 });
 
-function showWallsFunction() {
+function showWallsFunction(state) {
   playRandomPop()
-if (wallsVisibility === 0) {
+  console.log(state)
+if (state === true) {
   wallsVisibility = 0.5;
   showWalls.style.backgroundColor = "rgba(170, 233, 170, 1)"
 } else {
@@ -44020,8 +44052,8 @@ function mapSetup () {
     
     // Set player position
     if (myPlayer) {
-      playerX = mapsInfo[currentLand].playerPos.x
-      playerY = mapsInfo[currentLand].playerPos.y
+      playerX = localPlayerPos.x
+      playerY = localPlayerPos.y
       localPlayerMovement()
     }
 
@@ -44037,7 +44069,7 @@ function mapSetup () {
 let objectsFrames = 0;
 let objectFramesController = 0;
 
-function drawObjects (layer) {
+function drawObjects (layer, num) {
   // console.log(mapsInfo[currentLand])
   if (!mapsInfo[currentLand].objects) return
 
@@ -44050,35 +44082,34 @@ function drawObjects (layer) {
     }
   }
 
-  for (const obj of mapsInfo[currentLand].objects) {
+  for (let i = mapsInfo[currentLand].objects.length - 1; i >= 0; i--) {
 
-    if (obj.backgroundObj === "front") {
-      if (layer === "fronter") {
-        drawOnTop(obj.img, obj.x, obj.y, obj.w, obj.h, cameraX, cameraY, obj.animated)
-      }
-    }
+    for (const obj of mapsInfo[currentLand].objects[i]) {
+      if (!mapObject) return;
 
-    if (obj.backgroundObj === "back") {
-      if (layer === "backer") {
-        drawOnTop(obj.img, obj.x, obj.y, obj.w, obj.h, cameraX, cameraY, obj.animated)
-      }
-    }
-
-    if (obj.backgroundObj === true) {
-      if (layer === "background") {
-        drawOnTop(obj.img, obj.x, obj.y, obj.w, obj.h, cameraX, cameraY, obj.animated)
-      }
-    } 
-
-    if (obj.backgroundObj !== "front" && obj.backgroundObj !== "back" && obj.backgroundObj !== true) {
-      if ((!((playerY - cameraY + 120) > (obj.y - cameraY)) && layer === "front")) {
-        drawOnTop(obj.img, obj.x, obj.y, obj.w, obj.h, cameraX, cameraY, obj.animated)
-      }
-      else if ((playerY - cameraY + 120) >= (obj.y - cameraY) && layer === "back") {
-        drawOnTop(obj.img, obj.x, obj.y, obj.w, obj.h, cameraX, cameraY, obj.animated)
+      let objectOriginal = mapObject.find(item => item.name === obj.name)
+  
+      if (obj.backgroundObj === "back") {
+        if (layer === "backer") {
+          drawOnTop(objectOriginal.img, obj.x, obj.y, obj.w, obj.h, cameraX, cameraY, obj.animated)
+        }
+      } 
+      else if (obj.backgroundObj === true) {
+        if (layer === "background") {
+          drawOnTop(objectOriginal.img, obj.x, obj.y, obj.w, obj.h, cameraX, cameraY, obj.animated)
+        }
       }  
+      else {
+        if (((playerY - cameraY + 120) < (obj.y - cameraY)) && layer === "front" && num === i) {
+          drawOnTop(objectOriginal.img, obj.x, obj.y, obj.w, obj.h, cameraX, cameraY, obj.animated)
+        }
+        else if ((playerY - cameraY + 120) >= (obj.y - cameraY) && layer === "back" && num === i) {
+          drawOnTop(objectOriginal.img, obj.x, obj.y, obj.w, obj.h, cameraX, cameraY, obj.animated)
+        }  
+      }
     }
   }
+
 }
 
 function drawOnTop (img, x, y, width, height, cx, cy, anim) {
@@ -44132,13 +44163,15 @@ function localPlayerMovement () {
   }
 }
 
+let localPlayerPos= {x: 0, y: 0}
+
 function playerCollision () {
   playerColminX = playerX - cameraX - 20;
   playerColminY = playerY - cameraY + 80;
   playerColLengthX = playerWidth + 0;
   playerColLengthY = playerHeight - 10;
-  mapsInfo[currentLand].playerPos.x = playerX;
-  mapsInfo[currentLand].playerPos.y = playerY;
+  localPlayerPos.x = playerX;
+  localPlayerPos.y = playerY;
   canvas.beginPath();
   canvas.fillStyle = `rgb(255, 0, 13, ${wallsVisibility})`;
   canvas.fillRect(playerColminX, playerColminY, playerColLengthX, playerColLengthY);
@@ -45335,32 +45368,12 @@ function drawMap(layer) {
   const frameWidth = 1000; // Width of each frame in the sprite sheet
   const frameHeight = 1000; // Height of each frame in the sprite sheet
 
-  const isSpriteSheet = mapInfo.backgroundImage.width > frameWidth;
+  const isSpriteSheet = emptyMap.width > frameWidth;
 
   if (layer === "back") {
-    if (currentLand === "restfieldPath" || currentLand === "slimeForestPath") {
-      if (myPlayer.access[0][currentLand] === false) {
-        drawMapSprite(mapInfo.backgroundImage, isSpriteSheet, frameWidth, frameHeight);
-      } else {
-        drawMapSprite(mapInfo.backgroundImageOpen, isSpriteSheet, frameWidth, frameHeight);
-      }
-    } else {
-      drawMapSprite(mapInfo.backgroundImage, isSpriteSheet, frameWidth, frameHeight);
-    }
-    drawQuestMarkers();
+      drawMapSprite(emptyMap, isSpriteSheet, frameWidth, frameHeight);
+      drawQuestMarkers();
   } 
-  else {
-    if (currentLand === "restfieldPath" || currentLand === "slimeForestPath") {
-      if (myPlayer.access[0][currentLand] === false) {
-        drawMapSprite(mapInfo.foregroundImage, isSpriteSheet, frameWidth, frameHeight);
-      } else {
-        drawMapSprite(mapInfo.foregroundImageOpen, isSpriteSheet, frameWidth, frameHeight);
-      }
-    } else {
-      drawMapSprite(mapInfo.foregroundImage, isSpriteSheet, frameWidth, frameHeight);
-    }
-  }
-
   // Reset filter
   canvas.filter = "none";
 }
@@ -46931,9 +46944,12 @@ function updateGame() {
 
   // Background map Image and objects
   drawMap("back")
+
   drawObjects("background")
   drawObjects("backer")
-  drawObjects("back")
+
+  drawObjects("back", 0)
+  drawObjects("back", 1)
   
   // Particle settings
   particlesActor()
@@ -46952,8 +46968,12 @@ function updateGame() {
   
   // Foreground map Image and objects
   drawMap("front")
-  drawObjects("front")
-  drawObjects("fronter")
+
+  drawObjects("front", 0)
+  drawObjects("front", 1)
+
+  drawObjects("back", 2)
+  drawObjects("front", 2)
 
   nightTimeCanvas()
   drawUsername()
@@ -46988,6 +47008,12 @@ function emptyMapLoop(currentTime) {
   currentLand = "emptyMap";
   if (checkFPS(currentTime)) updateGame();
   intervalCanvasBase = requestAnimationFrame(emptyMapLoop)
+}
+
+function generalMapLoop(currentTime, map) {
+  // currentLand = mapsInfo[currentLand].areaName;
+  if (checkFPS(currentTime)) updateGame();
+  intervalCanvasBase = requestAnimationFrame(generalMapLoop)
 }
 
 function lobbyCombatAreaLoop(currentTime) {
