@@ -1210,6 +1210,20 @@ async function main() {
             }
 
         })
+
+        socket.on("createWorld", async (worldInfo) => {
+            await World.create({
+                areaName: worldInfo.title , 
+                description: worldInfo.desc ,
+                // type: worldInfo.type ,
+                // biome: worldInfo.biome ,
+                // playerMade: worldInfo.playerMade ,
+                playerPos: {x: 1000, y: 1000} ,
+                colliders: [] ,
+                enemies: [] ,
+                objects: [[], [], []] ,
+            }, {new: true});
+        })
        
         socket.on("placedObject", async (info) => {
             await World.findOneAndUpdate({areaName: info.currentLand}, {objects: info.objects}, {new: true});

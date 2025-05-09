@@ -472,14 +472,14 @@ color: white;
     /* transform: translate(0%, -50%); */
     align-items: flex-end;
     /* padding: 0 !important; */
-    padding: 18px;
+    padding: 10px 3px;
     /* background: white; */
     border-radius: 3px;
     display: none;
     flex-direction: column;
     gap: 10px;
-    max-height: 649px;
-    width: 164px;
+    max-height: 696px;
+    width: 76px;
     overflow-y: auto;
     border: solid 3px #b3a496;
     outline: solid 3px #393939;
@@ -487,11 +487,60 @@ color: white;
     background: #FFE2C1;
 }
 
+#mapInfo {
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    border: solid 3px #b3a496;
+    outline: solid 3px #393939;
+    z-index: 1;
+    background: #FFE2C1;
+    padding: 20px;
+}
+
+#mapInfo > h1 {
+    font-size: 27px;
+    margin: 0;
+}
+
+#mapInfo > input {
+    border: none;
+    background: white;
+    height: 30px;
+    border-radius: 4px;
+    border: solid 1px #00000052;
+    box-shadow: 3px 3px #0000003b;
+}
+
+#mapInfo > button {
+    border: none;
+    background: #c4ffc4;
+    height: 30px;
+    border-radius: 4px;
+    border: solid 1px #00000052;
+    box-shadow: 3px 3px #0000003b;
+}
+
+#mapDescInput {
+    border: none;
+    background: white;
+    height: 30px;
+    border-radius: 4px;
+    border: solid 1px #00000052;
+    box-shadow: 3px 3px #0000003b;
+    height: 160px !important;
+}
+
 #uiBuildingToolsDiv {
-    position: sticky;
+    position: relative;
     top: 0;
     /* left: -50px; */
-    margin-bottom: -343%;
+    /* margin-bottom: -343%; */
     align-self: flex-start;
     display: flex;
     align-items: center;
@@ -517,8 +566,8 @@ color: white;
     top: 0;
     border-radius: 5px;
     background: transparent;
-    border: solid 2.5px #b3a496;
-    outline: solid 2.5px #393939;
+    border: solid 2.5px #b3a49654;
+    outline: solid 2.5px #3939393d;
     transition: all .2s ease;
 }
 

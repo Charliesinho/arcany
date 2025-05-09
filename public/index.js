@@ -922,6 +922,12 @@ const liquidTransition = document.getElementById('liquidTransition');
 const placeDialog = document.getElementById('placeDialog');
 const uiBuilding = document.getElementById('uiBuilding');
 
+const mapNameInput = document.getElementById('mapNameInput');
+const mapDescInput = document.getElementById('mapDescInput');
+const createMapButton = document.getElementById('createMapButton');
+const createMapButtonUi = document.getElementById('createMapButtonUi');
+const mapInfoDiv = document.getElementById('mapInfo');
+
 const exploreMap = document.getElementById("exploreMap");
 const scores = document.getElementById("scores");
 const uiTop = document.getElementById("uiTop");
@@ -5333,8 +5339,8 @@ let movingDown = false;
 let movingLeft = false;
 let movingRight = false;
 
-let playerX = 2880;
-let playerY = 3568;
+let playerX = 2000;
+let playerY = 2000;
 
 let localPlayerDamaged = 0;
 let localPlayerDamageAngle = 0;
@@ -43572,6 +43578,25 @@ saveObjButtonUi.addEventListener("click", function() {
   errorDisplay("Saving the map")
 });
 
+createMapButtonUi.addEventListener("click", function() {
+  showWallsFunction(false);
+  if (mapInfoDiv.style.display === "flex") {
+    mapInfoDiv.style.display = "none"
+  } else {
+    mapInfoDiv.style.display = "flex"
+  }
+});
+
+createMapButton.addEventListener("click", function() {
+  showWallsFunction(false);
+  worldInfo = {
+    title: mapNameInput.value,
+    desc: mapDescInput.value
+  }
+  socket.emit("createWorld", worldInfo);
+  errorDisplay("Creating map")
+});
+
 placeFishingArea.addEventListener("click", function() {
   if (currentDevAction !== "fish") {
     currentDevAction = "fish";
@@ -44163,7 +44188,7 @@ function localPlayerMovement () {
   }
 }
 
-let localPlayerPos= {x: 0, y: 0}
+let localPlayerPos= {x: 2000, y: 2000}
 
 function playerCollision () {
   playerColminX = playerX - cameraX - 20;

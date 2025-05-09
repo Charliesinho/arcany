@@ -96,12 +96,15 @@
 
     <div id="uiBuilding">
       <div id="uiBuildingToolsDiv">
-        <h1>Actions</h1>
+        <!-- <h1>Actions</h1> -->
         <img class="buildingUiButton pointerActivator" id="hammerButtonUi" src="./icons/uiIcon/hammerIcon.png"></img>
+        <img class="buildingUiButton pointerActivator" id="portalButtonUi" src="./icons/uiIcon/portal.png"></img>
         <img class="buildingUiButton pointerActivator" id="wallButtonUi" src="./icons/uiIcon/wallIcon.png"></img>
         <img class="buildingUiButton pointerActivator" id="deleteObjButtonUi" src="./icons/uiIcon/deleteIcon.png"></img>
-        <img class="buildingUiButton pointerActivator" id="saveObjButtonUi" src="./icons/uiIcon/fish.png"></img>
-        <h1>Layers</h1>
+        <img class="buildingUiButton pointerActivator" id="editMapButtonUi" src="./icons/uiIcon/edit.png"></img>
+        <img class="buildingUiButton pointerActivator" id="saveObjButtonUi" src="./icons/uiIcon/save.png"></img>
+        <img class="buildingUiButton pointerActivator" id="createMapButtonUi" src="./icons/uiIcon/create.png"></img>
+        <!-- <h1>Layers</h1> -->
         <img class="buildingUiButton pointerActivator" id="layerOneButtonUi" src="./icons/uiIcon/frontLayerIcon.png"></img>
         <img class="buildingUiButton pointerActivator" id="layerTwoButtonUi" src="./icons/uiIcon/middleLayerIcon.png"></img>
         <img class="buildingUiButton pointerActivator" id="layerThreeButtonUi" src="./icons/uiIcon/backLayerIcon.png"></img>
@@ -109,8 +112,12 @@
     </div>
 
     <div id="mapInfo">
-      <input/>
-      <input/>
+      <h1>Map name</h1>
+      <input id="mapNameInput" />
+      <h1>Map Description</h1>
+      <textarea type="text" id="mapDescInput"></textarea>
+      <!-- <button class="pointerActivator">Set spawn point</button> -->
+      <button class="pointerActivator" id="createMapButton">Create</button>
     </div>
     
     <div id="uiDev" style="display: none;">
