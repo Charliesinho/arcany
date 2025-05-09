@@ -43600,7 +43600,7 @@ setInterval(() => {
 
   DayCycleState = (DayCycleState + 1) % DayCycleFilters.length;
 
-}, 120000);
+}, 10000);
 
 
 function mapSetup () {
