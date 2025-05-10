@@ -1,7 +1,7 @@
 //Change this to push >
 
-// const socket = io(`ws://localhost:5000`);
-const socket = io(`https://arcanyGame.up.railway.app/`);
+const socket = io(`ws://localhost:5000`);
+// const socket = io(`https://arcanyGame.up.railway.app/`);
 // const socket = io(window.location.origin);
 
 
@@ -168,6 +168,8 @@ const woodFloor = new Image();
 woodFloor.src = "./objects/woodFloor.png"
 const woodTable = new Image();
 woodTable.src = "./objects/woodTable.png"
+const testBean = new Image();
+testBean.src = "./objects/testBean.png"
 
 const residency = new Image();
 residency.src = "./islands/residency.png"
@@ -4823,6 +4825,17 @@ socket.on("player", (serverPlayer) => {
         h: 26,
         w: 11,
         animated: true,
+        lightSource: true
+      },
+      {
+        name: "testBean",
+        backgroundObj: false,
+        img: testBean,
+        x: 0,
+        y: 0,
+        h: testBean.height,
+        w: testBean.width,
+        animated: false,
         lightSource: true
       },
     ]
@@ -43185,9 +43198,9 @@ addEventListener("mousemove", (event) => {
   let x;
   let y;
   let escalableDivisor = calculateValue(window.screen.width)
-  // console.log(window.screen.width, escalableDivisor)
+  // console.log(window.screen, escalableDivisor)
   hoveredXCoord = event.clientX - (event.clientX - (event.screenX * 1.1)) + cameraX + cameraShakeX + 0 + escalableDivisor;
-  hoveredYCoord = event.clientY - (event.clientY - (event.screenY * 1.1)) + cameraY + cameraShakeY - 120 + escalableDivisor / 8;
+  hoveredYCoord = event.clientY - (event.clientY - (event.screenY * 1.1)) + cameraY + cameraShakeY - 120 + (escalableDivisor * 0.95) / 8;
 
   if ((currentlyPlacingWall || !currentlyPlacingWall) && currentDevAction !== "delete" && currentDevAction !== "deleteObj") {
     widthCoord = hoveredXCoord - selectedXcoord;
@@ -43515,12 +43528,13 @@ function createImagesFromMapObjects(mapObjects) {
     });
 
     parentDiv.appendChild(divElement);
+
     uiBuilding.appendChild(parentDiv);
   });
 }
 
 function calculateValue(resolution) {
-  return Math.max(0, -16.5 * resolution + 33792);
+  return Math.max(0, (-16.5 * resolution + 33792) * 1.02);
 }
 
 // UI DEV COMMENT >
