@@ -5,6 +5,10 @@ const PlayerSchema = new mongoose.Schema({
     type: String,
     default: 0,
   },
+  area: {
+    type: String,
+    default: "Castle Side",
+  },
   username: {
     type: String,
   },

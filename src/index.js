@@ -16,6 +16,7 @@ const db = mongoose.connection;
     });
 
 const Player = require( './playerSchema.js' );
+const World = require('./worldSchema.js');
 const { NONAME } = require('dns');
 
 const tickRate = 60;
@@ -1082,29 +1083,33 @@ async function main() {
                     usernames[socket.id] = username;  
                     myPlayer[socket.id] = newPlayerData; 
                     inventoryStore[socket.id] = myPlayer[socket.id];
+                    let map = await World.findOne({areaName: newPlayerData.area}).exec();
 
                     
 
-                    const loginAttempt = "success";
+                    const loginAttempt = {
+                        msg: "success",
+                        map: map
+                    }
                     // await pushItem(runeBullets, socket)
                     // await pushItem(runeFireRate, socket)
                     // await pushItem(runeRange, socket)
-                    // //await pushItem(restfieldBlanket, socket)
-                    // //await pushItem(restfieldBlanket, socket)
-                    // //await pushItem(treeLeaf, socket)
-                    // //await pushItem(treeLeaf, socket)
-                    // // await pushItem(smallCommonMeat, socket)
-                    // // await pushItem(ballo, socket)
-                    // // await pushItem(sardin, socket)
-                    // //await pushItem(octopus, socket)
-                    // // await pushItem(bass, socket)
-                    // // await pushItem(reaperClothes, socket)
-                    // // await pushItem(blackVampiresClothes, socket)
-                    // // await pushItem(fishermanClothes, socket)
-                    // // await pushItem(tropicalHat, socket)
-                    // // await pushItem(skullHelmet, socket)
-                    // //await pushItem(stick, socket)
-                    // //await pushItem(stick, socket)
+                    //await pushItem(restfieldBlanket, socket)
+                    //await pushItem(restfieldBlanket, socket)
+                    // await pushItem(treeLeaf, socket)
+                    //await pushItem(treeLeaf, socket)
+                    // await pushItem(smallCommonMeat, socket)
+                    // await pushItem(ballo, socket)
+                    // await pushItem(sardin, socket)
+                    //await pushItem(octopus, socket)
+                    // await pushItem(bass, socket)
+                    // await pushItem(reaperClothes, socket)
+                    // await pushItem(blackVampiresClothes, socket)
+                    // await pushItem(fishermanClothes, socket)
+                    // await pushItem(tropicalHat, socket)
+                    // await pushItem(skullHelmet, socket)
+                    // await pushItem(stick, socket)
+                    // await pushItem(stick, socket)
                     // await pushItem(stick, socket)
                     // await pushItem(arcaneGem, socket)
                     // await pushItem(arcaneGem2, socket)
@@ -1138,6 +1143,17 @@ async function main() {
             };
             async function playerCreate() {   
                 const playerData = await Player.findOne({username: username}).exec();
+                // await World.create({
+                //     areaName: "Castle Side" , 
+                //     // description: worldInfo.description ,
+                //     // type: worldInfo.type ,
+                //     // biome: worldInfo.biome ,
+                //     // playerMade: worldInfo.playerMade ,
+                //     playerPos: {x: 1000, y: 1000} ,
+                //     colliders: [] ,
+                //     enemies: [] ,
+                //     objects: [[], [], []] ,
+                // }, {new: true});
                 
                 if (!playerData) {
                     const newPlayerData = await Player.create({username: username, password: password, socket: id}, {new: true});
@@ -1172,6 +1188,48 @@ async function main() {
                 playerCreate();
             };
         });
+
+        socket.on("saveWorld", async (worldInfo) => {
+            const worldData = await World.findOne({areaName: worldInfo.areaName}).exec();
+
+            if (worldData) {
+                await World.findOneAndUpdate({areaName: worldInfo.areaName}, worldInfo, {new: true});
+                console.log("world saved")
+            } else {
+                await World.create({
+                    areaName: worldInfo.areaName , 
+                    // description: worldInfo.description ,
+                    // type: worldInfo.type ,
+                    // biome: worldInfo.biome ,
+                    // playerMade: worldInfo.playerMade ,
+                    playerPos: worldInfo.playerPos ,
+                    colliders: worldInfo.colliders ,
+                    enemies: worldInfo.enemies ,
+                    objects: worldInfo.objects ,
+                }, {new: true});
+            }
+
+        })
+
+        socket.on("createWorld", async (worldInfo) => {
+            await World.create({
+                areaName: worldInfo.title , 
+                description: worldInfo.desc ,
+                // type: worldInfo.type ,
+                // biome: worldInfo.biome ,
+                // playerMade: worldInfo.playerMade ,
+                playerPos: {x: 1000, y: 1000} ,
+                colliders: [] ,
+                enemies: [] ,
+                objects: [[], [], []] ,
+            }, {new: true});
+        })
+       
+        socket.on("placedObject", async (info) => {
+            await World.findOneAndUpdate({areaName: info.currentLand}, {objects: info.objects}, {new: true});
+            const worldData = await World.findOne({areaName: info.currentLand}).exec();
+            io.emit('updateMap', {worldData, object: info.object});
+        })
 
         socket.on("loadEnemies", (_enemies) => {
             const newEnemy = {
