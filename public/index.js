@@ -1,7 +1,7 @@
 //Change this to push >
 
-const socket = io(`ws://localhost:5000`);
-// const socket = io(`https://arcanyGame.up.railway.app/`);
+// const socket = io(`ws://localhost:5000`);
+const socket = io(`https://arcanyGame.up.railway.app/`);
 // const socket = io(window.location.origin);
 
 
@@ -916,7 +916,7 @@ const placeFishingArea = document.getElementById("placeFishingArea");
 const placeCraftingArea = document.getElementById("placeCraftingArea");
 const placeCookingArea = document.getElementById("placeCookingArea");
 const placeChest = document.getElementById("placeChest");
-const placeTransition = document.getElementById("placeTransition");
+const placeTransition = document.getElementById("portalButtonUi");
 const roomsDiv = document.getElementById('roomsDev');
 const dialogsDiv = document.getElementById('dialogsDev');
 const arcaneTransition = document.getElementById('arcaneTransition');
@@ -5239,6 +5239,18 @@ socket.on("updateMap", (map) => {
   buildPlaceParticles(map.object)
 })
 
+socket.on("loadMap", (map) => {
+  console.log(map)
+  let comingMap = map
+  let areaNameComing = comingMap.areaName
+
+  stopAllSound()
+  if (map.areaName) areaNameDisplay(map.areaName);
+
+  currentLand = areaNameComing
+  mapsInfo = {[areaNameComing]: comingMap}
+})
+
 socket.on("loginAttempt", (res) => {
   document.getElementById("introLogo-img").style.display = "none";
 
@@ -6295,6 +6307,7 @@ let transitionType = "arcane"
 let transitionTimeout = false;
 
 function transition (format) {
+  console.log("transition")
   if (format === "arcane") {
     transitionArcane()
   }
@@ -6306,32 +6319,33 @@ function transition (format) {
   }
 }
 function changeMap (dynamicFunctionName) {
-  console.log(spawnerIntervals)
-  let playerPosition;
-  Object.keys(mapsInfo).forEach(key => {
-    playerPosition =  mapsInfo[key].playerPos;
-    mapsInfo[key] = _.cloneDeep(originalMapsInfo[key]);
-    mapsInfo[key].playerPos = playerPosition;
-  });
-  spawnerIntervals.map(enemy => {
-      clearTimeout(enemy)
-  })
-  cancelAnimationFrame(intervalCanvasBase)
-  const canvasFunction = window[dynamicFunctionName];
-  if (typeof canvasFunction === "function") {
-    stopAllSound()
-    mapsInfo[currentSelectedMap].areaSounds();
-    intervalCanvasBase = requestAnimationFrame(canvasFunction);
-    if (mapsInfo[currentSelectedMap].areaName) areaNameDisplay(mapsInfo[currentSelectedMap].areaName)
+  console.log("Chanching!!")
+  socket.emit("requestChangeRoom", currentSelectedMap);
+  // let playerPosition;
+  // Object.keys(mapsInfo).forEach(key => {
+  //   playerPosition =  mapsInfo[key].playerPos;
+  //   mapsInfo[key] = _.cloneDeep(originalMapsInfo[key]);
+  //   mapsInfo[key].playerPos = playerPosition;
+  // });
+  // spawnerIntervals.map(enemy => {
+  //     clearTimeout(enemy)
+  // })
+  // cancelAnimationFrame(intervalCanvasBase)
+  // const canvasFunction = window[dynamicFunctionName];
+  // if (typeof canvasFunction === "function") {
+    //   mapsInfo[currentSelectedMap].areaSounds();
+    //   intervalCanvasBase = requestAnimationFrame(canvasFunction);
     setTimeout(() => {
       transitionTimeout = false;
     }, 5000);
-  } else {
-    console.error(`${dynamicFunctionName} is not a valid function`);
-  }
+  // } else {
+  //   console.error(`${dynamicFunctionName} is not a valid function`);
+  // }
 }
 function transitionArcane () {
+  console.log("arcane1")
   if (transitionTimeout === false) {
+    console.log("arcane2")
 
     transitionTimeout = true; 
     glitchArcane.play()
@@ -43194,7 +43208,7 @@ let currentSelectedObjLayer = 0;
 
 const rect = canvasLobby.getBoundingClientRect();
 
-addEventListener("mousemove", (event) => {
+canvasLobby.addEventListener("mousemove", (event) => {
   let x;
   let y;
   let escalableDivisor = calculateValue(window.screen.width)
@@ -43735,22 +43749,9 @@ placeTransition.addEventListener("click", function() {
 if (currentDevAction !== "transition") {
   currentDevAction = "transition";
   roomsDiv.style.display = "block"
-  placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  dialogsDiv.style.display = "none"
-  deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeDialog.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeChest.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  startBuildingBut.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeTransition.style.backgroundColor = "rgba(170, 233, 170, 1)"
-   uiBuilding.style.display = "none"
 } else {
   roomsDiv.style.display = "none"
   currentDevAction = "none";
-  placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
 }
 });
 
@@ -43883,10 +43884,12 @@ function isColliding(player, wall) {
   );
 }
 
-function addMapsInfoToDiv() {
-
-  for (const key in mapsInfo) {
-    if (mapsInfo.hasOwnProperty(key)) {
+socket.on("requestRoomsCompleted", (rooms) => {
+  console.log(rooms)
+  for (let key of rooms) {
+    console.log(key)
+      if (key == null) continue;
+      
       const pElement = document.createElement('p');
       
       pElement.innerHTML = key;
@@ -43904,8 +43907,34 @@ function addMapsInfoToDiv() {
       });
 
       roomsDiv.appendChild(pElement);
-    }
   }
+})
+
+function addMapsInfoToDiv() {
+
+  socket.emit("requestRooms", "");
+
+  // for (const key in mapsInfo) {
+  //   if (mapsInfo.hasOwnProperty(key)) {
+  //     const pElement = document.createElement('p');
+      
+  //     pElement.innerHTML = key;
+  //     pElement.classList.add('roomsDev-item');
+
+  //     pElement.addEventListener('click', () => {
+  //       currentSelectedMap = key;
+
+  //       pElement.classList.add('textjump');
+  //       pElement.innerHTML = "Selected!";
+  //       setTimeout(() => {
+  //         pElement.classList.remove('textjump');
+  //         pElement.innerHTML = key;
+  //       }, 1000);
+  //     });
+
+  //     roomsDiv.appendChild(pElement);
+  //   }
+  // }
   
   for (const key in dialogBoxes) {
     if (dialogBoxes.hasOwnProperty(key)) {
@@ -44290,6 +44319,8 @@ function drawColliders (type, x, y, w, h) {
         }
         else if (wall.type === "transition") {
           currentSelectedMap = wall.destination
+
+          console.log("transitioning")
 
           if (!challengeActive) transition(wall.format)
           

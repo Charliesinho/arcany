@@ -1160,14 +1160,23 @@ color: white;
 #roomsDev {
     position: absolute;
     background-color: rgb(30 26 37);
-    left: 70px;
+    left: 111px;
     padding: 10px;
-    bottom: 20px;
-    color: white;
+    bottom: 245px;
+    max-height: 478px;
+    color: #272727;
     font-size: 20px;
     -webkit-font-smoothing: none;
     display: none;
-    width: 180px;
+    width: 255px;
+    z-index: 1;
+    overflow: scroll;
+    overflow-y: auto;
+    border: solid 3px #b3a496;
+    outline: solid 3px #393939;
+    z-index: 1;
+    background: #FFE2C1;
+    border-radius: 4px;
 }
 
 #dialogsDev {

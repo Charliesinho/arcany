@@ -1230,6 +1230,25 @@ async function main() {
             const worldData = await World.findOne({areaName: info.currentLand}).exec();
             io.emit('updateMap', {worldData, object: info.object});
         })
+        
+        socket.on("requestChangeRoom", async (info) => {
+            const newWorld = await World.findOne({areaName: info}).exec();
+            
+            io.emit('loadMap', newWorld);
+        })
+        
+        socket.on("requestRooms", async (info) => {
+            try {
+                const worlds = await World.find({}, 'areaName');
+        
+                const roomNames = worlds.map(world => world.areaName);
+        
+                socket.emit("requestRoomsCompleted", roomNames);
+            } catch (error) {
+
+            }
+        });
+        
 
         socket.on("loadEnemies", (_enemies) => {
             const newEnemy = {
