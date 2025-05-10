@@ -63,11 +63,11 @@ window.addEventListener("load", () => {
 //OBJECTS
 
 const dirtFloor = new Image();
-dirtFloor.src = "./objects/dirtFloor.png"
+dirtFloor.src = "./objects/construction/floors/dirtFloor.png"
 const treeOne = new Image();
 treeOne.src = "./objects/treeOne.png"
 const woodPole = new Image();
-woodPole.src = "./objects/woodPole.png"
+woodPole.src = "./objects/construction/fences/woodPole.png"
 const whiteFlowers = new Image();
 whiteFlowers.src = "./objects/whiteFlowers.png"
 const bushOne = new Image();
@@ -75,7 +75,7 @@ bushOne.src = "./objects/bushOne.png"
 const rockOne = new Image();
 rockOne.src = "./objects/rockOne.png"
 const woodSquareDoor = new Image();
-woodSquareDoor.src = "./objects/woodSquareDoor.png"
+woodSquareDoor.src = "./objects/construction/walls/woodSquareDoor.png"
 const shadowTree = new Image();
 shadowTree.src = "./objects/shadowTree.png"
 const vineOne = new Image();
@@ -91,7 +91,7 @@ lightPoleOne.src = "./objects/lightPoleOne.png"
 const mediumTorch = new Image();
 mediumTorch.src = "./objects/mediumTorch.png"
 const dirtFloorBig = new Image();
-dirtFloorBig.src = "./objects/dirtFloorBig.png"
+dirtFloorBig.src = "./objects/construction/floors/dirtFloorBig.png"
 const plazaFountain = new Image();
 plazaFountain.src = "./objects/plazaFountain.png"
 const cookingStand = new Image();
@@ -103,23 +103,23 @@ enchantingTable.src = "./objects/enchantingTable.png"
 const flagLine = new Image();
 flagLine.src = "./objects/flagLine.png"
 const plantPatch = new Image();
-plantPatch.src = "./objects/plantPatch.png"
+plantPatch.src = "./objects/construction/floors/plantPatch.png"
 const woodFence = new Image();
-woodFence.src = "./objects/woodFence.png"
+woodFence.src = "./objects/construction/fences/woodFence.png"
 const woodFenceVer = new Image();
-woodFenceVer.src = "./objects/woodFenceVer.png"
+woodFenceVer.src = "./objects/construction/fences/woodFenceVer.png"
 const woodSmallWallHor = new Image();
-woodSmallWallHor.src = "./objects/woodSmallWallHor.png"
+woodSmallWallHor.src = "./objects/construction/fences/woodSmallWallHor.png"
 const woodSmallWallVert = new Image();
-woodSmallWallVert.src = "./objects/woodSmallWallVert.png"
+woodSmallWallVert.src = "./objects/construction/fences/woodSmallWallVert.png"
 const woodWallDoor = new Image();
-woodWallDoor.src = "./objects/woodWallDoor.png"
+woodWallDoor.src = "./objects/construction/walls/woodWallDoor.png"
 const woodWallHor = new Image();
-woodWallHor.src = "./objects/woodWallHor.png"
+woodWallHor.src = "./objects/construction/walls/woodWallHor.png"
 const woodWallVer = new Image();
-woodWallVer.src = "./objects/woodWallVer.png"
+woodWallVer.src = "./objects/construction/walls/woodWallVer.png"
 const woodWindowWall = new Image();
-woodWindowWall.src = "./objects/woodWindowWall.png"
+woodWindowWall.src = "./objects/construction/walls/woodWindowWall.png"
 const fishPond = new Image();
 fishPond.src = "./objects/fishPond.png"
 const dryGrass = new Image();
@@ -161,11 +161,11 @@ potPlantOne.src = "./objects/potPlantOne.png"
 const shelves = new Image();
 shelves.src = "./objects/shelves.png"
 const stoneFloor = new Image();
-stoneFloor.src = "./objects/stoneFloor.png"
+stoneFloor.src = "./objects/construction/floors/stoneFloor.png"
 const vineTwo = new Image();
 vineTwo.src = "./objects/vineTwo.png"
 const woodFloor = new Image();
-woodFloor.src = "./objects/woodFloor.png"
+woodFloor.src = "./objects/construction/floors/woodFloor.png"
 const woodTable = new Image();
 woodTable.src = "./objects/woodTable.png"
 const testBean = new Image();
@@ -44034,7 +44034,7 @@ setInterval(() => {
 
   DayCycleState = (DayCycleState + 1) % DayCycleFilters.length;
 
-}, 120000);
+}, 10000);
 
 
 function mapSetup () {
@@ -44152,6 +44152,7 @@ function drawObjects (layer, num) {
 }
 
 function drawOnTop (img, x, y, width, height, cx, cy, anim) {
+  // console.log(img)
   if (!anim) {
     canvas.drawImage(
       img,
