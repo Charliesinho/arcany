@@ -1,7 +1,7 @@
 //Change this to push >
 
-const socket = io(`ws://localhost:5000`);
-// const socket = io(`https://arcanyGame.up.railway.app/`);
+// const socket = io(`ws://localhost:5000`);
+const socket = io(`https://arcanyGame.up.railway.app/`);
 // const socket = io(window.location.origin);
 
 
@@ -168,8 +168,6 @@ const woodFloor = new Image();
 woodFloor.src = "./objects/construction/floors/woodFloor.png"
 const woodTable = new Image();
 woodTable.src = "./objects/furniture/tables/woodTable.png"
-const testBean = new Image();
-testBean.src = "./objects/testBean.png"
 
 const residency = new Image();
 residency.src = "./islands/residency.png"
@@ -4932,28 +4930,6 @@ socket.on("player", (serverPlayer) => {
         lightSource: true,
         category: "outdoor",
         subCategory: "outdoorFurniture",
-      },
-      {
-        name: "testBean",
-        backgroundObj: false,
-        img: testBean,
-        x: 0,
-        y: 0,
-        h: testBean.height,
-        w: testBean.width,
-        animated: false,
-        lightSource: true
-      },
-      {
-        name: "testBean",
-        backgroundObj: false,
-        img: testBean,
-        x: 0,
-        y: 0,
-        h: testBean.height,
-        w: testBean.width,
-        animated: false,
-        lightSource: true
       },
     ]
     createImagesFromMapObjects(mapObject)
