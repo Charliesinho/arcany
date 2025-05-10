@@ -64,20 +64,20 @@ window.addEventListener("load", () => {
 
 const dirtFloor = new Image();
 dirtFloor.src = "./objects/construction/floors/dirtFloor.png"
+const shadowTree = new Image();
+shadowTree.src = "./objects/shadowTree.png"
 const treeOne = new Image();
-treeOne.src = "./objects/treeOne.png"
+treeOne.src = "./objects/outdoor/trees/treeOne.png"
 const woodPole = new Image();
 woodPole.src = "./objects/construction/fences/woodPole.png"
 const whiteFlowers = new Image();
-whiteFlowers.src = "./objects/whiteFlowers.png"
+whiteFlowers.src = "./objects/outdoor/flowers/whiteFlowers.png"
 const bushOne = new Image();
-bushOne.src = "./objects/bushOne.png"
+bushOne.src = "./objects/outdoor/miniBush/bushOne.png"
 const rockOne = new Image();
-rockOne.src = "./objects/rockOne.png"
+rockOne.src = "./objects/outdoor/rocks/rockOne.png"
 const woodSquareDoor = new Image();
 woodSquareDoor.src = "./objects/construction/walls/woodSquareDoor.png"
-const shadowTree = new Image();
-shadowTree.src = "./objects/shadowTree.png"
 const vineOne = new Image();
 vineOne.src = "./objects/vineOne.png"
 const chestCommon = new Image();
@@ -85,15 +85,15 @@ chestCommon.src = "./objects/chestCommon.png"
 const cookingPotObj = new Image();
 cookingPotObj.src = "./objects/cookingPotObj.png"
 const grassOne = new Image();
-grassOne.src = "./objects/grassOne.png"
+grassOne.src = "./objects/outdoor/grass/grassOne.png"
 const lightPoleOne = new Image();
-lightPoleOne.src = "./objects/lightPoleOne.png"
+lightPoleOne.src = "./objects/outdoor/outdoorFurniture/lightPoleOne.png"
 const mediumTorch = new Image();
-mediumTorch.src = "./objects/mediumTorch.png"
+mediumTorch.src = "./objects/outdoor/outdoorFurniture/mediumTorch.png"
 const dirtFloorBig = new Image();
 dirtFloorBig.src = "./objects/construction/floors/dirtFloorBig.png"
 const plazaFountain = new Image();
-plazaFountain.src = "./objects/plazaFountain.png"
+plazaFountain.src = "./objects/outdoor/fountains/plazaFountain.png"
 const cookingStand = new Image();
 cookingStand.src = "./objects/cookingStand.png"
 const enchantingTower = new Image();
@@ -101,7 +101,7 @@ enchantingTower.src = "./objects/enchantingTower.png"
 const enchantingTable = new Image();
 enchantingTable.src = "./objects/enchantingTable.png"
 const flagLine = new Image();
-flagLine.src = "./objects/flagLine.png"
+flagLine.src = "./objects/outdoor/outdoorFurniture/flagLine.png"
 const plantPatch = new Image();
 plantPatch.src = "./objects/construction/floors/plantPatch.png"
 const woodFence = new Image();
@@ -123,43 +123,43 @@ woodWindowWall.src = "./objects/construction/walls/woodWindowWall.png"
 const fishPond = new Image();
 fishPond.src = "./objects/fishPond.png"
 const dryGrass = new Image();
-dryGrass.src = "./objects/dryGrass.png"
+dryGrass.src = "./objects/outdoor/grass/dryGrass.png"
 const smallLake = new Image();
 smallLake.src = "./objects/smallLake.png"
 const booksOne = new Image();
-booksOne.src = "./objects/booksOne.png"
+booksOne.src = "./objects/furniture/miniObject/booksOne.png"
 const redSmallCarpet = new Image();
-redSmallCarpet.src = "./objects/redSmallCarpet.png"
+redSmallCarpet.src = "./objects/furniture/carpets/redSmallCarpet.png"
 const chairLeft = new Image();
-chairLeft.src = "./objects/chairLeft.png"
+chairLeft.src = "./objects/furniture/chairs/chairLeft.png"
 const chairRight = new Image();
-chairRight.src = "./objects/chairRight.png"
+chairRight.src = "./objects/furniture/chairs/chairRight.png"
 const decoOne = new Image();
-decoOne.src = "./objects/decoOne.png"
+decoOne.src = "./objects/furniture/miniObject/decoOne.png"
 const hangingPlant = new Image();
-hangingPlant.src = "./objects/hangingPlant.png"
+hangingPlant.src = "./objects/outdoor/plants/hangingPlant.png"
 const hangingPlantRed = new Image();
-hangingPlantRed.src = "./objects/hangingPlantRed.png"
+hangingPlantRed.src = "./objects/outdoor/plants/hangingPlantRed.png"
 const lanternOne = new Image();
 lanternOne.src = "./objects/lanternOne.png"
 const paintFour = new Image();
-paintFour.src = "./objects/paintFour.png"
+paintFour.src = "./objects/furniture/painting/paintFour.png"
 const paintOne = new Image();
-paintOne.src = "./objects/paintOne.png"
+paintOne.src = "./objects/furniture/painting/paintOne.png"
 const paintThree = new Image();
-paintThree.src = "./objects/paintThree.png"
+paintThree.src = "./objects/furniture/painting/paintThree.png"
 const paintTwo = new Image();
-paintTwo.src = "./objects/paintTwo.png"
+paintTwo.src = "./objects/furniture/painting/paintTwo.png"
 const potPlantFour = new Image();
-potPlantFour.src = "./objects/potPlantFour.png"
+potPlantFour.src = "./objects/outdoor/plants/potPlantFour.png"
 const potPlantThree = new Image();
-potPlantThree.src = "./objects/potPlantThree.png"
+potPlantThree.src = "./objects/outdoor/plants/potPlantThree.png"
 const potPlantTwo = new Image();
-potPlantTwo.src = "./objects/potPlantTwo.png"
+potPlantTwo.src = "./objects/outdoor/plants/potPlantTwo.png"
 const potPlantOne = new Image();
-potPlantOne.src = "./objects/potPlantOne.png"
+potPlantOne.src = "./objects/outdoor/plants/potPlantOne.png"
 const shelves = new Image();
-shelves.src = "./objects/shelves.png"
+shelves.src = "./objects/furniture/storage/shelves.png"
 const stoneFloor = new Image();
 stoneFloor.src = "./objects/construction/floors/stoneFloor.png"
 const vineTwo = new Image();
@@ -167,7 +167,7 @@ vineTwo.src = "./objects/vineTwo.png"
 const woodFloor = new Image();
 woodFloor.src = "./objects/construction/floors/woodFloor.png"
 const woodTable = new Image();
-woodTable.src = "./objects/woodTable.png"
+woodTable.src = "./objects/furniture/tables/woodTable.png"
 
 const residency = new Image();
 residency.src = "./islands/residency.png"
@@ -44138,7 +44138,11 @@ function drawObjects (layer, num) {
 }
 
 function drawOnTop (img, x, y, width, height, cx, cy, anim) {
-  // console.log(img)
+  if (!img.complete || img.naturalWidth === 0) {
+    console.error("⚠️ Image failed to load:", img.src);
+    return; // Stop drawing
+  }
+
   if (!anim) {
     canvas.drawImage(
       img,
