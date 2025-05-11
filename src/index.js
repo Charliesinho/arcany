@@ -1232,6 +1232,10 @@ async function main() {
             io.emit('updateMap', {worldData, object: info.object});
         })
         
+        socket.on("setSpawn", async (info) => {
+            await World.findOneAndUpdate({areaName: info[1]}, {playerPos: info[0]}, {new: true});
+        })
+        
         socket.on("requestChangeRoom", async (info) => {
             const newWorld = await World.findOne({areaName: info}).exec();
 
