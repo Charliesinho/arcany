@@ -43700,7 +43700,7 @@ if (currentDevAction !== "deleteObj") {
 saveObjButtonUi.addEventListener("click", function() {
   showWallsFunction(false);
   socket.emit("saveWorld", mapsInfo[currentLand]);
-  errorDisplay("Creating map", "hue-rotate(90deg)")
+  errorDisplay("Saving map", "hue-rotate(90deg)")
 });
 
 createMapButtonUi.addEventListener("click", function() {
@@ -43984,7 +43984,8 @@ function isColliding(player, wall) {
 }
 
 socket.on("requestRoomsCompleted", (rooms) => {
-  console.log(rooms)
+  // console.log(rooms)
+  roomsDiv.innerHTML = '';
   for (let key of rooms) {
     console.log(key)
       if (key == null) continue;
