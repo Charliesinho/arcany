@@ -111,7 +111,7 @@ async function main() {
     });  
 
     io.on('connect', (socket) => {
-        socket.join("lobby");
+        socket.join("Castle Side");
         console.log("socket", socket.id)
 
         inputsMap[socket.id] = {
@@ -153,7 +153,7 @@ async function main() {
             username: "none",
             x: 2880,
             y: 3568,
-            room: "lobby",
+            room: "Castle Side",
 
             health: 3,
             fishingLevel: 0,
@@ -415,7 +415,7 @@ async function main() {
                 }   
                 
               };
-              roomChange()
+            roomChange()
         });
 
         socket.on("cooking", (items) => {
@@ -1223,6 +1223,7 @@ async function main() {
                 enemies: [] ,
                 objects: [[], [], []] ,
             }, {new: true});
+            io.to(socket.id).emit('createWorldSuccesful', worldInfo.title);
         })
        
         socket.on("placedObject", async (info) => {
@@ -1233,8 +1234,20 @@ async function main() {
         
         socket.on("requestChangeRoom", async (info) => {
             const newWorld = await World.findOne({areaName: info}).exec();
+
+            async function roomChange() {
+                for (const player of players) {
+                    if (player.id === socket.id) {
+                        player.room = newWorld.areaName
+                        myPlayer[socket.id] = player;    
+                        socket.join(newWorld.areaName);
+                  }
+                }   
+                
+              };
+            roomChange()
             
-            io.emit('loadMap', newWorld);
+            io.to(socket.id).emit('loadMap', newWorld);
         })
         
         socket.on("requestRooms", async (info) => {
@@ -1243,7 +1256,7 @@ async function main() {
         
                 const roomNames = worlds.map(world => world.areaName);
         
-                socket.emit("requestRoomsCompleted", roomNames);
+                io.to(socket.id).emit("requestRoomsCompleted", roomNames);
             } catch (error) {
 
             }

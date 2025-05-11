@@ -1,7 +1,7 @@
 //Change this to push >
 
-// const socket = io(`ws://localhost:5000`);
-const socket = io(`https://arcanyGame.up.railway.app/`);
+const socket = io(`ws://localhost:5000`);
+// const socket = io(`https://arcanyGame.up.railway.app/`);
 // const socket = io(window.location.origin);
 
 
@@ -6594,12 +6594,13 @@ setTimeout(() => {
 }, 4000);
 }
 
-function errorDisplay(name) {
+function errorDisplay(name, color) {
 
 errorPopUp.textContent = name;
 
 errorPopUp.style.opacity = 1;
 errorPopUp.style.transition = "opacity 1s ease"; 
+errorPopUp.style.filter = color ? color : "none"; 
 
 setTimeout(() => {
     errorPopUp.style.opacity = 0;
@@ -43384,7 +43385,7 @@ canvasLobby.addEventListener("mousemove", (event) => {
 });
 
 canvasLobby.addEventListener('click', function(event) {
-  console.log(currentSelectedWall)
+  // console.log(currentSelectedWall)
   if (!currentlyPlacingWall && currentDevAction === "wall" && currentSelectedWall === null) {
     selectedXcoord = hoveredXCoord;
     selectedYcoord = hoveredYCoord;
@@ -43650,14 +43651,14 @@ function calculateValue(resolution) {
 // UI DEV COMMENT >
 
 placeWalls.addEventListener("click", function() {
+  if (currentDevAction !== "wall") {
   showWallsFunction(true)
- if (currentDevAction !== "wall") {
   currentDevAction = "wall";
   roomsDiv.style.display = "none"
   dialogsDiv.style.display = "none"
- } else {
+} else {
+  showWallsFunction(false)
   currentDevAction = "none";
-  // placeWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
  }
 });
 
@@ -43699,7 +43700,7 @@ if (currentDevAction !== "deleteObj") {
 saveObjButtonUi.addEventListener("click", function() {
   showWallsFunction(false);
   socket.emit("saveWorld", mapsInfo[currentLand]);
-  errorDisplay("Saving the map")
+  errorDisplay("Creating map", "hue-rotate(90deg)")
 });
 
 createMapButtonUi.addEventListener("click", function() {
@@ -43718,7 +43719,7 @@ createMapButton.addEventListener("click", function() {
     desc: mapDescInput.value
   }
   socket.emit("createWorld", worldInfo);
-  errorDisplay("Creating map")
+  errorDisplay("Creating map", "hue-rotate(90deg)")
 });
 
 placeFishingArea.addEventListener("click", function() {
@@ -43845,9 +43846,11 @@ placeTransition.addEventListener("click", function() {
 if (currentDevAction !== "transition") {
   currentDevAction = "transition";
   roomsDiv.style.display = "block"
+  showWallsFunction(true)
 } else {
   roomsDiv.style.display = "none"
   currentDevAction = "none";
+  showWallsFunction(false)
 }
 });
 
@@ -44006,31 +44009,13 @@ socket.on("requestRoomsCompleted", (rooms) => {
   }
 })
 
+socket.on("createWorldSuccesful", () => {
+  addMapsInfoToDiv()
+})
+
 function addMapsInfoToDiv() {
 
   socket.emit("requestRooms", "");
-
-  // for (const key in mapsInfo) {
-  //   if (mapsInfo.hasOwnProperty(key)) {
-  //     const pElement = document.createElement('p');
-      
-  //     pElement.innerHTML = key;
-  //     pElement.classList.add('roomsDev-item');
-
-  //     pElement.addEventListener('click', () => {
-  //       currentSelectedMap = key;
-
-  //       pElement.classList.add('textjump');
-  //       pElement.innerHTML = "Selected!";
-  //       setTimeout(() => {
-  //         pElement.classList.remove('textjump');
-  //         pElement.innerHTML = key;
-  //       }, 1000);
-  //     });
-
-  //     roomsDiv.appendChild(pElement);
-  //   }
-  // }
   
   for (const key in dialogBoxes) {
     if (dialogBoxes.hasOwnProperty(key)) {
