@@ -921,6 +921,7 @@ const arcaneTransition = document.getElementById('arcaneTransition');
 const liquidTransition = document.getElementById('liquidTransition');
 const placeDialog = document.getElementById('placeDialog');
 const uiBuilding = document.getElementById('uiBuilding');
+const uiBuildingObjects = document.getElementById('uiBuildingObjects');
 
 const mapNameInput = document.getElementById('mapNameInput');
 const mapDescInput = document.getElementById('mapDescInput');
@@ -43678,7 +43679,8 @@ deleteWalls.addEventListener("click", function() {
     placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
     startBuildingBut.style.backgroundColor = "rgb(255 255 255 / 29%)"
     deleteWalls.style.backgroundColor = "rgba(170, 233, 170, 1)"
-     uiBuilding.style.display = "none"
+    uiBuilding.style.display = "none"
+    uiBuildingObjects.style.display = "none"
   } else {
     currentDevAction = "none";
     deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
@@ -43737,7 +43739,8 @@ placeFishingArea.addEventListener("click", function() {
     placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
     startBuildingBut.style.backgroundColor = "rgb(255 255 255 / 29%)"
     placeFishingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
-     uiBuilding.style.display = "none"
+    uiBuilding.style.display = "none"
+    uiBuildingObjects.style.display = "none"
   } else {
     currentDevAction = "none";
     placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
@@ -43759,7 +43762,8 @@ if (currentDevAction !== "enchanting") {
   placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
   startBuildingBut.style.backgroundColor = "rgb(255 255 255 / 29%)"
   placeEnchantingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
-   uiBuilding.style.display = "none"
+  uiBuilding.style.display = "none"
+  uiBuildingObjects.style.display = "none"
 } else {
   currentDevAction = "none";
   placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
@@ -43781,7 +43785,8 @@ if (currentDevAction !== "cook") {
   placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
   startBuildingBut.style.backgroundColor = "rgb(255 255 255 / 29%)"
   placeCookingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
-   uiBuilding.style.display = "none"
+  uiBuilding.style.display = "none"
+  uiBuildingObjects.style.display = "none"
 } else {
   currentDevAction = "none";
   placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
@@ -43793,8 +43798,10 @@ hammerButtonUi.addEventListener("click", function() {
   playRandomPop()
   if (currentDevAction !== "building") {
     currentDevAction = "building";
+    uiBuildingObjects.style.display = "flex";
   } else {
     currentDevAction = "none";
+    uiBuildingObjects.style.display = "none";
   }
 });
 
@@ -43814,9 +43821,11 @@ if (uiBuilding.style.display !== "flex") {
   roomsDiv.style.display = "none"
   dialogsDiv.style.display = "none"
   uiBuilding.style.display = "flex"
+  uiBuildingObjects.style.display = "none"
 } else {
   currentDevAction = "none";
   uiBuilding.style.display = "none"
+  uiBuildingObjects.style.display = "none"
 }
 });
 
@@ -43836,6 +43845,7 @@ if (currentDevAction !== "craft") {
   startBuildingBut.style.backgroundColor = "rgb(255 255 255 / 29%)"
   placeCraftingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
    uiBuilding.style.display = "none"
+   uiBuildingObjects.style.display = "none"
   } else {
   currentDevAction = "none";
   placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
@@ -43870,6 +43880,7 @@ if (currentDevAction !== "chest") {
   startBuildingBut.style.backgroundColor = "rgb(255 255 255 / 29%)"
   placeChest.style.backgroundColor = "rgba(170, 233, 170, 1)"
    uiBuilding.style.display = "none"
+   uiBuildingObjects.style.display = "none"
 } else {
   currentDevAction = "none";
   placeChest.style.backgroundColor = "rgb(255 255 255 / 29%)"
@@ -43920,7 +43931,8 @@ placeDialog.addEventListener("click", function() {
     placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
     startBuildingBut.style.backgroundColor = "rgb(255 255 255 / 29%)"
     placeDialog.style.backgroundColor = "rgba(170, 233, 170, 1)"
-     uiBuilding.style.display = "none"
+    uiBuilding.style.display = "none"
+    uiBuildingObjects.style.display = "none"
   } else {
     currentDevAction = "none";
     placeDialog.style.backgroundColor = "rgb(255 255 255 / 29%)"

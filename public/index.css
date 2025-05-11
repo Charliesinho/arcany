@@ -489,7 +489,7 @@ color: white;
 
 #uiBuildingObjects{
     position: absolute;
-    display: flex;
+    display: none;
     right: 3px;
     bottom: 3px;
     height: 100vh;
