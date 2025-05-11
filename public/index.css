@@ -501,7 +501,43 @@ color: white;
     outline: solid 3px #393939;
     z-index: 2;
     background: #FFE2C1;
+    border-radius: 4px;
 
+}
+
+
+#uiBuildingCategory{
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    right: 317px;
+    top: 20px;
+    gap: 5px;
+    text-align: right;
+    z-index: 1;
+}
+#uiBuildingCategory > p {
+    padding: 2px;
+    border: solid 2px rgb(148, 223, 148);
+    border-radius: 7px;
+    background: #ffe2c1;
+}
+.uiBuildingDiv{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: flex-start;
+    gap: 20px;
+    padding: 10px 10px;
+}
+.uiBuildingDiv > p {
+    width: 100%;
+    font-size: 20px;
+    padding: 10px;
+    margin-top: 10px;
+    text-align: end;
+    font-weight: 600;
 }
 
 #mapInfo {
@@ -576,8 +612,9 @@ color: white;
     border: solid 2.5px #b3a496;
     outline: solid 2.5px #393939;
 }
-#uiBuildingToolsDiv > img {
+.buildingUiButton{
     width: 50px;
+    height: 50px;
     padding: 3px;
     position: relative;
     top: 0;
