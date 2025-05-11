@@ -924,6 +924,12 @@ const placeDialog = document.getElementById('placeDialog');
 const uiBuilding = document.getElementById('uiBuilding');
 const uiBuildingObjects = document.getElementById('uiBuildingObjects');
 
+const uiBuildingCategoryConstruction = document.getElementById('uiBuildingCategoryConstruction');
+const uiBuildingCategoryFurniture = document.getElementById('uiBuildingCategoryFurniture');
+const uiBuildingCategoryStructure = document.getElementById('uiBuildingCategoryStructure');
+const uiBuildingCategoryOutdoor = document.getElementById('uiBuildingCategoryOutdoor');
+
+
 const mapNameInput = document.getElementById('mapNameInput');
 const mapDescInput = document.getElementById('mapDescInput');
 const createMapButton = document.getElementById('createMapButton');
@@ -4584,7 +4590,7 @@ socket.on("player", (serverPlayer) => {
         y: 0,
         h: 357,
         w: 119,
-        category: "structures",
+        category: "structure",
         subCategory: "enchanting",
       },
       {
@@ -4596,7 +4602,7 @@ socket.on("player", (serverPlayer) => {
         h: 72,
         w: 75,
         animated: true,
-        category: "structures",
+        category: "structure",
         subCategory: "enchanting",
       },
       {
@@ -4808,7 +4814,7 @@ socket.on("player", (serverPlayer) => {
         w: 21,
         lightSource: true,
         animated: true,
-        category: "structures",
+        category: "structure",
         subCategory: "chest",
       },
       {
@@ -4894,7 +4900,7 @@ socket.on("player", (serverPlayer) => {
         y: 0,
         h: 79,
         w: 105,
-        category: "structures",
+        category: "structure",
         subCategory: "kitchen",
       },
       {
@@ -7071,7 +7077,18 @@ function createImagesFromMapObjects(mapObjects) {
     parentDiv.appendChild(divElement);
 
 
-    uiBuilding.appendChild(parentDiv);
+    if(obj.category === "construction"){
+      uiBuildingConstruction.appendChild(parentDiv);
+    }
+    if(obj.category === "furniture"){
+      uiBuildingFurniture.appendChild(parentDiv);
+    }
+    if(obj.category === "outdoor"){
+      uiBuildingOutdoor.appendChild(parentDiv);
+    }
+    if(obj.category === "structure"){
+      uiBuildingStructure.appendChild(parentDiv);
+    }
   });
 }
 
@@ -7081,12 +7098,34 @@ function calculateValue(resolution) {
 
 // UI DEV COMMENT >
 
+function deselectUiButton() {
+  placeWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  deleteObjButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  hammerButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  createMapButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  uiBuildingObjects.style.display = "none";
+  uiBuildingCategory.style.display = "none";
+  roomsDiv.style.display = "none"
+  mapInfoDiv.style.display = "none"
+}
+
 placeWalls.addEventListener("click", function() {
   if (currentDevAction !== "wall") {
   showWallsFunction(true)
   currentDevAction = "wall";
   roomsDiv.style.display = "none"
   dialogsDiv.style.display = "none"
+  deselectUiButton()
+  placeWalls.style.backgroundColor = "rgba(170, 233, 170, 1)"
 } else {
   showWallsFunction(false)
   currentDevAction = "none";
@@ -7108,14 +7147,16 @@ deleteWalls.addEventListener("click", function() {
     placeChest.style.backgroundColor = "rgb(255 255 255 / 29%)"
     placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
     startBuildingBut.style.backgroundColor = "rgb(255 255 255 / 29%)"
-    deleteWalls.style.backgroundColor = "rgba(170, 233, 170, 1)"
+    deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
     uiBuilding.style.display = "none"
     uiBuildingObjects.style.display = "none"
+
+    deselectUiButton()
+    deleteWalls.style.backgroundColor = "rgba(170, 233, 170, 1)"
   } else {
     currentDevAction = "none";
-    deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
   }
- });
+});
 
 deleteObjButtonUi.addEventListener("click", function() {
   showWallsFunction(false)
@@ -7123,9 +7164,12 @@ if (currentDevAction !== "deleteObj") {
   currentDevAction = "deleteObj";
   roomsDiv.style.display = "none"
   dialogsDiv.style.display = "none"
+
+  deselectUiButton()
+  deleteObjButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
 } else {
   currentDevAction = "none";
-  deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  deleteObjButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
 }
 });
 
@@ -7145,7 +7189,10 @@ createMapButtonUi.addEventListener("click", function() {
   showWallsFunction(false);
   if (mapInfoDiv.style.display === "flex") {
     mapInfoDiv.style.display = "none"
+    createMapButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
   } else {
+    deselectUiButton()
+    createMapButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
     mapInfoDiv.style.display = "flex"
   }
 });
@@ -7163,20 +7210,8 @@ createMapButton.addEventListener("click", function() {
 placeFishingArea.addEventListener("click", function() {
   if (currentDevAction !== "fish") {
     currentDevAction = "fish";
-    roomsDiv.style.display = "none"
-    dialogsDiv.style.display = "none"
-    deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-    placeDialog.style.backgroundColor = "rgb(255 255 255 / 29%)"
-    placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-    placeWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-    placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-    placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-    placeChest.style.backgroundColor = "rgb(255 255 255 / 29%)"
-    placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
-    startBuildingBut.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    deselectUiButton()
     placeFishingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
-    uiBuilding.style.display = "none"
-    uiBuildingObjects.style.display = "none"
   } else {
     currentDevAction = "none";
     placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
@@ -7186,20 +7221,8 @@ placeFishingArea.addEventListener("click", function() {
 placeEnchantingArea.addEventListener("click", function() {
 if (currentDevAction !== "enchanting") {
   currentDevAction = "enchanting";
-  roomsDiv.style.display = "none"
-  dialogsDiv.style.display = "none"
-  deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeDialog.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeChest.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  startBuildingBut.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  deselectUiButton()
   placeEnchantingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
-  uiBuilding.style.display = "none"
-  uiBuildingObjects.style.display = "none"
 } else {
   currentDevAction = "none";
   placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
@@ -7209,20 +7232,8 @@ if (currentDevAction !== "enchanting") {
 placeCookingArea.addEventListener("click", function() {
 if (currentDevAction !== "cook") {
   currentDevAction = "cook";
-  roomsDiv.style.display = "none"
-  placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  dialogsDiv.style.display = "none"
-  deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeDialog.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeChest.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  startBuildingBut.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  deselectUiButton()
   placeCookingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
-  uiBuilding.style.display = "none"
-  uiBuildingObjects.style.display = "none"
 } else {
   currentDevAction = "none";
   placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
@@ -7234,21 +7245,55 @@ hammerButtonUi.addEventListener("click", function() {
   playRandomPop()
   if (currentDevAction !== "building") {
     currentDevAction = "building";
+    deselectUiButton()
     uiBuildingObjects.style.display = "flex";
+    uiBuildingCategory.style.display = "flex";
+    hammerButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
   } else {
     currentDevAction = "none";
     uiBuildingObjects.style.display = "none";
+    uiBuildingCategory.style.display = "none";
+    hammerButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
   }
 });
 
 layerOneButtonUi.addEventListener("click", function() {
-  currentSelectedObjLayer = 2;
+  if(currentSelectedObjLayer !== 2){
+    currentSelectedObjLayer = 2;
+    deselectUiButton()
+    layerThreeButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    layerTwoButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    layerOneButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
+    currentDevAction = "building";
+    hammerButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
+    uiBuildingObjects.style.display = "flex";
+  } 
 });
 layerTwoButtonUi.addEventListener("click", function() {
-  currentSelectedObjLayer = 1;
+  if(currentSelectedObjLayer !== 1){
+    deselectUiButton()
+    currentSelectedObjLayer = 1;
+    layerThreeButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    layerTwoButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
+    layerOneButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    currentDevAction = "building";
+    hammerButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
+    uiBuildingObjects.style.display = "flex";
+  } 
+ 
 });
 layerThreeButtonUi.addEventListener("click", function() {
-  currentSelectedObjLayer = 0;
+  if(currentSelectedObjLayer !== 0){
+    deselectUiButton()
+    currentSelectedObjLayer = 0;
+    layerThreeButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
+    layerTwoButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    layerOneButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    currentDevAction = "building";
+    hammerButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
+    uiBuildingObjects.style.display = "flex";
+  } 
+
 });
 
 startBuildingBut.addEventListener("click", function() {
@@ -7258,6 +7303,8 @@ if (uiBuilding.style.display !== "flex") {
   dialogsDiv.style.display = "none"
   uiBuilding.style.display = "flex"
   uiBuildingObjects.style.display = "none"
+  deselectUiButton()
+  startBuildingBut.style.backgroundColor = "rgb(148, 223, 148)"
 } else {
   currentDevAction = "none";
   uiBuilding.style.display = "none"
@@ -7268,20 +7315,8 @@ if (uiBuilding.style.display !== "flex") {
 placeCraftingArea.addEventListener("click", function() {
 if (currentDevAction !== "craft") {
   currentDevAction = "craft";
-  roomsDiv.style.display = "none"
-  dialogsDiv.style.display = "none"
-  placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeDialog.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeChest.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  startBuildingBut.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  deselectUiButton()
   placeCraftingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
-   uiBuilding.style.display = "none"
-   uiBuildingObjects.style.display = "none"
   } else {
   currentDevAction = "none";
   placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
@@ -7291,12 +7326,15 @@ if (currentDevAction !== "craft") {
 placeTransition.addEventListener("click", function() {
 if (currentDevAction !== "transition") {
   currentDevAction = "transition";
-  roomsDiv.style.display = "block"
   showWallsFunction(true)
+  deselectUiButton()
+  roomsDiv.style.display = "block"
+  placeTransition.style.backgroundColor = "rgb(148, 223, 148)"
 } else {
   roomsDiv.style.display = "none"
   currentDevAction = "none";
   showWallsFunction(false)
+  placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
 }
 });
 
@@ -7314,6 +7352,7 @@ if (currentDevAction !== "chest") {
   placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
   placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
   startBuildingBut.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  deselectUiButton()
   placeChest.style.backgroundColor = "rgba(170, 233, 170, 1)"
    uiBuilding.style.display = "none"
    uiBuildingObjects.style.display = "none"
@@ -7408,6 +7447,48 @@ mapsInfo[currentLand].colliders.forEach(wall => {
 exportWalls.addEventListener("click", function() {
 exportObjectAsText(mapsInfo[currentLand].colliders, "walls")
 });
+
+let uiBuildingCategoryActivate = "construction"
+
+function displayuiBuildingCategory() {
+  uiBuildingConstruction.style.display = 'none'
+  uiBuildingFurniture.style.display = 'none'
+  uiBuildingStructure.style.display = 'none'
+  uiBuildingOutdoor.style.display = 'none'
+}
+
+uiBuildingCategoryConstruction.addEventListener("click", function() {
+  if(uiBuildingCategoryActivate !== "construction"){
+    uiBuildingCategoryActivate = "construction"
+  } 
+  displayuiBuildingCategory()
+  uiBuildingConstruction.style.display = 'flex'
+})
+uiBuildingCategoryFurniture.addEventListener("click", function() {
+  if(uiBuildingCategoryActivate !== "furniture"){
+    uiBuildingCategoryActivate = "furniture"
+    console.log(uiBuildingCategoryActivate)
+  } 
+  displayuiBuildingCategory()
+  uiBuildingFurniture.style.display = 'flex'
+})
+uiBuildingCategoryStructure.addEventListener("click", function() {
+  if(uiBuildingCategoryActivate !== "structure"){
+    uiBuildingCategoryActivate = "structure"
+    console.log(uiBuildingCategoryActivate)
+  } 
+  displayuiBuildingCategory()
+  uiBuildingStructure.style.display = 'flex'
+})
+uiBuildingCategoryOutdoor.addEventListener("click", function() {
+  if(uiBuildingCategoryActivate !== "outdoor"){
+    uiBuildingCategoryActivate = "outdoor"
+    console.log(uiBuildingCategoryActivate)
+  } 
+  displayuiBuildingCategory()
+  uiBuildingOutdoor.style.display = 'flex'
+})
+
 
 // UI DEV COMMENT <
 
