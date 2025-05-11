@@ -43719,7 +43719,7 @@ createMapButton.addEventListener("click", function() {
     desc: mapDescInput.value
   }
   socket.emit("createWorld", worldInfo);
-  errorDisplay("Creating map", "hue-rotate(90deg)")
+  errorDisplay("Creating map")
 });
 
 placeFishingArea.addEventListener("click", function() {
@@ -44009,8 +44009,9 @@ socket.on("requestRoomsCompleted", (rooms) => {
   }
 })
 
-socket.on("createWorldSuccesful", () => {
+socket.on("createWorldSuccesful", (name) => {
   addMapsInfoToDiv()
+  errorDisplay(`${name} map created!`, "hue-rotate(90deg)")
 })
 
 function addMapsInfoToDiv() {
