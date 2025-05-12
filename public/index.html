@@ -97,26 +97,58 @@
     <div id="uiBuilding">
       <div id="uiBuildingToolsDiv">
         <!-- <h1>Actions</h1> -->
-        <img class="buildingUiButton pointerActivator" id="hammerButtonUi" src="./icons/uiIcon/hammerIcon.png"></img>
-        <img class="buildingUiButton pointerActivator" id="wallButtonUi" src="./icons/uiIcon/wallIcon.png"></img>
-        <img class="buildingUiButton pointerActivator" id="deleteObjButtonUi" src="./icons/uiIcon/deleteIcon.png"></img>
+        <br/>
         <img class="buildingUiButton pointerActivator" id="fishingButtonUi" src="./icons/uiIcon/fishingIcon.png"></img>
         <img class="buildingUiButton pointerActivator" id="enchantingButtonUi" src="./icons/uiIcon/enchantingIcon.png"></img>
         <img class="buildingUiButton pointerActivator" id="craftingButtonUi" src="./icons/uiIcon/craftingIcon.png"></img>
         <img class="buildingUiButton pointerActivator" id="cookingButtonUi" src="./icons/uiIcon/cookingIcon.png"></img>
         <img class="buildingUiButton pointerActivator" id="portalButtonUi" src="./icons/uiIcon/portal.png"></img>
+        <br/>
+        <img class="buildingUiButton pointerActivator" id="createMapButtonUi" src="./icons/uiIcon/create.png"></img>
         <img class="buildingUiButton pointerActivator" id="sapwnButtonUi" src="./icons/uiIcon/setSpawnIcon.png"></img>
         <img class="buildingUiButton pointerActivator" id="editMapButtonUi" src="./icons/uiIcon/edit.png"></img>
         <img class="buildingUiButton pointerActivator" id="saveObjButtonUi" src="./icons/uiIcon/save.png"></img>
-        <img class="buildingUiButton pointerActivator" id="createMapButtonUi" src="./icons/uiIcon/create.png"></img>
+        <br/>
+        <img class="buildingUiButton pointerActivator" id="wallButtonUi" src="./icons/uiIcon/wallIcon.png"></img>
+        <img class="buildingUiButton pointerActivator" id="deletewWallButtonUi" src="./icons/uiIcon/deletewallsIcon.png"></img>
         <!-- <h1>Layers</h1> -->
-         
+        <br/>
+        <img class="buildingUiButton pointerActivator" id="createMobButtonUi" src="./icons/uiIcon/create.png"></img>
+        <img class="buildingUiButton pointerActivator" id="placeMobButtonUi" src="./icons/uiIcon/placeMob.png"></img>
+        <br/>
+        <img class="buildingUiButton pointerActivator" id="hammerButtonUi" src="./icons/uiIcon/hammerIcon.png"></img>
+        <img class="buildingUiButton pointerActivator" id="deleteObjButtonUi" src="./icons/uiIcon/deleteIcon.png"></img>
         <img class="buildingUiButton pointerActivator" id="layerOneButtonUi" src="./icons/uiIcon/frontLayerIcon.png"></img>
         <img class="buildingUiButton pointerActivator" id="layerTwoButtonUi" src="./icons/uiIcon/middleLayerIcon.png"></img>
         <img class="buildingUiButton pointerActivator" id="layerThreeButtonUi" src="./icons/uiIcon/backLayerIcon.png"></img>
       </div>
     </div>
     <div id="roomsDev"></div>
+    
+    <div id="monsterCreationParent">
+
+      <div id="monsterCreationTitle">
+        <img class="buildingUiButton pointerActivator" id="placeMobButtonUi" src="./icons/uiIcon/placeMob.png"></img>
+        <h1>Monster creation</h1>
+      </div>
+     
+      
+      <div id="monsterCreationTop">
+        <div id="monsterImage"></div>
+        <div id="monsterCreationTopInputs">
+          <input placeholder="Name" id="monsterNameInput" />
+          <select id="monstercategoryDropdown">
+            <option value="regular">Regular</option>
+            <option value="wildlife">Wildlife</option>
+            <option value="boss">Boss</option>
+          </select>
+          <input placeholder="Lvl" id="monsterLvlInput" />
+          <input placeholder="Health" id="monsterHealthInput" />
+          <input placeholder="Speed" id="monsterSpeedInput" />
+          <input placeholder="State interval" id="monsterState intervalInput" />
+        </div>
+      </div>
+    </div>
 
     <div id="uiBuildingCategory">
       <p class="pointerActivator" id="uiBuildingCategoryConstruction">Construction</p>

@@ -1227,10 +1227,31 @@ async function main() {
         })
        
         socket.on("placedObject", async (info) => {
-            await World.findOneAndUpdate({areaName: info.currentLand}, {objects: info.objects}, {new: true});
-            const worldData = await World.findOne({areaName: info.currentLand}).exec();
-            io.emit('updateMap', {worldData, object: info.object});
-        })
+            const layerKey = `objects.${info.currentSelectedObjLayer}`;
+        
+            const update = {
+                $push: { [layerKey]: info.object }
+            };
+        
+            await World.findOneAndUpdate({ areaName: info.currentLand }, update, { new: true });
+            const worldData = await World.findOne({ areaName: info.currentLand }).exec();
+        
+            io.emit('updateMap', { worldData, object: info.object });
+        });
+        
+        socket.on("deletedObject", async (info) => {
+            const layerKey = `objects.${info.currentSelectedObjLayer}`;
+        
+            const update = {
+                $pull: { [layerKey]: info.object }  // Remove the matching object
+            };
+        
+            await World.findOneAndUpdate({ areaName: info.currentLand }, update, { new: true });
+            const worldData = await World.findOne({ areaName: info.currentLand }).exec();
+        
+            io.emit('updateMap', { worldData, object: info.object, deleting: true });
+        });            
+        
         
         socket.on("setSpawn", async (info) => {
             await World.findOneAndUpdate({areaName: info[1]}, {playerPos: info[0]}, {new: true});

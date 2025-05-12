@@ -1,7 +1,7 @@
 //Change this to push >
 
-// const socket = io(`ws://localhost:5000`);
-const socket = io(`https://arcanyGame.up.railway.app/`);
+const socket = io(`ws://localhost:5000`);
+// const socket = io(`https://arcanyGame.up.railway.app/`);
 // const socket = io(window.location.origin);
 
 
@@ -905,7 +905,7 @@ const layerTwoButtonUi  = document.getElementById("layerTwoButtonUi");
 const layerThreeButtonUi  = document.getElementById("layerThreeButtonUi");
 const deleteObjButtonUi = document.getElementById("deleteObjButtonUi");
 const saveObjButtonUi = document.getElementById("saveObjButtonUi");
-const deleteWalls = document.getElementById("deleteWalls");
+const deleteWalls = document.getElementById("deletewWallButtonUi");
 const placeEnchantingArea = document.getElementById("enchantingButtonUi");
 const startBuildingBut = document.getElementById("buildButton");
 const showWalls = document.getElementById("showWalls");
@@ -1008,6 +1008,79 @@ const artifactInventory = {
 }
 
 const catchGif = document.getElementById("catchGif");
+
+let mobsImages = [
+  {
+    name: "treeSimpleEnemy",
+    imgw: 31,
+    imgh: 27,
+    imgcw: 31,
+    imgch: 0,
+    frames: 0,
+    framesTimer: 0,
+    level: 1,
+    xp: 0,
+    speedX: 1,
+    speedY: 1,
+    spawn: {
+      x: 0,
+      y: 0
+    },
+    w: 100,
+    h: 100,
+    currentStateName: "idle",
+    currentState: null,
+    attackInterval: true,
+    states: [],
+    damaged: 0,
+    health: 10,
+    angle: 0,
+    maxHealth: 10,
+    baseSpawn: {
+      x: 0,
+      y: 0
+    },
+    spawnTimer: 1000,
+    enemyStateInt: 1000,
+    drop: "",
+    dropRate: 100,
+  },
+  {
+    name: "blackBrownBunny",
+    imgw: 31,
+    imgh: 27,
+    imgcw: 31,
+    imgch: 0,
+    frames: 0,
+    framesTimer: 0,
+    level: 1,
+    xp: 0,
+    speedX: 5,
+    speedY: 5,
+    spawn: {
+      x: 0,
+      y: 0
+    },
+    w: 80,
+    h: 80,
+    currentStateName: "idle",
+    currentState: null,
+    attackInterval: true,
+    states: [],
+    damaged: 0,
+    health: 4,
+    angle: 0,
+    maxHealth: 10,
+    baseSpawn: {
+      x: 0,
+      y: 0
+    },
+    spawnTimer: 1000,
+    enemyStateInt: 1000,
+    drop: "",
+    dropRate: 100,
+  },
+]
 
 //Ui interaction >
 
@@ -5335,9 +5408,9 @@ socket.on("startCooking", (item) => {
 let intervalCanvasBase;
 
 socket.on("updateMap", (map) => {
-  // console.log(map)
-  mapsInfo = {[map.worldData.areaName]: map.worldData}
-  buildPlaceParticles(map.object)
+  mapsInfo[map.worldData.areaName] = map.worldData
+  if (map.object) buildPlaceParticles(map.object)
+  if (map.deleting) buildDeleteParticles(map.object)
 })
 
 let mapsInfo = {};
@@ -6822,7 +6895,6 @@ canvasLobby.addEventListener("mousemove", (event) => {
 });
 
 canvasLobby.addEventListener('click', function(event) {
-  // console.log(currentSelectedWall)
   if (!currentlyPlacingWall && currentDevAction === "wall" && currentSelectedWall === null) {
     selectedXcoord = hoveredXCoord;
     selectedYcoord = hoveredYCoord;
@@ -6851,6 +6923,7 @@ canvasLobby.addEventListener('click', function(event) {
     currentSelectedWall = null;
   }
   else if (currentSelectedWall !== null && currentDevAction === "deleteObj") {
+    socket.emit("deletedObject",{ currentLand: currentLand, object: mapsInfo[currentLand].objects[currentSelectedObjLayer][currentSelectedWall], currentSelectedObjLayer});
     mapsInfo[currentLand].objects[currentSelectedObjLayer].splice(currentSelectedWall, 1)
     currentSelectedWall = null;
   }
@@ -6870,7 +6943,7 @@ canvasLobby.addEventListener('click', function(event) {
     
     playRandomPop()
     // buildPlaceParticles(objClone)
-    socket.emit("placedObject",{ objects: mapsInfo[currentLand].objects, currentLand: currentLand, object: objClone});
+    socket.emit("placedObject",{currentLand: currentLand, object: objClone, currentSelectedObjLayer});
   }
 
 
@@ -7120,6 +7193,7 @@ function deselectUiButton() {
 
 placeWalls.addEventListener("click", function() {
   if (currentDevAction !== "wall") {
+  currentSelectedWall = null
   showWallsFunction(true)
   currentDevAction = "wall";
   roomsDiv.style.display = "none"
@@ -7128,6 +7202,7 @@ placeWalls.addEventListener("click", function() {
   placeWalls.style.backgroundColor = "rgba(170, 233, 170, 1)"
 } else {
   showWallsFunction(false)
+  deselectUiButton()
   currentDevAction = "none";
  }
 });
@@ -7138,22 +7213,13 @@ deleteWalls.addEventListener("click", function() {
     currentDevAction = "delete";
     roomsDiv.style.display = "none"
     dialogsDiv.style.display = "none"
-    placeWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-    placeDialog.style.backgroundColor = "rgb(255 255 255 / 29%)"
-    placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-    placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-    placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-    placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-    placeChest.style.backgroundColor = "rgb(255 255 255 / 29%)"
-    placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
-    startBuildingBut.style.backgroundColor = "rgb(255 255 255 / 29%)"
-    deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-    uiBuilding.style.display = "none"
     uiBuildingObjects.style.display = "none"
-
+    
     deselectUiButton()
     deleteWalls.style.backgroundColor = "rgba(170, 233, 170, 1)"
   } else {
+    showWallsFunction(false)
+    deselectUiButton()
     currentDevAction = "none";
   }
 });
@@ -7190,10 +7256,12 @@ createMapButtonUi.addEventListener("click", function() {
   if (mapInfoDiv.style.display === "flex") {
     mapInfoDiv.style.display = "none"
     createMapButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    noMovement = false
   } else {
     deselectUiButton()
     createMapButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
     mapInfoDiv.style.display = "flex"
+    noMovement = true
   }
 });
 
@@ -7205,6 +7273,8 @@ createMapButton.addEventListener("click", function() {
   }
   socket.emit("createWorld", worldInfo);
   errorDisplay("Creating map")
+  mapInfoDiv.style.display = "none"
+  noMovement = false
 });
 
 placeFishingArea.addEventListener("click", function() {
@@ -7212,9 +7282,11 @@ placeFishingArea.addEventListener("click", function() {
     currentDevAction = "fish";
     deselectUiButton()
     placeFishingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
+    showWallsFunction(true)
   } else {
     currentDevAction = "none";
     placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    showWallsFunction(false)
   }
  });
 
@@ -7223,9 +7295,11 @@ if (currentDevAction !== "enchanting") {
   currentDevAction = "enchanting";
   deselectUiButton()
   placeEnchantingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
+  showWallsFunction(true)
 } else {
   currentDevAction = "none";
   placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  showWallsFunction(false)
 }
 });
 
@@ -7234,9 +7308,11 @@ if (currentDevAction !== "cook") {
   currentDevAction = "cook";
   deselectUiButton()
   placeCookingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
+  showWallsFunction(true)
 } else {
   currentDevAction = "none";
   placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  showWallsFunction(false)
 }
 });
 
@@ -7317,9 +7393,11 @@ if (currentDevAction !== "craft") {
   currentDevAction = "craft";
   deselectUiButton()
   placeCraftingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
+  showWallsFunction(true)
   } else {
   currentDevAction = "none";
   placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  showWallsFunction(false)
   }
 });
 
@@ -7754,7 +7832,7 @@ function drawObjects (layer, num) {
   if (!mapsInfo[currentLand].objects) return
 
   objectFramesController++;
-  if (objectFramesController > 15) {
+  if (objectFramesController > 50) {
     objectFramesController = 0;
     objectsFrames++
     if (objectsFrames >= 8) {
@@ -10530,6 +10608,29 @@ function buildPlaceParticles(obj) {
   }
 }
 
+function buildDeleteParticles(obj) {
+  // console.log(obj)
+  for (let i = 0; i < 20; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = Math.floor(Math.random() * (20 - 10 + 1)) + 1;; // Random speed (adjust as needed)
+    const size = 30; // Random size between 3 and 8
+    const particleX = obj.x - (obj.w * 2);
+    const particleY = obj.y - 100;
+
+    const randomNumber = Math.floor(Math.random() * 2) + 1;
+    
+    if (randomNumber === 1) {
+
+      particles.push({ x: 1, y: 1, size: size, color: 'Crimson', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partWalk"].speedDec, sizeDecrease: particlesSystem["partWalk"].sizeDec, name: particlesSystem["partSlime"].name });
+            
+    } else {
+
+      particles.push({ x: 1, y: 1, size: size, color: 'DarkRed', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partWalk"].speedDec, sizeDecrease: particlesSystem["partWalk"].sizeDec, name: particlesSystem["partSlime"].name });
+    }
+
+  }
+}
+
 function enemyDeathParticles (enemy) {
   for (let i = 0; i < 20; i++) {
     const angle = Math.random() * Math.PI * 2; // Random angle
@@ -10586,35 +10687,37 @@ function nightTimeCanvas() {
 
   function addLight(ctx, x, y) {
     ctx.beginPath();
-    ctx.arc(x, y, 300 + value, 0, Math.PI * 2);  // Create a white circle with radius 500
+    ctx.arc(x, y, 400 + value, 0, Math.PI * 2);  // Create a white circle with radius 500
     ctx.fillStyle = 'white';
     ctx.fill();  // Fill the circle with white
     ctx.closePath();
     
     ctx.beginPath();
-    ctx.arc(x, y, 320 + value, 0, Math.PI * 2);  // Create a white circle with radius 500
+    ctx.arc(x, y, 420 + value, 0, Math.PI * 2);  // Create a white circle with radius 500
     ctx.fillStyle = 'rgba(248, 248, 248, 0.50)';
     ctx.fill();  // Fill the circle with white
     ctx.closePath();
     
     ctx.beginPath();
-    ctx.arc(x, y, 340 + value, 0, Math.PI * 2);  // Create a white circle with radius 500
+    ctx.arc(x, y, 440 + value, 0, Math.PI * 2);  // Create a white circle with radius 500
     ctx.fillStyle = 'rgba(248, 248, 248, 0.15)';
     ctx.fill();  // Fill the circle with white
     ctx.closePath();
     
     ctx.beginPath();
-    ctx.arc(x, y, 360 + value, 0, Math.PI * 2);  // Create a white circle with radius 500
+    ctx.arc(x, y, 460 + value, 0, Math.PI * 2);  // Create a white circle with radius 500
     ctx.fillStyle = 'rgba(248, 248, 248, 0.05)';
     ctx.fill();  // Fill the circle with white
     ctx.closePath();
   }
 
   addLight(b_ctx, playerX - cameraShakeX - cameraX - 150, playerY - cameraShakeY - cameraY - 100);
-  
-  mapsInfo[currentLand].objects?.forEach(obj => {
-    if (!obj.lightSource) return
-    addLight(b_ctx, obj.x - cameraShakeX - cameraX - 180, obj.y - cameraShakeY - cameraY - 199);
+
+  mapsInfo[currentLand].objects?.forEach(objParent => {
+    objParent?.forEach(obj => {
+      if (!obj.lightSource) return
+      addLight(b_ctx, obj.x - cameraShakeX - cameraX - 180, obj.y - cameraShakeY - cameraY - 199);
+    })
   })
 
 

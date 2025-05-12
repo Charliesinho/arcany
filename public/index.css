@@ -1,6 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=Tiny5&display=swap');
 
+h2, h1 {
+    font-weight: 400;
+    margin: 0;
+}
+
 .textTitle{
     font-size: 39px;
     font-weight: 100;
@@ -44,6 +49,51 @@ body {
     overflow-x: hidden;
     overflow-y: hidden;
     background: black;
+}
+
+#monsterImage {
+    width: 150px; /* Set your desired width */
+    height: 150px; /* Set your desired height */
+    background-image: url('./enemies/purpleSlime.png');
+    border: solid 2.5px #b3a49654;
+    outline: solid 2.5px #3939393d;
+    border-radius: 3px;
+}
+
+#monsterCreationParent {
+    width: 400px;
+    overflow: hidden;
+    height: 600px;
+    position: absolute;
+    bottom: 103px;
+    left: 116px;
+    z-index: 1;
+    border: solid 3px #b3a496;
+    outline: solid 3px #393939;
+    background: #FFE2C1;
+    border-radius: 3px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#monsterCreationTop {
+    display: flex;
+    gap: 15px;
+}
+
+#monsterCreationTopInputs {
+    display: flex    ;
+    flex-direction: column;
+    gap: 7px;
+    width: 57%;
+}
+
+#monsterCreationTitle {
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
   
 
