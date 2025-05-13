@@ -1,7 +1,7 @@
 //Change this to push >
 
-// const socket = io(`ws://localhost:5000`);
-const socket = io(`https://arcanyGame.up.railway.app/`);
+const socket = io(`ws://localhost:5000`);
+// const socket = io(`https://arcanyGame.up.railway.app/`);
 // const socket = io(window.location.origin);
 
 
@@ -452,8 +452,16 @@ chatBubble.src = "chatBubble.png";
 const chatBubbleBigger = new Image();
 chatBubbleBigger.src = "chatBubbleBigger.png";
 
-const nameBubbleGreen = new Image();
-nameBubbleGreen.src = "./nameTags/nameTaglvl1.png";
+const nameTaglvl1 = new Image();
+nameTaglvl1.src = "./nameTags/nameTaglvl1.png";
+const nameTaglvl2 = new Image();
+nameTaglvl2.src = "./nameTags/nameTaglvl2.png";
+const nameTaglvl3 = new Image();
+nameTaglvl3.src = "./nameTags/nameTaglvl3.png";
+const nameTaglvl4 = new Image();
+nameTaglvl4.src = "./nameTags/nameTaglvl4.png";
+const nameTaglvl5 = new Image();
+nameTaglvl5.src = "./nameTags/nameTaglvl5.png";
 
 const Structure1 = new Image();
 Structure1.src = "./structures/Structure1.png";
@@ -8790,14 +8798,23 @@ function drawPlayerWeaponSheated(player) {
 
 function drawUsernameOnline (player, smoothPlayer) {
   if (hideAndSickvar === false){
-canvas.drawImage(nameBubbleGreen, smoothPlayer.smoothX - cameraX -40, smoothPlayer.smoothY - cameraY -48, 100,50)
+
+  let nameImage;
+
+  if (player.status === 1) {nameImage = nameTaglvl1}
+  else if (player.status === 2) {nameImage = nameTaglvl2}
+  else if (player.status === 3) {nameImage = nameTaglvl3}
+  else if (player.status === 4) {nameImage = nameTaglvl4}
+  else if (player.status === 5) {nameImage = nameTaglvl5}
+
+canvas.drawImage(nameImage, smoothPlayer.smoothX - cameraX -40, smoothPlayer.smoothY - cameraY -48, 100,50)
   canvas.beginPath();
-  canvas.font = "bolder 16px Tiny5";
+  canvas.font = "400 16px Tiny5";
   canvas.textAlign = "center";
-  canvas.fillStyle = "black";
+  canvas.fillStyle = player.status === 5 ? "white" : "black";
   canvas.fillText(player.username, smoothPlayer.smoothX - cameraX +10, smoothPlayer.smoothY  - cameraY -10);
   canvas.beginPath();
-  canvas.font = "bolder 12px Tiny5";
+  canvas.font = "400 12px Tiny5";
   canvas.textAlign = "center";
   canvas.fillStyle = "black";
   canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)) , smoothPlayer.smoothX - cameraX + 10, smoothPlayer.smoothY  - cameraY - 30.5);
@@ -8806,14 +8823,22 @@ canvas.drawImage(nameBubbleGreen, smoothPlayer.smoothX - cameraX -40, smoothPlay
 }
 
 function drawUsernameLocal (player) {
-  canvas.drawImage(nameBubbleGreen, playerX - cameraX -40, playerY - cameraY -48, 100,50)
+  let nameImage;
+
+  if (player.status === 1) {nameImage = nameTaglvl1}
+  else if (player.status === 2) {nameImage = nameTaglvl2}
+  else if (player.status === 3) {nameImage = nameTaglvl3}
+  else if (player.status === 4) {nameImage = nameTaglvl4}
+  else if (player.status === 5) {nameImage = nameTaglvl5}
+
+  canvas.drawImage(nameImage, playerX - cameraX -40, playerY - cameraY -48, 100,50)
   canvas.beginPath();
-  canvas.font = "bolder 16px Tiny5";
+  canvas.font = "400 16px Tiny5";
   canvas.textAlign = "center";
-  canvas.fillStyle = "black";
+  canvas.fillStyle = player.status === 5 ? "white" : "black";
   canvas.fillText(player.username, playerX - cameraX +10, playerY  - cameraY -12);
   canvas.beginPath();
-  canvas.font = "bolder 12px Tiny5";
+  canvas.font = "400 12px Tiny5";
   canvas.textAlign = "center";
   canvas.fillStyle = "black";
   canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)) , playerX - cameraX + 10, playerY  - cameraY - 32.5);

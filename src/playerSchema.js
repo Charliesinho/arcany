@@ -88,6 +88,10 @@ const PlayerSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  status: {
+    type: Number,
+    default: 1,
+  },
   access: {
     type: Array,
     default: [
