@@ -1136,6 +1136,7 @@ async function main() {
 
 
                     io.to(id).emit('loginAttempt', loginAttempt);
+                    io.to(id).emit('removeKeyBlocker', "");
 
 
                 } else if (playerData && playerData.password !== password) { 

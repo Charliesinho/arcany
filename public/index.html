@@ -117,10 +117,6 @@
         <img class="buildingUiButton pointerActivator" id="placeMobButtonUi" src="./icons/uiIcon/placeMob.png"></img>
         <br/>
         <img class="buildingUiButton pointerActivator" id="hammerButtonUi" src="./icons/uiIcon/hammerIcon.png"></img>
-        <img class="buildingUiButton pointerActivator" id="deleteObjButtonUi" src="./icons/uiIcon/deleteIcon.png"></img>
-        <img class="buildingUiButton pointerActivator" id="layerOneButtonUi" src="./icons/uiIcon/frontLayerIcon.png"></img>
-        <img class="buildingUiButton pointerActivator" id="layerTwoButtonUi" src="./icons/uiIcon/middleLayerIcon.png"></img>
-        <img class="buildingUiButton pointerActivator" id="layerThreeButtonUi" src="./icons/uiIcon/backLayerIcon.png"></img>
       </div>
     </div>
     <div id="roomsDev"></div>
@@ -151,17 +147,104 @@
     </div> -->
 
     <div id="uiBuildingCategory">
-      <p class="pointerActivator" id="uiBuildingCategoryConstruction">Construction</p>
-      <p class="pointerActivator" id="uiBuildingCategoryFurniture">Furniture</p>
-      <p class="pointerActivator" id="uiBuildingCategoryStructure">Structure</p>
-      <p class="pointerActivator" id="uiBuildingCategoryOutdoor">Outdoor</p>
+      <div  id="uiBuildingCategoryDiv">
+        <p class="pointerActivator" id="uiBuildingCategoryConstruction" style="background-color: rgb(148, 223, 148)"">Construction</p>
+        <p class="pointerActivator" id="uiBuildingCategoryFurniture">Furniture</p>
+        <p class="pointerActivator" id="uiBuildingCategoryStructure">Structure</p>
+        <p class="pointerActivator" id="uiBuildingCategoryOutdoor">Outdoor</p>
+      </div>
+
+      <div id="uiBuildingCategoryDiv">
+        <img class="pointerActivator" id="deleteObjButtonUi" src="./icons/uiIcon/deleteIcon.png"></img>
+        <img class="pointerActivator" id="layerOneButtonUi" src="./icons/uiIcon/frontLayerIcon.png"></img>
+        <img class="pointerActivator" id="layerTwoButtonUi" src="./icons/uiIcon/middleLayerIcon.png"></img>
+        <img class="pointerActivator" id="layerThreeButtonUi" src="./icons/uiIcon/backLayerIcon.png"></img>
+      </div>
     </div>
 
     <div id="uiBuildingObjects">
-      <div id="uiBuildingConstruction" class="uiBuildingDiv" style="display: flex"> <p>Construction</p></div>
-      <div id="uiBuildingFurniture" class="uiBuildingDiv" style="display: none"><p>Furniture</p></div>
-      <div id="uiBuildingStructure" class="uiBuildingDiv" style="display: none"><p>Structure</p></div>
-      <div id="uiBuildingOutdoor" class="uiBuildingDiv" style="display: none"><p>Outdoor</p></div>
+      <div id="uiBuildingConstruction" class="uiBuildingDiv" style="display: flex">
+
+        <div class="filterUiConstruction">
+        <p class="filter-labelSelected"></p>
+          <div class="filter-container">
+
+            <p class="filter-label">Filter</p>
+            <div class="filter-dropdown">
+              <div class="filterSubCategoryConstruction" id="">All</div>
+              <div class="filterSubCategoryConstruction" id="door">Door</div>
+              <div class="filterSubCategoryConstruction" id="fences">Fences</div>
+              <div class="filterSubCategoryConstruction" id="floors">Floors</div>
+              <div class="filterSubCategoryConstruction" id="walls">Walls</div>
+              <div class="filterSubCategoryConstruction" id="windows">Windows</div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+      <div id="uiBuildingFurniture" class="uiBuildingDiv" style="display: none">
+        <div class="filterUiConstruction">
+        <p class="filter-labelSelected"></p>
+          <div class="filter-container">
+
+            <p class="filter-label">Filter</p>
+            <div class="filter-dropdown">
+              <div class="filterSubCategoryConstruction" id="">All</div>
+              <div class="filterSubCategoryConstruction" id="carpets">Carpet</div>
+              <div class="filterSubCategoryConstruction" id="chairs">Chairs</div>
+              <div class="filterSubCategoryConstruction" id="curtains">Curtains</div>
+              <div class="filterSubCategoryConstruction" id="kitchen">Kitchen</div>
+              <div class="filterSubCategoryConstruction" id="decorations">Decoration</div>
+              <div class="filterSubCategoryConstruction" id="painting">Painting</div>
+              <div class="filterSubCategoryConstruction" id="storage">Storage</div>
+              <div class="filterSubCategoryConstruction" id="tables">Tables</div>
+            </div>
+
+             </div>
+        </div>
+      </div>
+      <div id="uiBuildingStructure" class="uiBuildingDiv" style="display: none">
+        <div class="filterUiConstruction">
+        <p class="filter-labelSelected"></p>
+          <div class="filter-container">
+
+            <p class="filter-label">Filter</p>
+            <div class="filter-dropdown">
+              <div class="filterSubCategoryConstruction" id="">All</div>
+              <div class="filterSubCategoryConstruction" id="chest">Chest</div>
+              <div class="filterSubCategoryConstruction" id="enchanting">Enchanting</div>
+              <div class="filterSubCategoryConstruction" id="kitchen">Kitchen</div>
+              <div class="filterSubCategoryConstruction" id="ruins">Ruins</div>
+            </div>
+
+             </div>
+        </div>
+      </div>
+      <div id="uiBuildingOutdoor" class="uiBuildingDiv" style="display: none">
+        <div class="filterUiConstruction">
+          <p class="filter-labelSelected"></p>
+          <div class="filter-container">
+
+            <p class="filter-label">Filter</p>
+            <div class="filter-dropdown">
+              <div class="filterSubCategoryConstruction" id="">All</div>
+              <div class="filterSubCategoryConstruction" id="decorations">Decoration</div>
+              <div class="filterSubCategoryConstruction" id="flowers">Flowers</div>
+              <div class="filterSubCategoryConstruction" id="fountains">Fountains</div>
+              <div class="filterSubCategoryConstruction" id="grass">Grass</div>
+              <div class="filterSubCategoryConstruction" id="furniture">Fourniture</div>
+              <div class="filterSubCategoryConstruction" id="plants">Plants</div>
+              <div class="filterSubCategoryConstruction" id="pools">Pools</div>
+              <div class="filterSubCategoryConstruction" id="rocks">Rocks</div>
+              <div class="filterSubCategoryConstruction" id="trees">Trees</div>
+              <div class="filterSubCategoryConstruction" id="water">Water</div>
+              <div class="filterSubCategoryConstruction" id="bush">Bush</div>
+            </div>
+
+             </div>
+        </div>
+      </div>
     </div>
 
     <div id="mapInfo">
