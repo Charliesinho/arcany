@@ -55,6 +55,7 @@ function tick() {
             player.artifacts = clientPlayer.artifacts;
             player.currency = clientPlayer.currency;
             player.access = clientPlayer.access;
+            player.status = clientPlayer.status;
 
             player.weapon = clientPlayer.weapon;
             player.armor = clientPlayer.armor;
@@ -180,6 +181,7 @@ async function main() {
             artifact: [],
             souls: [],
             artifacts: [],
+            status: 1,
 
             currency: 0,
 

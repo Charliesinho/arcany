@@ -1028,7 +1028,7 @@ color: white;
     flex-wrap: wrap;
 }
 .inventorySlotBG {
-    flex-basis: 27%;
+    flex-basis: 20%;
     background: url(./ui/uiInventoryBackground.png);
     background-size: contain;
     background-repeat: no-repeat;
@@ -1204,9 +1204,16 @@ color: white;
 #deleteInventoryButton{
     display: flex;
     position: relative;
+    /* bottom: 51px; */
     margin-top: 15px;
-    width: 50px;
+    width: 100%;
     height: 60px;
+}
+
+#trashIcon {
+    position: absolute;
+    width: 3vw;
+    right: 14px;
 }
 
 .closeBookButton{
