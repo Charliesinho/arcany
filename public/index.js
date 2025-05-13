@@ -1,7 +1,7 @@
 //Change this to push >
 
-const socket = io(`ws://localhost:5000`);
-// const socket = io(`https://arcanyGame.up.railway.app/`);
+// const socket = io(`ws://localhost:5000`);
+const socket = io(`https://arcanyGame.up.railway.app/`);
 // const socket = io(window.location.origin);
 
 
@@ -7761,7 +7761,7 @@ setInterval(() => {
 
   DayCycleState = (DayCycleState + 1) % DayCycleFilters.length;
 
-}, 10000);
+}, 100000);
 
 
 function mapSetup () {
