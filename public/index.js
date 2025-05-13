@@ -73,13 +73,13 @@ woodPole.src = "./objects/construction/fences/woodPole.png"
 const whiteFlowers = new Image();
 whiteFlowers.src = "./objects/outdoor/flowers/whiteFlowers.png"
 const bushOne = new Image();
-bushOne.src = "./objects/outdoor/miniBush/bushOne.png"
+bushOne.src = "./objects/outdoor/bush/bushOne.png"
 const rockOne = new Image();
 rockOne.src = "./objects/outdoor/rocks/rockOne.png"
 const woodSquareDoor = new Image();
 woodSquareDoor.src = "./objects/construction/walls/woodSquareDoor.png"
 const vineOne = new Image();
-vineOne.src = "./objects/outdoor/exteriorDecoration/vineOne.png"
+vineOne.src = "./objects/outdoor/decorations/vineOne.png"
 const chestCommon = new Image();
 chestCommon.src = "./objects/structures/chest/chestCommon.png"
 const cookingPotObj = new Image();
@@ -87,9 +87,9 @@ cookingPotObj.src = "./objects/furniture/kitchen/cookingPotObj.png"
 const grassOne = new Image();
 grassOne.src = "./objects/outdoor/grass/grassOne.png"
 const lightPoleOne = new Image();
-lightPoleOne.src = "./objects/outdoor/outdoorFurniture/lightPoleOne.png"
+lightPoleOne.src = "./objects/outdoor/furniture/lightPoleOne.png"
 const mediumTorch = new Image();
-mediumTorch.src = "./objects/outdoor/outdoorFurniture/mediumTorch.png"
+mediumTorch.src = "./objects/outdoor/furniture/mediumTorch.png"
 const dirtFloorBig = new Image();
 dirtFloorBig.src = "./objects/construction/floors/dirtFloorBig.png"
 const plazaFountain = new Image();
@@ -101,7 +101,7 @@ enchantingTower.src = "./objects/structures/enchanting/enchantingTower.png"
 const enchantingTable = new Image();
 enchantingTable.src = "./objects/structures/enchanting/enchantingTable.png"
 const flagLine = new Image();
-flagLine.src = "./objects/outdoor/outdoorFurniture/flagLine.png"
+flagLine.src = "./objects/outdoor/furniture/flagLine.png"
 const plantPatch = new Image();
 plantPatch.src = "./objects/construction/floors/plantPatch.png"
 const woodFence = new Image();
@@ -121,13 +121,13 @@ woodWallVer.src = "./objects/construction/walls/woodWallVer.png"
 const woodWindowWall = new Image();
 woodWindowWall.src = "./objects/construction/walls/woodWindowWall.png"
 const fishPond = new Image();
-fishPond.src = "./objects/outdoor/exteriorDecoration/fishPond.png"
+fishPond.src = "./objects/outdoor/decorations/fishPond.png"
 const dryGrass = new Image();
 dryGrass.src = "./objects/outdoor/grass/dryGrass.png"
 const smallLake = new Image();
 smallLake.src = "./objects/outdoor/water/smallLake.png"
 const booksOne = new Image();
-booksOne.src = "./objects/furniture/miniObject/booksOne.png"
+booksOne.src = "./objects/furniture/decorations/booksOne.png"
 const redSmallCarpet = new Image();
 redSmallCarpet.src = "./objects/furniture/carpets/redSmallCarpet.png"
 const chairLeft = new Image();
@@ -135,13 +135,13 @@ chairLeft.src = "./objects/furniture/chairs/chairLeft.png"
 const chairRight = new Image();
 chairRight.src = "./objects/furniture/chairs/chairRight.png"
 const decoOne = new Image();
-decoOne.src = "./objects/furniture/miniObject/decoOne.png"
+decoOne.src = "./objects/furniture/decorations/decoOne.png"
 const hangingPlant = new Image();
 hangingPlant.src = "./objects/outdoor/plants/hangingPlant.png"
 const hangingPlantRed = new Image();
 hangingPlantRed.src = "./objects/outdoor/plants/hangingPlantRed.png"
 const lanternOne = new Image();
-lanternOne.src = "./objects/outdoor/exteriorDecoration/lanternOne.png"
+lanternOne.src = "./objects/outdoor/decorations/lanternOne.png"
 const paintFour = new Image();
 paintFour.src = "./objects/furniture/painting/paintFour.png"
 const paintOne = new Image();
@@ -163,7 +163,7 @@ shelves.src = "./objects/furniture/storage/shelves.png"
 const stoneFloor = new Image();
 stoneFloor.src = "./objects/construction/floors/stoneFloor.png"
 const vineTwo = new Image();
-vineTwo.src = "./objects/outdoor/exteriorDecoration/vineTwo.png"
+vineTwo.src = "./objects/outdoor/decorations/vineTwo.png"
 const woodFloor = new Image();
 woodFloor.src = "./objects/construction/floors/woodFloor.png"
 const woodTable = new Image();
@@ -929,6 +929,8 @@ const uiBuildingCategoryFurniture = document.getElementById('uiBuildingCategoryF
 const uiBuildingCategoryStructure = document.getElementById('uiBuildingCategoryStructure');
 const uiBuildingCategoryOutdoor = document.getElementById('uiBuildingCategoryOutdoor');
 
+const filterSubCategoryConstruction = document.querySelectorAll('.filterSubCategoryConstruction')
+
 
 const mapNameInput = document.getElementById('mapNameInput');
 const mapDescInput = document.getElementById('mapDescInput');
@@ -1100,7 +1102,7 @@ let uiSoulCollectionOpen = false;
 let uiQuestOpen = false;
 let uiBooksOpen = false;
 
-function openIvn () {
+function openIvn() {
   const OpenMenuAudio = new Audio("./audios/OpenMenu.wav");
   OpenMenuAudio.loop = false;
   OpenMenuAudio.play()
@@ -1124,16 +1126,38 @@ function openIvn () {
     }
   
    } else {
-    menuUi.style.right = "-45.5vh";
-    uiButtonParent.style.right = "-10vh";
-    menuUiButtonOpener.style.right = "9vh"
-    uiIsClose = true
-    menuUiButtonProfile.style.zIndex = "1"
-    menuUiButtonInventory.style.zIndex = "1"
-    menuUiButtonSoulCollection.style.zIndex = "1"
-    menuUiButtonQuest.style.zIndex = "1"
-    menuUiButtonBooks.style.zIndex = "1"
+      menuUi.style.right = "-45.5vh";
+      uiButtonParent.style.right = "-10vh";
+      menuUiButtonOpener.style.right = "9vh"
+      uiIsClose = true
+      menuUiButtonProfile.style.zIndex = "1"
+      menuUiButtonInventory.style.zIndex = "1"
+      menuUiButtonSoulCollection.style.zIndex = "1"
+      menuUiButtonQuest.style.zIndex = "1"
+      menuUiButtonBooks.style.zIndex = "1"
    }
+}
+function cancelUi(){
+    menuUi.style.display = "none";
+    uiButtonParent.style.display = "none";
+    menuUiButtonOpener.style.display = "none"
+    uiIsClose = true
+    menuUiButtonProfile.style.display = "none"
+    menuUiButtonInventory.style.display = "none"
+    menuUiButtonSoulCollection.style.display = "none"
+    menuUiButtonQuest.style.display = "none"
+    menuUiButtonBooks.style.display = "none"
+}
+function openUi(){
+    menuUi.style.display = "flex";
+    uiButtonParent.style.display = "flex";
+    menuUiButtonOpener.style.display = "flex"
+    uiIsClose = true
+    menuUiButtonProfile.style.display = "flex"
+    menuUiButtonInventory.style.display = "flex"
+    menuUiButtonSoulCollection.style.display = "flex"
+    menuUiButtonQuest.style.display = "flex"
+    menuUiButtonBooks.style.display = "flex"
 }
 
 function playPaperSound() {
@@ -1636,6 +1660,7 @@ function openChestIsland () {
 
 // Chat
 let chatIsActivate = false;
+
 const recentMessages = new Map();
 
 function showChatFunction(){
@@ -1643,7 +1668,7 @@ function showChatFunction(){
     chat.style.display = "block";
     chatIsActivate = true;
     
-fishSelectorButton.style.display = 'none'
+    fishSelectorButton.style.display = 'none'
     fishingAvailablevar = false
 
   }else if(chatIsActivate){
@@ -2395,11 +2420,12 @@ fishingAvailableButton.addEventListener("click", () => {
     chatInput.disabled = false;
     blockMovement = false;
     noMovement = false
+    uiBuilding.style.display = "none"
+    deselectUiButton()
   } else {
     fishSelectorButton.style.display = 'none'
     fishingAvailablevar = false
   }
-  
   
 })
 
@@ -3837,6 +3863,10 @@ questClose.addEventListener("click", () => {
 let updateDialogs = true;
 let mapObject;
 
+socket.on("removeKeyBlocker", () => {
+  keyBlocker = false 
+})
+
 socket.on("player", (serverPlayer) => {
 
   // console.log("players: ", serverPlayer)
@@ -3858,10 +3888,6 @@ socket.on("player", (serverPlayer) => {
 
   if (myPlayer.username === 'none') {
     return;
-  }
-
-  if(keyBlocker) {
-    keyBlocker = false
   }
 
   currentHealth = myPlayer.health
@@ -4433,7 +4459,7 @@ socket.on("player", (serverPlayer) => {
         h: booksOne.height,
         w: booksOne.width,
         category: "furniture",
-        subCategory: "miniObject",
+        subCategory: "decorations",
       },
       {
         name: "redSmallCarpet",
@@ -4477,7 +4503,7 @@ socket.on("player", (serverPlayer) => {
         h: decoOne.height,
         w: decoOne.width,
         category: "furniture",
-        subCategory: "miniObject",
+        subCategory: "decorations",
       },
       {
         name: "hangingPlant",
@@ -4499,7 +4525,7 @@ socket.on("player", (serverPlayer) => {
         h: lanternOne.height,
         w: lanternOne.width,
         category: "outdoor",
-        subCategory: "exteriorDecoration",
+        subCategory: "decorations",
       },
       {
         name: "hangingPlantRed",
@@ -4653,7 +4679,7 @@ socket.on("player", (serverPlayer) => {
         h: vineTwo.height,
         w: vineTwo.width,
         category: "outdoor",
-        subCategory: "exteriorDecoration",
+        subCategory: "decorations",
       },
       {
         name: "enchantingTower",
@@ -4787,7 +4813,7 @@ socket.on("player", (serverPlayer) => {
         w: 123,
         animated: true,
         category: "outdoor",
-        subCategory: "outdoorFurniture",
+        subCategory: "furniture",
       },
       {
         name: "treeOne",
@@ -4831,7 +4857,7 @@ socket.on("player", (serverPlayer) => {
         h: 19,
         w: 22,
         category: "outdoor",
-        subCategory: "miniBush",
+        subCategory: "bush",
       },
       {
         name: "shadowTree",
@@ -4853,7 +4879,7 @@ socket.on("player", (serverPlayer) => {
         h: 12,
         w: 42,
         category: "outdoor",
-        subCategory: "exteriorDecoration",
+        subCategory: "decorations",
       },
       {
         name: "rockOne",
@@ -4914,7 +4940,7 @@ socket.on("player", (serverPlayer) => {
         lightSource: false,
         animated: true,
         category: "outdoor",
-        subCategory: "exteriorDecoration",
+        subCategory: "decorations",
       },
       {
         name: "smallLake",
@@ -4997,7 +5023,7 @@ socket.on("player", (serverPlayer) => {
         w: 22,
         lightSource: true,
         category: "outdoor",
-        subCategory: "outdoorFurniture",
+        subCategory: "furniture",
       },
       {
         name: "mediumTorch",
@@ -5010,7 +5036,7 @@ socket.on("player", (serverPlayer) => {
         animated: true,
         lightSource: true,
         category: "outdoor",
-        subCategory: "outdoorFurniture",
+        subCategory: "furniture",
       },
     ]
     createImagesFromMapObjects(mapObject)
@@ -5646,7 +5672,9 @@ window.addEventListener("keydown", (e) => {
     }
 
     if (myPlayer) {
-      if (e?.key?.toLowerCase() === "i"){
+      if(keyBlocker){
+        return
+      } else if (e?.key?.toLowerCase() === "i"){
         openIvn()
       }
     }
@@ -7111,12 +7139,50 @@ canvasLobby.addEventListener('click', function(event) {
    
 });
 
+
+function handleConstructionFilter(filter) {
+  let objAvailable = document.querySelectorAll(".buildObjectParent")
+  objAvailable.forEach(obj => {
+    if(obj.id !== filter){
+      obj.style.display = 'none'
+    } else {
+      obj.style.display = 'flex'
+    }
+
+    if(filter === ""){
+      obj.style.display = 'flex'
+    }
+
+    let filterlabelSelected = document.querySelectorAll(".filter-labelSelected")
+    filterlabelSelected.forEach(label => {
+      if(constructionFilter === ""){
+        label.innerHTML = ""
+      } else {
+        label.innerHTML = constructionFilter.charAt(0).toUpperCase() + constructionFilter.slice(1, constructionFilter.length)
+      }
+    })
+  })
+}
+
+let constructionFilter = ""
+
+filterSubCategoryConstruction.forEach(component => {
+  component.addEventListener('click', () => {
+    constructionFilter = component.id
+    handleConstructionFilter(constructionFilter)
+
+  });
+})
+
+
 function createImagesFromMapObjects(mapObjects) {
 
   mapObjects.forEach(obj => {
     const parentDiv = document.createElement('div');
     parentDiv.classList.add('pointerActivator');
     parentDiv.classList.add('buildObjectParent');
+    parentDiv.id = obj.subCategory;
+
 
     const divElement = document.createElement('div');
     divElement.classList.add('buildObject');
@@ -7140,6 +7206,7 @@ function createImagesFromMapObjects(mapObjects) {
       clickHover.loop = false;
       clickHover.play()
     });
+    
     parentDiv.addEventListener('mouseenter', () => {
       const clickHover = new Audio("./audios/tapWood.wav");
       clickHover.volume = 0.3;
@@ -7149,18 +7216,23 @@ function createImagesFromMapObjects(mapObjects) {
 
     parentDiv.appendChild(divElement);
 
+    const category = obj.category;
 
-    if(obj.category === "construction"){
+    if(category === "construction"){
       uiBuildingConstruction.appendChild(parentDiv);
+      
     }
-    if(obj.category === "furniture"){
+    if(category === "furniture"){
       uiBuildingFurniture.appendChild(parentDiv);
+      
     }
-    if(obj.category === "outdoor"){
+    if(category === "outdoor"){
       uiBuildingOutdoor.appendChild(parentDiv);
+      
     }
-    if(obj.category === "structure"){
+    if(category === "structure"){
       uiBuildingStructure.appendChild(parentDiv);
+      
     }
   });
 }
@@ -7174,7 +7246,7 @@ function calculateValue(resolution) {
 function deselectUiButton() {
   placeWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
   deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  deleteObjButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  deleteObjButtonUi.style.backgroundColor = "#ffe2c1"
   placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
   placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
   placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
@@ -7189,6 +7261,7 @@ function deselectUiButton() {
   uiBuildingCategory.style.display = "none";
   roomsDiv.style.display = "none"
   mapInfoDiv.style.display = "none"
+  deleteObject = false
 }
 
 placeWalls.addEventListener("click", function() {
@@ -7224,18 +7297,23 @@ deleteWalls.addEventListener("click", function() {
   }
 });
 
+let deleteObject = false
+
 deleteObjButtonUi.addEventListener("click", function() {
   showWallsFunction(false)
-if (currentDevAction !== "deleteObj") {
-  currentDevAction = "deleteObj";
+if(deleteObject === false) {
   roomsDiv.style.display = "none"
   dialogsDiv.style.display = "none"
 
   deselectUiButton()
+  hammerButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
   deleteObjButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
-} else {
-  currentDevAction = "none";
-  deleteObjButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  uiBuildingObjects.style.display = "flex";
+  uiBuildingCategory.style.display = "flex";
+  deleteObject = true;
+}else if (deleteObject === true) {
+  deleteObject = false;
+  deleteObjButtonUi.style.backgroundColor = "#ffe2c1"
 }
 });
 
@@ -7321,15 +7399,18 @@ hammerButtonUi.addEventListener("click", function() {
   playRandomPop()
   if (currentDevAction !== "building") {
     currentDevAction = "building";
+    cancelUi()
     deselectUiButton()
     uiBuildingObjects.style.display = "flex";
     uiBuildingCategory.style.display = "flex";
     hammerButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
+    
   } else {
+    openUi()
     currentDevAction = "none";
     uiBuildingObjects.style.display = "none";
     uiBuildingCategory.style.display = "none";
-    hammerButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    hammerButtonUi.style.backgroundColor = "#ffe2c1"
   }
 });
 
@@ -7337,24 +7418,27 @@ layerOneButtonUi.addEventListener("click", function() {
   if(currentSelectedObjLayer !== 2){
     currentSelectedObjLayer = 2;
     deselectUiButton()
-    layerThreeButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
-    layerTwoButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    layerThreeButtonUi.style.backgroundColor = "#ffe2c1"
+    layerTwoButtonUi.style.backgroundColor = "#ffe2c1"
     layerOneButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
     currentDevAction = "building";
     hammerButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
     uiBuildingObjects.style.display = "flex";
+    uiBuildingCategory.style.display = "flex";
+    
   } 
 });
 layerTwoButtonUi.addEventListener("click", function() {
   if(currentSelectedObjLayer !== 1){
     deselectUiButton()
     currentSelectedObjLayer = 1;
-    layerThreeButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    layerThreeButtonUi.style.backgroundColor = "#ffe2c1"
     layerTwoButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
-    layerOneButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    layerOneButtonUi.style.backgroundColor = "#ffe2c1"
     currentDevAction = "building";
     hammerButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
     uiBuildingObjects.style.display = "flex";
+    uiBuildingCategory.style.display = "flex";
   } 
  
 });
@@ -7363,28 +7447,46 @@ layerThreeButtonUi.addEventListener("click", function() {
     deselectUiButton()
     currentSelectedObjLayer = 0;
     layerThreeButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
-    layerTwoButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
-    layerOneButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    layerTwoButtonUi.style.backgroundColor = "#ffe2c1"
+    layerOneButtonUi.style.backgroundColor = "#ffe2c1"
     currentDevAction = "building";
     hammerButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
     uiBuildingObjects.style.display = "flex";
+    uiBuildingCategory.style.display = "flex";
   } 
 
 });
 
 startBuildingBut.addEventListener("click", function() {
   playRandomPop()
+
 if (uiBuilding.style.display !== "flex") {
+
   roomsDiv.style.display = "none"
   dialogsDiv.style.display = "none"
   uiBuilding.style.display = "flex"
   uiBuildingObjects.style.display = "none"
   deselectUiButton()
-  startBuildingBut.style.backgroundColor = "rgb(148, 223, 148)"
+
+  fishSelectorButton.style.display = 'none'
+  fishingAvailablevar = false
+  
+
+  if(chatIsActivate = true){
+    chatIsActivate = false
+    chat.style.display = "none";
+    chatButton.style.bottom = "10px"
+    chatInput.value = "";
+    chatInput.disabled = true;
+    chatInput.disabled = false;
+  }
+
 } else {
   currentDevAction = "none";
   uiBuilding.style.display = "none"
   uiBuildingObjects.style.display = "none"
+  uiBuildingCategory.style.display = "none";
+  keyBlocker = false
 }
 });
 
@@ -7533,38 +7635,48 @@ function displayuiBuildingCategory() {
   uiBuildingFurniture.style.display = 'none'
   uiBuildingStructure.style.display = 'none'
   uiBuildingOutdoor.style.display = 'none'
+
+  uiBuildingCategoryConstruction.style.background = "#ffe2c1"
+  uiBuildingCategoryFurniture.style.background = "#ffe2c1"
+  uiBuildingCategoryStructure.style.background = "#ffe2c1"
+  uiBuildingCategoryOutdoor.style.background = "#ffe2c1"
+
+  constructionFilter = ""
+  handleConstructionFilter(constructionFilter)
 }
 
 uiBuildingCategoryConstruction.addEventListener("click", function() {
+  
   if(uiBuildingCategoryActivate !== "construction"){
     uiBuildingCategoryActivate = "construction"
   } 
   displayuiBuildingCategory()
   uiBuildingConstruction.style.display = 'flex'
+  uiBuildingCategoryConstruction.style.background = "rgb(148, 223, 148)"
 })
 uiBuildingCategoryFurniture.addEventListener("click", function() {
   if(uiBuildingCategoryActivate !== "furniture"){
     uiBuildingCategoryActivate = "furniture"
-    console.log(uiBuildingCategoryActivate)
   } 
   displayuiBuildingCategory()
   uiBuildingFurniture.style.display = 'flex'
+  uiBuildingCategoryFurniture.style.background = "rgb(148, 223, 148)"
 })
 uiBuildingCategoryStructure.addEventListener("click", function() {
   if(uiBuildingCategoryActivate !== "structure"){
     uiBuildingCategoryActivate = "structure"
-    console.log(uiBuildingCategoryActivate)
   } 
   displayuiBuildingCategory()
   uiBuildingStructure.style.display = 'flex'
+  uiBuildingCategoryStructure.style.background = "rgb(148, 223, 148)"
 })
 uiBuildingCategoryOutdoor.addEventListener("click", function() {
   if(uiBuildingCategoryActivate !== "outdoor"){
     uiBuildingCategoryActivate = "outdoor"
-    console.log(uiBuildingCategoryActivate)
   } 
   displayuiBuildingCategory()
   uiBuildingOutdoor.style.display = 'flex'
+  uiBuildingCategoryOutdoor.style.background = "rgb(148, 223, 148)"
 })
 
 
