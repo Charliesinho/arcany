@@ -7312,6 +7312,7 @@ deleteObjButtonUi.addEventListener("click", function() {
 if(deleteObject === false) {
   roomsDiv.style.display = "none"
   dialogsDiv.style.display = "none"
+  currentDevAction = "deleteObj"
 
   deselectUiButton()
   hammerButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
@@ -7322,6 +7323,7 @@ if(deleteObject === false) {
 }else if (deleteObject === true) {
   deleteObject = false;
   deleteObjButtonUi.style.backgroundColor = "#ffe2c1"
+  currentDevAction = "building";
 }
 });
 
