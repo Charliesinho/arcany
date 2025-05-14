@@ -1,7 +1,7 @@
 //Change this to push >
 
-const socket = io(`ws://localhost:5000`);
-// const socket = io(`https://arcanyGame.up.railway.app/`);
+// const socket = io(`ws://localhost:5000`);
+const socket = io(`https://arcanyGame.up.railway.app/`);
 // const socket = io(window.location.origin);
 
 
@@ -6976,6 +6976,8 @@ canvasLobby.addEventListener('click', function(event) {
     currentSelectedWall = null;
   }
   else if (currentSelectedWall !== null && currentDevAction === "deleteObj") {
+    console.log(mapsInfo[currentLand].objects[currentSelectedObjLayer][currentSelectedWall])
+    buildDeleteParticles(mapsInfo[currentLand].objects[currentSelectedObjLayer][currentSelectedWall])
     socket.emit("deletedObject",{ currentLand: currentLand, object: mapsInfo[currentLand].objects[currentSelectedObjLayer][currentSelectedWall], currentSelectedObjLayer});
     mapsInfo[currentLand].objects[currentSelectedObjLayer].splice(currentSelectedWall, 1)
     currentSelectedWall = null;
@@ -6995,8 +6997,8 @@ canvasLobby.addEventListener('click', function(event) {
     });
     
     playRandomPop()
-    // buildPlaceParticles(objClone)
-    socket.emit("placedObject",{currentLand: currentLand, object: objClone, currentSelectedObjLayer});
+    buildPlaceParticles(objClone)
+    socket.emit("placedObject",{currentLand: currentLand, object: objClone, objects: mapsInfo[currentLand].objects[currentSelectedObjLayer], currentSelectedObjLayer});
   }
 
 
@@ -8991,7 +8993,7 @@ function drawChat () {
   function drawChatBubble (img, player, x, xd, y, yd, w, h, cx, cy ) {
     canvas.drawImage(img, x + xd, y + yd, w , h)
     canvas.beginPath();
-    canvas.font = "bolder 16px Tiny5";
+    canvas.font = "400 18px Tiny5";
     canvas.textAlign = "center";
     canvas.fillStyle = "black";
     canvas.fillText(player.chatMessage, x +cx, y -cy);

@@ -1231,29 +1231,45 @@ async function main() {
        
         socket.on("placedObject", async (info) => {
             const layerKey = `objects.${info.currentSelectedObjLayer}`;
+            const clientLayer = info.objects; // only the layer array sent from the client
         
+            // Step 1: Get current data from DB
             const worldDoc = await World.findOne({ areaName: info.currentLand }).lean();
-            const currentObjects = worldDoc.objects?.[info.currentSelectedObjLayer] || [];
+            const serverLayer = worldDoc.objects?.[info.currentSelectedObjLayer] || [];
         
-            currentObjects.push(info.object);
+            // Step 2: Build a Set of stringified existing server objects for comparison
+            const serverSet = new Set(serverLayer.map(obj => JSON.stringify(obj)));
         
-            currentObjects.sort((a, b) => {
+            // Step 3: Add only missing objects from clientLayer in the same order
+            const mergedLayer = [...serverLayer];
+        
+            for (const obj of clientLayer) {
+                const objStr = JSON.stringify(obj);
+                if (!serverSet.has(objStr)) {
+                    mergedLayer.push(obj);
+                    serverSet.add(objStr); // prevent duplicates if client sent dupes
+                }
+            }
+        
+            // Step 4: Sort merged layer
+            mergedLayer.sort((a, b) => {
                 if (a.backgroundObj && !b.backgroundObj) return -1;
                 if (!a.backgroundObj && b.backgroundObj) return 1;
                 return a.y - b.y;
             });
         
-            const update = {
-                $set: {
-                    [layerKey]: currentObjects
-                }
-            };
+            // Step 5: Save to DB
+            await World.findOneAndUpdate(
+                { areaName: info.currentLand },
+                { $set: { [layerKey]: mergedLayer } },
+                { new: true }
+            );
         
-            await World.findOneAndUpdate({ areaName: info.currentLand }, update, { new: true });
-        
+            // Step 6: Broadcast to everyone except sender
             const worldData = await World.findOne({ areaName: info.currentLand }).exec();
-            io.emit('updateMap', { worldData, object: info.object });
+            socket.broadcast.emit('updateMap', { worldData, object: info.object });
         });
+        
         
         
         socket.on("deletedObject", async (info) => {
@@ -1266,7 +1282,7 @@ async function main() {
             await World.findOneAndUpdate({ areaName: info.currentLand }, update, { new: true });
             const worldData = await World.findOne({ areaName: info.currentLand }).exec();
         
-            io.emit('updateMap', { worldData, object: info.object, deleting: true });
+            socket.broadcast.emit('updateMap', { worldData, object: info.object, deleting: true });
         });            
         
         
@@ -1351,7 +1367,7 @@ async function main() {
             
             for (const player of players) {
                 if (player.id === socket.id) {
-                    player.chatTimer = 100;                    
+                    player.chatTimer = 200;                    
                 }
             }         
         });
