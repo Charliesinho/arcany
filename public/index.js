@@ -5454,18 +5454,17 @@ socket.on("startCooking", (item) => {
 let intervalCanvasBase;
 
 socket.on("updateMap", (map) => {
-  mapsInfo[map.worldData.areaName] = map.worldData
   if (!map.deleting) {
     if (!map.deleting) buildPlaceParticles(map.object)
-    mapsInfo[currentLand].objects[currentSelectedObjLayer].push(map.object)
-    mapsInfo[currentLand].objects[currentSelectedObjLayer].sort((a, b) => {
+    mapsInfo[currentLand].objects[map.currentSelectedObjLayer].push(map.object)
+    mapsInfo[currentLand].objects[map.currentSelectedObjLayer].sort((a, b) => {
       if (a.backgroundObj && !b.backgroundObj) return -1;
       if (!a.backgroundObj && b.backgroundObj) return 1; 
       return a.y - b.y;
     });
   } else {
     if (map.deleting) buildDeleteParticles(map.object)
-    mapsInfo[currentLand].objects[currentSelectedObjLayer].splice(mapsInfo[currentLand].objects[currentSelectedObjLayer].indexOf(map.object), 1)
+    mapsInfo[currentLand].objects[map.currentSelectedObjLayer].splice(mapsInfo[currentLand].objects[map.currentSelectedObjLayer].indexOf(map.object), 1)
   }
 })
 
