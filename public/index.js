@@ -1,7 +1,7 @@
 //Change this to push >
 
-// const socket = io(`ws://localhost:5000`);
-const socket = io(`https://arcanyGame.up.railway.app/`);
+const socket = io(`ws://localhost:5000`);
+// const socket = io(`https://arcanyGame.up.railway.app/`);
 // const socket = io(window.location.origin);
 
 
@@ -634,10 +634,15 @@ metalPan.volume = 0.2;
 
 
 const canvasLobby = document.getElementById("canvas-lobby");
-// canvasLobby.width =  window.innerWidth * 1.1;
-// canvasLobby.height = window.innerHeight * 1.1;
-canvasLobby.width =  1920 * 1.3;
-canvasLobby.height = 1080 * 1.3;
+function resizeCanvasLobby() {
+  canvasLobby.width = window.innerWidth * 1.3;
+  canvasLobby.height = window.innerHeight * 1.3;
+}
+resizeCanvasLobby();
+window.addEventListener('resize', resizeCanvasLobby);
+
+// canvasLobby.width =  1920 * 1.3;
+// canvasLobby.height = 1080 * 1.3;
 
 const canvas = canvasLobby.getContext("2d");
 
