@@ -1267,7 +1267,7 @@ async function main() {
         
             // Step 6: Broadcast to everyone except sender
             const worldData = await World.findOne({ areaName: info.currentLand }).exec();
-            socket.broadcast.emit('updateMap', { worldData, object: info.object });
+            socket.broadcast.emit('updateMap', { currentSelectedObjLayer: info.currentSelectedObjLayer, object: info.object });
         });
         
         
@@ -1282,7 +1282,7 @@ async function main() {
             await World.findOneAndUpdate({ areaName: info.currentLand }, update, { new: true });
             const worldData = await World.findOne({ areaName: info.currentLand }).exec();
         
-            socket.broadcast.emit('updateMap', { worldData, object: info.object, deleting: true });
+            socket.broadcast.emit('updateMap', { currentSelectedObjLayer: info.currentSelectedObjLayer, object: info.object, deleting: true });
         });            
         
         
