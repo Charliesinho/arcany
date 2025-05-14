@@ -1232,21 +1232,17 @@ async function main() {
         socket.on("placedObject", async (info) => {
             const layerKey = `objects.${info.currentSelectedObjLayer}`;
         
-            // Step 1: Pull current objects from DB
             const worldDoc = await World.findOne({ areaName: info.currentLand }).lean();
             const currentObjects = worldDoc.objects?.[info.currentSelectedObjLayer] || [];
         
-            // Step 2: Add the new object
             currentObjects.push(info.object);
         
-            // Step 3: Sort the array
             currentObjects.sort((a, b) => {
                 if (a.backgroundObj && !b.backgroundObj) return -1;
                 if (!a.backgroundObj && b.backgroundObj) return 1;
                 return a.y - b.y;
             });
         
-            // Step 4: Save the updated array back to the DB
             const update = {
                 $set: {
                     [layerKey]: currentObjects
@@ -1255,7 +1251,6 @@ async function main() {
         
             await World.findOneAndUpdate({ areaName: info.currentLand }, update, { new: true });
         
-            // Step 5: Emit the updated data
             const worldData = await World.findOne({ areaName: info.currentLand }).exec();
             io.emit('updateMap', { worldData, object: info.object });
         });

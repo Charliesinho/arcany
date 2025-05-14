@@ -1,7 +1,7 @@
 //Change this to push >
 
-// const socket = io(`ws://localhost:5000`);
-const socket = io(`https://arcanyGame.up.railway.app/`);
+const socket = io(`ws://localhost:5000`);
+// const socket = io(`https://arcanyGame.up.railway.app/`);
 // const socket = io(window.location.origin);
 
 
@@ -634,8 +634,10 @@ metalPan.volume = 0.2;
 
 
 const canvasLobby = document.getElementById("canvas-lobby");
-canvasLobby.width =  window.innerWidth * 1.1;
-canvasLobby.height = window.innerHeight * 1.1;
+// canvasLobby.width =  window.innerWidth * 1.1;
+// canvasLobby.height = window.innerHeight * 1.1;
+canvasLobby.width =  1920 * 1.3;
+canvasLobby.height = 1080 * 1.3;
 
 const canvas = canvasLobby.getContext("2d");
 
@@ -1418,6 +1420,16 @@ openerScreenButton.addEventListener("click", function() {
     
   }, 4000);
   audioClick.play();
+
+  const elem = document.documentElement; // makes the whole page fullscreen
+
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.webkitRequestFullscreen) { // Safari
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) { // IE11
+    elem.msRequestFullscreen();
+  }
 });
 
 loginButton.addEventListener("click", function (event) {
@@ -6848,15 +6860,20 @@ let currentSelectedObjLayer = 0;
 
 let OpenMenuOfObjects = false;
 
-const rect = canvasLobby.getBoundingClientRect();
+// const rect = canvasLobby.getBoundingClientRect();
 
 canvasLobby.addEventListener("mousemove", (event) => {
   let x;
   let y;
   let escalableDivisor = calculateValue(window.screen.width)
-  // console.log(window.screen, escalableDivisor)
-  hoveredXCoord = event.clientX - (event.clientX - (event.screenX * 1.1)) + cameraX + cameraShakeX + 0 + escalableDivisor;
-  hoveredYCoord = event.clientY - (event.clientY - (event.screenY * 1.1)) + cameraY + cameraShakeY - 120 + (escalableDivisor * 0.95) / 8;
+  const rect = canvasLobby.getBoundingClientRect();
+
+  // Normalized canvas coordinates
+  const mouseX = (event.clientX - rect.left) * (canvasLobby.width / rect.width);
+  const mouseY = (event.clientY - rect.top) * (canvasLobby.height / rect.height);
+
+  hoveredXCoord = mouseX + cameraX + cameraShakeX;
+  hoveredYCoord = mouseY + cameraY + cameraShakeY;
 
   if ((currentlyPlacingWall || !currentlyPlacingWall) && currentDevAction !== "delete" && currentDevAction !== "deleteObj") {
     widthCoord = hoveredXCoord - selectedXcoord;
@@ -6984,13 +7001,13 @@ canvasLobby.addEventListener('click', function(event) {
 
 
   else if (!currentlyPlacingWall && currentDevAction === "fish" && currentSelectedWall === null) {
-    selectedXcoord = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
-    selectedYcoord = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    selectedXcoord = hoveredXCoord;
+    selectedYcoord = hoveredYCoord;
     currentlyPlacingWall = true;
   }
   else if (currentSelectedWall === null && currentlyPlacingWall && currentDevAction === "fish") {
-    const x = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
-    const y = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    const x = hoveredXCoord;
+    const y = hoveredYCoord;
     const newWidth = x - selectedXcoord;
     const newHeight = y - selectedYcoord;
     
@@ -7007,13 +7024,13 @@ canvasLobby.addEventListener('click', function(event) {
   
   
   else if (!currentlyPlacingWall && currentDevAction === "cook" && currentSelectedWall === null) {
-    selectedXcoord = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
-    selectedYcoord = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    selectedXcoord = hoveredXCoord;
+    selectedYcoord = hoveredYCoord;
     currentlyPlacingWall = true;
   }
   else if (currentSelectedWall === null && currentlyPlacingWall && currentDevAction === "cook") {
-    const x = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
-    const y = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    const x = hoveredXCoord;
+    const y = hoveredYCoord;
     const newWidth = x - selectedXcoord;
     const newHeight = y - selectedYcoord;
     
@@ -7029,13 +7046,13 @@ canvasLobby.addEventListener('click', function(event) {
   }
   
   else if (!currentlyPlacingWall && currentDevAction === "enchanting" && currentSelectedWall === null) {
-    selectedXcoord = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
-    selectedYcoord = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    selectedXcoord = hoveredXCoord;
+    selectedYcoord = hoveredYCoord;
     currentlyPlacingWall = true;
   }
   else if (currentSelectedWall === null && currentlyPlacingWall && currentDevAction === "enchanting") {
-    const x = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
-    const y = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    const x = hoveredXCoord;
+    const y = hoveredYCoord;
     const newWidth = x - selectedXcoord;
     const newHeight = y - selectedYcoord;
     
@@ -7052,13 +7069,13 @@ canvasLobby.addEventListener('click', function(event) {
   
   
   else if (!currentlyPlacingWall && currentDevAction === "craft" && currentSelectedWall === null) {
-    selectedXcoord = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
-    selectedYcoord = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    selectedXcoord = hoveredXCoord;
+    selectedYcoord = hoveredYCoord;
     currentlyPlacingWall = true;
   }
   else if (currentSelectedWall === null && currentlyPlacingWall && currentDevAction === "craft") {
-    const x = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
-    const y = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    const x = hoveredXCoord;
+    const y = hoveredYCoord;
     const newWidth = x - selectedXcoord;
     const newHeight = y - selectedYcoord;
     
@@ -7075,13 +7092,13 @@ canvasLobby.addEventListener('click', function(event) {
   
   
   else if (!currentlyPlacingWall && currentDevAction === "chest" && currentSelectedWall === null) {
-    selectedXcoord = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
-    selectedYcoord = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    selectedXcoord = hoveredXCoord;
+    selectedYcoord = hoveredYCoord;
     currentlyPlacingWall = true;
   }
   else if (currentSelectedWall === null && currentlyPlacingWall && currentDevAction === "chest") {
-    const x = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
-    const y = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    const x = hoveredXCoord;
+    const y = hoveredYCoord;
     const newWidth = x - selectedXcoord;
     const newHeight = y - selectedYcoord;
     
@@ -7099,13 +7116,13 @@ canvasLobby.addEventListener('click', function(event) {
 
   
   else if (!currentlyPlacingWall && currentDevAction === "transition" && currentSelectedWall === null) {
-    selectedXcoord = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
-    selectedYcoord = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    selectedXcoord = hoveredXCoord;
+    selectedYcoord = hoveredYCoord;
     currentlyPlacingWall = true;
   }
   else if (currentSelectedWall === null && currentlyPlacingWall && currentDevAction === "transition") {
-    const x = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
-    const y = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    const x = hoveredXCoord;
+    const y = hoveredYCoord;
     const newWidth = x - selectedXcoord;
     const newHeight = y - selectedYcoord;
     
@@ -7123,13 +7140,13 @@ canvasLobby.addEventListener('click', function(event) {
   }
   
   else if (!currentlyPlacingWall && currentDevAction === "dialog" && currentSelectedWall === null) {
-    selectedXcoord = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
-    selectedYcoord = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    selectedXcoord = hoveredXCoord;
+    selectedYcoord = hoveredYCoord;
     currentlyPlacingWall = true;
   }
   else if (currentSelectedWall === null && currentlyPlacingWall && currentDevAction === "dialog") {
-    const x = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
-    const y = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    const x = hoveredXCoord;
+    const y = hoveredYCoord;
     const newWidth = x - selectedXcoord;
     const newHeight = y - selectedYcoord;
     
