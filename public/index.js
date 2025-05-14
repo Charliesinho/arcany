@@ -474,6 +474,22 @@ const oilFry = new Audio("./audios/oilFry.wav");
 oilFry.loop = true;
 oilFry.volume = 0.2;
 
+const grasslandsST1 = new Audio("./audios/grasslandsST1.mp3");
+grasslandsST1.loop = false;
+grasslandsST1.volume = 1;
+const grasslandsST2 = new Audio("./audios/grasslandsST2.mp3");
+grasslandsST2.loop = false;
+grasslandsST2.volume = 1;
+const grasslandsST3 = new Audio("./audios/grasslandsST3.mp3");
+grasslandsST3.loop = false;
+grasslandsST3.volume = 1;
+const grasslandsST4 = new Audio("./audios/grasslandsST4.mp3");
+grasslandsST4.loop = false;
+grasslandsST4.volume = 1;
+const grasslandsST5 = new Audio("./audios/grasslandsST5.mp3");
+grasslandsST5.loop = false;
+grasslandsST5.volume = 1;
+
 const hammerSmash = new Audio("./audios/hammerSmash.wav");
 hammerSmash.loop = false;
 hammerSmash.volume = 0.4;
@@ -923,6 +939,7 @@ const saveObjButtonUi = document.getElementById("saveObjButtonUi");
 const deleteWalls = document.getElementById("deletewWallButtonUi");
 const placeEnchantingArea = document.getElementById("enchantingButtonUi");
 const startBuildingBut = document.getElementById("buildButton");
+const openMusicPlayerButton = document.getElementById("audioButton");
 const showWalls = document.getElementById("showWalls");
 const sapwnButtonUi = document.getElementById("sapwnButtonUi");
 const exportWalls = document.getElementById("exportWalls");
@@ -943,6 +960,10 @@ const uiBuildingCategoryConstruction = document.getElementById('uiBuildingCatego
 const uiBuildingCategoryFurniture = document.getElementById('uiBuildingCategoryFurniture');
 const uiBuildingCategoryStructure = document.getElementById('uiBuildingCategoryStructure');
 const uiBuildingCategoryOutdoor = document.getElementById('uiBuildingCategoryOutdoor');
+
+const musicPlayer = document.getElementById('musicPlayer');
+const musicPlayerSlider = document.getElementById('musicPlayerSlider');
+const musicPlayerPlay = document.getElementById('musicPlayerPlay');
 
 const filterSubCategoryConstruction = document.querySelectorAll('.filterSubCategoryConstruction')
 
@@ -6990,11 +7011,14 @@ canvasLobby.addEventListener('click', function(event) {
     currentSelectedWall = null;
   }
   else if (currentSelectedWall !== null && currentDevAction === "deleteObj") {
-    console.log(mapsInfo[currentLand].objects[currentSelectedObjLayer][currentSelectedWall])
     buildDeleteParticles(mapsInfo[currentLand].objects[currentSelectedObjLayer][currentSelectedWall])
     socket.emit("deletedObject",{ currentLand: currentLand, object: mapsInfo[currentLand].objects[currentSelectedObjLayer][currentSelectedWall], currentSelectedObjLayer});
     mapsInfo[currentLand].objects[currentSelectedObjLayer].splice(currentSelectedWall, 1)
     currentSelectedWall = null;
+    let objDelSound = new Audio("./audios/deleteObj.wav");
+    objDelSound.loop = false;
+    objDelSound.volume = 0.8;
+    objDelSound.play();
   }
   
   else if (currentDevAction === "building") {
@@ -7010,7 +7034,7 @@ canvasLobby.addEventListener('click', function(event) {
       return a.y - b.y; // Otherwise, sort by y
     });
     
-    playRandomPop()
+    playRandomBuild()
     buildPlaceParticles(objClone)
     socket.emit("placedObject",{currentLand: currentLand, object: objClone, objects: mapsInfo[currentLand].objects[currentSelectedObjLayer], currentSelectedObjLayer});
   }
@@ -7303,6 +7327,7 @@ function deselectUiButton() {
   roomsDiv.style.display = "none"
   mapInfoDiv.style.display = "none"
   deleteObject = false
+  musicPlayer.style.display = "none"
 }
 
 placeWalls.addEventListener("click", function() {
@@ -7531,6 +7556,83 @@ if (uiBuilding.style.display !== "flex") {
   uiBuildingCategory.style.display = "none";
   keyBlocker = false
 }
+});
+
+openMusicPlayerButton.addEventListener("click", function() {
+  if (musicPlayer.style.display != "block") {
+    deselectUiButton()
+    musicPlayer.style.display = "block"
+    const audioPlayerOpen = new Audio("./audios/audioPlayerOpen.wav");
+    audioPlayerOpen.loop = false;
+    audioPlayerOpen.volume = 1;
+    audioPlayerOpen.play()
+
+    fishSelectorButton.style.display = 'none'
+    chatIsActivate = false
+    chat.style.display = "none";
+    chatButton.style.bottom = "10px"
+    chatInput.value = "";
+    chatInput.disabled = true;
+    chatInput.disabled = false;
+    blockMovement = false;
+    noMovement = false
+    uiBuilding.style.display = "none"
+  } else {
+    musicPlayer.style.display = "none"
+  }
+});
+
+let musicLibrary = {
+  grasslands: [grasslandsST1, grasslandsST2, grasslandsST3, grasslandsST4, grasslandsST5]
+}
+
+let currentAudio = null;
+let isPlaying = false;
+
+musicLibrary.grasslands.forEach(audio => {
+  audio.volume = musicPlayerSlider.value;
+});
+
+musicPlayerPlay.addEventListener("click", function () {
+  const clickHover = new Audio("./audios/tapWood.wav");
+  clickHover.volume = 0.3;
+  clickHover.loop = false;
+  clickHover.play();
+
+  if (isPlaying && currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    currentAudio = null;
+    isPlaying = false;
+    musicPlayer.style.background = "url(./Textures/musicPlayer.png)";
+    return;
+  }
+
+  playRandomSong();
+});
+
+function playRandomSong() {
+  const songs = musicLibrary.grasslands;
+  const randomIndex = Math.floor(Math.random() * songs.length);
+  currentAudio = songs[randomIndex];
+
+  currentAudio.volume = musicPlayerSlider.value;
+  currentAudio.play();
+  isPlaying = true;
+  musicPlayer.style.background = "url(./Textures/musicPlayer.gif)";
+
+  // When song ends, play another if still in play mode
+  currentAudio.onended = () => {
+    if (isPlaying) {
+      playRandomSong();
+    }
+  };
+}
+
+musicPlayerSlider.addEventListener("input", function () {
+  if (currentAudio) {
+    currentAudio.volume = this.value;
+  }
 });
 
 placeCraftingArea.addEventListener("click", function() {
@@ -10107,6 +10209,24 @@ function playRandomPop() {
     const pop2 = new Audio("./audios/pop2.wav");
     pop2.loop = false;
     pop2.volume = 0.5;
+
+    const sounds = [pop1, pop2];
+
+    const playRandomSound = () => {
+      sounds[Math.floor(Math.random() * sounds.length)].play();
+    };
+
+    playRandomSound();
+}
+
+function playRandomBuild() {
+  const pop1 = new Audio("./audios/build.wav");
+    pop1.loop = false;
+    pop1.volume = 0.8;
+
+    const pop2 = new Audio("./audios/build2.wav");
+    pop2.loop = false;
+    pop2.volume = 0.8;
 
     const sounds = [pop1, pop2];
 

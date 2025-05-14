@@ -1058,6 +1058,33 @@ color: white;
 }
 /* PROFILE >*/
 
+#musicPlayer {
+    width: 250px;
+    position: absolute;
+    z-index: 1;
+    left: 10px;
+    bottom: 103px;
+    display: none;
+    background: url(./Textures/musicPlayer.png);
+    background-size: cover !important;
+    height: 300px;
+}
+
+#musicPlayerSlider {
+    position: absolute;
+    top: 123px;
+    left: 33px;
+    width: 89px;
+}
+
+#musicPlayerPlay {
+    width: 70px;
+    height: 70px;
+    position: absolute;
+    bottom: 56px;
+    left: 91px;
+}
+
 /* INVENTORY < */
 #uiInventory{
     display: none;
