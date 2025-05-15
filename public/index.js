@@ -177,6 +177,12 @@ mushroomCastel.src = "./objects/structures/building/mushroomCastel.png"
 const grasslandCristal = new Image();
 grasslandCristal.src = "./objects/structures/building/grasslandCristal.png"
 
+//STRUCTURES BRIDGES
+const grasslandBridgeBackOne = new Image();
+grasslandBridgeBackOne.src = "./objects/structures/bridges/grasslandBridgeBackOne.png"
+const grasslandBridgeFrontOne = new Image();
+grasslandBridgeFrontOne.src = "./objects/structures/bridges/grasslandBridgeFrontOne.png"
+
 const residency = new Image();
 residency.src = "./islands/residency.png"
 
@@ -5235,6 +5241,34 @@ socket.on("player", (serverPlayer) => {
     w: 116,
     category: "structure",
     subCategory: "building",
+
+    subscription: 'dev',
+  },
+
+  //STRUCTURE BRIDGES
+  {
+    name: "grasslandBridgeBackOne",
+    backgroundObj: true,
+    img: grasslandBridgeBackOne,
+    x: 0,
+    y: 0,
+    h: grasslandBridgeBackOne.height,
+    w: grasslandBridgeBackOne.width,
+    category: "structure",
+    subCategory: "bridges",
+
+    subscription: 'dev',
+  },
+  {
+    name: "grasslandBridgeFrontOne",
+    backgroundObj: false,
+    img: grasslandBridgeFrontOne,
+    x: 0,
+    y: 0,
+    h: 70,
+    w: 35,
+    category: "structure",
+    subCategory: "bridges",
 
     subscription: 'dev',
   },
