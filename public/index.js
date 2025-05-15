@@ -1,5 +1,6 @@
 //Change this to push >
 
+
 const socket = io(`ws://localhost:5000`);
 // const socket = io(`https://arcanyGame.up.railway.app/`);
 // const socket = io(window.location.origin);
@@ -169,9 +170,20 @@ woodFloor.src = "./objects/construction/floors/woodFloor.png"
 const woodTable = new Image();
 woodTable.src = "./objects/furniture/tables/woodTable.png"
 
+//OUTDOOR DECORATIONS
+const cristalOneRight = new Image();
+cristalOneRight.src = "./objects/outdoor/decorations/cristalOneRight.png"
+const cristalOneLeft = new Image();
+cristalOneLeft.src = "./objects/outdoor/decorations/cristalOneLeft.png"
+const cristalTwoLeft = new Image();
+cristalTwoLeft.src = "./objects/outdoor/decorations/cristalTwoLeft.png"
+const cristalTwoRight = new Image();
+cristalTwoRight.src = "./objects/outdoor/decorations/cristalTwoRight.png"
+
 //STRUCTURES BUILDING
 const coffeOfGrassland = new Image();
 coffeOfGrassland.src = "./objects/structures/building/coffeOfGrassland.png"
+
 const mushroomCastel = new Image();
 mushroomCastel.src = "./objects/structures/building/mushroomCastel.png"
 const grasslandCristal = new Image();
@@ -182,122 +194,51 @@ const grasslandBridgeBackOne = new Image();
 grasslandBridgeBackOne.src = "./objects/structures/bridges/grasslandBridgeBackOne.png"
 const grasslandBridgeFrontOne = new Image();
 grasslandBridgeFrontOne.src = "./objects/structures/bridges/grasslandBridgeFrontOne.png"
+const grasslandBridgeBackTwo = new Image();
+grasslandBridgeBackTwo.src = "./objects/structures/bridges/grasslandBridgeBackTwo.png"
+const grasslandBridgeFrontTwo = new Image();
+grasslandBridgeFrontTwo.src = "./objects/structures/bridges/grasslandBridgeFrontTwo.png"
 
-const residency = new Image();
-residency.src = "./islands/residency.png"
+//FURNITURE CARPETS
+const circleRedCarpet = new Image();
+circleRedCarpet.src = "./objects/furniture/carpets/circleRedCarpet.png"
+const circlePinkCarpet = new Image();
+circlePinkCarpet.src = "./objects/furniture/carpets/circlePinkCarpet.png"
+const circleOrangeCarpet = new Image();
+circleOrangeCarpet.src = "./objects/furniture/carpets/circleOrangeCarpet.png"
 
-const lobbyMap = new Image();
-lobbyMap.src = "./islands/lobby.png";
 
-const lobbyMapFront = new Image();
-lobbyMapFront.src = "./islands/lobbyFront.png";
+//FURNITURE DECORATION
+const boxesOneRight = new Image();
+boxesOneRight.src = "./objects/furniture/decorations/boxesOneRight.png"
+const boxesOneLeft = new Image();
+boxesOneLeft.src = "./objects/furniture/decorations/boxesOneLeft.png"
+const boxeWithFruitsRight = new Image();
+boxeWithFruitsRight.src = "./objects/furniture/decorations/boxeWithFruitsRight.png"
+const boxeWithFruitsLeft = new Image();
+boxeWithFruitsLeft.src = "./objects/furniture/decorations/boxeWithFruitsLeft.png"
+const poleInformationLeft = new Image();
+poleInformationLeft.src = "./objects/furniture/decorations/poleInformationLeft.png"
+const poleInformationRight = new Image();
+poleInformationRight.src = "./objects/furniture/decorations/poleInformationRight.png"
+const poleBank = new Image();
+poleBank.src = "./objects/furniture/decorations/poleBank.png"
+const poleOne = new Image();
+poleOne.src = "./objects/furniture/decorations/poleOne.png"
+const poleTwoLeft = new Image();
+poleTwoLeft.src = "./objects/furniture/decorations/poleTwoLeft.png"
+const poleTwoRight = new Image();
+poleTwoRight.src = "./objects/furniture/decorations/poleTwoRight.png"
+const distributorPinkLeft = new Image();
+distributorPinkLeft.src = "./objects/furniture/decorations/distributorPinkLeft.png"
+const distributorPinkRight = new Image();
+distributorPinkRight.src = "./objects/furniture/decorations/distributorPinkRight.png"
+const cauldron = new Image();
+cauldron.src = "./objects/furniture/decorations/cauldron.png"
+
 
 const emptyMap = new Image();
 emptyMap.src = "./islands/emptyMap.png";
-
-const emptyMapFront = new Image();
-emptyMapFront.src = "./islands/emptyMapFront.png";
-
-const islandOneMap = new Image();
-islandOneMap.src = "./islands/islandOne.png";
-
-const islandOneMapFront = new Image();
-islandOneMapFront.src = "./islands/islandOneFront.png";
-
-const islandOneMapArcane = new Image();
-islandOneMapArcane.src = "./islands/arcanyMaps/islandOneArcane.png";
-
-const islandOneMapArcaneFront = new Image();
-islandOneMapArcaneFront.src = "./islands/arcanyMaps/islandOneArcaneFront.png";
-
-const lobbyCombatArea = new Image();
-lobbyCombatArea.src = "./islands/lobbyCombatArea.png";
-
-const lobbyCombatAreaFront = new Image();
-lobbyCombatAreaFront.src = "./islands/lobbyCombatAreaFront.png";
-
-const slimeForestPath = new Image();
-slimeForestPath.src = "./islands/slimeForestPath.png"
-
-const slimeForestPathOpen = new Image();
-slimeForestPathOpen.src = "./islands/slimeForestPathOpen.png"
-
-const slimeForestPathFront = new Image();
-slimeForestPathFront.src = "./islands/slimeForestPathFront.png"
-
-const grasslandsTower = new Image();
-grasslandsTower.src = "./islands/grasslandsTower.png"
-
-const grasslandsTowerFront = new Image();
-grasslandsTowerFront.src = "./islands/grasslandsTowerFront.png"
-
-const slimeForestPathArcane = new Image();
-slimeForestPathArcane.src = "./islands/arcanyMaps/slimeForestPathArcany/slimeForestPathArcany.png"
-
-const slimeForestPathArcaneFront = new Image();
-slimeForestPathArcaneFront.src = "./islands/arcanyMaps/slimeForestPathArcany/slimeForestPathFrontArcany.png"
-
-const mushroomForest = new Image();
-mushroomForest.src = "./islands/mushroom.png"
-
-const mushroomForestFront = new Image();
-mushroomForestFront.src = "./islands/mushroomFront.png"
-
-const mushroomForestArcane = new Image();
-mushroomForestArcane.src = "./islands/arcanyMaps/mushroomArcany/mushroomArcane.png"
-
-const mushroomForestArcaneFront = new Image();
-mushroomForestArcaneFront.src = "./islands/arcanyMaps/mushroomArcany/mushroomFrontArcane.png"
-
-const restfieldPath = new Image();
-restfieldPath.src = "./islands/restfieldPath.png"
-
-const restfieldPathOpen = new Image();
-restfieldPathOpen.src = "./islands/restfieldPathOpen.png"
-
-const restfieldPathFront = new Image();
-restfieldPathFront.src = "./islands/restfieldPathFront.png"
-
-const restfieldPathFrontOpen = new Image();
-restfieldPathFrontOpen.src = "./islands/restfieldPathFrontOpen.png"
-
-const restFiledTown = new Image();
-restFiledTown.src = "./islands/restFiledTown.png"
-
-const restFiledTownFront = new Image();
-restFiledTownFront.src = "./islands/restFiledTownFront.png"
-
-const restfieldTownCemetery = new Image();
-restfieldTownCemetery.src = "./islands/restfieldTownCemetery.png"
-
-const restfieldTownCemeteryFront = new Image();
-restfieldTownCemeteryFront.src = "./islands/restfieldTownCemeteryFront.png"
-
-const restfieldTrial = new Image();
-restfieldTrial.src = "./islands/restfieldTrial.png"
-
-const restfieldTrialFront = new Image();
-restfieldTrialFront.src = "./islands/restfieldTrialFront.png"
-
-const restfieldMall = new Image();
-restfieldMall.src = "./islands/restfieldMall.png"
-
-const restfieldMallFront = new Image();
-restfieldMallFront.src = "./islands/restfieldMallFront.png"
-
-const restfieldMallInside = new Image();
-restfieldMallInside.src = "./islands/restfieldMallInside.png"
-
-const restfieldMallInsideFront = new Image();
-restfieldMallInsideFront.src = "./islands/restfieldMallInsideFront.png"
-
-const restfieldMallTreasure = new Image();
-restfieldMallTreasure.src = "./islands/restfieldMallTreasure.png"
-
-const restfieldMallTreasureFront = new Image();
-restfieldMallTreasureFront.src = "./islands/restfieldMallTreasureFront.png"
-
-
 
 
 //PLAYER-SKINS <
@@ -731,7 +672,7 @@ menuUiProfile.style.height = window.innerHeight;
 const logOutButton = document.getElementById('logOutButton');
 
 //UI BOOK<
-  const ingredientBook = document.getElementById('ingredientBook');
+const ingredientBook = document.getElementById('ingredientBook');
 const ingredientBookBookFish = document.getElementById('ingredientBookBookFish');
 const ingredientBookBookMeat = document.getElementById('ingredientBookBookMeat');
 const ingredientBookBookVegetable = document.getElementById('ingredientBookBookVegetable');
@@ -814,7 +755,7 @@ const lvlBookEnchantment = document.querySelector('.lvlBookEnchantment');
 const enchantmentBook = document.querySelector('.enchantmentBook');
 
 
-  const historyBook = document.getElementById('historyBook');
+const historyBook = document.getElementById('historyBook');
 const historyBookCastelSide = document.getElementById('historyBookCastelSide')
 const historyBookRestfield = document.getElementById('historyBookRestfield')
 const nameBookHistory = document.querySelector('.nameBookHistory')
@@ -828,10 +769,6 @@ const enchantingBook = document.getElementById('enchantingBook');
 
 const BookParent = document.getElementById('BookParent');
 const closeBookButton = document.querySelector('.closeBookButton')
-
-
-
-
 
 //UI BOOK>
 
@@ -4724,6 +4661,45 @@ socket.on("player", (serverPlayer) => {
 
     subscription: 'none',
   },
+  {
+    name: "circleRedCarpet",
+    backgroundObj: "back",
+    img: circleRedCarpet,
+    x: 0,
+    y: 0,
+    h: circleRedCarpet.height,
+    w: circleRedCarpet.width,
+    category: "furniture",
+    subCategory: "carpets",
+
+    subscription: 'none',
+  },
+  {
+    name: "circlePinkCarpet",
+    backgroundObj: "back",
+    img: circlePinkCarpet,
+    x: 0,
+    y: 0,
+    h: circlePinkCarpet.height,
+    w: circlePinkCarpet.width,
+    category: "furniture",
+    subCategory: "carpets",
+
+    subscription: 'none',
+  },
+  {
+    name: "circleOrangeCarpet",
+    backgroundObj: "back",
+    img: circleOrangeCarpet,
+    x: 0,
+    y: 0,
+    h: circleOrangeCarpet.height,
+    w: circleOrangeCarpet.width,
+    category: "furniture",
+    subCategory: "carpets",
+
+    subscription: 'none',
+  },
 
   // furniture - chairs
   {
@@ -4755,6 +4731,120 @@ socket.on("player", (serverPlayer) => {
   },
 
   // furniture - decorations
+  {
+    name: "cauldron",
+    backgroundObj: "front",
+    img: cauldron,
+    lightSource: true,
+    animated: true,
+    x: 0,
+    y: 0,
+    h: 32,
+    w: 25,
+    category: "furniture",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
+  {
+    name: "distributorPinkLeft",
+    backgroundObj: "front",
+    img: distributorPinkLeft,
+    reverse: distributorPinkRight,
+    lightSource: true,
+    x: 0,
+    y: 0,
+    h: distributorPinkLeft.height,
+    w: distributorPinkLeft.width,
+    category: "furniture",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
+  {
+    name: "poleTwoLeft",
+    backgroundObj: "front",
+    img: poleTwoLeft,
+    reverse: poleTwoRight,
+    lightSource: true,
+    x: 0,
+    y: 0,
+    h: poleTwoLeft.height,
+    w: poleTwoLeft.width,
+    category: "furniture",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
+  {
+    name: "poleOne",
+    backgroundObj: "front",
+    img: poleOne,
+    lightSource: true,
+    x: 0,
+    y: 0,
+    h: poleOne.height,
+    w: poleOne.width,
+    category: "furniture",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
+  {
+    name: "poleBank",
+    backgroundObj: "front",
+    img: poleBank,
+    x: 0,
+    y: 0,
+    h: poleBank.height,
+    w: poleBank.width,
+    category: "furniture",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
+  {
+    name: "boxesOneRight",
+    backgroundObj: "front",
+    img: boxesOneRight,
+    reverse: boxesOneLeft,
+    x: 0,
+    y: 0,
+    h: boxesOneRight.height,
+    w: boxesOneRight.width,
+    category: "furniture",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
+  {
+    name: "boxeWithFruitsLeft",
+    backgroundObj: "front",
+    img: boxeWithFruitsLeft,
+    reverse: boxeWithFruitsRight,
+    x: 0,
+    y: 0,
+    h: boxeWithFruitsLeft.height,
+    w: boxeWithFruitsLeft.width,
+    category: "furniture",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
+  {
+    name: "poleInformationLeft",
+    backgroundObj: "front",
+    img: poleInformationLeft,
+    reverse: poleInformationRight,
+    x: 0,
+    y: 0,
+    h: poleInformationLeft.height,
+    w: poleInformationLeft.width,
+    category: "furniture",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
   {
     name: "booksOne",
     backgroundObj: "front",
@@ -4912,6 +5002,38 @@ socket.on("player", (serverPlayer) => {
   },
 
   // outdoor - decorations
+  {
+    name: "cristalTwoLeft",
+    backgroundObj: false,
+    img: cristalTwoLeft,
+    reverse: cristalTwoRight,
+    x: 0,
+    y: 0,
+    h: cristalTwoLeft.height,
+    w: cristalTwoLeft.width,
+    lightSource: true,
+    animated: false,
+    category: "outdoor",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
+  {
+    name: "cristalOneRight",
+    backgroundObj: false,
+    img: cristalOneRight,
+    reverse: cristalOneLeft,
+    x: 0,
+    y: 0,
+    h: cristalOneRight.height,
+    w: cristalOneRight.width,
+    lightSource: true,
+    animated: false,
+    category: "outdoor",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
   {
     name: "fishPond",
     backgroundObj: false,
@@ -5272,6 +5394,32 @@ socket.on("player", (serverPlayer) => {
 
     subscription: 'dev',
   },
+  {
+    name: "grasslandBridgeBackTwo",
+    backgroundObj: true,
+    img: grasslandBridgeBackTwo,
+    x: 0,
+    y: 0,
+    h: grasslandBridgeBackTwo.height,
+    w: grasslandBridgeBackTwo.width,
+    category: "structure",
+    subCategory: "bridges",
+
+    subscription: 'dev',
+  },
+  {
+    name: "grasslandBridgeFrontTwo",
+    backgroundObj: false,
+    img: grasslandBridgeFrontTwo,
+    x: 0,
+    y: 0,
+    h: grasslandBridgeFrontTwo.height,
+    w: grasslandBridgeFrontTwo.width,
+    category: "structure",
+    subCategory: "bridges",
+
+    subscription: 'dev',
+  },
 
   //LIGHTS
   //LANTERNS
@@ -5294,6 +5442,7 @@ socket.on("player", (serverPlayer) => {
     name: "lightPoleOne",
     backgroundObj: false,
     img: lightPoleOne,
+    lightSource: true,
     x: 0,
     y: 0,
     h: 52,
