@@ -169,6 +169,14 @@ woodFloor.src = "./objects/construction/floors/woodFloor.png"
 const woodTable = new Image();
 woodTable.src = "./objects/furniture/tables/woodTable.png"
 
+//STRUCTURES BUILDING
+const coffeOfGrassland = new Image();
+coffeOfGrassland.src = "./objects/structures/building/coffeOfGrassland.png"
+const mushroomCastel = new Image();
+mushroomCastel.src = "./objects/structures/building/mushroomCastel.png"
+const grasslandCristal = new Image();
+grasslandCristal.src = "./objects/structures/building/grasslandCristal.png"
+
 const residency = new Image();
 residency.src = "./islands/residency.png"
 
@@ -4481,7 +4489,7 @@ socket.on("player", (serverPlayer) => {
     
     };
   
-    mapObject = [
+  mapObject = [
   // construction - fences
   {
     name: "woodFenceVer",
@@ -4493,6 +4501,9 @@ socket.on("player", (serverPlayer) => {
     w: 7,
     category: "construction",
     subCategory: "fences",
+
+    subscription: 'none',
+
   },
   {
     name: "woodFence",
@@ -4504,6 +4515,8 @@ socket.on("player", (serverPlayer) => {
     w: 28,
     category: "construction",
     subCategory: "fences",
+
+    subscription: 'none',
   },
   {
     name: "woodSmallWallHor",
@@ -4515,6 +4528,8 @@ socket.on("player", (serverPlayer) => {
     w: 31,
     category: "construction",
     subCategory: "fences",
+
+    subscription: 'none',
   },
   {
     name: "woodSmallWallVert",
@@ -4526,6 +4541,8 @@ socket.on("player", (serverPlayer) => {
     w: 7,
     category: "construction",
     subCategory: "fences",
+
+    subscription: 'none',
   },
   {
     name: "woodPole",
@@ -4537,6 +4554,8 @@ socket.on("player", (serverPlayer) => {
     w: 7,
     category: "construction",
     subCategory: "fences",
+
+    subscription: 'none',
   },
 
   // construction - floors
@@ -4550,6 +4569,8 @@ socket.on("player", (serverPlayer) => {
     w: 23,
     category: "construction",
     subCategory: "floors",
+
+    subscription: 'none',
   },
   {
     name: "stoneFloor",
@@ -4561,6 +4582,8 @@ socket.on("player", (serverPlayer) => {
     w: stoneFloor.width,
     category: "construction",
     subCategory: "floors",
+
+    subscription: 'none',
   },
   {
     name: "woodFloor",
@@ -4572,6 +4595,8 @@ socket.on("player", (serverPlayer) => {
     w: woodFloor.width,
     category: "construction",
     subCategory: "floors",
+
+    subscription: 'none',
   },
   {
     name: "plantPatch",
@@ -4583,6 +4608,8 @@ socket.on("player", (serverPlayer) => {
     w: 16,
     category: "construction",
     subCategory: "floors",
+
+    subscription: 'none',
   },
   {
     name: "dirtFloorBig",
@@ -4594,6 +4621,8 @@ socket.on("player", (serverPlayer) => {
     w: 57,
     category: "construction",
     subCategory: "floors",
+
+    subscription: 'none',
   },
   {
     name: "shadowTree",
@@ -4605,6 +4634,8 @@ socket.on("player", (serverPlayer) => {
     w: 48,
     category: "construction",
     subCategory: "floors",
+
+    subscription: 'none',
   },
 
   // construction - walls
@@ -4618,6 +4649,8 @@ socket.on("player", (serverPlayer) => {
     w: 67,
     category: "construction",
     subCategory: "walls",
+
+    subscription: 'none',
   },
   {
     name: "woodWallHor",
@@ -4629,6 +4662,7 @@ socket.on("player", (serverPlayer) => {
     w: 67,
     category: "construction",
     subCategory: "walls",
+    subscription: 'none',
   },
   {
     name: "woodWindowWall",
@@ -4640,6 +4674,8 @@ socket.on("player", (serverPlayer) => {
     w: 67,
     category: "construction",
     subCategory: "walls",
+
+    subscription: 'none',
   },
   {
     name: "woodWallVer",
@@ -4651,6 +4687,8 @@ socket.on("player", (serverPlayer) => {
     w: 7,
     category: "construction",
     subCategory: "walls",
+
+    subscription: 'none',
   },
   {
     name: "woodSquareDoor",
@@ -4662,6 +4700,8 @@ socket.on("player", (serverPlayer) => {
     w: 43,
     category: "construction",
     subCategory: "walls",
+
+    subscription: 'none',
   },
 
   // furniture 
@@ -4675,6 +4715,8 @@ socket.on("player", (serverPlayer) => {
     w: redSmallCarpet.width,
     category: "furniture",
     subCategory: "carpets",
+
+    subscription: 'none',
   },
 
   // furniture - chairs
@@ -4682,12 +4724,15 @@ socket.on("player", (serverPlayer) => {
     name: "chairLeft",
     backgroundObj: "back",
     img: chairLeft,
+    reverse: chairRight,
     x: 0,
     y: 0,
     h: chairLeft.height,
     w: chairLeft.width,
     category: "furniture",
     subCategory: "chairs",
+
+    subscription: 'none',
   },
   {
     name: "chairRight",
@@ -4699,6 +4744,8 @@ socket.on("player", (serverPlayer) => {
     w: chairRight.width,
     category: "furniture",
     subCategory: "chairs",
+
+    subscription: 'none',
   },
 
   // furniture - decorations
@@ -4712,6 +4759,8 @@ socket.on("player", (serverPlayer) => {
     w: booksOne.width,
     category: "furniture",
     subCategory: "decorations",
+
+    subscription: 'none',
   },
   {
     name: "decoOne",
@@ -4723,6 +4772,8 @@ socket.on("player", (serverPlayer) => {
     w: decoOne.width,
     category: "furniture",
     subCategory: "decorations",
+
+    subscription: 'none',
   },
 
   {
@@ -4735,6 +4786,8 @@ socket.on("player", (serverPlayer) => {
     w: paintFour.width,
     category: "furniture",
     subCategory: "decorations",
+
+    subscription: 'none',
   },
   {
     name: "paintOne",
@@ -4746,6 +4799,8 @@ socket.on("player", (serverPlayer) => {
     w: paintOne.width,
     category: "furniture",
     subCategory: "decorations",
+
+    subscription: 'none',
   },
   {
     name: "paintThree",
@@ -4757,6 +4812,8 @@ socket.on("player", (serverPlayer) => {
     w: paintThree.width,
     category: "furniture",
     subCategory: "decorations",
+
+    subscription: 'none',
   },
   {
     name: "paintTwo",
@@ -4768,6 +4825,8 @@ socket.on("player", (serverPlayer) => {
     w: paintTwo.width,
     category: "furniture",
     subCategory: "decorations",
+
+    subscription: 'none',
   },
 
   // furniture - kitchen
@@ -4783,6 +4842,8 @@ socket.on("player", (serverPlayer) => {
     animated: true,
     category: "furniture",
     subCategory: "kitchen",
+
+    subscription: 'none',
   },
 
   {
@@ -4795,6 +4856,8 @@ socket.on("player", (serverPlayer) => {
     w: potPlantFour.width,
     category: "outdoor",
     subCategory: "plants",
+
+    subscription: 'none',
   },
 
   // furniture - storage
@@ -4808,6 +4871,8 @@ socket.on("player", (serverPlayer) => {
     w: shelves.width,
     category: "furniture",
     subCategory: "storage",
+
+    subscription: 'none',
   },
 
   // furniture - tables
@@ -4821,6 +4886,8 @@ socket.on("player", (serverPlayer) => {
     w: woodTable.width,
     category: "furniture",
     subCategory: "tables",
+
+    subscription: 'none',
   },
 
   // outdoor - bush
@@ -4834,6 +4901,8 @@ socket.on("player", (serverPlayer) => {
     w: 22,
     category: "outdoor",
     subCategory: "plants",
+
+    subscription: 'none',
   },
 
   // outdoor - decorations
@@ -4849,6 +4918,8 @@ socket.on("player", (serverPlayer) => {
     animated: true,
     category: "outdoor",
     subCategory: "decorations",
+
+    subscription: 'none',
   },
   {
     name: "whiteFlowers",
@@ -4860,6 +4931,8 @@ socket.on("player", (serverPlayer) => {
     w: 14,
     category: "outdoor",
     subCategory: "grass",
+
+    subscription: 'none',
   },
 
   // outdoor - fountains
@@ -4874,6 +4947,8 @@ socket.on("player", (serverPlayer) => {
     animated: true,
     category: "outdoor",
     subCategory: "decorations",
+
+    subscription: 'none',
   },
 
   // outdoor - furniture
@@ -4888,6 +4963,8 @@ socket.on("player", (serverPlayer) => {
     animated: true,
     category: "outdoor",
     subCategory: "furniture",
+
+    subscription: 'none',
   },
 
   // outdoor - grass
@@ -4903,6 +4980,8 @@ socket.on("player", (serverPlayer) => {
     animated: true,
     category: "outdoor",
     subCategory: "grass",
+
+    subscription: 'none',
   },
   {
     name: "grassOne",
@@ -4914,6 +4993,8 @@ socket.on("player", (serverPlayer) => {
     w: 10,
     category: "outdoor",
     subCategory: "grass",
+
+    subscription: 'none',
   },
 
   // outdoor - plants
@@ -4927,6 +5008,8 @@ socket.on("player", (serverPlayer) => {
     w: vineTwo.width,
     category: "outdoor",
     subCategory: "plants",
+
+    subscription: 'none',
   },
   {
     name: "vineOne",
@@ -4938,6 +5021,8 @@ socket.on("player", (serverPlayer) => {
     w: 42,
     category: "outdoor",
     subCategory: "plants",
+
+    subscription: 'none',
   },
   {
     name: "hangingPlant",
@@ -4949,6 +5034,8 @@ socket.on("player", (serverPlayer) => {
     w: hangingPlant.width,
     category: "outdoor",
     subCategory: "plants",
+
+    subscription: 'none',
   },
   {
     name: "hangingPlantRed",
@@ -4960,6 +5047,8 @@ socket.on("player", (serverPlayer) => {
     w: hangingPlantRed.width,
     category: "outdoor",
     subCategory: "plants",
+
+    subscription: 'none',
   },
   {
     name: "potPlantThree",
@@ -4971,6 +5060,8 @@ socket.on("player", (serverPlayer) => {
     w: potPlantThree.width,
     category: "outdoor",
     subCategory: "plants",
+
+    subscription: 'none',
   },
   {
     name: "potPlantTwo",
@@ -4982,6 +5073,8 @@ socket.on("player", (serverPlayer) => {
     w: potPlantTwo.width,
     category: "outdoor",
     subCategory: "plants",
+
+    subscription: 'none',
   },
   {
     name: "potPlantOne",
@@ -4993,6 +5086,8 @@ socket.on("player", (serverPlayer) => {
     w: potPlantOne.width,
     category: "outdoor",
     subCategory: "plants",
+
+    subscription: 'none',
   },
 
   // outdoor - rocks
@@ -5006,6 +5101,8 @@ socket.on("player", (serverPlayer) => {
     w: 35,
     category: "outdoor",
     subCategory: "rocks",
+
+    subscription: 'none',
   },
 
   // outdoor - trees
@@ -5019,6 +5116,8 @@ socket.on("player", (serverPlayer) => {
     w: 43,
     category: "outdoor",
     subCategory: "trees",
+
+    subscription: 'none',
   },
 
   // outdoor - water
@@ -5034,6 +5133,8 @@ socket.on("player", (serverPlayer) => {
     animated: true,
     category: "outdoor",
     subCategory: "water",
+
+    subscription: 'none',
   },
 
   // structure - chest
@@ -5049,6 +5150,8 @@ socket.on("player", (serverPlayer) => {
     animated: true,
     category: "structure",
     subCategory: "chest",
+
+    subscription: 'none',
   },
 
   // structure - enchanting
@@ -5062,6 +5165,8 @@ socket.on("player", (serverPlayer) => {
     w: 119,
     category: "structure",
     subCategory: "enchanting",
+
+    subscription: 'dev',
   },
   {
     name: "enchantingTable",
@@ -5074,6 +5179,8 @@ socket.on("player", (serverPlayer) => {
     animated: true,
     category: "structure",
     subCategory: "enchanting",
+
+    subscription: 'dev',
   },
 
   // structure - kitchen
@@ -5087,6 +5194,49 @@ socket.on("player", (serverPlayer) => {
     w: 105,
     category: "structure",
     subCategory: "kitchen",
+
+    subscription: 'dev',
+  },
+
+  // structure - BUILDING
+  {
+    name: "coffeOfGrassland",
+    backgroundObj: true,
+    img: coffeOfGrassland,
+    x: 0,
+    y: 0,
+    h: 131,
+    w: 145,
+    category: "structure",
+    subCategory: "building",
+
+    subscription: 'dev',
+  },
+  {
+    name: "mushroomCastel",
+    backgroundObj: false,
+    img: mushroomCastel,
+    x: 0,
+    y: 0,
+    h: 239,
+    w: 249,
+    category: "structure",
+    subCategory: "building",
+
+    subscription: 'dev',
+  },
+  {
+    name: "grasslandCristal",
+    backgroundObj: false,
+    img: grasslandCristal,
+    x: 0,
+    y: 0,
+    h: 186,
+    w: 116,
+    category: "structure",
+    subCategory: "building",
+
+    subscription: 'dev',
   },
 
   //LIGHTS
@@ -5101,6 +5251,8 @@ socket.on("player", (serverPlayer) => {
     w: lanternOne.width,
     category: "light",
     subCategory: "lanterns",
+
+    subscription: 'none',
   },
 
   //LAMPS
@@ -5115,6 +5267,8 @@ socket.on("player", (serverPlayer) => {
     lightSource: true,
     category: "light",
     subCategory: "lamps",
+
+    subscription: 'none',
   },
   {
     name: "mediumTorch",
@@ -5128,9 +5282,11 @@ socket.on("player", (serverPlayer) => {
     lightSource: true,
     category: "light",
     subCategory: "lamps",
+
+    subscription: 'none',
   },
 
-]
+  ]
 
     createImagesFromMapObjects(mapObject)
   }
