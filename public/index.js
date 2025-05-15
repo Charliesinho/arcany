@@ -474,6 +474,22 @@ const oilFry = new Audio("./audios/oilFry.wav");
 oilFry.loop = true;
 oilFry.volume = 0.2;
 
+const grasslandsST1 = new Audio("./audios/grasslandsST1.mp3");
+grasslandsST1.loop = false;
+grasslandsST1.volume = 1;
+const grasslandsST2 = new Audio("./audios/grasslandsST2.mp3");
+grasslandsST2.loop = false;
+grasslandsST2.volume = 1;
+const grasslandsST3 = new Audio("./audios/grasslandsST3.mp3");
+grasslandsST3.loop = false;
+grasslandsST3.volume = 1;
+const grasslandsST4 = new Audio("./audios/grasslandsST4.mp3");
+grasslandsST4.loop = false;
+grasslandsST4.volume = 1;
+const grasslandsST5 = new Audio("./audios/grasslandsST5.mp3");
+grasslandsST5.loop = false;
+grasslandsST5.volume = 1;
+
 const hammerSmash = new Audio("./audios/hammerSmash.wav");
 hammerSmash.loop = false;
 hammerSmash.volume = 0.4;
@@ -634,8 +650,15 @@ metalPan.volume = 0.2;
 
 
 const canvasLobby = document.getElementById("canvas-lobby");
-canvasLobby.width =  window.innerWidth * 1.1;
-canvasLobby.height = window.innerHeight * 1.1;
+function resizeCanvasLobby() {
+  canvasLobby.width = window.innerWidth * 1.3;
+  canvasLobby.height = window.innerHeight * 1.3;
+}
+resizeCanvasLobby();
+window.addEventListener('resize', resizeCanvasLobby);
+
+// canvasLobby.width =  1920 * 1.3;
+// canvasLobby.height = 1080 * 1.3;
 
 const canvas = canvasLobby.getContext("2d");
 
@@ -916,6 +939,7 @@ const saveObjButtonUi = document.getElementById("saveObjButtonUi");
 const deleteWalls = document.getElementById("deletewWallButtonUi");
 const placeEnchantingArea = document.getElementById("enchantingButtonUi");
 const startBuildingBut = document.getElementById("buildButton");
+const openMusicPlayerButton = document.getElementById("audioButton");
 const showWalls = document.getElementById("showWalls");
 const sapwnButtonUi = document.getElementById("sapwnButtonUi");
 const exportWalls = document.getElementById("exportWalls");
@@ -937,6 +961,10 @@ const uiBuildingCategoryFurniture = document.getElementById('uiBuildingCategoryF
 const uiBuildingCategoryStructure = document.getElementById('uiBuildingCategoryStructure');
 const uiBuildingCategoryOutdoor = document.getElementById('uiBuildingCategoryOutdoor');
 const uiBuildingCategoryLight = document.getElementById('uiBuildingCategoryLight');
+
+const musicPlayer = document.getElementById('musicPlayer');
+const musicPlayerSlider = document.getElementById('musicPlayerSlider');
+const musicPlayerPlay = document.getElementById('musicPlayerPlay');
 
 const filterSubCategoryConstruction = document.querySelectorAll('.filterSubCategoryConstruction')
 
@@ -1419,6 +1447,16 @@ openerScreenButton.addEventListener("click", function() {
     
   }, 4000);
   audioClick.play();
+
+  const elem = document.documentElement; // makes the whole page fullscreen
+
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.webkitRequestFullscreen) { // Safari
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) { // IE11
+    elem.msRequestFullscreen();
+  }
 });
 
 loginButton.addEventListener("click", function (event) {
@@ -5489,9 +5527,18 @@ socket.on("startCooking", (item) => {
 let intervalCanvasBase;
 
 socket.on("updateMap", (map) => {
-  mapsInfo[map.worldData.areaName] = map.worldData
-  if (map.object) buildPlaceParticles(map.object)
-  if (map.deleting) buildDeleteParticles(map.object)
+  if (!map.deleting) {
+    if (!map.deleting) buildPlaceParticles(map.object)
+    mapsInfo[currentLand].objects[map.currentSelectedObjLayer].push(map.object)
+    mapsInfo[currentLand].objects[map.currentSelectedObjLayer].sort((a, b) => {
+      if (a.backgroundObj && !b.backgroundObj) return -1;
+      if (!a.backgroundObj && b.backgroundObj) return 1; 
+      return a.y - b.y;
+    });
+  } else {
+    if (map.deleting) buildDeleteParticles(map.object)
+    mapsInfo[currentLand].objects[map.currentSelectedObjLayer].splice(mapsInfo[currentLand].objects[map.currentSelectedObjLayer].indexOf(map.object), 1)
+  }
 })
 
 let mapsInfo = {};
@@ -6895,15 +6942,20 @@ let currentSelectedObjLayer = 0;
 
 let OpenMenuOfObjects = false;
 
-const rect = canvasLobby.getBoundingClientRect();
+// const rect = canvasLobby.getBoundingClientRect();
 
 canvasLobby.addEventListener("mousemove", (event) => {
   let x;
   let y;
   let escalableDivisor = calculateValue(window.screen.width)
-  // console.log(window.screen, escalableDivisor)
-  hoveredXCoord = event.clientX - (event.clientX - (event.screenX * 1.1)) + cameraX + cameraShakeX + 0 + escalableDivisor;
-  hoveredYCoord = event.clientY - (event.clientY - (event.screenY * 1.1)) + cameraY + cameraShakeY - 120 + (escalableDivisor * 0.95) / 8;
+  const rect = canvasLobby.getBoundingClientRect();
+
+  // Normalized canvas coordinates
+  const mouseX = (event.clientX - rect.left) * (canvasLobby.width / rect.width);
+  const mouseY = (event.clientY - rect.top) * (canvasLobby.height / rect.height);
+
+  hoveredXCoord = mouseX + cameraX + cameraShakeX;
+  hoveredYCoord = mouseY + cameraY + cameraShakeY;
 
   if ((currentlyPlacingWall || !currentlyPlacingWall) && currentDevAction !== "delete" && currentDevAction !== "deleteObj") {
     widthCoord = hoveredXCoord - selectedXcoord;
@@ -7006,9 +7058,14 @@ canvasLobby.addEventListener('click', function(event) {
     currentSelectedWall = null;
   }
   else if (currentSelectedWall !== null && currentDevAction === "deleteObj") {
+    buildDeleteParticles(mapsInfo[currentLand].objects[currentSelectedObjLayer][currentSelectedWall])
     socket.emit("deletedObject",{ currentLand: currentLand, object: mapsInfo[currentLand].objects[currentSelectedObjLayer][currentSelectedWall], currentSelectedObjLayer});
     mapsInfo[currentLand].objects[currentSelectedObjLayer].splice(currentSelectedWall, 1)
     currentSelectedWall = null;
+    let objDelSound = new Audio("./audios/deleteObj.wav");
+    objDelSound.loop = false;
+    objDelSound.volume = 0.8;
+    objDelSound.play();
   }
   
   else if (currentDevAction === "building") {
@@ -7024,20 +7081,20 @@ canvasLobby.addEventListener('click', function(event) {
       return a.y - b.y; // Otherwise, sort by y
     });
     
-    playRandomPop()
-    // buildPlaceParticles(objClone)
-    socket.emit("placedObject",{currentLand: currentLand, object: objClone, currentSelectedObjLayer});
+    playRandomBuild()
+    buildPlaceParticles(objClone)
+    socket.emit("placedObject",{currentLand: currentLand, object: objClone, objects: mapsInfo[currentLand].objects[currentSelectedObjLayer], currentSelectedObjLayer});
   }
 
 
   else if (!currentlyPlacingWall && currentDevAction === "fish" && currentSelectedWall === null) {
-    selectedXcoord = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
-    selectedYcoord = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    selectedXcoord = hoveredXCoord;
+    selectedYcoord = hoveredYCoord;
     currentlyPlacingWall = true;
   }
   else if (currentSelectedWall === null && currentlyPlacingWall && currentDevAction === "fish") {
-    const x = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
-    const y = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    const x = hoveredXCoord;
+    const y = hoveredYCoord;
     const newWidth = x - selectedXcoord;
     const newHeight = y - selectedYcoord;
     
@@ -7054,13 +7111,13 @@ canvasLobby.addEventListener('click', function(event) {
   
   
   else if (!currentlyPlacingWall && currentDevAction === "cook" && currentSelectedWall === null) {
-    selectedXcoord = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
-    selectedYcoord = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    selectedXcoord = hoveredXCoord;
+    selectedYcoord = hoveredYCoord;
     currentlyPlacingWall = true;
   }
   else if (currentSelectedWall === null && currentlyPlacingWall && currentDevAction === "cook") {
-    const x = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
-    const y = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    const x = hoveredXCoord;
+    const y = hoveredYCoord;
     const newWidth = x - selectedXcoord;
     const newHeight = y - selectedYcoord;
     
@@ -7076,13 +7133,13 @@ canvasLobby.addEventListener('click', function(event) {
   }
   
   else if (!currentlyPlacingWall && currentDevAction === "enchanting" && currentSelectedWall === null) {
-    selectedXcoord = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
-    selectedYcoord = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    selectedXcoord = hoveredXCoord;
+    selectedYcoord = hoveredYCoord;
     currentlyPlacingWall = true;
   }
   else if (currentSelectedWall === null && currentlyPlacingWall && currentDevAction === "enchanting") {
-    const x = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
-    const y = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    const x = hoveredXCoord;
+    const y = hoveredYCoord;
     const newWidth = x - selectedXcoord;
     const newHeight = y - selectedYcoord;
     
@@ -7099,13 +7156,13 @@ canvasLobby.addEventListener('click', function(event) {
   
   
   else if (!currentlyPlacingWall && currentDevAction === "craft" && currentSelectedWall === null) {
-    selectedXcoord = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
-    selectedYcoord = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    selectedXcoord = hoveredXCoord;
+    selectedYcoord = hoveredYCoord;
     currentlyPlacingWall = true;
   }
   else if (currentSelectedWall === null && currentlyPlacingWall && currentDevAction === "craft") {
-    const x = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
-    const y = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    const x = hoveredXCoord;
+    const y = hoveredYCoord;
     const newWidth = x - selectedXcoord;
     const newHeight = y - selectedYcoord;
     
@@ -7122,13 +7179,13 @@ canvasLobby.addEventListener('click', function(event) {
   
   
   else if (!currentlyPlacingWall && currentDevAction === "chest" && currentSelectedWall === null) {
-    selectedXcoord = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
-    selectedYcoord = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    selectedXcoord = hoveredXCoord;
+    selectedYcoord = hoveredYCoord;
     currentlyPlacingWall = true;
   }
   else if (currentSelectedWall === null && currentlyPlacingWall && currentDevAction === "chest") {
-    const x = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
-    const y = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    const x = hoveredXCoord;
+    const y = hoveredYCoord;
     const newWidth = x - selectedXcoord;
     const newHeight = y - selectedYcoord;
     
@@ -7146,13 +7203,13 @@ canvasLobby.addEventListener('click', function(event) {
 
   
   else if (!currentlyPlacingWall && currentDevAction === "transition" && currentSelectedWall === null) {
-    selectedXcoord = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
-    selectedYcoord = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    selectedXcoord = hoveredXCoord;
+    selectedYcoord = hoveredYCoord;
     currentlyPlacingWall = true;
   }
   else if (currentSelectedWall === null && currentlyPlacingWall && currentDevAction === "transition") {
-    const x = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
-    const y = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    const x = hoveredXCoord;
+    const y = hoveredYCoord;
     const newWidth = x - selectedXcoord;
     const newHeight = y - selectedYcoord;
     
@@ -7170,13 +7227,13 @@ canvasLobby.addEventListener('click', function(event) {
   }
   
   else if (!currentlyPlacingWall && currentDevAction === "dialog" && currentSelectedWall === null) {
-    selectedXcoord = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
-    selectedYcoord = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    selectedXcoord = hoveredXCoord;
+    selectedYcoord = hoveredYCoord;
     currentlyPlacingWall = true;
   }
   else if (currentSelectedWall === null && currentlyPlacingWall && currentDevAction === "dialog") {
-    const x = event.clientX - rect.left + secondaryCameraX + cameraShakeX + 66;
-    const y = event.clientY - rect.top + secondaryCameraY + cameraShakeY + 5;
+    const x = hoveredXCoord;
+    const y = hoveredYCoord;
     const newWidth = x - selectedXcoord;
     const newHeight = y - selectedYcoord;
     
@@ -7320,6 +7377,7 @@ function deselectUiButton() {
   roomsDiv.style.display = "none"
   mapInfoDiv.style.display = "none"
   deleteObject = false
+  musicPlayer.style.display = "none"
 }
 
 placeWalls.addEventListener("click", function() {
@@ -7548,6 +7606,83 @@ if (uiBuilding.style.display !== "flex") {
   uiBuildingCategory.style.display = "none";
   keyBlocker = false
 }
+});
+
+openMusicPlayerButton.addEventListener("click", function() {
+  if (musicPlayer.style.display != "block") {
+    deselectUiButton()
+    musicPlayer.style.display = "block"
+    const audioPlayerOpen = new Audio("./audios/audioPlayerOpen.wav");
+    audioPlayerOpen.loop = false;
+    audioPlayerOpen.volume = 1;
+    audioPlayerOpen.play()
+
+    fishSelectorButton.style.display = 'none'
+    chatIsActivate = false
+    chat.style.display = "none";
+    chatButton.style.bottom = "10px"
+    chatInput.value = "";
+    chatInput.disabled = true;
+    chatInput.disabled = false;
+    blockMovement = false;
+    noMovement = false
+    uiBuilding.style.display = "none"
+  } else {
+    musicPlayer.style.display = "none"
+  }
+});
+
+let musicLibrary = {
+  grasslands: [grasslandsST1, grasslandsST2, grasslandsST3, grasslandsST4, grasslandsST5]
+}
+
+let currentAudio = null;
+let isPlaying = false;
+
+musicLibrary.grasslands.forEach(audio => {
+  audio.volume = musicPlayerSlider.value;
+});
+
+musicPlayerPlay.addEventListener("click", function () {
+  const clickHover = new Audio("./audios/tapWood.wav");
+  clickHover.volume = 0.3;
+  clickHover.loop = false;
+  clickHover.play();
+
+  if (isPlaying && currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    currentAudio = null;
+    isPlaying = false;
+    musicPlayer.style.background = "url(./Textures/musicPlayer.png)";
+    return;
+  }
+
+  playRandomSong();
+});
+
+function playRandomSong() {
+  const songs = musicLibrary.grasslands;
+  const randomIndex = Math.floor(Math.random() * songs.length);
+  currentAudio = songs[randomIndex];
+
+  currentAudio.volume = musicPlayerSlider.value;
+  currentAudio.play();
+  isPlaying = true;
+  musicPlayer.style.background = "url(./Textures/musicPlayer.gif)";
+
+  // When song ends, play another if still in play mode
+  currentAudio.onended = () => {
+    if (isPlaying) {
+      playRandomSong();
+    }
+  };
+}
+
+musicPlayerSlider.addEventListener("input", function () {
+  if (currentAudio) {
+    currentAudio.volume = this.value;
+  }
 });
 
 placeCraftingArea.addEventListener("click", function() {
@@ -9034,7 +9169,7 @@ function drawChat () {
   function drawChatBubble (img, player, x, xd, y, yd, w, h, cx, cy ) {
     canvas.drawImage(img, x + xd, y + yd, w , h)
     canvas.beginPath();
-    canvas.font = "bolder 16px Tiny5";
+    canvas.font = "400 18px Tiny5";
     canvas.textAlign = "center";
     canvas.fillStyle = "black";
     canvas.fillText(player.chatMessage, x +cx, y -cy);
@@ -10134,6 +10269,24 @@ function playRandomPop() {
     const pop2 = new Audio("./audios/pop2.wav");
     pop2.loop = false;
     pop2.volume = 0.5;
+
+    const sounds = [pop1, pop2];
+
+    const playRandomSound = () => {
+      sounds[Math.floor(Math.random() * sounds.length)].play();
+    };
+
+    playRandomSound();
+}
+
+function playRandomBuild() {
+  const pop1 = new Audio("./audios/build.wav");
+    pop1.loop = false;
+    pop1.volume = 0.8;
+
+    const pop2 = new Audio("./audios/build2.wav");
+    pop2.loop = false;
+    pop2.volume = 0.8;
 
     const sounds = [pop1, pop2];
 
