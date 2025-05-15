@@ -71,15 +71,15 @@ treeOne.src = "./objects/outdoor/trees/treeOne.png"
 const woodPole = new Image();
 woodPole.src = "./objects/construction/fences/woodPole.png"
 const whiteFlowers = new Image();
-whiteFlowers.src = "./objects/outdoor/flowers/whiteFlowers.png"
+whiteFlowers.src = "./objects/outdoor/grass/whiteFlowers.png"
 const bushOne = new Image();
-bushOne.src = "./objects/outdoor/bush/bushOne.png"
+bushOne.src = "./objects/outdoor/plants/bushOne.png"
 const rockOne = new Image();
 rockOne.src = "./objects/outdoor/rocks/rockOne.png"
 const woodSquareDoor = new Image();
 woodSquareDoor.src = "./objects/construction/walls/woodSquareDoor.png"
 const vineOne = new Image();
-vineOne.src = "./objects/outdoor/decorations/vineOne.png"
+vineOne.src = "./objects/outdoor/plants/vineOne.png"
 const chestCommon = new Image();
 chestCommon.src = "./objects/structures/chest/chestCommon.png"
 const cookingPotObj = new Image();
@@ -87,13 +87,13 @@ cookingPotObj.src = "./objects/furniture/kitchen/cookingPotObj.png"
 const grassOne = new Image();
 grassOne.src = "./objects/outdoor/grass/grassOne.png"
 const lightPoleOne = new Image();
-lightPoleOne.src = "./objects/outdoor/furniture/lightPoleOne.png"
+lightPoleOne.src = "./objects/light/lamps/lightPoleOne.png"
 const mediumTorch = new Image();
-mediumTorch.src = "./objects/outdoor/furniture/mediumTorch.png"
+mediumTorch.src = "./objects/light/lamps/mediumTorch.png"
 const dirtFloorBig = new Image();
 dirtFloorBig.src = "./objects/construction/floors/dirtFloorBig.png"
 const plazaFountain = new Image();
-plazaFountain.src = "./objects/outdoor/fountains/plazaFountain.png"
+plazaFountain.src = "./objects/outdoor/decorations/plazaFountain.png"
 const cookingStand = new Image();
 cookingStand.src = "./objects/structures/kitchen/cookingStand.png"
 const enchantingTower = new Image();
@@ -141,15 +141,15 @@ hangingPlant.src = "./objects/outdoor/plants/hangingPlant.png"
 const hangingPlantRed = new Image();
 hangingPlantRed.src = "./objects/outdoor/plants/hangingPlantRed.png"
 const lanternOne = new Image();
-lanternOne.src = "./objects/outdoor/decorations/lanternOne.png"
+lanternOne.src = "./objects/light/lanterns/lanternOne.png"
 const paintFour = new Image();
-paintFour.src = "./objects/furniture/painting/paintFour.png"
+paintFour.src = "./objects/furniture/decorations/paintFour.png"
 const paintOne = new Image();
-paintOne.src = "./objects/furniture/painting/paintOne.png"
+paintOne.src = "./objects/furniture/decorations/paintOne.png"
 const paintThree = new Image();
-paintThree.src = "./objects/furniture/painting/paintThree.png"
+paintThree.src = "./objects/furniture/decorations/paintThree.png"
 const paintTwo = new Image();
-paintTwo.src = "./objects/furniture/painting/paintTwo.png"
+paintTwo.src = "./objects/furniture/decorations/paintTwo.png"
 const potPlantFour = new Image();
 potPlantFour.src = "./objects/outdoor/plants/potPlantFour.png"
 const potPlantThree = new Image();
@@ -163,11 +163,19 @@ shelves.src = "./objects/furniture/storage/shelves.png"
 const stoneFloor = new Image();
 stoneFloor.src = "./objects/construction/floors/stoneFloor.png"
 const vineTwo = new Image();
-vineTwo.src = "./objects/outdoor/decorations/vineTwo.png"
+vineTwo.src = "./objects/outdoor/plants/vineTwo.png"
 const woodFloor = new Image();
 woodFloor.src = "./objects/construction/floors/woodFloor.png"
 const woodTable = new Image();
 woodTable.src = "./objects/furniture/tables/woodTable.png"
+
+//STRUCTURES BUILDING
+const coffeOfGrassland = new Image();
+coffeOfGrassland.src = "./objects/structures/building/coffeOfGrassland.png"
+const mushroomCastel = new Image();
+mushroomCastel.src = "./objects/structures/building/mushroomCastel.png"
+const grasslandCristal = new Image();
+grasslandCristal.src = "./objects/structures/building/grasslandCristal.png"
 
 const residency = new Image();
 residency.src = "./islands/residency.png"
@@ -960,6 +968,7 @@ const uiBuildingCategoryConstruction = document.getElementById('uiBuildingCatego
 const uiBuildingCategoryFurniture = document.getElementById('uiBuildingCategoryFurniture');
 const uiBuildingCategoryStructure = document.getElementById('uiBuildingCategoryStructure');
 const uiBuildingCategoryOutdoor = document.getElementById('uiBuildingCategoryOutdoor');
+const uiBuildingCategoryLight = document.getElementById('uiBuildingCategoryLight');
 
 const musicPlayer = document.getElementById('musicPlayer');
 const musicPlayerSlider = document.getElementById('musicPlayerSlider');
@@ -2509,16 +2518,12 @@ socket.on("scoresData", (scoresArray) => {
   });
 });
 
-
-
 //Switch inventories >
 
 
 //Switch inventories <
 
 //Cooking >
-
-
 
 let paddleXPos = (container.clientWidth / 2) - (paddle.clientWidth / 2);
 paddle.style.left = `${paddleXPos}px`;
@@ -4484,607 +4489,805 @@ socket.on("player", (serverPlayer) => {
     
     };
   
-    mapObject = [
-      {
-        name: "dirtFloor",
-        backgroundObj: true,
-        img: dirtFloor,
-        x: 0,
-        y: 0,
-        h: 22,
-        w: 23,
-        category: "construction",
-        subCategory: "floors",
-      },
-      {
-        name: "booksOne",
-        backgroundObj: "front",
-        img: booksOne,
-        x: 0,
-        y: 0,
-        h: booksOne.height,
-        w: booksOne.width,
-        category: "furniture",
-        subCategory: "decorations",
-      },
-      {
-        name: "redSmallCarpet",
-        backgroundObj: "back",
-        img: redSmallCarpet,
-        x: 0,
-        y: 0,
-        h: redSmallCarpet.height,
-        w: redSmallCarpet.width,
-        category: "furniture",
-        subCategory: "carpets",
-      },
-      {
-        name: "chairLeft",
-        backgroundObj: "back",
-        img: chairLeft,
-        x: 0,
-        y: 0,
-        h: chairLeft.height,
-        w: chairLeft.width,
-        category: "furniture",
-        subCategory: "chairs",
-      },
-      {
-        name: "chairRight",
-        backgroundObj: "back",
-        img: chairRight,
-        x: 0,
-        y: 0,
-        h: chairRight.height,
-        w: chairRight.width,
-        category: "furniture",
-        subCategory: "chairs",
-      },
-      {
-        name: "decoOne",
-        backgroundObj: "front",
-        img: decoOne,
-        x: 0,
-        y: 0,
-        h: decoOne.height,
-        w: decoOne.width,
-        category: "furniture",
-        subCategory: "decorations",
-      },
-      {
-        name: "hangingPlant",
-        backgroundObj: "front",
-        img: hangingPlant,
-        x: 0,
-        y: 0,
-        h: hangingPlant.height,
-        w: hangingPlant.width,
-        category: "outdoor",
-        subCategory: "plants",
-      },
-      {
-        name: "lanternOne",
-        backgroundObj: "front",
-        img: lanternOne,
-        x: 0,
-        y: 0,
-        h: lanternOne.height,
-        w: lanternOne.width,
-        category: "outdoor",
-        subCategory: "decorations",
-      },
-      {
-        name: "hangingPlantRed",
-        backgroundObj: "front",
-        img: hangingPlantRed,
-        x: 0,
-        y: 0,
-        h: hangingPlantRed.height,
-        w: hangingPlantRed.width,
-        category: "outdoor",
-        subCategory: "plants",
-      },
-      {
-        name: "paintFour",
-        backgroundObj: "front",
-        img: paintFour,
-        x: 0,
-        y: 0,
-        h: paintFour.height,
-        w: paintFour.width,
-        category: "furniture",
-        subCategory: "paintings",
-      },
-      {
-        name: "paintOne",
-        backgroundObj: "front",
-        img: paintOne,
-        x: 0,
-        y: 0,
-        h: paintOne.height,
-        w: paintOne.width,
-        category: "furniture",
-        subCategory: "paintings",
-      },
-      {
-        name: "paintThree",
-        backgroundObj: "front",
-        img: paintThree,
-        x: 0,
-        y: 0,
-        h: paintThree.height,
-        w: paintThree.width,
-        category: "furniture",
-        subCategory: "paintings",
-      },
-      {
-        name: "paintTwo",
-        backgroundObj: "front",
-        img: paintTwo,
-        x: 0,
-        y: 0,
-        h: paintTwo.height,
-        w: paintTwo.width,
-        category: "furniture",
-        subCategory: "paintings",
-      },
-      {
-        name: "potPlantFour",
-        backgroundObj: false,
-        img: potPlantFour,
-        x: 0,
-        y: 0,
-        h: potPlantFour.height,
-        w: potPlantFour.width,
-        category: "furniture",
-        subCategory: "paintings",
-      },
-      {
-        name: "potPlantThree",
-        backgroundObj: false,
-        img: potPlantThree,
-        x: 0,
-        y: 0,
-        h: potPlantThree.height,
-        w: potPlantThree.width,
-        category: "outdoor",
-        subCategory: "plants",
-      },
-      {
-        name: "potPlantTwo",
-        backgroundObj: false,
-        img: potPlantTwo,
-        x: 0,
-        y: 0,
-        h: potPlantTwo.height,
-        w: potPlantTwo.width,
-        category: "outdoor",
-        subCategory: "plants",
-      },
-      {
-        name: "potPlantOne",
-        backgroundObj: false,
-        img: potPlantOne,
-        x: 0,
-        y: 0,
-        h: potPlantOne.height,
-        w: potPlantOne.width,
-        category: "outdoor",
-        subCategory: "plants",
-      },
-      {
-        name: "shelves",
-        backgroundObj: false,
-        img: shelves,
-        x: 0,
-        y: 0,
-        h: shelves.height,
-        w: shelves.width,
-        category: "furniture",
-        subCategory: "storage",
-      },
-      {
-        name: "woodTable",
-        backgroundObj: false,
-        img: woodTable,
-        x: 0,
-        y: 0,
-        h: woodTable.height,
-        w: woodTable.width,
-        category: "furniture",
-        subCategory: "tables",
-      },
-      {
-        name: "stoneFloor",
-        backgroundObj: true,
-        img: stoneFloor,
-        x: 0,
-        y: 0,
-        h: stoneFloor.height,
-        w: stoneFloor.width,
-        category: "construction",
-        subCategory: "floors",
-      },
-      {
-        name: "woodFloor",
-        backgroundObj: true,
-        img: woodFloor,
-        x: 0,
-        y: 0,
-        h: woodFloor.height,
-        w: woodFloor.width,
-        category: "construction",
-        subCategory: "floors",
-      },
-      {
-        name: "vineTwo",
-        backgroundObj: "front",
-        img: vineTwo,
-        x: 0,
-        y: 0,
-        h: vineTwo.height,
-        w: vineTwo.width,
-        category: "outdoor",
-        subCategory: "decorations",
-      },
-      {
-        name: "enchantingTower",
-        backgroundObj: false,
-        img: enchantingTower,
-        x: 0,
-        y: 0,
-        h: 357,
-        w: 119,
-        category: "structure",
-        subCategory: "enchanting",
-      },
-      {
-        name: "enchantingTable",
-        backgroundObj: false,
-        img: enchantingTable,
-        x: 0,
-        y: 0,
-        h: 72,
-        w: 75,
-        animated: true,
-        category: "structure",
-        subCategory: "enchanting",
-      },
-      {
-        name: "plantPatch",
-        backgroundObj: true,
-        img: plantPatch,
-        x: 0,
-        y: 0,
-        h: 15,
-        w: 16,
-        category: "construction",
-        subCategory: "floors",
-      },
-      {
-        name: "woodFenceVer",
-        backgroundObj: false,
-        img: woodFenceVer,
-        x: 0,
-        y: 0,
-        h: 35,
-        w: 7,
-        category: "construction",
-        subCategory: "fences",
-      },
-      {
-        name: "woodFence",
-        backgroundObj: false,
-        img: woodFence,
-        x: 0,
-        y: 0,
-        h: 22,
-        w: 28,
-        category: "construction",
-        subCategory: "fences",
-      },
-      {
-        name: "woodSmallWallHor",
-        backgroundObj: false,
-        img: woodSmallWallHor,
-        x: 0,
-        y: 0,
-        h: 22,
-        w: 31,
-        category: "construction",
-        subCategory: "fences",
-      },
-      {
-        name: "woodSmallWallVert",
-        backgroundObj: false,
-        img: woodSmallWallVert,
-        x: 0,
-        y: 0,
-        h: 37,
-        w: 7,
-        category: "construction",
-        subCategory: "fences",
-      },
-      {
-        name: "woodWallDoor",
-        backgroundObj: false,
-        img: woodWallDoor,
-        x: 0,
-        y: 0,
-        h: 52,
-        w: 67,
-        category: "construction",
-        subCategory: "walls",
-      },
-      {
-        name: "woodWallHor",
-        backgroundObj: false,
-        img: woodWallHor,
-        x: 0,
-        y: 0,
-        h: 52,
-        w: 67,
-        category: "construction",
-        subCategory: "walls",
-      },
-      {
-        name: "woodWindowWall",
-        backgroundObj: false,
-        img: woodWindowWall,
-        x: 0,
-        y: 0,
-        h: 52,
-        w: 67,
-        category: "construction",
-        subCategory: "walls",
-      },
-      {
-        name: "woodWallVer",
-        backgroundObj: false,
-        img: woodWallVer,
-        x: 0,
-        y: 0,
-        h: 92,
-        w: 7,
-        category: "construction",
-        subCategory: "walls",
-      },
-      {
-        name: "flagLine",
-        backgroundObj: "front",
-        img: flagLine,
-        x: 0,
-        y: 0,
-        h: 26,
-        w: 123,
-        animated: true,
-        category: "outdoor",
-        subCategory: "furniture",
-      },
-      {
-        name: "treeOne",
-        backgroundObj: false,
-        img: treeOne,
-        x: 0,
-        y: 0,
-        h: 70,
-        w: 43,
-        category: "outdoor",
-        subCategory: "trees",
-      },
-      {
-        name: "woodPole",
-        backgroundObj: false,
-        img: woodPole,
-        x: 0,
-        y: 0,
-        h: 21,
-        w: 7,
-        category: "construction",
-        subCategory: "fences",
-      },
-      {
-        name: "whiteFlowers",
-        backgroundObj: true,
-        img: whiteFlowers,
-        x: 0,
-        y: 0,
-        h: 13,
-        w: 14,
-        category: "outdoor",
-        subCategory: "flowers",
-      },
-      {
-        name: "bushOne",
-        backgroundObj: false,
-        img: bushOne,
-        x: 0,
-        y: 0,
-        h: 19,
-        w: 22,
-        category: "outdoor",
-        subCategory: "bush",
-      },
-      {
-        name: "shadowTree",
-        backgroundObj: true,
-        img: shadowTree,
-        x: 0,
-        y: 0,
-        h: 15,
-        w: 48,
-        category: "construction",
-        subCategory: "floors",
-      },
-      {
-        name: "vineOne",
-        backgroundObj: "front",
-        img: vineOne,
-        x: 0,
-        y: 0,
-        h: 12,
-        w: 42,
-        category: "outdoor",
-        subCategory: "decorations",
-      },
-      {
-        name: "rockOne",
-        backgroundObj: false,
-        img: rockOne,
-        x: 0,
-        y: 0,
-        h: 27,
-        w: 35,
-        category: "outdoor",
-        subCategory: "rocks",
-      },
-      {
-        name: "woodSquareDoor",
-        backgroundObj: false,
-        img: woodSquareDoor,
-        x: 0,
-        y: 0,
-        h: 52,
-        w: 43,
-        category: "construction",
-        subCategory: "walls",
-      },
-      {
-        name: "chestCommon",
-        backgroundObj: false,
-        img: chestCommon,
-        x: 0,
-        y: 0,
-        h: 18,
-        w: 21,
-        lightSource: true,
-        animated: true,
-        category: "structure",
-        subCategory: "chest",
-      },
-      {
-        name: "cookingPotObj",
-        backgroundObj: false,
-        img: cookingPotObj,
-        x: 0,
-        y: 0,
-        h: 30,
-        w: 26,
-        lightSource: true,
-        animated: true,
-        category: "furniture",
-        subCategory: "kitchen",
-      },
-      {
-        name: "fishPond",
-        backgroundObj: false,
-        img: fishPond,
-        x: 0,
-        y: 0,
-        h: 30,
-        w: 30,
-        lightSource: false,
-        animated: true,
-        category: "outdoor",
-        subCategory: "decorations",
-      },
-      {
-        name: "smallLake",
-        backgroundObj: true,
-        img: smallLake,
-        x: 0,
-        y: 0,
-        h: 112,
-        w: 112,
-        lightSource: false,
-        animated: true,
-        category: "outdoor",
-        subCategory: "water",
-      },
-      {
-        name: "dryGrass",
-        backgroundObj: false,
-        img: dryGrass,
-        x: 0,
-        y: 0,
-        h: 15,
-        w: 15,
-        lightSource: false,
-        animated: true,
-        category: "outdoor",
-        subCategory: "grass",
-      },
-      {
-        name: "plazaFountain",
-        backgroundObj: false,
-        img: plazaFountain,
-        x: 0,
-        y: 0,
-        h: 84,
-        w: 131,
-        animated: true,
-        category: "outdoor",
-        subCategory: "fountains",
-      },
-      {
-        name: "grassOne",
-        backgroundObj: false,
-        img: grassOne,
-        x: 0,
-        y: 0,
-        h: 7,
-        w: 10,
-        category: "outdoor",
-        subCategory: "grass",
-      },
-      {
-        name: "cookingStand",
-        backgroundObj: false,
-        img: cookingStand,
-        x: 0,
-        y: 0,
-        h: 79,
-        w: 105,
-        category: "structure",
-        subCategory: "kitchen",
-      },
-      {
-        name: "dirtFloorBig",
-        backgroundObj: true,
-        img: dirtFloorBig,
-        x: 0,
-        y: 0,
-        h: 47,
-        w: 57,
-        category: "construction",
-        subCategory: "floors",
-      },
-      {
-        name: "lightPoleOne",
-        backgroundObj: false,
-        img: lightPoleOne,
-        x: 0,
-        y: 0,
-        h: 52,
-        w: 22,
-        lightSource: true,
-        category: "outdoor",
-        subCategory: "furniture",
-      },
-      {
-        name: "mediumTorch",
-        backgroundObj: false,
-        img: mediumTorch,
-        x: 0,
-        y: 0,
-        h: 26,
-        w: 11,
-        animated: true,
-        lightSource: true,
-        category: "outdoor",
-        subCategory: "furniture",
-      },
-    ]
+  mapObject = [
+  // construction - fences
+  {
+    name: "woodFenceVer",
+    backgroundObj: false,
+    img: woodFenceVer,
+    x: 0,
+    y: 0,
+    h: 35,
+    w: 7,
+    category: "construction",
+    subCategory: "fences",
+
+    subscription: 'none',
+
+  },
+  {
+    name: "woodFence",
+    backgroundObj: false,
+    img: woodFence,
+    x: 0,
+    y: 0,
+    h: 22,
+    w: 28,
+    category: "construction",
+    subCategory: "fences",
+
+    subscription: 'none',
+  },
+  {
+    name: "woodSmallWallHor",
+    backgroundObj: false,
+    img: woodSmallWallHor,
+    x: 0,
+    y: 0,
+    h: 22,
+    w: 31,
+    category: "construction",
+    subCategory: "fences",
+
+    subscription: 'none',
+  },
+  {
+    name: "woodSmallWallVert",
+    backgroundObj: false,
+    img: woodSmallWallVert,
+    x: 0,
+    y: 0,
+    h: 37,
+    w: 7,
+    category: "construction",
+    subCategory: "fences",
+
+    subscription: 'none',
+  },
+  {
+    name: "woodPole",
+    backgroundObj: false,
+    img: woodPole,
+    x: 0,
+    y: 0,
+    h: 21,
+    w: 7,
+    category: "construction",
+    subCategory: "fences",
+
+    subscription: 'none',
+  },
+
+  // construction - floors
+  {
+    name: "dirtFloor",
+    backgroundObj: true,
+    img: dirtFloor,
+    x: 0,
+    y: 0,
+    h: 22,
+    w: 23,
+    category: "construction",
+    subCategory: "floors",
+
+    subscription: 'none',
+  },
+  {
+    name: "stoneFloor",
+    backgroundObj: true,
+    img: stoneFloor,
+    x: 0,
+    y: 0,
+    h: stoneFloor.height,
+    w: stoneFloor.width,
+    category: "construction",
+    subCategory: "floors",
+
+    subscription: 'none',
+  },
+  {
+    name: "woodFloor",
+    backgroundObj: true,
+    img: woodFloor,
+    x: 0,
+    y: 0,
+    h: woodFloor.height,
+    w: woodFloor.width,
+    category: "construction",
+    subCategory: "floors",
+
+    subscription: 'none',
+  },
+  {
+    name: "plantPatch",
+    backgroundObj: true,
+    img: plantPatch,
+    x: 0,
+    y: 0,
+    h: 15,
+    w: 16,
+    category: "construction",
+    subCategory: "floors",
+
+    subscription: 'none',
+  },
+  {
+    name: "dirtFloorBig",
+    backgroundObj: true,
+    img: dirtFloorBig,
+    x: 0,
+    y: 0,
+    h: 47,
+    w: 57,
+    category: "construction",
+    subCategory: "floors",
+
+    subscription: 'none',
+  },
+  {
+    name: "shadowTree",
+    backgroundObj: true,
+    img: shadowTree,
+    x: 0,
+    y: 0,
+    h: 15,
+    w: 48,
+    category: "construction",
+    subCategory: "floors",
+
+    subscription: 'none',
+  },
+
+  // construction - walls
+  {
+    name: "woodWallDoor",
+    backgroundObj: false,
+    img: woodWallDoor,
+    x: 0,
+    y: 0,
+    h: 52,
+    w: 67,
+    category: "construction",
+    subCategory: "walls",
+
+    subscription: 'none',
+  },
+  {
+    name: "woodWallHor",
+    backgroundObj: false,
+    img: woodWallHor,
+    x: 0,
+    y: 0,
+    h: 52,
+    w: 67,
+    category: "construction",
+    subCategory: "walls",
+    subscription: 'none',
+  },
+  {
+    name: "woodWindowWall",
+    backgroundObj: false,
+    img: woodWindowWall,
+    x: 0,
+    y: 0,
+    h: 52,
+    w: 67,
+    category: "construction",
+    subCategory: "walls",
+
+    subscription: 'none',
+  },
+  {
+    name: "woodWallVer",
+    backgroundObj: false,
+    img: woodWallVer,
+    x: 0,
+    y: 0,
+    h: 92,
+    w: 7,
+    category: "construction",
+    subCategory: "walls",
+
+    subscription: 'none',
+  },
+  {
+    name: "woodSquareDoor",
+    backgroundObj: false,
+    img: woodSquareDoor,
+    x: 0,
+    y: 0,
+    h: 52,
+    w: 43,
+    category: "construction",
+    subCategory: "walls",
+
+    subscription: 'none',
+  },
+
+  // furniture 
+  {
+    name: "redSmallCarpet",
+    backgroundObj: "back",
+    img: redSmallCarpet,
+    x: 0,
+    y: 0,
+    h: redSmallCarpet.height,
+    w: redSmallCarpet.width,
+    category: "furniture",
+    subCategory: "carpets",
+
+    subscription: 'none',
+  },
+
+  // furniture - chairs
+  {
+    name: "chairLeft",
+    backgroundObj: "back",
+    img: chairLeft,
+    reverse: chairRight,
+    x: 0,
+    y: 0,
+    h: chairLeft.height,
+    w: chairLeft.width,
+    category: "furniture",
+    subCategory: "chairs",
+
+    subscription: 'none',
+  },
+  {
+    name: "chairRight",
+    backgroundObj: "back",
+    img: chairRight,
+    x: 0,
+    y: 0,
+    h: chairRight.height,
+    w: chairRight.width,
+    category: "furniture",
+    subCategory: "chairs",
+
+    subscription: 'none',
+  },
+
+  // furniture - decorations
+  {
+    name: "booksOne",
+    backgroundObj: "front",
+    img: booksOne,
+    x: 0,
+    y: 0,
+    h: booksOne.height,
+    w: booksOne.width,
+    category: "furniture",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
+  {
+    name: "decoOne",
+    backgroundObj: "front",
+    img: decoOne,
+    x: 0,
+    y: 0,
+    h: decoOne.height,
+    w: decoOne.width,
+    category: "furniture",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
+
+  {
+    name: "paintFour",
+    backgroundObj: "front",
+    img: paintFour,
+    x: 0,
+    y: 0,
+    h: paintFour.height,
+    w: paintFour.width,
+    category: "furniture",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
+  {
+    name: "paintOne",
+    backgroundObj: "front",
+    img: paintOne,
+    x: 0,
+    y: 0,
+    h: paintOne.height,
+    w: paintOne.width,
+    category: "furniture",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
+  {
+    name: "paintThree",
+    backgroundObj: "front",
+    img: paintThree,
+    x: 0,
+    y: 0,
+    h: paintThree.height,
+    w: paintThree.width,
+    category: "furniture",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
+  {
+    name: "paintTwo",
+    backgroundObj: "front",
+    img: paintTwo,
+    x: 0,
+    y: 0,
+    h: paintTwo.height,
+    w: paintTwo.width,
+    category: "furniture",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
+
+  // furniture - kitchen
+  {
+    name: "cookingPotObj",
+    backgroundObj: false,
+    img: cookingPotObj,
+    x: 0,
+    y: 0,
+    h: 30,
+    w: 26,
+    lightSource: true,
+    animated: true,
+    category: "furniture",
+    subCategory: "kitchen",
+
+    subscription: 'none',
+  },
+
+  {
+    name: "potPlantFour",
+    backgroundObj: false,
+    img: potPlantFour,
+    x: 0,
+    y: 0,
+    h: potPlantFour.height,
+    w: potPlantFour.width,
+    category: "outdoor",
+    subCategory: "plants",
+
+    subscription: 'none',
+  },
+
+  // furniture - storage
+  {
+    name: "shelves",
+    backgroundObj: false,
+    img: shelves,
+    x: 0,
+    y: 0,
+    h: shelves.height,
+    w: shelves.width,
+    category: "furniture",
+    subCategory: "storage",
+
+    subscription: 'none',
+  },
+
+  // furniture - tables
+  {
+    name: "woodTable",
+    backgroundObj: false,
+    img: woodTable,
+    x: 0,
+    y: 0,
+    h: woodTable.height,
+    w: woodTable.width,
+    category: "furniture",
+    subCategory: "tables",
+
+    subscription: 'none',
+  },
+
+  // outdoor - bush
+  {
+    name: "bushOne",
+    backgroundObj: false,
+    img: bushOne,
+    x: 0,
+    y: 0,
+    h: 19,
+    w: 22,
+    category: "outdoor",
+    subCategory: "plants",
+
+    subscription: 'none',
+  },
+
+  // outdoor - decorations
+  {
+    name: "fishPond",
+    backgroundObj: false,
+    img: fishPond,
+    x: 0,
+    y: 0,
+    h: 30,
+    w: 30,
+    lightSource: false,
+    animated: true,
+    category: "outdoor",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
+  {
+    name: "whiteFlowers",
+    backgroundObj: true,
+    img: whiteFlowers,
+    x: 0,
+    y: 0,
+    h: 13,
+    w: 14,
+    category: "outdoor",
+    subCategory: "grass",
+
+    subscription: 'none',
+  },
+
+  // outdoor - fountains
+  {
+    name: "plazaFountain",
+    backgroundObj: false,
+    img: plazaFountain,
+    x: 0,
+    y: 0,
+    h: 84,
+    w: 131,
+    animated: true,
+    category: "outdoor",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
+
+  // outdoor - furniture
+  {
+    name: "flagLine",
+    backgroundObj: "front",
+    img: flagLine,
+    x: 0,
+    y: 0,
+    h: 26,
+    w: 123,
+    animated: true,
+    category: "outdoor",
+    subCategory: "furniture",
+
+    subscription: 'none',
+  },
+
+  // outdoor - grass
+  {
+    name: "dryGrass",
+    backgroundObj: false,
+    img: dryGrass,
+    x: 0,
+    y: 0,
+    h: 15,
+    w: 15,
+    lightSource: false,
+    animated: true,
+    category: "outdoor",
+    subCategory: "grass",
+
+    subscription: 'none',
+  },
+  {
+    name: "grassOne",
+    backgroundObj: false,
+    img: grassOne,
+    x: 0,
+    y: 0,
+    h: 7,
+    w: 10,
+    category: "outdoor",
+    subCategory: "grass",
+
+    subscription: 'none',
+  },
+
+  // outdoor - plants
+  {
+    name: "vineTwo",
+    backgroundObj: "front",
+    img: vineTwo,
+    x: 0,
+    y: 0,
+    h: vineTwo.height,
+    w: vineTwo.width,
+    category: "outdoor",
+    subCategory: "plants",
+
+    subscription: 'none',
+  },
+  {
+    name: "vineOne",
+    backgroundObj: "front",
+    img: vineOne,
+    x: 0,
+    y: 0,
+    h: 12,
+    w: 42,
+    category: "outdoor",
+    subCategory: "plants",
+
+    subscription: 'none',
+  },
+  {
+    name: "hangingPlant",
+    backgroundObj: "front",
+    img: hangingPlant,
+    x: 0,
+    y: 0,
+    h: hangingPlant.height,
+    w: hangingPlant.width,
+    category: "outdoor",
+    subCategory: "plants",
+
+    subscription: 'none',
+  },
+  {
+    name: "hangingPlantRed",
+    backgroundObj: "front",
+    img: hangingPlantRed,
+    x: 0,
+    y: 0,
+    h: hangingPlantRed.height,
+    w: hangingPlantRed.width,
+    category: "outdoor",
+    subCategory: "plants",
+
+    subscription: 'none',
+  },
+  {
+    name: "potPlantThree",
+    backgroundObj: false,
+    img: potPlantThree,
+    x: 0,
+    y: 0,
+    h: potPlantThree.height,
+    w: potPlantThree.width,
+    category: "outdoor",
+    subCategory: "plants",
+
+    subscription: 'none',
+  },
+  {
+    name: "potPlantTwo",
+    backgroundObj: false,
+    img: potPlantTwo,
+    x: 0,
+    y: 0,
+    h: potPlantTwo.height,
+    w: potPlantTwo.width,
+    category: "outdoor",
+    subCategory: "plants",
+
+    subscription: 'none',
+  },
+  {
+    name: "potPlantOne",
+    backgroundObj: false,
+    img: potPlantOne,
+    x: 0,
+    y: 0,
+    h: potPlantOne.height,
+    w: potPlantOne.width,
+    category: "outdoor",
+    subCategory: "plants",
+
+    subscription: 'none',
+  },
+
+  // outdoor - rocks
+  {
+    name: "rockOne",
+    backgroundObj: false,
+    img: rockOne,
+    x: 0,
+    y: 0,
+    h: 27,
+    w: 35,
+    category: "outdoor",
+    subCategory: "rocks",
+
+    subscription: 'none',
+  },
+
+  // outdoor - trees
+  {
+    name: "treeOne",
+    backgroundObj: false,
+    img: treeOne,
+    x: 0,
+    y: 0,
+    h: 70,
+    w: 43,
+    category: "outdoor",
+    subCategory: "trees",
+
+    subscription: 'none',
+  },
+
+  // outdoor - water
+  {
+    name: "smallLake",
+    backgroundObj: true,
+    img: smallLake,
+    x: 0,
+    y: 0,
+    h: 112,
+    w: 112,
+    lightSource: false,
+    animated: true,
+    category: "outdoor",
+    subCategory: "water",
+
+    subscription: 'none',
+  },
+
+  // structure - chest
+  {
+    name: "chestCommon",
+    backgroundObj: false,
+    img: chestCommon,
+    x: 0,
+    y: 0,
+    h: 18,
+    w: 21,
+    lightSource: true,
+    animated: true,
+    category: "structure",
+    subCategory: "chest",
+
+    subscription: 'none',
+  },
+
+  // structure - enchanting
+  {
+    name: "enchantingTower",
+    backgroundObj: false,
+    img: enchantingTower,
+    x: 0,
+    y: 0,
+    h: 357,
+    w: 119,
+    category: "structure",
+    subCategory: "enchanting",
+
+    subscription: 'dev',
+  },
+  {
+    name: "enchantingTable",
+    backgroundObj: false,
+    img: enchantingTable,
+    x: 0,
+    y: 0,
+    h: 72,
+    w: 75,
+    animated: true,
+    category: "structure",
+    subCategory: "enchanting",
+
+    subscription: 'dev',
+  },
+
+  // structure - kitchen
+  {
+    name: "cookingStand",
+    backgroundObj: false,
+    img: cookingStand,
+    x: 0,
+    y: 0,
+    h: 79,
+    w: 105,
+    category: "structure",
+    subCategory: "kitchen",
+
+    subscription: 'dev',
+  },
+
+  // structure - BUILDING
+  {
+    name: "coffeOfGrassland",
+    backgroundObj: true,
+    img: coffeOfGrassland,
+    x: 0,
+    y: 0,
+    h: 131,
+    w: 145,
+    category: "structure",
+    subCategory: "building",
+
+    subscription: 'dev',
+  },
+  {
+    name: "mushroomCastel",
+    backgroundObj: false,
+    img: mushroomCastel,
+    x: 0,
+    y: 0,
+    h: 239,
+    w: 249,
+    category: "structure",
+    subCategory: "building",
+
+    subscription: 'dev',
+  },
+  {
+    name: "grasslandCristal",
+    backgroundObj: false,
+    img: grasslandCristal,
+    x: 0,
+    y: 0,
+    h: 186,
+    w: 116,
+    category: "structure",
+    subCategory: "building",
+
+    subscription: 'dev',
+  },
+
+  //LIGHTS
+  //LANTERNS
+  {
+    name: "lanternOne",
+    backgroundObj: "front",
+    img: lanternOne,
+    x: 0,
+    y: 0,
+    h: lanternOne.height,
+    w: lanternOne.width,
+    category: "light",
+    subCategory: "lanterns",
+
+    subscription: 'none',
+  },
+
+  //LAMPS
+  {
+    name: "lightPoleOne",
+    backgroundObj: false,
+    img: lightPoleOne,
+    x: 0,
+    y: 0,
+    h: 52,
+    w: 22,
+    lightSource: true,
+    category: "light",
+    subCategory: "lamps",
+
+    subscription: 'none',
+  },
+  {
+    name: "mediumTorch",
+    backgroundObj: false,
+    img: mediumTorch,
+    x: 0,
+    y: 0,
+    h: 26,
+    w: 11,
+    animated: true,
+    lightSource: true,
+    category: "light",
+    subCategory: "lamps",
+
+    subscription: 'none',
+  },
+
+  ]
+
     createImagesFromMapObjects(mapObject)
   }
 
@@ -7297,6 +7500,9 @@ function createImagesFromMapObjects(mapObjects) {
     }
     if(category === "structure"){
       uiBuildingStructure.appendChild(parentDiv);
+    }
+    if(category === "light"){
+      uiBuildingLight.appendChild(parentDiv);
       
     }
   });
@@ -7780,11 +7986,13 @@ function displayuiBuildingCategory() {
   uiBuildingFurniture.style.display = 'none'
   uiBuildingStructure.style.display = 'none'
   uiBuildingOutdoor.style.display = 'none'
+  uiBuildingLight.style.display = 'none'
 
   uiBuildingCategoryConstruction.style.background = "#ffe2c1"
   uiBuildingCategoryFurniture.style.background = "#ffe2c1"
   uiBuildingCategoryStructure.style.background = "#ffe2c1"
   uiBuildingCategoryOutdoor.style.background = "#ffe2c1"
+  uiBuildingCategoryLight.style.background = "#ffe2c1"
 
   constructionFilter = ""
   handleConstructionFilter(constructionFilter)
@@ -7822,6 +8030,14 @@ uiBuildingCategoryOutdoor.addEventListener("click", function() {
   displayuiBuildingCategory()
   uiBuildingOutdoor.style.display = 'flex'
   uiBuildingCategoryOutdoor.style.background = "rgb(148, 223, 148)"
+})
+uiBuildingCategoryLight.addEventListener("click", function() {
+  if(uiBuildingCategoryActivate !== "light"){
+    uiBuildingCategoryActivate = "light"
+  } 
+  displayuiBuildingCategory()
+  uiBuildingLight.style.display = 'flex'
+  uiBuildingCategoryLight.style.background = "rgb(148, 223, 148)"
 })
 
 
