@@ -430,6 +430,9 @@ questOngoingImg.src = "./Textures/questOngoingImg.png";
 const questStartImg = new Image();
 questStartImg.src = "./Textures/questStartImg.png";
 
+const fishingAnim = new Image();
+fishingAnim.src = "./animations/fishing.png";
+
 const arcaneRepeater = new Image();
 arcaneRepeater.src = "./inventory/arcaneRepeater.png";
 
@@ -5957,11 +5960,6 @@ window.addEventListener("keydown", (e) => {
   //Fishing Minigame >
 
   if (fishing === true && (keyCheck === "w" || keyCheck === "z" || keyCheck === "q" || keyCheck === "s" || keyCheck === "d" || keyCheck === "a" ) ) {
-    // Exit the fishing minigame
-    fishingBarHit.classList.remove('startFish');
-    // fishingBarHit.classList.add('noFish');
-    fishingBar.style.marginLeft = "-50%";
-    fishingGame.style.display = "none";
     fishing = false;
     noMovement = false;
     audioSplash.pause();
@@ -5974,45 +5972,21 @@ window.addEventListener("keydown", (e) => {
 
   if(e?.key?.toLowerCase() === "e" && fishAvailable === true && fishing === false) {
 
-    fishingBarHit.classList.add('startFish');
     noMovement = true
 
     audioSplash.play();
 
-    fishingGame.style.display = "block";
     fishing = true;
 
     const number = Math.floor(Math.random() * (20000 - 5000 + 1) + 5000);
 
     function fishingStart() {
 
-      fishingBarHit.classList.remove('startFish');
 
       fishingInterval = setInterval(() => {
 
-        marginFish += .5;
       
-        if (marginFish < 100) {
-      
-          fishingBar.style.marginLeft = marginFish + "%";
-        } else {
-          marginFish = -50;
-          clearInterval(fishingInterval);
-          fishingBar.style.marginLeft = marginFish + "%";
-          noMovement = false
-      
-          setTimeout(() => {
-      
-            fishingGame.style.display = "none";
-            fishing = false;
-            fishingBarHit.classList.remove('noFish');
-      
-          }, 800);
-      
-          setTimeout(() => {
-            fishingBarHit.classList.add('noFish');
-          }, 300);
-        }
+    
       }, 10);
 
     };
@@ -8933,6 +8907,7 @@ function drawLocalPlayer () {
           );
       }}
       drawPlayerWeaponOut(player)
+      drawPlayerAnimation(player, "fishing")
     }
   }
 
@@ -9204,6 +9179,24 @@ function drawPlayerArtifact (player) {
     return window[name]; 
   } else {
     return transparentCape;
+  }
+}
+
+function drawPlayerAnimation (player) {
+  console.log("entered")
+  if (fishing) {
+    console.log("fishing")
+    canvas.drawImage(
+      fishingAnim,
+      58 + 0,
+      50,
+      58,
+      50,
+      playerX - cameraX + 65 - cameraShakeX - playerAdjustmentX,
+      playerY - cameraY + 120 - cameraShakeY - playerAdjustmentY,
+      playerWidth - playerZoomX,
+      playerHeight - playerZoomY,
+    );
   }
 }
 
