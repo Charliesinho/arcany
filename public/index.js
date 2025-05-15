@@ -1,7 +1,7 @@
 //Change this to push >
 
-const socket = io(`ws://localhost:5000`);
-// const socket = io(`https://arcanyGame.up.railway.app/`);
+// const socket = io(`ws://localhost:5000`);
+const socket = io(`https://arcanyGame.up.railway.app/`);
 // const socket = io(window.location.origin);
 
 
@@ -537,11 +537,20 @@ audioEquip.loop = false;
 const audioBuy = new Audio("./audios/buy.wav");
 audioBuy.loop = false;
 
-const audioSplash = new Audio("./audios/splash.mp3");
+const audioSplash = new Audio("./audios/splash.wav");
 audioSplash.loop = false;
+audioSplash.volume = 0.5;
 
-const audioSuccess = new Audio("./audios/success.mp3");
+const fishHooked = new Audio("./audios/fishHooked.wav");
+fishHooked.loop = false;
+
+const fishCatch = new Audio("./audios/fishCatch.wav");
+fishCatch.loop = false;
+fishCatch.volume = 0.5;
+
+const audioSuccess = new Audio("./audios/obtainedItem.wav");
 audioSuccess.loop = false;
+audioSuccess.volume = 0.5;
 
 const audioIntro = new Audio("./audios/introTune.wav");
 audioIntro.loop = true;
@@ -617,6 +626,7 @@ lobbySong.volume = 0.8;
 
 const levelUpAudio = new Audio("./audios/levelUp.mp3");
 levelUpAudio.loop = false;
+lobbySong.volume = 0.5;
 
 const audioCardFlip = new Audio("./audios/cardFlip.wav");
 audioCardFlip.loop = false;
@@ -1465,15 +1475,15 @@ openerScreenButton.addEventListener("click", function() {
   }, 4000);
   audioClick.play();
 
-  const elem = document.documentElement; // makes the whole page fullscreen
+  // const elem = document.documentElement; // makes the whole page fullscreen
 
-  if (elem.requestFullscreen) {
-    elem.requestFullscreen();
-  } else if (elem.webkitRequestFullscreen) { // Safari
-    elem.webkitRequestFullscreen();
-  } else if (elem.msRequestFullscreen) { // IE11
-    elem.msRequestFullscreen();
-  }
+  // if (elem.requestFullscreen) {
+  //   elem.requestFullscreen();
+  // } else if (elem.webkitRequestFullscreen) { // Safari
+  //   elem.webkitRequestFullscreen();
+  // } else if (elem.msRequestFullscreen) { // IE11
+  //   elem.msRequestFullscreen();
+  // }
 });
 
 loginButton.addEventListener("click", function (event) {
@@ -5883,6 +5893,9 @@ let dashingAllowed = false;
 
 let wallsVisibility = 0;
 
+let fishingFrame = 1;
+let fishable = false;
+
 // setInterval(() => {
 //   playerLocation = [playerX, playerY];
 //   socket.emit("playerLocation", playerLocation);
@@ -6000,6 +6013,7 @@ window.addEventListener("keydown", (e) => {
     audioSplash.currentTime = 0;
     clearInterval(fishingInterval);
     clearTimeout(fishingTimeout);
+    fishable = false;
 
     return;
   }
@@ -6014,15 +6028,27 @@ window.addEventListener("keydown", (e) => {
 
     const number = Math.floor(Math.random() * (20000 - 5000 + 1) + 5000);
 
-    function fishingStart() {
+    fishingFrame = 0;
 
-
+    fishingInterval = setInterval(() => {
+     if (fishingFrame < 16) {
+      fishingFrame++
+    } else {
+      fishingFrame = 12;
+    }
+  }, 100);
+  
+  function fishingStart() {
+      clearInterval(fishingInterval)
+      fishHooked.play()
+      fishable = true;
       fishingInterval = setInterval(() => {
-
-      
-    
-      }, 10);
-
+        if (fishingFrame < 37) {
+         fishingFrame++
+       } else {
+         fishingFrame = 30;
+       }
+      }, 100);
     };
 
     fishingTimeout = setTimeout(() => {
@@ -6030,16 +6056,21 @@ window.addEventListener("keydown", (e) => {
     }, number);
   };
 
-  if(e?.key?.toLowerCase() === "e" && fishAvailable === true && fishing === true) {
-
-    if (marginFish < 65 && marginFish > 35) {
-
-      socket.emit("fishing", fishSelected);
-      cameraShake();
-      marginFish = 100;
-      audioClick.play();
-      noMovement = false
-    };
+  if(e?.key?.toLowerCase() === "e" && fishAvailable === true && fishing === true && fishable) {
+    fishCatch.play()
+      clearInterval(fishingInterval)
+      fishable = false;
+      fishingFrame = 45;
+      fishingInterval = setInterval(() => {
+        if (fishingFrame < 51) {
+         fishingFrame++
+       } else {
+        clearInterval(fishingInterval)
+        fishing = false;
+        socket.emit("fishing", fishSelected);
+        noMovement = false
+       }
+      }, 100);
   }
   //Fishing Minigame <
   
@@ -8105,29 +8136,29 @@ socket.on("createWorldSuccesful", (name) => {
 
 function addMapsInfoToDiv() {
 
-  socket.emit("requestRooms", "");
+  // socket.emit("requestRooms", "");
   
-  for (const key in dialogBoxes) {
-    if (dialogBoxes.hasOwnProperty(key)) {
-      const pElement = document.createElement('p');
+  // for (const key in dialogBoxes) {
+  //   if (dialogBoxes.hasOwnProperty(key)) {
+  //     const pElement = document.createElement('p');
       
-      pElement.innerHTML = key;
-      pElement.classList.add('roomsDev-item');
+  //     pElement.innerHTML = key;
+  //     pElement.classList.add('roomsDev-item');
 
-      pElement.addEventListener('click', () => {
-        currentDialogTitle = key;
+  //     pElement.addEventListener('click', () => {
+  //       currentDialogTitle = key;
 
-        pElement.classList.add('textjump');
-        pElement.innerHTML = "Selected!";
-        setTimeout(() => {
-          pElement.classList.remove('textjump');
-          pElement.innerHTML = key;
-        }, 1000);
-      });
+  //       pElement.classList.add('textjump');
+  //       pElement.innerHTML = "Selected!";
+  //       setTimeout(() => {
+  //         pElement.classList.remove('textjump');
+  //         pElement.innerHTML = key;
+  //       }, 1000);
+  //     });
 
-      dialogsDiv.appendChild(pElement);
-    }
-  }
+  //     dialogsDiv.appendChild(pElement);
+  //   }
+  // }
 }
 
 // Developer UI <
@@ -9217,20 +9248,16 @@ function drawPlayerArtifact (player) {
 }
 
 function drawPlayerAnimation (player) {
-  console.log("entered")
   if (fishing) {
-    console.log("fishing")
     canvas.drawImage(
       fishingAnim,
-      58 + 0,
-      50,
-      58,
-      50,
-      playerX - cameraX + 65 - cameraShakeX - playerAdjustmentX,
-      playerY - cameraY + 120 - cameraShakeY - playerAdjustmentY,
-      playerWidth - playerZoomX,
-      playerHeight - playerZoomY,
-    );
+      fishingFrame * 58, 0,       // <-- Cut from this X, 0 Y
+      58, 50,                     // <-- Crop 58x50
+      playerX - (58 * generalZoom) - cameraX + 300,
+      playerY - (50 * generalZoom) - cameraY + 200,
+      58 * generalZoom,
+      50 * generalZoom
+    );    
   }
 }
 
