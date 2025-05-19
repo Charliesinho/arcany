@@ -8536,6 +8536,7 @@ function drawObjects (layer, num) {
       } 
       else if (obj.backgroundObj === true) {
         if (layer === "background") {
+          console.log(obj)
           drawOnTop(objectOriginal.img, obj.x, obj.y, obj.w, obj.h, cameraX, cameraY, obj.animated)
         }
       }  
