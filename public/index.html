@@ -113,7 +113,6 @@
         <img class="buildingUiButton pointerActivator" id="deletewWallButtonUi" src="./icons/uiIcon/deletewallsIcon.png"></img>
         <!-- <h1>Layers</h1> -->
         <br/>
-        <img class="buildingUiButton pointerActivator" id="createMobButtonUi" src="./icons/uiIcon/create.png"></img>
         <img class="buildingUiButton pointerActivator" id="placeMobButtonUi" src="./icons/uiIcon/placeMob.png"></img>
         <br/>
         <img class="buildingUiButton pointerActivator" id="hammerButtonUi" src="./icons/uiIcon/hammerIcon.png"></img>
@@ -121,30 +120,49 @@
     </div>
     <div id="roomsDev"></div>
     
-    <!-- <div id="monsterCreationParent">
+    <div id="monsterCreationParent">
 
       <div id="monsterCreationTitle">
         <img class="buildingUiButton pointerActivator" id="placeMobButtonUi" src="./icons/uiIcon/placeMob.png"></img>
         <h1>Monster creation</h1>
       </div>
      
-      
       <div id="monsterCreationTop">
-        <div id="monsterImage"></div>
+        <div id="monsterImage" class="pointerActivator"></div>
         <div id="monsterCreationTopInputs">
-          <input placeholder="Name" id="monsterNameInput" />
+          <div id="monsterNameInput">Monster name</div>
           <select id="monstercategoryDropdown">
             <option value="regular">Regular</option>
             <option value="wildlife">Wildlife</option>
             <option value="boss">Boss</option>
           </select>
+          <select id="monsterTypeDropdown">
+            <option value="solar">Solar</option>
+            <option value="arcane">Arcane</option>
+            <option value="nuclear">Nuclear</option>
+            <option value="inmortal">Inmortal</option>
+          </select>
           <input placeholder="Lvl" id="monsterLvlInput" />
           <input placeholder="Health" id="monsterHealthInput" />
           <input placeholder="Speed" id="monsterSpeedInput" />
-          <input placeholder="State interval" id="monsterState intervalInput" />
+          <input placeholder="State interval" id="monsterStateIntervalInput" />
         </div>
       </div>
-    </div> -->
+      
+      <div id="monsterCreationAttacks">
+      </div>
+      
+      
+      <div id="monsterCreationBottom">
+        <div id="lootCreationInputs">
+          <input placeholder="Rate" id="lootRateInput" />
+          <input placeholder="Spawn timer" id="spawnTimerMonsterInput" />
+        </div>
+        <div id="lootImage" class="pointerActivator"></div>
+      </div>
+    </div>
+    <div id="monsterLoot"></div>
+    <div id="monsterSelectionImageParent"></div>
 
     <div id="uiBuildingCategory">
       <div  id="uiBuildingCategoryDiv">

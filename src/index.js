@@ -1091,7 +1091,8 @@ async function main() {
 
                     const loginAttempt = {
                         msg: "success",
-                        map: map
+                        map: map,
+                        itemsObj
                     }
                     // await pushItem(runeBullets, socket)
                     // await pushItem(runeFireRate, socket)
@@ -1118,7 +1119,7 @@ async function main() {
                     // await pushItem(arcaneGem3, socket)
                     // await pushItem(arcaneRepeaterInv, socket)
                     // await pushItem(arcaneLancerInv, socket)
-                    //await pushItem(arcaneStaffCommon, socket)
+                    await pushItem(arcaneStaffCommon, socket)
                     //await pushItem(arcaneStaffCommon, socket)
 
                     // await Player.findOneAndUpdate({socket: socket.id}, {souls: [restfieldSkeletonSoulInventory, ghostSoulInventory, restfieldZombieSoulInventory, redDemonSoulInventory, pinkDemonSoulInventory]}, {new: true});
@@ -1269,9 +1270,7 @@ async function main() {
             const worldData = await World.findOne({ areaName: info.currentLand }).exec();
             socket.broadcast.emit('updateMap', { currentSelectedObjLayer: info.currentSelectedObjLayer, object: info.object });
         });
-        
-        
-        
+         
         socket.on("deletedObject", async (info) => {
             const layerKey = `objects.${info.currentSelectedObjLayer}`;
         
@@ -1284,7 +1283,6 @@ async function main() {
         
             socket.broadcast.emit('updateMap', { currentSelectedObjLayer: info.currentSelectedObjLayer, object: info.object, deleting: true });
         });            
-        
         
         socket.on("setSpawn", async (info) => {
             await World.findOneAndUpdate({areaName: info[1]}, {playerPos: info[0]}, {new: true});
@@ -1318,8 +1316,7 @@ async function main() {
             } catch (error) {
 
             }
-        });
-        
+        });   
 
         socket.on("loadEnemies", (_enemies) => {
             const newEnemy = {
@@ -1345,18 +1342,6 @@ async function main() {
 
             // enemies[socket.id] = enemies;
         })
-    
-        // socket.on("inputs", (inputs) => {
-        //     inputsMap[socket.id] = inputs;
-        // });
-
-        // socket.on("animPlayer", (animPlayerSocket) => {
-        //     animPlayerStore[socket.id] = animPlayerSocket;            
-        // });
-
-        // socket.on("lastLookPlayer", (lastLookPlayer) => {                    
-        //     lastLookPlayerStore[socket.id] = lastLookPlayer;  
-        // });
 
         socket.on("weaponAngle", (weaponAngle) => {                    
             weaponAngleStore[socket.id] = weaponAngle;  
@@ -1456,8 +1441,6 @@ async function main() {
           
             getScores();
           });
-          
-        
 
         socket.on("disconnect", () => {
             playerToDelete = players.find((player) => player.id !== socket.id);

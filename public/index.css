@@ -52,18 +52,37 @@ body {
 }
 
 #monsterImage {
-    width: 150px; /* Set your desired width */
-    height: 150px; /* Set your desired height */
-    background-image: url('./enemies/purpleSlime.png');
+    width: 173px; /* Set your desired width */
+    height: 173px; /* Set your desired height */
+    background-image: url('./icons/uiIcon/exclamation.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+#lootImage {
+    width: 173px; /* Set your desired width */
+    height: 173px; /* Set your desired height */
+    background-image: url('./icons/uiIcon/exclamation.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.attackMob-icon {
     border: solid 2.5px #b3a49654;
     outline: solid 2.5px #3939393d;
     border-radius: 3px;
 }
 
+#monsterCreationAttacks {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
 #monsterCreationParent {
     width: 400px;
     overflow: hidden;
-    height: 600px;
+    height: 626px;
     position: absolute;
     bottom: 103px;
     left: 116px;
@@ -73,17 +92,82 @@ body {
     background: #FFE2C1;
     border-radius: 3px;
     padding: 15px;
-    display: flex;
+    display: none;
     flex-direction: column;
     gap: 15px;
 }
+
+#monsterSelectionImageParent {
+    width: 400px;
+    overflow: hidden;
+    height: 600px;
+    position: absolute;
+    bottom: 103px;
+    left: 567px;
+    z-index: 1;
+    border: solid 3px #b3a496;
+    outline: solid 3px #393939;
+    background: #FFE2C1;
+    border-radius: 3px;
+    padding: 15px;
+    display: none;
+    gap: 15px;
+}
+
+#monsterLoot {
+    width: 400px;
+    overflow: scroll;
+    height: 600px;
+    position: absolute;
+    bottom: 103px;
+    left: 567px;
+    z-index: 1;
+    border: solid 3px #b3a496;
+    outline: solid 3px #393939;
+    background: #FFE2C1;
+    border-radius: 3px;
+    padding: 15px;
+    display: none;
+    gap: 15px;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.mob-icon {
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    -ms-interpolation-mode: nearest-neighbor;
+    border-radius: 5px;
+    background: transparent;
+    border: solid 2.5px #b3a49654;
+    outline: solid 2.5px #3939393d;
+  }
+
+  .itemImg-icon {
+    border-radius: 5px;
+    background: transparent;
+    border: solid 2.5px #b3a49654;
+    outline: solid 2.5px #3939393d;
+  }
 
 #monsterCreationTop {
     display: flex;
     gap: 15px;
 }
 
+#monsterCreationBottom {
+    display: flex;
+    gap: 15px;
+}
+
 #monsterCreationTopInputs {
+    display: flex    ;
+    flex-direction: column;
+    gap: 7px;
+    width: 57%;
+}
+
+#lootCreationInputs {
     display: flex    ;
     flex-direction: column;
     gap: 7px;
@@ -711,6 +795,16 @@ color: white;
 .buildObject {
     height: 24px;
     width: 24px;
+    image-rendering: pixelated;
+    /* For better browser support, you can add these too: */
+    image-rendering: crisp-edges;
+    -ms-interpolation-mode: nearest-neighbor; /* for IE */
+}
+
+* {
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    -ms-interpolation-mode: nearest-neighbor; /* for IE */
 }
 
 .buildObjectParent {
