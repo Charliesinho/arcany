@@ -4383,6 +4383,7 @@ socket.on("player", (serverPlayer) => {
   {
     name: "blockersArea",
     backgroundObj: false,
+    img: blockersArea,
     x: 0,
     y: 0,
     h: blockersArea.height,
@@ -7647,7 +7648,6 @@ function createImagesFromMapObjects(mapObjects) {
     parentDiv.classList.add('buildObjectParent');
     parentDiv.id = obj.subCategory;
 
-
     const divElement = document.createElement('div');
     divElement.classList.add('buildObject');
 
@@ -7956,7 +7956,7 @@ if (uiBuilding.style.display !== "flex") {
   uiBuilding.style.display = "none"
   uiBuildingObjects.style.display = "none"
   uiBuildingCategory.style.display = "none";
-  keyBlocker = false
+  openUi()
 }
 });
 
@@ -8536,7 +8536,6 @@ function drawObjects (layer, num) {
       } 
       else if (obj.backgroundObj === true) {
         if (layer === "background") {
-          console.log(obj)
           drawOnTop(objectOriginal.img, obj.x, obj.y, obj.w, obj.h, cameraX, cameraY, obj.animated)
         }
       }  
