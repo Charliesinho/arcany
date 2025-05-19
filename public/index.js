@@ -63,6 +63,25 @@ window.addEventListener("load", () => {
 const emptyMap = new Image();
 emptyMap.src = "./islands/emptyMap.png";
 
+const easyCircle = new Image();
+easyCircle.src = "./icons/attacks/easyCircle.png";
+const easyLazer = new Image();
+easyLazer.src = "./icons/attacks/easyLazer.png";
+const idle = new Image();
+idle.src = "./icons/attacks/idle.png";
+const mediumCircle = new Image();
+mediumCircle.src = "./icons/attacks/mediumCircle.png";
+const mediumLazer = new Image();
+mediumLazer.src = "./icons/attacks/mediumLazer.png";
+const raiseSkeletonsMedium = new Image();
+raiseSkeletonsMedium.src = "./icons/attacks/raiseSkeletonsMedium.png";
+const slowFireball = new Image();
+slowFireball.src = "./icons/attacks/slowFireball.png";
+const peace = new Image();
+peace.src = "./icons/attacks/peace.png";
+const follow = new Image();
+follow.src = "./icons/attacks/follow.png";
+
 const WeaponStick = new Image();
 WeaponStick.src = "stick.png";
 
@@ -149,9 +168,37 @@ let projectiles = [];
 let cameraShakeX = -150;
 let cameraShakeY = -180;
 
+// Monsters creation UI
+
+
+monsterImage.addEventListener("click", function(){
+  if (monsterSelectionImageParent.style.display != "flex") {
+    monsterSelectionImageParent.style.display = "flex"
+  } else {
+    monsterSelectionImageParent.style.display = "none"
+  }
+});
+
+lootImage.addEventListener("click", function(){
+  if (monsterLoot.style.display != "flex") {
+    monsterLoot.style.display = "flex"
+  } else {
+    monsterLoot.style.display = "none"
+  }
+});
+
+placeMobButtonUi.addEventListener("click", function(){
+  if (monsterCreationParent.style.display != "flex") {
+    monsterCreationParent.style.display = "flex"
+  } else {
+    monsterCreationParent.style.display = "none"
+  }
+});
+
 let mobsImages = [
   {
     name: "treeSimpleEnemy",
+    img: treeSimpleEnemy,
     imgw: 31,
     imgh: 27,
     imgcw: 31,
@@ -187,6 +234,7 @@ let mobsImages = [
   },
   {
     name: "blackBrownBunny",
+    img: blackBrownBunny,
     imgw: 31,
     imgh: 27,
     imgcw: 31,
@@ -221,6 +269,206 @@ let mobsImages = [
     dropRate: 100,
   },
 ]
+
+let attackIcons = [
+  {
+    name: "idleState",
+    img: idle
+  },
+  {
+    name: "moveStateRandom",
+    img: peace
+  },
+  {
+    name: "moveState",
+    img: follow
+  },
+  {
+    name: "attackState",
+    img: slowFireball
+  },
+  {
+    name: "attackCircleState",
+    img: easyCircle
+  },
+  {
+    name: "lazerMooshState",
+    img: easyLazer
+  },
+  {
+    name: "attackCircleMooshBossState",
+    img: mediumCircle
+  },
+  {
+    name: "lazerSokoState",
+    img: mediumLazer
+  },
+  {
+    name: "invokeSokoState",
+    img: raiseSkeletonsMedium
+  },
+]
+
+let selectedMob = null; // Stores clicked mob objects
+
+mobsImages.forEach(mob => {
+  if (mob.img.complete) {
+    createMobDiv(mob);
+  } else {
+    mob.img.onload = () => {
+      createMobDiv(mob);
+    };
+  }
+});
+
+function createMobDiv(mob) {
+  const mobDiv = document.createElement('div');
+  mobDiv.classList.add('mob-icon');
+  mobDiv.classList.add('pointerActivator');
+
+  // Fixed display size
+  mobDiv.style.width = '100px';
+  mobDiv.style.height = '100px';
+
+  // Scale calculations
+  const scaleX = 100 / mob.imgw;
+  const scaleY = 100 / mob.imgh;
+  const bgWidth = mob.img.width * scaleX;
+  const bgHeight = mob.img.height * scaleY;
+
+  // Background styling
+  mobDiv.style.backgroundImage = `url(${mob.img.src})`;
+  mobDiv.style.backgroundSize = `${bgWidth}px ${bgHeight}px`;
+  mobDiv.style.backgroundPosition = `-${mob.imgcw * scaleX}px -${mob.imgch * scaleY}px`;
+  mobDiv.style.backgroundRepeat = 'no-repeat';
+
+  // Optional tooltip
+  mobDiv.title = mob.name;
+
+  // Click event: push mob object to selectedMobs
+  mobDiv.addEventListener('click', () => {
+    selectedMob = mob;
+    monsterNameInput.innerHTML = mob.name
+    // Scale calculations
+    const scaleX = 173 / mob.imgw;
+    const scaleY = 173 / mob.imgh;
+    const bgWidth = mob.img.width * scaleX;
+    const bgHeight = mob.img.height * scaleY;
+
+    // Background styling
+    monsterImage.style.backgroundImage = `url(${mob.img.src})`;
+    monsterImage.style.backgroundSize = `${bgWidth}px ${bgHeight}px`;
+    monsterImage.style.backgroundPosition = `-${mob.imgcw * scaleX}px -${mob.imgch * scaleY}px`;
+    monsterImage.style.backgroundRepeat = 'no-repeat';
+    console.log(`Selected: ${mob.name}`, selectedMob);
+  });
+
+  monsterSelectionImageParent.appendChild(mobDiv);
+}
+
+const attacksSelected = [];
+
+attackIcons.forEach(attack => {
+  const attackImg = document.createElement('img');
+  attackImg.classList.add('attackMob-icon');
+  attackImg.classList.add('pointerActivator');
+  attackImg.src = attack.img.src;
+  attackImg.alt = attack.name;
+  attackImg.title = attack.name;
+
+  attackImg.style.width = "65px";
+  attackImg.style.height = "65px";
+  attackImg.style.margin = "5px";
+  attackImg.style.filter = "grayscale(100%)";
+
+  attackImg.addEventListener("click", () => {
+    if (!selectedMob) {
+      errorDisplay("Choose a monster first")
+      return;
+    }
+    
+    const index = selectedMob.states.indexOf(attack.name);
+
+    if (index === -1) {
+      // Not in array, add it
+      selectedMob.states.push(attack.name);
+      attackImg.style.filter = "none";
+    } else {
+      // Already in array, remove it
+      selectedMob.states.splice(index, 1);
+      attackImg.style.filter = "grayscale(100%)";
+    }
+  });
+
+  monsterCreationAttacks.appendChild(attackImg);
+});
+
+function populateMonsterLoot() {
+  monsterLoot.innerHTML = ""; // Clear existing items
+
+  Object.values(allItemsObj).forEach(obj => {
+    const itemImg = document.createElement("img");
+    itemImg.classList.add('itemImg-icon');
+    itemImg.classList.add('pointerActivator');
+    itemImg.src = obj.image;
+    itemImg.alt = obj.name;
+    itemImg.title = obj.name;
+
+    itemImg.style.width = "50px";
+    itemImg.style.height = "50px";
+    itemImg.style.margin = "5px";
+
+    itemImg.addEventListener("click", () => {
+      if (!selectedMob) {
+        errorDisplay("Choose a monster first")
+        return;
+      }
+      selectedMob.drop = obj.name;
+
+      lootImage.style.backgroundImage = `url(${obj.image})`;
+      lootImage.style.backgroundSize = `contain`;
+    });
+
+    monsterLoot.appendChild(itemImg);
+  });
+}
+
+// Assume selectedMob is already assigned to one of your mob objects
+// Example: let selectedMob = mobsImages[0];
+
+const inputMappings = {
+  monsterLvlInput: "level",
+  monsterHealthInput: "health",
+  monsterSpeedInput: "speed", // handled specially below
+  monsterStateIntervalInput: "enemyStateInt",
+  lootRateInput: "dropRate",
+  spawnTimerMonsterInput: "spawnTimer",
+  monstercategoryDropdown: "category", // optional custom props
+  monsterTypeDropdown: "type"
+};
+
+// Loop through each input ID and add listener
+Object.entries(inputMappings).forEach(([inputId, mobProp]) => {
+  const inputEl = document.getElementById(inputId);
+  if (!inputEl) return;
+
+  const eventType = inputEl.tagName === "SELECT" ? "change" : "input";
+
+  inputEl.addEventListener(eventType, (e) => {
+    const value = e.target.value;
+    const num = isNaN(value) ? value : +value;
+
+    if (mobProp === "speed") {
+      selectedMob.speedX = num;
+      selectedMob.speedY = num;
+    } else {
+      selectedMob[mobProp] = num;
+    }
+    console.log(selectedMob)
+  });
+});
+
+
 
 //Ui interaction >
 
@@ -5657,12 +5905,14 @@ socket.on("loadMap", (map) => {
   localPlayerPos = {x: comingMap.playerPos.x, y: comingMap.playerPos.y}
 })
 
+let allItemsObj = {}
+
 socket.on("loginAttempt", (res) => {
   document.getElementById("introLogo-img").style.display = "none";
 
   if(res.msg === "success") {
     let comingMap = res.map
-    // console.log(comingMap)
+    allItemsObj = res.itemsObj;
     let areaNameComing = comingMap.areaName
     currentLand = areaNameComing
     mapsInfo[areaNameComing] = comingMap
@@ -5675,6 +5925,8 @@ socket.on("loginAttempt", (res) => {
     lobbySoundtrack()
     // intervalCanvasBase = setInterval(lobbyLoop, 16.67); //Initial canvas
     console.log("logged in")
+    
+    populateMonsterLoot()
 
     chatInput.style.display = "block";
     playerHeartParent.style.display = "block";
@@ -7155,6 +7407,19 @@ canvasLobby.addEventListener('click', function(event) {
     objDelSound.play();
   }
   
+  else if (currentDevAction === "monster") {
+    let objClone = _.cloneDeep(selectedMob);
+    let newCoords = {x: hoveredXCoord, y: hoveredYCoord}
+    objClone.baseSpawn = newCoords
+    objClone.spawn = newCoords
+
+    mapsInfo[currentLand].enemies.push(objClone)
+    
+    playRandomBuild()
+    buildPlaceParticles(objClone)
+    // socket.emit("placedObject",{currentLand: currentLand, object: objClone, objects: mapsInfo[currentLand].objects[currentSelectedObjLayer], currentSelectedObjLayer});
+  }
+  
   else if (currentDevAction === "building") {
     let obj = mapObject.find(item => item.name === currentObjToPlace);
     let objClone = _.cloneDeep(obj);
@@ -7769,6 +8034,19 @@ function playRandomSong() {
 musicPlayerSlider.addEventListener("input", function () {
   if (currentAudio) {
     currentAudio.volume = this.value;
+  }
+});
+
+placeMobButtonUi.addEventListener("click", function(){
+  if (currentDevAction !== "monster") {
+    monsterCreationParent.style.display = "flex"
+    currentDevAction = "monster";
+  } else {
+    monsterCreationParent.style.display = "none"
+    monsterSelectionImageParent.style.display = "none"
+    monsterLoot.style.display = "none"
+    currentDevAction = "none";
+    showWallsFunction(false)
   }
 });
 
@@ -9817,69 +10095,75 @@ function checkEnemyCombat (enemy) {
       enemy => enemy.isBoss === true && enemy.health > 0
     );
     
-    if (!hasActiveMinions && bossAlive && !hasActiveBoss) {
-      const areaBoss = mapsInfo[currentLand].enemies.find(
-        enemy => enemy.isBoss === true && enemy.active === false
-      );
-      activateBossEnemy(areaBoss)
-    } else if (!bossAlive) {
-      fightMusic1.pause();
-      fightMusic1.currentTime = 0;
-      SokosBoss.pause();
-      SokosBoss.currentTime = 0;
-      bossFight = false;
-      bossBarParent.style.display = "none";
-      bossBarHealth.style.width = 100 + "%";
-      bossBarHealthFollower.style.width = 100 + "%";
+    // if (!hasActiveMinions && bossAlive && !hasActiveBoss) {
+    //   const areaBoss = mapsInfo[currentLand].enemies.find(
+    //     enemy => enemy.isBoss === true && enemy.active === false
+    //   );
+    //   activateBossEnemy(areaBoss)
+    // } else if (!bossAlive) {
+    //   fightMusic1.pause();
+    //   fightMusic1.currentTime = 0;
+    //   SokosBoss.pause();
+    //   SokosBoss.currentTime = 0;
+    //   bossFight = false;
+    //   bossBarParent.style.display = "none";
+    //   bossBarHealth.style.width = 100 + "%";
+    //   bossBarHealthFollower.style.width = 100 + "%";
 
-      if (enemy.isBoss) {
+    //   if (enemy.isBoss) {
 
-        if (enemy.name === "mooshroomBossRed") {
-          socket.emit("giveItem", "chestKey");
-        }
-        else if (enemy.name === "restfieldReaper") {
-          socket.emit("giveItem", "chestKeyRestfield");
-        }
+    //     if (enemy.name === "mooshroomBossRed") {
+    //       socket.emit("giveItem", "chestKey");
+    //     }
+    //     else if (enemy.name === "restfieldReaper") {
+    //       socket.emit("giveItem", "chestKeyRestfield");
+    //     }
 
-        setTimeout(() => {
-          frameDuration = 800 / 30;
-        }, 100);
-        setTimeout(() => {
-          frameDuration = 800 / fps;
-        }, 1500);
+    //     setTimeout(() => {
+    //       frameDuration = 800 / 30;
+    //     }, 100);
+    //     setTimeout(() => {
+    //       frameDuration = 800 / fps;
+    //     }, 1500);
 
-        resetTimer()
-        areaNameDisplay("Trial Completed");
-        challengeCompleted.play();
-        challengeActive = false;
-        setTimeout(() => {
-          let playerPosition;
+    //     resetTimer()
+    //     areaNameDisplay("Trial Completed");
+    //     challengeCompleted.play();
+    //     challengeActive = false;
+    //     setTimeout(() => {
+    //       let playerPosition;
 
-          if (enemy.name === "mooshroomBossRed") {
-            playerPosition =  mapsInfo.mushroomForest.playerPos;
-            mapsInfo.mushroomForest = _.cloneDeep(originalMapsInfo.mushroomForest);
-            mapsInfo.mushroomForest.playerPos = playerPosition;
-          }
-          if (enemy.name === "restfieldReaper") {
-            playerPosition =  mapsInfo.restfieldTrial.playerPos;
-            mapsInfo.restfieldTrial = _.cloneDeep(originalMapsInfo.restfieldTrial);
-            mapsInfo.restfieldTrial.playerPos = playerPosition;
-          }
-          hideTimer()
-        }, 2000);
-        mapsInfo[currentSelectedMap].areaSounds();
-      }
-    }
+    //       if (enemy.name === "mooshroomBossRed") {
+    //         playerPosition =  mapsInfo.mushroomForest.playerPos;
+    //         mapsInfo.mushroomForest = _.cloneDeep(originalMapsInfo.mushroomForest);
+    //         mapsInfo.mushroomForest.playerPos = playerPosition;
+    //       }
+    //       if (enemy.name === "restfieldReaper") {
+    //         playerPosition =  mapsInfo.restfieldTrial.playerPos;
+    //         mapsInfo.restfieldTrial = _.cloneDeep(originalMapsInfo.restfieldTrial);
+    //         mapsInfo.restfieldTrial.playerPos = playerPosition;
+    //       }
+    //       hideTimer()
+    //     }, 2000);
+    //     mapsInfo[currentSelectedMap].areaSounds();
+    //   }
+    // }
+
+    
+    let baseSpawn = _.cloneDeep(enemy.baseSpawn)
+    console.log(baseSpawn)
     
     setTimeout(() => {
       enemy.spawn.x = -1000;
       enemy.spawn.y = -1000;
 
+      
       if (enemy.spawnTimer) {
         let intervalSpawner = setTimeout(() => {
-          enemy.spawn.x = enemy.baseSpawn.x;
-          enemy.spawn.y = enemy.baseSpawn.y;
+          enemy.spawn.x = baseSpawn.x;
+          enemy.spawn.y = baseSpawn.y;
           enemy.health = enemy.maxHealth
+          console.log(enemy, mapsInfo[currentLand])
           mapsInfo[currentLand].enemies.push(enemy)
         }, enemy.spawnTimer);
 
@@ -9967,7 +10251,7 @@ function handleEnemyState(enemy) {
     enemy.stateTimer = null;
     const states = enemy.states;
     const chosenState = states[Math.floor(Math.random() * states.length)];
-    executeStateForDuration(enemy, chosenState, enemy.enemyStateInt);
+    executeStateForDuration(enemy, window[chosenState], enemy.enemyStateInt);
   }, enemy.enemyStateInt);
 }
 

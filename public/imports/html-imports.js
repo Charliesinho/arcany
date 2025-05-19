@@ -364,3 +364,14 @@ const artifactInventory = {
 }
 
 const catchGif = document.getElementById("catchGif");
+
+// Mobs
+const monsterImage = document.getElementById("monsterImage");
+const monsterSelectionImageParent = document.getElementById("monsterSelectionImageParent");
+const monsterCreationAttacks = document.getElementById("monsterCreationAttacks");
+const monsterLoot = document.getElementById("monsterLoot");
+const lootImage = document.getElementById("lootImage");
+const monsterNameInput = document.getElementById("monsterNameInput");
+const placeMobButtonUi = document.getElementById("placeMobButtonUi");
+const monsterCreationParent = document.getElementById("monsterCreationParent");
+
