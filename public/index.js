@@ -233,8 +233,116 @@ let mobsImages = [
     dropRate: 100,
   },
   {
+    name: "purpleSlime",
+    img: purpleSlime,
+    imgw: 31,
+    imgh: 27,
+    imgcw: 31,
+    imgch: 0,
+    frames: 0,
+    framesTimer: 0,
+    level: 1,
+    xp: 10,
+    speedX: 2,
+    speedY: 2,
+    spawn: {
+      x: 0,
+      y: 0
+    },
+    w: 100,
+    h: 100,
+    currentStateName: "idle",
+    currentState: null,
+    attackInterval: true,
+    states: [0],
+    damaged: 0,
+    health: 5,
+    angle: 0,
+    maxHealth: 10,
+    baseSpawn: {
+      x: 0,
+      y: 0
+    },
+    spawnTimer: 0,
+    enemyStateInt: 0,
+    drop: "",
+    dropRate: 0,
+  },
+  {
     name: "blackBrownBunny",
     img: blackBrownBunny,
+    imgw: 31,
+    imgh: 27,
+    imgcw: 31,
+    imgch: 0,
+    frames: 0,
+    framesTimer: 0,
+    level: 1,
+    xp: 0,
+    speedX: 5,
+    speedY: 5,
+    spawn: {
+      x: 0,
+      y: 0
+    },
+    w: 80,
+    h: 80,
+    currentStateName: "idle",
+    currentState: null,
+    attackInterval: true,
+    states: [],
+    damaged: 0,
+    health: 4,
+    angle: 0,
+    maxHealth: 10,
+    baseSpawn: {
+      x: 0,
+      y: 0
+    },
+    spawnTimer: 1000,
+    enemyStateInt: 1000,
+    drop: "",
+    dropRate: 100,
+  },
+  {
+    name: "whiteBunny",
+    img: whiteBunny,
+    imgw: 31,
+    imgh: 27,
+    imgcw: 31,
+    imgch: 0,
+    frames: 0,
+    framesTimer: 0,
+    level: 1,
+    xp: 0,
+    speedX: 5,
+    speedY: 5,
+    spawn: {
+      x: 0,
+      y: 0
+    },
+    w: 80,
+    h: 80,
+    currentStateName: "idle",
+    currentState: null,
+    attackInterval: true,
+    states: [],
+    damaged: 0,
+    health: 4,
+    angle: 0,
+    maxHealth: 10,
+    baseSpawn: {
+      x: 0,
+      y: 0
+    },
+    spawnTimer: 1000,
+    enemyStateInt: 1000,
+    drop: "",
+    dropRate: 100,
+  },
+  {
+    name: "brownBunny",
+    img: brownBunny,
     imgw: 31,
     imgh: 27,
     imgcw: 31,
@@ -8648,6 +8756,7 @@ function drawColliders (type, x, y, w, h) {
 
 
       let dialogCounter = 0;
+      let chestCounter = 0;
 
       mapsInfo[currentLand].colliders.forEach(wallX => {
         const adjustedX = wallX.x - cameraShakeX - cameraX;
@@ -8656,6 +8765,9 @@ function drawColliders (type, x, y, w, h) {
         if (isColliding(colliderToCheck, { x: adjustedX, y: adjustedY, width: wallX.width, height: wallX.height })) {
           if (wall.type === "dialog") {
             dialogCounter++
+          }
+          else if (wall.type === "chest") {
+            chestCounter++
           }
         }
       })
@@ -8766,7 +8878,7 @@ function drawColliders (type, x, y, w, h) {
           grassEnchantingAvailable = false;
           enchantingContainer.style.display = "none";
         }
-        if (wall.type === "chest") {
+        if (wall.type === "chest" && chestCounter === 0) {
           IslandChestAvailable = false;
           IslandOpenChest = false;
           rewardFrame.style.visibility = "hidden";
