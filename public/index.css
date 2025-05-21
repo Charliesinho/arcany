@@ -1134,7 +1134,7 @@ color: white;
     width: 100%;
     margin: 40px 0px 25px 0px;
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     gap: 13px;
     flex-wrap: wrap;
 }
@@ -1143,14 +1143,17 @@ color: white;
     background: url(./ui/uiInventoryBackground.png);
     background-size: contain;
     background-repeat: no-repeat;
+    background-position-x: 50%;
     /* box-shadow: 0px 2px #1C140E; */
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
     position: relative;
     top: 0;
     filter: brightness(1);
     transition: all .2s ease;
+    /* width: 100%; */
+    flex-basis: 25%;
 }
 
 .inventorySlotBG:hover {
@@ -1619,8 +1622,8 @@ color: white;
     position: relative;
     top: 0;
     left: 0;
-    width: 3.4vw;
-    height: 3.4vw;
+    width: 62px;
+    height: 62px;
     padding: 10px;
     transition: all .2s ease-out;
 }
