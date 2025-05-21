@@ -839,6 +839,25 @@ color: white;
     box-shadow: 0 10px 10px rgba(0, 0, 0, 0.142);
 }
 
+/* EDIT MAPS */
+#editMaps{
+    width: 400px;
+    overflow: hidden;
+    height: 626px;
+    position: absolute;
+    bottom: 103px;
+    left: 116px;
+    z-index: 1;
+    border: solid 3px #b3a496;
+    outline: solid 3px #393939;
+    background: #FFE2C1;
+    border-radius: 3px;
+    padding: 15px;
+    display: none;
+    flex-direction: column;
+    gap: 15px;
+}
+
 /* //FILTER UI CONSTRUCTION// */
 .filterUiConstruction{
   position: relative;
@@ -890,7 +909,6 @@ color: white;
   background-color: #e0ffe0;
 }
 /* //FILTER UI CONSTRUCTION // */
-
 
 #playerTradeId{
     margin-top: 30px;

@@ -185,10 +185,13 @@ lootImage.addEventListener("click", function(){
 });
 
 placeMobButtonUi.addEventListener("click", function(){
-  if (monsterCreationParent.style.display != "flex") {
+  if (monsterCreationParent.style.display !== "flex") {
+    deselectUiButton()
     monsterCreationParent.style.display = "flex"
+    placeMobButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
   } else {
     monsterCreationParent.style.display = "none"
+    placeMobButtonUi.style.backgroundColor = "rgba(148, 223, 148, 0)"
   }
 });
 
@@ -8183,6 +8186,7 @@ function deselectUiButton() {
   placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
   placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
   placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  editMapsButttonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
   uiBuildingObjects.style.display = "none";
   uiBuildingCategory.style.display = "none";
   roomsDiv.style.display = "none"
@@ -8252,6 +8256,18 @@ if(deleteObject === false) {
   currentDevAction = "building";
 }
 });
+
+editMapsButttonUi.addEventListener("click", function(){
+  showWallsFunction(false)
+  if(editMapsPage.style.display !== "flex"){
+    monsterCreationParent.style.display = "none"
+    editMapsPage.style.display = "flex"
+    editMapsButttonUi.style.backgroundColor = "rgb(148, 223, 148)"
+  } else {
+    editMapsPage.style.display = "none"
+    editMapsButttonUi.style.backgroundColor = "rgba(148, 223, 148, 0)"
+  }
+})
 
 saveObjButtonUi.addEventListener("click", function() {
   showWallsFunction(false);

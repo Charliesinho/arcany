@@ -376,3 +376,7 @@ const monsterNameInput = document.getElementById("monsterNameInput");
 const placeMobButtonUi = document.getElementById("placeMobButtonUi");
 const monsterCreationParent = document.getElementById("monsterCreationParent");
 
+//EDIT MAPS
+const editMapsButttonUi = document.getElementById("editMapButtonUi")
+const editMapsPage = document.getElementById("editMaps")
+
