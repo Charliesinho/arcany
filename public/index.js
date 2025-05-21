@@ -6626,6 +6626,7 @@ if (!movementUpdateInterval) {
       inputs,
       animPlayer,
       lastLookPlayer,
+      angleMouse
     };
     socket.emit("playerUpdate", updateData);
   }, 100);
@@ -6728,6 +6729,7 @@ window.addEventListener("keydown", (e) => {
     clearInterval(fishingInterval);
     clearTimeout(fishingTimeout);
     fishable = false;
+    animPlayer = "idleRight";
 
     return;
   }
@@ -6735,6 +6737,8 @@ window.addEventListener("keydown", (e) => {
   if(e?.key?.toLowerCase() === "e" && fishAvailable === true && fishing === false) {
 
     noMovement = true
+
+    animPlayer = "fishing"
 
     audioSplash.play();
 
@@ -6783,6 +6787,7 @@ window.addEventListener("keydown", (e) => {
         fishing = false;
         socket.emit("fishing", fishSelected);
         noMovement = false
+        animPlayer = "idleRight";
        }
       }, 100);
   }
@@ -6932,7 +6937,7 @@ window.addEventListener("keyup", (e) => {
     movingRight === false &&
     movingLeft === false
   ) {
-    if( animPlayer !== "sittingDown"){
+    if( animPlayer !== "sittingDown" && !fishing){
        animPlayer = "idleRight";
     }
     footsteps.pause();
@@ -6954,7 +6959,7 @@ function shootDefaultArcane () {
   let angle = angleMouse
   const audioShootNature = new Audio("./audios/shootNature.wav");
   audioShootNature.loop = false;
-  audioShootNature.volume = 0.3;
+  audioShootNature.volume = 0.8;
   audioShootNature.play()
 
   // socket.emit("projectile", angle);
@@ -7001,7 +7006,7 @@ function shootArcaneRepeater () {
   const angle = angleMouse
   const audioShootNature = new Audio("./audios/shootNature.wav");
   audioShootNature.loop = false;
-  audioShootNature.volume = 0.3;
+  audioShootNature.volume = 0.8;
   audioShootNature.play()
   const bullet1 = angle + 0.1
   const bullet2 = angle - 0.1
@@ -7056,7 +7061,7 @@ function shootArcaneLancer () {
   const angle = angleMouse
   const audioShootNature = new Audio("./audios/shootNature.wav");
   audioShootNature.loop = false;
-  audioShootNature.volume = 0.3;
+  audioShootNature.volume = 0.8;
   audioShootNature.play()
   // socket.emit("projectile", angle);
   cameraShake();
@@ -8982,6 +8987,7 @@ function initializeSmoothOnlinePlayers() {
         username: player.username,
         smoothX: player.x,  // Start at the actual position
         smoothY: player.y,  // Start at the actual position
+        angleMouse: player.weaponAngle
       };
     }
   }
@@ -9008,9 +9014,22 @@ function updateSmoothOnlinePlayerPosition(smoothPlayer) {
       if (Math.abs(smoothPlayer.smoothY - player.y) > 10) {
         smoothPlayer.smoothY += smoothPlayer.smoothY < player.y ? speedY : -speedY;
       }
+      const angleDiff = shortestAngleDiff(smoothPlayer.angleMouse, player.weaponAngle);
+
+      if (Math.abs(angleDiff) > 0.01) {
+        smoothPlayer.angleMouse += angleDiff * 0.1; // or clamp speed if needed
+      }
     }
   }
 }
+
+function shortestAngleDiff(a, b) {
+  let diff = b - a;
+  while (diff < -Math.PI) diff += Math.PI * 2;
+  while (diff > Math.PI) diff -= Math.PI * 2;
+  return diff;
+}
+
 
 const DayCycleFilters = [
   'sepia(0%) hue-rotate(0deg) saturate(1) contrast(1) brightness(1)',  
@@ -9216,7 +9235,13 @@ function drawSceneLayer(layer, num) {
   // 🎨 Add map objects
   for (let i = 0; i < mapsInfo[currentLand].objects.length; i++) {
     for (const obj of mapsInfo[currentLand].objects[i]) {
-      const objectOriginal = mapObject.find(item => item.name === obj.name);
+      let objectOriginal;
+
+      if (obj.img) {
+        objectOriginal = obj;
+      } else {
+        objectOriginal = mapObject.find(item => item.name === obj.name);
+      }
       if (!objectOriginal || objectOriginal.backgroundObj === "back" || objectOriginal.backgroundObj === true) continue;
 
       const drawItem = {
@@ -9642,7 +9667,7 @@ function drawLocalPlayer () {
       let armor = drawPlayerArmor(player);
       let artifact = drawPlayerArtifact(player);
       // console.log(playerWidth, playerHeight)
-      if (animPlayer === "sittingDown" && player.lastLooked === "right"){
+      if ((animPlayer === "sittingDown" || animPlayer === "fishing") && player.lastLooked === "right"){
         frameCurrentPlayer = frameCurrentPlayer % 6;
   
         playerCutX = frameCurrentPlayer * playerWidth;
@@ -9670,7 +9695,7 @@ function drawLocalPlayer () {
           playerHeight - playerZoomY,
         );
       }
-      else if (animPlayer === "sittingDown" && player.lastLooked === "left"){
+      else if ((animPlayer === "sittingDown" || animPlayer === "fishing") && player.lastLooked === "left"){
         frameCurrentPlayer = frameCurrentPlayer % 6;
   
         playerCutX = frameCurrentPlayer * playerWidth;
@@ -9887,7 +9912,7 @@ function drawLocalPlayer () {
           );
       }}
       drawPlayerWeaponOut(player)
-      drawPlayerAnimation(player, "fishing")
+      drawPlayerAnimation(player)
     }
   }
 
@@ -9905,11 +9930,11 @@ function drawOnlinePlayers (player, smoothPlayer) {
   let armor = drawPlayerArmor(player);
   let artifact = drawPlayerArtifact(player);
 
-  drawPlayerWeaponSheated(player)
   drawPlayerOnline()
+  drawPlayerWeaponSheated(player)
 
   function drawPlayerOnline () {
-    if (player.anim === "sittingDown" && player.lastLooked === "right") {
+    if ((player.anim === "sittingDown" || player.anim === "fishing") && player.lastLooked === "right") {
       frameCurrentPlayer = frameCurrentPlayer % 6;
 
       playerCutX = frameCurrentPlayer * playerWidth;
@@ -9937,7 +9962,7 @@ function drawOnlinePlayers (player, smoothPlayer) {
         playerHeight - playerZoomY,
       );
     }
-    else if (player.anim === "sittingDown" && player.lastLooked === "left"){
+    else if ((player.anim === "sittingDown" || player.anim === "fishing") && player.lastLooked === "left"){
       frameCurrentPlayer = frameCurrentPlayer % 6;
 
       playerCutX = frameCurrentPlayer * playerWidth;
@@ -10126,6 +10151,7 @@ function drawOnlinePlayers (player, smoothPlayer) {
         );
     }}
   }
+  drawPlayerAnimation(player)
 }
 
 
@@ -10148,16 +10174,30 @@ function drawPlayerArtifact (player) {
 }
 
 function drawPlayerAnimation (player) {
-  if (fishing) {
-    canvas.drawImage(
-      fishingAnim,
-      fishingFrame * 58, 0,       // <-- Cut from this X, 0 Y
-      58, 50,                     // <-- Crop 58x50
-      playerX - (58 * generalZoom) - cameraX + 300,
-      playerY - (50 * generalZoom) - cameraY + 200,
-      58 * generalZoom,
-      50 * generalZoom
-    );    
+  if (player.username === myPlayer.username && player.room === myPlayer.room) {
+    if (fishing) {
+      canvas.drawImage(
+        fishingAnim,
+        fishingFrame * 58, 0,       // <-- Cut from this X, 0 Y
+        58, 50,                     // <-- Crop 58x50
+        player.x - (58 * generalZoom) - cameraX + 300,
+        player.y - (50 * generalZoom) - cameraY + 200,
+        58 * generalZoom,
+        50 * generalZoom
+      );    
+    }
+  } else {
+    if (player.anim === "fishing") {
+      canvas.drawImage(
+        fishingAnim,
+        17 * 58, 0,       // <-- Cut from this X, 0 Y
+        58, 50,                     // <-- Crop 58x50
+        player.x - (58 * generalZoom) - cameraX + 300,
+        player.y - (50 * generalZoom) - cameraY + 200,
+        58 * generalZoom,
+        50 * generalZoom
+      );    
+    }
   }
 }
 
@@ -10195,12 +10235,18 @@ function drawPlayerWeaponOut (player) {
 }
 
 function drawPlayerWeaponSheated(player) {
-  if (player.weapon[0]) {
-    let smoothPlayer = Object.values(smoothPlayers).find(Splayer => Splayer.username === player.username)
+  let smoothPlayer = Object.values(smoothPlayers).find(Splayer => Splayer.username === player.username)
+  if (player.anim === "fishing") {
+    canvas.save(); // Save the current canvas state
+    canvas.translate(smoothPlayer.smoothX - cameraX - cameraShakeX - 150 +18 - recoil, smoothPlayer.smoothY + cameraShakeY + 180 - cameraY + 70); // Translate to the player's position
+    canvas.rotate(smoothPlayer.angleMouse); // Rotate based on the mouse angle
+    canvas.drawImage(fishingStick ,0, -7.5, 100, 25);
+    canvas.restore();
+  }
+  else if (player.weapon[0]) {
     canvas.save();
-    canvas.translate(smoothPlayer.smoothX - cameraX, smoothPlayer.smoothY - cameraY +90);
-    canvas.rotate(player.weaponAngle);
-    canvas.rotate(-170);
+    canvas.translate(smoothPlayer.smoothX - cameraX - cameraShakeX - 150 +18 - recoil, smoothPlayer.smoothY - + cameraShakeY - 180 - cameraY +70);
+    canvas.rotate(smoothPlayer.angleMouse);
     if (player.weapon[0].name === "solarStaffCommon") {
       canvas.drawImage(solarStaffCommon ,0, -7.5, 100, 25); // Draw the rectangle centered around the rotated point
     }
@@ -10937,14 +10983,14 @@ function checkEnemyCombat (enemy) {
       bossBarHealthFollower.style.width = bossBarPercentage + "%";
 
       if (enemy.health > 0) {
-        const enemyHitAudio = new Audio("./audios/enemyHit.mp3");
+        const enemyHitAudio = new Audio("./audios/enemyHit.wav");
         enemyHitAudio.loop = false;
-        enemyHitAudio.volume = 0.3;
+        enemyHitAudio.volume = 0.6;
         enemyHitAudio.play()
       } else {
-        const splatAudio = new Audio("./audios/splat.mp3");
+        const splatAudio = new Audio("./audios/splat.wav");
         splatAudio.loop = false;
-        splatAudio.volume = 0.3;
+        splatAudio.volume = 0.6;
         splatAudio.play()
       }
     }

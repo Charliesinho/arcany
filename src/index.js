@@ -60,6 +60,7 @@ function tick() {
             player.weapon = clientPlayer.weapon;
             player.armor = clientPlayer.armor;
             player.artifact = clientPlayer.artifact;
+            // player.weaponAngle = clientPlayer.weaponAngle;
 
             player.fishingLevel = clientPlayer.fishing;
             player.cookingLevel = clientPlayer.cooking;
@@ -81,8 +82,7 @@ function tick() {
 
         // player.anim = anim;
 
-        // player.lastLooked = lastLooked;
-        player.weaponAngle = weaponAngle;
+        // player.lastLooked = lastLooked
         player.chatMessage = chatMessage;
         player.username = username;
 
@@ -213,7 +213,7 @@ async function main() {
         // })
         
         socket.on("playerUpdate", (data) => {
-            const { location, inputs, animPlayer, lastLookPlayer } = data;
+            const { location, inputs, animPlayer, lastLookPlayer, angleMouse } = data;
         
             for (const player of players) {
             if (player.id === socket.id) {
@@ -223,6 +223,7 @@ async function main() {
                 player.inputs = inputs;
                 player.anim = animPlayer;
                 player.lastLooked = lastLookPlayer;
+                player.weaponAngle = angleMouse;
                 break;
             }
             }
@@ -237,7 +238,6 @@ async function main() {
                 octopus,
                 nemi, 
                 hanami,
-                fishBones,
                 low,
                 willy,
                 cork,
@@ -278,13 +278,19 @@ async function main() {
                         selectedFish = availableFish[randomIndex];
                     } else {
                         let fishToChoose = fishSelected.toLowerCase()
-                        for(let fish of allFish){
-                            if(fish.name === fishToChoose){
-                                selectedFish = fish
+                        let myNumber = Math.floor(Math.random() * 100) + 1;
+
+                        if (myNumber > 50) {
+                            for(let fish of allFish){
+                                if(fish.name === fishToChoose){
+                                    selectedFish = fish
+                                }
                             }
+                        } else {
+                            selectedFish = availableFish[randomIndex];
                         }
                     }
-        console.log(selectedFish, fishSelected, fishSelected.toLowerCase())
+
                     if (player.inventory.length <= 21) {
                         console.log('hello', selectedFish); 
 
@@ -298,15 +304,12 @@ async function main() {
         
                         myPlayer[socket.id] = player;
                     }
-                } else {
-                    console.log("No fish available for this level.");
                 }
             }
         
             fishing();
         });
         
-
         socket.on("consumable", (item) => {
             async function consume() {
                 const player = await Player.findOne({socket: socket.id}).exec();
