@@ -107,6 +107,11 @@ const woodSmallWallVertDiagonalReverse = new Image();
 woodSmallWallVertDiagonalReverse.src = "./objects/construction/fences/woodSmallWallVertDiagonalReverse.png"
 const restfieldFence = new Image();
 restfieldFence.src = "./objects/construction/fences/restfieldFence.png"
+const restfieldFenceOne = new Image();
+restfieldFenceOne.src = "./objects/construction/fences/restfieldFenceOne.png"
+const restfieldFenceOneReverse = new Image();
+restfieldFenceOneReverse.src = "./objects/construction/fences/restfieldFenceOneReverse.png"
+
 const restfieldFenceTwo = new Image();
 restfieldFenceTwo.src = "./objects/construction/fences/restfieldFenceTwo.png"
 const restfieldFenceTwoReverse = new Image();

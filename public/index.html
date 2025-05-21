@@ -121,7 +121,49 @@
     <div id="roomsDev"></div>
 
     <div id="editMaps">
-      
+      <div>
+        <div class="editMapsParent">
+          <h1 id="editMapsTitle">Your map</h1>
+          <img id="closeEditMapsTitle" class="pointerActivator" src="./icons/uiIcon/deleteIcon.png" style="width: 25px; height: 25px;">
+        </div>
+        
+        <div class="editMapsParent">
+
+          <div class="editMapsChildText">
+            <div id="editMapsRenameDiv" >
+              <p>Rename your map</p>
+              <input id="editMapsRenameInput" value="new name"></input>
+            </div>
+  
+            <div id="editMapsDescriptionDiv" >
+              <p>Description</p>
+              <textarea type="text" id="editMapsDescriptionInput" value="Description"></textarea>
+            </div>
+          </div>
+          <div class="editMapsChildText">
+            <button id="editMapsChooseBase" class="editMapsEditButton pointerActivator greenHover">Choose a new base</button>
+
+            <button id="editMapsDeleteObj" class="editMapsEditButton pointerActivator redHover">Delete all objects</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="editMapsSaveSetting">
+        <div id="editMapsSaveSettingSave" class="editMapsSaveSettingButton greenHover pointerActivator">Save map</div>
+        <div id="editMapsSaveSettingDelete" class="editMapsSaveSettingButton redHover pointerActivator">Delete map</div>
+      </div>
+    </div>
+
+    <div id="popupDeleteAllObjParent">
+      <div class="popUpBlackscreen"></div>
+
+      <div id="popupDeleteAllObjChild">
+        <p>Do you really want to delete all the objects of this map ?</p>
+        <div id="popupDeleteAllObjChildDiv">
+          <button id="deleteAllObjButton" class="editMapsSaveSettingButton greenHover pointerActivator">Yes</button>
+          <button id="deleteAllObjButtonCancel" class="editMapsSaveSettingButton redHover pointerActivator">Cancel</button>
+        </div>
+      </div>
     </div>
     
     <div id="monsterCreationParent">

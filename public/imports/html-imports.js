@@ -373,10 +373,16 @@ const monsterCreationAttacks = document.getElementById("monsterCreationAttacks")
 const monsterLoot = document.getElementById("monsterLoot");
 const lootImage = document.getElementById("lootImage");
 const monsterNameInput = document.getElementById("monsterNameInput");
+
 const placeMobButtonUi = document.getElementById("placeMobButtonUi");
 const monsterCreationParent = document.getElementById("monsterCreationParent");
 
 //EDIT MAPS
-const editMapsButttonUi = document.getElementById("editMapButtonUi")
+const editMapsButtonUi = document.getElementById("editMapButtonUi")
+const closeEditMapsTitle = document.getElementById("closeEditMapsTitle")
 const editMapsPage = document.getElementById("editMaps")
-
+const editMapsRenameInput = document.getElementById("editMapsRenameInput");
+const editMapsDeleteObj = document.getElementById("editMapsDeleteObj");
+const popupDeleteAllObjParent = document.getElementById("popupDeleteAllObjParent");
+const deleteAllObjButton = document.getElementById("deleteAllObjButton");
+const deleteAllObjButtonCancel = document.getElementById("deleteAllObjButtonCancel");

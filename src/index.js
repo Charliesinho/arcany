@@ -1290,7 +1290,15 @@ async function main() {
             const worldData = await World.findOne({ areaName: info.currentLand }).exec();
         
             socket.broadcast.emit('updateMap', { currentSelectedObjLayer: info.currentSelectedObjLayer, object: info.object, deleting: true });
-        });            
+        });  
+        socket.on("deleteAllObj", async (info) => {
+            console.log(info)
+            let emptyAllLayer = [[],[],[]]
+            await World.findOneAndUpdate({ areaName: info}, {objects: emptyAllLayer}, { new: true });
+
+            socket.emit("updateMap", { deletingAll: true })
+        })
+
         
         socket.on("setSpawn", async (info) => {
             await World.findOneAndUpdate({areaName: info[1]}, {playerPos: info[0]}, {new: true});

@@ -4010,6 +4010,19 @@ socket.on("player", (serverPlayer) => {
     subscription: 'none',
   },
   {
+    name: "restfieldFenceOne",
+    backgroundObj: false,
+    img: restfieldFenceOneReverse,
+    x: 0,
+    y: 0,
+    h: restfieldFenceOne.height,
+    w: restfieldFenceOne.width,
+    category: "construction",
+    subCategory: "fences",
+
+    subscription: 'none',
+  },
+  {
     name: "restfieldFenceTwo",
     backgroundObj: false,
     img: restfieldFenceTwo,
@@ -6425,7 +6438,9 @@ socket.on("startCooking", (item) => {
 let intervalCanvasBase;
 
 socket.on("updateMap", (map) => {
-  if (!map.deleting) {
+   if(map.deletingAll){
+    mapsInfo[currentLand].objects = [[],[],[]]
+  } else if (!map.deleting) {
     if (!map.deleting) buildPlaceParticles(map.object)
     mapsInfo[currentLand].objects[map.currentSelectedObjLayer].push(map.object)
     mapsInfo[currentLand].objects[map.currentSelectedObjLayer].sort((a, b) => {
@@ -7961,6 +7976,7 @@ canvasLobby.addEventListener('click', function(event) {
     objDelSound.volume = 0.8;
     objDelSound.play();
   }
+
   
   else if (currentDevAction === "monster") {
     let objClone = _.cloneDeep(selectedMob);
@@ -8283,7 +8299,7 @@ function deselectUiButton() {
   placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
   placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
   placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  editMapsButttonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  editMapsButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
   placeMobButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
   uiBuildingObjects.style.display = "none";
   uiBuildingCategory.style.display = "none";
@@ -8333,12 +8349,18 @@ let rotateObj = false
 
 rotateObjButtonUi.addEventListener("click", function(){
   showWallsFunction(false)
-  rotateObj = !rotateObj
- console.log(rotateObj)
+  playRandomPop()
+  if(!rotateObj){
+    rotateObj = true
+  } else {
+    rotateObj = false
+  }
+  
 });
 
 deleteObjButtonUi.addEventListener("click", function() {
   showWallsFunction(false)
+  playRandomPop()
 if(deleteObject === false) {
   roomsDiv.style.display = "none"
   dialogsDiv.style.display = "none"
@@ -8357,22 +8379,47 @@ if(deleteObject === false) {
 }
 });
 
-editMapsButttonUi.addEventListener("click", function(){
+editMapsButtonUi.addEventListener("click", function(){
   showWallsFunction(false)
+  playRandomPop()
   if(currentDevAction !== "editmap"){
     deselectUiButton()
     currentDevAction = "editmap"
     editMapsPage.style.display = "flex"
-    editMapsButttonUi.style.backgroundColor = "rgb(148, 223, 148)"
+    editMapsButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
   } else {
     editMapsPage.style.display = "none"
-    editMapsButttonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    editMapsButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
     currentDevAction = "none"
   }
 })
 
+editMapsDeleteObj.addEventListener("click", function(){
+  showWallsFunction(false)
+  playRandomPop()
+  popupDeleteAllObjParent.style.display = "flex"
+})
+
+closeEditMapsTitle.addEventListener("click", function(){
+  playRandomPop()
+  editMapsPage.style.display = "none"
+  editMapsButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  currentDevAction = "none"
+})
+
+deleteAllObjButton.addEventListener("click", function(){
+  playRandomPop()
+  socket.emit("deleteAllObj", mapsInfo[currentLand].areaName);
+  popupDeleteAllObjParent.style.display = "none"
+})
+
+deleteAllObjButtonCancel.addEventListener("click", function(){
+  playRandomPop()
+  popupDeleteAllObjParent.style.display = "none"
+})
 
 saveObjButtonUi.addEventListener("click", function() {
+  playRandomPop()
   showWallsFunction(false);
   socket.emit("saveWorld", mapsInfo[currentLand]);
   errorDisplay("Saving map")
@@ -8421,7 +8468,7 @@ placeFishingArea.addEventListener("click", function() {
     placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
     showWallsFunction(false)
   }
- });
+});
 
 placeEnchantingArea.addEventListener("click", function() {
 if (currentDevAction !== "enchanting") {
@@ -10486,6 +10533,7 @@ function drawDevWallsPlacement () {
   else if (currentDevAction === "building") {
     const obj = mapObject.find(item => item.name === currentObjToPlace);
     if (!obj) return
+    
     let imageObj;
 
     if (rotateObj && obj.reverse) {
