@@ -9161,9 +9161,10 @@ function drawObjects (layer, num) {
 function drawSceneLayer(layer, num) {
   if (!mapObject) return;
 
-  initializeSmoothOnlinePlayers()
+  initializeSmoothOnlinePlayers();
 
   const drawQueue = [];
+  const topLayerObjects = []; // 💡 We'll store layerIndex 2 objects here
 
   objectFramesController++;
 
@@ -9173,14 +9174,20 @@ function drawSceneLayer(layer, num) {
       const objectOriginal = mapObject.find(item => item.name === obj.name);
       if (!objectOriginal || objectOriginal.backgroundObj === "back" || objectOriginal.backgroundObj === true) continue;
 
-      drawQueue.push({
+      const drawItem = {
         type: 'object',
         y: obj.y,
         layerIndex: i,
         layer,
         obj,
         objectOriginal
-      });
+      };
+
+      if (i === 2) {
+        topLayerObjects.push(drawItem); // Defer drawing layerIndex 2
+      } else {
+        drawQueue.push(drawItem);
+      }
     }
   }
 
@@ -9196,11 +9203,11 @@ function drawSceneLayer(layer, num) {
   // 🌐 Add online players
   for (const player of players) {
     if (player.username !== myPlayer.username && player.room === myPlayer.room) {
-      const smoothPlayer = Object.values(smoothPlayers).find(sp => sp.username === player.username);
+      const smoothPlayer = smoothPlayers[player.username];
       if (!smoothPlayer) continue;
       drawQueue.push({
         type: 'onlinePlayer',
-        y: smoothPlayer.smoothY + 120, // base of player
+        y: smoothPlayer.smoothY + 120,
         player,
         smoothPlayer
       });
@@ -9216,24 +9223,29 @@ function drawSceneLayer(layer, num) {
   // 🔀 Sort draw queue by Y position
   drawQueue.sort((a, b) => a.y - b.y);
 
-  // 🎬 Draw everything in correct order
+  // 🎬 Draw everything in correct order (except layerIndex 2 objects)
   for (const item of drawQueue) {
     if (item.type === 'enemy') {
       drawEnemy(item.enemy);
-
     } else if (item.type === 'object') {
       const { obj, objectOriginal, layerIndex } = item;
       if (num === layerIndex) {
         drawOnTop(objectOriginal.img, obj.x, obj.y, obj.w, obj.h, cameraX, cameraY, obj.animated);
       }
-
     } else if (item.type === 'onlinePlayer') {
       drawOnlinePlayers(item.player, item.smoothPlayer);
-
     } else if (item.type === 'player') {
       drawLocalPlayer();
     }
   }
+
+  // ⭐️ Draw layerIndex 2 objects LAST, on top of everything
+  
+  for (const item of topLayerObjects) {
+    const { obj, objectOriginal } = item;
+    drawOnTop(objectOriginal.img, obj.x, obj.y, obj.w, obj.h, cameraX, cameraY, obj.animated);
+  }
+  
 }
 
 function drawOnTop (img, x, y, width, height, cx, cy, anim) {
