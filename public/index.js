@@ -1,10 +1,7 @@
 //Change this to push >
-
-
 // const socket = io(`ws://localhost:5000`);
 //const socket = io(`https://arcanyGame.up.railway.app/`);
 const socket = io(window.location.origin);
-
 
 //Change this to push <
 
@@ -188,10 +185,13 @@ lootImage.addEventListener("click", function(){
 });
 
 placeMobButtonUi.addEventListener("click", function(){
-  if (monsterCreationParent.style.display != "flex") {
+  if (monsterCreationParent.style.display !== "flex") {
+    deselectUiButton()
     monsterCreationParent.style.display = "flex"
+    placeMobButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
   } else {
     monsterCreationParent.style.display = "none"
+    placeMobButtonUi.style.backgroundColor = "rgba(148, 223, 148, 0)"
   }
 });
 
@@ -3994,6 +3994,47 @@ socket.on("player", (serverPlayer) => {
     subscription: 'none',
   },
   {
+    name: "woodSmallWallVertDiagonal",
+    backgroundObj: false,
+    img: woodSmallWallVertDiagonal,
+    reverse:woodSmallWallVertDiagonalReverse,
+    x: 0,
+    y: 0,
+    h: woodSmallWallVertDiagonal.height,
+    w: woodSmallWallVertDiagonal.width,
+    category: "construction",
+    subCategory: "fences",
+
+    subscription: 'none',
+  },
+  {
+    name: "restfieldFence",
+    backgroundObj: false,
+    img: restfieldFence,
+    x: 0,
+    y: 0,
+    h: restfieldFence.height,
+    w: restfieldFence.width,
+    category: "construction",
+    subCategory: "fences",
+
+    subscription: 'none',
+  },
+  {
+    name: "restfieldFenceTwo",
+    backgroundObj: false,
+    img: restfieldFenceTwo,
+    reverse:restfieldFenceTwoReverse,
+    x: 0,
+    y: 0,
+    h: restfieldFenceTwo.height,
+    w: restfieldFenceTwo.width,
+    category: "construction",
+    subCategory: "fences",
+
+    subscription: 'none',
+  },
+  {
     name: "woodPole",
     backgroundObj: false,
     img: woodPole,
@@ -4269,6 +4310,35 @@ socket.on("player", (serverPlayer) => {
 
     subscription: 'members',
   },
+  {
+    name: "restfieldArc",
+    backgroundObj: false,
+    img: restfieldArc,
+    x: 0,
+    y: 0,
+    h: restfieldArc.height,
+    w: restfieldArc.width,
+    category: "construction",
+    subCategory: "doors",
+    lightSource: true,
+    
+
+    subscription: 'members',
+  },
+  {
+    name: "restfieldArcTwo",
+    backgroundObj: false,
+    img: restfieldArcTwo,
+    x: 0,
+    y: 0,
+    h: restfieldArcTwo.height,
+    w: restfieldArcTwo.width,
+    category: "construction",
+    subCategory: "doors",
+    
+
+    subscription: 'members',
+  },
 
   // construction - walls
   {
@@ -4291,6 +4361,18 @@ socket.on("player", (serverPlayer) => {
     y: 0,
     h: 52,
     w: 67,
+    category: "construction",
+    subCategory: "walls",
+    subscription: 'none',
+  },
+  {
+    name: "woodWallHorTwo",
+    backgroundObj: false,
+    img: woodWallHorTwoReverse,
+    x: 0,
+    y: 0,
+    h: woodWallHorTwo.height,
+    w: woodWallHorTwo.width,
     category: "construction",
     subCategory: "walls",
     subscription: 'none',
@@ -4335,6 +4417,19 @@ socket.on("player", (serverPlayer) => {
     subscription: 'none',
   },
   {
+    name: "restfieldWall",
+    backgroundObj: false,
+    img: restfieldWall,
+    x: 0,
+    y: 0,
+    h: restfieldWall.height,
+    w: restfieldWall.width,
+    category: "construction",
+    subCategory: "walls",
+
+    subscription: 'none',
+  },
+  {
     name: "woodWallHorRight",
     backgroundObj: false,
     img: woodWallHorRight,
@@ -4359,6 +4454,19 @@ socket.on("player", (serverPlayer) => {
     y: 0,
     h: GrasslandRuinsOneLeft.height,
     w: GrasslandRuinsOneLeft.width,
+    category: "construction",
+    subCategory: "ruins",
+
+    subscription: 'none',
+  },
+  {
+    name: "GrasslandRuinsEleven",
+    backgroundObj: false,
+    img: GrasslandRuinsEleven,
+    x: 0,
+    y: 0,
+    h: GrasslandRuinsEleven.height,
+    w: GrasslandRuinsEleven.width,
     category: "construction",
     subCategory: "ruins",
 
@@ -4489,6 +4597,33 @@ socket.on("player", (serverPlayer) => {
     subscription: 'none',
   },
   {
+    name: "GrasslandRuinsNineRight",
+    backgroundObj: false,
+    img: GrasslandRuinsNineRight,
+    reverse:GrasslandRuinsNineLeft,
+    x: 0,
+    y: 0,
+    h: GrasslandRuinsNineRight.height,
+    w: GrasslandRuinsNineRight.width,
+    category: "construction",
+    subCategory: "ruins",
+
+    subscription: 'none',
+  },
+  {
+    name: "GrasslandRuinsTen",
+    backgroundObj: false,
+    img: GrasslandRuinsTen,
+    x: 0,
+    y: 0,
+    h: GrasslandRuinsTen.height,
+    w: GrasslandRuinsTen.width,
+    category: "construction",
+    subCategory: "ruins",
+
+    subscription: 'dev',
+  },
+  {
     name: "blockersArea",
     backgroundObj: false,
     img: blockersArea,
@@ -4550,6 +4685,32 @@ socket.on("player", (serverPlayer) => {
     y: 0,
     h: circleOrangeCarpet.height,
     w: circleOrangeCarpet.width,
+    category: "furniture",
+    subCategory: "carpets",
+
+    subscription: 'none',
+  },
+  {
+    name: "restfieldMallCarpetOne",
+    backgroundObj: "back",
+    img: restfieldMallCarpetOne,
+    x: 0,
+    y: 0,
+    h: restfieldMallCarpetOne.height,
+    w: restfieldMallCarpetOne.width,
+    category: "furniture",
+    subCategory: "carpets",
+
+    subscription: 'none',
+  },
+  {
+    name: "restfieldMallCarpetTwo",
+    backgroundObj: "back",
+    img: restfieldMallCarpetTwo,
+    x: 0,
+    y: 0,
+    h: restfieldMallCarpetTwo.height,
+    w: restfieldMallCarpetTwo.width,
     category: "furniture",
     subCategory: "carpets",
 
@@ -4659,14 +4820,26 @@ socket.on("player", (serverPlayer) => {
     subscription: 'none',
   },
   {
-    name: "boxesOneRight",
+    name: "boxesOne",
     backgroundObj: "front",
-    img: boxesOneRight,
-    reverse: boxesOneLeft,
+    img: boxesOne,
     x: 0,
     y: 0,
-    h: boxesOneRight.height,
-    w: boxesOneRight.width,
+    h: boxesOne.height,
+    w: boxesOne.width,
+    category: "furniture",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
+  {
+    name: "boxesTwo",
+    backgroundObj: "front",
+    img: boxesTwo,
+    x: 0,
+    y: 0,
+    h: boxesTwo.height,
+    w: boxesTwo.width,
     category: "furniture",
     subCategory: "decorations",
 
@@ -4726,7 +4899,6 @@ socket.on("player", (serverPlayer) => {
 
     subscription: 'none',
   },
-
   {
     name: "paintFour",
     backgroundObj: "front",
@@ -4793,6 +4965,112 @@ socket.on("player", (serverPlayer) => {
 
     subscription: 'none',
   },
+  {
+    name: "paperWallOne",
+    backgroundObj: "front",
+    img: paperWallOne,
+    x: 0,
+    y: 0,
+    h: paperWallOne.height,
+    w: paperWallOne.width,
+    category: "furniture",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
+  {
+    name: "paperWallTwo",
+    backgroundObj: "front",
+    img: paperWallTwo,
+    x: 0,
+    y: 0,
+    h: paperWallTwo.height,
+    w: paperWallTwo.width,
+    category: "furniture",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
+  {
+    name: "skeletonOne",
+    backgroundObj: "front",
+    img: skeletonOne,
+    reverse: skeletonOneReverse,
+    x: 0,
+    y: 0,
+    h: skeletonOne.height,
+    w: skeletonOne.width,
+    category: "furniture",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
+  {
+    name: "skeletonTwo",
+    backgroundObj: "front",
+    img: skeletonTwo,
+    reverse: skeletonTwoReverse,
+    x: 0,
+    y: 0,
+    h: skeletonTwo.height,
+    w: skeletonTwo.width,
+    category: "furniture",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
+  {
+    name: "paintFive",
+    backgroundObj: "front",
+    img: paintFive,
+    x: 0,
+    y: 0,
+    h: paintFive.height,
+    w: paintFive.width,
+    category: "furniture",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
+  {
+    name: "bankDragon",
+    backgroundObj: "front",
+    img: bankDragon,
+    x: 0,
+    y: 0,
+    h: bankDragon.height,
+    w: bankDragon.width,
+    category: "furniture",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
+  {
+    name: "bankCharactere",
+    backgroundObj: "front",
+    img: bankCharactere,
+    x: 0,
+    y: 0,
+    h: bankCharactere.height,
+    w: bankCharactere.width,
+    category: "furniture",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
+  {
+    name: "restfieldDecoration",
+    backgroundObj: "front",
+    img: restfieldDecoration,
+    x: 0,
+    y: 0,
+    h: restfieldDecoration.height,
+    w: restfieldDecoration.width,
+    category: "furniture",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
 
   // furniture - kitchen
   {
@@ -4839,6 +5117,19 @@ socket.on("player", (serverPlayer) => {
 
     subscription: 'none',
   },
+  {
+    name: "restfieldmallStorage",
+    backgroundObj: false,
+    img: restfieldmallStorage,
+    x: 0,
+    y: 0,
+    h: restfieldmallStorage.height,
+    w: restfieldmallStorage.width,
+    category: "furniture",
+    subCategory: "storage",
+
+    subscription: 'none',
+  },
 
   // furniture - tables
   {
@@ -4849,6 +5140,19 @@ socket.on("player", (serverPlayer) => {
     y: 0,
     h: woodTable.height,
     w: woodTable.width,
+    category: "furniture",
+    subCategory: "tables",
+
+    subscription: 'none',
+  },
+  {
+    name: "craftingTable",
+    backgroundObj: false,
+    img: craftingTable,
+    x: 0,
+    y: 0,
+    h: craftingTable.height,
+    w: craftingTable.width,
     category: "furniture",
     subCategory: "tables",
 
@@ -4967,6 +5271,33 @@ socket.on("player", (serverPlayer) => {
 
   // outdoor - furniture
   {
+    name: "Resstfieldplatforme",
+    backgroundObj: true,
+    img: Resstfieldplatforme,
+    x: 0,
+    y: 0,
+    h: Resstfieldplatforme.height,
+    w: Resstfieldplatforme.width,
+    category: "outdoor",
+    subCategory: "furniture",
+
+    subscription: 'none',
+  },
+  {
+    name: "ResstfieldStructure",
+    backgroundObj: false,
+    img: ResstfieldStructure,
+    reverse:ResstfieldStructureNoLight,
+    x: 0,
+    y: 0,
+    h: ResstfieldStructure.height,
+    w: ResstfieldStructure.width,
+    category: "outdoor",
+    subCategory: "furniture",
+
+    subscription: 'none',
+  },
+  {
     name: "flagLine",
     backgroundObj: "front",
     img: flagLine,
@@ -4975,6 +5306,84 @@ socket.on("player", (serverPlayer) => {
     h: 26,
     w: 123,
     animated: true,
+    category: "outdoor",
+    subCategory: "furniture",
+
+    subscription: 'none',
+  },
+  {
+    name: "tombstoneOne",
+    backgroundObj: "front",
+    img: tombstoneOne,
+    x: 0,
+    y: 0,
+    h: tombstoneOne.height,
+    w: tombstoneOne.width,
+    category: "outdoor",
+    subCategory: "furniture",
+
+    subscription: 'none',
+  },
+  {
+    name: "tombstoneTwo",
+    backgroundObj: "front",
+    img: tombstoneTwo,
+    x: 0,
+    y: 0,
+    h: tombstoneTwo.height,
+    w: tombstoneTwo.width,
+    category: "outdoor",
+    subCategory: "furniture",
+
+    subscription: 'none',
+  },
+  {
+    name: "tombstoneThree",
+    backgroundObj: "front",
+    img: tombstoneThree,
+    x: 0,
+    y: 0,
+    h: tombstoneThree.height,
+    w: tombstoneThree.width,
+    category: "outdoor",
+    subCategory: "furniture",
+
+    subscription: 'none',
+  },
+  {
+    name: "tombstoneFour",
+    backgroundObj: "front",
+    img: tombstoneFour,
+    x: 0,
+    y: 0,
+    h: tombstoneFour.height,
+    w: tombstoneFour.width,
+    category: "outdoor",
+    subCategory: "furniture",
+
+    subscription: 'none',
+  },
+  {
+    name: "tombstoneFive",
+    backgroundObj: "front",
+    img: tombstoneFive,
+    x: 0,
+    y: 0,
+    h: tombstoneFive.height,
+    w: tombstoneFive.width,
+    category: "outdoor",
+    subCategory: "furniture",
+
+    subscription: 'none',
+  },
+  {
+    name: "tombstoneSix",
+    backgroundObj: "front",
+    img: tombstoneSix,
+    x: 0,
+    y: 0,
+    h: tombstoneSix.height,
+    w: tombstoneSix.width,
     category: "outdoor",
     subCategory: "furniture",
 
@@ -5267,6 +5676,36 @@ socket.on("player", (serverPlayer) => {
 
     subscription: 'none',
   },
+  {
+    name: "smallLakeTwo",
+    backgroundObj: true,
+    img: smallLakeTwo,
+    x: 0,
+    y: 0,
+    h: 70,
+    w: 70,
+    lightSource: false,
+    animated: true,
+    category: "outdoor",
+    subCategory: "water",
+
+    subscription: 'none',
+  },
+  {
+    name: "smallLakeThree",
+    backgroundObj: true,
+    img: smallLakeThree,
+    x: 0,
+    y: 0,
+    h: 70,
+    w: 70,
+    lightSource: false,
+    animated: true,
+    category: "outdoor",
+    subCategory: "water",
+
+    subscription: 'none',
+  },
 
   // structure - chest
   {
@@ -5319,6 +5758,7 @@ socket.on("player", (serverPlayer) => {
     name: "cookingStand",
     backgroundObj: false,
     img: cookingStand,
+    reverse: cookingStandReverse,
     x: 0,
     y: 0,
     h: cookingStand.height,
@@ -5445,6 +5885,7 @@ socket.on("player", (serverPlayer) => {
     name: "lightPoleOne",
     backgroundObj: false,
     img: lightPoleOne,
+    reverse:lightPoleOneReverse,
     lightSource: true,
     x: 0,
     y: 0,
@@ -5456,6 +5897,22 @@ socket.on("player", (serverPlayer) => {
 
     subscription: 'none',
   },
+  {
+    name: "restfieldPole",
+    backgroundObj: false,
+    img: restfieldPole,
+    lightSource: true,
+    x: 0,
+    y: 0,
+    h: 52,
+    w: 22,
+    lightSource: true,
+    category: "light",
+    subCategory: "lamps",
+
+    subscription: 'none',
+  },
+
   {
     name: "mediumTorch",
     backgroundObj: false,
@@ -7535,6 +7992,11 @@ canvasLobby.addEventListener('click', function(event) {
     objClone.x = hoveredXCoord + 200
     objClone.y = hoveredYCoord + 200
 
+    if(rotateObj && objClone.reverse){
+      objClone.img = objClone.reverse
+      console.log(rotateObj, objClone.img, objClone.reverse)
+    }
+
     mapsInfo[currentLand].objects[currentSelectedObjLayer].push(objClone)
     mapsInfo[currentLand].objects[currentSelectedObjLayer].sort((a, b) => {
       if (a.backgroundObj && !b.backgroundObj) return -1; // a goes first
@@ -7832,6 +8294,7 @@ function deselectUiButton() {
   placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
   placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
   placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  editMapsButttonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
   uiBuildingObjects.style.display = "none";
   uiBuildingCategory.style.display = "none";
   roomsDiv.style.display = "none"
@@ -7874,6 +8337,13 @@ deleteWalls.addEventListener("click", function() {
 });
 
 let deleteObject = false
+let rotateObj = false
+
+rotateObjButtonUi.addEventListener("click", function(){
+  showWallsFunction(false)
+  rotateObj = !rotateObj
+ console.log(rotateObj)
+});
 
 deleteObjButtonUi.addEventListener("click", function() {
   showWallsFunction(false)
@@ -7894,6 +8364,18 @@ if(deleteObject === false) {
   currentDevAction = "building";
 }
 });
+
+editMapsButttonUi.addEventListener("click", function(){
+  showWallsFunction(false)
+  if(editMapsPage.style.display !== "flex"){
+    monsterCreationParent.style.display = "none"
+    editMapsPage.style.display = "flex"
+    editMapsButttonUi.style.backgroundColor = "rgb(148, 223, 148)"
+  } else {
+    editMapsPage.style.display = "none"
+    editMapsButttonUi.style.backgroundColor = "rgba(148, 223, 148, 0)"
+  }
+})
 
 saveObjButtonUi.addEventListener("click", function() {
   showWallsFunction(false);
@@ -8264,7 +8746,6 @@ placeDialog.addEventListener("click", function() {
 
 function showWallsFunction(state) {
   playRandomPop()
-  console.log(state)
 if (state === true) {
   wallsVisibility = 0.5;
   showWalls.style.backgroundColor = "rgba(170, 233, 170, 1)"
@@ -8646,8 +9127,14 @@ function drawObjects (layer, num) {
         })
       }
 
-      let objectOriginal = mapObject.find(item => item.name === obj.name)
-  
+      let objectOriginal;
+
+      if (obj.img) {
+        objectOriginal = obj
+      } else {
+        objectOriginal = mapObject.find(item => item.name === obj.name)
+      }
+      
       if (obj.backgroundObj === "back") {
         if (layer === "backer") {
           drawOnTop(objectOriginal.img, obj.x, obj.y, obj.w, obj.h, cameraX, cameraY, obj.animated)
@@ -9989,8 +10476,16 @@ function drawDevWallsPlacement () {
   else if (currentDevAction === "building") {
     const obj = mapObject.find(item => item.name === currentObjToPlace);
     if (!obj) return
+    let imageObj;
+
+    if (rotateObj && obj.reverse) {
+      imageObj = obj.reverse
+    } else {
+      imageObj = obj.img
+    }
+
     drawOnTop(
-      obj.img, 
+      imageObj, 
       hoveredXCoord + 200, 
       hoveredYCoord + 200, 
       obj.w, obj.h, 

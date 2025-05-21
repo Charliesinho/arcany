@@ -28,26 +28,17 @@ const enchantingTower = new Image();
 enchantingTower.src = "./objects/structures/enchanting/enchantingTower.png"
 const enchantingTable = new Image();
 enchantingTable.src = "./objects/structures/enchanting/enchantingTable.png"
-const flagLine = new Image();
-flagLine.src = "./objects/outdoor/furniture/flagLine.png"
+
 const plantPatch = new Image();
 plantPatch.src = "./objects/construction/floors/plantPatch.png"
-const woodFence = new Image();
-woodFence.src = "./objects/construction/fences/woodFence.png"
-const woodFenceVer = new Image();
-woodFenceVer.src = "./objects/construction/fences/woodFenceVer.png"
-const woodSmallWallHor = new Image();
-woodSmallWallHor.src = "./objects/construction/fences/woodSmallWallHor.png"
-const woodSmallWallVert = new Image();
-woodSmallWallVert.src = "./objects/construction/fences/woodSmallWallVert.png"
+
 const woodWindowWall = new Image();
 woodWindowWall.src = "./objects/construction/walls/woodWindowWall.png"
 const fishPond = new Image();
 fishPond.src = "./objects/outdoor/decorations/fishPond.png"
 const dryGrass = new Image();
 dryGrass.src = "./objects/outdoor/grass/dryGrass.png"
-const smallLake = new Image();
-smallLake.src = "./objects/outdoor/water/smallLake.png"
+
 const booksOne = new Image();
 booksOne.src = "./objects/furniture/decorations/booksOne.png"
 const redSmallCarpet = new Image();
@@ -73,14 +64,12 @@ paintThree.src = "./objects/furniture/decorations/paintThree.png"
 const paintTwo = new Image();
 paintTwo.src = "./objects/furniture/decorations/paintTwo.png"
 
-const shelves = new Image();
-shelves.src = "./objects/furniture/storage/shelves.png"
+
 const vineTwo = new Image();
 vineTwo.src = "./objects/outdoor/plants/vineTwo.png"
 const woodFloor = new Image();
 woodFloor.src = "./objects/construction/floors/woodFloor.png"
-const woodTable = new Image();
-woodTable.src = "./objects/furniture/tables/woodTable.png"
+
 
 
 // CONSTRUCTION WALLS
@@ -96,6 +85,33 @@ const woodWallHorRight = new Image();
 woodWallHorRight.src = "./objects/construction/walls/woodWallHorRight.png"
 const woodWallHorLeft = new Image();
 woodWallHorLeft.src = "./objects/construction/walls/woodWallHorLeft.png"
+const woodWallHorTwo = new Image();
+woodWallHorTwo.src = "./objects/construction/walls/woodWallHorTwo.png"
+const woodWallHorTwoReverse = new Image();
+woodWallHorTwoReverse.src = "./objects/construction/walls/woodWallHorTwoReverse.png"
+const restfieldWall = new Image();
+restfieldWall.src = "./objects/construction/walls/restfieldWall.png"
+
+//CONSTRUCTION FENCE
+const woodFence = new Image();
+woodFence.src = "./objects/construction/fences/woodFence.png"
+const woodFenceVer = new Image();
+woodFenceVer.src = "./objects/construction/fences/woodFenceVer.png"
+const woodSmallWallHor = new Image();
+woodSmallWallHor.src = "./objects/construction/fences/woodSmallWallHor.png"
+const woodSmallWallVert = new Image();
+woodSmallWallVert.src = "./objects/construction/fences/woodSmallWallVert.png"
+const woodSmallWallVertDiagonal = new Image();
+woodSmallWallVertDiagonal.src = "./objects/construction/fences/woodSmallWallVertDiagonal.png"
+const woodSmallWallVertDiagonalReverse = new Image();
+woodSmallWallVertDiagonalReverse.src = "./objects/construction/fences/woodSmallWallVertDiagonalReverse.png"
+const restfieldFence = new Image();
+restfieldFence.src = "./objects/construction/fences/restfieldFence.png"
+const restfieldFenceTwo = new Image();
+restfieldFenceTwo.src = "./objects/construction/fences/restfieldFenceTwo.png"
+const restfieldFenceTwoReverse = new Image();
+restfieldFenceTwoReverse.src = "./objects/construction/fences/restfieldFenceTwoReverse.png"
+
 
 // CONSTRUCTION FLOORS
 const grasslandDirtFloor = new Image();
@@ -104,28 +120,24 @@ const grasslandDirtBig = new Image();
 grasslandDirtBig.src = "./objects/construction/floors/grasslandDirtBig.png"
 const grasslandDirtFloorCircle = new Image();
 grasslandDirtFloorCircle.src = "./objects/construction/floors/grasslandDirtFloorCircle.png"
-
 const grasslandGrassClearCircle = new Image();
 grasslandGrassClearCircle.src = "./objects/construction/floors/grasslandGrassClearCircle.png"
 const grasslandGrassClearBig = new Image();
 grasslandGrassClearBig.src = "./objects/construction/floors/grasslandGrassClearBig.png"
 const grasslandGrassClearFloor = new Image();
 grasslandGrassClearFloor.src = "./objects/construction/floors/grasslandGrassClearFloor.png"
-
 const grasslandGrassMediumCircle = new Image();
 grasslandGrassMediumCircle.src = "./objects/construction/floors/grasslandGrassMediumCircle.png"
 const grasslandGrassMediumBig = new Image();
 grasslandGrassMediumBig.src = "./objects/construction/floors/grasslandGrassMediumBig.png"
 const grasslandGrassMediumFloor = new Image();
 grasslandGrassMediumFloor.src = "./objects/construction/floors/grasslandGrassMediumFloor.png"
-
 const grasslandGrassDarkCircle = new Image();
 grasslandGrassDarkCircle.src = "./objects/construction/floors/grasslandGrassDarkCircle.png"
 const grasslandGrassDarkBig = new Image();
 grasslandGrassDarkBig.src = "./objects/construction/floors/grasslandGrassDarkBig.png"
 const grasslandGrassDarkFloor = new Image();
 grasslandGrassDarkFloor.src = "./objects/construction/floors/grasslandGrassDarkFloor.png"
-
 const stoneFloor = new Image();
 stoneFloor.src = "./objects/construction/floors/stoneFloor.png"
 const stoneFloorTwo = new Image();
@@ -139,11 +151,17 @@ restfieldMallTiles.src = "./objects/construction/floors/restfieldMallTiles.png"
 //CONSTRUCTION DOOR
 const restfieldMallDoor = new Image();
 restfieldMallDoor.src = "./objects/construction/doors/restfieldMallDoor.png"
+const restfieldArc = new Image();
+restfieldArc.src = "./objects/construction/doors/restfieldArc.png"
+const restfieldArcTwo = new Image();
+restfieldArcTwo.src = "./objects/construction/doors/restfieldArcTwo.png"
 
 
 //CONSTRUCTION RUINS
 const GrasslandRuinsOneLeft = new Image();
 GrasslandRuinsOneLeft.src = "./objects/construction/ruins/GrasslandRuinsOneLeft.png"
+const GrasslandRuinsEleven = new Image();
+GrasslandRuinsEleven.src = "./objects/construction/ruins/GrasslandRuinsEleven.png"
 const GrasslandRuinsOneRight = new Image();
 GrasslandRuinsOneRight.src = "./objects/construction/ruins/GrasslandRuinsOneRight.png"
 const GrasslandRuinsTwoLeft = new Image();
@@ -178,8 +196,14 @@ const GrasslandRuinsHeightLeft = new Image();
 GrasslandRuinsHeightLeft.src = "./objects/construction/ruins/GrasslandRuinsHeightLeft.png"
 const GrasslandRuinsHeightRight = new Image();
 GrasslandRuinsHeightRight.src = "./objects/construction/ruins/GrasslandRuinsHeightRight.png"
+const GrasslandRuinsNineRight = new Image();
+GrasslandRuinsNineRight.src = "./objects/construction/ruins/GrasslandRuinsNineRight.png"
+const GrasslandRuinsNineLeft = new Image();
+GrasslandRuinsNineLeft.src = "./objects/construction/ruins/GrasslandRuinsNineLeft.png"
 const blockersArea = new Image();
 blockersArea.src = "./objects/construction/ruins/blockersArea.png"
+const GrasslandRuinsTen = new Image();
+GrasslandRuinsTen.src = "./objects/construction/ruins/GrasslandRuinsTen.png"
 
 //OUTDOOR DECORATIONS
 const cristalOneRight = new Image();
@@ -194,6 +218,14 @@ const orangeMushroom = new Image();
 orangeMushroom.src = "./objects/outdoor/decorations/orangeMushroom.png"
 const redMushroom = new Image();
 redMushroom.src = "./objects/outdoor/decorations/redMushroom.png"
+
+//OUTDOOR WATER
+const smallLake = new Image();
+smallLake.src = "./objects/outdoor/water/smallLake.png"
+const smallLakeTwo = new Image();
+smallLakeTwo.src = "./objects/outdoor/water/smallLakeTwo.png"
+const smallLakeThree = new Image();
+smallLakeThree.src = "./objects/outdoor/water/smallLakeThree.png"
 
 //OUTDOOR TREE
 const treeOne = new Image();
@@ -219,9 +251,32 @@ bluePotPlant.src = "./objects/outdoor/plants/bluePotPlant.png"
 const redPotPlant = new Image();
 redPotPlant.src = "./objects/outdoor/plants/redPotPlant.png"
 
+//OUTDOOR FURNITURE
+const ResstfieldStructure = new Image();
+ResstfieldStructure.src = "./objects/outdoor/furniture/ResstfieldStructure.png"
+const ResstfieldStructureNoLight = new Image();
+ResstfieldStructureNoLight.src = "./objects/outdoor/furniture/ResstfieldStructureNoLight.png"
+const Resstfieldplatforme = new Image();
+Resstfieldplatforme.src = "./objects/outdoor/furniture/Resstfieldplatforme.png"
+const flagLine = new Image();
+flagLine.src = "./objects/outdoor/furniture/flagLine.png"
+const tombstoneOne = new Image();
+tombstoneOne.src = "./objects/outdoor/furniture/tombstoneOne.png"
+const tombstoneTwo = new Image();
+tombstoneTwo.src = "./objects/outdoor/furniture/tombstoneTwo.png"
+const tombstoneThree = new Image();
+tombstoneThree.src = "./objects/outdoor/furniture/tombstoneThree.png"
+const tombstoneFour = new Image();
+tombstoneFour.src = "./objects/outdoor/furniture/tombstoneFour.png"
+const tombstoneFive = new Image();
+tombstoneFive.src = "./objects/outdoor/furniture/tombstoneFive.png"
+const tombstoneSix = new Image();
+tombstoneSix.src = "./objects/outdoor/furniture/tombstoneSix.png"
+
 //OUTDOOR GRASS
 const whiteFlowers = new Image();
 whiteFlowers.src = "./objects/outdoor/grass/whiteFlowers.png"
+
 const yellowFlowers = new Image();
 yellowFlowers.src = "./objects/outdoor/grass/yellowFlowers.png"
 const RedFlowers = new Image();
@@ -255,12 +310,16 @@ const circlePinkCarpet = new Image();
 circlePinkCarpet.src = "./objects/furniture/carpets/circlePinkCarpet.png"
 const circleOrangeCarpet = new Image();
 circleOrangeCarpet.src = "./objects/furniture/carpets/circleOrangeCarpet.png"
+const restfieldMallCarpetOne = new Image();
+restfieldMallCarpetOne.src = "./objects/furniture/carpets/restfieldMallCarpetOne.png"
+const restfieldMallCarpetTwo = new Image();
+restfieldMallCarpetTwo.src = "./objects/furniture/carpets/restfieldMallCarpetTwo.png"
 
 //FURNITURE DECORATION
-const boxesOneRight = new Image();
-boxesOneRight.src = "./objects/furniture/decorations/boxesOneRight.png"
-const boxesOneLeft = new Image();
-boxesOneLeft.src = "./objects/furniture/decorations/boxesOneLeft.png"
+const boxesOne = new Image();
+boxesOne.src = "./objects/furniture/decorations/boxesOne.png"
+const boxesTwo = new Image();
+boxesTwo.src = "./objects/furniture/decorations/boxesTwo.png"
 const boxeWithFruitsRight = new Image();
 boxeWithFruitsRight.src = "./objects/furniture/decorations/boxeWithFruitsRight.png"
 const boxeWithFruitsLeft = new Image();
@@ -287,14 +346,52 @@ const boxeWithFruitsTwoRight = new Image();
 boxeWithFruitsTwoRight.src = "./objects/furniture/decorations/boxeWithFruitsTwoRight.png"
 const boxeWithFruitsTwoLeft = new Image();
 boxeWithFruitsTwoLeft.src = "./objects/furniture/decorations/boxeWithFruitsTwoLeft.png"
+const paperWallOne = new Image();
+paperWallOne.src = "./objects/furniture/decorations/paperWallOne.png"
+const paperWallTwo = new Image();
+paperWallTwo.src = "./objects/furniture/decorations/paperWallTwo.png"
+const paintFive = new Image();
+paintFive.src = "./objects/furniture/decorations/paintFive.png"
+const skeletonOne = new Image();
+skeletonOne.src = "./objects/furniture/decorations/skeletonOne.png"
+const skeletonOneReverse = new Image();
+skeletonOneReverse.src = "./objects/furniture/decorations/skeletonOneReverse.png"
+const skeletonTwo = new Image();
+skeletonTwo.src = "./objects/furniture/decorations/skeletonTwo.png"
+const skeletonTwoReverse = new Image();
+skeletonTwoReverse.src = "./objects/furniture/decorations/skeletonTwoReverse.png"
+const bankDragon = new Image();
+bankDragon.src = "./objects/furniture/decorations/bankDragon.png"
+const bankCharactere = new Image();
+bankCharactere.src = "./objects/furniture/decorations/bankCharactere.png"
+const restfieldDecoration = new Image();
+restfieldDecoration.src = "./objects/furniture/decorations/restfieldDecoration.png"
+
+//FURNITURE TABLES
+const woodTable = new Image();
+woodTable.src = "./objects/furniture/tables/woodTable.png"
+const craftingTable = new Image();
+craftingTable.src = "./objects/furniture/tables/craftingTable.png"
 
 //FURNITURE KITCHEN
 const cookingStand = new Image();
 cookingStand.src = "./objects/furniture/kitchen/cookingStand.png"
+const cookingStandReverse = new Image();
+cookingStandReverse.src = "./objects/furniture/kitchen/cookingStandReverse.png"
+
+//FURNITURE STORAGE
+const shelves = new Image();
+shelves.src = "./objects/furniture/storage/shelves.png"
+const restfieldmallStorage = new Image();
+restfieldmallStorage.src = "./objects/furniture/storage/restfieldmallStorage.png"
 
 //LIGHT
 const lightPoleOne = new Image();
 lightPoleOne.src = "./objects/light/lamps/lightPoleOne.png"
+const lightPoleOneReverse = new Image();
+lightPoleOneReverse.src = "./objects/light/lamps/lightPoleOneReverse.png"
+const restfieldPole = new Image();
+restfieldPole.src = "./objects/light/lamps/restfieldPole.png"
 const mediumTorch = new Image();
 mediumTorch.src = "./objects/light/lamps/mediumTorch.png"
 const restfielMallLight = new Image();
