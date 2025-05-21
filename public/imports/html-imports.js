@@ -252,6 +252,7 @@ const layerOneButtonUi  = document.getElementById("layerOneButtonUi");
 const layerTwoButtonUi  = document.getElementById("layerTwoButtonUi");
 const layerThreeButtonUi  = document.getElementById("layerThreeButtonUi");
 const deleteObjButtonUi = document.getElementById("deleteObjButtonUi");
+const rotateObjButtonUi = document.getElementById("rotateObjButtonUi");
 const saveObjButtonUi = document.getElementById("saveObjButtonUi");
 const deleteWalls = document.getElementById("deletewWallButtonUi");
 const placeEnchantingArea = document.getElementById("enchantingButtonUi");
