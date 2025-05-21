@@ -6944,7 +6944,7 @@ function shootDefaultArcane () {
   let angle = angleMouse
   const audioShootNature = new Audio("./audios/shootNature.wav");
   audioShootNature.loop = false;
-  audioShootNature.volume = 0.3;
+  audioShootNature.volume = 0.8;
   audioShootNature.play()
 
   // socket.emit("projectile", angle);
@@ -6991,7 +6991,7 @@ function shootArcaneRepeater () {
   const angle = angleMouse
   const audioShootNature = new Audio("./audios/shootNature.wav");
   audioShootNature.loop = false;
-  audioShootNature.volume = 0.3;
+  audioShootNature.volume = 0.8;
   audioShootNature.play()
   const bullet1 = angle + 0.1
   const bullet2 = angle - 0.1
@@ -7046,7 +7046,7 @@ function shootArcaneLancer () {
   const angle = angleMouse
   const audioShootNature = new Audio("./audios/shootNature.wav");
   audioShootNature.loop = false;
-  audioShootNature.volume = 0.3;
+  audioShootNature.volume = 0.8;
   audioShootNature.play()
   // socket.emit("projectile", angle);
   cameraShake();
@@ -9188,7 +9188,13 @@ function drawSceneLayer(layer, num) {
   // 🎨 Add map objects
   for (let i = 0; i < mapsInfo[currentLand].objects.length; i++) {
     for (const obj of mapsInfo[currentLand].objects[i]) {
-      const objectOriginal = mapObject.find(item => item.name === obj.name);
+      let objectOriginal;
+
+      if (obj.img) {
+        objectOriginal = obj;
+      } else {
+        objectOriginal = mapObject.find(item => item.name === obj.name);
+      }
       if (!objectOriginal || objectOriginal.backgroundObj === "back" || objectOriginal.backgroundObj === true) continue;
 
       const drawItem = {
@@ -10929,14 +10935,14 @@ function checkEnemyCombat (enemy) {
       bossBarHealthFollower.style.width = bossBarPercentage + "%";
 
       if (enemy.health > 0) {
-        const enemyHitAudio = new Audio("./audios/enemyHit.mp3");
+        const enemyHitAudio = new Audio("./audios/enemyHit.wav");
         enemyHitAudio.loop = false;
-        enemyHitAudio.volume = 0.3;
+        enemyHitAudio.volume = 0.6;
         enemyHitAudio.play()
       } else {
-        const splatAudio = new Audio("./audios/splat.mp3");
+        const splatAudio = new Audio("./audios/splat.wav");
         splatAudio.loop = false;
-        splatAudio.volume = 0.3;
+        splatAudio.volume = 0.6;
         splatAudio.play()
       }
     }

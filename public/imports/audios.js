@@ -75,9 +75,9 @@ const shopSong = new Audio("./audios/shopSong.mp3");
 shopSong.loop = true;
 shopSong.volume = 0.5;
 
-const loggedIn = new Audio("./audios/loggedIn.mp3");
+const loggedIn = new Audio("./audios/loggedIn.wav");
 loggedIn.loop = false;
-loggedIn.volume = 0.3;
+loggedIn.volume = 0.5;
 
 const glitchArcane = new Audio("./audios/glitchArcane.wav");
 glitchArcane.loop = false;
@@ -139,9 +139,9 @@ const lobbySong = new Audio("./audios/lobbySong.wav");
 lobbySong.loop = true;
 lobbySong.volume = 0.8;
 
-const levelUpAudio = new Audio("./audios/levelUp.mp3");
+const levelUpAudio = new Audio("./audios/levelUp.wav");
 levelUpAudio.loop = false;
-lobbySong.volume = 0.5;
+levelUpAudio.volume = 0.5;
 
 const audioCardFlip = new Audio("./audios/cardFlip.wav");
 audioCardFlip.loop = false;
