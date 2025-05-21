@@ -184,17 +184,6 @@ lootImage.addEventListener("click", function(){
   }
 });
 
-placeMobButtonUi.addEventListener("click", function(){
-  if (monsterCreationParent.style.display !== "flex") {
-    deselectUiButton()
-    monsterCreationParent.style.display = "flex"
-    placeMobButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
-  } else {
-    monsterCreationParent.style.display = "none"
-    placeMobButtonUi.style.backgroundColor = "rgba(148, 223, 148, 0)"
-  }
-});
-
 let mobsImages = [
   {
     name: "treeSimpleEnemy",
@@ -8300,12 +8289,15 @@ function deselectUiButton() {
   placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
   placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
   editMapsButttonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeMobButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
   uiBuildingObjects.style.display = "none";
   uiBuildingCategory.style.display = "none";
   roomsDiv.style.display = "none"
   mapInfoDiv.style.display = "none"
   deleteObject = false
   musicPlayer.style.display = "none"
+  monsterCreationParent.style.display = "none"
+  editMapsPage.style.display = "none"
 }
 
 placeWalls.addEventListener("click", function() {
@@ -8372,15 +8364,18 @@ if(deleteObject === false) {
 
 editMapsButttonUi.addEventListener("click", function(){
   showWallsFunction(false)
-  if(editMapsPage.style.display !== "flex"){
-    monsterCreationParent.style.display = "none"
+  if(currentDevAction !== "editmap"){
+    deselectUiButton()
+    currentDevAction = "editmap"
     editMapsPage.style.display = "flex"
     editMapsButttonUi.style.backgroundColor = "rgb(148, 223, 148)"
   } else {
     editMapsPage.style.display = "none"
-    editMapsButttonUi.style.backgroundColor = "rgba(148, 223, 148, 0)"
+    editMapsButttonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    currentDevAction = "none"
   }
 })
+
 
 saveObjButtonUi.addEventListener("click", function() {
   showWallsFunction(false);
@@ -8633,15 +8628,18 @@ musicPlayerSlider.addEventListener("input", function () {
 });
 
 placeMobButtonUi.addEventListener("click", function(){
+  showWallsFunction(false)
   if (currentDevAction !== "monster") {
-    monsterCreationParent.style.display = "flex"
     currentDevAction = "monster";
+    deselectUiButton()
+    placeMobButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
+    monsterCreationParent.style.display = "flex"
   } else {
     monsterCreationParent.style.display = "none"
     monsterSelectionImageParent.style.display = "none"
     monsterLoot.style.display = "none"
     currentDevAction = "none";
-    showWallsFunction(false)
+    placeMobButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
   }
 });
 
