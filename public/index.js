@@ -1,6 +1,8 @@
 //Change this to push >
 // const socket = io(`ws://localhost:5000`);
 
+const { reverse } = require("lodash");
+
 //const socket = io(`https://arcanyGame.up.railway.app/`);
 const socket = io(window.location.origin);
 
@@ -60,6 +62,12 @@ window.addEventListener("load", () => {
 
 const emptyMap = new Image();
 emptyMap.src = "./islands/emptyMap.png";
+const BlackMap = new Image();
+BlackMap.src = "./islands/BlackMap.png";
+const insideMap = new Image();
+insideMap.src = "./islands/insideMap.png";
+const RestfieldMap = new Image();
+RestfieldMap.src = "./islands/RestfieldMap.png";
 
 const easyCircle = new Image();
 easyCircle.src = "./icons/attacks/easyCircle.png";
@@ -575,9 +583,9 @@ Object.entries(inputMappings).forEach(([inputId, mobProp]) => {
 //   uiBuilding.scrollLeft += event.deltaY; // Scroll horizontally
 // });
 
-logOutButton.addEventListener("click", function(){
-  location.reload();
-});
+// logOutButton.addEventListener("click", function(){
+//   location.reload();
+// });
 
 let uiIsClose = true
 let uiProfileOpen = true;
@@ -3035,7 +3043,7 @@ let maxHealth = 6;
 let currentHealth = 6;
 let dying = false;
 
-function playerDeath () {
+function playerDeath() {
 
   if (dying) return;
 
@@ -3125,6 +3133,10 @@ respawn.addEventListener("click", () => {
     dying = false;
   }, 200);
 })
+
+function userNameUi(){
+  userNameTitle.innerHTML = myPlayer.username
+}
 
 function health() {
 
@@ -3378,6 +3390,8 @@ socket.on("player", (serverPlayer) => {
 
   if (myPlayer.username === 'none') {
     return;
+  } else {
+    userNameUi()
   }
 
   currentHealth = myPlayer.health
@@ -5075,6 +5089,60 @@ socket.on("player", (serverPlayer) => {
 
     subscription: 'none',
   },
+  {
+    name: "distributorPinkFront",
+    backgroundObj: "front",
+    img: distributorPinkFront,
+    x: 0,
+    y: 0,
+    h: distributorPinkFront.height,
+    w: distributorPinkFront.width,
+    category: "furniture",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
+  {
+    name: "restfieldMallbooks",
+    backgroundObj: "front",
+    img: restfieldMallbooks,
+    reverse:restfieldMallbooksReverse,
+    x: 0,
+    y: 0,
+    h: restfieldMallbooks.height,
+    w: restfieldMallbooks.width,
+    category: "furniture",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
+  {
+    name: "restfieldMallbooksTwo",
+    backgroundObj: "front",
+    img: restfieldMallbooksTwo,
+    reverse:restfieldMallbooksTwoReverse,
+    x: 0,
+    y: 0,
+    h: restfieldMallbooksTwo.height,
+    w: restfieldMallbooksTwo.width,
+    category: "furniture",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
+  {
+    name: "restfieldMallbooksThree",
+    backgroundObj: "front",
+    img: restfieldMallbooksThree,
+    x: 0,
+    y: 0,
+    h: restfieldMallbooksThree.height,
+    w: restfieldMallbooksThree.width,
+    category: "furniture",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
 
   // furniture - kitchen
   {
@@ -5129,6 +5197,46 @@ socket.on("player", (serverPlayer) => {
     y: 0,
     h: restfieldmallStorage.height,
     w: restfieldmallStorage.width,
+    category: "furniture",
+    subCategory: "storage",
+
+    subscription: 'none',
+  },
+  {
+    name: "restfieldShelves",
+    backgroundObj: false,
+    img: restfieldShelves,
+    x: 0,
+    y: 0,
+    h: restfieldShelves.height,
+    w: restfieldShelves.width,
+    category: "furniture",
+    subCategory: "storage",
+
+    subscription: 'none',
+  },
+  {
+    name: "restfieldShelvesTwo",
+    backgroundObj: false,
+    img: restfieldShelvesTwo,
+    x: 0,
+    y: 0,
+    h: restfieldShelvesTwo.height,
+    w: restfieldShelvesTwo.width,
+    category: "furniture",
+    subCategory: "storage",
+
+    subscription: 'none',
+  },
+  {
+    name: "restfieldShelvesThree",
+    backgroundObj: false,
+    img: restfieldShelvesThree,
+    reverse:restfieldShelvesThreeReverse,
+    x: 0,
+    y: 0,
+    h: restfieldShelvesThree.height,
+    w: restfieldShelvesThree.width,
     category: "furniture",
     subCategory: "storage",
 
@@ -5908,8 +6016,8 @@ socket.on("player", (serverPlayer) => {
     lightSource: true,
     x: 0,
     y: 0,
-    h: 52,
-    w: 22,
+    h: restfieldPole.height,
+    w: restfieldPole.width,
     lightSource: true,
     category: "light",
     subCategory: "lamps",
@@ -6491,8 +6599,6 @@ socket.on("loginAttempt", (res) => {
     localPlayerPos = comingMap.playerPos
     audioIntro.pause();
     loggedIn.play();
-    // intervalCanvasBase = requestAnimationFrame(lobbyLoop); //Initial canvas
-    // intervalCanvasBase = requestAnimationFrame(emptyMapLoop)
     intervalCanvasBase = requestAnimationFrame(generalMapLoop)
     lobbySoundtrack()
     // intervalCanvasBase = setInterval(lobbyLoop, 16.67); //Initial canvas
@@ -8293,21 +8399,22 @@ function calculateValue(resolution) {
 // UI DEV COMMENT >
 
 function deselectUiButton() {
-  placeWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeWalls.style.backgroundColor = "transparent"
+  deleteWalls.style.backgroundColor = "transparent"
   deleteObjButtonUi.style.backgroundColor = "#ffe2c1"
-  placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  hammerButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  createMapButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  editMapsButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeMobButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  placeFishingArea.style.backgroundColor = "transparent"
+  placeEnchantingArea.style.backgroundColor = "transparent"
+  placeCookingArea.style.backgroundColor = "transparent"
+  hammerButtonUi.style.backgroundColor = "transparent"
+  placeTransition.style.backgroundColor = "transparent"
+  createMapButtonUi.style.backgroundColor = "transparent"
+  placeCraftingArea.style.backgroundColor = "transparent"
+  placeFishingArea.style.backgroundColor = "transparent"
+  placeEnchantingArea.style.backgroundColor = "transparent"
+  placeCookingArea.style.backgroundColor = "transparent"
+  editMapsButtonUi.style.backgroundColor = "transparent"
+  placeMobButtonUi.style.backgroundColor = "transparent"
+  placeAreaButton.style.backgroundColor = "transparent"
   uiBuildingObjects.style.display = "none";
   uiBuildingCategory.style.display = "none";
   roomsDiv.style.display = "none"
@@ -8316,6 +8423,8 @@ function deselectUiButton() {
   musicPlayer.style.display = "none"
   monsterCreationParent.style.display = "none"
   editMapsPage.style.display = "none"
+  placeArea.style.display = "none"
+  openUi()
 }
 
 placeWalls.addEventListener("click", function() {
@@ -8340,7 +8449,6 @@ deleteWalls.addEventListener("click", function() {
     currentDevAction = "delete";
     roomsDiv.style.display = "none"
     dialogsDiv.style.display = "none"
-    uiBuildingObjects.style.display = "none"
     
     deselectUiButton()
     deleteWalls.style.backgroundColor = "rgba(170, 233, 170, 1)"
@@ -8386,6 +8494,21 @@ if(deleteObject === false) {
 }
 });
 
+placeAreaButton.addEventListener("click", function(){
+  showWallsFunction(false)
+  playRandomPop()
+  if(currentDevAction !== "placeArea"){
+    deselectUiButton()
+    currentDevAction = "placeArea"
+    placeAreaButton.style.backgroundColor = "rgb(148, 223, 148)"
+    placeArea.style.display = "flex"
+  } else {
+    placeArea.style.display = "none"
+    placeAreaButton.style.backgroundColor = "transparent"
+    currentDevAction = "none"
+  }
+})
+
 editMapsButtonUi.addEventListener("click", function(){
   showWallsFunction(false)
   playRandomPop()
@@ -8405,6 +8528,7 @@ editMapsDeleteObj.addEventListener("click", function(){
   showWallsFunction(false)
   playRandomPop()
   popupDeleteAllObjParent.style.display = "flex"
+  popUpBlackscreen.style.display = "flex"
 })
 
 closeEditMapsTitle.addEventListener("click", function(){
@@ -8418,11 +8542,13 @@ deleteAllObjButton.addEventListener("click", function(){
   playRandomPop()
   socket.emit("deleteAllObj", mapsInfo[currentLand].areaName);
   popupDeleteAllObjParent.style.display = "none"
+  popUpBlackscreen.style.display = "none"
 })
 
 deleteAllObjButtonCancel.addEventListener("click", function(){
   playRandomPop()
   popupDeleteAllObjParent.style.display = "none"
+  popUpBlackscreen.style.display = "none"
 })
 
 saveObjButtonUi.addEventListener("click", function() {
@@ -8508,8 +8634,8 @@ hammerButtonUi.addEventListener("click", function() {
   playRandomPop()
   if (currentDevAction !== "building") {
     currentDevAction = "building";
-    cancelUi()
     deselectUiButton()
+    cancelUi()
     uiBuildingObjects.style.display = "flex";
     uiBuildingCategory.style.display = "flex";
     hammerButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
@@ -8570,7 +8696,7 @@ startBuildingBut.addEventListener("click", function() {
   playRandomPop()
 
 if (uiBuilding.style.display !== "flex") {
-
+  
   roomsDiv.style.display = "none"
   dialogsDiv.style.display = "none"
   uiBuilding.style.display = "flex"

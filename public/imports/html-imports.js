@@ -140,6 +140,8 @@ const closeBookButton = document.querySelector('.closeBookButton')
 
 //UI <
 
+
+const userNameTitle = document.getElementById("userNameTitle");
 const uiSkinsImg = document.getElementById("uiSkinsImg");
 const circleCharacter = document.getElementById("circleCharacter");
 const mountainsUi = document.getElementById("mountainsUi");
@@ -384,5 +386,10 @@ const editMapsPage = document.getElementById("editMaps")
 const editMapsRenameInput = document.getElementById("editMapsRenameInput");
 const editMapsDeleteObj = document.getElementById("editMapsDeleteObj");
 const popupDeleteAllObjParent = document.getElementById("popupDeleteAllObjParent");
+const popUpBlackscreen = document.getElementById("popUpBlackscreen");
 const deleteAllObjButton = document.getElementById("deleteAllObjButton");
 const deleteAllObjButtonCancel = document.getElementById("deleteAllObjButtonCancel");
+
+//placeArea
+const placeArea = document.getElementById("placeArea");
+const placeAreaButton = document.getElementById("placeAreaButton");

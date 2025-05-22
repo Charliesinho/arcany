@@ -57,6 +57,7 @@ body {
     background-image: url('./icons/uiIcon/exclamation.png');
     background-size: cover;
     background-repeat: no-repeat;
+    image-rendering: pixelated;
 }
 
 #lootImage {
@@ -65,12 +66,14 @@ body {
     background-image: url('./icons/uiIcon/exclamation.png');
     background-size: cover;
     background-repeat: no-repeat;
+    image-rendering: pixelated;
 }
 
 .attackMob-icon {
     border: solid 2.5px #b3a49654;
     outline: solid 2.5px #3939393d;
     border-radius: 3px;
+    image-rendering: pixelated;
 }
 
 #monsterCreationAttacks {
@@ -113,6 +116,7 @@ body {
     display: none;
     flex-wrap: wrap;
     gap: 15px;
+    image-rendering: pixelated;
 }
 
 #monsterLoot {
@@ -788,7 +792,7 @@ color: white;
 #uiBuildingToolsDiv > img:hover {
     top: -3px;
     box-shadow: 0 5px 5px rgba(0, 0, 0, 0.142);
-    background-color: rgb(148, 223, 148);
+    background-color: rgb(148, 223, 148) !important;
 }
 
 .buildObject {
@@ -944,15 +948,16 @@ color: white;
     height: 100vh;
     display: none;
     position: absolute;
-    z-index: 1;
+    z-index: 2;
 
 }
-.popUpBlackscreen{
+#popUpBlackscreen{
+    display: none;
     position: absolute;
     background-color: #5f141085;
     width: 100vw;
     height: 100vh;
-    z-index: 1;
+    z-index: 2;
 }
 #popupDeleteAllObjChild{
     width: 300px;
@@ -974,6 +979,34 @@ color: white;
     margin-top: 30px
 }
 
+
+/* //PLACE AREA */
+#placeArea{
+    position : absolute;
+    bottom: 104px;
+    left: 119px;
+    /* transform: translate(0%, -50%); */
+    align-items: flex-end;
+    /* padding: 0 !important; */
+    padding: 10px;
+    background: white;
+    border-radius: 3px;
+    display: none;
+    flex-direction: column;
+    gap: 22px;
+    max-height: 766px;
+    width: 60px;
+    overflow-y: auto;
+    border: solid 3px #b3a496;
+    outline: solid 3px #393939;
+    z-index: 1;
+    background: #FFE2C1;
+}
+#placeArea > img:hover{
+    top: -3px;
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.142);
+    background-color: rgb(148, 223, 148) !important;
+}
 
 /* //FILTER UI CONSTRUCTION// */
 .filterUiConstruction{
@@ -1178,7 +1211,6 @@ color: white;
     width: calc(100% - 80px);
     height: calc(100% - 90px);
     justify-content: flex-start;
-    gap: 20px;
     flex-direction: column;
     padding: 45px 40px;
 }
@@ -1214,12 +1246,11 @@ color: white;
 
 #uiProfileSkillAndAppearance{
     height: 360px;
-    width: 100%;
+    width: calc(100% - 30px);
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
-    gap: 30px;
-    align-items: center;
+    padding: 15px;
+    justify-content: space-around;
 }
 #skillLevels{
     display: flex;
@@ -1241,17 +1272,30 @@ color: white;
     position: relative;
     z-index: 2;
 }
+#uiSkinsImgParent{
+    background: url(./ui/uiInventoryBackgroundPlayer.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position-x: 50%;
+    /* width: 90%; */
+    /* height: auto; */
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
 #uiSkinsImg {
     position: relative;
-    right: 150px;
-    top: 30px;
+    width: 325px;
 }
 #uiProfileCurrentClothing{
-    width: 100%;
-    margin: 40px 0px 25px 0px;
-    display: flex;
-    justify-content: space-evenly;
-    gap: 13px;
+        display: flex
+;
+    flex-direction: column;
+    display: flex
+;
+    justify-content: space-between;
+    /* gap: 13px; */
+    padding: 15px;
     flex-wrap: wrap;
 }
 .inventorySlotBG {

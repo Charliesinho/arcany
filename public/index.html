@@ -20,6 +20,8 @@
       </video>      
     </div>
 
+    <div id="popUpBlackscreen"></div>
+
     <div id="openerScreen">
       <div id="openerScreen-upper">
         <div class="openerScreen-child">
@@ -98,12 +100,7 @@
       <div id="uiBuildingToolsDiv">
         <!-- <h1>Actions</h1> -->
         <br/>
-        <img class="buildingUiButton pointerActivator" id="fishingButtonUi" src="./icons/uiIcon/fishingIcon.png"></img>
-        <img class="buildingUiButton pointerActivator" id="enchantingButtonUi" src="./icons/uiIcon/enchantingIcon.png"></img>
-        <img class="buildingUiButton pointerActivator" id="craftingButtonUi" src="./icons/uiIcon/craftingIcon.png"></img>
-        <img class="buildingUiButton pointerActivator" id="cookingButtonUi" src="./icons/uiIcon/cookingIcon.png"></img>
-        <img class="buildingUiButton pointerActivator" id="portalButtonUi" src="./icons/uiIcon/portal.png"></img>
-        <br/>
+        <img class="buildingUiButton pointerActivator" id="placeAreaButton" src="./icons/uiIcon/create.png"></img>
         <img class="buildingUiButton pointerActivator" id="createMapButtonUi" src="./icons/uiIcon/create.png"></img>
         <img class="buildingUiButton pointerActivator" id="sapwnButtonUi" src="./icons/uiIcon/setSpawnIcon.png"></img>
         <img class="buildingUiButton pointerActivator" id="editMapButtonUi" src="./icons/uiIcon/edit.png"></img>
@@ -117,8 +114,17 @@
         <br/>
         <img class="buildingUiButton pointerActivator" id="hammerButtonUi" src="./icons/uiIcon/hammerIcon.png"></img>
       </div>
+
     </div>
     <div id="roomsDev"></div>
+    
+    <div id="placeArea">
+      <img class="buildingUiButton pointerActivator" id="fishingButtonUi" src="./icons/uiIcon/fishingIcon.png"></img>
+      <img class="buildingUiButton pointerActivator" id="enchantingButtonUi" src="./icons/uiIcon/enchantingIcon.png"></img>
+      <img class="buildingUiButton pointerActivator" id="craftingButtonUi" src="./icons/uiIcon/craftingIcon.png"></img>
+      <img class="buildingUiButton pointerActivator" id="cookingButtonUi" src="./icons/uiIcon/cookingIcon.png"></img>
+      <img class="buildingUiButton pointerActivator" id="portalButtonUi" src="./icons/uiIcon/portal.png"></img>
+    </div>
 
     <div id="editMaps">
       <div>
@@ -155,7 +161,6 @@
     </div>
 
     <div id="popupDeleteAllObjParent">
-      <div class="popUpBlackscreen"></div>
 
       <div id="popupDeleteAllObjChild">
         <p>Do you really want to delete all the objects of this map ?</p>
@@ -396,9 +401,13 @@
       <div id="uiProfileUserName">
         <img id="uiProfileRank" src="./ui/Rank/rankOne.png" >
         <div id="uiProfileUsernameAndLevel">
-          <p class="textTitle uiProfileName">Melina</p>
+          <p id="userNameTitle" class="textTitle uiProfileName"></p>
           <p class="textStandard uiProfileLevel">LVL 1</p>
         </div>
+      </div>
+
+      <div id="uiSkinsImgParent">
+        <img id="uiSkinsImg">
       </div>
 
       <div id="uiProfileSkillAndAppearance">
@@ -435,10 +444,8 @@
           </div>
 
         </div>
-        <img id="uiSkinsImg">
-      </div>
 
-      <div id="uiProfileCurrentClothing" >   
+        <div id="uiProfileCurrentClothing" >   
           <div class="inventorySlotBG">
             <div class="pointerActivator inventoryItem equipmentItem weaponEquipped"></div>
           </div>   
@@ -449,14 +456,12 @@
             <div class="pointerActivator inventoryItem equipmentItem artifactEquipped"></div>
           </div> 
       </div>
+        
+      </div>     
 
-      <p id="uiProfileCurrentStrengthInformation">This is some explanation for the three boxes on top. Depending on which you select you have a diferent text.</p>
-      
-
-      <button id="logOutButton" class="pointerActivator">
+      <!-- <button id="logOutButton" class="pointerActivator">
         <p>Log out</p>
-      </button>
-
+      </button> -->
     </div>
 
     <div id="uiInventory" class="inventoryShadow inventoryHide dragParent">

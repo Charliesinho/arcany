@@ -371,6 +371,18 @@ const bankCharactere = new Image();
 bankCharactere.src = "./objects/furniture/decorations/bankCharactere.png"
 const restfieldDecoration = new Image();
 restfieldDecoration.src = "./objects/furniture/decorations/restfieldDecoration.png"
+const distributorPinkFront = new Image();
+distributorPinkFront.src = "./objects/furniture/decorations/distributorPinkFront.png"
+const restfieldMallbooks = new Image();
+restfieldMallbooks.src = "./objects/furniture/decorations/restfieldMallbooks.png"
+const restfieldMallbooksReverse = new Image();
+restfieldMallbooksReverse.src = "./objects/furniture/decorations/restfieldMallbooksReverse.png"
+const restfieldMallbooksTwo = new Image();
+restfieldMallbooksTwo.src = "./objects/furniture/decorations/restfieldMallbooksTwo.png"
+const restfieldMallbooksTwoReverse = new Image();
+restfieldMallbooksTwoReverse.src = "./objects/furniture/decorations/restfieldMallbooksTwoReverse.png"
+const restfieldMallbooksThree = new Image();
+restfieldMallbooksThree.src = "./objects/furniture/decorations/restfieldMallbooksThree.png"
 
 //FURNITURE TABLES
 const woodTable = new Image();
@@ -389,6 +401,14 @@ const shelves = new Image();
 shelves.src = "./objects/furniture/storage/shelves.png"
 const restfieldmallStorage = new Image();
 restfieldmallStorage.src = "./objects/furniture/storage/restfieldmallStorage.png"
+const restfieldShelves = new Image();
+restfieldShelves.src = "./objects/furniture/storage/restfieldShelves.png"
+const restfieldShelvesTwo = new Image();
+restfieldShelvesTwo.src = "./objects/furniture/storage/restfieldShelvesTwo.png"
+const restfieldShelvesThree = new Image();
+restfieldShelvesThree.src = "./objects/furniture/storage/restfieldShelvesThree.png"
+const restfieldShelvesThreeReverse = new Image();
+restfieldShelvesThreeReverse.src = "./objects/furniture/storage/restfieldShelvesThreeReverse.png"
 
 //LIGHT
 const lightPoleOne = new Image();
