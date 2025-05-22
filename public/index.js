@@ -1,5 +1,8 @@
 //Change this to push >
 // const socket = io(`ws://localhost:5000`);
+
+const { reverse } = require("lodash");
+
 //const socket = io(`https://arcanyGame.up.railway.app/`);
 const socket = io(window.location.origin);
 
@@ -4012,7 +4015,8 @@ socket.on("player", (serverPlayer) => {
   {
     name: "restfieldFenceOne",
     backgroundObj: false,
-    img: restfieldFenceOneReverse,
+    img: restfieldFenceOne,
+    reverse:restfieldFenceOneReverse,
     x: 0,
     y: 0,
     h: restfieldFenceOne.height,
