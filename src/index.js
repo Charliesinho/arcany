@@ -91,7 +91,7 @@ function tick() {
 
 }
 
-setInterval(tick, 300);
+setInterval(tick, 100);
 
 async function updateHealth(username, health, id) {    
     const playerHealth = await Player.findOneAndUpdate({username: username}, {health: health}, {new: true}); 
@@ -676,6 +676,57 @@ async function main() {
                 
               };
               expObtained()
+        });
+        
+        socket.on("toInvite", (user) => {
+
+            async function invite() {
+                const player = await Player.findOne({username: user[0]}).exec();     
+                if (!player) return;
+                user.push(player.socket)                                      
+                io.to(player.socket).emit('partyInvite', user);           
+            };
+            invite()
+        });
+        
+        socket.on("partyInviteAccepted", (user) => {
+            async function invite() {
+                // const player = await Player.findOne({username: user[0]}).exec();     
+                // if (!player) return;                                      
+                io.to(user[1]).emit('partyInviteAcceptedCallback', user);           
+            };
+            invite()
+        });
+        
+        socket.on("updateParty", (users) => {
+            async function invite() {
+                for (let user of users) {
+                    io.to(user.id).emit('updatePartyClient', users);           
+                }                            
+            };
+            invite()
+        });
+        
+        socket.on("partyProjectile", (info) => {
+            async function invite() {
+                for (let user of info[0]) {
+                    if (user.id != socket.id) {
+                        io.to(user.id).emit('partyProjectileClient', info[1]);           
+                    }
+                }                            
+            };
+            invite()
+        });
+        
+        socket.on("leaderShareEnemies", (info) => {
+            async function share() {
+                for (let user of info[1]) {
+                    if (user.id != socket.id) {
+                        io.to(user.id).emit('leaderShareEnemiesClient', info[0]);           
+                    }
+                }                            
+            };
+            share()
         });
         
         socket.on("updateServer", () => {

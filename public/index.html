@@ -76,6 +76,7 @@
 
     <p id="areaName">Default name</p>
     <p id="errorPopUp">Level requirements not met</p>
+    <p id="partyPopUp" class="pointerActivator"></p>
     <div id="tradeScreen">
       <h1>Trade</h1>
       <p>To trade just select the item you'd like to trade, then type the username of the player you'd like to trade with. Finally just click on "Send"!</p>
@@ -83,6 +84,18 @@
       <img id="tradeItemImg" src="./Textures/itemPlaceholder.png" id="tradeItem" />
       <button id="tradeSend" class="pointerActivator">Send</button>
     </div>
+    
+    <div id="partyScreen">
+      <h1>Party</h1>
+      <p>To add someone to your party just type the username of the player you'd like to add, then just click on "Send invite". Note that when you join a party, all the mobs will update to match the ones of the host so you can fight together!</p>
+      <input id="playerPartyId" placeholder="username..."></input>
+      <button id="partySend" class="pointerActivator">Send invite</button>
+    </div>
+
+    <div id="partyMembers">
+      <h1>Party</h1>
+    </div>
+
     <div id='timer'>00:00</div>  
     <div id="blackScreen"></div>
     <p id="youDied">YOU DIED</p>
@@ -99,19 +112,19 @@
     <div id="uiBuilding">
       <div id="uiBuildingToolsDiv">
         <!-- <h1>Actions</h1> -->
-        <br/>
+        <!-- <br/> -->
         <img class="buildingUiButton pointerActivator" id="placeAreaButton" src="./icons/uiIcon/create.png"></img>
         <img class="buildingUiButton pointerActivator" id="createMapButtonUi" src="./icons/uiIcon/create.png"></img>
         <img class="buildingUiButton pointerActivator" id="sapwnButtonUi" src="./icons/uiIcon/setSpawnIcon.png"></img>
         <img class="buildingUiButton pointerActivator" id="editMapButtonUi" src="./icons/uiIcon/edit.png"></img>
         <img class="buildingUiButton pointerActivator" id="saveObjButtonUi" src="./icons/uiIcon/save.png"></img>
-        <br/>
+        <!-- <br/> -->
         <img class="buildingUiButton pointerActivator" id="wallButtonUi" src="./icons/uiIcon/wallIcon.png"></img>
         <img class="buildingUiButton pointerActivator" id="deletewWallButtonUi" src="./icons/uiIcon/deletewallsIcon.png"></img>
         <!-- <h1>Layers</h1> -->
-        <br/>
+        <!-- <br/> -->
         <img class="buildingUiButton pointerActivator" id="placeMobButtonUi" src="./icons/uiIcon/placeMob.png"></img>
-        <br/>
+        <!-- <br/> -->
         <img class="buildingUiButton pointerActivator" id="hammerButtonUi" src="./icons/uiIcon/hammerIcon.png"></img>
       </div>
 
@@ -963,6 +976,7 @@
     <img class="pointerActivator toolBarIcon" id="fishingAvailable" src="./inventory/low.png"></img>
     <img class="pointerActivator toolBarIcon" id="buildButton" src="./icons/uiIcon/hammerIcon.png"></img>
     <img class="pointerActivator toolBarIcon" id="audioButton" src="./icons/uiIcon/musicIcon.png"></img>
+    <img class="pointerActivator toolBarIcon" id="partyButton" src="./icons/uiIcon/partyIcon.png"></img>
     <img class="pointerActivator toolBarIcon" id="settingButton" src="./icons/uiIcon/settingIcon.png"></img>
     <!-- <img class="pointerActivator toolBarIcon" id="wallsButton" src="./icons/uiIcon/wallIcon.png"></img> -->
     <div id="fishSelector"></div>
