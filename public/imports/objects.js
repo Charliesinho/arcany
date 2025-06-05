@@ -91,6 +91,20 @@ const woodWallHorTwoReverse = new Image();
 woodWallHorTwoReverse.src = "./objects/construction/walls/woodWallHorTwoReverse.png"
 const restfieldWall = new Image();
 restfieldWall.src = "./objects/construction/walls/restfieldWall.png"
+const restfieldMallWall = new Image();
+restfieldMallWall.src = "./objects/construction/walls/restfieldMallWall.png"
+const restfieldMallWallTwo = new Image();
+restfieldMallWallTwo.src = "./objects/construction/walls/restfieldMallWallTwo.png"
+const restfieldMallWallShadow = new Image();
+restfieldMallWallShadow.src = "./objects/construction/walls/restfieldMallWallShadow.png"
+
+//CONSTRUCTION ROOF
+const restfieldMallBrokenRoof = new Image();
+restfieldMallBrokenRoof.src = "./objects/construction/roofs/restfieldMallBrokenRoof.png"
+const restfieldMallBrokenRoofTwo = new Image();
+restfieldMallBrokenRoofTwo.src = "./objects/construction/roofs/restfieldMallBrokenRoofTwo.png"
+
+
 
 //CONSTRUCTION FENCE
 const woodFence = new Image();
@@ -116,6 +130,10 @@ const restfieldFenceTwo = new Image();
 restfieldFenceTwo.src = "./objects/construction/fences/restfieldFenceTwo.png"
 const restfieldFenceTwoReverse = new Image();
 restfieldFenceTwoReverse.src = "./objects/construction/fences/restfieldFenceTwoReverse.png"
+const restfieldMallFence = new Image();
+restfieldMallFence.src = "./objects/construction/fences/restfieldMallFence.png"
+const restfieldMallFenceReverse = new Image();
+restfieldMallFenceReverse.src = "./objects/construction/fences/restfieldMallFenceReverse.png"
 
 
 // CONSTRUCTION FLOORS
@@ -151,6 +169,16 @@ const stoneFloorPatch = new Image();
 stoneFloorPatch.src = "./objects/construction/floors/stoneFloorPatch.png"
 const restfieldMallTiles = new Image();
 restfieldMallTiles.src = "./objects/construction/floors/restfieldMallTiles.png"
+const restfieldMallFullFloorReverse = new Image();
+restfieldMallFullFloorReverse.src = "./objects/construction/floors/restfieldMallFullFloorReverse.png"
+const restfieldMallFullFloor = new Image();
+restfieldMallFullFloor.src = "./objects/construction/floors/restfieldMallFullFloor.png"
+const restfieldMallParking = new Image();
+restfieldMallParking.src = "./objects/construction/floors/restfieldMallParking.png"
+const restfieldMallParkingTwo = new Image();
+restfieldMallParkingTwo.src = "./objects/construction/floors/restfieldMallParkingTwo.png"
+const restfieldMallParkingReverse = new Image();
+restfieldMallParkingReverse.src = "./objects/construction/floors/restfieldMallParkingReverse.png"
 
 
 //CONSTRUCTION DOOR
@@ -223,6 +251,12 @@ const orangeMushroom = new Image();
 orangeMushroom.src = "./objects/outdoor/decorations/orangeMushroom.png"
 const redMushroom = new Image();
 redMushroom.src = "./objects/outdoor/decorations/redMushroom.png"
+const trash = new Image();
+trash.src = "./objects/outdoor/decorations/trash.png"
+const trashbag = new Image();
+trashbag.src = "./objects/outdoor/decorations/trashbag.png"
+const trashbagTwo = new Image();
+trashbagTwo.src = "./objects/outdoor/decorations/trashbagTwo.png"
 
 //OUTDOOR WATER
 const smallLake = new Image();
@@ -297,6 +331,14 @@ const mushroomCastel = new Image();
 mushroomCastel.src = "./objects/structures/building/mushroomCastel.png"
 const grasslandCristal = new Image();
 grasslandCristal.src = "./objects/structures/building/grasslandCristal.png"
+const restfieldMallSign = new Image();
+restfieldMallSign.src = "./objects/structures/building/restfieldMallSign.png"
+const restfieldMall = new Image();
+restfieldMall.src = "./objects/structures/building/restfieldMall.png"
+const residency = new Image();
+residency.src = "./objects/structures/building/residency.png"
+const residencyReverse = new Image();
+residencyReverse.src = "./objects/structures/building/residencyReverse.png"
 
 //STRUCTURES BRIDGES
 const grasslandBridgeBackOne = new Image();
@@ -383,12 +425,22 @@ const restfieldMallbooksTwoReverse = new Image();
 restfieldMallbooksTwoReverse.src = "./objects/furniture/decorations/restfieldMallbooksTwoReverse.png"
 const restfieldMallbooksThree = new Image();
 restfieldMallbooksThree.src = "./objects/furniture/decorations/restfieldMallbooksThree.png"
+const boxesResidency = new Image();
+boxesResidency.src = "./objects/furniture/decorations/boxesResidency.png"
+const bedResidency = new Image();
+bedResidency.src = "./objects/furniture/decorations/bedResidency.png"
+const paperResidency = new Image();
+paperResidency.src = "./objects/furniture/decorations/paperResidency.png"
+const booksResidency = new Image();
+booksResidency.src = "./objects/furniture/decorations/booksResidency.png"
 
 //FURNITURE TABLES
 const woodTable = new Image();
 woodTable.src = "./objects/furniture/tables/woodTable.png"
 const craftingTable = new Image();
 craftingTable.src = "./objects/furniture/tables/craftingTable.png"
+const tableResidency = new Image();
+tableResidency.src = "./objects/furniture/tables/tableResidency.png"
 
 //FURNITURE KITCHEN
 const cookingStand = new Image();
@@ -409,6 +461,18 @@ const restfieldShelvesThree = new Image();
 restfieldShelvesThree.src = "./objects/furniture/storage/restfieldShelvesThree.png"
 const restfieldShelvesThreeReverse = new Image();
 restfieldShelvesThreeReverse.src = "./objects/furniture/storage/restfieldShelvesThreeReverse.png"
+const restfieldMallFridgeOne = new Image();
+restfieldMallFridgeOne.src = "./objects/furniture/storage/restfieldMallFridgeOne.png"
+const restfieldMallFridgeOneReverse = new Image();
+restfieldMallFridgeOneReverse.src = "./objects/furniture/storage/restfieldMallFridgeOneReverse.png"
+const restfieldMallFridgeTwoReverse = new Image();
+restfieldMallFridgeTwoReverse.src = "./objects/furniture/storage/restfieldMallFridgeTwoReverse.png"
+const restfieldMallFridgeTwo = new Image();
+restfieldMallFridgeTwo.src = "./objects/furniture/storage/restfieldMallFridgeTwo.png"
+const restfieldMallFridgeThree = new Image();
+restfieldMallFridgeThree.src = "./objects/furniture/storage/restfieldMallFridgeThree.png"
+const shelvesResidency = new Image();
+shelvesResidency.src = "./objects/furniture/storage/shelvesResidency.png"
 
 //LIGHT
 const lightPoleOne = new Image();
@@ -433,6 +497,15 @@ lightpoleTwo.src = "./objects/light/lamps/lightpoleTwo.png"
 //LIGHT CEILING LAMPS
 const restfieldCeilingLamp = new Image();
 restfieldCeilingLamp.src = "./objects/light/ceilinglamps/restfieldCeilingLamp.png"
+
+const restfieldCeilingLampTwo = new Image();
+restfieldCeilingLampTwo.src = "./objects/light/ceilinglamps/restfieldCeilingLampTwo.png"
+const restfieldCeilingLampTwoReverse = new Image();
+restfieldCeilingLampTwoReverse.src = "./objects/light/ceilinglamps/restfieldCeilingLampTwoReverse.png"
+const restfieldCeilingLampThree = new Image();
+restfieldCeilingLampThree.src = "./objects/light/ceilinglamps/restfieldCeilingLampThree.png"
+const restfieldCeilingLampThreeReverse = new Image();
+restfieldCeilingLampThreeReverse.src = "./objects/light/ceilinglamps/restfieldCeilingLampThreeReverse.png"
 
 //LIGHT spotLights
 const christmasLightOne = new Image();

@@ -374,6 +374,10 @@ const artifactInventory = {
 
 const catchGif = document.getElementById("catchGif");
 
+// WIN XP
+const gainXpDiv = document.getElementById("gainXpDiv")
+const gainXpText = document.getElementById("gainXpText")
+
 // Mobs
 const monsterImage = document.getElementById("monsterImage");
 const monsterSelectionImageParent = document.getElementById("monsterSelectionImageParent");
