@@ -298,6 +298,7 @@ async function main() {
                         player.fishing += selectedFish.xp
 
                         io.to(socket.id).emit("obtained", selectedFish);
+                        io.to(socket.id).emit("xp", selectedFish.xp);
 
                         await Player.findOneAndUpdate({socket: socket.id}, {fishing: player.fishing}, {new: true}).exec();
                         await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true}).exec();
@@ -526,6 +527,7 @@ async function main() {
                     await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
                     await Player.findOneAndUpdate({socket: socket.id}, {cooking: player.cooking}, {new: true});
                     io.to(socket.id).emit('obtained', plate);
+                    io.to(socket.id).emit("xp", xp);
                     myPlayer[socket.id] = player; 
 
                     console.log(arrayOfTypes)
@@ -583,6 +585,7 @@ async function main() {
                     await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
                     await Player.findOneAndUpdate({socket: socket.id}, {enchanting: player.enchanting}, {new: true});
                     io.to(socket.id).emit('obtained', staff);
+                    io.to(socket.id).emit("xp", xp);
                 
               };
               cooking()
@@ -635,13 +638,12 @@ async function main() {
                         xp = 0;
                     }
 
-                    
-
                     player.inventory.push(staff); 
                     player.crafting += xp;                                          
                     await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
                     await Player.findOneAndUpdate({socket: socket.id}, {crafting: player.crafting}, {new: true});
                     io.to(socket.id).emit('obtained', staff);
+                    io.to(socket.id).emit("xp", xp);
                 
               };
               cooking()
@@ -654,6 +656,7 @@ async function main() {
         
                     myPlayer[socket.id] = player;   
                     player.combat = player.combat + xp;
+                    io.to(socket.id).emit("xp", xp);
 
                     await Player.findOneAndUpdate({socket: socket.id}, {combat: player.combat}, {new: true});
                                    

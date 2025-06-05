@@ -2305,6 +2305,11 @@ document.addEventListener('mousedown', function(event) {
             if (craftSuccessBar >= 100) {
                 clearTimeout(startAnimTimeout)
                 endCrafting("success"); // End the animation and reset everything
+
+                setTimeout(() => {
+                    grassOpenCrafting = false;
+                    noMovement = false;
+                }, 500);
             }
             if (craftFailedBar >= 100) {
                 clearTimeout(startAnimTimeout)
@@ -2363,6 +2368,9 @@ function endCrafting(type) {
     // Reset positions, bars, and animations
     if (type === "success") resetCrafting();
     if (type === "fail") cancelCrafting();
+
+    console.log(currentlyCrafting)
+    currentlyCrafting = false
 }
 
 // Reset the crafting game to its initial state
@@ -2638,7 +2646,6 @@ function interactInventory(item, index) {
           }, 500);
           
           pop.play()
-          
          
     
           if (craftingArray.length === 0) {
@@ -2980,6 +2987,13 @@ function obtainedAnim (image) {
     obtainedItem.classList.add('obtainedAnim');
     catchGif.classList.add('starsAnim');
   }, 500);
+}
+
+function playGainXP (xp) {
+  gainXpText.innerHTML = "+" + xp + "xp"
+  gainXpText.style.animation = 'none';           
+  gainXpText.offsetHeight;                     
+  gainXpText.style.animation = 'gainXpAnimation 2s ease';
 }
 
 let consumeAvailable = true;
@@ -6895,6 +6909,10 @@ socket.on("obtained", (item) => {
   const image = item.image;
   obtainedAnim(image);
   socket.emit("updateServer");
+});
+
+socket.on("xp", (item) => {
+  playGainXP(item)
 });
 
 let cookingColor = 0;
