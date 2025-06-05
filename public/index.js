@@ -4062,6 +4062,20 @@ socket.on("player", (serverPlayer) => {
 
     subscription: 'none',
   },
+  {
+    name: "restfieldMallFence",
+    backgroundObj: false,
+    img: restfieldMallFence,
+    reverse:restfieldMallFenceReverse,
+    x: 0,
+    y: 0,
+    h: restfieldMallFence.height,
+    w: restfieldMallFence.width,
+    category: "construction",
+    subCategory: "fences",
+
+    subscription: 'none',
+  },
 
   // construction - floors
   {
@@ -4311,6 +4325,60 @@ socket.on("player", (serverPlayer) => {
 
     subscription: 'none',
   },
+  {
+    name: "restfieldMallFullFloor",
+    backgroundObj: true,
+    img: restfieldMallFullFloor,
+    x: 0,
+    y: 0,
+    h: restfieldMallFullFloor.height,
+    w: restfieldMallFullFloor.width,
+    category: "construction",
+    subCategory: "floors",
+
+    subscription: 'none',
+  },
+  {
+    name: "restfieldMallFullFloorReverse",
+    backgroundObj: true,
+    img: restfieldMallFullFloorReverse,
+    x: 0,
+    y: 0,
+    h: restfieldMallFullFloorReverse.height,
+    w: restfieldMallFullFloorReverse.width,
+    category: "construction",
+    subCategory: "floors",
+
+    subscription: 'none',
+  },
+  {
+    name: "restfieldMallParking",
+    backgroundObj: true,
+    img: restfieldMallParking,
+    reverse:restfieldMallParkingReverse,
+    x: 0,
+    y: 0,
+    h: restfieldMallParking.height,
+    w: restfieldMallParking.width,
+    category: "construction",
+    subCategory: "floors",
+
+    subscription: 'none',
+  },
+  {
+    name: "restfieldMallParkingTwo",
+    backgroundObj: true,
+    img: restfieldMallParkingTwo,
+    x: 0,
+    y: 0,
+    h: restfieldMallParkingTwo.height,
+    w: restfieldMallParkingTwo.width,
+    category: "construction",
+    subCategory: "floors",
+
+    subscription: 'none',
+  },
+  
   //CONSTRUCTION DOORS
   {
     name: "restfieldMallDoor",
@@ -4458,6 +4526,75 @@ socket.on("player", (serverPlayer) => {
 
     subscription: 'none',
   },
+  {
+    name: "restfieldMallWall",
+    backgroundObj: true,
+    img: restfieldMallWall,
+    x: 0,
+    y: 0,
+    h: restfieldMallWall.height,
+    w: restfieldMallWall.width,
+    category: "construction",
+    subCategory: "walls",
+
+    subscription: 'none',
+  },
+  {
+    name: "restfieldMallWallTwo",
+    backgroundObj: true,
+    img: restfieldMallWallTwo,
+    x: 0,
+    y: 0,
+    h: restfieldMallWallTwo.height,
+    w: restfieldMallWallTwo.width,
+    category: "construction",
+    subCategory: "walls",
+
+    subscription: 'none',
+  },
+  {
+    name: "restfieldMallWallShadow",
+    backgroundObj: true,
+    img: restfieldMallWallShadow,
+    x: 0,
+    y: 0,
+    h: restfieldMallWallShadow.height,
+    w: restfieldMallWallShadow.width,
+    category: "construction",
+    subCategory: "walls",
+
+    subscription: 'none',
+  },
+  
+
+  //CONSTRUCTIONS ROOF
+{
+    name: "restfieldMallBrokenRoof",
+    backgroundObj: false,
+    img: restfieldMallBrokenRoof,
+    x: 0,
+    y: 0,
+    h: restfieldMallBrokenRoof.height,
+    w: restfieldMallBrokenRoof.width,
+    category: "construction",
+    subCategory: "roofs",
+
+    subscription: 'none',
+  },
+{
+    name: "restfieldMallBrokenRoofTwo",
+    backgroundObj: false,
+    img: restfieldMallBrokenRoofTwo,
+    x: 0,
+    y: 0,
+    h: restfieldMallBrokenRoofTwo.height,
+    w: restfieldMallBrokenRoofTwo.width,
+    category: "construction",
+    subCategory: "roofs",
+
+    subscription: 'none',
+  },
+
 
   //CONSTRUCTIONS RUINS
   {
@@ -5140,6 +5277,58 @@ socket.on("player", (serverPlayer) => {
 
     subscription: 'none',
   },
+  {
+    name: "boxesResidency",
+    backgroundObj: "front",
+    img: boxesResidency,
+    x: 0,
+    y: 0,
+    h: boxesResidency.height,
+    w: boxesResidency.width,
+    category: "furniture",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
+  {
+    name: "bedResidency",
+    backgroundObj: "front",
+    img: bedResidency,
+    x: 0,
+    y: 0,
+    h: bedResidency.height,
+    w: bedResidency.width,
+    category: "furniture",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
+  {
+    name: "paperResidency",
+    backgroundObj: "front",
+    img: paperResidency,
+    x: 0,
+    y: 0,
+    h: paperResidency.height,
+    w: paperResidency.width,
+    category: "furniture",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
+  {
+    name: "booksResidency",
+    backgroundObj: "front",
+    img: booksResidency,
+    x: 0,
+    y: 0,
+    h: booksResidency.height,
+    w: booksResidency.width,
+    category: "furniture",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
 
   // furniture - kitchen
   {
@@ -5239,6 +5428,60 @@ socket.on("player", (serverPlayer) => {
 
     subscription: 'none',
   },
+  {
+    name: "restfieldMallFridgeOne",
+    backgroundObj: false,
+    img: restfieldMallFridgeOne,
+    reverse:restfieldMallFridgeOneReverse,
+    x: 0,
+    y: 0,
+    h: restfieldMallFridgeOne.height,
+    w: restfieldMallFridgeOne.width,
+    category: "furniture",
+    subCategory: "storage",
+
+    subscription: 'none',
+  },
+  {
+    name: "restfieldMallFridgeTwo",
+    backgroundObj: false,
+    img: restfieldMallFridgeTwo,
+    reverse:restfieldMallFridgeTwoReverse,
+    x: 0,
+    y: 0,
+    h: restfieldMallFridgeTwo.height,
+    w: restfieldMallFridgeTwo.width,
+    category: "furniture",
+    subCategory: "storage",
+
+    subscription: 'none',
+  },
+  {
+    name: "restfieldMallFridgeThree",
+    backgroundObj: false,
+    img: restfieldMallFridgeThree,
+    x: 0,
+    y: 0,
+    h: restfieldMallFridgeThree.height,
+    w: restfieldMallFridgeThree.width,
+    category: "furniture",
+    subCategory: "storage",
+
+    subscription: 'none',
+  },
+  {
+    name: "shelvesResidency",
+    backgroundObj: false,
+    img: shelvesResidency,
+    x: 0,
+    y: 0,
+    h: shelvesResidency.height,
+    w: shelvesResidency.width,
+    category: "furniture",
+    subCategory: "storage",
+
+    subscription: 'none',
+  },
 
   // furniture - tables
   {
@@ -5262,6 +5505,19 @@ socket.on("player", (serverPlayer) => {
     y: 0,
     h: craftingTable.height,
     w: craftingTable.width,
+    category: "furniture",
+    subCategory: "tables",
+
+    subscription: 'none',
+  },
+  {
+    name: "tableResidency",
+    backgroundObj: false,
+    img: tableResidency,
+    x: 0,
+    y: 0,
+    h: tableResidency.height,
+    w: tableResidency.width,
     category: "furniture",
     subCategory: "tables",
 
@@ -5354,6 +5610,51 @@ socket.on("player", (serverPlayer) => {
     y: 0,
     h: redMushroom.height,
     w: redMushroom.width,
+    lightSource: false,
+    animated: false,
+    category: "outdoor",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
+  {
+    name: "trash",
+    backgroundObj: false,
+    img: trash,
+    x: 0,
+    y: 0,
+    h: trash.height,
+    w: trash.width,
+    lightSource: false,
+    animated: false,
+    category: "outdoor",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
+  {
+    name: "trashbag",
+    backgroundObj: false,
+    img: trashbag,
+    x: 0,
+    y: 0,
+    h: trashbag.height,
+    w: trashbag.width,
+    lightSource: false,
+    animated: false,
+    category: "outdoor",
+    subCategory: "decorations",
+
+    subscription: 'none',
+  },
+  {
+    name: "trashbagTwo",
+    backgroundObj: false,
+    img: trashbagTwo,
+    x: 0,
+    y: 0,
+    h: trashbagTwo.height,
+    w: trashbagTwo.width,
     lightSource: false,
     animated: false,
     category: "outdoor",
@@ -5918,6 +6219,58 @@ socket.on("player", (serverPlayer) => {
 
     subscription: 'dev',
   },
+  {
+    name: "restfieldMallSign",
+    backgroundObj: false,
+    img: restfieldMallSign,
+    x: 0,
+    y: 0,
+    h: restfieldMallSign.height,
+    w: restfieldMallSign.width,
+    category: "structure",
+    subCategory: "building",
+
+    subscription: 'dev',
+  },
+  {
+    name: "restfieldMall",
+    backgroundObj: false,
+    img: restfieldMall,
+    x: 0,
+    y: 0,
+    h: restfieldMall.height,
+    w: restfieldMall.width,
+    category: "structure",
+    subCategory: "building",
+
+    subscription: 'dev',
+  },
+  {
+    name: "residency",
+    backgroundObj: true,
+    img: residency,
+    x: 0,
+    y: 0,
+    h: residency.height,
+    w: residency.width,
+    category: "structure",
+    subCategory: "building",
+
+    subscription: 'dev',
+  },
+  {
+    name: "residencyReverse",
+    backgroundObj: false,
+    img: residencyReverse,
+    x: 0,
+    y: 0,
+    h: residencyReverse.height,
+    w: residencyReverse.width,
+    category: "structure",
+    subCategory: "building",
+
+    subscription: 'dev',
+  },
 
   //STRUCTURE BRIDGES
   {
@@ -6115,6 +6468,39 @@ socket.on("player", (serverPlayer) => {
 
     subscription: 'none',
   },
+  {
+    name: "restfieldCeilingLampTwo",
+    backgroundObj: false,
+    img: restfieldCeilingLampTwo,
+    reverse:restfieldCeilingLampTwoReverse,
+    x: 0,
+    y: 0,
+    h: 78,
+    w: 41,
+    animated: true,
+    lightSource: true,
+    category: "light",
+    subCategory: "ceilinglamps",
+
+    subscription: 'none',
+  },
+  {
+    name: "restfieldCeilingLampThree",
+    backgroundObj: false,
+    img: restfieldCeilingLampThree,
+    reverse:restfieldCeilingLampThreeReverse,
+    x: 0,
+    y: 0,
+    h: 59,
+    w: 39,
+    animated: true,
+    lightSource: true,
+    category: "light",
+    subCategory: "ceilinglamps",
+
+    subscription: 'none',
+  },
+  
 
     //LAMPS spotlight
   {
