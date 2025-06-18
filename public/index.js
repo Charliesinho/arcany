@@ -9303,6 +9303,7 @@ hammerButtonUi.addEventListener("click", function() {
 });
 
 let uiBuildingVisible = true
+
 function uiConstructionIsVisible () {
   if(uiBuildingVisible){
     uiBuildingVisible = false
@@ -9324,6 +9325,7 @@ uiConstructionVisibility.addEventListener("click", function() {
 });
 
 informationButton.addEventListener("click", function() {
+  showWallsFunction(false)
   playRandomPop()
   deselectUiButton()
 
@@ -9332,6 +9334,9 @@ informationButton.addEventListener("click", function() {
   uiBuildingObjects.style.display = "none"
   uiBuildingCategory.style.display = "none";
   informationButton.style.display = "none"
+  uiBuildingCategoryDivVisibility.style.display = "none"
+  uiBuildingVisible = false
+
   openUi()
 })
 
