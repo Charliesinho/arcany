@@ -233,6 +233,7 @@ let mobsImages = [
     enemyStateInt: 1000,
     drop: "",
     dropRate: 100,
+    targetPlayer: null,
   },
   {
     name: "purpleSlime",
@@ -269,6 +270,7 @@ let mobsImages = [
     enemyStateInt: 0,
     drop: "",
     dropRate: 0,
+    targetPlayer: null,
   },
   {
     name: "blackBrownBunny",
@@ -305,6 +307,7 @@ let mobsImages = [
     enemyStateInt: 1000,
     drop: "",
     dropRate: 100,
+    targetPlayer: null,
   },
   {
     name: "whiteBunny",
@@ -341,6 +344,7 @@ let mobsImages = [
     enemyStateInt: 1000,
     drop: "",
     dropRate: 100,
+    targetPlayer: null,
   },
   {
     name: "brownBunny",
@@ -377,6 +381,7 @@ let mobsImages = [
     enemyStateInt: 1000,
     drop: "",
     dropRate: 100,
+    targetPlayer: null,
   },
 ]
 
@@ -554,7 +559,8 @@ const inputMappings = {
   lootRateInput: "dropRate",
   spawnTimerMonsterInput: "spawnTimer",
   monstercategoryDropdown: "category", // optional custom props
-  monsterTypeDropdown: "type"
+  monsterTypeDropdown: "type",
+  monsterXpInput: "xp",
 };
 
 // Loop through each input ID and add listener
@@ -571,7 +577,12 @@ Object.entries(inputMappings).forEach(([inputId, mobProp]) => {
     if (mobProp === "speed") {
       selectedMob.speedX = num;
       selectedMob.speedY = num;
-    } else {
+    } 
+    else if (mobProp === "health") {
+      selectedMob.health = num;
+      selectedMob.maxHealth = num;
+    } 
+    else {
       selectedMob[mobProp] = num;
     }
     console.log(selectedMob)
@@ -1058,6 +1069,9 @@ function progressQuestCounter(questItem, step) {
 
 let trading = false;
 let party = false;
+let currentParty = [];
+let inParty = false;
+let isLeader = false;
 
 tradeSend.addEventListener("click", function(){
   socket.emit("toDelete", tradedItems);
@@ -1124,9 +1138,6 @@ partyButton.addEventListener("click", function(){
   partyScreen.style.pointerEvents = party ? "all" : "none";
 })
 
-let currentParty = [];
-let inParty = false;
-
 partyPopUp.addEventListener("click", function(){
   socket.emit('partyInviteAccepted', partyInvite);
   partyPopUp.style.opacity = 0;
@@ -1168,8 +1179,6 @@ function addPartyMember(textContent, leader) {
   container.appendChild(p);
 }
 
-let isLeader = false;
-
 socket.on("updatePartyClient", (info) => {
   currentParty = info;
   for (let member of currentParty) {
@@ -1204,6 +1213,13 @@ function leaderShareEnemies () {
 
 socket.on("leaderShareEnemiesClient", (enemies) => {
   mapsInfo[currentLand].enemies = enemies;
+})
+
+socket.on("leaderChangeRoomClient", (info) => {
+  playerX = info[2]
+  playerY = info[3]
+  mapsInfo[currentLand].playerPos = {x: info[2], y: info[3]}
+  transitionLiquidInstant(info[0])
 })
 
 socket.on("partyProjectileClient", (projectile) => {
@@ -7146,7 +7162,6 @@ socket.on("updateMap", (map) => {
 let mapsInfo = {};
 
 socket.on("loadMap", (map) => {
-  console.log(map)
   let comingMap = map
   let areaNameComing = comingMap.areaName
 
@@ -7157,7 +7172,7 @@ socket.on("loadMap", (map) => {
     comingMap.playerPos = mapsInfo[areaNameComing].playerPos
   }
 
-  mapsInfo[currentLand].playerPos = {x: localPlayerPos.x, y: localPlayerPos.y}
+  if (!inParty) mapsInfo[currentLand].playerPos = {x: localPlayerPos.x, y: localPlayerPos.y}
 
   currentLand = areaNameComing
   mapsInfo[areaNameComing] = comingMap
@@ -8239,6 +8254,8 @@ let transitionType = "liquid"
 let transitionTimeout = false;
 
 function transition (format) {
+  if (!isLeader && inParty) return;
+
   if (format === "arcane") {
     transitionArcane()
   }
@@ -8271,6 +8288,12 @@ function changeMap (dynamicFunctionName) {
   // } else {
   //   console.error(`${dynamicFunctionName} is not a valid function`);
   // }
+}
+function changeMapClient (dynamicFunctionName) {
+  socket.emit("requestChangeRoom", dynamicFunctionName);
+    setTimeout(() => {
+      transitionTimeout = false;
+    }, 5000);
 }
 function transitionArcane () {
 
@@ -8319,18 +8342,47 @@ function transitionLiquid() {
       liquidOverlay.style.background = `url(${newGifUrl})`;
     }, 10); 
 
+    
     liquidOverlay.style.display = "block";
     
     const dynamicFunctionName = currentSelectedMap + "Loop";    
     setTimeout(() => {
       changeMap(dynamicFunctionName);
       socket.emit("changeRoom", currentSelectedMap);
+      socket.emit("leaderChangeRoom", [currentSelectedMap, currentParty, playerX, playerY])
     }, 1800);   
     
     setTimeout(() => {
       liquidOverlay.style.display = "none";
     }, 3900);
   }
+}
+
+function transitionLiquidInstant(passedMap) {
+    movezone.play()
+    
+    const gifUrl = "./Textures/liquidTransition.gif"; // Remove `url("")` from the string
+    const newGifUrl = gifUrl + "?" + new Date().getTime(); // Append a timestamp to force reload
+    
+    liquidOverlay.style.background = 'none'; 
+
+    console.log(passedMap)
+    
+    setTimeout(() => {
+      liquidOverlay.style.background = `url(${newGifUrl})`;
+    }, 10); 
+
+    liquidOverlay.style.display = "block";
+
+    setTimeout(() => {
+      changeMapClient(passedMap);
+      socket.emit("changeRoom", passedMap);
+    }, 1800);   
+    
+    setTimeout(() => {
+      liquidOverlay.style.display = "none";
+    }, 3900);
+  
 }
 
 arcaneTransition.style.backgroundColor = "rgba(170, 233, 170, 1)"
@@ -10027,6 +10079,8 @@ function drawSceneLayer(layer, num) {
 
   // 👾 Add enemies
   for (const enemy of mapsInfo[currentLand].enemies || []) {
+    if (!enemy.spawn) return;
+
     drawQueue.push({
       type: 'enemy',
       y: enemy.spawn.y + (enemy.h * 3),
@@ -11624,12 +11678,18 @@ function checkEnemyCombat (enemy) {
     // attackCircleState(enemy)
     mapsInfo[currentLand].enemies.splice(mapsInfo[currentLand].enemies.indexOf(enemy), 1)
 
-    socket.emit("enemyKilled", enemy.xp);
+    let dropAmount = enemy.xp
+    console.log(dropAmount, currentParty.length)
+    if (inParty) {
+      dropAmount = dropAmount / currentParty.length
+    }
+
+    socket.emit("enemyKilled", dropAmount);
 
     if (enemy.drop) {
       let randomNumber = Math.floor(Math.random() * 101);
       if (enemy.dropRate >= randomNumber) {
-        socket.emit("enemyDrop", enemy.drop);
+        socket.emit("enemyDrop", dropAmount);
       }
     }
 
@@ -11737,7 +11797,20 @@ function checkEnemyCombat (enemy) {
       && enemy.damaged === 0 
       && !projectile.enemy
       ) {
+      if (!enemy.targetPlayer && isLeader) {
+        let playerChosen;
+        for (let indPlayer of players) {
+          if (indPlayer.id == projectile.playerId) {
+            playerChosen = indPlayer;
+          }
+        }
+        console.log(players, projectile, playerChosen)
+        enemy.targetPlayer = playerChosen;
 
+        setTimeout(() => {
+          if (enemy) enemy.targetPlayer = null;
+        }, 5000);
+      }
       enemy.damaged = 2;
       enemy.angle = projectile.angle || projectile.bullet1 || projectile.bullet2;
       projectile.timeLeft = projectile.timeLeft > 1 ? 1 : projectile.timeLeft;
@@ -11877,7 +11950,7 @@ function moveState(enemy) {
   }
 
   // Decide movement when no commitment
-  if (colliders.includes("up") && enemy.spawn.y > playerY - 120) {
+  if (colliders.includes("up") && enemy.spawn.y > (enemy.targetPlayer ?  enemy.targetPlayer.y : playerY) - 120) {
     const direction = chooseDirection(
       playerX < enemy.spawn.x ? "left" : "right",
       "left",
@@ -11885,7 +11958,7 @@ function moveState(enemy) {
     );
     if (direction === "left") enemy.spawn.x -= enemy.speedX;
     if (direction === "right") enemy.spawn.x += enemy.speedX;
-  } else if (colliders.includes("down") && enemy.spawn.y < playerY - 120) {
+  } else if (colliders.includes("down") && enemy.spawn.y < (enemy.targetPlayer ?  enemy.targetPlayer.y : playerY) - 120) {
     const direction = chooseDirection(
       playerX < enemy.spawn.x ? "left" : "right",
       "left",
@@ -11893,17 +11966,17 @@ function moveState(enemy) {
     );
     if (direction === "left") enemy.spawn.x -= enemy.speedX;
     if (direction === "right") enemy.spawn.x += enemy.speedX;
-  } else if (colliders.includes("left") && enemy.spawn.x > playerX - 200) {
+  } else if (colliders.includes("left") && enemy.spawn.x > (enemy.targetPlayer ?  enemy.targetPlayer.x : playerX) - 200) {
     const direction = chooseDirection(
-      playerY < enemy.spawn.y ? "up" : "down",
+      (enemy.targetPlayer ?  enemy.targetPlayer.y : playerY) < enemy.spawn.y ? "up" : "down",
       "up",
       "down"
     );
     if (direction === "up") enemy.spawn.y -= enemy.speedY;
     if (direction === "down") enemy.spawn.y += enemy.speedY;
-  } else if (colliders.includes("right") && enemy.spawn.x < playerX - 200) {
+  } else if (colliders.includes("right") && enemy.spawn.x < (enemy.targetPlayer?  enemy.targetPlayer.x : playerX) - 200) {
     const direction = chooseDirection(
-      playerY < enemy.spawn.y ? "up" : "down",
+      (enemy.targetPlayer ?  enemy.targetPlayer.y : playerY) < enemy.spawn.y ? "up" : "down",
       "up",
       "down"
     );
@@ -11911,10 +11984,10 @@ function moveState(enemy) {
     if (direction === "down") enemy.spawn.y += enemy.speedY;
   } else {
     // No collision or already bypassing, continue normal movement
-    if (enemy.spawn.x > playerX - 200) enemy.spawn.x -= enemy.speedX;
-    if (enemy.spawn.x < playerX - 200) enemy.spawn.x += enemy.speedX;
-    if (enemy.spawn.y > playerY - 120) enemy.spawn.y -= enemy.speedY;
-    if (enemy.spawn.y < playerY - 120) enemy.spawn.y += enemy.speedY;
+    if (enemy.spawn.x > (enemy.targetPlayer ?  enemy.targetPlayer.x : playerX) - 200) enemy.spawn.x -= enemy.speedX;
+    if (enemy.spawn.x < (enemy.targetPlayer ?  enemy.targetPlayer.x : playerX) - 200) enemy.spawn.x += enemy.speedX;
+    if (enemy.spawn.y > (enemy.targetPlayer ?  enemy.targetPlayer.y : playerY) - 120) enemy.spawn.y -= enemy.speedY;
+    if (enemy.spawn.y < (enemy.targetPlayer ?  enemy.targetPlayer.y : playerY) - 120) enemy.spawn.y += enemy.speedY;
   }
 
   resolveEnemyCollisions(enemy);
@@ -12119,6 +12192,20 @@ function attackState(enemy) {
       playerId: socket.id,
       enemy: true
     }) 
+
+    let toSend = [
+      currentParty, 
+      {
+      angle: bulletAngle,
+      x: enemy.spawn.x + ((enemy.w)/2) + 200,
+      y: enemy.spawn.y + ((enemy.h)/2) + 200,
+      speed: 5,
+      timeLeft: 100,
+      playerId: socket.id,
+      enemy: true
+      }]
+
+    if (inParty) socket.emit("partyProjectile", toSend)
 
     const basicBulletTree = new Audio("./audios/basicBulletTree.wav");
     basicBulletTree.loop = false;
@@ -12752,10 +12839,17 @@ function updateAllEnemies() {
 }
 
 function getAngleBetweenPlayerAndEnemy(enemy) {
-  const dx = playerX - enemy.spawn.x - ((enemy.w)/2) - 200;
-  const dy = playerY + 100 - enemy.spawn.y - ((enemy.h)/2) - 200;
-  const angle = Math.atan2(dy, dx); // Returns the angle in radians
-  return angle;
+  if (!enemy.targetPlayer) {
+    const dx = playerX - enemy.spawn.x - ((enemy.w)/2) - 200;
+    const dy = playerY + 100 - enemy.spawn.y - ((enemy.h)/2) - 200;
+    const angle = Math.atan2(dy, dx); // Returns the angle in radians
+    return angle;
+  } else {
+    const dx = enemy.targetPlayer.x - enemy.spawn.x - ((enemy.w)/2) - 200;
+    const dy = enemy.targetPlayer.y + 100 - enemy.spawn.y - ((enemy.h)/2) - 200;
+    const angle = Math.atan2(dy, dx); // Returns the angle in radians
+    return angle;
+  }
 }
 
 // Enemy functions <
