@@ -9060,22 +9060,23 @@ function calculateValue(resolution) {
 // UI DEV COMMENT >
 
 function deselectUiButton() {
-  placeWalls.style.backgroundColor = "transparent"
-  deleteWalls.style.backgroundColor = "transparent"
+  currentDevAction = ""
+  placeWalls.style.backgroundColor = "#ffe2c1"
+  deleteWalls.style.backgroundColor = "#ffe2c1"
   deleteObjButtonUi.style.backgroundColor = "#ffe2c1"
-  placeFishingArea.style.backgroundColor = "transparent"
-  placeEnchantingArea.style.backgroundColor = "transparent"
-  placeCookingArea.style.backgroundColor = "transparent"
-  hammerButtonUi.style.backgroundColor = "transparent"
-  placeTransition.style.backgroundColor = "transparent"
-  createMapButtonUi.style.backgroundColor = "transparent"
-  placeCraftingArea.style.backgroundColor = "transparent"
-  placeFishingArea.style.backgroundColor = "transparent"
-  placeEnchantingArea.style.backgroundColor = "transparent"
-  placeCookingArea.style.backgroundColor = "transparent"
-  editMapsButtonUi.style.backgroundColor = "transparent"
-  placeMobButtonUi.style.backgroundColor = "transparent"
-  placeAreaButton.style.backgroundColor = "transparent"
+  placeFishingArea.style.backgroundColor = "#ffe2c1"
+  placeEnchantingArea.style.backgroundColor = "#ffe2c1"
+  placeCookingArea.style.backgroundColor = "#ffe2c1"
+  hammerButtonUi.style.backgroundColor = "#ffe2c1"
+  placeTransition.style.backgroundColor = "#ffe2c1"
+  createMapButtonUi.style.backgroundColor = "#ffe2c1"
+  placeCraftingArea.style.backgroundColor = "#ffe2c1"
+  placeFishingArea.style.backgroundColor = "#ffe2c1"
+  placeEnchantingArea.style.backgroundColor = "#ffe2c1"
+  placeCookingArea.style.backgroundColor = "#ffe2c1"
+  editMapsButtonUi.style.backgroundColor = "#ffe2c1"
+  placeMobButtonUi.style.backgroundColor = "#ffe2c1"
+  placeAreaButton.style.backgroundColor = "#ffe2c1"
   uiBuildingObjects.style.display = "none";
   uiBuildingCategory.style.display = "none";
   roomsDiv.style.display = "none"
@@ -9085,38 +9086,42 @@ function deselectUiButton() {
   monsterCreationParent.style.display = "none"
   editMapsPage.style.display = "none"
   placeArea.style.display = "none"
-  uiBuildingCategoryDivVisibility.style.display = "none"
+  uiBuildingVisible = true
 }
 
 placeWalls.addEventListener("click", function() {
-  if (currentDevAction !== "wall") {
-  currentSelectedWall = null
+  if(currentDevAction !== "wall") {
   showWallsFunction(true)
+
+  currentSelectedWall = null
   currentDevAction = "wall";
   roomsDiv.style.display = "none"
   dialogsDiv.style.display = "none"
-  deselectUiButton()
+  uiBuilding.style.display = "flex"
   placeWalls.style.backgroundColor = "rgba(170, 233, 170, 1)"
+  deleteWalls.style.backgroundColor = "#ffe2c1"
+
 } else {
   showWallsFunction(false)
-  deselectUiButton()
-  currentDevAction = "none";
+  currentDevAction = "building";
+  placeWalls.style.backgroundColor = "#ffe2c1"
  }
 });
 
 deleteWalls.addEventListener("click", function() {
-  showWallsFunction(true)
   if (currentDevAction !== "delete") {
+    showWallsFunction(true)
     currentDevAction = "delete";
     roomsDiv.style.display = "none"
     dialogsDiv.style.display = "none"
     
-    deselectUiButton()
     deleteWalls.style.backgroundColor = "rgba(170, 233, 170, 1)"
+    placeWalls.style.backgroundColor = "#ffe2c1"
+
   } else {
     showWallsFunction(false)
-    deselectUiButton()
-    currentDevAction = "none";
+    currentDevAction = "building";
+    deleteWalls.style.backgroundColor = "#ffe2c1"
   }
 });
 
@@ -9128,8 +9133,10 @@ rotateObjButtonUi.addEventListener("click", function(){
   playRandomPop()
   if(!rotateObj){
     rotateObj = true
+    rotateObjButtonUi.style.backgroundColor = "rgba(170, 233, 170, 1)"
   } else {
     rotateObj = false
+    rotateObjButtonUi.style.backgroundColor = "#ffe2c1"
   }
   
 });
@@ -9138,21 +9145,49 @@ deleteObjButtonUi.addEventListener("click", function() {
   showWallsFunction(false)
   playRandomPop()
 if(deleteObject === false) {
+  deselectUiButton()
   roomsDiv.style.display = "none"
   dialogsDiv.style.display = "none"
   currentDevAction = "deleteObj"
 
-  deselectUiButton()
   hammerButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
   deleteObjButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
   uiBuildingObjects.style.display = "flex";
   uiBuildingCategory.style.display = "flex";
   deleteObject = true;
+
 }else if (deleteObject === true) {
   deleteObject = false;
   deleteObjButtonUi.style.backgroundColor = "#ffe2c1"
   currentDevAction = "building";
 }
+});
+
+layerOneButtonUi.addEventListener("click", function() {
+  if(currentSelectedObjLayer !== 2){
+    currentSelectedObjLayer = 2;
+    deselectUiButton()
+    layerThreeButtonUi.style.backgroundColor = "#ffe2c1"
+    layerOneButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
+    currentDevAction = "building";
+    hammerButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
+    uiBuildingObjects.style.display = "flex";
+    uiBuildingCategory.style.display = "flex";
+    
+  } 
+});
+layerThreeButtonUi.addEventListener("click", function() {
+  if(currentSelectedObjLayer !== 0){
+    deselectUiButton()
+    currentSelectedObjLayer = 0;
+    layerThreeButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
+    layerOneButtonUi.style.backgroundColor = "#ffe2c1"
+    currentDevAction = "building";
+    hammerButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
+    uiBuildingObjects.style.display = "flex";
+    uiBuildingCategory.style.display = "flex";
+  } 
+
 });
 
 placeAreaButton.addEventListener("click", function(){
@@ -9299,9 +9334,9 @@ hammerButtonUi.addEventListener("click", function() {
   showWallsFunction(false)
   playRandomPop()
   if (currentDevAction !== "building") {
-    currentDevAction = "building";
     deselectUiButton()
     cancelUi()
+    currentDevAction = "building";
     uiBuildingObjects.style.display = "flex";
     uiBuildingCategory.style.display = "flex";
     hammerButtonUi.style.backgroundColor = "rgb(148, 223, 148)";
@@ -9319,52 +9354,9 @@ hammerButtonUi.addEventListener("click", function() {
   }
 });
 
-layerOneButtonUi.addEventListener("click", function() {
-  if(currentSelectedObjLayer !== 2){
-    currentSelectedObjLayer = 2;
-    deselectUiButton()
-    layerThreeButtonUi.style.backgroundColor = "#ffe2c1"
-    layerTwoButtonUi.style.backgroundColor = "#ffe2c1"
-    layerOneButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
-    currentDevAction = "building";
-    hammerButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
-    uiBuildingObjects.style.display = "flex";
-    uiBuildingCategory.style.display = "flex";
-    
-  } 
-});
-layerTwoButtonUi.addEventListener("click", function() {
-  if(currentSelectedObjLayer !== 1){
-    deselectUiButton()
-    currentSelectedObjLayer = 1;
-    layerThreeButtonUi.style.backgroundColor = "#ffe2c1"
-    layerTwoButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
-    layerOneButtonUi.style.backgroundColor = "#ffe2c1"
-    currentDevAction = "building";
-    hammerButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
-    uiBuildingObjects.style.display = "flex";
-    uiBuildingCategory.style.display = "flex";
-  } 
- 
-});
-layerThreeButtonUi.addEventListener("click", function() {
-  if(currentSelectedObjLayer !== 0){
-    deselectUiButton()
-    currentSelectedObjLayer = 0;
-    layerThreeButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
-    layerTwoButtonUi.style.backgroundColor = "#ffe2c1"
-    layerOneButtonUi.style.backgroundColor = "#ffe2c1"
-    currentDevAction = "building";
-    hammerButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
-    uiBuildingObjects.style.display = "flex";
-    uiBuildingCategory.style.display = "flex";
-  } 
-
-});
-
 let uiBuildingVisible = true
 
-uiConstructionVisibility.addEventListener("click", function() {
+function uiConstructionIsVisible () {
   if(uiBuildingVisible){
     uiBuildingVisible = false
     uiConstructionVisibility.src = "./icons/uiIcon/notVisibleIcon.png"
@@ -9378,22 +9370,41 @@ uiConstructionVisibility.addEventListener("click", function() {
     uiBuildingCategory.style.right = "325px"
     uiBuildingCategoryDivVisibility.style.right = "325px"
   }
+}
+
+uiConstructionVisibility.addEventListener("click", function() {
+  uiConstructionIsVisible ()
 });
+
+informationButton.addEventListener("click", function() {
+  showWallsFunction(false)
+  playRandomPop()
+  deselectUiButton()
+
+  currentDevAction = "none";
+  uiBuilding.style.display = "none"
+  uiBuildingObjects.style.display = "none"
+  uiBuildingCategory.style.display = "none";
+  informationButton.style.display = "none"
+  uiBuildingCategoryDivVisibility.style.display = "none"
+  uiBuildingVisible = false
+
+  openUi()
+})
 
 startBuildingBut.addEventListener("click", function() {
   playRandomPop()
   cancelUi()
+  deselectUiButton()
 
 if (uiBuilding.style.display !== "flex") {
   roomsDiv.style.display = "none"
   dialogsDiv.style.display = "none"
   uiBuilding.style.display = "flex"
 
-  deselectUiButton()
-
   fishSelectorButton.style.display = 'none'
   fishingAvailablevar = false
-  
+  informationButton.style.display = "flex"
 
   if(chatIsActivate = true){
     chatIsActivate = false
@@ -9409,6 +9420,7 @@ if (uiBuilding.style.display !== "flex") {
   uiBuilding.style.display = "none"
   uiBuildingObjects.style.display = "none"
   uiBuildingCategory.style.display = "none";
+  informationButton.style.display = "none"
   openUi()
 }
 });
