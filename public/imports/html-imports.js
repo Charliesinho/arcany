@@ -259,6 +259,7 @@ const hammerButtonUi  = document.getElementById("hammerButtonUi");
 const layerOneButtonUi  = document.getElementById("layerOneButtonUi");
 const layerTwoButtonUi  = document.getElementById("layerTwoButtonUi");
 const layerThreeButtonUi  = document.getElementById("layerThreeButtonUi");
+const uiConstructionVisibility  = document.getElementById("uiConstructionVisibility");
 const deleteObjButtonUi = document.getElementById("deleteObjButtonUi");
 const rotateObjButtonUi = document.getElementById("rotateObjButtonUi");
 const saveObjButtonUi = document.getElementById("saveObjButtonUi");

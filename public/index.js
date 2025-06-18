@@ -9033,6 +9033,7 @@ function deselectUiButton() {
   monsterCreationParent.style.display = "none"
   editMapsPage.style.display = "none"
   placeArea.style.display = "none"
+  uiBuildingCategoryDivVisibility.style.display = "none"
 }
 
 placeWalls.addEventListener("click", function() {
@@ -9251,14 +9252,18 @@ hammerButtonUi.addEventListener("click", function() {
     cancelUi()
     uiBuildingObjects.style.display = "flex";
     uiBuildingCategory.style.display = "flex";
-    hammerButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
+    hammerButtonUi.style.backgroundColor = "rgb(148, 223, 148)";
+    uiBuildingObjects.style.display = "flex"
+    uiBuildingCategoryDivVisibility.style.display = "flex"
     
   } else {
     cancelUi()
     currentDevAction = "none";
     uiBuildingObjects.style.display = "none";
     uiBuildingCategory.style.display = "none";
-    hammerButtonUi.style.backgroundColor = "#ffe2c1"
+    hammerButtonUi.style.backgroundColor = "#ffe2c1";
+    uiBuildingObjects.style.display = "none"
+    uiBuildingCategoryDivVisibility.style.display = "none"
   }
 });
 
@@ -9305,16 +9310,33 @@ layerThreeButtonUi.addEventListener("click", function() {
 
 });
 
+let uiBuildingVisible = true
+
+uiConstructionVisibility.addEventListener("click", function() {
+  if(uiBuildingVisible){
+    uiBuildingVisible = false
+    uiConstructionVisibility.src = "./icons/uiIcon/notVisibleIcon.png"
+    uiBuildingObjects.style.right = "-350px"
+    uiBuildingCategory.style.right = "-370px"
+    uiBuildingCategoryDivVisibility.style.right = "15px"
+  } else {
+    uiBuildingVisible = true
+    uiConstructionVisibility.src = "./icons/uiIcon/visibleIcon.png"
+    uiBuildingObjects.style.right = "10px"
+    uiBuildingCategory.style.right = "325px"
+    uiBuildingCategoryDivVisibility.style.right = "325px"
+  }
+});
+
 startBuildingBut.addEventListener("click", function() {
   playRandomPop()
   cancelUi()
 
 if (uiBuilding.style.display !== "flex") {
-  
   roomsDiv.style.display = "none"
   dialogsDiv.style.display = "none"
   uiBuilding.style.display = "flex"
-  uiBuildingObjects.style.display = "none"
+
   deselectUiButton()
 
   fishSelectorButton.style.display = 'none'
