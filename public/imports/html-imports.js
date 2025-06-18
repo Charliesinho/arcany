@@ -254,10 +254,11 @@ const timer = document.querySelector("#timer");
 
 const uiProfileRank = document.getElementById("uiProfileRank");
 
+const informationButton = document.getElementById("informationButton")
+
 const placeWalls = document.getElementById("wallButtonUi");
 const hammerButtonUi  = document.getElementById("hammerButtonUi");
 const layerOneButtonUi  = document.getElementById("layerOneButtonUi");
-const layerTwoButtonUi  = document.getElementById("layerTwoButtonUi");
 const layerThreeButtonUi  = document.getElementById("layerThreeButtonUi");
 const uiConstructionVisibility  = document.getElementById("uiConstructionVisibility");
 const deleteObjButtonUi = document.getElementById("deleteObjButtonUi");

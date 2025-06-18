@@ -122,9 +122,6 @@
         <img class="buildingUiButton pointerActivator" id="sapwnButtonUi" src="./icons/uiIcon/setSpawnIcon.png"></img>
         <img class="buildingUiButton pointerActivator" id="editMapButtonUi" src="./icons/uiIcon/edit.png"></img>
         <img class="buildingUiButton pointerActivator" id="saveObjButtonUi" src="./icons/uiIcon/save.png"></img>
-        <!-- <br/> -->
-        <img class="buildingUiButton pointerActivator" id="wallButtonUi" src="./icons/uiIcon/wallIcon.png"></img>
-        <img class="buildingUiButton pointerActivator" id="deletewWallButtonUi" src="./icons/uiIcon/deletewallsIcon.png"></img>
         <!-- <h1>Layers</h1> -->
         <!-- <br/> -->
         <img class="buildingUiButton pointerActivator" id="placeMobButtonUi" src="./icons/uiIcon/placeMob.png"></img>
@@ -242,14 +239,15 @@
       </div>
 
       <div id="uiBuildingCategoryDiv" class="uiBuildingCategoryDivBottom">
-        <img class="pointerActivator" id="deleteObjButtonUi" src="./icons/uiIcon/deleteIcon.png"></img>
-        <img class="pointerActivator" id="rotateObjButtonUi" src="./icons/uiIcon/rotateObjIcon.png"></img>
-        <img class="pointerActivator" id="layerOneButtonUi" src="./icons/uiIcon/frontLayerIcon.png"></img>
-        <img class="pointerActivator" id="layerTwoButtonUi" src="./icons/uiIcon/middleLayerIcon.png"></img>
-        <img class="pointerActivator" id="layerThreeButtonUi" src="./icons/uiIcon/backLayerIcon.png"></img>
+        <img class="pointerActivator uiButtonBG" id="wallButtonUi" src="./icons/uiIcon/wallIcon.png"></img>
+        <img class="pointerActivator uiButtonBG" id="deletewWallButtonUi" src="./icons/uiIcon/deletewallsIcon.png"></img>
+        <img class="pointerActivator uiButtonBG" id="deleteObjButtonUi" src="./icons/uiIcon/deleteIcon.png"></img>
+        <img class="pointerActivator uiButtonBG" id="rotateObjButtonUi" src="./icons/uiIcon/rotateObjIcon.png"></img>
+        <img class="pointerActivator uiButtonBG" id="layerOneButtonUi" src="./icons/uiIcon/frontLayerIcon.png"></img>
+        <img class="pointerActivator uiButtonBG" id="layerThreeButtonUi" src="./icons/uiIcon/backLayerIcon.png"></img>
       </div>
     </div>
-    
+
     <div id="uiBuildingCategoryDivVisibility">
       <img class="pointerActivator" id="uiConstructionVisibility" src="./icons/uiIcon/visibleIcon.png"></img>
     </div>
@@ -366,6 +364,8 @@
       <button class="pointerActivator" id="createMapButton">Create</button>
     </div>
     
+    <div id="informationButton">Building mode</div>
+
     <div id="uiDev" style="display: none;">
       <button id="placeWalls" class="buttonDev pointerActivator">🧱</button>
       <button id="placeFishingArea" class="buttonDev pointerActivator">🐟</button>
