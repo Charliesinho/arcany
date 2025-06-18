@@ -2185,6 +2185,11 @@ function moveLogos() {
             newWidthPercent = currentWidthPercent + 8;
           } else {
             endCooking(element)
+
+            setTimeout(() => {
+              noMovement = false
+              grassOpenCooking = false;
+            }, 500)
           }
           element.style.width = `${newWidthPercent}%`;
         }
@@ -2498,6 +2503,8 @@ function checkCodeEnachant (number, rune) {
           socket.emit("enchanting", enchantingArray);
         }, 200);
         socket.emit("toDelete", enchantedItems);
+        noMovement = false
+        grassOpenEnchanting = false;
       } else {
         const enchantFail = new Audio("./audios/enchantFail.wav");
         enchantFail.loop = false;
@@ -2533,6 +2540,8 @@ function resetEnchant () {
   rune3.style.filter = "saturate(0)";
   rune4.style.filter = "saturate(0)";
   rune5.style.filter = "saturate(0)";
+
+
 }
 
 // Enchanting <
@@ -8825,7 +8834,6 @@ function deselectUiButton() {
   monsterCreationParent.style.display = "none"
   editMapsPage.style.display = "none"
   placeArea.style.display = "none"
-  openUi()
 }
 
 placeWalls.addEventListener("click", function() {
@@ -9042,7 +9050,7 @@ hammerButtonUi.addEventListener("click", function() {
     hammerButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
     
   } else {
-    openUi()
+    cancelUi()
     currentDevAction = "none";
     uiBuildingObjects.style.display = "none";
     uiBuildingCategory.style.display = "none";
@@ -9095,6 +9103,7 @@ layerThreeButtonUi.addEventListener("click", function() {
 
 startBuildingBut.addEventListener("click", function() {
   playRandomPop()
+  cancelUi()
 
 if (uiBuilding.style.display !== "flex") {
   
