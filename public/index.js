@@ -1,4 +1,7 @@
 //Change this to push >
+// const socket = io(`ws://localhost:5000`);
+
+// const { reverse } = require("lodash");
 
 //const socket = io(`https://arcanyGame.up.railway.app/`);
 const socket = io(window.location.origin);
@@ -17,6 +20,10 @@ setTimeout(() => {
     }
   }, 20);
 }, 1000);
+
+document.addEventListener("contextmenu", function (e) {
+  e.preventDefault();
+});
 
 let loadingProgress = 0;
 
@@ -1050,18 +1057,40 @@ function progressQuestCounter(questItem, step) {
 // Trade system >
 
 let trading = false;
+let party = false;
 
 tradeSend.addEventListener("click", function(){
   socket.emit("toDelete", tradedItems);
 
   setTimeout(() => {
     let tradingItems = [playerTradeId.value, tradingArray[0]]
-    console.log(tradingItems)
     socket.emit("toTrade", tradingItems);
     resetTrading();
     trading = false;
     noMovement = false;
   }, 500);
+})
+
+partySend.addEventListener("click", function(){
+  for (let userParty of currentParty){
+    if (userParty.name === myPlayer.username && !userParty.leader) {
+      errorDisplay(`Only the party leader can invite`);
+      return
+    }
+  }
+  if (currentParty.length < 5) {
+    socket.emit("toInvite", [playerPartyId.value, myPlayer.id, myPlayer.username]);
+    party = false;
+    noMovement = false;
+    errorDisplay(`Invite sent to ${playerPartyId.value}!`, "hue-rotate(90deg)")
+    resetParty()
+    party = false
+    noMovement = false;
+    partyScreen.style.opacity = "0";
+    partyScreen.style.pointerEvents = "none";
+  } else {
+    errorDisplay(`Your party is already full!`)
+  }
 })
 
 function resetTrading () {
@@ -1072,6 +1101,11 @@ function resetTrading () {
   tradeScreen.style.opacity = "0";
   tradeScreen.style.pointerEvents = "none"
 }
+function resetParty () {
+  playerPartyId.value = ""
+    partyScreen.style.opacity = "0";
+    partyScreen.style.pointerEvents = "none"
+}
 
 tradeButton.addEventListener("click", function(){
   if (trading) resetTrading();
@@ -1080,6 +1114,100 @@ tradeButton.addEventListener("click", function(){
   tradeScreen.style.opacity = trading ? "1" : "0";
   tradeScreen.style.pointerEvents = trading ? "all" : "none";
   if (uiIsClose) openIvn()
+})
+
+partyButton.addEventListener("click", function(){
+  if (trading) resetParty()
+  party = party ? false : true
+  noMovement = party ? true : false;
+  partyScreen.style.opacity = party ? "1" : "0";
+  partyScreen.style.pointerEvents = party ? "all" : "none";
+})
+
+let currentParty = [];
+let inParty = false;
+
+partyPopUp.addEventListener("click", function(){
+  socket.emit('partyInviteAccepted', partyInvite);
+  partyPopUp.style.opacity = 0;
+  partyPopUp.style.pointerEvents = "none"; 
+  inParty = true;
+  partyInvite = null;
+})
+
+socket.on("partyInvite", (info) => {
+  partyInvite = info;
+  partyAddNotificationDisplay(`${info[2]} invited you to a party, click here to join!`)
+})
+
+socket.on("partyInviteAcceptedCallback", (info) => {
+  let member = {
+    name: info[0],
+    id: info[3],
+    leader: false
+  }
+  currentParty.push(member);
+  console.log(currentParty)
+  socket.emit("updateParty", currentParty)
+  partyAddNotificationDisplay(`${info[0]} joined your party!`)
+  inParty = true;
+})
+
+function addPartyMember(textContent, leader) {
+  const container = document.getElementById("partyMembers");
+  container.style.display = "block"
+
+  const p = document.createElement("p");
+  p.className = "partyMembers-member";
+  if (leader) {
+    p.textContent = "🜲 " + textContent;
+  } else {
+    p.textContent = "ጸ " + textContent;
+  }
+
+  container.appendChild(p);
+}
+
+let isLeader = false;
+
+socket.on("updatePartyClient", (info) => {
+  currentParty = info;
+  for (let member of currentParty) {
+    if (member.name === myPlayer.username) {
+      if (member.leader === true) {
+        isLeader = true;
+        leaderShareEnemies() 
+      }
+      else {
+        isLeader = false;
+      }
+    } 
+  }
+
+  const container = document.getElementById("partyMembers");
+  container.innerHTML = "";
+  for (let member of currentParty) {
+    if (member.leader === false) {
+      addPartyMember(member.name, false)
+    } else {
+      addPartyMember(member.name, true)
+    }
+  }
+  console.log(currentParty)
+})
+
+function leaderShareEnemies () {
+  setInterval(() => {
+    socket.emit("leaderShareEnemies", [mapsInfo[currentLand].enemies, currentParty])
+  }, 100);
+}
+
+socket.on("leaderShareEnemiesClient", (enemies) => {
+  mapsInfo[currentLand].enemies = enemies;
+})
+
+socket.on("partyProjectileClient", (projectile) => {
+  projectilesClient.push(projectile)
 })
 
 // Trade system <
@@ -3962,126 +4090,126 @@ socket.on("player", (serverPlayer) => {
     
     };
   
-  mapObject = [
-  // construction - fences
-  {
-    name: "woodFenceVer",
-    backgroundObj: false,
-    img: woodFenceVer,
-    x: 0,
-    y: 0,
-    h: 35,
-    w: 7,
-    category: "construction",
-    subCategory: "fences",
+    mapObject = [
+    // construction - fences
+    {
+      name: "woodFenceVer",
+      backgroundObj: false,
+      img: woodFenceVer,
+      x: 0,
+      y: 0,
+      h: 35,
+      w: 7,
+      category: "construction",
+      subCategory: "fences",
 
-    subscription: 'none',
+      subscription: 'none',
 
-  },
-  {
-    name: "woodFence",
-    backgroundObj: false,
-    img: woodFence,
-    x: 0,
-    y: 0,
-    h: 22,
-    w: 28,
-    category: "construction",
-    subCategory: "fences",
+    },
+    {
+      name: "woodFence",
+      backgroundObj: false,
+      img: woodFence,
+      x: 0,
+      y: 0,
+      h: 22,
+      w: 28,
+      category: "construction",
+      subCategory: "fences",
 
-    subscription: 'none',
-  },
-  {
-    name: "woodSmallWallHor",
-    backgroundObj: false,
-    img: woodSmallWallHor,
-    x: 0,
-    y: 0,
-    h: 22,
-    w: 31,
-    category: "construction",
-    subCategory: "fences",
+      subscription: 'none',
+    },
+    {
+      name: "woodSmallWallHor",
+      backgroundObj: false,
+      img: woodSmallWallHor,
+      x: 0,
+      y: 0,
+      h: 22,
+      w: 31,
+      category: "construction",
+      subCategory: "fences",
 
-    subscription: 'none',
-  },
-  {
-    name: "woodSmallWallVert",
-    backgroundObj: false,
-    img: woodSmallWallVert,
-    x: 0,
-    y: 0,
-    h: 37,
-    w: 7,
-    category: "construction",
-    subCategory: "fences",
+      subscription: 'none',
+    },
+    {
+      name: "woodSmallWallVert",
+      backgroundObj: false,
+      img: woodSmallWallVert,
+      x: 0,
+      y: 0,
+      h: 37,
+      w: 7,
+      category: "construction",
+      subCategory: "fences",
 
-    subscription: 'none',
-  },
-  {
-    name: "woodSmallWallVertDiagonal",
-    backgroundObj: false,
-    img: woodSmallWallVertDiagonal,
-    reverse:woodSmallWallVertDiagonalReverse,
-    x: 0,
-    y: 0,
-    h: woodSmallWallVertDiagonal.height,
-    w: woodSmallWallVertDiagonal.width,
-    category: "construction",
-    subCategory: "fences",
+      subscription: 'none',
+    },
+    {
+      name: "woodSmallWallVertDiagonal",
+      backgroundObj: false,
+      img: woodSmallWallVertDiagonal,
+      reverse:woodSmallWallVertDiagonalReverse,
+      x: 0,
+      y: 0,
+      h: woodSmallWallVertDiagonal.height,
+      w: woodSmallWallVertDiagonal.width,
+      category: "construction",
+      subCategory: "fences",
 
-    subscription: 'none',
-  },
-  {
-    name: "restfieldFence",
-    backgroundObj: false,
-    img: restfieldFence,
-    x: 0,
-    y: 0,
-    h: restfieldFence.height,
-    w: restfieldFence.width,
-    category: "construction",
-    subCategory: "fences",
+      subscription: 'none',
+    },
+    {
+      name: "restfieldFence",
+      backgroundObj: false,
+      img: restfieldFence,
+      x: 0,
+      y: 0,
+      h: restfieldFence.height,
+      w: restfieldFence.width,
+      category: "construction",
+      subCategory: "fences",
 
-    subscription: 'none',
-  },
-  {
-    name: "restfieldFenceOne",
-    backgroundObj: false,
-    img: restfieldFenceOne,
-    reverse:restfieldFenceOneReverse,
-    x: 0,
-    y: 0,
-    h: restfieldFenceOne.height,
-    w: restfieldFenceOne.width,
-    category: "construction",
-    subCategory: "fences",
+      subscription: 'none',
+    },
+    {
+      name: "restfieldFenceOne",
+      backgroundObj: false,
+      img: restfieldFenceOne,
+      reverse:restfieldFenceOneReverse,
+      x: 0,
+      y: 0,
+      h: restfieldFenceOne.height,
+      w: restfieldFenceOne.width,
+      category: "construction",
+      subCategory: "fences",
 
-    subscription: 'none',
-  },
-  {
-    name: "restfieldFenceTwo",
-    backgroundObj: false,
-    img: restfieldFenceTwo,
-    reverse:restfieldFenceTwoReverse,
-    x: 0,
-    y: 0,
-    h: restfieldFenceTwo.height,
-    w: restfieldFenceTwo.width,
-    category: "construction",
-    subCategory: "fences",
+      subscription: 'none',
+    },
+    {
+      name: "restfieldFenceTwo",
+      backgroundObj: false,
+      img: restfieldFenceTwo,
+      reverse:restfieldFenceTwoReverse,
+      x: 0,
+      y: 0,
+      h: restfieldFenceTwo.height,
+      w: restfieldFenceTwo.width,
+      category: "construction",
+      subCategory: "fences",
 
-    subscription: 'none',
-  },
-  {
-    name: "woodPole",
-    backgroundObj: false,
-    img: woodPole,
-    x: 0,
-    y: 0,
-    h: 21,
-    w: 7,
-    category: "construction",
-    subCategory: "fences",
+      subscription: 'none',
+    },
+    {
+      name: "woodPole",
+      backgroundObj: false,
+      img: woodPole,
+      x: 0,
+      y: 0,
+      h: 21,
+      w: 7,
+      category: "construction",
+      subCategory: "fences",
 
     subscription: 'none',
   },
@@ -4100,251 +4228,251 @@ socket.on("player", (serverPlayer) => {
     subscription: 'none',
   },
 
-  // construction - floors
-  {
-    name: "restfieldMallTiles",
-    backgroundObj: true,
-    img: restfieldMallTiles,
-    x: 0,
-    y: 0,
-    h: restfieldMallTiles.height,
-    w: restfieldMallTiles.width,
-    category: "construction",
-    subCategory: "floors",
+    // construction - floors
+    {
+      name: "restfieldMallTiles",
+      backgroundObj: true,
+      img: restfieldMallTiles,
+      x: 0,
+      y: 0,
+      h: restfieldMallTiles.height,
+      w: restfieldMallTiles.width,
+      category: "construction",
+      subCategory: "floors",
 
-    subscription: 'member',
-  },
-  {
-    name: "stoneFloorPatch",
-    backgroundObj: true,
-    img: stoneFloorPatch,
-    x: 0,
-    y: 0,
-    h: stoneFloorPatch.height,
-    w: stoneFloorPatch.width,
-    category: "construction",
-    subCategory: "floors",
+      subscription: 'member',
+    },
+    {
+      name: "stoneFloorPatch",
+      backgroundObj: true,
+      img: stoneFloorPatch,
+      x: 0,
+      y: 0,
+      h: stoneFloorPatch.height,
+      w: stoneFloorPatch.width,
+      category: "construction",
+      subCategory: "floors",
 
-    subscription: 'none',
-  },
-  {
-    name: "stoneFloorTwo",
-    backgroundObj: true,
-    img: stoneFloorTwo,
-    x: 0,
-    y: 0,
-    h: stoneFloorTwo.height,
-    w: stoneFloorTwo.width,
-    category: "construction",
-    subCategory: "floors",
+      subscription: 'none',
+    },
+    {
+      name: "stoneFloorTwo",
+      backgroundObj: true,
+      img: stoneFloorTwo,
+      x: 0,
+      y: 0,
+      h: stoneFloorTwo.height,
+      w: stoneFloorTwo.width,
+      category: "construction",
+      subCategory: "floors",
 
-    subscription: 'none',
-  },
-  {
-    name: "grasslandDirtFloor",
-    backgroundObj: true,
-    img: grasslandDirtFloor,
-    x: 0,
-    y: 0,
-    h: 22,
-    w: 23,
-    category: "construction",
-    subCategory: "floors",
-    
-    subscription: 'none',
-  },
-  {
-    name: "grasslandDirtBig",
-    backgroundObj: true,
-    img: grasslandDirtBig,
-    x: 0,
-    y: 0,
-    h: 47,
-    w: 57,
-    category: "construction",
-    subCategory: "floors",
+      subscription: 'none',
+    },
+    {
+      name: "grasslandDirtFloor",
+      backgroundObj: true,
+      img: grasslandDirtFloor,
+      x: 0,
+      y: 0,
+      h: 22,
+      w: 23,
+      category: "construction",
+      subCategory: "floors",
+      
+      subscription: 'none',
+    },
+    {
+      name: "grasslandDirtBig",
+      backgroundObj: true,
+      img: grasslandDirtBig,
+      x: 0,
+      y: 0,
+      h: 47,
+      w: 57,
+      category: "construction",
+      subCategory: "floors",
 
-    subscription: 'none',
-  },
-  {
-    name: "grasslandDirtFloorCircle",
-    backgroundObj: true,
-    img: grasslandDirtFloorCircle,
-    x: 0,
-    y: 0,
-    h: grasslandDirtFloorCircle.height,
-    w: grasslandDirtFloorCircle.width,
-    category: "construction",
-    subCategory: "floors",
+      subscription: 'none',
+    },
+    {
+      name: "grasslandDirtFloorCircle",
+      backgroundObj: true,
+      img: grasslandDirtFloorCircle,
+      x: 0,
+      y: 0,
+      h: grasslandDirtFloorCircle.height,
+      w: grasslandDirtFloorCircle.width,
+      category: "construction",
+      subCategory: "floors",
 
-    subscription: 'none',
-  },
-  {
-    name: "grasslandGrassClearCircle",
-    backgroundObj: true,
-    img: grasslandGrassClearCircle,
-    x: 0,
-    y: 0,
-    h: grasslandGrassClearCircle.height,
-    w: grasslandGrassClearCircle.width,
-    category: "construction",
-    subCategory: "floors",
+      subscription: 'none',
+    },
+    {
+      name: "grasslandGrassClearCircle",
+      backgroundObj: true,
+      img: grasslandGrassClearCircle,
+      x: 0,
+      y: 0,
+      h: grasslandGrassClearCircle.height,
+      w: grasslandGrassClearCircle.width,
+      category: "construction",
+      subCategory: "floors",
 
-    subscription: 'none',
-  },
-  {
-    name: "grasslandGrassClearBig",
-    backgroundObj: true,
-    img: grasslandGrassClearBig,
-    x: 0,
-    y: 0,
-    h: grasslandGrassClearBig.height,
-    w: grasslandGrassClearBig.width,
-    category: "construction",
-    subCategory: "floors",
+      subscription: 'none',
+    },
+    {
+      name: "grasslandGrassClearBig",
+      backgroundObj: true,
+      img: grasslandGrassClearBig,
+      x: 0,
+      y: 0,
+      h: grasslandGrassClearBig.height,
+      w: grasslandGrassClearBig.width,
+      category: "construction",
+      subCategory: "floors",
 
-    subscription: 'none',
-  },
-  {
-    name: "grasslandGrassClearBig",
-    backgroundObj: true,
-    img: grasslandGrassClearBig,
-    x: 0,
-    y: 0,
-    h: grasslandGrassClearBig.height,
-    w: grasslandGrassClearBig.width,
-    category: "construction",
-    subCategory: "floors",
+      subscription: 'none',
+    },
+    {
+      name: "grasslandGrassClearBig",
+      backgroundObj: true,
+      img: grasslandGrassClearBig,
+      x: 0,
+      y: 0,
+      h: grasslandGrassClearBig.height,
+      w: grasslandGrassClearBig.width,
+      category: "construction",
+      subCategory: "floors",
 
-    subscription: 'none',
-  },
-  {
-    name: "grasslandGrassMediumCircle",
-    backgroundObj: true,
-    img: grasslandGrassMediumCircle,
-    x: 0,
-    y: 0,
-    h: grasslandGrassMediumCircle.height,
-    w: grasslandGrassMediumCircle.width,
-    category: "construction",
-    subCategory: "floors",
+      subscription: 'none',
+    },
+    {
+      name: "grasslandGrassMediumCircle",
+      backgroundObj: true,
+      img: grasslandGrassMediumCircle,
+      x: 0,
+      y: 0,
+      h: grasslandGrassMediumCircle.height,
+      w: grasslandGrassMediumCircle.width,
+      category: "construction",
+      subCategory: "floors",
 
-    subscription: 'none',
-  },
-  {
-    name: "grasslandGrassMediumBig",
-    backgroundObj: true,
-    img: grasslandGrassMediumBig,
-    x: 0,
-    y: 0,
-    h: grasslandGrassMediumBig.height,
-    w: grasslandGrassMediumBig.width,
-    category: "construction",
-    subCategory: "floors",
+      subscription: 'none',
+    },
+    {
+      name: "grasslandGrassMediumBig",
+      backgroundObj: true,
+      img: grasslandGrassMediumBig,
+      x: 0,
+      y: 0,
+      h: grasslandGrassMediumBig.height,
+      w: grasslandGrassMediumBig.width,
+      category: "construction",
+      subCategory: "floors",
 
-    subscription: 'none',
-  },
-  {
-    name: "grasslandGrassMediumFloor",
-    backgroundObj: true,
-    img: grasslandGrassMediumFloor,
-    x: 0,
-    y: 0,
-    h: grasslandGrassMediumFloor.height,
-    w: grasslandGrassMediumFloor.width,
-    category: "construction",
-    subCategory: "floors",
+      subscription: 'none',
+    },
+    {
+      name: "grasslandGrassMediumFloor",
+      backgroundObj: true,
+      img: grasslandGrassMediumFloor,
+      x: 0,
+      y: 0,
+      h: grasslandGrassMediumFloor.height,
+      w: grasslandGrassMediumFloor.width,
+      category: "construction",
+      subCategory: "floors",
 
-    subscription: 'none',
-  },
-  {
-    name: "grasslandGrassDarkCircle",
-    backgroundObj: true,
-    img: grasslandGrassDarkCircle,
-    x: 0,
-    y: 0,
-    h: grasslandGrassDarkCircle.height,
-    w: grasslandGrassDarkCircle.width,
-    category: "construction",
-    subCategory: "floors",
+      subscription: 'none',
+    },
+    {
+      name: "grasslandGrassDarkCircle",
+      backgroundObj: true,
+      img: grasslandGrassDarkCircle,
+      x: 0,
+      y: 0,
+      h: grasslandGrassDarkCircle.height,
+      w: grasslandGrassDarkCircle.width,
+      category: "construction",
+      subCategory: "floors",
 
-    subscription: 'none',
-  },
-  {
-    name: "grasslandGrassDarkBig",
-    backgroundObj: true,
-    img: grasslandGrassDarkBig,
-    x: 0,
-    y: 0,
-    h: grasslandGrassDarkBig.height,
-    w: grasslandGrassDarkBig.width,
-    category: "construction",
-    subCategory: "floors",
+      subscription: 'none',
+    },
+    {
+      name: "grasslandGrassDarkBig",
+      backgroundObj: true,
+      img: grasslandGrassDarkBig,
+      x: 0,
+      y: 0,
+      h: grasslandGrassDarkBig.height,
+      w: grasslandGrassDarkBig.width,
+      category: "construction",
+      subCategory: "floors",
 
-    subscription: 'none',
-  },
-  {
-    name: "grasslandGrassDarkFloor",
-    backgroundObj: true,
-    img: grasslandGrassDarkFloor,
-    x: 0,
-    y: 0,
-    h: grasslandGrassDarkFloor.height,
-    w: grasslandGrassDarkFloor.width,
-    category: "construction",
-    subCategory: "floors",
+      subscription: 'none',
+    },
+    {
+      name: "grasslandGrassDarkFloor",
+      backgroundObj: true,
+      img: grasslandGrassDarkFloor,
+      x: 0,
+      y: 0,
+      h: grasslandGrassDarkFloor.height,
+      w: grasslandGrassDarkFloor.width,
+      category: "construction",
+      subCategory: "floors",
 
-    subscription: 'none',
-  },
-  {
-    name: "stoneFloor",
-    backgroundObj: true,
-    img: stoneFloor,
-    x: 0,
-    y: 0,
-    h: stoneFloor.height,
-    w: stoneFloor.width,
-    category: "construction",
-    subCategory: "floors",
+      subscription: 'none',
+    },
+    {
+      name: "stoneFloor",
+      backgroundObj: true,
+      img: stoneFloor,
+      x: 0,
+      y: 0,
+      h: stoneFloor.height,
+      w: stoneFloor.width,
+      category: "construction",
+      subCategory: "floors",
 
-    subscription: 'none',
-  },
-  {
-    name: "woodFloor",
-    backgroundObj: true,
-    img: woodFloor,
-    x: 0,
-    y: 0,
-    h: woodFloor.height,
-    w: woodFloor.width,
-    category: "construction",
-    subCategory: "floors",
+      subscription: 'none',
+    },
+    {
+      name: "woodFloor",
+      backgroundObj: true,
+      img: woodFloor,
+      x: 0,
+      y: 0,
+      h: woodFloor.height,
+      w: woodFloor.width,
+      category: "construction",
+      subCategory: "floors",
 
-    subscription: 'none',
-  },
-  {
-    name: "plantPatch",
-    backgroundObj: true,
-    img: plantPatch,
-    x: 0,
-    y: 0,
-    h: 15,
-    w: 16,
-    category: "construction",
-    subCategory: "floors",
+      subscription: 'none',
+    },
+    {
+      name: "plantPatch",
+      backgroundObj: true,
+      img: plantPatch,
+      x: 0,
+      y: 0,
+      h: 15,
+      w: 16,
+      category: "construction",
+      subCategory: "floors",
 
-    subscription: 'none',
-  },
-  {
-    name: "shadowTree",
-    backgroundObj: true,
-    img: shadowTree,
-    x: 0,
-    y: 0,
-    h: 15,
-    w: 48,
-    category: "construction",
-    subCategory: "floors",
+      subscription: 'none',
+    },
+    {
+      name: "shadowTree",
+      backgroundObj: true,
+      img: shadowTree,
+      x: 0,
+      y: 0,
+      h: 15,
+      w: 48,
+      category: "construction",
+      subCategory: "floors",
 
     subscription: 'none',
   },
@@ -4414,138 +4542,138 @@ socket.on("player", (serverPlayer) => {
     category: "construction",
     subCategory: "doors",
 
-    subscription: 'members',
-  },
-  {
-    name: "restfieldArc",
-    backgroundObj: false,
-    img: restfieldArc,
-    x: 0,
-    y: 0,
-    h: restfieldArc.height,
-    w: restfieldArc.width,
-    category: "construction",
-    subCategory: "doors",
-    lightSource: true,
-    
+      subscription: 'members',
+    },
+    {
+      name: "restfieldArc",
+      backgroundObj: false,
+      img: restfieldArc,
+      x: 0,
+      y: 0,
+      h: restfieldArc.height,
+      w: restfieldArc.width,
+      category: "construction",
+      subCategory: "doors",
+      lightSource: true,
+      
 
-    subscription: 'members',
-  },
-  {
-    name: "restfieldArcTwo",
-    backgroundObj: false,
-    img: restfieldArcTwo,
-    x: 0,
-    y: 0,
-    h: restfieldArcTwo.height,
-    w: restfieldArcTwo.width,
-    category: "construction",
-    subCategory: "doors",
-    
+      subscription: 'members',
+    },
+    {
+      name: "restfieldArcTwo",
+      backgroundObj: false,
+      img: restfieldArcTwo,
+      x: 0,
+      y: 0,
+      h: restfieldArcTwo.height,
+      w: restfieldArcTwo.width,
+      category: "construction",
+      subCategory: "doors",
+      
 
-    subscription: 'members',
-  },
+      subscription: 'members',
+    },
 
-  // construction - walls
-  {
-    name: "woodWallDestroyed",
-    backgroundObj: false,
-    img: woodWallDestroyed,
-    x: 0,
-    y: 0,
-    h: woodWallDestroyed.height,
-    w: woodWallDestroyed.width,
-    category: "construction",
-    subCategory: "walls",
-    subscription: 'none',
-  },
-  {
-    name: "woodWallHor",
-    backgroundObj: false,
-    img: woodWallHor,
-    x: 0,
-    y: 0,
-    h: 52,
-    w: 67,
-    category: "construction",
-    subCategory: "walls",
-    subscription: 'none',
-  },
-  {
-    name: "woodWallHorTwo",
-    backgroundObj: false,
-    img: woodWallHorTwoReverse,
-    x: 0,
-    y: 0,
-    h: woodWallHorTwo.height,
-    w: woodWallHorTwo.width,
-    category: "construction",
-    subCategory: "walls",
-    subscription: 'none',
-  },
-  {
-    name: "woodWindowWall",
-    backgroundObj: false,
-    img: woodWindowWall,
-    x: 0,
-    y: 0,
-    h: 52,
-    w: 67,
-    category: "construction",
-    subCategory: "walls",
+    // construction - walls
+    {
+      name: "woodWallDestroyed",
+      backgroundObj: false,
+      img: woodWallDestroyed,
+      x: 0,
+      y: 0,
+      h: woodWallDestroyed.height,
+      w: woodWallDestroyed.width,
+      category: "construction",
+      subCategory: "walls",
+      subscription: 'none',
+    },
+    {
+      name: "woodWallHor",
+      backgroundObj: false,
+      img: woodWallHor,
+      x: 0,
+      y: 0,
+      h: 52,
+      w: 67,
+      category: "construction",
+      subCategory: "walls",
+      subscription: 'none',
+    },
+    {
+      name: "woodWallHorTwo",
+      backgroundObj: false,
+      img: woodWallHorTwoReverse,
+      x: 0,
+      y: 0,
+      h: woodWallHorTwo.height,
+      w: woodWallHorTwo.width,
+      category: "construction",
+      subCategory: "walls",
+      subscription: 'none',
+    },
+    {
+      name: "woodWindowWall",
+      backgroundObj: false,
+      img: woodWindowWall,
+      x: 0,
+      y: 0,
+      h: 52,
+      w: 67,
+      category: "construction",
+      subCategory: "walls",
 
-    subscription: 'none',
-  },
-  {
-    name: "woodWallVer",
-    backgroundObj: false,
-    img: woodWallVer,
-    x: 0,
-    y: 0,
-    h: 92,
-    w: 7,
-    category: "construction",
-    subCategory: "walls",
+      subscription: 'none',
+    },
+    {
+      name: "woodWallVer",
+      backgroundObj: false,
+      img: woodWallVer,
+      x: 0,
+      y: 0,
+      h: 92,
+      w: 7,
+      category: "construction",
+      subCategory: "walls",
 
-    subscription: 'none',
-  },
-  {
-    name: "woodSquareDoor",
-    backgroundObj: false,
-    img: woodSquareDoor,
-    x: 0,
-    y: 0,
-    h: 52,
-    w: 43,
-    category: "construction",
-    subCategory: "walls",
+      subscription: 'none',
+    },
+    {
+      name: "woodSquareDoor",
+      backgroundObj: false,
+      img: woodSquareDoor,
+      x: 0,
+      y: 0,
+      h: 52,
+      w: 43,
+      category: "construction",
+      subCategory: "walls",
 
-    subscription: 'none',
-  },
-  {
-    name: "restfieldWall",
-    backgroundObj: false,
-    img: restfieldWall,
-    x: 0,
-    y: 0,
-    h: restfieldWall.height,
-    w: restfieldWall.width,
-    category: "construction",
-    subCategory: "walls",
+      subscription: 'none',
+    },
+    {
+      name: "restfieldWall",
+      backgroundObj: false,
+      img: restfieldWall,
+      x: 0,
+      y: 0,
+      h: restfieldWall.height,
+      w: restfieldWall.width,
+      category: "construction",
+      subCategory: "walls",
 
-    subscription: 'none',
-  },
-  {
-    name: "woodWallHorRight",
-    backgroundObj: false,
-    img: woodWallHorRight,
-    reverse:woodWallHorLeft,
-    x: 0,
-    y: 0,
-    h: woodWallHorRight.height,
-    w: woodWallHorRight.width,
-    category: "construction",
-    subCategory: "walls",
+      subscription: 'none',
+    },
+    {
+      name: "woodWallHorRight",
+      backgroundObj: false,
+      img: woodWallHorRight,
+      reverse:woodWallHorLeft,
+      x: 0,
+      y: 0,
+      h: woodWallHorRight.height,
+      w: woodWallHorRight.width,
+      category: "construction",
+      subCategory: "walls",
 
     subscription: 'none',
   },
@@ -4619,684 +4747,684 @@ socket.on("player", (serverPlayer) => {
   },
 
 
-  //CONSTRUCTIONS RUINS
-  {
-    name: "GrasslandRuinsOneLeft",
-    backgroundObj: false,
-    img: GrasslandRuinsOneLeft,
-    reverse: GrasslandRuinsOneRight,
-    x: 0,
-    y: 0,
-    h: GrasslandRuinsOneLeft.height,
-    w: GrasslandRuinsOneLeft.width,
-    category: "construction",
-    subCategory: "ruins",
+    //CONSTRUCTIONS RUINS
+    {
+      name: "GrasslandRuinsOneLeft",
+      backgroundObj: false,
+      img: GrasslandRuinsOneLeft,
+      reverse: GrasslandRuinsOneRight,
+      x: 0,
+      y: 0,
+      h: GrasslandRuinsOneLeft.height,
+      w: GrasslandRuinsOneLeft.width,
+      category: "construction",
+      subCategory: "ruins",
 
-    subscription: 'none',
-  },
-  {
-    name: "GrasslandRuinsEleven",
-    backgroundObj: false,
-    img: GrasslandRuinsEleven,
-    x: 0,
-    y: 0,
-    h: GrasslandRuinsEleven.height,
-    w: GrasslandRuinsEleven.width,
-    category: "construction",
-    subCategory: "ruins",
+      subscription: 'none',
+    },
+    {
+      name: "GrasslandRuinsEleven",
+      backgroundObj: false,
+      img: GrasslandRuinsEleven,
+      x: 0,
+      y: 0,
+      h: GrasslandRuinsEleven.height,
+      w: GrasslandRuinsEleven.width,
+      category: "construction",
+      subCategory: "ruins",
 
-    subscription: 'none',
-  },
-  {
-    name: "GrasslandRuinsTwoLeft",
-    backgroundObj: false,
-    img: GrasslandRuinsTwoLeft,
-    reverse: GrasslandRuinsTwoRight,
-    x: 0,
-    y: 0,
-    h: GrasslandRuinsTwoLeft.height,
-    w: GrasslandRuinsTwoLeft.width,
-    category: "construction",
-    subCategory: "ruins",
+      subscription: 'none',
+    },
+    {
+      name: "GrasslandRuinsTwoLeft",
+      backgroundObj: false,
+      img: GrasslandRuinsTwoLeft,
+      reverse: GrasslandRuinsTwoRight,
+      x: 0,
+      y: 0,
+      h: GrasslandRuinsTwoLeft.height,
+      w: GrasslandRuinsTwoLeft.width,
+      category: "construction",
+      subCategory: "ruins",
 
-    subscription: 'dev',
-  },
-  {
-    name: "GrasslandRuinsThreeTypeOne",
-    backgroundObj: false,
-    img: GrasslandRuinsThreeTypeOne,
-    x: 0,
-    y: 0,
-    h: GrasslandRuinsThreeTypeOne.height,
-    w: GrasslandRuinsThreeTypeOne.width,
-    category: "construction",
-    subCategory: "ruins",
+      subscription: 'dev',
+    },
+    {
+      name: "GrasslandRuinsThreeTypeOne",
+      backgroundObj: false,
+      img: GrasslandRuinsThreeTypeOne,
+      x: 0,
+      y: 0,
+      h: GrasslandRuinsThreeTypeOne.height,
+      w: GrasslandRuinsThreeTypeOne.width,
+      category: "construction",
+      subCategory: "ruins",
 
-    subscription: 'none',
-  },
-  {
-    name: "GrasslandRuinsThreeTypeTwo",
-    backgroundObj: false,
-    img: GrasslandRuinsThreeTypeTwo,
-    x: 0,
-    y: 0,
-    h: GrasslandRuinsThreeTypeTwo.height,
-    w: GrasslandRuinsThreeTypeTwo.width,
-    category: "construction",
-    subCategory: "ruins",
+      subscription: 'none',
+    },
+    {
+      name: "GrasslandRuinsThreeTypeTwo",
+      backgroundObj: false,
+      img: GrasslandRuinsThreeTypeTwo,
+      x: 0,
+      y: 0,
+      h: GrasslandRuinsThreeTypeTwo.height,
+      w: GrasslandRuinsThreeTypeTwo.width,
+      category: "construction",
+      subCategory: "ruins",
 
-    subscription: 'none',
-  },
-  {
-    name: "GrasslandRuinsThreeRight",
-    backgroundObj: false,
-    img: GrasslandRuinsThreeRight,
-    reverse:GrasslandRuinsThreeLeft,
-    x: 0,
-    y: 0,
-    h: GrasslandRuinsThreeRight.height,
-    w: GrasslandRuinsThreeRight.width,
-    category: "construction",
-    subCategory: "ruins",
+      subscription: 'none',
+    },
+    {
+      name: "GrasslandRuinsThreeRight",
+      backgroundObj: false,
+      img: GrasslandRuinsThreeRight,
+      reverse:GrasslandRuinsThreeLeft,
+      x: 0,
+      y: 0,
+      h: GrasslandRuinsThreeRight.height,
+      w: GrasslandRuinsThreeRight.width,
+      category: "construction",
+      subCategory: "ruins",
 
-    subscription: 'none',
-  },
-  {
-    name: "GrasslandRuinsFourRight",
-    backgroundObj: false,
-    img: GrasslandRuinsFourRight,
-    reverse:GrasslandRuinsFourLeft,
-    x: 0,
-    y: 0,
-    h: GrasslandRuinsFourRight.height,
-    w: GrasslandRuinsFourRight.width,
-    category: "construction",
-    subCategory: "ruins",
+      subscription: 'none',
+    },
+    {
+      name: "GrasslandRuinsFourRight",
+      backgroundObj: false,
+      img: GrasslandRuinsFourRight,
+      reverse:GrasslandRuinsFourLeft,
+      x: 0,
+      y: 0,
+      h: GrasslandRuinsFourRight.height,
+      w: GrasslandRuinsFourRight.width,
+      category: "construction",
+      subCategory: "ruins",
 
-    subscription: 'none',
-  },
-  {
-    name: "GrasslandRuinsFiveLeft",
-    backgroundObj: false,
-    img: GrasslandRuinsFiveLeft,
-    reverse:GrasslandRuinsFiveRight,
-    x: 0,
-    y: 0,
-    h: GrasslandRuinsFiveLeft.height,
-    w: GrasslandRuinsFiveLeft.width,
-    category: "construction",
-    subCategory: "ruins",
+      subscription: 'none',
+    },
+    {
+      name: "GrasslandRuinsFiveLeft",
+      backgroundObj: false,
+      img: GrasslandRuinsFiveLeft,
+      reverse:GrasslandRuinsFiveRight,
+      x: 0,
+      y: 0,
+      h: GrasslandRuinsFiveLeft.height,
+      w: GrasslandRuinsFiveLeft.width,
+      category: "construction",
+      subCategory: "ruins",
 
-    subscription: 'none',
-  },
-  {
-    name: "GrasslandRuinsSixRight",
-    backgroundObj: false,
-    img: GrasslandRuinsSixRight,
-    reverse:GrasslandRuinsSixLeft,
-    x: 0,
-    y: 0,
-    h: GrasslandRuinsSixRight.height,
-    w: GrasslandRuinsSixRight.width,
-    category: "construction",
-    subCategory: "ruins",
+      subscription: 'none',
+    },
+    {
+      name: "GrasslandRuinsSixRight",
+      backgroundObj: false,
+      img: GrasslandRuinsSixRight,
+      reverse:GrasslandRuinsSixLeft,
+      x: 0,
+      y: 0,
+      h: GrasslandRuinsSixRight.height,
+      w: GrasslandRuinsSixRight.width,
+      category: "construction",
+      subCategory: "ruins",
 
-    subscription: 'none',
-  },
-  {
-    name: "GrasslandRuinsSevenLeft",
-    backgroundObj: false,
-    img: GrasslandRuinsSevenLeft,
-    reverse:GrasslandRuinsSevenRight,
-    x: 0,
-    y: 0,
-    h: GrasslandRuinsSevenLeft.height,
-    w: GrasslandRuinsSevenLeft.width,
-    category: "construction",
-    subCategory: "ruins",
+      subscription: 'none',
+    },
+    {
+      name: "GrasslandRuinsSevenLeft",
+      backgroundObj: false,
+      img: GrasslandRuinsSevenLeft,
+      reverse:GrasslandRuinsSevenRight,
+      x: 0,
+      y: 0,
+      h: GrasslandRuinsSevenLeft.height,
+      w: GrasslandRuinsSevenLeft.width,
+      category: "construction",
+      subCategory: "ruins",
 
-    subscription: 'none',
-  },
-  {
-    name: "GrasslandRuinsHeightLeft",
-    backgroundObj: false,
-    img: GrasslandRuinsHeightLeft,
-    reverse:GrasslandRuinsHeightRight,
-    x: 0,
-    y: 0,
-    h: GrasslandRuinsHeightLeft.height,
-    w: GrasslandRuinsHeightLeft.width,
-    category: "construction",
-    subCategory: "ruins",
+      subscription: 'none',
+    },
+    {
+      name: "GrasslandRuinsHeightLeft",
+      backgroundObj: false,
+      img: GrasslandRuinsHeightLeft,
+      reverse:GrasslandRuinsHeightRight,
+      x: 0,
+      y: 0,
+      h: GrasslandRuinsHeightLeft.height,
+      w: GrasslandRuinsHeightLeft.width,
+      category: "construction",
+      subCategory: "ruins",
 
-    subscription: 'none',
-  },
-  {
-    name: "GrasslandRuinsNineRight",
-    backgroundObj: false,
-    img: GrasslandRuinsNineRight,
-    reverse:GrasslandRuinsNineLeft,
-    x: 0,
-    y: 0,
-    h: GrasslandRuinsNineRight.height,
-    w: GrasslandRuinsNineRight.width,
-    category: "construction",
-    subCategory: "ruins",
+      subscription: 'none',
+    },
+    {
+      name: "GrasslandRuinsNineRight",
+      backgroundObj: false,
+      img: GrasslandRuinsNineRight,
+      reverse:GrasslandRuinsNineLeft,
+      x: 0,
+      y: 0,
+      h: GrasslandRuinsNineRight.height,
+      w: GrasslandRuinsNineRight.width,
+      category: "construction",
+      subCategory: "ruins",
 
-    subscription: 'none',
-  },
-  {
-    name: "GrasslandRuinsTen",
-    backgroundObj: false,
-    img: GrasslandRuinsTen,
-    x: 0,
-    y: 0,
-    h: GrasslandRuinsTen.height,
-    w: GrasslandRuinsTen.width,
-    category: "construction",
-    subCategory: "ruins",
+      subscription: 'none',
+    },
+    {
+      name: "GrasslandRuinsTen",
+      backgroundObj: false,
+      img: GrasslandRuinsTen,
+      x: 0,
+      y: 0,
+      h: GrasslandRuinsTen.height,
+      w: GrasslandRuinsTen.width,
+      category: "construction",
+      subCategory: "ruins",
 
-    subscription: 'dev',
-  },
-  {
-    name: "blockersArea",
-    backgroundObj: false,
-    img: blockersArea,
-    x: 0,
-    y: 0,
-    h: blockersArea.height,
-    w: blockersArea.width,
-    category: "construction",
-    subCategory: "ruins",
+      subscription: 'dev',
+    },
+    {
+      name: "blockersArea",
+      backgroundObj: false,
+      img: blockersArea,
+      x: 0,
+      y: 0,
+      h: blockersArea.height,
+      w: blockersArea.width,
+      category: "construction",
+      subCategory: "ruins",
 
-    subscription: 'dev',
-  },
+      subscription: 'dev',
+    },
 
-  // furniture 
-  {
-    name: "redSmallCarpet",
-    backgroundObj: "back",
-    img: redSmallCarpet,
-    x: 0,
-    y: 0,
-    h: redSmallCarpet.height,
-    w: redSmallCarpet.width,
-    category: "furniture",
-    subCategory: "carpets",
+    // furniture 
+    {
+      name: "redSmallCarpet",
+      backgroundObj: "back",
+      img: redSmallCarpet,
+      x: 0,
+      y: 0,
+      h: redSmallCarpet.height,
+      w: redSmallCarpet.width,
+      category: "furniture",
+      subCategory: "carpets",
 
-    subscription: 'none',
-  },
-  {
-    name: "circleRedCarpet",
-    backgroundObj: "back",
-    img: circleRedCarpet,
-    x: 0,
-    y: 0,
-    h: circleRedCarpet.height,
-    w: circleRedCarpet.width,
-    category: "furniture",
-    subCategory: "carpets",
+      subscription: 'none',
+    },
+    {
+      name: "circleRedCarpet",
+      backgroundObj: "back",
+      img: circleRedCarpet,
+      x: 0,
+      y: 0,
+      h: circleRedCarpet.height,
+      w: circleRedCarpet.width,
+      category: "furniture",
+      subCategory: "carpets",
 
-    subscription: 'none',
-  },
-  {
-    name: "circlePinkCarpet",
-    backgroundObj: "back",
-    img: circlePinkCarpet,
-    x: 0,
-    y: 0,
-    h: circlePinkCarpet.height,
-    w: circlePinkCarpet.width,
-    category: "furniture",
-    subCategory: "carpets",
+      subscription: 'none',
+    },
+    {
+      name: "circlePinkCarpet",
+      backgroundObj: "back",
+      img: circlePinkCarpet,
+      x: 0,
+      y: 0,
+      h: circlePinkCarpet.height,
+      w: circlePinkCarpet.width,
+      category: "furniture",
+      subCategory: "carpets",
 
-    subscription: 'none',
-  },
-  {
-    name: "circleOrangeCarpet",
-    backgroundObj: "back",
-    img: circleOrangeCarpet,
-    x: 0,
-    y: 0,
-    h: circleOrangeCarpet.height,
-    w: circleOrangeCarpet.width,
-    category: "furniture",
-    subCategory: "carpets",
+      subscription: 'none',
+    },
+    {
+      name: "circleOrangeCarpet",
+      backgroundObj: "back",
+      img: circleOrangeCarpet,
+      x: 0,
+      y: 0,
+      h: circleOrangeCarpet.height,
+      w: circleOrangeCarpet.width,
+      category: "furniture",
+      subCategory: "carpets",
 
-    subscription: 'none',
-  },
-  {
-    name: "restfieldMallCarpetOne",
-    backgroundObj: "back",
-    img: restfieldMallCarpetOne,
-    x: 0,
-    y: 0,
-    h: restfieldMallCarpetOne.height,
-    w: restfieldMallCarpetOne.width,
-    category: "furniture",
-    subCategory: "carpets",
+      subscription: 'none',
+    },
+    {
+      name: "restfieldMallCarpetOne",
+      backgroundObj: "back",
+      img: restfieldMallCarpetOne,
+      x: 0,
+      y: 0,
+      h: restfieldMallCarpetOne.height,
+      w: restfieldMallCarpetOne.width,
+      category: "furniture",
+      subCategory: "carpets",
 
-    subscription: 'none',
-  },
-  {
-    name: "restfieldMallCarpetTwo",
-    backgroundObj: "back",
-    img: restfieldMallCarpetTwo,
-    x: 0,
-    y: 0,
-    h: restfieldMallCarpetTwo.height,
-    w: restfieldMallCarpetTwo.width,
-    category: "furniture",
-    subCategory: "carpets",
+      subscription: 'none',
+    },
+    {
+      name: "restfieldMallCarpetTwo",
+      backgroundObj: "back",
+      img: restfieldMallCarpetTwo,
+      x: 0,
+      y: 0,
+      h: restfieldMallCarpetTwo.height,
+      w: restfieldMallCarpetTwo.width,
+      category: "furniture",
+      subCategory: "carpets",
 
-    subscription: 'none',
-  },
+      subscription: 'none',
+    },
 
-  // furniture - chairs
-  {
-    name: "chairLeft",
-    backgroundObj: "back",
-    img: chairLeft,
-    reverse: chairRight,
-    x: 0,
-    y: 0,
-    h: chairLeft.height,
-    w: chairLeft.width,
-    category: "furniture",
-    subCategory: "chairs",
+    // furniture - chairs
+    {
+      name: "chairLeft",
+      backgroundObj: "back",
+      img: chairLeft,
+      reverse: chairRight,
+      x: 0,
+      y: 0,
+      h: chairLeft.height,
+      w: chairLeft.width,
+      category: "furniture",
+      subCategory: "chairs",
 
-    subscription: 'none',
-  },
-  {
-    name: "chairRight",
-    backgroundObj: "back",
-    img: chairRight,
-    x: 0,
-    y: 0,
-    h: chairRight.height,
-    w: chairRight.width,
-    category: "furniture",
-    subCategory: "chairs",
+      subscription: 'none',
+    },
+    {
+      name: "chairRight",
+      backgroundObj: "back",
+      img: chairRight,
+      x: 0,
+      y: 0,
+      h: chairRight.height,
+      w: chairRight.width,
+      category: "furniture",
+      subCategory: "chairs",
 
-    subscription: 'none',
-  },
+      subscription: 'none',
+    },
 
-  // furniture - decorations
-  {
-    name: "cauldron",
-    backgroundObj: "front",
-    img: cauldron,
-    lightSource: true,
-    animated: true,
-    x: 0,
-    y: 0,
-    h: 32,
-    w: 25,
-    category: "furniture",
-    subCategory: "decorations",
+    // furniture - decorations
+    {
+      name: "cauldron",
+      backgroundObj: "front",
+      img: cauldron,
+      lightSource: true,
+      animated: true,
+      x: 0,
+      y: 0,
+      h: 32,
+      w: 25,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "distributorPinkLeft",
-    backgroundObj: "front",
-    img: distributorPinkLeft,
-    reverse: distributorPinkRight,
-    lightSource: true,
-    x: 0,
-    y: 0,
-    h: distributorPinkLeft.height,
-    w: distributorPinkLeft.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "distributorPinkLeft",
+      backgroundObj: "front",
+      img: distributorPinkLeft,
+      reverse: distributorPinkRight,
+      lightSource: true,
+      x: 0,
+      y: 0,
+      h: distributorPinkLeft.height,
+      w: distributorPinkLeft.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "poleTwoLeft",
-    backgroundObj: "front",
-    img: poleTwoLeft,
-    reverse: poleTwoRight,
-    lightSource: true,
-    x: 0,
-    y: 0,
-    h: poleTwoLeft.height,
-    w: poleTwoLeft.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "poleTwoLeft",
+      backgroundObj: "front",
+      img: poleTwoLeft,
+      reverse: poleTwoRight,
+      lightSource: true,
+      x: 0,
+      y: 0,
+      h: poleTwoLeft.height,
+      w: poleTwoLeft.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "poleOne",
-    backgroundObj: "front",
-    img: poleOne,
-    lightSource: true,
-    x: 0,
-    y: 0,
-    h: poleOne.height,
-    w: poleOne.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "poleOne",
+      backgroundObj: "front",
+      img: poleOne,
+      lightSource: true,
+      x: 0,
+      y: 0,
+      h: poleOne.height,
+      w: poleOne.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "poleBank",
-    backgroundObj: "front",
-    img: poleBank,
-    x: 0,
-    y: 0,
-    h: poleBank.height,
-    w: poleBank.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "poleBank",
+      backgroundObj: "front",
+      img: poleBank,
+      x: 0,
+      y: 0,
+      h: poleBank.height,
+      w: poleBank.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "boxesOne",
-    backgroundObj: "front",
-    img: boxesOne,
-    x: 0,
-    y: 0,
-    h: boxesOne.height,
-    w: boxesOne.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "boxesOne",
+      backgroundObj: "front",
+      img: boxesOne,
+      x: 0,
+      y: 0,
+      h: boxesOne.height,
+      w: boxesOne.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "boxesTwo",
-    backgroundObj: "front",
-    img: boxesTwo,
-    x: 0,
-    y: 0,
-    h: boxesTwo.height,
-    w: boxesTwo.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "boxesTwo",
+      backgroundObj: "front",
+      img: boxesTwo,
+      x: 0,
+      y: 0,
+      h: boxesTwo.height,
+      w: boxesTwo.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "boxeWithFruitsLeft",
-    backgroundObj: "front",
-    img: boxeWithFruitsLeft,
-    reverse: boxeWithFruitsRight,
-    x: 0,
-    y: 0,
-    h: boxeWithFruitsLeft.height,
-    w: boxeWithFruitsLeft.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "boxeWithFruitsLeft",
+      backgroundObj: "front",
+      img: boxeWithFruitsLeft,
+      reverse: boxeWithFruitsRight,
+      x: 0,
+      y: 0,
+      h: boxeWithFruitsLeft.height,
+      w: boxeWithFruitsLeft.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "poleInformationLeft",
-    backgroundObj: "front",
-    img: poleInformationLeft,
-    reverse: poleInformationRight,
-    x: 0,
-    y: 0,
-    h: poleInformationLeft.height,
-    w: poleInformationLeft.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "poleInformationLeft",
+      backgroundObj: "front",
+      img: poleInformationLeft,
+      reverse: poleInformationRight,
+      x: 0,
+      y: 0,
+      h: poleInformationLeft.height,
+      w: poleInformationLeft.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "booksOne",
-    backgroundObj: "front",
-    img: booksOne,
-    x: 0,
-    y: 0,
-    h: booksOne.height,
-    w: booksOne.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "booksOne",
+      backgroundObj: "front",
+      img: booksOne,
+      x: 0,
+      y: 0,
+      h: booksOne.height,
+      w: booksOne.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "decoOne",
-    backgroundObj: "front",
-    img: decoOne,
-    x: 0,
-    y: 0,
-    h: decoOne.height,
-    w: decoOne.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "decoOne",
+      backgroundObj: "front",
+      img: decoOne,
+      x: 0,
+      y: 0,
+      h: decoOne.height,
+      w: decoOne.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "paintFour",
-    backgroundObj: "front",
-    img: paintFour,
-    x: 0,
-    y: 0,
-    h: paintFour.height,
-    w: paintFour.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "paintFour",
+      backgroundObj: "front",
+      img: paintFour,
+      x: 0,
+      y: 0,
+      h: paintFour.height,
+      w: paintFour.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "paintOne",
-    backgroundObj: "front",
-    img: paintOne,
-    x: 0,
-    y: 0,
-    h: paintOne.height,
-    w: paintOne.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "paintOne",
+      backgroundObj: "front",
+      img: paintOne,
+      x: 0,
+      y: 0,
+      h: paintOne.height,
+      w: paintOne.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "paintThree",
-    backgroundObj: "front",
-    img: paintThree,
-    x: 0,
-    y: 0,
-    h: paintThree.height,
-    w: paintThree.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "paintThree",
+      backgroundObj: "front",
+      img: paintThree,
+      x: 0,
+      y: 0,
+      h: paintThree.height,
+      w: paintThree.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "boxeWithFruitsTwoRight",
-    backgroundObj: "front",
-    img: boxeWithFruitsTwoRight,
-    reverse:boxeWithFruitsTwoLeft,
-    x: 0,
-    y: 0,
-    h: boxeWithFruitsTwoRight.height,
-    w: boxeWithFruitsTwoRight.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "boxeWithFruitsTwoRight",
+      backgroundObj: "front",
+      img: boxeWithFruitsTwoRight,
+      reverse:boxeWithFruitsTwoLeft,
+      x: 0,
+      y: 0,
+      h: boxeWithFruitsTwoRight.height,
+      w: boxeWithFruitsTwoRight.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "paintTwo",
-    backgroundObj: "front",
-    img: paintTwo,
-    x: 0,
-    y: 0,
-    h: paintTwo.height,
-    w: paintTwo.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "paintTwo",
+      backgroundObj: "front",
+      img: paintTwo,
+      x: 0,
+      y: 0,
+      h: paintTwo.height,
+      w: paintTwo.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "paperWallOne",
-    backgroundObj: "front",
-    img: paperWallOne,
-    x: 0,
-    y: 0,
-    h: paperWallOne.height,
-    w: paperWallOne.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "paperWallOne",
+      backgroundObj: "front",
+      img: paperWallOne,
+      x: 0,
+      y: 0,
+      h: paperWallOne.height,
+      w: paperWallOne.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "paperWallTwo",
-    backgroundObj: "front",
-    img: paperWallTwo,
-    x: 0,
-    y: 0,
-    h: paperWallTwo.height,
-    w: paperWallTwo.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "paperWallTwo",
+      backgroundObj: "front",
+      img: paperWallTwo,
+      x: 0,
+      y: 0,
+      h: paperWallTwo.height,
+      w: paperWallTwo.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "skeletonOne",
-    backgroundObj: "front",
-    img: skeletonOne,
-    reverse: skeletonOneReverse,
-    x: 0,
-    y: 0,
-    h: skeletonOne.height,
-    w: skeletonOne.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "skeletonOne",
+      backgroundObj: "front",
+      img: skeletonOne,
+      reverse: skeletonOneReverse,
+      x: 0,
+      y: 0,
+      h: skeletonOne.height,
+      w: skeletonOne.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "skeletonTwo",
-    backgroundObj: "front",
-    img: skeletonTwo,
-    reverse: skeletonTwoReverse,
-    x: 0,
-    y: 0,
-    h: skeletonTwo.height,
-    w: skeletonTwo.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "skeletonTwo",
+      backgroundObj: "front",
+      img: skeletonTwo,
+      reverse: skeletonTwoReverse,
+      x: 0,
+      y: 0,
+      h: skeletonTwo.height,
+      w: skeletonTwo.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "paintFive",
-    backgroundObj: "front",
-    img: paintFive,
-    x: 0,
-    y: 0,
-    h: paintFive.height,
-    w: paintFive.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "paintFive",
+      backgroundObj: "front",
+      img: paintFive,
+      x: 0,
+      y: 0,
+      h: paintFive.height,
+      w: paintFive.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "bankDragon",
-    backgroundObj: "front",
-    img: bankDragon,
-    x: 0,
-    y: 0,
-    h: bankDragon.height,
-    w: bankDragon.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "bankDragon",
+      backgroundObj: "front",
+      img: bankDragon,
+      x: 0,
+      y: 0,
+      h: bankDragon.height,
+      w: bankDragon.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "bankCharactere",
-    backgroundObj: "front",
-    img: bankCharactere,
-    x: 0,
-    y: 0,
-    h: bankCharactere.height,
-    w: bankCharactere.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "bankCharactere",
+      backgroundObj: "front",
+      img: bankCharactere,
+      x: 0,
+      y: 0,
+      h: bankCharactere.height,
+      w: bankCharactere.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "restfieldDecoration",
-    backgroundObj: "front",
-    img: restfieldDecoration,
-    x: 0,
-    y: 0,
-    h: restfieldDecoration.height,
-    w: restfieldDecoration.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "restfieldDecoration",
+      backgroundObj: "front",
+      img: restfieldDecoration,
+      x: 0,
+      y: 0,
+      h: restfieldDecoration.height,
+      w: restfieldDecoration.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "distributorPinkFront",
-    backgroundObj: "front",
-    img: distributorPinkFront,
-    x: 0,
-    y: 0,
-    h: distributorPinkFront.height,
-    w: distributorPinkFront.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "distributorPinkFront",
+      backgroundObj: "front",
+      img: distributorPinkFront,
+      x: 0,
+      y: 0,
+      h: distributorPinkFront.height,
+      w: distributorPinkFront.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "restfieldMallbooks",
-    backgroundObj: "front",
-    img: restfieldMallbooks,
-    reverse:restfieldMallbooksReverse,
-    x: 0,
-    y: 0,
-    h: restfieldMallbooks.height,
-    w: restfieldMallbooks.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "restfieldMallbooks",
+      backgroundObj: "front",
+      img: restfieldMallbooks,
+      reverse:restfieldMallbooksReverse,
+      x: 0,
+      y: 0,
+      h: restfieldMallbooks.height,
+      w: restfieldMallbooks.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "restfieldMallbooksTwo",
-    backgroundObj: "front",
-    img: restfieldMallbooksTwo,
-    reverse:restfieldMallbooksTwoReverse,
-    x: 0,
-    y: 0,
-    h: restfieldMallbooksTwo.height,
-    w: restfieldMallbooksTwo.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "restfieldMallbooksTwo",
+      backgroundObj: "front",
+      img: restfieldMallbooksTwo,
+      reverse:restfieldMallbooksTwoReverse,
+      x: 0,
+      y: 0,
+      h: restfieldMallbooksTwo.height,
+      w: restfieldMallbooksTwo.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "restfieldMallbooksThree",
-    backgroundObj: "front",
-    img: restfieldMallbooksThree,
-    x: 0,
-    y: 0,
-    h: restfieldMallbooksThree.height,
-    w: restfieldMallbooksThree.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "restfieldMallbooksThree",
+      backgroundObj: "front",
+      img: restfieldMallbooksThree,
+      x: 0,
+      y: 0,
+      h: restfieldMallbooksThree.height,
+      w: restfieldMallbooksThree.width,
+      category: "furniture",
+      subCategory: "decorations",
 
     subscription: 'none',
   },
@@ -5353,101 +5481,101 @@ socket.on("player", (serverPlayer) => {
     subscription: 'none',
   },
 
-  // furniture - kitchen
-  {
-    name: "cookingPotObj",
-    backgroundObj: false,
-    img: cookingPotObj,
-    x: 0,
-    y: 0,
-    h: 30,
-    w: 26,
-    lightSource: true,
-    animated: true,
-    category: "furniture",
-    subCategory: "kitchen",
+    // furniture - kitchen
+    {
+      name: "cookingPotObj",
+      backgroundObj: false,
+      img: cookingPotObj,
+      x: 0,
+      y: 0,
+      h: 30,
+      w: 26,
+      lightSource: true,
+      animated: true,
+      category: "furniture",
+      subCategory: "kitchen",
 
-    subscription: 'none',
-  },
+      subscription: 'none',
+    },
 
-  {
-    name: "potPlantFour",
-    backgroundObj: false,
-    img: potPlantFour,
-    x: 0,
-    y: 0,
-    h: potPlantFour.height,
-    w: potPlantFour.width,
-    category: "outdoor",
-    subCategory: "plants",
+    {
+      name: "potPlantFour",
+      backgroundObj: false,
+      img: potPlantFour,
+      x: 0,
+      y: 0,
+      h: potPlantFour.height,
+      w: potPlantFour.width,
+      category: "outdoor",
+      subCategory: "plants",
 
-    subscription: 'none',
-  },
+      subscription: 'none',
+    },
 
-  // furniture - storage
-  {
-    name: "shelves",
-    backgroundObj: false,
-    img: shelves,
-    x: 0,
-    y: 0,
-    h: shelves.height,
-    w: shelves.width,
-    category: "furniture",
-    subCategory: "storage",
+    // furniture - storage
+    {
+      name: "shelves",
+      backgroundObj: false,
+      img: shelves,
+      x: 0,
+      y: 0,
+      h: shelves.height,
+      w: shelves.width,
+      category: "furniture",
+      subCategory: "storage",
 
-    subscription: 'none',
-  },
-  {
-    name: "restfieldmallStorage",
-    backgroundObj: false,
-    img: restfieldmallStorage,
-    x: 0,
-    y: 0,
-    h: restfieldmallStorage.height,
-    w: restfieldmallStorage.width,
-    category: "furniture",
-    subCategory: "storage",
+      subscription: 'none',
+    },
+    {
+      name: "restfieldmallStorage",
+      backgroundObj: false,
+      img: restfieldmallStorage,
+      x: 0,
+      y: 0,
+      h: restfieldmallStorage.height,
+      w: restfieldmallStorage.width,
+      category: "furniture",
+      subCategory: "storage",
 
-    subscription: 'none',
-  },
-  {
-    name: "restfieldShelves",
-    backgroundObj: false,
-    img: restfieldShelves,
-    x: 0,
-    y: 0,
-    h: restfieldShelves.height,
-    w: restfieldShelves.width,
-    category: "furniture",
-    subCategory: "storage",
+      subscription: 'none',
+    },
+    {
+      name: "restfieldShelves",
+      backgroundObj: false,
+      img: restfieldShelves,
+      x: 0,
+      y: 0,
+      h: restfieldShelves.height,
+      w: restfieldShelves.width,
+      category: "furniture",
+      subCategory: "storage",
 
-    subscription: 'none',
-  },
-  {
-    name: "restfieldShelvesTwo",
-    backgroundObj: false,
-    img: restfieldShelvesTwo,
-    x: 0,
-    y: 0,
-    h: restfieldShelvesTwo.height,
-    w: restfieldShelvesTwo.width,
-    category: "furniture",
-    subCategory: "storage",
+      subscription: 'none',
+    },
+    {
+      name: "restfieldShelvesTwo",
+      backgroundObj: false,
+      img: restfieldShelvesTwo,
+      x: 0,
+      y: 0,
+      h: restfieldShelvesTwo.height,
+      w: restfieldShelvesTwo.width,
+      category: "furniture",
+      subCategory: "storage",
 
-    subscription: 'none',
-  },
-  {
-    name: "restfieldShelvesThree",
-    backgroundObj: false,
-    img: restfieldShelvesThree,
-    reverse:restfieldShelvesThreeReverse,
-    x: 0,
-    y: 0,
-    h: restfieldShelvesThree.height,
-    w: restfieldShelvesThree.width,
-    category: "furniture",
-    subCategory: "storage",
+      subscription: 'none',
+    },
+    {
+      name: "restfieldShelvesThree",
+      backgroundObj: false,
+      img: restfieldShelvesThree,
+      reverse:restfieldShelvesThreeReverse,
+      x: 0,
+      y: 0,
+      h: restfieldShelvesThree.height,
+      w: restfieldShelvesThree.width,
+      category: "furniture",
+      subCategory: "storage",
 
     subscription: 'none',
   },
@@ -5506,30 +5634,30 @@ socket.on("player", (serverPlayer) => {
     subscription: 'none',
   },
 
-  // furniture - tables
-  {
-    name: "woodTable",
-    backgroundObj: false,
-    img: woodTable,
-    x: 0,
-    y: 0,
-    h: woodTable.height,
-    w: woodTable.width,
-    category: "furniture",
-    subCategory: "tables",
+    // furniture - tables
+    {
+      name: "woodTable",
+      backgroundObj: false,
+      img: woodTable,
+      x: 0,
+      y: 0,
+      h: woodTable.height,
+      w: woodTable.width,
+      category: "furniture",
+      subCategory: "tables",
 
-    subscription: 'none',
-  },
-  {
-    name: "craftingTable",
-    backgroundObj: false,
-    img: craftingTable,
-    x: 0,
-    y: 0,
-    h: craftingTable.height,
-    w: craftingTable.width,
-    category: "furniture",
-    subCategory: "tables",
+      subscription: 'none',
+    },
+    {
+      name: "craftingTable",
+      backgroundObj: false,
+      img: craftingTable,
+      x: 0,
+      y: 0,
+      h: craftingTable.height,
+      w: craftingTable.width,
+      category: "furniture",
+      subCategory: "tables",
 
     subscription: 'none',
   },
@@ -5547,96 +5675,96 @@ socket.on("player", (serverPlayer) => {
     subscription: 'none',
   },
 
-  // outdoor - bush
-  {
-    name: "bushOne",
-    backgroundObj: false,
-    img: bushOne,
-    x: 0,
-    y: 0,
-    h: 19,
-    w: 22,
-    category: "outdoor",
-    subCategory: "plants",
+    // outdoor - bush
+    {
+      name: "bushOne",
+      backgroundObj: false,
+      img: bushOne,
+      x: 0,
+      y: 0,
+      h: 19,
+      w: 22,
+      category: "outdoor",
+      subCategory: "plants",
 
-    subscription: 'none',
-  },
+      subscription: 'none',
+    },
 
-  // outdoor - decorations
-  {
-    name: "cristalTwoLeft",
-    backgroundObj: false,
-    img: cristalTwoLeft,
-    reverse: cristalTwoRight,
-    x: 0,
-    y: 0,
-    h: cristalTwoLeft.height,
-    w: cristalTwoLeft.width,
-    lightSource: true,
-    animated: false,
-    category: "outdoor",
-    subCategory: "decorations",
+    // outdoor - decorations
+    {
+      name: "cristalTwoLeft",
+      backgroundObj: false,
+      img: cristalTwoLeft,
+      reverse: cristalTwoRight,
+      x: 0,
+      y: 0,
+      h: cristalTwoLeft.height,
+      w: cristalTwoLeft.width,
+      lightSource: true,
+      animated: false,
+      category: "outdoor",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "cristalOneRight",
-    backgroundObj: false,
-    img: cristalOneRight,
-    reverse: cristalOneLeft,
-    x: 0,
-    y: 0,
-    h: cristalOneRight.height,
-    w: cristalOneRight.width,
-    lightSource: true,
-    animated: false,
-    category: "outdoor",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "cristalOneRight",
+      backgroundObj: false,
+      img: cristalOneRight,
+      reverse: cristalOneLeft,
+      x: 0,
+      y: 0,
+      h: cristalOneRight.height,
+      w: cristalOneRight.width,
+      lightSource: true,
+      animated: false,
+      category: "outdoor",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "fishPond",
-    backgroundObj: false,
-    img: fishPond,
-    x: 0,
-    y: 0,
-    h: 30,
-    w: 30,
-    lightSource: false,
-    animated: true,
-    category: "outdoor",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "fishPond",
+      backgroundObj: false,
+      img: fishPond,
+      x: 0,
+      y: 0,
+      h: 30,
+      w: 30,
+      lightSource: false,
+      animated: true,
+      category: "outdoor",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "orangeMushroom",
-    backgroundObj: false,
-    img: orangeMushroom,
-    x: 0,
-    y: 0,
-    h: orangeMushroom.height,
-    w: orangeMushroom.width,
-    lightSource: false,
-    animated: false,
-    category: "outdoor",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "orangeMushroom",
+      backgroundObj: false,
+      img: orangeMushroom,
+      x: 0,
+      y: 0,
+      h: orangeMushroom.height,
+      w: orangeMushroom.width,
+      lightSource: false,
+      animated: false,
+      category: "outdoor",
+      subCategory: "decorations",
 
-    subscription: 'members',
-  },
-  {
-    name: "redMushroom",
-    backgroundObj: false,
-    img: redMushroom,
-    x: 0,
-    y: 0,
-    h: redMushroom.height,
-    w: redMushroom.width,
-    lightSource: false,
-    animated: false,
-    category: "outdoor",
-    subCategory: "decorations",
+      subscription: 'members',
+    },
+    {
+      name: "redMushroom",
+      backgroundObj: false,
+      img: redMushroom,
+      x: 0,
+      y: 0,
+      h: redMushroom.height,
+      w: redMushroom.width,
+      lightSource: false,
+      animated: false,
+      category: "outdoor",
+      subCategory: "decorations",
 
     subscription: 'none',
   },
@@ -5686,559 +5814,559 @@ socket.on("player", (serverPlayer) => {
     subscription: 'none',
   },
 
-  // outdoor - fountains
-  {
-    name: "plazaFountain",
-    backgroundObj: false,
-    img: plazaFountain,
-    x: 0,
-    y: 0,
-    h: 84,
-    w: 131,
-    animated: true,
-    category: "outdoor",
-    subCategory: "decorations",
+    // outdoor - fountains
+    {
+      name: "plazaFountain",
+      backgroundObj: false,
+      img: plazaFountain,
+      x: 0,
+      y: 0,
+      h: 84,
+      w: 131,
+      animated: true,
+      category: "outdoor",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
+      subscription: 'none',
+    },
 
-  // outdoor - furniture
-  {
-    name: "Resstfieldplatforme",
-    backgroundObj: true,
-    img: Resstfieldplatforme,
-    x: 0,
-    y: 0,
-    h: Resstfieldplatforme.height,
-    w: Resstfieldplatforme.width,
-    category: "outdoor",
-    subCategory: "furniture",
+    // outdoor - furniture
+    {
+      name: "Resstfieldplatforme",
+      backgroundObj: true,
+      img: Resstfieldplatforme,
+      x: 0,
+      y: 0,
+      h: Resstfieldplatforme.height,
+      w: Resstfieldplatforme.width,
+      category: "outdoor",
+      subCategory: "furniture",
 
-    subscription: 'none',
-  },
-  {
-    name: "ResstfieldStructure",
-    backgroundObj: false,
-    img: ResstfieldStructure,
-    reverse:ResstfieldStructureNoLight,
-    x: 0,
-    y: 0,
-    h: ResstfieldStructure.height,
-    w: ResstfieldStructure.width,
-    category: "outdoor",
-    subCategory: "furniture",
+      subscription: 'none',
+    },
+    {
+      name: "ResstfieldStructure",
+      backgroundObj: false,
+      img: ResstfieldStructure,
+      reverse:ResstfieldStructureNoLight,
+      x: 0,
+      y: 0,
+      h: ResstfieldStructure.height,
+      w: ResstfieldStructure.width,
+      category: "outdoor",
+      subCategory: "furniture",
 
-    subscription: 'none',
-  },
-  {
-    name: "flagLine",
-    backgroundObj: "front",
-    img: flagLine,
-    x: 0,
-    y: 0,
-    h: 26,
-    w: 123,
-    animated: true,
-    category: "outdoor",
-    subCategory: "furniture",
+      subscription: 'none',
+    },
+    {
+      name: "flagLine",
+      backgroundObj: "front",
+      img: flagLine,
+      x: 0,
+      y: 0,
+      h: 26,
+      w: 123,
+      animated: true,
+      category: "outdoor",
+      subCategory: "furniture",
 
-    subscription: 'none',
-  },
-  {
-    name: "tombstoneOne",
-    backgroundObj: "front",
-    img: tombstoneOne,
-    x: 0,
-    y: 0,
-    h: tombstoneOne.height,
-    w: tombstoneOne.width,
-    category: "outdoor",
-    subCategory: "furniture",
+      subscription: 'none',
+    },
+    {
+      name: "tombstoneOne",
+      backgroundObj: "front",
+      img: tombstoneOne,
+      x: 0,
+      y: 0,
+      h: tombstoneOne.height,
+      w: tombstoneOne.width,
+      category: "outdoor",
+      subCategory: "furniture",
 
-    subscription: 'none',
-  },
-  {
-    name: "tombstoneTwo",
-    backgroundObj: "front",
-    img: tombstoneTwo,
-    x: 0,
-    y: 0,
-    h: tombstoneTwo.height,
-    w: tombstoneTwo.width,
-    category: "outdoor",
-    subCategory: "furniture",
+      subscription: 'none',
+    },
+    {
+      name: "tombstoneTwo",
+      backgroundObj: "front",
+      img: tombstoneTwo,
+      x: 0,
+      y: 0,
+      h: tombstoneTwo.height,
+      w: tombstoneTwo.width,
+      category: "outdoor",
+      subCategory: "furniture",
 
-    subscription: 'none',
-  },
-  {
-    name: "tombstoneThree",
-    backgroundObj: "front",
-    img: tombstoneThree,
-    x: 0,
-    y: 0,
-    h: tombstoneThree.height,
-    w: tombstoneThree.width,
-    category: "outdoor",
-    subCategory: "furniture",
+      subscription: 'none',
+    },
+    {
+      name: "tombstoneThree",
+      backgroundObj: "front",
+      img: tombstoneThree,
+      x: 0,
+      y: 0,
+      h: tombstoneThree.height,
+      w: tombstoneThree.width,
+      category: "outdoor",
+      subCategory: "furniture",
 
-    subscription: 'none',
-  },
-  {
-    name: "tombstoneFour",
-    backgroundObj: "front",
-    img: tombstoneFour,
-    x: 0,
-    y: 0,
-    h: tombstoneFour.height,
-    w: tombstoneFour.width,
-    category: "outdoor",
-    subCategory: "furniture",
+      subscription: 'none',
+    },
+    {
+      name: "tombstoneFour",
+      backgroundObj: "front",
+      img: tombstoneFour,
+      x: 0,
+      y: 0,
+      h: tombstoneFour.height,
+      w: tombstoneFour.width,
+      category: "outdoor",
+      subCategory: "furniture",
 
-    subscription: 'none',
-  },
-  {
-    name: "tombstoneFive",
-    backgroundObj: "front",
-    img: tombstoneFive,
-    x: 0,
-    y: 0,
-    h: tombstoneFive.height,
-    w: tombstoneFive.width,
-    category: "outdoor",
-    subCategory: "furniture",
+      subscription: 'none',
+    },
+    {
+      name: "tombstoneFive",
+      backgroundObj: "front",
+      img: tombstoneFive,
+      x: 0,
+      y: 0,
+      h: tombstoneFive.height,
+      w: tombstoneFive.width,
+      category: "outdoor",
+      subCategory: "furniture",
 
-    subscription: 'none',
-  },
-  {
-    name: "tombstoneSix",
-    backgroundObj: "front",
-    img: tombstoneSix,
-    x: 0,
-    y: 0,
-    h: tombstoneSix.height,
-    w: tombstoneSix.width,
-    category: "outdoor",
-    subCategory: "furniture",
+      subscription: 'none',
+    },
+    {
+      name: "tombstoneSix",
+      backgroundObj: "front",
+      img: tombstoneSix,
+      x: 0,
+      y: 0,
+      h: tombstoneSix.height,
+      w: tombstoneSix.width,
+      category: "outdoor",
+      subCategory: "furniture",
 
-    subscription: 'none',
-  },
+      subscription: 'none',
+    },
 
-  // outdoor - grass
-  {
-    name: "dryGrass",
-    backgroundObj: false,
-    img: dryGrass,
-    x: 0,
-    y: 0,
-    h: 15,
-    w: 15,
-    lightSource: false,
-    animated: true,
-    category: "outdoor",
-    subCategory: "grass",
+    // outdoor - grass
+    {
+      name: "dryGrass",
+      backgroundObj: false,
+      img: dryGrass,
+      x: 0,
+      y: 0,
+      h: 15,
+      w: 15,
+      lightSource: false,
+      animated: true,
+      category: "outdoor",
+      subCategory: "grass",
 
-    subscription: 'none',
-  },
-  {
-    name: "grassOne",
-    backgroundObj: false,
-    img: grassOne,
-    x: 0,
-    y: 0,
-    h: 7,
-    w: 10,
-    category: "outdoor",
-    subCategory: "grass",
+      subscription: 'none',
+    },
+    {
+      name: "grassOne",
+      backgroundObj: false,
+      img: grassOne,
+      x: 0,
+      y: 0,
+      h: 7,
+      w: 10,
+      category: "outdoor",
+      subCategory: "grass",
 
-    subscription: 'none',
-  },
-  {
-    name: "whiteFlowers",
-    backgroundObj: true,
-    img: whiteFlowers,
-    x: 0,
-    y: 0,
-    h: 13,
-    w: 14,
-    category: "outdoor",
-    subCategory: "grass",
+      subscription: 'none',
+    },
+    {
+      name: "whiteFlowers",
+      backgroundObj: true,
+      img: whiteFlowers,
+      x: 0,
+      y: 0,
+      h: 13,
+      w: 14,
+      category: "outdoor",
+      subCategory: "grass",
 
-    subscription: 'none',
-  },
-  {
-    name: "yellowFlowers",
-    backgroundObj: true,
-    img: yellowFlowers,
-    x: 0,
-    y: 0,
-    h: yellowFlowers.height,
-    w: yellowFlowers.width,
-    category: "outdoor",
-    subCategory: "grass",
+      subscription: 'none',
+    },
+    {
+      name: "yellowFlowers",
+      backgroundObj: true,
+      img: yellowFlowers,
+      x: 0,
+      y: 0,
+      h: yellowFlowers.height,
+      w: yellowFlowers.width,
+      category: "outdoor",
+      subCategory: "grass",
 
-    subscription: 'none',
-  },
-  {
-    name: "patchOfGrass",
-    backgroundObj: true,
-    img: patchOfGrass,
-    x: 0,
-    y: 0,
-    h: patchOfGrass.height,
-    w: patchOfGrass.width,
-    category: "outdoor",
-    subCategory: "grass",
+      subscription: 'none',
+    },
+    {
+      name: "patchOfGrass",
+      backgroundObj: true,
+      img: patchOfGrass,
+      x: 0,
+      y: 0,
+      h: patchOfGrass.height,
+      w: patchOfGrass.width,
+      category: "outdoor",
+      subCategory: "grass",
 
-    subscription: 'none',
-  },
-  {
-    name: "RedFlowers",
-    backgroundObj: true,
-    img: RedFlowers,
-    x: 0,
-    y: 0,
-    h: RedFlowers.height,
-    w: RedFlowers.width,
-    category: "outdoor",
-    subCategory: "grass",
+      subscription: 'none',
+    },
+    {
+      name: "RedFlowers",
+      backgroundObj: true,
+      img: RedFlowers,
+      x: 0,
+      y: 0,
+      h: RedFlowers.height,
+      w: RedFlowers.width,
+      category: "outdoor",
+      subCategory: "grass",
 
-    subscription: 'none',
-  },
+      subscription: 'none',
+    },
 
-  // outdoor - plants
-  {
-    name: "vineTwo",
-    backgroundObj: "front",
-    img: vineTwo,
-    x: 0,
-    y: 0,
-    h: vineTwo.height,
-    w: vineTwo.width,
-    category: "outdoor",
-    subCategory: "plants",
+    // outdoor - plants
+    {
+      name: "vineTwo",
+      backgroundObj: "front",
+      img: vineTwo,
+      x: 0,
+      y: 0,
+      h: vineTwo.height,
+      w: vineTwo.width,
+      category: "outdoor",
+      subCategory: "plants",
 
-    subscription: 'none',
-  },
-  {
-    name: "vineOne",
-    backgroundObj: "front",
-    img: vineOne,
-    x: 0,
-    y: 0,
-    h: 12,
-    w: 42,
-    category: "outdoor",
-    subCategory: "plants",
+      subscription: 'none',
+    },
+    {
+      name: "vineOne",
+      backgroundObj: "front",
+      img: vineOne,
+      x: 0,
+      y: 0,
+      h: 12,
+      w: 42,
+      category: "outdoor",
+      subCategory: "plants",
 
-    subscription: 'none',
-  },
-  {
-    name: "hangingPlant",
-    backgroundObj: "front",
-    img: hangingPlant,
-    x: 0,
-    y: 0,
-    h: hangingPlant.height,
-    w: hangingPlant.width,
-    category: "outdoor",
-    subCategory: "plants",
+      subscription: 'none',
+    },
+    {
+      name: "hangingPlant",
+      backgroundObj: "front",
+      img: hangingPlant,
+      x: 0,
+      y: 0,
+      h: hangingPlant.height,
+      w: hangingPlant.width,
+      category: "outdoor",
+      subCategory: "plants",
 
-    subscription: 'none',
-  },
-  {
-    name: "hangingPlantRed",
-    backgroundObj: "front",
-    img: hangingPlantRed,
-    x: 0,
-    y: 0,
-    h: hangingPlantRed.height,
-    w: hangingPlantRed.width,
-    category: "outdoor",
-    subCategory: "plants",
+      subscription: 'none',
+    },
+    {
+      name: "hangingPlantRed",
+      backgroundObj: "front",
+      img: hangingPlantRed,
+      x: 0,
+      y: 0,
+      h: hangingPlantRed.height,
+      w: hangingPlantRed.width,
+      category: "outdoor",
+      subCategory: "plants",
 
-    subscription: 'none',
-  },
-  {
-    name: "potPlantThree",
-    backgroundObj: false,
-    img: potPlantThree,
-    x: 0,
-    y: 0,
-    h: potPlantThree.height,
-    w: potPlantThree.width,
-    category: "outdoor",
-    subCategory: "plants",
+      subscription: 'none',
+    },
+    {
+      name: "potPlantThree",
+      backgroundObj: false,
+      img: potPlantThree,
+      x: 0,
+      y: 0,
+      h: potPlantThree.height,
+      w: potPlantThree.width,
+      category: "outdoor",
+      subCategory: "plants",
 
-    subscription: 'none',
-  },
-  {
-    name: "potPlantTwo",
-    backgroundObj: false,
-    img: potPlantTwo,
-    x: 0,
-    y: 0,
-    h: potPlantTwo.height,
-    w: potPlantTwo.width,
-    category: "outdoor",
-    subCategory: "plants",
+      subscription: 'none',
+    },
+    {
+      name: "potPlantTwo",
+      backgroundObj: false,
+      img: potPlantTwo,
+      x: 0,
+      y: 0,
+      h: potPlantTwo.height,
+      w: potPlantTwo.width,
+      category: "outdoor",
+      subCategory: "plants",
 
-    subscription: 'none',
-  },
-  {
-    name: "potPlantOne",
-    backgroundObj: false,
-    img: potPlantOne,
-    x: 0,
-    y: 0,
-    h: potPlantOne.height,
-    w: potPlantOne.width,
-    category: "outdoor",
-    subCategory: "plants",
+      subscription: 'none',
+    },
+    {
+      name: "potPlantOne",
+      backgroundObj: false,
+      img: potPlantOne,
+      x: 0,
+      y: 0,
+      h: potPlantOne.height,
+      w: potPlantOne.width,
+      category: "outdoor",
+      subCategory: "plants",
 
-    subscription: 'none',
-  },
-  {
-    name: "bluePotPlant",
-    backgroundObj: false,
-    img: bluePotPlant,
-    x: 0,
-    y: 0,
-    h: bluePotPlant.height,
-    w: bluePotPlant.width,
-    category: "outdoor",
-    subCategory: "plants",
+      subscription: 'none',
+    },
+    {
+      name: "bluePotPlant",
+      backgroundObj: false,
+      img: bluePotPlant,
+      x: 0,
+      y: 0,
+      h: bluePotPlant.height,
+      w: bluePotPlant.width,
+      category: "outdoor",
+      subCategory: "plants",
 
-    subscription: 'none',
-  },
-  {
-    name: "redPotPlant",
-    backgroundObj: false,
-    img: redPotPlant,
-    x: 0,
-    y: 0,
-    h: redPotPlant.height,
-    w: redPotPlant.width,
-    category: "outdoor",
-    subCategory: "plants",
+      subscription: 'none',
+    },
+    {
+      name: "redPotPlant",
+      backgroundObj: false,
+      img: redPotPlant,
+      x: 0,
+      y: 0,
+      h: redPotPlant.height,
+      w: redPotPlant.width,
+      category: "outdoor",
+      subCategory: "plants",
 
-    subscription: 'none',
-  },
+      subscription: 'none',
+    },
 
-  // outdoor - rocks
-  {
-    name: "rockOne",
-    backgroundObj: false,
-    img: rockOne,
-    x: 0,
-    y: 0,
-    h: 27,
-    w: 35,
-    category: "outdoor",
-    subCategory: "rocks",
+    // outdoor - rocks
+    {
+      name: "rockOne",
+      backgroundObj: false,
+      img: rockOne,
+      x: 0,
+      y: 0,
+      h: 27,
+      w: 35,
+      category: "outdoor",
+      subCategory: "rocks",
 
-    subscription: 'none',
-  },
+      subscription: 'none',
+    },
 
-  // outdoor - trees
-  {
-    name: "treeOne",
-    backgroundObj: false,
-    img: treeOne,
-    x: 0,
-    y: 0,
-    h: 70,
-    w: 43,
-    category: "outdoor",
-    subCategory: "trees",
+    // outdoor - trees
+    {
+      name: "treeOne",
+      backgroundObj: false,
+      img: treeOne,
+      x: 0,
+      y: 0,
+      h: 70,
+      w: 43,
+      category: "outdoor",
+      subCategory: "trees",
 
-    subscription: 'none',
-  },
-  {
-    name: "restfieldBigTree",
-    backgroundObj: false,
-    img: restfieldBigTree,
-    x: 0,
-    y: 0,
-    h: restfieldBigTree.height,
-    w: restfieldBigTree.width,
-    category: "outdoor",
-    subCategory: "trees",
+      subscription: 'none',
+    },
+    {
+      name: "restfieldBigTree",
+      backgroundObj: false,
+      img: restfieldBigTree,
+      x: 0,
+      y: 0,
+      h: restfieldBigTree.height,
+      w: restfieldBigTree.width,
+      category: "outdoor",
+      subCategory: "trees",
 
-    subscription: 'member',
-  },
-  {
-    name: "restfieldDeadTreeOne",
-    backgroundObj: false,
-    img: restfieldDeadTreeOne,
-    x: 0,
-    y: 0,
-    h: restfieldDeadTreeOne.height,
-    w: restfieldDeadTreeOne.width,
-    category: "outdoor",
-    subCategory: "trees",
+      subscription: 'member',
+    },
+    {
+      name: "restfieldDeadTreeOne",
+      backgroundObj: false,
+      img: restfieldDeadTreeOne,
+      x: 0,
+      y: 0,
+      h: restfieldDeadTreeOne.height,
+      w: restfieldDeadTreeOne.width,
+      category: "outdoor",
+      subCategory: "trees",
 
-    subscription: 'member',
-  },
-  {
-    name: "restfieldDeadTreeTwo",
-    backgroundObj: false,
-    img: restfieldDeadTreeTwo,
-    x: 0,
-    y: 0,
-    h: restfieldDeadTreeTwo.height,
-    w: restfieldDeadTreeTwo.width,
-    category: "outdoor",
-    subCategory: "trees",
+      subscription: 'member',
+    },
+    {
+      name: "restfieldDeadTreeTwo",
+      backgroundObj: false,
+      img: restfieldDeadTreeTwo,
+      x: 0,
+      y: 0,
+      h: restfieldDeadTreeTwo.height,
+      w: restfieldDeadTreeTwo.width,
+      category: "outdoor",
+      subCategory: "trees",
 
-    subscription: 'member',
-  },
+      subscription: 'member',
+    },
 
-  // outdoor - water
-  {
-    name: "smallLake",
-    backgroundObj: true,
-    img: smallLake,
-    x: 0,
-    y: 0,
-    h: 112,
-    w: 112,
-    lightSource: false,
-    animated: true,
-    category: "outdoor",
-    subCategory: "water",
+    // outdoor - water
+    {
+      name: "smallLake",
+      backgroundObj: true,
+      img: smallLake,
+      x: 0,
+      y: 0,
+      h: 112,
+      w: 112,
+      lightSource: false,
+      animated: true,
+      category: "outdoor",
+      subCategory: "water",
 
-    subscription: 'none',
-  },
-  {
-    name: "smallLakeTwo",
-    backgroundObj: true,
-    img: smallLakeTwo,
-    x: 0,
-    y: 0,
-    h: 70,
-    w: 70,
-    lightSource: false,
-    animated: true,
-    category: "outdoor",
-    subCategory: "water",
+      subscription: 'none',
+    },
+    {
+      name: "smallLakeTwo",
+      backgroundObj: true,
+      img: smallLakeTwo,
+      x: 0,
+      y: 0,
+      h: 70,
+      w: 70,
+      lightSource: false,
+      animated: true,
+      category: "outdoor",
+      subCategory: "water",
 
-    subscription: 'none',
-  },
-  {
-    name: "smallLakeThree",
-    backgroundObj: true,
-    img: smallLakeThree,
-    x: 0,
-    y: 0,
-    h: 70,
-    w: 70,
-    lightSource: false,
-    animated: true,
-    category: "outdoor",
-    subCategory: "water",
+      subscription: 'none',
+    },
+    {
+      name: "smallLakeThree",
+      backgroundObj: true,
+      img: smallLakeThree,
+      x: 0,
+      y: 0,
+      h: 70,
+      w: 70,
+      lightSource: false,
+      animated: true,
+      category: "outdoor",
+      subCategory: "water",
 
-    subscription: 'none',
-  },
+      subscription: 'none',
+    },
 
-  // structure - chest
-  {
-    name: "chestCommon",
-    backgroundObj: false,
-    img: chestCommon,
-    x: 0,
-    y: 0,
-    h: 18,
-    w: 21,
-    lightSource: true,
-    animated: true,
-    category: "structure",
-    subCategory: "chest",
+    // structure - chest
+    {
+      name: "chestCommon",
+      backgroundObj: false,
+      img: chestCommon,
+      x: 0,
+      y: 0,
+      h: 18,
+      w: 21,
+      lightSource: true,
+      animated: true,
+      category: "structure",
+      subCategory: "chest",
 
-    subscription: 'none',
-  },
+      subscription: 'none',
+    },
 
-  // structure - enchanting
-  {
-    name: "enchantingTower",
-    backgroundObj: false,
-    img: enchantingTower,
-    x: 0,
-    y: 0,
-    h: 357,
-    w: 119,
-    category: "structure",
-    subCategory: "enchanting",
+    // structure - enchanting
+    {
+      name: "enchantingTower",
+      backgroundObj: false,
+      img: enchantingTower,
+      x: 0,
+      y: 0,
+      h: 357,
+      w: 119,
+      category: "structure",
+      subCategory: "enchanting",
 
-    subscription: 'dev',
-  },
-  {
-    name: "enchantingTable",
-    backgroundObj: false,
-    img: enchantingTable,
-    x: 0,
-    y: 0,
-    h: 72,
-    w: 75,
-    animated: true,
-    category: "structure",
-    subCategory: "enchanting",
+      subscription: 'dev',
+    },
+    {
+      name: "enchantingTable",
+      backgroundObj: false,
+      img: enchantingTable,
+      x: 0,
+      y: 0,
+      h: 72,
+      w: 75,
+      animated: true,
+      category: "structure",
+      subCategory: "enchanting",
 
-    subscription: 'dev',
-  },
+      subscription: 'dev',
+    },
 
-  // structure - kitchen
-  {
-    name: "cookingStand",
-    backgroundObj: false,
-    img: cookingStand,
-    reverse: cookingStandReverse,
-    x: 0,
-    y: 0,
-    h: cookingStand.height,
-    w: cookingStand.width,
-    category: "furniture",
-    subCategory: "kitchen",
+    // structure - kitchen
+    {
+      name: "cookingStand",
+      backgroundObj: false,
+      img: cookingStand,
+      reverse: cookingStandReverse,
+      x: 0,
+      y: 0,
+      h: cookingStand.height,
+      w: cookingStand.width,
+      category: "furniture",
+      subCategory: "kitchen",
 
-    subscription: 'dev',
-  },
+      subscription: 'dev',
+    },
 
-  // structure - BUILDING
-  {
-    name: "coffeOfGrassland",
-    backgroundObj: true,
-    img: coffeOfGrassland,
-    x: 0,
-    y: 0,
-    h: 131,
-    w: 145,
-    category: "structure",
-    subCategory: "building",
+    // structure - BUILDING
+    {
+      name: "coffeOfGrassland",
+      backgroundObj: true,
+      img: coffeOfGrassland,
+      x: 0,
+      y: 0,
+      h: 131,
+      w: 145,
+      category: "structure",
+      subCategory: "building",
 
-    subscription: 'dev',
-  },
-  {
-    name: "mushroomCastel",
-    backgroundObj: false,
-    img: mushroomCastel,
-    x: 0,
-    y: 0,
-    h: 239,
-    w: 249,
-    category: "structure",
-    subCategory: "building",
+      subscription: 'dev',
+    },
+    {
+      name: "mushroomCastel",
+      backgroundObj: false,
+      img: mushroomCastel,
+      x: 0,
+      y: 0,
+      h: 239,
+      w: 249,
+      category: "structure",
+      subCategory: "building",
 
-    subscription: 'dev',
-  },
-  {
-    name: "grasslandCristal",
-    backgroundObj: false,
-    img: grasslandCristal,
-    x: 0,
-    y: 0,
-    h: 186,
-    w: 116,
-    category: "structure",
-    subCategory: "building",
+      subscription: 'dev',
+    },
+    {
+      name: "grasslandCristal",
+      backgroundObj: false,
+      img: grasslandCristal,
+      x: 0,
+      y: 0,
+      h: 186,
+      w: 116,
+      category: "structure",
+      subCategory: "building",
 
     subscription: 'dev',
   },
@@ -6295,199 +6423,199 @@ socket.on("player", (serverPlayer) => {
     subscription: 'dev',
   },
 
-  //STRUCTURE BRIDGES
-  {
-    name: "grasslandBridgeBackOne",
-    backgroundObj: true,
-    img: grasslandBridgeBackOne,
-    x: 0,
-    y: 0,
-    h: grasslandBridgeBackOne.height,
-    w: grasslandBridgeBackOne.width,
-    category: "structure",
-    subCategory: "bridges",
+    //STRUCTURE BRIDGES
+    {
+      name: "grasslandBridgeBackOne",
+      backgroundObj: true,
+      img: grasslandBridgeBackOne,
+      x: 0,
+      y: 0,
+      h: grasslandBridgeBackOne.height,
+      w: grasslandBridgeBackOne.width,
+      category: "structure",
+      subCategory: "bridges",
 
-    subscription: 'dev',
-  },
-  {
-    name: "grasslandBridgeFrontOne",
-    backgroundObj: false,
-    img: grasslandBridgeFrontOne,
-    x: 0,
-    y: 0,
-    h: 70,
-    w: 35,
-    category: "structure",
-    subCategory: "bridges",
+      subscription: 'dev',
+    },
+    {
+      name: "grasslandBridgeFrontOne",
+      backgroundObj: false,
+      img: grasslandBridgeFrontOne,
+      x: 0,
+      y: 0,
+      h: 70,
+      w: 35,
+      category: "structure",
+      subCategory: "bridges",
 
-    subscription: 'dev',
-  },
-  {
-    name: "grasslandBridgeBackTwo",
-    backgroundObj: true,
-    img: grasslandBridgeBackTwo,
-    x: 0,
-    y: 0,
-    h: grasslandBridgeBackTwo.height,
-    w: grasslandBridgeBackTwo.width,
-    category: "structure",
-    subCategory: "bridges",
+      subscription: 'dev',
+    },
+    {
+      name: "grasslandBridgeBackTwo",
+      backgroundObj: true,
+      img: grasslandBridgeBackTwo,
+      x: 0,
+      y: 0,
+      h: grasslandBridgeBackTwo.height,
+      w: grasslandBridgeBackTwo.width,
+      category: "structure",
+      subCategory: "bridges",
 
-    subscription: 'dev',
-  },
-  {
-    name: "grasslandBridgeFrontTwo",
-    backgroundObj: false,
-    img: grasslandBridgeFrontTwo,
-    x: 0,
-    y: 0,
-    h: grasslandBridgeFrontTwo.height,
-    w: grasslandBridgeFrontTwo.width,
-    category: "structure",
-    subCategory: "bridges",
+      subscription: 'dev',
+    },
+    {
+      name: "grasslandBridgeFrontTwo",
+      backgroundObj: false,
+      img: grasslandBridgeFrontTwo,
+      x: 0,
+      y: 0,
+      h: grasslandBridgeFrontTwo.height,
+      w: grasslandBridgeFrontTwo.width,
+      category: "structure",
+      subCategory: "bridges",
 
-    subscription: 'dev',
-  },
+      subscription: 'dev',
+    },
 
-  //LIGHTS
-  //LANTERNS
-  {
-    name: "lanternOne",
-    backgroundObj: "front",
-    img: lanternOne,
-    x: 0,
-    y: 0,
-    h: lanternOne.height,
-    w: lanternOne.width,
-    category: "light",
-    subCategory: "lanterns",
+    //LIGHTS
+    //LANTERNS
+    {
+      name: "lanternOne",
+      backgroundObj: "front",
+      img: lanternOne,
+      x: 0,
+      y: 0,
+      h: lanternOne.height,
+      w: lanternOne.width,
+      category: "light",
+      subCategory: "lanterns",
 
-    subscription: 'none',
-  },
+      subscription: 'none',
+    },
 
-  //LAMPS LIGHT
-  {
-    name: "lightPoleOne",
-    backgroundObj: false,
-    img: lightPoleOne,
-    reverse:lightPoleOneReverse,
-    lightSource: true,
-    x: 0,
-    y: 0,
-    h: 52,
-    w: 22,
-    lightSource: true,
-    category: "light",
-    subCategory: "lamps",
+    //LAMPS LIGHT
+    {
+      name: "lightPoleOne",
+      backgroundObj: false,
+      img: lightPoleOne,
+      reverse:lightPoleOneReverse,
+      lightSource: true,
+      x: 0,
+      y: 0,
+      h: 52,
+      w: 22,
+      lightSource: true,
+      category: "light",
+      subCategory: "lamps",
 
-    subscription: 'none',
-  },
-  {
-    name: "restfieldPole",
-    backgroundObj: false,
-    img: restfieldPole,
-    lightSource: true,
-    x: 0,
-    y: 0,
-    h: restfieldPole.height,
-    w: restfieldPole.width,
-    lightSource: true,
-    category: "light",
-    subCategory: "lamps",
+      subscription: 'none',
+    },
+    {
+      name: "restfieldPole",
+      backgroundObj: false,
+      img: restfieldPole,
+      lightSource: true,
+      x: 0,
+      y: 0,
+      h: restfieldPole.height,
+      w: restfieldPole.width,
+      lightSource: true,
+      category: "light",
+      subCategory: "lamps",
 
-    subscription: 'none',
-  },
+      subscription: 'none',
+    },
 
-  {
-    name: "mediumTorch",
-    backgroundObj: false,
-    img: mediumTorch,
-    x: 0,
-    y: 0,
-    h: 26,
-    w: 11,
-    animated: true,
-    lightSource: true,
-    category: "light",
-    subCategory: "lamps",
+    {
+      name: "mediumTorch",
+      backgroundObj: false,
+      img: mediumTorch,
+      x: 0,
+      y: 0,
+      h: 26,
+      w: 11,
+      animated: true,
+      lightSource: true,
+      category: "light",
+      subCategory: "lamps",
 
-    subscription: 'none',
-  },
-  {
-    name: "restfieldLamp",
-    backgroundObj: false,
-    img: restfieldLamp,
-    x: 0,
-    y: 0,
-    h: restfieldLamp.height,
-    w: restfieldLamp.width,
-    animated: false,
-    lightSource: true,
-    category: "light",
-    subCategory: "lamps",
+      subscription: 'none',
+    },
+    {
+      name: "restfieldLamp",
+      backgroundObj: false,
+      img: restfieldLamp,
+      x: 0,
+      y: 0,
+      h: restfieldLamp.height,
+      w: restfieldLamp.width,
+      animated: false,
+      lightSource: true,
+      category: "light",
+      subCategory: "lamps",
 
-    subscription: 'member',
-  },
-  {
-    name: "restfielMallLight",
-    backgroundObj: false,
-    img: restfielMallLight,
-    x: 0,
-    y: 0,
-    h: restfielMallLight.height,
-    w: restfielMallLight.width,
-    animated: false,
-    lightSource: true,
-    category: "light",
-    subCategory: "lamps",
+      subscription: 'member',
+    },
+    {
+      name: "restfielMallLight",
+      backgroundObj: false,
+      img: restfielMallLight,
+      x: 0,
+      y: 0,
+      h: restfielMallLight.height,
+      w: restfielMallLight.width,
+      animated: false,
+      lightSource: true,
+      category: "light",
+      subCategory: "lamps",
 
-    subscription: 'member',
-  },
-  {
-    name: "mushroomPoleLeft",
-    backgroundObj: false,
-    img: mushroomPoleLeft,
-    reverse: mushroomPoleRight,
-    x: 0,
-    y: 0,
-    h: mushroomPoleLeft.height,
-    w: mushroomPoleLeft.width,
-    animated: false,
-    lightSource: true,
-    category: "light",
-    subCategory: "lamps",
+      subscription: 'member',
+    },
+    {
+      name: "mushroomPoleLeft",
+      backgroundObj: false,
+      img: mushroomPoleLeft,
+      reverse: mushroomPoleRight,
+      x: 0,
+      y: 0,
+      h: mushroomPoleLeft.height,
+      w: mushroomPoleLeft.width,
+      animated: false,
+      lightSource: true,
+      category: "light",
+      subCategory: "lamps",
 
-    subscription: 'none',
-  },
-  {
-    name: "lightpoleTwo",
-    backgroundObj: false,
-    img: lightpoleTwo,
-    x: 0,
-    y: 0,
-    h: lightpoleTwo.height,
-    w: lightpoleTwo.width,
-    animated: false,
-    lightSource: true,
-    category: "light",
-    subCategory: "lamps",
+      subscription: 'none',
+    },
+    {
+      name: "lightpoleTwo",
+      backgroundObj: false,
+      img: lightpoleTwo,
+      x: 0,
+      y: 0,
+      h: lightpoleTwo.height,
+      w: lightpoleTwo.width,
+      animated: false,
+      lightSource: true,
+      category: "light",
+      subCategory: "lamps",
 
-    subscription: 'none',
-  },
+      subscription: 'none',
+    },
 
-    //LAMPS ceiling LIGHT
-  {
-    name: "restfieldCeilingLamp",
-    backgroundObj: false,
-    img: restfieldCeilingLamp,
-    x: 0,
-    y: 0,
-    h: 87,
-    w: 30,
-    animated: true,
-    lightSource: true,
-    category: "light",
-    subCategory: "lamps",
+      //LAMPS ceiling LIGHT
+    {
+      name: "restfieldCeilingLamp",
+      backgroundObj: false,
+      img: restfieldCeilingLamp,
+      x: 0,
+      y: 0,
+      h: 87,
+      w: 30,
+      animated: true,
+      lightSource: true,
+      category: "light",
+      subCategory: "lamps",
 
     subscription: 'none',
   },
@@ -6525,47 +6653,54 @@ socket.on("player", (serverPlayer) => {
   },
   
 
-    //LAMPS spotlight
-  {
-    name: "christmasLightOne",
-    backgroundObj: false,
-    img: christmasLightOne,
-    x: 0,
-    y: 0,
-    h: christmasLightOne.height,
-    w: christmasLightOne.width,
-    animated: false,
-    lightSource: true,
-    category: "light",
-    subCategory: "spotlights",
+      //LAMPS spotlight
+    {
+      name: "christmasLightOne",
+      backgroundObj: false,
+      img: christmasLightOne,
+      x: 0,
+      y: 0,
+      h: christmasLightOne.height,
+      w: christmasLightOne.width,
+      animated: false,
+      lightSource: true,
+      category: "light",
+      subCategory: "spotlights",
 
-    subscription: 'none',
-  },
-  {
-    name: "christmasLightTwo",
-    backgroundObj: false,
-    img: christmasLightTwo,
-    x: 0,
-    y: 0,
-    h: christmasLightTwo.height,
-    w: christmasLightTwo.width,
-    animated: false,
-    lightSource: true,
-    category: "light",
-    subCategory: "spotlights",
+      subscription: 'none',
+    },
+    {
+      name: "christmasLightTwo",
+      backgroundObj: false,
+      img: christmasLightTwo,
+      x: 0,
+      y: 0,
+      h: christmasLightTwo.height,
+      w: christmasLightTwo.width,
+      animated: false,
+      lightSource: true,
+      category: "light",
+      subCategory: "spotlights",
 
-    subscription: 'none',
-  },
+      subscription: 'none',
+    },
 
-  ]
+    ]
 
     createImagesFromMapObjects(mapObject)
+
+    currentParty.push({
+      name: myPlayer.username,
+      id: myPlayer.id,
+      leader: true,
+    })
   }
 
 
   health()
   updateQuestUI()
   updateProgressBars()
+  updateInventoryUI()
   if (updateDialogs) {
     addMapsInfoToDiv()
     updateDialogs = false
@@ -6726,44 +6861,43 @@ socket.on("player", (serverPlayer) => {
     }
   }
 
-    if (myPlayer.armor.length) {
-      for (const item of myPlayer.armor) {
-        equippedItems[`soul`].style.background = `url(${item.image})`;
-        equippedItems[`soul`].style.backgroundSize = 'cover';
+  if (myPlayer.armor.length) {
+    for (const item of myPlayer.armor) {
+      equippedItems[`soul`].style.background = `url(${item.image})`;
+      equippedItems[`soul`].style.backgroundSize = 'cover';
 
-        if (item.name === "frogSoulInventory") {
-          uiSkinsImg.src = "./ui/uiSkins/uiFrogSkin.gif";
-        } 
-        else if (item.name === "redDemonSoulInventory") {
-          uiSkinsImg.src = "./ui/uiSkins/uiDemonSkin.gif";
-        }
-        else if (item.name === "restfieldSkeletonSoulInventory") {
-          uiSkinsImg.src = "./ui/uiSkins/uiSkeletonSkin.gif";
-        }
-        else if (item.name === "restfieldZombieSoulInventory") {
-          uiSkinsImg.src = "./ui/uiSkins/uiZombieSkin.gif";
-        }
-        else if (item.name === "vampiresSoulInventory") {
-          uiSkinsImg.src = "./ui/uiSkins/uiVampiresSkin.gif";
-        }
-        else if (item.name === "pinkDemonSoulInventory") {
-          uiSkinsImg.src = "./ui/uiSkins/uiPinkSkin.gif";
-        }
-        else if (item.name === "arcanyDemonSoulInventory") {
-          uiSkinsImg.src = "./ui/uiSkins/uiPurpleSkin.gif";
-        }
-        else if (item.name === "reaperSoulInventory") {
-          uiSkinsImg.src = "./ui/uiSkins/uiReaperSkin.gif";
-        }
-        else if (item.name === "ghostSoulInventory") {
-          uiSkinsImg.src = "./ui/uiSkins/uiGhostSkin.gif";
-        }
-        
-        }
-        } else {
-          uiSkinsImg.src = "./ui/uiSkins/uiHumanSkin.gif"
-        }
-
+      if (item.name === "frogSoulInventory") {
+        uiSkinsImg.src = "./ui/uiSkins/uiFrogSkin.gif";
+      } 
+      else if (item.name === "redDemonSoulInventory") {
+        uiSkinsImg.src = "./ui/uiSkins/uiDemonSkin.gif";
+      }
+      else if (item.name === "restfieldSkeletonSoulInventory") {
+        uiSkinsImg.src = "./ui/uiSkins/uiSkeletonSkin.gif";
+      }
+      else if (item.name === "restfieldZombieSoulInventory") {
+        uiSkinsImg.src = "./ui/uiSkins/uiZombieSkin.gif";
+      }
+      else if (item.name === "vampiresSoulInventory") {
+        uiSkinsImg.src = "./ui/uiSkins/uiVampiresSkin.gif";
+      }
+      else if (item.name === "pinkDemonSoulInventory") {
+        uiSkinsImg.src = "./ui/uiSkins/uiPinkSkin.gif";
+      }
+      else if (item.name === "arcanyDemonSoulInventory") {
+        uiSkinsImg.src = "./ui/uiSkins/uiPurpleSkin.gif";
+      }
+      else if (item.name === "reaperSoulInventory") {
+        uiSkinsImg.src = "./ui/uiSkins/uiReaperSkin.gif";
+      }
+      else if (item.name === "ghostSoulInventory") {
+        uiSkinsImg.src = "./ui/uiSkins/uiGhostSkin.gif";
+      }
+      
+      }
+  } else {
+    uiSkinsImg.src = "./ui/uiSkins/uiHumanSkin.gif"
+  }
 
   if (myPlayer.armor.length) {
     equippedItems[`soul`].addEventListener("mousedown", (e) => {
@@ -6801,36 +6935,66 @@ socket.on("player", (serverPlayer) => {
     equippedItems[`weapon`].style.background = `none`;
   }
 
-  // inventorySlots[`inventorySlot0`].style.background = `none`;
+  // if (myPlayer.inventory.length !== 0) {
+  //     for (let i = 0; i < 21; i++) {
 
-  if (myPlayer.inventory.length !== 0) {
-      // console.log(myPlayer.inventory)
-      for (let i = 0; i < 21; i++) {
+  //     if (myPlayer.inventory[i]) {
+  //       inventorySlots[`inventorySlot${i}`].src = myPlayer.inventory[i].image;
+  //     } else {
+  //       inventorySlots[`inventorySlot${i}`].src="data:image/svg+xml;charset=utf8,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%3E%3C/svg%3E";
+  //     }
 
-
-        if (myPlayer.inventory[i]) {
-          inventorySlots[`inventorySlot${i}`].src = myPlayer.inventory[i].image;
-        } else {
-          inventorySlots[`inventorySlot${i}`].src="data:image/svg+xml;charset=utf8,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%3E%3C/svg%3E";
-        }
-
-          function deleteInventoryReference () {
-            deleteInventory(myPlayer.inventory[i], i);
-            audioClick.play();
-          }
-          
-          if (deleting) {
-            inventorySlots[`inventorySlot${i}`].addEventListener("mousedown", deleteInventoryReference);
-          } else {            
-            inventorySlots[`inventorySlot${i}`].addEventListener("mousedown", (e) => {
-              interactInventory(myPlayer.inventory[i], i);
-              audioClick.play();
-            });
-          }
-      };
-    }
+  //     function deleteInventoryReference () {
+  //       deleteInventory(myPlayer.inventory[i], i);
+  //       audioClick.play();
+  //     }
+      
+  //     if (deleting) {
+  //       inventorySlots[`inventorySlot${i}`].addEventListener("mousedown", deleteInventoryReference);
+  //     } else {            
+  //       inventorySlots[`inventorySlot${i}`].addEventListener("mousedown", (e) => {
+  //         interactInventory(myPlayer.inventory[i], i);
+  //         audioClick.play();
+  //       });
+  //     }
+  //   };
+  // }
 
 });
+
+let previousInventory = [];
+
+function updateInventoryUI() {
+  const currentInventory = JSON.stringify(myPlayer.inventory);
+
+  if (currentInventory === JSON.stringify(previousInventory && !deleting)) return;
+
+  previousInventory = JSON.parse(currentInventory);
+
+  for (let i = 0; i < 21; i++) {
+    const slot = inventorySlots[`inventorySlot${i}`];
+    const item = myPlayer.inventory[i];
+
+    slot.src = item ? item.image : "data:image/svg+xml;charset=utf8,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%3E%3C/svg%3E";
+
+    const newSlot = slot.cloneNode(true);
+    slot.parentNode.replaceChild(newSlot, slot);
+
+    if (deleting) {
+      newSlot.addEventListener("mousedown", function deleteInventoryReference() {
+        deleteInventory(item, i);
+        audioClick.play();
+      });
+    } else {
+      newSlot.addEventListener("mousedown", () => {
+        interactInventory(item, i);
+        audioClick.play();
+      });
+    }
+
+    inventorySlots[`inventorySlot${i}`] = newSlot;
+  }
+}
 
 //Language Setting <
 
@@ -6918,6 +7082,11 @@ socket.on("obtained", (item) => {
   const image = item.image;
   obtainedAnim(image);
   socket.emit("updateServer");
+  updateInventoryUI()
+});
+
+socket.on("xp", (item) => {
+  playGainXP(item)
 });
 
 socket.on("xp", (item) => {
@@ -7498,6 +7667,19 @@ function shootDefaultArcane () {
         playerId: socket.id,
         damage: myPlayer?.weapon[0].damage,
     });
+
+    let toSend = [
+      currentParty, 
+      {
+        angle: bulletAngle,
+        x: playerX + 20,
+        y: playerY + 50,
+        timeLeft: myPlayer?.weapon[0].range,
+        playerId: socket.id,
+        damage: myPlayer?.weapon[0].damage,
+      }]
+
+    if (inParty) socket.emit("partyProjectile", toSend)
 }
 
 
@@ -8262,6 +8444,23 @@ setTimeout(() => {
 }, 4000);
 }
 
+let partyInvite;
+
+function partyAddNotificationDisplay(name) {
+
+partyPopUp.textContent = name;
+
+partyPopUp.style.opacity = 1;
+partyPopUp.style.transition = "opacity 1s ease"; 
+partyPopUp.style.pointerEvents = "all"; 
+
+setTimeout(() => {
+  partyPopUp.style.opacity = 0;
+  partyPopUp.style.pointerEvents = "none"; 
+    partyInvite = null;
+}, 6000);
+}
+
 // Sounds <
 
 
@@ -8963,6 +9162,11 @@ deleteAllObjButtonCancel.addEventListener("click", function(){
 saveObjButtonUi.addEventListener("click", function() {
   playRandomPop()
   showWallsFunction(false);
+  console.log(mapsInfo[currentLand])
+  for (let enemy of mapsInfo[currentLand].enemies) {
+    enemy.stateTimer = 0;
+    enemy.spawn = _.cloneDeep(enemy.baseSpawn)
+  }
   socket.emit("saveWorld", mapsInfo[currentLand]);
   errorDisplay("Saving map")
 });
@@ -11567,14 +11771,15 @@ function checkEnemyCombat (enemy) {
 function handleEnemyState(enemy) {
   if (enemy.stateTimer) return;
 
-  
-  enemy.stateTimer = setTimeout(() => {
-    enemy.frames = 0;
-    enemy.stateTimer = null;
-    const states = enemy.states;
-    const chosenState = states[Math.floor(Math.random() * states.length)];
-    executeStateForDuration(enemy, window[chosenState], enemy.enemyStateInt);
-  }, enemy.enemyStateInt);
+  if (isLeader || currentParty.length < 2) {
+    enemy.stateTimer = setTimeout(() => {
+      enemy.frames = 0;
+      enemy.stateTimer = null;
+      const states = enemy.states;
+      const chosenState = states[Math.floor(Math.random() * states.length)];
+      executeStateForDuration(enemy, window[chosenState], enemy.enemyStateInt);
+    }, enemy.enemyStateInt);
+  }
 }
 
 function executeStateForDuration(enemy, stateFunction, duration) {
@@ -11795,7 +12000,6 @@ function moveStateAndMelee(enemy) {
       // basicBulletTree.play()
     }
 }
-
 
 function moveStateRandom(enemy) {
   if (enemy.currentStateName === "idle") {

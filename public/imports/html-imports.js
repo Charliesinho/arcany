@@ -202,12 +202,18 @@ const craftingHammer = document.getElementById('craftingHammer');
 
 const tradeItemImg = document.getElementById('tradeItemImg');
 const tradeSend = document.getElementById('tradeSend');
+const partySend = document.getElementById('partySend');
 const tradeButton = document.getElementById('tradeButton');
+const partyButton = document.getElementById('partyButton');
 const tradeScreen = document.getElementById('tradeScreen');
+const partyScreen = document.getElementById('partyScreen');
+const playerPartyId = document.getElementById('playerPartyId');
 const playerTradeId = document.getElementById('playerTradeId');
+const partyMembers = document.getElementById('partyMembers');
 
 const resetButton = document.querySelectorAll('.resetButton')
 const errorPopUp = document.getElementById('errorPopUp');
+const partyPopUp = document.getElementById('partyPopUp');
 
 const cookingItem = document.querySelector(".cookingItem");
 const container = document.getElementById('cookingContainer');

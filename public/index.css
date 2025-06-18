@@ -651,6 +651,41 @@ color: white;
     background: #b8b8b870;
 }
 
+#partyScreen {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: url("./Textures/backGeneral.png");
+    background-size: cover;
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    flex-direction: column;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    opacity: 0;
+    transition: all .5s ease;
+    pointer-events: none;
+    z-index: 1;
+    gap: 36px;
+}
+
+#partyScreen h1 {
+    font-size: 40px;
+}
+
+#partyScreen p {
+    text-align: justify;
+    /* margin-top: 22px; */
+    font-size: 19px;
+    width: 90%;
+    color: #00000075;
+}
+
+
+
 #uiBuilding {
     position: absolute;
     bottom: 103px;
@@ -662,10 +697,10 @@ color: white;
     /* background: white; */
     border-radius: 3px;
     display: none;
-    flex-direction: column;
+    /* flex-direction: column; */
     gap: 10px;
-    max-height: 766px;
-    width: 76px;
+    max-height: 325px;
+    width: 215px;
     overflow-y: auto;
     border: solid 3px #b3a496;
     outline: solid 3px #393939;
@@ -809,11 +844,14 @@ color: white;
     /* left: -50px; */
     /* margin-bottom: -343%; */
     align-self: flex-start;
-    display: flex;
+    display: flex
+;
     align-items: center;
-    flex-direction: column;
+    justify-content: center;
+    flex-wrap: wrap;
+    /* flex-direction: column; */
     gap: 10px;
-    width: 76px;
+    width: 100%;
 }
 
 #uiBuildingToolsDiv > h1 {
@@ -1119,8 +1157,47 @@ color: white;
     border: solid 6px;
     font-size: 18px;
 }
+#playerPartyId{
+    margin-top: 30px;
+    /* height: 40px; */
+    width: 200px;
+    padding: 10px;
+    background: #e9dbce;
+    border: solid 6px;
+    font-size: 18px;
+}
+
+#partyMembers {
+    min-width: 200px;
+    min-height: 50px;
+    border: solid 3px #b3a496;
+    outline: solid 3px #393939;
+    z-index: 2;
+    background: #FFE2C1;
+    border-radius: 4px;
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    padding: 4px 12px;
+    display: none;
+}
+
+.partyMembers-member {
+    color: #000000a1;
+    margin: 5px 0px;
+    background-color: #0000000f;
+    padding: 5px;
+    border-radius: 3px;
+}
 
 #tradeScreen button {
+    width: 200px;
+    height: 57px;
+    border: solid 6px black;
+    background: #a9ffa9;
+    font-size: 19px;
+}
+#partyScreen button {
     width: 200px;
     height: 57px;
     border: solid 6px black;
@@ -1207,7 +1284,7 @@ color: white;
     transition: all 0.5s ease;
 }
 
-#errorPopUp {
+#errorPopUp, #partyPopUp {
     position: absolute;
     bottom: 50px;
     left: 50%;
@@ -1226,6 +1303,10 @@ color: white;
     opacity: 0;
     pointer-events: none;
     margin: 0;
+}
+
+#partyPopUp {
+    filter: hue-rotate(90deg);
 }
 
 /* UI LABEL ORGANISATION */
