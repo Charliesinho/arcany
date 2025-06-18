@@ -8712,7 +8712,7 @@ canvasLobby.addEventListener('click', function(event) {
 
     if(rotateObj && objClone.reverse){
       objClone.img = objClone.reverse
-      console.log(rotateObj, objClone.img, objClone.reverse)
+      objClone.reversed = true;
     }
 
     mapsInfo[currentLand].objects[currentSelectedObjLayer].push(objClone)
@@ -10033,7 +10033,7 @@ function drawSceneLayer(layer, num) {
     } else if (item.type === 'object') {
       const { obj, objectOriginal, layerIndex } = item;
       if (num === layerIndex) {
-        drawOnTop(objectOriginal.img, obj.x, obj.y, obj.w, obj.h, cameraX, cameraY, obj.animated);
+        drawOnTop(item.obj.reversed ? objectOriginal.reverse : objectOriginal.img, obj.x, obj.y, obj.w, obj.h, cameraX, cameraY, obj.animated);
       }
     } else if (item.type === 'onlinePlayer') {
       drawOnlinePlayers(item.player, item.smoothPlayer);
@@ -10046,7 +10046,7 @@ function drawSceneLayer(layer, num) {
   
   for (const item of topLayerObjects) {
     const { obj, objectOriginal } = item;
-    drawOnTop(objectOriginal.img, obj.x, obj.y, obj.w, obj.h, cameraX, cameraY, obj.animated);
+    drawOnTop(item.obj.reversed? objectOriginal.reverse : objectOriginal.img, obj.x, obj.y, obj.w, obj.h, cameraX, cameraY, obj.animated);
   }
   
 }
