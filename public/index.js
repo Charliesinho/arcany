@@ -383,6 +383,79 @@ let mobsImages = [
     dropRate: 100,
     targetPlayer: null,
   },
+  {
+    name: "redMooshroomEnemy",
+    img: redMooshroomEnemy,
+    imgw: 42,
+    imgh: 39,
+    imgcw: 42,
+    imgch: 0,
+    frames: 0,
+    framesTimer: 0,
+    level: 1,
+    xp: 50,
+    speedX: 15,
+    speedY: 15,
+    spawn: {
+      x: 1825,
+      y: 1158
+    },
+    w: 140,
+    h: 140,
+    currentStateName: "idle",
+    currentState: null,
+    attackInterval: true,
+    states: [moveState, attackState, attackCircleState],
+    damaged: 0,
+    health: 5,
+    angle: 0,
+    maxHealth: 10,
+    baseSpawn: {
+      x: 1825,
+      y: 1158
+    },
+    spawnTimer: null,
+    enemyStateInt: 1000,
+    active: true,
+    drop: "miniMushroom",
+    dropRate: 10,
+  },
+  {
+    name: "mooshroomBossRed",
+    // isBoss: true,
+    img: mooshroomBossRed,
+    imgw: 147,
+    imgh: 175,
+    imgcw: 147,
+    imgch: 0,
+    frames: 0,
+    framesTimer: 0,
+    level: 5,
+    xp: 500,
+    speedX: 0,
+    speedY: 0,
+    spawn: {
+      x: 1900,
+      y: 1100
+    },
+    w: 550,
+    h: 550,
+    currentStateName: "idle",
+    currentState: null,
+    attackInterval: true,
+    states: [lazerMooshState, attackCircleMooshBossState],
+    damaged: 0,
+    health: 100,
+    angle: 0,
+    maxHealth: 100,
+    baseSpawn: {
+      x: 1900,
+      y: 1100
+    },
+    spawnTimer: null,
+    enemyStateInt: 5000,
+    active: true,
+  },
 ]
 
 let attackIcons = [
@@ -574,6 +647,8 @@ Object.entries(inputMappings).forEach(([inputId, mobProp]) => {
     const value = e.target.value;
     const num = isNaN(value) ? value : +value;
 
+    console.log(value)
+
     if (mobProp === "speed") {
       selectedMob.speedX = num;
       selectedMob.speedY = num;
@@ -581,6 +656,12 @@ Object.entries(inputMappings).forEach(([inputId, mobProp]) => {
     else if (mobProp === "health") {
       selectedMob.health = num;
       selectedMob.maxHealth = num;
+    } 
+    else if (mobProp === "category") {
+      if (value === "boss") {
+        selectedMob.isBoss = true;
+        selectedMob.active = false;
+      }
     } 
     else {
       selectedMob[mobProp] = num;
@@ -9060,7 +9141,8 @@ function calculateValue(resolution) {
 // UI DEV COMMENT >
 
 function deselectUiButton() {
-  currentDevAction = ""
+  // console.log("DESELECTING ALL")
+  // currentDevAction = ""
   placeWalls.style.backgroundColor = "#ffe2c1"
   deleteWalls.style.backgroundColor = "#ffe2c1"
   deleteObjButtonUi.style.backgroundColor = "#ffe2c1"
