@@ -130,34 +130,40 @@ body {
 #monsterCreationAttacks {
     display: flex;
     flex-wrap: wrap;
+    width: 90%;
     justify-content: space-between;
 }
 
 #monsterCreationParent {
-    width: 355px;
+    width: 300px;
     overflow: hidden;
-    height: calc(100vh - 40px - 30px);
+    height: calc(100vh - 45px);
     position: absolute;
-    bottom: 20px;
-    right: 20px;
+    bottom: 10px;
+    right: 10px;
     z-index: 1;
     border: solid 3px #b3a496;
     outline: solid 3px #393939;
     background: #FFE2C1;
     border-radius: 3px;
-    padding: 15px;
+    padding: 10px;
     display: none;
     flex-direction: column;
     gap: 15px;
+    align-items: center;
+    overflow: visible;
 }
 
 #monsterSelectionImageParent {
-    width: 400px;
+    width: 225px;
+    flex-direction: row;
     overflow: hidden;
-    /* height: 600px; */
+    justify-content: center;
+    align-items: flex-start;
+    height: calc(100vh - 60px);
     position: absolute;
-    bottom: 103px;
-    left: 567px;
+    top: 10px;
+    right: 355px;
     z-index: 1;
     border: solid 3px #b3a496;
     outline: solid 3px #393939;
@@ -171,12 +177,12 @@ body {
 }
 
 #monsterLoot {
-    width: 400px;
+    width: 390px;
     overflow: scroll;
-    height: 600px;
+    height: 776px;
     position: absolute;
-    bottom: 103px;
-    left: 567px;
+    bottom: 11px;
+    right: 355px;
     z-index: 1;
     border: solid 3px #b3a496;
     outline: solid 3px #393939;
@@ -208,25 +214,41 @@ outline: solid 2.5px #3939393d;
 #monsterCreationTop {
     display: flex;
     gap: 15px;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
 }
 
 #monsterCreationBottom {
+    position: absolute;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    align-items: center;
+    width: 160px;
+    height: 290px;
     display: flex;
+    right: 340px;
     gap: 15px;
+    top: 0px;
+    border: solid 3px #b3a496;
+    outline: solid 3px #393939;
+    background: #FFE2C1;
+    border-radius: 3px;
+    padding: 10px;
 }
 
 #monsterCreationTopInputs {
     display: flex    ;
     flex-direction: column;
     gap: 7px;
-    width: 57%;
+    width: 90%;
 }
 
 #lootCreationInputs {
     display: flex    ;
     flex-direction: column;
     gap: 7px;
-    width: 57%;
+    width: 70%;
 }
 
 #monsterCreationTitle {
@@ -730,7 +752,6 @@ color: white;
     display: none;
     right: 10px;
     bottom: 10px;
-    height: 73vh;
     width: 300px;
     height: calc(100vh - 25px);
     overflow-y: auto;
