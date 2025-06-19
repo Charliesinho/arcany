@@ -9200,7 +9200,7 @@ placeAreaButton.addEventListener("click", function(){
     placeArea.style.display = "flex"
   } else {
     placeArea.style.display = "none"
-    placeAreaButton.style.backgroundColor = "transparent"
+    placeAreaButton.style.backgroundColor = "#ffe2c1"
     currentDevAction = "none"
   }
 })
@@ -9208,6 +9208,7 @@ placeAreaButton.addEventListener("click", function(){
 editMapsButtonUi.addEventListener("click", function(){
   showWallsFunction(false)
   playRandomPop()
+  uiBuildingCategoryDivVisibility.style.display = "none"
   if(currentDevAction !== "editmap"){
     deselectUiButton()
     currentDevAction = "editmap"
@@ -9215,7 +9216,7 @@ editMapsButtonUi.addEventListener("click", function(){
     editMapsButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
   } else {
     editMapsPage.style.display = "none"
-    editMapsButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    editMapsButtonUi.style.backgroundColor = "#FFE2C1"
     currentDevAction = "none"
   }
 })
@@ -9225,12 +9226,13 @@ editMapsDeleteObj.addEventListener("click", function(){
   playRandomPop()
   popupDeleteAllObjParent.style.display = "flex"
   popUpBlackscreen.style.display = "flex"
+  uiBuildingCategoryDivVisibility.style.display = "none"
 })
 
 closeEditMapsTitle.addEventListener("click", function(){
   playRandomPop()
   editMapsPage.style.display = "none"
-  editMapsButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  editMapsButtonUi.style.backgroundColor = "#FFE2C1"
   currentDevAction = "none"
 })
 
@@ -9267,9 +9269,10 @@ sapwnButtonUi.addEventListener("click", function() {
 
 createMapButtonUi.addEventListener("click", function() {
   showWallsFunction(false);
+  uiBuildingCategoryDivVisibility.style.display = "none"
   if (mapInfoDiv.style.display === "flex") {
     mapInfoDiv.style.display = "none"
-    createMapButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    createMapButtonUi.style.backgroundColor = "#ffe2c1"
     noMovement = false
   } else {
     deselectUiButton()
@@ -9280,7 +9283,7 @@ createMapButtonUi.addEventListener("click", function() {
 });
 
 createMapButton.addEventListener("click", function() {
-  showWallsFunction(false);
+  showWallsFunction(false);uiBuildingCategoryDivVisibility.style.display = "none"
   worldInfo = {
     title: mapNameInput.value,
     desc: mapDescInput.value
@@ -9505,6 +9508,8 @@ musicPlayerSlider.addEventListener("input", function () {
 
 placeMobButtonUi.addEventListener("click", function(){
   showWallsFunction(false)
+  uiBuildingCategoryDivVisibility.style.display = "none"
+
   if (currentDevAction !== "monster") {
     currentDevAction = "monster";
     deselectUiButton()
@@ -9533,6 +9538,7 @@ if (currentDevAction !== "craft") {
 });
 
 placeTransition.addEventListener("click", function() {
+  uiBuildingCategoryDivVisibility.style.display = "none"
 if (currentDevAction !== "transition") {
   currentDevAction = "transition";
   showWallsFunction(true)
