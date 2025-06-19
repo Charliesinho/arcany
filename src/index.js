@@ -731,6 +731,17 @@ async function main() {
             };
             share()
         });
+
+        socket.on("leaderChangeRoom", (info) => {
+            async function share() {
+                for (let user of info[1]) {
+                    if (user.id != socket.id) {
+                        io.to(user.id).emit('leaderChangeRoomClient', info);           
+                    }
+                }                            
+            };
+            share()
+        });
         
         socket.on("updateServer", () => {
 
@@ -933,8 +944,8 @@ async function main() {
                     //             io.to(socket.id).emit('obtained', ballo);
                     //         } 
                     //         else if (number >= 80 && number < 90) {
-                    //             player.inventory.push(mushroomClothesRed);                                           
-                    //             io.to(socket.id).emit('obtained', mushroomClothesRed);
+                    //             player.inventory.push(redMushroomlInventory);                                           
+                    //             io.to(socket.id).emit('obtained', redMushroomlInventory);
                     //         } 
                     //         else {
                     //             player.inventory.push(arcaneRepeaterInv);                                           
@@ -2172,7 +2183,7 @@ const trashPlate = {
 
 // CLOTHES
 
-const mushroomClothesRed = {
+const redMushroomlInventory = {
     type: "artifact",
     name: "redMushroomlInventory",
     level: 1,
@@ -2348,7 +2359,7 @@ const itemsObj = {
     burpy,
     cody,
     minrow,
-    mushroomClothesRed,
+    redMushroomlInventory,
     mushroomClothesOrange,
     tropicalHatInventory,
     skullHelmet,
