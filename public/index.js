@@ -591,6 +591,8 @@ attackIcons.forEach(attack => {
   monsterCreationAttacks.appendChild(attackImg);
 });
 
+let selectedDevItem = "stick";
+
 function populateMonsterLoot() {
   monsterLoot.innerHTML = ""; // Clear existing items
 
@@ -607,11 +609,11 @@ function populateMonsterLoot() {
     itemImg.style.margin = "5px";
 
     itemImg.addEventListener("click", () => {
-      if (!selectedMob) {
-        errorDisplay("Choose a monster first")
-        return;
+      if (selectedMob) {
+        selectedMob.drop = obj.name;
       }
-      selectedMob.drop = obj.name;
+
+      selectedDevItem = obj.name;
 
       lootImage.style.backgroundImage = `url(${obj.image})`;
       lootImage.style.backgroundSize = `contain`;
@@ -7393,6 +7395,8 @@ let wallsVisibility = 0;
 let fishingFrame = 1;
 let fishable = false;
 
+let monsterAltar = false;
+
 // setInterval(() => {
 //   playerLocation = [playerX, playerY];
 //   socket.emit("playerLocation", playerLocation);
@@ -7589,6 +7593,19 @@ window.addEventListener("keydown", (e) => {
     openShopAudio.play();
   } else if (e?.key?.toLowerCase() === "e" && grassShopAvailable & grassOpenShop) {
     grassOpenShop = false;
+  }
+
+  //Shop grasslands open <
+ 
+  //Shop grasslands open >
+
+  if(e?.key?.toLowerCase() === "e" && monsterAltar) {
+    const areaBoss = mapsInfo[currentLand].enemies.find(
+      enemy => enemy.isBoss === true && enemy.active === false
+    );
+    if (areaBoss) {
+      activateBossEnemy(areaBoss)
+    }
   }
 
   //Shop grasslands open <
@@ -8870,6 +8887,29 @@ canvasLobby.addEventListener('click', function(event) {
   }
 
 
+  else if (!currentlyPlacingWall && currentDevAction === "monsterAltar" && currentSelectedWall === null) {
+    selectedXcoord = hoveredXCoord;
+    selectedYcoord = hoveredYCoord;
+    currentlyPlacingWall = true;
+  }
+  else if (currentSelectedWall === null && currentlyPlacingWall && currentDevAction === "monsterAltar") {
+    const x = hoveredXCoord;
+    const y = hoveredYCoord;
+    const newWidth = x - selectedXcoord;
+    const newHeight = y - selectedYcoord;
+    
+    mapsInfo[currentLand].colliders.push({
+      type: "monsterAltar",
+      requiredItem: selectedDevItem,
+      x: selectedXcoord,
+      y: selectedYcoord,
+      width: newWidth,
+      height: newHeight,
+      color: `rgb(51, 102, 255, ${wallsVisibility})`
+    })
+    currentlyPlacingWall = false;
+  }
+  
   else if (!currentlyPlacingWall && currentDevAction === "fish" && currentSelectedWall === null) {
     selectedXcoord = hoveredXCoord;
     selectedYcoord = hoveredYCoord;
@@ -9170,6 +9210,22 @@ function deselectUiButton() {
   placeArea.style.display = "none"
   uiBuildingVisible = true
 }
+
+monsterAltarButtonUi.addEventListener("click", function() {
+  if(currentDevAction !== "monsterAltar") {
+  showWallsFunction(true)
+
+  currentSelectedWall = null
+  currentDevAction = "monsterAltar";
+  roomsDiv.style.display = "none"
+  monsterAltarButtonUi.style.backgroundColor = "rgba(170, 233, 170, 1)"
+
+} else {
+  showWallsFunction(false)
+  currentDevAction = "none";
+  monsterAltarButtonUi.style.backgroundColor = "#ffe2c1"
+ }
+});
 
 placeWalls.addEventListener("click", function() {
   if(currentDevAction !== "wall") {
@@ -9722,6 +9778,7 @@ mapsInfo[currentLand].colliders.forEach(wall => {
   } else if (wall.type === "cook") {
     wall.color = `rgb(153, 255, 102, ${wallsVisibility})`
   } else if (wall.type === "craft") {
+    wall.color = `rgb(179, 255, 213, ${wallsVisibility})`
   } else if (wall.type === "enchanting") {
     wall.color = `rgb(204, 0, 255, ${wallsVisibility})`
   } else if (wall.type === "chest") {
@@ -9729,6 +9786,8 @@ mapsInfo[currentLand].colliders.forEach(wall => {
   } else if (wall.type === "transition") {
     wall.color = `rgb(204, 0, 204, ${wallsVisibility})`
   } else if (wall.type === "dialog") {
+    wall.color = `rgb(179, 255, 213, ${wallsVisibility})`
+  } else if (wall.type === "monsterAltar") {
     wall.color = `rgb(179, 255, 213, ${wallsVisibility})`
   }
 })
@@ -10013,6 +10072,7 @@ function mapSetup () {
     playerHeight = humanSkin.height / 6;
 
     // Reset variables
+    monsterAltar = false;
     fishAvailable = false;
     grassCookingAvailable = false;
     grassCraftingAvailable = false;
@@ -10375,6 +10435,9 @@ function drawColliders (type, x, y, w, h) {
         }
         else if (wall.type === "fish") {
           fishAvailable = true;
+        }
+        else if (wall.type === "monsterAltar") {
+          monsterAltar = true;
         }
         else if (wall.type === "transition") {
           currentSelectedMap = wall.destination
@@ -11518,25 +11581,25 @@ function drawDevWallsPlacement () {
 }
 
 function drawMap(layer) {
-  const targetHue = bossFight ? -95 : 0;
-  const targetLuminosity = dying ? -100 : bossFight ? -50 : 0;
-  const changeSpeed = 1;
+  // const targetHue = bossFight ? -95 : 0;
+  // const targetLuminosity = dying ? -100 : bossFight ? -50 : 0;
+  // const changeSpeed = 1;
 
-  // Adjust hue and luminosity
-  if (currentHue < targetHue) {
-    currentHue = Math.min(currentHue + changeSpeed, targetHue);
-  } else if (currentHue > targetHue) {
-    currentHue = Math.max(currentHue - changeSpeed, targetHue);
-  }
+  // // Adjust hue and luminosity
+  // if (currentHue < targetHue) {
+  //   currentHue = Math.min(currentHue + changeSpeed, targetHue);
+  // } else if (currentHue > targetHue) {
+  //   currentHue = Math.max(currentHue - changeSpeed, targetHue);
+  // }
 
-  if (currentLuminosity < targetLuminosity) {
-    currentLuminosity = Math.min(currentLuminosity + changeSpeed, targetLuminosity);
-  } else if (currentLuminosity > targetLuminosity) {
-    currentLuminosity = Math.max(currentLuminosity - changeSpeed, targetLuminosity);
-  }
+  // if (currentLuminosity < targetLuminosity) {
+  //   currentLuminosity = Math.min(currentLuminosity + changeSpeed, targetLuminosity);
+  // } else if (currentLuminosity > targetLuminosity) {
+  //   currentLuminosity = Math.max(currentLuminosity - changeSpeed, targetLuminosity);
+  // }
 
-  // Apply canvas filters
-  canvas.filter = `hue-rotate(${currentHue}deg) brightness(${100 + currentLuminosity}%)`;
+  // // Apply canvas filters
+  // canvas.filter = `hue-rotate(${currentHue}deg) brightness(${100 + currentLuminosity}%)`;
 
   const mapInfo = mapsInfo[currentLand];
   const frameWidth = 1000; // Width of each frame in the sprite sheet
@@ -11619,7 +11682,7 @@ function activateNormalEnemy (enemy) {
 }
 
 
-function activateBossEnemy (enemy) {
+function activateBossEnemy(enemy) {
   cutscene = true;
   secondaryCameraX = enemy.spawn.x - (enemy.w) + (enemy.w/4);
   secondaryCameraY = enemy.spawn.y + (enemy.h/4);
@@ -11803,54 +11866,56 @@ function checkEnemyCombat (enemy) {
     //     enemy => enemy.isBoss === true && enemy.active === false
     //   );
     //   activateBossEnemy(areaBoss)
-    // } else if (!bossAlive) {
-    //   fightMusic1.pause();
-    //   fightMusic1.currentTime = 0;
-    //   SokosBoss.pause();
-    //   SokosBoss.currentTime = 0;
-    //   bossFight = false;
-    //   bossBarParent.style.display = "none";
-    //   bossBarHealth.style.width = 100 + "%";
-    //   bossBarHealthFollower.style.width = 100 + "%";
+    // } else 
+    
+    if (!bossAlive) {
+      fightMusic1.pause();
+      fightMusic1.currentTime = 0;
+      SokosBoss.pause();
+      SokosBoss.currentTime = 0;
+      bossFight = false;
+      bossBarParent.style.display = "none";
+      bossBarHealth.style.width = 100 + "%";
+      bossBarHealthFollower.style.width = 100 + "%";
 
-    //   if (enemy.isBoss) {
+      if (enemy.isBoss) {
 
-    //     if (enemy.name === "mooshroomBossRed") {
-    //       socket.emit("giveItem", "chestKey");
-    //     }
-    //     else if (enemy.name === "restfieldReaper") {
-    //       socket.emit("giveItem", "chestKeyRestfield");
-    //     }
+        // if (enemy.name === "mooshroomBossRed") {
+        //   socket.emit("giveItem", "chestKey");
+        // }
+        // else if (enemy.name === "restfieldReaper") {
+        //   socket.emit("giveItem", "chestKeyRestfield");
+        // }
 
-    //     setTimeout(() => {
-    //       frameDuration = 800 / 30;
-    //     }, 100);
-    //     setTimeout(() => {
-    //       frameDuration = 800 / fps;
-    //     }, 1500);
+        // setTimeout(() => {
+        //   frameDuration = 800 / 30;
+        // }, 100);
+        // setTimeout(() => {
+        //   frameDuration = 800 / fps;
+        // }, 1500);
 
-    //     resetTimer()
-    //     areaNameDisplay("Trial Completed");
-    //     challengeCompleted.play();
-    //     challengeActive = false;
-    //     setTimeout(() => {
-    //       let playerPosition;
+        // resetTimer()
+        areaNameDisplay("Boss defeated");
+        challengeCompleted.play();
+        // challengeActive = false;
+        // setTimeout(() => {
+        //   let playerPosition;
 
-    //       if (enemy.name === "mooshroomBossRed") {
-    //         playerPosition =  mapsInfo.mushroomForest.playerPos;
-    //         mapsInfo.mushroomForest = _.cloneDeep(originalMapsInfo.mushroomForest);
-    //         mapsInfo.mushroomForest.playerPos = playerPosition;
-    //       }
-    //       if (enemy.name === "restfieldReaper") {
-    //         playerPosition =  mapsInfo.restfieldTrial.playerPos;
-    //         mapsInfo.restfieldTrial = _.cloneDeep(originalMapsInfo.restfieldTrial);
-    //         mapsInfo.restfieldTrial.playerPos = playerPosition;
-    //       }
-    //       hideTimer()
-    //     }, 2000);
-    //     mapsInfo[currentSelectedMap].areaSounds();
-    //   }
-    // }
+        //   if (enemy.name === "mooshroomBossRed") {
+        //     playerPosition =  mapsInfo.mushroomForest.playerPos;
+        //     mapsInfo.mushroomForest = _.cloneDeep(originalMapsInfo.mushroomForest);
+        //     mapsInfo.mushroomForest.playerPos = playerPosition;
+        //   }
+        //   if (enemy.name === "restfieldReaper") {
+        //     playerPosition =  mapsInfo.restfieldTrial.playerPos;
+        //     mapsInfo.restfieldTrial = _.cloneDeep(originalMapsInfo.restfieldTrial);
+        //     mapsInfo.restfieldTrial.playerPos = playerPosition;
+        //   }
+        //   hideTimer()
+        // }, 2000);
+        // mapsInfo[currentSelectedMap].areaSounds();
+      }
+    }
 
     
     let baseSpawn = _.cloneDeep(enemy.baseSpawn)
@@ -11859,6 +11924,9 @@ function checkEnemyCombat (enemy) {
     setTimeout(() => {
       enemy.spawn.x = -1000;
       enemy.spawn.y = -1000;
+      if (enemy.isBoss === true) {
+        enemy.active = false;
+      }
 
       
       if (enemy.spawnTimer) {
@@ -11866,7 +11934,6 @@ function checkEnemyCombat (enemy) {
           enemy.spawn.x = baseSpawn.x;
           enemy.spawn.y = baseSpawn.y;
           enemy.health = enemy.maxHealth
-          console.log(enemy, mapsInfo[currentLand])
           mapsInfo[currentLand].enemies.push(enemy)
         }, enemy.spawnTimer);
 
