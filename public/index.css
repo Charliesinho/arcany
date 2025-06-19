@@ -40,6 +40,7 @@ h2, h1 {
     font-family: "Tiny5", serif !important;
     /* font-weight: 100 ; */
     -webkit-user-drag: none;
+    image-rendering: pixelated;
   }
   
 body {
