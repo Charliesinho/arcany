@@ -9478,6 +9478,7 @@ startBuildingBut.addEventListener("click", function() {
   playRandomPop()
   cancelUi()
   deselectUiButton()
+  uiBuildingCategoryDivVisibility.style.display = "none"
 
 if (uiBuilding.style.display !== "flex") {
   roomsDiv.style.display = "none"
