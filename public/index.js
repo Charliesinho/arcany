@@ -184,6 +184,7 @@ let cameraShakeY = -180;
 monsterImage.addEventListener("click", function(){
   if (monsterSelectionImageParent.style.display != "flex") {
     monsterSelectionImageParent.style.display = "flex"
+    monsterLoot.style.display = "none"
   } else {
     monsterSelectionImageParent.style.display = "none"
   }
@@ -9658,7 +9659,7 @@ placeMobButtonUi.addEventListener("click", function(){
     monsterSelectionImageParent.style.display = "none"
     monsterLoot.style.display = "none"
     currentDevAction = "none";
-    placeMobButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    placeMobButtonUi.style.backgroundColor = "#ffe2c1"
   }
 });
 
