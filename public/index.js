@@ -7604,8 +7604,25 @@ window.addEventListener("keydown", (e) => {
     const areaBoss = mapsInfo[currentLand].enemies.find(
       enemy => enemy.isBoss === true && enemy.active === false
     );
+    let itemToActivate = null;
+    for (const item of myPlayer.inventory) {
+      if (item.name === monsterAltar) {
+        itemToActivate = myPlayer.inventory.indexOf(item);
+      }
+    }
     if (areaBoss) {
-      activateBossEnemy(areaBoss)
+      if (itemToActivate) {
+        if ((inParty && isLeader) || !inParty)  {
+          socket.emit("toDelete", [itemToActivate]);
+          activateBossEnemy(areaBoss)
+        } else {
+        errorDisplay("Only the party leader can do offerings")
+        }
+      } else {
+        errorDisplay("You don't have the required item")
+      }
+    } else {
+      errorDisplay("There is no area boss at the moment")
     }
   }
 
@@ -9184,6 +9201,7 @@ function calculateValue(resolution) {
 function deselectUiButton() {
   // console.log("DESELECTING ALL")
   // currentDevAction = ""
+  monsterLoot.style.display = "none"
   placeWalls.style.backgroundColor = "#ffe2c1"
   deleteWalls.style.backgroundColor = "#ffe2c1"
   deleteObjButtonUi.style.backgroundColor = "#ffe2c1"
@@ -9214,6 +9232,7 @@ function deselectUiButton() {
 
 monsterAltarButtonUi.addEventListener("click", function() {
   if(currentDevAction !== "monsterAltar") {
+    monsterLoot.style.display = "flex"
   showWallsFunction(true)
 
   currentSelectedWall = null
@@ -9223,6 +9242,7 @@ monsterAltarButtonUi.addEventListener("click", function() {
 
 } else {
   showWallsFunction(false)
+  monsterLoot.style.display = "none"
   currentDevAction = "none";
   monsterAltarButtonUi.style.backgroundColor = "#ffe2c1"
  }
@@ -10444,7 +10464,7 @@ function drawColliders (type, x, y, w, h) {
           fishAvailable = true;
         }
         else if (wall.type === "monsterAltar") {
-          monsterAltar = true;
+          monsterAltar = wall.requiredItem;
         }
         else if (wall.type === "transition") {
           currentSelectedMap = wall.destination
@@ -11854,7 +11874,7 @@ function checkEnemyCombat (enemy) {
     if (enemy.drop) {
       let randomNumber = Math.floor(Math.random() * 101);
       if (enemy.dropRate >= randomNumber) {
-        socket.emit("enemyDrop", dropAmount);
+        socket.emit("enemyDrop", enemy.drop);
       }
     }
 
