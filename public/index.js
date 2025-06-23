@@ -457,6 +457,41 @@ let mobsImages = [
     enemyStateInt: 5000,
     active: true,
   },
+  {
+    name: "restfieldSkeleton",
+    img: restfieldSkeleton,
+    imgw: 48,
+    imgh: 48,
+    imgcw: 48,
+    imgch: 0,
+    frames: 0,
+    framesTimer: 0,
+    level: 1,
+    xp: 100,
+    speedX: 15,
+    speedY: 15,
+    spawn: {
+      x: 0,
+      y: 0
+    },
+    w: 140,
+    h: 140,
+    currentStateName: "idle",
+    currentState: null,
+    attackInterval: true,
+    states: [moveState, attackState],
+    damaged: 0,
+    health: 5,
+    angle: 0,
+    maxHealth: 10,
+    baseSpawn: {
+      x: 0,
+      y: 0
+    },
+    spawnTimer: 5000,
+    enemyStateInt: 1000,
+    active: false,
+  },
 ]
 
 let attackIcons = [
@@ -665,6 +700,11 @@ Object.entries(inputMappings).forEach(([inputId, mobProp]) => {
         selectedMob.isBoss = true;
         selectedMob.active = false;
       }
+      else if (value === "night") {
+        selectedMob.night = true;
+        selectedMob.active = false;
+      }
+      
     } 
     else {
       selectedMob[mobProp] = num;
@@ -1288,6 +1328,17 @@ socket.on("updatePartyClient", (info) => {
   }
   console.log(currentParty)
 })
+
+socket.on("leaderActivatedBossClient", (info) => {
+    const areaBoss = mapsInfo[currentLand].enemies.find(
+      enemy => enemy.isBoss === true && enemy.active === false
+    );
+    activateBossEnemy(areaBoss)
+});
+
+socket.on("partyEnemyKilledClient", (enemy) => {
+    handleEnemyDeath(enemy)
+});
 
 function leaderShareEnemies () {
   setInterval(() => {
@@ -7614,7 +7665,11 @@ window.addEventListener("keydown", (e) => {
       if (itemToActivate) {
         if ((inParty && isLeader) || !inParty)  {
           socket.emit("toDelete", [itemToActivate]);
-          activateBossEnemy(areaBoss)
+          if (inParty && isLeader) {
+            socket.emit("leaderActivatedBoss", currentParty);
+          } else {
+            activateBossEnemy(areaBoss)
+          }
         } else {
         errorDisplay("Only the party leader can do offerings")
         }
@@ -8626,7 +8681,7 @@ setTimeout(() => {
   partyPopUp.style.opacity = 0;
   partyPopUp.style.pointerEvents = "none"; 
     partyInvite = null;
-}, 6000);
+}, 8000);
 }
 
 // Sounds <
@@ -10021,6 +10076,7 @@ let DayCycleState = 0;
 
 let currentSoundtrackVolume = 1;
 let currentNightSoundtrackVolume = 0;
+let nightEnmiesInterval;
 
 setInterval(() => {
   canvasLobby.style.filter = DayCycleFilters[DayCycleState];
@@ -10064,8 +10120,24 @@ setInterval(() => {
   } else {
     targetAlphaCycle = 0; 
   }
+  if (DayCycleState == 2) {
+    nightEnmiesInterval = setInterval(() => {
+      activateNightMobs()
+    }, 2000);
+  } 
+  
+  if (DayCycleState == 1 || DayCycleState == 3) {
+    clearInterval(nightEnmiesInterval)
+  }
+
+  if (DayCycleState == 0) {
+    nightEnmiesInterval = setInterval(() => {
+      activateDayMobs()
+    }, 2000);
+  } 
 
   DayCycleState = (DayCycleState + 1) % DayCycleFilters.length;
+
 
 }, 100000);
 
@@ -11745,6 +11817,57 @@ function activateBossEnemy(enemy) {
   }, timeToWake);
 }
 
+function activateNightMobs() {
+  for (let enemy of mapsInfo[currentLand].enemies) {
+    if (!enemy.night) continue;
+   const randomInteger = Math.floor(Math.random() * 21); // 0 to 10 inclusive
+
+    if (randomInteger == 0) continue;
+
+    let activateInterval = setInterval(() => {
+      enemy.framesTimer--
+          
+      if (enemy.framesTimer <= 0) {
+        enemy.framesTimer = 5;
+      }
+      
+      if (enemy.framesTimer === 2) {
+        enemy.frames++
+        if (enemy.frames > 5) {
+          enemy.active = true;
+          clearInterval(activateInterval)
+        }
+      }
+    },40)
+  }
+}
+
+function activateDayMobs() {
+  for (let enemy of mapsInfo[currentLand].enemies) {
+    if (enemy.night) continue;
+
+    const randomInteger = Math.floor(Math.random() * 21); // 0 to 10 inclusive
+
+    if (randomInteger == 0) continue;
+
+    let activateInterval = setInterval(() => {
+      enemy.framesTimer--
+          
+      if (enemy.framesTimer <= 0) {
+        enemy.framesTimer = 5;
+      }
+      
+      if (enemy.framesTimer === 2) {
+        enemy.frames++
+        if (enemy.frames > 5) {
+          enemy.active = true;
+          clearInterval(activateInterval)
+        }
+      }
+    },40)
+  }
+}
+
 function drawEnemy (enemy) {
   // mapsInfo[currentLand].enemies?.forEach(enemy => {
 
@@ -11823,6 +11946,48 @@ function drawEnemy (enemy) {
 let bossBarPercentage = 100;
 let spawnerIntervals = []
 
+
+function handleEnemyDeath (enemy) {
+  enemyDeathParticles(enemy)
+    enemy.attackInterval = true;
+    mapsInfo[currentLand].enemies.splice(mapsInfo[currentLand].enemies.indexOf(enemy), 1)
+
+    let dropAmount = enemy.xp
+
+    if (inParty) {
+      dropAmount = dropAmount / currentParty.length
+    }
+
+    socket.emit("enemyKilled", dropAmount);
+
+    if (enemy.drop) {
+      let randomNumber = Math.floor(Math.random() * 101);
+      if (enemy.dropRate >= randomNumber) {
+        socket.emit("enemyDrop", enemy.drop);
+      }
+    }
+
+    const bossAlive = mapsInfo[currentLand].enemies.find(
+      enemy => enemy.isBoss === true && enemy.health > 0
+    );
+    
+    if (!bossAlive) {
+      fightMusic1.pause();
+      fightMusic1.currentTime = 0;
+      SokosBoss.pause();
+      SokosBoss.currentTime = 0;
+      bossFight = false;
+      bossBarParent.style.display = "none";
+      bossBarHealth.style.width = 100 + "%";
+      bossBarHealthFollower.style.width = 100 + "%";
+
+      if (enemy.isBoss) {
+        areaNameDisplay("Boss defeated");
+        challengeCompleted.play();
+      }
+    }
+}
+
 function checkEnemyCombat (enemy) {
   if (enemy.damaged > 0) {
     enemy.damaged--
@@ -11838,102 +12003,28 @@ function checkEnemyCombat (enemy) {
       enemy.currentStateName = "idle"
     }
   }
-
+  
   if (enemy.health <= 0) {
-    enemyDeathParticles(enemy)
-    enemy.attackInterval = true;
-    // attackCircleState(enemy)
-    mapsInfo[currentLand].enemies.splice(mapsInfo[currentLand].enemies.indexOf(enemy), 1)
+    if (inParty && !isLeader) return;
 
-    let dropAmount = enemy.xp
-    console.log(dropAmount, currentParty.length)
-    if (inParty) {
-      dropAmount = dropAmount / currentParty.length
-    }
+    if (inParty && isLeader) {
+      socket.emit("partyEnemyKilled", [enemy, currentParty]);
+    };
 
-    socket.emit("enemyKilled", dropAmount);
-
-    if (enemy.drop) {
-      let randomNumber = Math.floor(Math.random() * 101);
-      if (enemy.dropRate >= randomNumber) {
-        socket.emit("enemyDrop", enemy.drop);
-      }
-    }
-
-    const hasActiveMinions = mapsInfo[currentLand].enemies.some(
-      enemy => enemy.active === true && !enemy.isBoss
-    );
-    const hasActiveBoss = mapsInfo[currentLand].enemies.some(
-      enemy => enemy.active === true && enemy.isBoss
-    );
-    const bossAlive = mapsInfo[currentLand].enemies.find(
-      enemy => enemy.isBoss === true && enemy.health > 0
-    );
-    
-    // if (!hasActiveMinions && bossAlive && !hasActiveBoss) {
-    //   const areaBoss = mapsInfo[currentLand].enemies.find(
-    //     enemy => enemy.isBoss === true && enemy.active === false
-    //   );
-    //   activateBossEnemy(areaBoss)
-    // } else 
-    
-    if (!bossAlive) {
-      fightMusic1.pause();
-      fightMusic1.currentTime = 0;
-      SokosBoss.pause();
-      SokosBoss.currentTime = 0;
-      bossFight = false;
-      bossBarParent.style.display = "none";
-      bossBarHealth.style.width = 100 + "%";
-      bossBarHealthFollower.style.width = 100 + "%";
-
-      if (enemy.isBoss) {
-
-        // if (enemy.name === "mooshroomBossRed") {
-        //   socket.emit("giveItem", "chestKey");
-        // }
-        // else if (enemy.name === "restfieldReaper") {
-        //   socket.emit("giveItem", "chestKeyRestfield");
-        // }
-
-        // setTimeout(() => {
-        //   frameDuration = 800 / 30;
-        // }, 100);
-        // setTimeout(() => {
-        //   frameDuration = 800 / fps;
-        // }, 1500);
-
-        // resetTimer()
-        areaNameDisplay("Boss defeated");
-        challengeCompleted.play();
-        // challengeActive = false;
-        // setTimeout(() => {
-        //   let playerPosition;
-
-        //   if (enemy.name === "mooshroomBossRed") {
-        //     playerPosition =  mapsInfo.mushroomForest.playerPos;
-        //     mapsInfo.mushroomForest = _.cloneDeep(originalMapsInfo.mushroomForest);
-        //     mapsInfo.mushroomForest.playerPos = playerPosition;
-        //   }
-        //   if (enemy.name === "restfieldReaper") {
-        //     playerPosition =  mapsInfo.restfieldTrial.playerPos;
-        //     mapsInfo.restfieldTrial = _.cloneDeep(originalMapsInfo.restfieldTrial);
-        //     mapsInfo.restfieldTrial.playerPos = playerPosition;
-        //   }
-        //   hideTimer()
-        // }, 2000);
-        // mapsInfo[currentSelectedMap].areaSounds();
-      }
-    }
-
+    handleEnemyDeath(enemy)
     
     let baseSpawn = _.cloneDeep(enemy.baseSpawn)
-    console.log(baseSpawn)
     
     setTimeout(() => {
       enemy.spawn.x = -1000;
       enemy.spawn.y = -1000;
       if (enemy.isBoss === true) {
+        enemy.active = false;
+      }
+      if (enemy.night === true) {
+        enemy.active = false;
+      }
+      if (DayCycleState == 2 || DayCycleState == 1 ) {
         enemy.active = false;
       }
 
@@ -12037,10 +12128,15 @@ function checkEnemyCombat (enemy) {
 function handleEnemyState(enemy) {
   if (enemy.stateTimer) return;
 
-  if (isLeader || currentParty.length < 2) {
+  if (isLeader || !inParty) {
     enemy.stateTimer = setTimeout(() => {
       enemy.frames = 0;
       enemy.stateTimer = null;
+      for (let state of enemy.states) {
+        if (state == null) {
+          enemy.states.splice(enemy.states.indexOf(state), 1)
+        }
+      }
       const states = enemy.states;
       const chosenState = states[Math.floor(Math.random() * states.length)];
       executeStateForDuration(enemy, window[chosenState], enemy.enemyStateInt);

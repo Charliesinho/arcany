@@ -743,6 +743,26 @@ async function main() {
             share()
         });
         
+        socket.on("partyEnemyKilled", (info) => {
+            async function share() {
+                for (let user of info[1]) {
+                    if (user.id != socket.id) {
+                        io.to(user.id).emit('partyEnemyKilledClient', info[0]);           
+                    }
+                }                            
+            };
+            share()
+        });
+
+        socket.on("leaderActivatedBoss", (info) => {
+            async function share() {
+                for (let user of info) {
+                    io.to(user.id).emit('leaderActivatedBossClient', true);           
+                }                            
+            };
+            share()
+        });
+        
         socket.on("updateServer", () => {
 
             async function expObtained() {
