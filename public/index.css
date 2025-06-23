@@ -785,8 +785,20 @@ color: white;
     gap: 10px;
     width: 100%;
 }
-.uiBuildingCategoryDivBottom{
-    margin-bottom: 80px;
+#uiBuildingCategoryDivBottom{
+    flex-direction: row;
+    display: flex;
+    gap: 15px;
+    position: absolute;
+    bottom: 7px;
+    right: 0px;
+    align-items: end;
+    justify-content: center;
+}
+#uiBuildingCategoryDivBottom > div{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 #uiBuildingCategoryDivVisibility{
     display: none;
@@ -794,9 +806,9 @@ color: white;
     justify-content: center;
     align-items: flex-end;
     gap: 10px;
-    right: 325px;
+    right: 480px;
     position: absolute;
-    bottom: 15px;
+    bottom: 7px;
     z-index: 10;
     transition: all 0.4s ease;
 }
@@ -1841,15 +1853,16 @@ color: white;
 #roomsDev {
     position: absolute;
     background-color: rgb(30 26 37);
-    left: 111px;
+    right: 480px;
     padding: 10px;
-    bottom: 103px;
+    bottom: 78px;
     max-height: 478px;
     color: #272727;
     font-size: 20px;
     -webkit-font-smoothing: none;
     display: none;
-    width: 255px;
+    width: 176px;
+    text-align: center;
     z-index: 1;
     overflow: scroll;
     overflow-y: auto;

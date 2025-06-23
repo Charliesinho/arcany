@@ -9217,7 +9217,6 @@ function deselectUiButton() {
   placeCookingArea.style.backgroundColor = "#ffe2c1"
   editMapsButtonUi.style.backgroundColor = "#ffe2c1"
   placeMobButtonUi.style.backgroundColor = "#ffe2c1"
-  placeAreaButton.style.backgroundColor = "#ffe2c1"
   uiBuildingObjects.style.display = "none";
   uiBuildingCategory.style.display = "none";
   roomsDiv.style.display = "none"
@@ -9230,61 +9229,6 @@ function deselectUiButton() {
   uiBuildingVisible = true
 }
 
-monsterAltarButtonUi.addEventListener("click", function() {
-  if(currentDevAction !== "monsterAltar") {
-    monsterLoot.style.display = "flex"
-  showWallsFunction(true)
-
-  currentSelectedWall = null
-  currentDevAction = "monsterAltar";
-  roomsDiv.style.display = "none"
-  monsterAltarButtonUi.style.backgroundColor = "rgba(170, 233, 170, 1)"
-
-} else {
-  showWallsFunction(false)
-  monsterLoot.style.display = "none"
-  currentDevAction = "none";
-  monsterAltarButtonUi.style.backgroundColor = "#ffe2c1"
- }
-});
-
-placeWalls.addEventListener("click", function() {
-  if(currentDevAction !== "wall") {
-  showWallsFunction(true)
-
-  currentSelectedWall = null
-  currentDevAction = "wall";
-  roomsDiv.style.display = "none"
-  dialogsDiv.style.display = "none"
-  uiBuilding.style.display = "flex"
-  placeWalls.style.backgroundColor = "rgba(170, 233, 170, 1)"
-  deleteWalls.style.backgroundColor = "#ffe2c1"
-
-} else {
-  showWallsFunction(false)
-  currentDevAction = "building";
-  placeWalls.style.backgroundColor = "#ffe2c1"
- }
-});
-
-deleteWalls.addEventListener("click", function() {
-  if (currentDevAction !== "delete") {
-    showWallsFunction(true)
-    currentDevAction = "delete";
-    roomsDiv.style.display = "none"
-    dialogsDiv.style.display = "none"
-    
-    deleteWalls.style.backgroundColor = "rgba(170, 233, 170, 1)"
-    placeWalls.style.backgroundColor = "#ffe2c1"
-
-  } else {
-    showWallsFunction(false)
-    currentDevAction = "building";
-    deleteWalls.style.backgroundColor = "#ffe2c1"
-  }
-});
-
-let deleteObject = false
 let rotateObj = false
 
 rotateObjButtonUi.addEventListener("click", function(){
@@ -9347,21 +9291,6 @@ layerThreeButtonUi.addEventListener("click", function() {
     uiBuildingCategory.style.display = "flex";
   } 
 
-});
-
-placeAreaButton.addEventListener("click", function(){
-  showWallsFunction(false)
-  playRandomPop()
-  if(currentDevAction !== "placeArea"){
-    deselectUiButton()
-    currentDevAction = "placeArea"
-    placeAreaButton.style.backgroundColor = "rgb(148, 223, 148)"
-    placeArea.style.display = "flex"
-  } else {
-    placeArea.style.display = "none"
-    placeAreaButton.style.backgroundColor = "#ffe2c1"
-    currentDevAction = "none"
-  }
 })
 
 editMapsButtonUi.addEventListener("click", function(){
@@ -9453,69 +9382,6 @@ createMapButton.addEventListener("click", function() {
   noMovement = false
 });
 
-placeFishingArea.addEventListener("click", function() {
-  if (currentDevAction !== "fish") {
-    currentDevAction = "fish";
-    deselectUiButton()
-    placeFishingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
-    showWallsFunction(true)
-  } else {
-    currentDevAction = "none";
-    placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-    showWallsFunction(false)
-  }
-});
-
-placeEnchantingArea.addEventListener("click", function() {
-if (currentDevAction !== "enchanting") {
-  currentDevAction = "enchanting";
-  deselectUiButton()
-  placeEnchantingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
-  showWallsFunction(true)
-} else {
-  currentDevAction = "none";
-  placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  showWallsFunction(false)
-}
-});
-
-placeCookingArea.addEventListener("click", function() {
-if (currentDevAction !== "cook") {
-  currentDevAction = "cook";
-  deselectUiButton()
-  placeCookingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
-  showWallsFunction(true)
-} else {
-  currentDevAction = "none";
-  placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  showWallsFunction(false)
-}
-});
-
-hammerButtonUi.addEventListener("click", function() {
-  showWallsFunction(false)
-  playRandomPop()
-  if (currentDevAction !== "building") {
-    deselectUiButton()
-    cancelUi()
-    currentDevAction = "building";
-    uiBuildingObjects.style.display = "flex";
-    uiBuildingCategory.style.display = "flex";
-    hammerButtonUi.style.backgroundColor = "rgb(148, 223, 148)";
-    uiBuildingObjects.style.display = "flex"
-    uiBuildingCategoryDivVisibility.style.display = "flex"
-    
-  } else {
-    cancelUi()
-    currentDevAction = "none";
-    uiBuildingObjects.style.display = "none";
-    uiBuildingCategory.style.display = "none";
-    hammerButtonUi.style.backgroundColor = "#ffe2c1";
-    uiBuildingObjects.style.display = "none"
-    uiBuildingCategoryDivVisibility.style.display = "none"
-  }
-});
-
 let uiBuildingVisible = true
 
 function uiConstructionIsVisible () {
@@ -9530,7 +9396,7 @@ function uiConstructionIsVisible () {
     uiConstructionVisibility.src = "./icons/uiIcon/visibleIcon.png"
     uiBuildingObjects.style.right = "10px"
     uiBuildingCategory.style.right = "325px"
-    uiBuildingCategoryDivVisibility.style.right = "325px"
+    uiBuildingCategoryDivVisibility.style.right = "480px"
   }
 }
 
@@ -9612,6 +9478,45 @@ openMusicPlayerButton.addEventListener("click", function() {
   }
 });
 
+hammerButtonUi.addEventListener("click", function() {
+  showWallsFunction(false)
+  playRandomPop()
+  if (currentDevAction !== "building") {
+    deselectUiButton()
+    cancelUi()
+    currentDevAction = "building";
+    uiBuildingObjects.style.display = "flex";
+    uiBuildingCategory.style.display = "flex";
+    hammerButtonUi.style.backgroundColor = "rgb(148, 223, 148)";
+    uiBuildingObjects.style.display = "flex"
+    uiBuildingCategoryDivVisibility.style.display = "flex"
+    
+  } else {
+    cancelUi()
+    currentDevAction = "none";
+    uiBuildingObjects.style.display = "none";
+    uiBuildingCategory.style.display = "none";
+    hammerButtonUi.style.backgroundColor = "#ffe2c1";
+    uiBuildingObjects.style.display = "none"
+    uiBuildingCategoryDivVisibility.style.display = "none"
+  }
+});
+
+placeMobButtonUi.addEventListener("click", function(){
+  showWallsFunction(false)
+
+  if (currentDevAction !== "monster") {
+    currentDevAction = "monster";
+    deselectUiButton()
+    placeMobButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
+    monsterCreationParent.style.display = "flex"
+  } else {
+    monsterCreationParent.style.display = "none"
+    monsterSelectionImageParent.style.display = "none"
+    
+  }
+});
+
 let musicLibrary = {
   grasslands: [grasslandsST1, grasslandsST2, grasslandsST3, grasslandsST4, grasslandsST5]
 }
@@ -9665,52 +9570,129 @@ musicPlayerSlider.addEventListener("input", function () {
   }
 });
 
-placeMobButtonUi.addEventListener("click", function(){
-  showWallsFunction(false)
-  uiBuildingCategoryDivVisibility.style.display = "none"
-
-  if (currentDevAction !== "monster") {
-    currentDevAction = "monster";
-    deselectUiButton()
-    placeMobButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
-    monsterCreationParent.style.display = "flex"
+//PLACE AREA
+let deleteObject = false
+function placeAreaColorChange(){
+  currentDevAction = "building"
+  placeCraftingArea.style.backgroundColor = "#ffe2c1"
+  placeTransition.style.backgroundColor = "#ffe2c1"
+  monsterAltarButtonUi.style.backgroundColor = "#ffe2c1"
+  placeCookingArea.style.backgroundColor = "#ffe2c1"
+  placeEnchantingArea.style.backgroundColor = "#ffe2c1"
+  placeFishingArea.style.backgroundColor = "#ffe2c1"
+  placeWalls.style.backgroundColor = "#ffe2c1"
+  deleteWalls.style.backgroundColor = "#ffe2c1"
+  roomsDiv.style.display = "none"
+  monsterLoot.style.display = "none"
+}
+placeFishingArea.addEventListener("click", function() {
+  if (currentDevAction !== "fish") {
+    placeAreaColorChange()
+    currentDevAction = "fish";
+    placeFishingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
+    showWallsFunction(true)
   } else {
-    monsterCreationParent.style.display = "none"
-    monsterSelectionImageParent.style.display = "none"
-    monsterLoot.style.display = "none"
-    currentDevAction = "none";
-    placeMobButtonUi.style.backgroundColor = "#ffe2c1"
+    placeAreaColorChange()
+    showWallsFunction(false)
   }
 });
 
+placeEnchantingArea.addEventListener("click", function() {
+  if (currentDevAction !== "enchanting") {
+  placeAreaColorChange()
+  currentDevAction = "enchanting";
+  placeEnchantingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
+  showWallsFunction(true)
+} else {
+  placeAreaColorChange()
+  showWallsFunction(false)
+}
+});
+
+placeCookingArea.addEventListener("click", function() {
+  if (currentDevAction !== "cook") {
+  placeAreaColorChange()
+  currentDevAction = "cook";
+  placeCookingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
+  showWallsFunction(true)
+} else {
+  placeAreaColorChange()
+  showWallsFunction(false)
+}
+});
+
+monsterAltarButtonUi.addEventListener("click", function() {
+  if(currentDevAction !== "monsterAltar") {
+    placeAreaColorChange()
+    showWallsFunction(true)
+    monsterLoot.style.display = "flex"
+
+  currentSelectedWall = null
+  currentDevAction = "monsterAltar";
+  monsterAltarButtonUi.style.backgroundColor = "rgba(170, 233, 170, 1)"
+
+} else {
+  showWallsFunction(false)
+  placeAreaColorChange()
+ }
+});
+
 placeCraftingArea.addEventListener("click", function() {
-if (currentDevAction !== "craft") {
+  if (currentDevAction !== "craft") {
+  placeAreaColorChange()
   currentDevAction = "craft";
-  deselectUiButton()
   placeCraftingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
   showWallsFunction(true)
   } else {
+  placeAreaColorChange()
   currentDevAction = "none";
-  placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
   showWallsFunction(false)
   }
 });
 
 placeTransition.addEventListener("click", function() {
-  uiBuildingCategoryDivVisibility.style.display = "none"
 if (currentDevAction !== "transition") {
+  placeAreaColorChange()
   currentDevAction = "transition";
   showWallsFunction(true)
-  deselectUiButton()
   roomsDiv.style.display = "block"
   placeTransition.style.backgroundColor = "rgb(148, 223, 148)"
 } else {
-  roomsDiv.style.display = "none"
+  placeAreaColorChange()
   currentDevAction = "none";
   showWallsFunction(false)
-  placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
 }
 });
+
+placeWalls.addEventListener("click", function() {
+  if(currentDevAction !== "wall") {
+  placeAreaColorChange()
+  showWallsFunction(true)
+  currentSelectedWall = null
+  currentDevAction = "wall";
+  uiBuilding.style.display = "flex"
+  placeWalls.style.backgroundColor = "rgba(170, 233, 170, 1)"
+} else {
+  placeAreaColorChange()
+  showWallsFunction(false)
+  currentDevAction = "building";
+ }
+});
+
+deleteWalls.addEventListener("click", function() {
+  if (currentDevAction !== "delete") {
+    placeAreaColorChange()
+    showWallsFunction(true)
+    currentDevAction = "delete";
+    deleteWalls.style.backgroundColor = "rgba(170, 233, 170, 1)"
+  } else {
+    placeAreaColorChange()
+    showWallsFunction(false)
+    currentDevAction = "building";
+  }
+});
+//PLACE AREA
+
 
 placeChest.addEventListener("click", function() {
 if (currentDevAction !== "chest") {
