@@ -731,6 +731,17 @@ async function main() {
             };
             share()
         });
+        
+        socket.on("respawnEveryone", (info) => {
+            async function share() {
+                for (let user of info[1]) {
+                    if (user.id != socket.id) {
+                        io.to(user.id).emit('respawnEveryoneClient', true);           
+                    }
+                }                            
+            };
+            share()
+        });
 
         socket.on("leaderChangeRoom", (info) => {
             async function share() {
@@ -1394,6 +1405,7 @@ async function main() {
         
         socket.on("requestChangeRoom", async (info) => {
             const newWorld = await World.findOne({areaName: info}).exec();
+            if (!newWorld) return;
 
             async function roomChange() {
                 for (const player of players) {

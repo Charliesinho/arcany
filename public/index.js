@@ -1,7 +1,7 @@
 //Change this to push >
 // const socket = io(`ws://localhost:5000`);
 
-// const { reverse } = require("lodash");
+// const cloneDeep = require('lodash/cloneDeep');
 
 //const socket = io(`https://arcanyGame.up.railway.app/`);
 const socket = io(window.location.origin);
@@ -406,7 +406,7 @@ let mobsImages = [
     currentStateName: "idle",
     currentState: null,
     attackInterval: true,
-    states: [moveState, attackState, attackCircleState],
+    states: [],
     damaged: 0,
     health: 5,
     angle: 0,
@@ -444,7 +444,7 @@ let mobsImages = [
     currentStateName: "idle",
     currentState: null,
     attackInterval: true,
-    states: [lazerMooshState, attackCircleMooshBossState],
+    states: [],
     damaged: 0,
     health: 100,
     angle: 0,
@@ -479,7 +479,7 @@ let mobsImages = [
     currentStateName: "idle",
     currentState: null,
     attackInterval: true,
-    states: [moveState, attackState],
+    states: [],
     damaged: 0,
     health: 5,
     angle: 0,
@@ -3342,6 +3342,10 @@ let maxHealth = 6;
 let currentHealth = 6;
 let dying = false;
 
+socket.on("respawnEveryoneClient", () => {
+  respawnPlayer()
+})
+
 function playerDeath() {
 
   if (dying) return;
@@ -3349,47 +3353,47 @@ function playerDeath() {
   dying = true;
   challengeActive = false;
 
+  if (inParty && !isLeader) return;
+
+  if (inParty && isLeader) {
+    socket.emit("respawnEveryone", currentParty)
+  }
+
   bossBarParent.style.display = "none";
   bossBarHealth.style.width = 100 + "%";
   bossBarHealthFollower.style.width = 100 + "%";
 
-  // clearInterval(intervalCanvasBase)
-  projectilesClient = [];
   stopAllSound()
   const deathSound = new Audio("./audios/deathSound.wav");
   deathSound.loop = false;
   deathSound.volume = 0.7;
   deathSound.play();
   noMovement = true;
-  const dynamicFunctionName = currentSelectedMap + "Loop";   
-  const canvasFunction = window[dynamicFunctionName];
   resetTimer()
   hideTimer()
-
-  setTimeout(() => {
-    clearInterval(intervalCanvasBase);
-    intervalCanvasBase = setInterval(canvasFunction, 100);
-  }, 500);
-
-  setTimeout(() => {
-    clearInterval(intervalCanvasBase);
-  }, 2500);
   
+  bossFight = false;
+  blackScreen()
+
+  youDied.style.display = "block";
+  respawn.style.display = "block";
+
+}
+
+function respawnPlayer () {
+  mapsInfo = _.cloneDeep(originalMapsInfo);
+  socket.emit("healMax", maxHealth);
+
   setTimeout(() => {
-    bossFight = false;
-    blackScreen()
+    youDied.style.display = "none";
+    respawn.style.display = "none";
     projectilesClient = [];
-
-    youDied.style.display = "block";
-    respawn.style.display = "block";
-
-  }, 3000)
-
-  setTimeout(() => {
-    projectilesClient = [];
-    socket.emit("healMax", maxHealth);
     noMovement = false;
-  }, 4000);
+    blackScreen ()
+    currentSelectedMap = "Castle Side"
+    changeMap()
+    // socket.emit("changeRoom", currentSelectedMap);
+  }, 200);
 }
 
 let blackScreenOpacity = 0;
@@ -3420,17 +3424,19 @@ function blackScreen () {
 
 respawn.addEventListener("click", () => {
   mapsInfo = _.cloneDeep(originalMapsInfo);
+  socket.emit("healMax", maxHealth);
 
   setTimeout(() => {
     youDied.style.display = "none";
     respawn.style.display = "none";
+    projectilesClient = [];
+    noMovement = false;
     blackScreen ()
-    currentSelectedMap = "lobby"
-    let functionName = currentSelectedMap + "Loop";
-    changeMap(functionName)
-    socket.emit("changeRoom", currentSelectedMap);
-    dying = false;
+    currentSelectedMap = "Castle Side"
+    changeMap()
+    // socket.emit("changeRoom", currentSelectedMap);
   }, 200);
+  
 })
 
 function userNameUi(){
@@ -3696,6 +3702,8 @@ socket.on("player", (serverPlayer) => {
   currentHealth = myPlayer.health
   if (currentHealth > maxHealth) {
     currentHealth = maxHealth
+  } else if (currentHealth > 0) {
+    dying = false;
   }
 
   if (!dialogBoxes && !mapObject) {
@@ -7295,10 +7303,15 @@ socket.on("updateMap", (map) => {
 })
 
 let mapsInfo = {};
+let originalMapsInfo = {};
 
 socket.on("loadMap", (map) => {
   let comingMap = map
   let areaNameComing = comingMap.areaName
+
+  if (!originalMapsInfo[areaNameComing]) {
+    originalMapsInfo[areaNameComing] = _.cloneDeep(comingMap);
+  }
 
   stopAllSound()
   if (map.areaName) areaNameDisplay(map.areaName);
@@ -7306,8 +7319,6 @@ socket.on("loadMap", (map) => {
   if (mapsInfo[areaNameComing]) {
     comingMap.playerPos = mapsInfo[areaNameComing].playerPos
   }
-
-  if (!inParty) mapsInfo[currentLand].playerPos = {x: localPlayerPos.x, y: localPlayerPos.y}
 
   currentLand = areaNameComing
   mapsInfo[areaNameComing] = comingMap
@@ -8427,6 +8438,8 @@ let transitionTimeout = false;
 function transition (format) {
   if (!isLeader && inParty) return;
 
+  if (!inParty && !dying) mapsInfo[currentLand].playerPos = {x: localPlayerPos.x, y: localPlayerPos.y}
+
   if (format === "arcane") {
     transitionArcane()
   }
@@ -8439,6 +8452,9 @@ function transition (format) {
 }
 function changeMap (dynamicFunctionName) {
   socket.emit("requestChangeRoom", currentSelectedMap);
+  setTimeout(() => {
+    if (DayCycleState == 0) activateDayMobs()
+  }, 5000);
   // let playerPosition;
   // Object.keys(mapsInfo).forEach(key => {
   //   playerPosition =  mapsInfo[key].playerPos;
@@ -10133,6 +10149,8 @@ setInterval(() => {
     }
   }, 50); 
 
+  clearInterval(nightEnmiesInterval)
+
   if (DayCycleState === 2) { 
     targetAlphaCycle = 1; 
   } else {
@@ -10141,7 +10159,7 @@ setInterval(() => {
   if (DayCycleState == 2) {
     nightEnmiesInterval = setInterval(() => {
       activateNightMobs()
-    }, 2000);
+    }, 10000);
   } 
   
   if (DayCycleState == 1 || DayCycleState == 3) {
@@ -10149,9 +10167,10 @@ setInterval(() => {
   }
 
   if (DayCycleState == 0) {
-    nightEnmiesInterval = setInterval(() => {
-      activateDayMobs()
-    }, 2000);
+    // nightEnmiesInterval = setInterval(() => {
+    //   activateDayMobs()
+    // }, 10000);
+    activateDayMobs()
   } 
 
   DayCycleState = (DayCycleState + 1) % DayCycleFilters.length;
@@ -11771,8 +11790,10 @@ function activateNormalEnemy (enemy) {
     }
     
     if (enemy.framesTimer === 2) {
-      enemy.frames++
-      if (enemy.frames > 5) {
+      if (enemy.frames < 5) {
+        enemy.frames++
+      }
+      if (enemy.frames > 4) {
         enemy.active = true;
         clearInterval(activateInterval)
       }
@@ -11824,11 +11845,14 @@ function activateBossEnemy(enemy) {
       }
       
       if (enemy.framesTimer === 2) {
-        enemy.frames++
-        if (enemy.frames > 5) {
+        if (enemy.frames < 5) {
+          enemy.frames++
+        }
+        if (enemy.frames > 4) {
           enemy.active = true;
           cutscene = false;
           clearInterval(activateInterval)
+          handleEnemyState(enemy)
         }
       }
     },40)
@@ -11850,10 +11874,13 @@ function activateNightMobs() {
       }
       
       if (enemy.framesTimer === 2) {
-        enemy.frames++
-        if (enemy.frames > 5) {
+        if (enemy.frames < 5) {
+          enemy.frames++
+        }
+        if (enemy.frames > 4) {
           enemy.active = true;
           clearInterval(activateInterval)
+          handleEnemyState(enemy)
         }
       }
     },40)
@@ -11862,24 +11889,27 @@ function activateNightMobs() {
 
 function activateDayMobs() {
   for (let enemy of mapsInfo[currentLand].enemies) {
-    if (enemy.night) continue;
+    if (enemy.night || enemy.isBoss) continue;
 
-    const randomInteger = Math.floor(Math.random() * 21); // 0 to 10 inclusive
+    const randomInteger = Math.floor(Math.random() * 11); // 0 to 10 inclusive
 
-    if (randomInteger == 0) continue;
+    // if (randomInteger != 0) continue;
 
     let activateInterval = setInterval(() => {
       enemy.framesTimer--
           
       if (enemy.framesTimer <= 0) {
-        enemy.framesTimer = 5;
+        enemy.framesTimer = 5; 
       }
       
       if (enemy.framesTimer === 2) {
-        enemy.frames++
-        if (enemy.frames > 5) {
+        if (enemy.frames < 5) {
+          enemy.frames++
+        }
+        if (enemy.frames > 4) {
           enemy.active = true;
           clearInterval(activateInterval)
+          handleEnemyState(enemy)
         }
       }
     },40)
@@ -12036,16 +12066,7 @@ function checkEnemyCombat (enemy) {
     setTimeout(() => {
       enemy.spawn.x = -1000;
       enemy.spawn.y = -1000;
-      if (enemy.isBoss === true) {
-        enemy.active = false;
-      }
-      if (enemy.night === true) {
-        enemy.active = false;
-      }
-      if (DayCycleState == 2 || DayCycleState == 1 ) {
-        enemy.active = false;
-      }
-
+      enemy.active = false;
       
       if (enemy.spawnTimer) {
         let intervalSpawner = setTimeout(() => {
@@ -12053,6 +12074,9 @@ function checkEnemyCombat (enemy) {
           enemy.spawn.y = baseSpawn.y;
           enemy.health = enemy.maxHealth
           mapsInfo[currentLand].enemies.push(enemy)
+          if (DayCycleState == 0) {
+            activateDayMobs()
+          } 
         }, enemy.spawnTimer);
 
         spawnerIntervals.push(intervalSpawner)
@@ -12145,17 +12169,19 @@ function checkEnemyCombat (enemy) {
 
 function handleEnemyState(enemy) {
   if (enemy.stateTimer) return;
+  let validStates = [];
+  for (let state of enemy.states) {
+    if (state != null) {
+      // enemy.states.splice(enemy.states.indexOf(state), 1)
+      validStates.push(state)
+    }
+  }
 
   if (isLeader || !inParty) {
     enemy.stateTimer = setTimeout(() => {
       enemy.frames = 0;
       enemy.stateTimer = null;
-      for (let state of enemy.states) {
-        if (state == null) {
-          enemy.states.splice(enemy.states.indexOf(state), 1)
-        }
-      }
-      const states = enemy.states;
+      const states = validStates;
       const chosenState = states[Math.floor(Math.random() * states.length)];
       executeStateForDuration(enemy, window[chosenState], enemy.enemyStateInt);
     }, enemy.enemyStateInt);
@@ -12193,6 +12219,10 @@ function moveState(enemy) {
   if (!enemy.committedDirection) {
     enemy.committedDirection = null;
   }
+
+  let collidingOtherEnemy = resolveEnemyCollisions(enemy);
+
+  if (collidingOtherEnemy) return;
 
   const chooseDirection = (primary, fallback1, fallback2) => {
     if (!colliders.includes(primary)) {
@@ -12275,7 +12305,6 @@ function moveState(enemy) {
     if (enemy.spawn.y < (enemy.targetPlayer ?  enemy.targetPlayer.y : playerY) - 120) enemy.spawn.y += enemy.speedY;
   }
 
-  resolveEnemyCollisions(enemy);
 }
 
 function moveStateAndMelee(enemy) {
@@ -13105,8 +13134,9 @@ function resolveEnemyCollisions(enemy) {
     if (otherEnemy === enemy) return;
     const dx = enemy.spawn.x - otherEnemy.spawn.x;
     const dy = enemy.spawn.y - otherEnemy.spawn.y;
-    if (Math.abs(dx) < 100) enemy.spawn.x += dx > 0 ? enemy.speedX : -enemy.speedX;
-    if (Math.abs(dy) < 100) enemy.spawn.y += dy > 0 ? enemy.speedY : -enemy.speedY;
+    if (Math.abs(dx) < 20) enemy.spawn.x += dx > 0 ? enemy.speedX : -enemy.speedX;
+    if (Math.abs(dy) < 20) enemy.spawn.y += dy > 0 ? enemy.speedY : -enemy.speedY;
+    if (Math.abs(dx) < 20 || Math.abs(dy) < 20) {return true} else {return false};
   });
 }
 function resolveEnemyCollisionsZombie(enemy) {
