@@ -139,7 +139,7 @@ body {
     overflow: hidden;
     height: calc(100vh - 45px);
     position: absolute;
-    bottom: 10px;
+    bottom: 8px;
     right: 10px;
     z-index: 1;
     border: solid 3px #b3a496;
@@ -152,6 +152,7 @@ body {
     gap: 15px;
     align-items: center;
     overflow: visible;
+    transition: all 0.4s ease;
 }
 
 #monsterSelectionImageParent {
@@ -180,7 +181,7 @@ body {
 #monsterLoot {
     width: 390px;
     overflow: scroll;
-    height: 776px;
+    height: calc(100vh - 400px);
     position: absolute;
     bottom: 0px;
     right: 340px;
@@ -194,6 +195,7 @@ body {
     gap: 15px;
     justify-content: space-between;
     flex-wrap: wrap;
+    transition: all 0.4s ease;
 }
 
 .mob-icon {
@@ -236,6 +238,7 @@ outline: solid 2.5px #3939393d;
     background: #FFE2C1;
     border-radius: 3px;
     padding: 10px;
+    transition: all 0.4s ease;
 }
 
 #monsterCreationTopInputs {
@@ -735,14 +738,13 @@ color: white;
 }
 #uiBuilding {
     position: absolute;
-    bottom: 103px;
+    bottom: 90px;
     left: 12px;
     align-items: flex-end;
     padding: 10px 3px;
     border-radius: 3px;
     display: none;
     gap: 10px;
-    max-height: 325px;
     overflow-y: auto;
     border: solid 0px #b3a496;
     outline: solid 0px #393939;
@@ -752,9 +754,9 @@ color: white;
     position: absolute;
     display: none;
     right: 10px;
-    bottom: 10px;
+    bottom: 8px;
     width: 300px;
-    height: calc(100vh - 25px);
+    height: calc(100vh - 22px);
     overflow-y: auto;
     border: solid 3px #b3a496;
     outline: solid 3px #393939;
@@ -806,16 +808,19 @@ color: white;
     justify-content: center;
     align-items: flex-end;
     gap: 10px;
-    right: 480px;
+    right: 50%;
     position: absolute;
-    bottom: 7px;
+    bottom: 10px;
+    z-index: 10;
+    transition: all 0.4s ease;
+}
+#uiBuildingCategoryDivVisibility:hover{
+    bottom: 6px;
     z-index: 10;
     transition: all 0.4s ease;
 }
 #uiBuildingCategoryDivVisibility > img{
-    border: solid 3px #b3a496;
-    outline: solid 3px #393939;
-    background: #ffe2c1;
+    background: #33ff00;
     width: 50px;
     height: 50px;
     padding: 3px;
@@ -823,7 +828,15 @@ color: white;
     align-items: center;
     background-size: cover;
     background-repeat: no-repeat;
-    border-radius: 5px;
+    border-radius: 50%;
+    border: solid 2px black;
+    box-shadow: 0px 4px 0px 0px black;
+    border: solid 2px black;
+    transition: all 0.4s ease;
+}
+#uiBuildingCategoryDivVisibility > img:hover{
+    background: rgb(255, 0, 0);
+    box-shadow: 0px 0px 0px 0px black;
 }
 .uiButtonBG{
     border: solid 3px #b3a496;
@@ -865,10 +878,6 @@ color: white;
     margin-top: 10px;
     text-align: end;
     font-weight: 600;
-}
-
-.uiButtonBG{
-
 }
 
 #mapInfo {
@@ -931,7 +940,7 @@ color: white;
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-    /* flex-direction: column; */
+    flex-direction: column;
     gap: 10px;
     width: 100%;
 }
@@ -1298,7 +1307,7 @@ color: white;
 #playerHeart{
     display: flex;
     position: absolute;
-    top: 25px;
+    top: 20px;
     left: 50%;
     gap: 5px;
     transform: translate(-50%, -0%);
@@ -1988,12 +1997,6 @@ color: white;
     height: 62px;
     padding: 10px;
     transition: all .2s ease-out;
-}
-
-.inventoryItem:hover {
-    
-    /* filter: brightness(1.5); */
-    
 }
 
 .inventoryItem:active {
