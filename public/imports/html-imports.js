@@ -405,4 +405,3 @@ const deleteAllObjButtonCancel = document.getElementById("deleteAllObjButtonCanc
 
 //placeArea
 const placeArea = document.getElementById("placeArea");
-const placeAreaButton = document.getElementById("placeAreaButton");
