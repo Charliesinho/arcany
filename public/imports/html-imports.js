@@ -202,12 +202,18 @@ const craftingHammer = document.getElementById('craftingHammer');
 
 const tradeItemImg = document.getElementById('tradeItemImg');
 const tradeSend = document.getElementById('tradeSend');
+const partySend = document.getElementById('partySend');
 const tradeButton = document.getElementById('tradeButton');
+const partyButton = document.getElementById('partyButton');
 const tradeScreen = document.getElementById('tradeScreen');
+const partyScreen = document.getElementById('partyScreen');
+const playerPartyId = document.getElementById('playerPartyId');
 const playerTradeId = document.getElementById('playerTradeId');
+const partyMembers = document.getElementById('partyMembers');
 
 const resetButton = document.querySelectorAll('.resetButton')
 const errorPopUp = document.getElementById('errorPopUp');
+const partyPopUp = document.getElementById('partyPopUp');
 
 const cookingItem = document.querySelector(".cookingItem");
 const container = document.getElementById('cookingContainer');
@@ -248,11 +254,13 @@ const timer = document.querySelector("#timer");
 
 const uiProfileRank = document.getElementById("uiProfileRank");
 
+const informationButton = document.getElementById("informationButton")
+
 const placeWalls = document.getElementById("wallButtonUi");
 const hammerButtonUi  = document.getElementById("hammerButtonUi");
 const layerOneButtonUi  = document.getElementById("layerOneButtonUi");
-const layerTwoButtonUi  = document.getElementById("layerTwoButtonUi");
 const layerThreeButtonUi  = document.getElementById("layerThreeButtonUi");
+const uiConstructionVisibility  = document.getElementById("uiConstructionVisibility");
 const deleteObjButtonUi = document.getElementById("deleteObjButtonUi");
 const rotateObjButtonUi = document.getElementById("rotateObjButtonUi");
 const saveObjButtonUi = document.getElementById("saveObjButtonUi");
@@ -275,6 +283,7 @@ const liquidTransition = document.getElementById('liquidTransition');
 const placeDialog = document.getElementById('placeDialog');
 const uiBuilding = document.getElementById('uiBuilding');
 const uiBuildingObjects = document.getElementById('uiBuildingObjects');
+const monsterAltarButtonUi = document.getElementById('monsterAltarButtonUi');
 
 const uiBuildingCategoryConstruction = document.getElementById('uiBuildingCategoryConstruction');
 const uiBuildingCategoryFurniture = document.getElementById('uiBuildingCategoryFurniture');
@@ -396,4 +405,3 @@ const deleteAllObjButtonCancel = document.getElementById("deleteAllObjButtonCanc
 
 //placeArea
 const placeArea = document.getElementById("placeArea");
-const placeAreaButton = document.getElementById("placeAreaButton");

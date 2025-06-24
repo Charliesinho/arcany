@@ -91,7 +91,7 @@ function tick() {
 
 }
 
-setInterval(tick, 300);
+setInterval(tick, 100);
 
 async function updateHealth(username, health, id) {    
     const playerHealth = await Player.findOneAndUpdate({username: username}, {health: health}, {new: true}); 
@@ -681,6 +681,88 @@ async function main() {
               expObtained()
         });
         
+        socket.on("toInvite", (user) => {
+
+            async function invite() {
+                const player = await Player.findOne({username: user[0]}).exec();     
+                if (!player) return;
+                user.push(player.socket)                                      
+                io.to(player.socket).emit('partyInvite', user);           
+            };
+            invite()
+        });
+        
+        socket.on("partyInviteAccepted", (user) => {
+            async function invite() {
+                // const player = await Player.findOne({username: user[0]}).exec();     
+                // if (!player) return;                                      
+                io.to(user[1]).emit('partyInviteAcceptedCallback', user);           
+            };
+            invite()
+        });
+        
+        socket.on("updateParty", (users) => {
+            async function invite() {
+                for (let user of users) {
+                    io.to(user.id).emit('updatePartyClient', users);           
+                }                            
+            };
+            invite()
+        });
+        
+        socket.on("partyProjectile", (info) => {
+            async function invite() {
+                for (let user of info[0]) {
+                    if (user.id != socket.id) {
+                        io.to(user.id).emit('partyProjectileClient', info[1]);           
+                    }
+                }                            
+            };
+            invite()
+        });
+        
+        socket.on("leaderShareEnemies", (info) => {
+            async function share() {
+                for (let user of info[1]) {
+                    if (user.id != socket.id) {
+                        io.to(user.id).emit('leaderShareEnemiesClient', info[0]);           
+                    }
+                }                            
+            };
+            share()
+        });
+
+        socket.on("leaderChangeRoom", (info) => {
+            async function share() {
+                for (let user of info[1]) {
+                    if (user.id != socket.id) {
+                        io.to(user.id).emit('leaderChangeRoomClient', info);           
+                    }
+                }                            
+            };
+            share()
+        });
+        
+        socket.on("partyEnemyKilled", (info) => {
+            async function share() {
+                for (let user of info[1]) {
+                    if (user.id != socket.id) {
+                        io.to(user.id).emit('partyEnemyKilledClient', info[0]);           
+                    }
+                }                            
+            };
+            share()
+        });
+
+        socket.on("leaderActivatedBoss", (info) => {
+            async function share() {
+                for (let user of info) {
+                    io.to(user.id).emit('leaderActivatedBossClient', true);           
+                }                            
+            };
+            share()
+        });
+        
         socket.on("updateServer", () => {
 
             async function expObtained() {
@@ -882,8 +964,8 @@ async function main() {
                     //             io.to(socket.id).emit('obtained', ballo);
                     //         } 
                     //         else if (number >= 80 && number < 90) {
-                    //             player.inventory.push(mushroomClothesRed);                                           
-                    //             io.to(socket.id).emit('obtained', mushroomClothesRed);
+                    //             player.inventory.push(redMushroomlInventory);                                           
+                    //             io.to(socket.id).emit('obtained', redMushroomlInventory);
                     //         } 
                     //         else {
                     //             player.inventory.push(arcaneRepeaterInv);                                           
@@ -1473,7 +1555,7 @@ async function main() {
     
     app.use(express.static( 'public' ));
 
-    const PORT  = process.env.PORT || 5000;
+    const PORT  = process.env.PORT || 3000;
 
     httpServer.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`);
@@ -2121,7 +2203,7 @@ const trashPlate = {
 
 // CLOTHES
 
-const mushroomClothesRed = {
+const redMushroomlInventory = {
     type: "artifact",
     name: "redMushroomlInventory",
     level: 1,
@@ -2297,7 +2379,7 @@ const itemsObj = {
     burpy,
     cody,
     minrow,
-    mushroomClothesRed,
+    redMushroomlInventory,
     mushroomClothesOrange,
     tropicalHatInventory,
     skullHelmet,

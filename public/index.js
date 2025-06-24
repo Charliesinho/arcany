@@ -1,4 +1,7 @@
 //Change this to push >
+// const socket = io(`ws://localhost:5000`);
+
+// const { reverse } = require("lodash");
 
 //const socket = io(`https://arcanyGame.up.railway.app/`);
 const socket = io(window.location.origin);
@@ -17,6 +20,10 @@ setTimeout(() => {
     }
   }, 20);
 }, 1000);
+
+document.addEventListener("contextmenu", function (e) {
+  e.preventDefault();
+});
 
 let loadingProgress = 0;
 
@@ -177,6 +184,7 @@ let cameraShakeY = -180;
 monsterImage.addEventListener("click", function(){
   if (monsterSelectionImageParent.style.display != "flex") {
     monsterSelectionImageParent.style.display = "flex"
+    monsterLoot.style.display = "none"
   } else {
     monsterSelectionImageParent.style.display = "none"
   }
@@ -226,6 +234,7 @@ let mobsImages = [
     enemyStateInt: 1000,
     drop: "",
     dropRate: 100,
+    targetPlayer: null,
   },
   {
     name: "purpleSlime",
@@ -262,6 +271,7 @@ let mobsImages = [
     enemyStateInt: 0,
     drop: "",
     dropRate: 0,
+    targetPlayer: null,
   },
   {
     name: "blackBrownBunny",
@@ -298,6 +308,7 @@ let mobsImages = [
     enemyStateInt: 1000,
     drop: "",
     dropRate: 100,
+    targetPlayer: null,
   },
   {
     name: "whiteBunny",
@@ -334,6 +345,7 @@ let mobsImages = [
     enemyStateInt: 1000,
     drop: "",
     dropRate: 100,
+    targetPlayer: null,
   },
   {
     name: "brownBunny",
@@ -370,6 +382,115 @@ let mobsImages = [
     enemyStateInt: 1000,
     drop: "",
     dropRate: 100,
+    targetPlayer: null,
+  },
+  {
+    name: "redMooshroomEnemy",
+    img: redMooshroomEnemy,
+    imgw: 42,
+    imgh: 39,
+    imgcw: 42,
+    imgch: 0,
+    frames: 0,
+    framesTimer: 0,
+    level: 1,
+    xp: 50,
+    speedX: 15,
+    speedY: 15,
+    spawn: {
+      x: 1825,
+      y: 1158
+    },
+    w: 140,
+    h: 140,
+    currentStateName: "idle",
+    currentState: null,
+    attackInterval: true,
+    states: [moveState, attackState, attackCircleState],
+    damaged: 0,
+    health: 5,
+    angle: 0,
+    maxHealth: 10,
+    baseSpawn: {
+      x: 1825,
+      y: 1158
+    },
+    spawnTimer: null,
+    enemyStateInt: 1000,
+    active: true,
+    drop: "miniMushroom",
+    dropRate: 10,
+  },
+  {
+    name: "mooshroomBossRed",
+    // isBoss: true,
+    img: mooshroomBossRed,
+    imgw: 147,
+    imgh: 175,
+    imgcw: 147,
+    imgch: 0,
+    frames: 0,
+    framesTimer: 0,
+    level: 5,
+    xp: 500,
+    speedX: 0,
+    speedY: 0,
+    spawn: {
+      x: 1900,
+      y: 1100
+    },
+    w: 550,
+    h: 550,
+    currentStateName: "idle",
+    currentState: null,
+    attackInterval: true,
+    states: [lazerMooshState, attackCircleMooshBossState],
+    damaged: 0,
+    health: 100,
+    angle: 0,
+    maxHealth: 100,
+    baseSpawn: {
+      x: 1900,
+      y: 1100
+    },
+    spawnTimer: null,
+    enemyStateInt: 5000,
+    active: true,
+  },
+  {
+    name: "restfieldSkeleton",
+    img: restfieldSkeleton,
+    imgw: 48,
+    imgh: 48,
+    imgcw: 48,
+    imgch: 0,
+    frames: 0,
+    framesTimer: 0,
+    level: 1,
+    xp: 100,
+    speedX: 15,
+    speedY: 15,
+    spawn: {
+      x: 0,
+      y: 0
+    },
+    w: 140,
+    h: 140,
+    currentStateName: "idle",
+    currentState: null,
+    attackInterval: true,
+    states: [moveState, attackState],
+    damaged: 0,
+    health: 5,
+    angle: 0,
+    maxHealth: 10,
+    baseSpawn: {
+      x: 0,
+      y: 0
+    },
+    spawnTimer: 5000,
+    enemyStateInt: 1000,
+    active: false,
   },
 ]
 
@@ -506,6 +627,8 @@ attackIcons.forEach(attack => {
   monsterCreationAttacks.appendChild(attackImg);
 });
 
+let selectedDevItem = "stick";
+
 function populateMonsterLoot() {
   monsterLoot.innerHTML = ""; // Clear existing items
 
@@ -522,11 +645,11 @@ function populateMonsterLoot() {
     itemImg.style.margin = "5px";
 
     itemImg.addEventListener("click", () => {
-      if (!selectedMob) {
-        errorDisplay("Choose a monster first")
-        return;
+      if (selectedMob) {
+        selectedMob.drop = obj.name;
       }
-      selectedMob.drop = obj.name;
+
+      selectedDevItem = obj.name;
 
       lootImage.style.backgroundImage = `url(${obj.image})`;
       lootImage.style.backgroundSize = `contain`;
@@ -547,7 +670,8 @@ const inputMappings = {
   lootRateInput: "dropRate",
   spawnTimerMonsterInput: "spawnTimer",
   monstercategoryDropdown: "category", // optional custom props
-  monsterTypeDropdown: "type"
+  monsterTypeDropdown: "type",
+  monsterXpInput: "xp",
 };
 
 // Loop through each input ID and add listener
@@ -561,10 +685,28 @@ Object.entries(inputMappings).forEach(([inputId, mobProp]) => {
     const value = e.target.value;
     const num = isNaN(value) ? value : +value;
 
+    console.log(value)
+
     if (mobProp === "speed") {
       selectedMob.speedX = num;
       selectedMob.speedY = num;
-    } else {
+    } 
+    else if (mobProp === "health") {
+      selectedMob.health = num;
+      selectedMob.maxHealth = num;
+    } 
+    else if (mobProp === "category") {
+      if (value === "boss") {
+        selectedMob.isBoss = true;
+        selectedMob.active = false;
+      }
+      else if (value === "night") {
+        selectedMob.night = true;
+        selectedMob.active = false;
+      }
+      
+    } 
+    else {
       selectedMob[mobProp] = num;
     }
     console.log(selectedMob)
@@ -1050,18 +1192,43 @@ function progressQuestCounter(questItem, step) {
 // Trade system >
 
 let trading = false;
+let party = false;
+let currentParty = [];
+let inParty = false;
+let isLeader = false;
 
 tradeSend.addEventListener("click", function(){
   socket.emit("toDelete", tradedItems);
 
   setTimeout(() => {
     let tradingItems = [playerTradeId.value, tradingArray[0]]
-    console.log(tradingItems)
     socket.emit("toTrade", tradingItems);
     resetTrading();
     trading = false;
     noMovement = false;
   }, 500);
+})
+
+partySend.addEventListener("click", function(){
+  for (let userParty of currentParty){
+    if (userParty.name === myPlayer.username && !userParty.leader) {
+      errorDisplay(`Only the party leader can invite`);
+      return
+    }
+  }
+  if (currentParty.length < 5) {
+    socket.emit("toInvite", [playerPartyId.value, myPlayer.id, myPlayer.username]);
+    party = false;
+    noMovement = false;
+    errorDisplay(`Invite sent to ${playerPartyId.value}!`, "hue-rotate(90deg)")
+    resetParty()
+    party = false
+    noMovement = false;
+    partyScreen.style.opacity = "0";
+    partyScreen.style.pointerEvents = "none";
+  } else {
+    errorDisplay(`Your party is already full!`)
+  }
 })
 
 function resetTrading () {
@@ -1072,6 +1239,11 @@ function resetTrading () {
   tradeScreen.style.opacity = "0";
   tradeScreen.style.pointerEvents = "none"
 }
+function resetParty () {
+  playerPartyId.value = ""
+    partyScreen.style.opacity = "0";
+    partyScreen.style.pointerEvents = "none"
+}
 
 tradeButton.addEventListener("click", function(){
   if (trading) resetTrading();
@@ -1080,6 +1252,113 @@ tradeButton.addEventListener("click", function(){
   tradeScreen.style.opacity = trading ? "1" : "0";
   tradeScreen.style.pointerEvents = trading ? "all" : "none";
   if (uiIsClose) openIvn()
+})
+
+partyButton.addEventListener("click", function(){
+  if (trading) resetParty()
+  party = party ? false : true
+  noMovement = party ? true : false;
+  partyScreen.style.opacity = party ? "1" : "0";
+  partyScreen.style.pointerEvents = party ? "all" : "none";
+})
+
+partyPopUp.addEventListener("click", function(){
+  socket.emit('partyInviteAccepted', partyInvite);
+  partyPopUp.style.opacity = 0;
+  partyPopUp.style.pointerEvents = "none"; 
+  inParty = true;
+  partyInvite = null;
+})
+
+socket.on("partyInvite", (info) => {
+  partyInvite = info;
+  partyAddNotificationDisplay(`${info[2]} invited you to a party, click here to join!`)
+})
+
+socket.on("partyInviteAcceptedCallback", (info) => {
+  let member = {
+    name: info[0],
+    id: info[3],
+    leader: false
+  }
+  currentParty.push(member);
+  console.log(currentParty)
+  socket.emit("updateParty", currentParty)
+  partyAddNotificationDisplay(`${info[0]} joined your party!`)
+  inParty = true;
+})
+
+function addPartyMember(textContent, leader) {
+  const container = document.getElementById("partyMembers");
+  container.style.display = "block"
+
+  const p = document.createElement("p");
+  p.className = "partyMembers-member";
+  if (leader) {
+    p.textContent = "🜲 " + textContent;
+  } else {
+    p.textContent = "ጸ " + textContent;
+  }
+
+  container.appendChild(p);
+}
+
+socket.on("updatePartyClient", (info) => {
+  currentParty = info;
+  for (let member of currentParty) {
+    if (member.name === myPlayer.username) {
+      if (member.leader === true) {
+        isLeader = true;
+        leaderShareEnemies() 
+      }
+      else {
+        isLeader = false;
+      }
+    } 
+  }
+
+  const container = document.getElementById("partyMembers");
+  container.innerHTML = "";
+  for (let member of currentParty) {
+    if (member.leader === false) {
+      addPartyMember(member.name, false)
+    } else {
+      addPartyMember(member.name, true)
+    }
+  }
+  console.log(currentParty)
+})
+
+socket.on("leaderActivatedBossClient", (info) => {
+    const areaBoss = mapsInfo[currentLand].enemies.find(
+      enemy => enemy.isBoss === true && enemy.active === false
+    );
+    activateBossEnemy(areaBoss)
+});
+
+socket.on("partyEnemyKilledClient", (enemy) => {
+    handleEnemyDeath(enemy)
+});
+
+function leaderShareEnemies () {
+  setInterval(() => {
+    socket.emit("leaderShareEnemies", [mapsInfo[currentLand].enemies, currentParty])
+  }, 100);
+}
+
+socket.on("leaderShareEnemiesClient", (enemies) => {
+  mapsInfo[currentLand].enemies = enemies;
+})
+
+socket.on("leaderChangeRoomClient", (info) => {
+  playerX = info[2]
+  playerY = info[3]
+  mapsInfo[currentLand].playerPos = {x: info[2], y: info[3]}
+  transitionLiquidInstant(info[0])
+})
+
+socket.on("partyProjectileClient", (projectile) => {
+  projectilesClient.push(projectile)
 })
 
 // Trade system <
@@ -3962,126 +4241,126 @@ socket.on("player", (serverPlayer) => {
     
     };
   
-  mapObject = [
-  // construction - fences
-  {
-    name: "woodFenceVer",
-    backgroundObj: false,
-    img: woodFenceVer,
-    x: 0,
-    y: 0,
-    h: 35,
-    w: 7,
-    category: "construction",
-    subCategory: "fences",
+    mapObject = [
+    // construction - fences
+    {
+      name: "woodFenceVer",
+      backgroundObj: false,
+      img: woodFenceVer,
+      x: 0,
+      y: 0,
+      h: 35,
+      w: 7,
+      category: "construction",
+      subCategory: "fences",
 
-    subscription: 'none',
+      subscription: 'none',
 
-  },
-  {
-    name: "woodFence",
-    backgroundObj: false,
-    img: woodFence,
-    x: 0,
-    y: 0,
-    h: 22,
-    w: 28,
-    category: "construction",
-    subCategory: "fences",
+    },
+    {
+      name: "woodFence",
+      backgroundObj: false,
+      img: woodFence,
+      x: 0,
+      y: 0,
+      h: 22,
+      w: 28,
+      category: "construction",
+      subCategory: "fences",
 
-    subscription: 'none',
-  },
-  {
-    name: "woodSmallWallHor",
-    backgroundObj: false,
-    img: woodSmallWallHor,
-    x: 0,
-    y: 0,
-    h: 22,
-    w: 31,
-    category: "construction",
-    subCategory: "fences",
+      subscription: 'none',
+    },
+    {
+      name: "woodSmallWallHor",
+      backgroundObj: false,
+      img: woodSmallWallHor,
+      x: 0,
+      y: 0,
+      h: 22,
+      w: 31,
+      category: "construction",
+      subCategory: "fences",
 
-    subscription: 'none',
-  },
-  {
-    name: "woodSmallWallVert",
-    backgroundObj: false,
-    img: woodSmallWallVert,
-    x: 0,
-    y: 0,
-    h: 37,
-    w: 7,
-    category: "construction",
-    subCategory: "fences",
+      subscription: 'none',
+    },
+    {
+      name: "woodSmallWallVert",
+      backgroundObj: false,
+      img: woodSmallWallVert,
+      x: 0,
+      y: 0,
+      h: 37,
+      w: 7,
+      category: "construction",
+      subCategory: "fences",
 
-    subscription: 'none',
-  },
-  {
-    name: "woodSmallWallVertDiagonal",
-    backgroundObj: false,
-    img: woodSmallWallVertDiagonal,
-    reverse:woodSmallWallVertDiagonalReverse,
-    x: 0,
-    y: 0,
-    h: woodSmallWallVertDiagonal.height,
-    w: woodSmallWallVertDiagonal.width,
-    category: "construction",
-    subCategory: "fences",
+      subscription: 'none',
+    },
+    {
+      name: "woodSmallWallVertDiagonal",
+      backgroundObj: false,
+      img: woodSmallWallVertDiagonal,
+      reverse:woodSmallWallVertDiagonalReverse,
+      x: 0,
+      y: 0,
+      h: woodSmallWallVertDiagonal.height,
+      w: woodSmallWallVertDiagonal.width,
+      category: "construction",
+      subCategory: "fences",
 
-    subscription: 'none',
-  },
-  {
-    name: "restfieldFence",
-    backgroundObj: false,
-    img: restfieldFence,
-    x: 0,
-    y: 0,
-    h: restfieldFence.height,
-    w: restfieldFence.width,
-    category: "construction",
-    subCategory: "fences",
+      subscription: 'none',
+    },
+    {
+      name: "restfieldFence",
+      backgroundObj: false,
+      img: restfieldFence,
+      x: 0,
+      y: 0,
+      h: restfieldFence.height,
+      w: restfieldFence.width,
+      category: "construction",
+      subCategory: "fences",
 
-    subscription: 'none',
-  },
-  {
-    name: "restfieldFenceOne",
-    backgroundObj: false,
-    img: restfieldFenceOne,
-    reverse:restfieldFenceOneReverse,
-    x: 0,
-    y: 0,
-    h: restfieldFenceOne.height,
-    w: restfieldFenceOne.width,
-    category: "construction",
-    subCategory: "fences",
+      subscription: 'none',
+    },
+    {
+      name: "restfieldFenceOne",
+      backgroundObj: false,
+      img: restfieldFenceOne,
+      reverse:restfieldFenceOneReverse,
+      x: 0,
+      y: 0,
+      h: restfieldFenceOne.height,
+      w: restfieldFenceOne.width,
+      category: "construction",
+      subCategory: "fences",
 
-    subscription: 'none',
-  },
-  {
-    name: "restfieldFenceTwo",
-    backgroundObj: false,
-    img: restfieldFenceTwo,
-    reverse:restfieldFenceTwoReverse,
-    x: 0,
-    y: 0,
-    h: restfieldFenceTwo.height,
-    w: restfieldFenceTwo.width,
-    category: "construction",
-    subCategory: "fences",
+      subscription: 'none',
+    },
+    {
+      name: "restfieldFenceTwo",
+      backgroundObj: false,
+      img: restfieldFenceTwo,
+      reverse:restfieldFenceTwoReverse,
+      x: 0,
+      y: 0,
+      h: restfieldFenceTwo.height,
+      w: restfieldFenceTwo.width,
+      category: "construction",
+      subCategory: "fences",
 
-    subscription: 'none',
-  },
-  {
-    name: "woodPole",
-    backgroundObj: false,
-    img: woodPole,
-    x: 0,
-    y: 0,
-    h: 21,
-    w: 7,
-    category: "construction",
-    subCategory: "fences",
+      subscription: 'none',
+    },
+    {
+      name: "woodPole",
+      backgroundObj: false,
+      img: woodPole,
+      x: 0,
+      y: 0,
+      h: 21,
+      w: 7,
+      category: "construction",
+      subCategory: "fences",
 
     subscription: 'none',
   },
@@ -4100,251 +4379,251 @@ socket.on("player", (serverPlayer) => {
     subscription: 'none',
   },
 
-  // construction - floors
-  {
-    name: "restfieldMallTiles",
-    backgroundObj: true,
-    img: restfieldMallTiles,
-    x: 0,
-    y: 0,
-    h: restfieldMallTiles.height,
-    w: restfieldMallTiles.width,
-    category: "construction",
-    subCategory: "floors",
+    // construction - floors
+    {
+      name: "restfieldMallTiles",
+      backgroundObj: true,
+      img: restfieldMallTiles,
+      x: 0,
+      y: 0,
+      h: restfieldMallTiles.height,
+      w: restfieldMallTiles.width,
+      category: "construction",
+      subCategory: "floors",
 
-    subscription: 'member',
-  },
-  {
-    name: "stoneFloorPatch",
-    backgroundObj: true,
-    img: stoneFloorPatch,
-    x: 0,
-    y: 0,
-    h: stoneFloorPatch.height,
-    w: stoneFloorPatch.width,
-    category: "construction",
-    subCategory: "floors",
+      subscription: 'member',
+    },
+    {
+      name: "stoneFloorPatch",
+      backgroundObj: true,
+      img: stoneFloorPatch,
+      x: 0,
+      y: 0,
+      h: stoneFloorPatch.height,
+      w: stoneFloorPatch.width,
+      category: "construction",
+      subCategory: "floors",
 
-    subscription: 'none',
-  },
-  {
-    name: "stoneFloorTwo",
-    backgroundObj: true,
-    img: stoneFloorTwo,
-    x: 0,
-    y: 0,
-    h: stoneFloorTwo.height,
-    w: stoneFloorTwo.width,
-    category: "construction",
-    subCategory: "floors",
+      subscription: 'none',
+    },
+    {
+      name: "stoneFloorTwo",
+      backgroundObj: true,
+      img: stoneFloorTwo,
+      x: 0,
+      y: 0,
+      h: stoneFloorTwo.height,
+      w: stoneFloorTwo.width,
+      category: "construction",
+      subCategory: "floors",
 
-    subscription: 'none',
-  },
-  {
-    name: "grasslandDirtFloor",
-    backgroundObj: true,
-    img: grasslandDirtFloor,
-    x: 0,
-    y: 0,
-    h: 22,
-    w: 23,
-    category: "construction",
-    subCategory: "floors",
-    
-    subscription: 'none',
-  },
-  {
-    name: "grasslandDirtBig",
-    backgroundObj: true,
-    img: grasslandDirtBig,
-    x: 0,
-    y: 0,
-    h: 47,
-    w: 57,
-    category: "construction",
-    subCategory: "floors",
+      subscription: 'none',
+    },
+    {
+      name: "grasslandDirtFloor",
+      backgroundObj: true,
+      img: grasslandDirtFloor,
+      x: 0,
+      y: 0,
+      h: 22,
+      w: 23,
+      category: "construction",
+      subCategory: "floors",
+      
+      subscription: 'none',
+    },
+    {
+      name: "grasslandDirtBig",
+      backgroundObj: true,
+      img: grasslandDirtBig,
+      x: 0,
+      y: 0,
+      h: 47,
+      w: 57,
+      category: "construction",
+      subCategory: "floors",
 
-    subscription: 'none',
-  },
-  {
-    name: "grasslandDirtFloorCircle",
-    backgroundObj: true,
-    img: grasslandDirtFloorCircle,
-    x: 0,
-    y: 0,
-    h: grasslandDirtFloorCircle.height,
-    w: grasslandDirtFloorCircle.width,
-    category: "construction",
-    subCategory: "floors",
+      subscription: 'none',
+    },
+    {
+      name: "grasslandDirtFloorCircle",
+      backgroundObj: true,
+      img: grasslandDirtFloorCircle,
+      x: 0,
+      y: 0,
+      h: grasslandDirtFloorCircle.height,
+      w: grasslandDirtFloorCircle.width,
+      category: "construction",
+      subCategory: "floors",
 
-    subscription: 'none',
-  },
-  {
-    name: "grasslandGrassClearCircle",
-    backgroundObj: true,
-    img: grasslandGrassClearCircle,
-    x: 0,
-    y: 0,
-    h: grasslandGrassClearCircle.height,
-    w: grasslandGrassClearCircle.width,
-    category: "construction",
-    subCategory: "floors",
+      subscription: 'none',
+    },
+    {
+      name: "grasslandGrassClearCircle",
+      backgroundObj: true,
+      img: grasslandGrassClearCircle,
+      x: 0,
+      y: 0,
+      h: grasslandGrassClearCircle.height,
+      w: grasslandGrassClearCircle.width,
+      category: "construction",
+      subCategory: "floors",
 
-    subscription: 'none',
-  },
-  {
-    name: "grasslandGrassClearBig",
-    backgroundObj: true,
-    img: grasslandGrassClearBig,
-    x: 0,
-    y: 0,
-    h: grasslandGrassClearBig.height,
-    w: grasslandGrassClearBig.width,
-    category: "construction",
-    subCategory: "floors",
+      subscription: 'none',
+    },
+    {
+      name: "grasslandGrassClearBig",
+      backgroundObj: true,
+      img: grasslandGrassClearBig,
+      x: 0,
+      y: 0,
+      h: grasslandGrassClearBig.height,
+      w: grasslandGrassClearBig.width,
+      category: "construction",
+      subCategory: "floors",
 
-    subscription: 'none',
-  },
-  {
-    name: "grasslandGrassClearBig",
-    backgroundObj: true,
-    img: grasslandGrassClearBig,
-    x: 0,
-    y: 0,
-    h: grasslandGrassClearBig.height,
-    w: grasslandGrassClearBig.width,
-    category: "construction",
-    subCategory: "floors",
+      subscription: 'none',
+    },
+    {
+      name: "grasslandGrassClearBig",
+      backgroundObj: true,
+      img: grasslandGrassClearBig,
+      x: 0,
+      y: 0,
+      h: grasslandGrassClearBig.height,
+      w: grasslandGrassClearBig.width,
+      category: "construction",
+      subCategory: "floors",
 
-    subscription: 'none',
-  },
-  {
-    name: "grasslandGrassMediumCircle",
-    backgroundObj: true,
-    img: grasslandGrassMediumCircle,
-    x: 0,
-    y: 0,
-    h: grasslandGrassMediumCircle.height,
-    w: grasslandGrassMediumCircle.width,
-    category: "construction",
-    subCategory: "floors",
+      subscription: 'none',
+    },
+    {
+      name: "grasslandGrassMediumCircle",
+      backgroundObj: true,
+      img: grasslandGrassMediumCircle,
+      x: 0,
+      y: 0,
+      h: grasslandGrassMediumCircle.height,
+      w: grasslandGrassMediumCircle.width,
+      category: "construction",
+      subCategory: "floors",
 
-    subscription: 'none',
-  },
-  {
-    name: "grasslandGrassMediumBig",
-    backgroundObj: true,
-    img: grasslandGrassMediumBig,
-    x: 0,
-    y: 0,
-    h: grasslandGrassMediumBig.height,
-    w: grasslandGrassMediumBig.width,
-    category: "construction",
-    subCategory: "floors",
+      subscription: 'none',
+    },
+    {
+      name: "grasslandGrassMediumBig",
+      backgroundObj: true,
+      img: grasslandGrassMediumBig,
+      x: 0,
+      y: 0,
+      h: grasslandGrassMediumBig.height,
+      w: grasslandGrassMediumBig.width,
+      category: "construction",
+      subCategory: "floors",
 
-    subscription: 'none',
-  },
-  {
-    name: "grasslandGrassMediumFloor",
-    backgroundObj: true,
-    img: grasslandGrassMediumFloor,
-    x: 0,
-    y: 0,
-    h: grasslandGrassMediumFloor.height,
-    w: grasslandGrassMediumFloor.width,
-    category: "construction",
-    subCategory: "floors",
+      subscription: 'none',
+    },
+    {
+      name: "grasslandGrassMediumFloor",
+      backgroundObj: true,
+      img: grasslandGrassMediumFloor,
+      x: 0,
+      y: 0,
+      h: grasslandGrassMediumFloor.height,
+      w: grasslandGrassMediumFloor.width,
+      category: "construction",
+      subCategory: "floors",
 
-    subscription: 'none',
-  },
-  {
-    name: "grasslandGrassDarkCircle",
-    backgroundObj: true,
-    img: grasslandGrassDarkCircle,
-    x: 0,
-    y: 0,
-    h: grasslandGrassDarkCircle.height,
-    w: grasslandGrassDarkCircle.width,
-    category: "construction",
-    subCategory: "floors",
+      subscription: 'none',
+    },
+    {
+      name: "grasslandGrassDarkCircle",
+      backgroundObj: true,
+      img: grasslandGrassDarkCircle,
+      x: 0,
+      y: 0,
+      h: grasslandGrassDarkCircle.height,
+      w: grasslandGrassDarkCircle.width,
+      category: "construction",
+      subCategory: "floors",
 
-    subscription: 'none',
-  },
-  {
-    name: "grasslandGrassDarkBig",
-    backgroundObj: true,
-    img: grasslandGrassDarkBig,
-    x: 0,
-    y: 0,
-    h: grasslandGrassDarkBig.height,
-    w: grasslandGrassDarkBig.width,
-    category: "construction",
-    subCategory: "floors",
+      subscription: 'none',
+    },
+    {
+      name: "grasslandGrassDarkBig",
+      backgroundObj: true,
+      img: grasslandGrassDarkBig,
+      x: 0,
+      y: 0,
+      h: grasslandGrassDarkBig.height,
+      w: grasslandGrassDarkBig.width,
+      category: "construction",
+      subCategory: "floors",
 
-    subscription: 'none',
-  },
-  {
-    name: "grasslandGrassDarkFloor",
-    backgroundObj: true,
-    img: grasslandGrassDarkFloor,
-    x: 0,
-    y: 0,
-    h: grasslandGrassDarkFloor.height,
-    w: grasslandGrassDarkFloor.width,
-    category: "construction",
-    subCategory: "floors",
+      subscription: 'none',
+    },
+    {
+      name: "grasslandGrassDarkFloor",
+      backgroundObj: true,
+      img: grasslandGrassDarkFloor,
+      x: 0,
+      y: 0,
+      h: grasslandGrassDarkFloor.height,
+      w: grasslandGrassDarkFloor.width,
+      category: "construction",
+      subCategory: "floors",
 
-    subscription: 'none',
-  },
-  {
-    name: "stoneFloor",
-    backgroundObj: true,
-    img: stoneFloor,
-    x: 0,
-    y: 0,
-    h: stoneFloor.height,
-    w: stoneFloor.width,
-    category: "construction",
-    subCategory: "floors",
+      subscription: 'none',
+    },
+    {
+      name: "stoneFloor",
+      backgroundObj: true,
+      img: stoneFloor,
+      x: 0,
+      y: 0,
+      h: stoneFloor.height,
+      w: stoneFloor.width,
+      category: "construction",
+      subCategory: "floors",
 
-    subscription: 'none',
-  },
-  {
-    name: "woodFloor",
-    backgroundObj: true,
-    img: woodFloor,
-    x: 0,
-    y: 0,
-    h: woodFloor.height,
-    w: woodFloor.width,
-    category: "construction",
-    subCategory: "floors",
+      subscription: 'none',
+    },
+    {
+      name: "woodFloor",
+      backgroundObj: true,
+      img: woodFloor,
+      x: 0,
+      y: 0,
+      h: woodFloor.height,
+      w: woodFloor.width,
+      category: "construction",
+      subCategory: "floors",
 
-    subscription: 'none',
-  },
-  {
-    name: "plantPatch",
-    backgroundObj: true,
-    img: plantPatch,
-    x: 0,
-    y: 0,
-    h: 15,
-    w: 16,
-    category: "construction",
-    subCategory: "floors",
+      subscription: 'none',
+    },
+    {
+      name: "plantPatch",
+      backgroundObj: true,
+      img: plantPatch,
+      x: 0,
+      y: 0,
+      h: 15,
+      w: 16,
+      category: "construction",
+      subCategory: "floors",
 
-    subscription: 'none',
-  },
-  {
-    name: "shadowTree",
-    backgroundObj: true,
-    img: shadowTree,
-    x: 0,
-    y: 0,
-    h: 15,
-    w: 48,
-    category: "construction",
-    subCategory: "floors",
+      subscription: 'none',
+    },
+    {
+      name: "shadowTree",
+      backgroundObj: true,
+      img: shadowTree,
+      x: 0,
+      y: 0,
+      h: 15,
+      w: 48,
+      category: "construction",
+      subCategory: "floors",
 
     subscription: 'none',
   },
@@ -4414,138 +4693,138 @@ socket.on("player", (serverPlayer) => {
     category: "construction",
     subCategory: "doors",
 
-    subscription: 'members',
-  },
-  {
-    name: "restfieldArc",
-    backgroundObj: false,
-    img: restfieldArc,
-    x: 0,
-    y: 0,
-    h: restfieldArc.height,
-    w: restfieldArc.width,
-    category: "construction",
-    subCategory: "doors",
-    lightSource: true,
-    
+      subscription: 'members',
+    },
+    {
+      name: "restfieldArc",
+      backgroundObj: false,
+      img: restfieldArc,
+      x: 0,
+      y: 0,
+      h: restfieldArc.height,
+      w: restfieldArc.width,
+      category: "construction",
+      subCategory: "doors",
+      lightSource: true,
+      
 
-    subscription: 'members',
-  },
-  {
-    name: "restfieldArcTwo",
-    backgroundObj: false,
-    img: restfieldArcTwo,
-    x: 0,
-    y: 0,
-    h: restfieldArcTwo.height,
-    w: restfieldArcTwo.width,
-    category: "construction",
-    subCategory: "doors",
-    
+      subscription: 'members',
+    },
+    {
+      name: "restfieldArcTwo",
+      backgroundObj: false,
+      img: restfieldArcTwo,
+      x: 0,
+      y: 0,
+      h: restfieldArcTwo.height,
+      w: restfieldArcTwo.width,
+      category: "construction",
+      subCategory: "doors",
+      
 
-    subscription: 'members',
-  },
+      subscription: 'members',
+    },
 
-  // construction - walls
-  {
-    name: "woodWallDestroyed",
-    backgroundObj: false,
-    img: woodWallDestroyed,
-    x: 0,
-    y: 0,
-    h: woodWallDestroyed.height,
-    w: woodWallDestroyed.width,
-    category: "construction",
-    subCategory: "walls",
-    subscription: 'none',
-  },
-  {
-    name: "woodWallHor",
-    backgroundObj: false,
-    img: woodWallHor,
-    x: 0,
-    y: 0,
-    h: 52,
-    w: 67,
-    category: "construction",
-    subCategory: "walls",
-    subscription: 'none',
-  },
-  {
-    name: "woodWallHorTwo",
-    backgroundObj: false,
-    img: woodWallHorTwoReverse,
-    x: 0,
-    y: 0,
-    h: woodWallHorTwo.height,
-    w: woodWallHorTwo.width,
-    category: "construction",
-    subCategory: "walls",
-    subscription: 'none',
-  },
-  {
-    name: "woodWindowWall",
-    backgroundObj: false,
-    img: woodWindowWall,
-    x: 0,
-    y: 0,
-    h: 52,
-    w: 67,
-    category: "construction",
-    subCategory: "walls",
+    // construction - walls
+    {
+      name: "woodWallDestroyed",
+      backgroundObj: false,
+      img: woodWallDestroyed,
+      x: 0,
+      y: 0,
+      h: woodWallDestroyed.height,
+      w: woodWallDestroyed.width,
+      category: "construction",
+      subCategory: "walls",
+      subscription: 'none',
+    },
+    {
+      name: "woodWallHor",
+      backgroundObj: false,
+      img: woodWallHor,
+      x: 0,
+      y: 0,
+      h: 52,
+      w: 67,
+      category: "construction",
+      subCategory: "walls",
+      subscription: 'none',
+    },
+    {
+      name: "woodWallHorTwo",
+      backgroundObj: false,
+      img: woodWallHorTwoReverse,
+      x: 0,
+      y: 0,
+      h: woodWallHorTwo.height,
+      w: woodWallHorTwo.width,
+      category: "construction",
+      subCategory: "walls",
+      subscription: 'none',
+    },
+    {
+      name: "woodWindowWall",
+      backgroundObj: false,
+      img: woodWindowWall,
+      x: 0,
+      y: 0,
+      h: 52,
+      w: 67,
+      category: "construction",
+      subCategory: "walls",
 
-    subscription: 'none',
-  },
-  {
-    name: "woodWallVer",
-    backgroundObj: false,
-    img: woodWallVer,
-    x: 0,
-    y: 0,
-    h: 92,
-    w: 7,
-    category: "construction",
-    subCategory: "walls",
+      subscription: 'none',
+    },
+    {
+      name: "woodWallVer",
+      backgroundObj: false,
+      img: woodWallVer,
+      x: 0,
+      y: 0,
+      h: 92,
+      w: 7,
+      category: "construction",
+      subCategory: "walls",
 
-    subscription: 'none',
-  },
-  {
-    name: "woodSquareDoor",
-    backgroundObj: false,
-    img: woodSquareDoor,
-    x: 0,
-    y: 0,
-    h: 52,
-    w: 43,
-    category: "construction",
-    subCategory: "walls",
+      subscription: 'none',
+    },
+    {
+      name: "woodSquareDoor",
+      backgroundObj: false,
+      img: woodSquareDoor,
+      x: 0,
+      y: 0,
+      h: 52,
+      w: 43,
+      category: "construction",
+      subCategory: "walls",
 
-    subscription: 'none',
-  },
-  {
-    name: "restfieldWall",
-    backgroundObj: false,
-    img: restfieldWall,
-    x: 0,
-    y: 0,
-    h: restfieldWall.height,
-    w: restfieldWall.width,
-    category: "construction",
-    subCategory: "walls",
+      subscription: 'none',
+    },
+    {
+      name: "restfieldWall",
+      backgroundObj: false,
+      img: restfieldWall,
+      x: 0,
+      y: 0,
+      h: restfieldWall.height,
+      w: restfieldWall.width,
+      category: "construction",
+      subCategory: "walls",
 
-    subscription: 'none',
-  },
-  {
-    name: "woodWallHorRight",
-    backgroundObj: false,
-    img: woodWallHorRight,
-    reverse:woodWallHorLeft,
-    x: 0,
-    y: 0,
-    h: woodWallHorRight.height,
-    w: woodWallHorRight.width,
-    category: "construction",
-    subCategory: "walls",
+      subscription: 'none',
+    },
+    {
+      name: "woodWallHorRight",
+      backgroundObj: false,
+      img: woodWallHorRight,
+      reverse:woodWallHorLeft,
+      x: 0,
+      y: 0,
+      h: woodWallHorRight.height,
+      w: woodWallHorRight.width,
+      category: "construction",
+      subCategory: "walls",
 
     subscription: 'none',
   },
@@ -4619,684 +4898,684 @@ socket.on("player", (serverPlayer) => {
   },
 
 
-  //CONSTRUCTIONS RUINS
-  {
-    name: "GrasslandRuinsOneLeft",
-    backgroundObj: false,
-    img: GrasslandRuinsOneLeft,
-    reverse: GrasslandRuinsOneRight,
-    x: 0,
-    y: 0,
-    h: GrasslandRuinsOneLeft.height,
-    w: GrasslandRuinsOneLeft.width,
-    category: "construction",
-    subCategory: "ruins",
+    //CONSTRUCTIONS RUINS
+    {
+      name: "GrasslandRuinsOneLeft",
+      backgroundObj: false,
+      img: GrasslandRuinsOneLeft,
+      reverse: GrasslandRuinsOneRight,
+      x: 0,
+      y: 0,
+      h: GrasslandRuinsOneLeft.height,
+      w: GrasslandRuinsOneLeft.width,
+      category: "construction",
+      subCategory: "ruins",
 
-    subscription: 'none',
-  },
-  {
-    name: "GrasslandRuinsEleven",
-    backgroundObj: false,
-    img: GrasslandRuinsEleven,
-    x: 0,
-    y: 0,
-    h: GrasslandRuinsEleven.height,
-    w: GrasslandRuinsEleven.width,
-    category: "construction",
-    subCategory: "ruins",
+      subscription: 'none',
+    },
+    {
+      name: "GrasslandRuinsEleven",
+      backgroundObj: false,
+      img: GrasslandRuinsEleven,
+      x: 0,
+      y: 0,
+      h: GrasslandRuinsEleven.height,
+      w: GrasslandRuinsEleven.width,
+      category: "construction",
+      subCategory: "ruins",
 
-    subscription: 'none',
-  },
-  {
-    name: "GrasslandRuinsTwoLeft",
-    backgroundObj: false,
-    img: GrasslandRuinsTwoLeft,
-    reverse: GrasslandRuinsTwoRight,
-    x: 0,
-    y: 0,
-    h: GrasslandRuinsTwoLeft.height,
-    w: GrasslandRuinsTwoLeft.width,
-    category: "construction",
-    subCategory: "ruins",
+      subscription: 'none',
+    },
+    {
+      name: "GrasslandRuinsTwoLeft",
+      backgroundObj: false,
+      img: GrasslandRuinsTwoLeft,
+      reverse: GrasslandRuinsTwoRight,
+      x: 0,
+      y: 0,
+      h: GrasslandRuinsTwoLeft.height,
+      w: GrasslandRuinsTwoLeft.width,
+      category: "construction",
+      subCategory: "ruins",
 
-    subscription: 'dev',
-  },
-  {
-    name: "GrasslandRuinsThreeTypeOne",
-    backgroundObj: false,
-    img: GrasslandRuinsThreeTypeOne,
-    x: 0,
-    y: 0,
-    h: GrasslandRuinsThreeTypeOne.height,
-    w: GrasslandRuinsThreeTypeOne.width,
-    category: "construction",
-    subCategory: "ruins",
+      subscription: 'dev',
+    },
+    {
+      name: "GrasslandRuinsThreeTypeOne",
+      backgroundObj: false,
+      img: GrasslandRuinsThreeTypeOne,
+      x: 0,
+      y: 0,
+      h: GrasslandRuinsThreeTypeOne.height,
+      w: GrasslandRuinsThreeTypeOne.width,
+      category: "construction",
+      subCategory: "ruins",
 
-    subscription: 'none',
-  },
-  {
-    name: "GrasslandRuinsThreeTypeTwo",
-    backgroundObj: false,
-    img: GrasslandRuinsThreeTypeTwo,
-    x: 0,
-    y: 0,
-    h: GrasslandRuinsThreeTypeTwo.height,
-    w: GrasslandRuinsThreeTypeTwo.width,
-    category: "construction",
-    subCategory: "ruins",
+      subscription: 'none',
+    },
+    {
+      name: "GrasslandRuinsThreeTypeTwo",
+      backgroundObj: false,
+      img: GrasslandRuinsThreeTypeTwo,
+      x: 0,
+      y: 0,
+      h: GrasslandRuinsThreeTypeTwo.height,
+      w: GrasslandRuinsThreeTypeTwo.width,
+      category: "construction",
+      subCategory: "ruins",
 
-    subscription: 'none',
-  },
-  {
-    name: "GrasslandRuinsThreeRight",
-    backgroundObj: false,
-    img: GrasslandRuinsThreeRight,
-    reverse:GrasslandRuinsThreeLeft,
-    x: 0,
-    y: 0,
-    h: GrasslandRuinsThreeRight.height,
-    w: GrasslandRuinsThreeRight.width,
-    category: "construction",
-    subCategory: "ruins",
+      subscription: 'none',
+    },
+    {
+      name: "GrasslandRuinsThreeRight",
+      backgroundObj: false,
+      img: GrasslandRuinsThreeRight,
+      reverse:GrasslandRuinsThreeLeft,
+      x: 0,
+      y: 0,
+      h: GrasslandRuinsThreeRight.height,
+      w: GrasslandRuinsThreeRight.width,
+      category: "construction",
+      subCategory: "ruins",
 
-    subscription: 'none',
-  },
-  {
-    name: "GrasslandRuinsFourRight",
-    backgroundObj: false,
-    img: GrasslandRuinsFourRight,
-    reverse:GrasslandRuinsFourLeft,
-    x: 0,
-    y: 0,
-    h: GrasslandRuinsFourRight.height,
-    w: GrasslandRuinsFourRight.width,
-    category: "construction",
-    subCategory: "ruins",
+      subscription: 'none',
+    },
+    {
+      name: "GrasslandRuinsFourRight",
+      backgroundObj: false,
+      img: GrasslandRuinsFourRight,
+      reverse:GrasslandRuinsFourLeft,
+      x: 0,
+      y: 0,
+      h: GrasslandRuinsFourRight.height,
+      w: GrasslandRuinsFourRight.width,
+      category: "construction",
+      subCategory: "ruins",
 
-    subscription: 'none',
-  },
-  {
-    name: "GrasslandRuinsFiveLeft",
-    backgroundObj: false,
-    img: GrasslandRuinsFiveLeft,
-    reverse:GrasslandRuinsFiveRight,
-    x: 0,
-    y: 0,
-    h: GrasslandRuinsFiveLeft.height,
-    w: GrasslandRuinsFiveLeft.width,
-    category: "construction",
-    subCategory: "ruins",
+      subscription: 'none',
+    },
+    {
+      name: "GrasslandRuinsFiveLeft",
+      backgroundObj: false,
+      img: GrasslandRuinsFiveLeft,
+      reverse:GrasslandRuinsFiveRight,
+      x: 0,
+      y: 0,
+      h: GrasslandRuinsFiveLeft.height,
+      w: GrasslandRuinsFiveLeft.width,
+      category: "construction",
+      subCategory: "ruins",
 
-    subscription: 'none',
-  },
-  {
-    name: "GrasslandRuinsSixRight",
-    backgroundObj: false,
-    img: GrasslandRuinsSixRight,
-    reverse:GrasslandRuinsSixLeft,
-    x: 0,
-    y: 0,
-    h: GrasslandRuinsSixRight.height,
-    w: GrasslandRuinsSixRight.width,
-    category: "construction",
-    subCategory: "ruins",
+      subscription: 'none',
+    },
+    {
+      name: "GrasslandRuinsSixRight",
+      backgroundObj: false,
+      img: GrasslandRuinsSixRight,
+      reverse:GrasslandRuinsSixLeft,
+      x: 0,
+      y: 0,
+      h: GrasslandRuinsSixRight.height,
+      w: GrasslandRuinsSixRight.width,
+      category: "construction",
+      subCategory: "ruins",
 
-    subscription: 'none',
-  },
-  {
-    name: "GrasslandRuinsSevenLeft",
-    backgroundObj: false,
-    img: GrasslandRuinsSevenLeft,
-    reverse:GrasslandRuinsSevenRight,
-    x: 0,
-    y: 0,
-    h: GrasslandRuinsSevenLeft.height,
-    w: GrasslandRuinsSevenLeft.width,
-    category: "construction",
-    subCategory: "ruins",
+      subscription: 'none',
+    },
+    {
+      name: "GrasslandRuinsSevenLeft",
+      backgroundObj: false,
+      img: GrasslandRuinsSevenLeft,
+      reverse:GrasslandRuinsSevenRight,
+      x: 0,
+      y: 0,
+      h: GrasslandRuinsSevenLeft.height,
+      w: GrasslandRuinsSevenLeft.width,
+      category: "construction",
+      subCategory: "ruins",
 
-    subscription: 'none',
-  },
-  {
-    name: "GrasslandRuinsHeightLeft",
-    backgroundObj: false,
-    img: GrasslandRuinsHeightLeft,
-    reverse:GrasslandRuinsHeightRight,
-    x: 0,
-    y: 0,
-    h: GrasslandRuinsHeightLeft.height,
-    w: GrasslandRuinsHeightLeft.width,
-    category: "construction",
-    subCategory: "ruins",
+      subscription: 'none',
+    },
+    {
+      name: "GrasslandRuinsHeightLeft",
+      backgroundObj: false,
+      img: GrasslandRuinsHeightLeft,
+      reverse:GrasslandRuinsHeightRight,
+      x: 0,
+      y: 0,
+      h: GrasslandRuinsHeightLeft.height,
+      w: GrasslandRuinsHeightLeft.width,
+      category: "construction",
+      subCategory: "ruins",
 
-    subscription: 'none',
-  },
-  {
-    name: "GrasslandRuinsNineRight",
-    backgroundObj: false,
-    img: GrasslandRuinsNineRight,
-    reverse:GrasslandRuinsNineLeft,
-    x: 0,
-    y: 0,
-    h: GrasslandRuinsNineRight.height,
-    w: GrasslandRuinsNineRight.width,
-    category: "construction",
-    subCategory: "ruins",
+      subscription: 'none',
+    },
+    {
+      name: "GrasslandRuinsNineRight",
+      backgroundObj: false,
+      img: GrasslandRuinsNineRight,
+      reverse:GrasslandRuinsNineLeft,
+      x: 0,
+      y: 0,
+      h: GrasslandRuinsNineRight.height,
+      w: GrasslandRuinsNineRight.width,
+      category: "construction",
+      subCategory: "ruins",
 
-    subscription: 'none',
-  },
-  {
-    name: "GrasslandRuinsTen",
-    backgroundObj: false,
-    img: GrasslandRuinsTen,
-    x: 0,
-    y: 0,
-    h: GrasslandRuinsTen.height,
-    w: GrasslandRuinsTen.width,
-    category: "construction",
-    subCategory: "ruins",
+      subscription: 'none',
+    },
+    {
+      name: "GrasslandRuinsTen",
+      backgroundObj: false,
+      img: GrasslandRuinsTen,
+      x: 0,
+      y: 0,
+      h: GrasslandRuinsTen.height,
+      w: GrasslandRuinsTen.width,
+      category: "construction",
+      subCategory: "ruins",
 
-    subscription: 'dev',
-  },
-  {
-    name: "blockersArea",
-    backgroundObj: false,
-    img: blockersArea,
-    x: 0,
-    y: 0,
-    h: blockersArea.height,
-    w: blockersArea.width,
-    category: "construction",
-    subCategory: "ruins",
+      subscription: 'dev',
+    },
+    {
+      name: "blockersArea",
+      backgroundObj: false,
+      img: blockersArea,
+      x: 0,
+      y: 0,
+      h: blockersArea.height,
+      w: blockersArea.width,
+      category: "construction",
+      subCategory: "ruins",
 
-    subscription: 'dev',
-  },
+      subscription: 'dev',
+    },
 
-  // furniture 
-  {
-    name: "redSmallCarpet",
-    backgroundObj: "back",
-    img: redSmallCarpet,
-    x: 0,
-    y: 0,
-    h: redSmallCarpet.height,
-    w: redSmallCarpet.width,
-    category: "furniture",
-    subCategory: "carpets",
+    // furniture 
+    {
+      name: "redSmallCarpet",
+      backgroundObj: "back",
+      img: redSmallCarpet,
+      x: 0,
+      y: 0,
+      h: redSmallCarpet.height,
+      w: redSmallCarpet.width,
+      category: "furniture",
+      subCategory: "carpets",
 
-    subscription: 'none',
-  },
-  {
-    name: "circleRedCarpet",
-    backgroundObj: "back",
-    img: circleRedCarpet,
-    x: 0,
-    y: 0,
-    h: circleRedCarpet.height,
-    w: circleRedCarpet.width,
-    category: "furniture",
-    subCategory: "carpets",
+      subscription: 'none',
+    },
+    {
+      name: "circleRedCarpet",
+      backgroundObj: "back",
+      img: circleRedCarpet,
+      x: 0,
+      y: 0,
+      h: circleRedCarpet.height,
+      w: circleRedCarpet.width,
+      category: "furniture",
+      subCategory: "carpets",
 
-    subscription: 'none',
-  },
-  {
-    name: "circlePinkCarpet",
-    backgroundObj: "back",
-    img: circlePinkCarpet,
-    x: 0,
-    y: 0,
-    h: circlePinkCarpet.height,
-    w: circlePinkCarpet.width,
-    category: "furniture",
-    subCategory: "carpets",
+      subscription: 'none',
+    },
+    {
+      name: "circlePinkCarpet",
+      backgroundObj: "back",
+      img: circlePinkCarpet,
+      x: 0,
+      y: 0,
+      h: circlePinkCarpet.height,
+      w: circlePinkCarpet.width,
+      category: "furniture",
+      subCategory: "carpets",
 
-    subscription: 'none',
-  },
-  {
-    name: "circleOrangeCarpet",
-    backgroundObj: "back",
-    img: circleOrangeCarpet,
-    x: 0,
-    y: 0,
-    h: circleOrangeCarpet.height,
-    w: circleOrangeCarpet.width,
-    category: "furniture",
-    subCategory: "carpets",
+      subscription: 'none',
+    },
+    {
+      name: "circleOrangeCarpet",
+      backgroundObj: "back",
+      img: circleOrangeCarpet,
+      x: 0,
+      y: 0,
+      h: circleOrangeCarpet.height,
+      w: circleOrangeCarpet.width,
+      category: "furniture",
+      subCategory: "carpets",
 
-    subscription: 'none',
-  },
-  {
-    name: "restfieldMallCarpetOne",
-    backgroundObj: "back",
-    img: restfieldMallCarpetOne,
-    x: 0,
-    y: 0,
-    h: restfieldMallCarpetOne.height,
-    w: restfieldMallCarpetOne.width,
-    category: "furniture",
-    subCategory: "carpets",
+      subscription: 'none',
+    },
+    {
+      name: "restfieldMallCarpetOne",
+      backgroundObj: "back",
+      img: restfieldMallCarpetOne,
+      x: 0,
+      y: 0,
+      h: restfieldMallCarpetOne.height,
+      w: restfieldMallCarpetOne.width,
+      category: "furniture",
+      subCategory: "carpets",
 
-    subscription: 'none',
-  },
-  {
-    name: "restfieldMallCarpetTwo",
-    backgroundObj: "back",
-    img: restfieldMallCarpetTwo,
-    x: 0,
-    y: 0,
-    h: restfieldMallCarpetTwo.height,
-    w: restfieldMallCarpetTwo.width,
-    category: "furniture",
-    subCategory: "carpets",
+      subscription: 'none',
+    },
+    {
+      name: "restfieldMallCarpetTwo",
+      backgroundObj: "back",
+      img: restfieldMallCarpetTwo,
+      x: 0,
+      y: 0,
+      h: restfieldMallCarpetTwo.height,
+      w: restfieldMallCarpetTwo.width,
+      category: "furniture",
+      subCategory: "carpets",
 
-    subscription: 'none',
-  },
+      subscription: 'none',
+    },
 
-  // furniture - chairs
-  {
-    name: "chairLeft",
-    backgroundObj: "back",
-    img: chairLeft,
-    reverse: chairRight,
-    x: 0,
-    y: 0,
-    h: chairLeft.height,
-    w: chairLeft.width,
-    category: "furniture",
-    subCategory: "chairs",
+    // furniture - chairs
+    {
+      name: "chairLeft",
+      backgroundObj: "back",
+      img: chairLeft,
+      reverse: chairRight,
+      x: 0,
+      y: 0,
+      h: chairLeft.height,
+      w: chairLeft.width,
+      category: "furniture",
+      subCategory: "chairs",
 
-    subscription: 'none',
-  },
-  {
-    name: "chairRight",
-    backgroundObj: "back",
-    img: chairRight,
-    x: 0,
-    y: 0,
-    h: chairRight.height,
-    w: chairRight.width,
-    category: "furniture",
-    subCategory: "chairs",
+      subscription: 'none',
+    },
+    {
+      name: "chairRight",
+      backgroundObj: "back",
+      img: chairRight,
+      x: 0,
+      y: 0,
+      h: chairRight.height,
+      w: chairRight.width,
+      category: "furniture",
+      subCategory: "chairs",
 
-    subscription: 'none',
-  },
+      subscription: 'none',
+    },
 
-  // furniture - decorations
-  {
-    name: "cauldron",
-    backgroundObj: "front",
-    img: cauldron,
-    lightSource: true,
-    animated: true,
-    x: 0,
-    y: 0,
-    h: 32,
-    w: 25,
-    category: "furniture",
-    subCategory: "decorations",
+    // furniture - decorations
+    {
+      name: "cauldron",
+      backgroundObj: "front",
+      img: cauldron,
+      lightSource: true,
+      animated: true,
+      x: 0,
+      y: 0,
+      h: 32,
+      w: 25,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "distributorPinkLeft",
-    backgroundObj: "front",
-    img: distributorPinkLeft,
-    reverse: distributorPinkRight,
-    lightSource: true,
-    x: 0,
-    y: 0,
-    h: distributorPinkLeft.height,
-    w: distributorPinkLeft.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "distributorPinkLeft",
+      backgroundObj: "front",
+      img: distributorPinkLeft,
+      reverse: distributorPinkRight,
+      lightSource: true,
+      x: 0,
+      y: 0,
+      h: distributorPinkLeft.height,
+      w: distributorPinkLeft.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "poleTwoLeft",
-    backgroundObj: "front",
-    img: poleTwoLeft,
-    reverse: poleTwoRight,
-    lightSource: true,
-    x: 0,
-    y: 0,
-    h: poleTwoLeft.height,
-    w: poleTwoLeft.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "poleTwoLeft",
+      backgroundObj: "front",
+      img: poleTwoLeft,
+      reverse: poleTwoRight,
+      lightSource: true,
+      x: 0,
+      y: 0,
+      h: poleTwoLeft.height,
+      w: poleTwoLeft.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "poleOne",
-    backgroundObj: "front",
-    img: poleOne,
-    lightSource: true,
-    x: 0,
-    y: 0,
-    h: poleOne.height,
-    w: poleOne.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "poleOne",
+      backgroundObj: "front",
+      img: poleOne,
+      lightSource: true,
+      x: 0,
+      y: 0,
+      h: poleOne.height,
+      w: poleOne.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "poleBank",
-    backgroundObj: "front",
-    img: poleBank,
-    x: 0,
-    y: 0,
-    h: poleBank.height,
-    w: poleBank.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "poleBank",
+      backgroundObj: "front",
+      img: poleBank,
+      x: 0,
+      y: 0,
+      h: poleBank.height,
+      w: poleBank.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "boxesOne",
-    backgroundObj: "front",
-    img: boxesOne,
-    x: 0,
-    y: 0,
-    h: boxesOne.height,
-    w: boxesOne.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "boxesOne",
+      backgroundObj: "front",
+      img: boxesOne,
+      x: 0,
+      y: 0,
+      h: boxesOne.height,
+      w: boxesOne.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "boxesTwo",
-    backgroundObj: "front",
-    img: boxesTwo,
-    x: 0,
-    y: 0,
-    h: boxesTwo.height,
-    w: boxesTwo.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "boxesTwo",
+      backgroundObj: "front",
+      img: boxesTwo,
+      x: 0,
+      y: 0,
+      h: boxesTwo.height,
+      w: boxesTwo.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "boxeWithFruitsLeft",
-    backgroundObj: "front",
-    img: boxeWithFruitsLeft,
-    reverse: boxeWithFruitsRight,
-    x: 0,
-    y: 0,
-    h: boxeWithFruitsLeft.height,
-    w: boxeWithFruitsLeft.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "boxeWithFruitsLeft",
+      backgroundObj: "front",
+      img: boxeWithFruitsLeft,
+      reverse: boxeWithFruitsRight,
+      x: 0,
+      y: 0,
+      h: boxeWithFruitsLeft.height,
+      w: boxeWithFruitsLeft.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "poleInformationLeft",
-    backgroundObj: "front",
-    img: poleInformationLeft,
-    reverse: poleInformationRight,
-    x: 0,
-    y: 0,
-    h: poleInformationLeft.height,
-    w: poleInformationLeft.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "poleInformationLeft",
+      backgroundObj: "front",
+      img: poleInformationLeft,
+      reverse: poleInformationRight,
+      x: 0,
+      y: 0,
+      h: poleInformationLeft.height,
+      w: poleInformationLeft.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "booksOne",
-    backgroundObj: "front",
-    img: booksOne,
-    x: 0,
-    y: 0,
-    h: booksOne.height,
-    w: booksOne.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "booksOne",
+      backgroundObj: "front",
+      img: booksOne,
+      x: 0,
+      y: 0,
+      h: booksOne.height,
+      w: booksOne.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "decoOne",
-    backgroundObj: "front",
-    img: decoOne,
-    x: 0,
-    y: 0,
-    h: decoOne.height,
-    w: decoOne.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "decoOne",
+      backgroundObj: "front",
+      img: decoOne,
+      x: 0,
+      y: 0,
+      h: decoOne.height,
+      w: decoOne.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "paintFour",
-    backgroundObj: "front",
-    img: paintFour,
-    x: 0,
-    y: 0,
-    h: paintFour.height,
-    w: paintFour.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "paintFour",
+      backgroundObj: "front",
+      img: paintFour,
+      x: 0,
+      y: 0,
+      h: paintFour.height,
+      w: paintFour.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "paintOne",
-    backgroundObj: "front",
-    img: paintOne,
-    x: 0,
-    y: 0,
-    h: paintOne.height,
-    w: paintOne.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "paintOne",
+      backgroundObj: "front",
+      img: paintOne,
+      x: 0,
+      y: 0,
+      h: paintOne.height,
+      w: paintOne.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "paintThree",
-    backgroundObj: "front",
-    img: paintThree,
-    x: 0,
-    y: 0,
-    h: paintThree.height,
-    w: paintThree.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "paintThree",
+      backgroundObj: "front",
+      img: paintThree,
+      x: 0,
+      y: 0,
+      h: paintThree.height,
+      w: paintThree.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "boxeWithFruitsTwoRight",
-    backgroundObj: "front",
-    img: boxeWithFruitsTwoRight,
-    reverse:boxeWithFruitsTwoLeft,
-    x: 0,
-    y: 0,
-    h: boxeWithFruitsTwoRight.height,
-    w: boxeWithFruitsTwoRight.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "boxeWithFruitsTwoRight",
+      backgroundObj: "front",
+      img: boxeWithFruitsTwoRight,
+      reverse:boxeWithFruitsTwoLeft,
+      x: 0,
+      y: 0,
+      h: boxeWithFruitsTwoRight.height,
+      w: boxeWithFruitsTwoRight.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "paintTwo",
-    backgroundObj: "front",
-    img: paintTwo,
-    x: 0,
-    y: 0,
-    h: paintTwo.height,
-    w: paintTwo.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "paintTwo",
+      backgroundObj: "front",
+      img: paintTwo,
+      x: 0,
+      y: 0,
+      h: paintTwo.height,
+      w: paintTwo.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "paperWallOne",
-    backgroundObj: "front",
-    img: paperWallOne,
-    x: 0,
-    y: 0,
-    h: paperWallOne.height,
-    w: paperWallOne.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "paperWallOne",
+      backgroundObj: "front",
+      img: paperWallOne,
+      x: 0,
+      y: 0,
+      h: paperWallOne.height,
+      w: paperWallOne.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "paperWallTwo",
-    backgroundObj: "front",
-    img: paperWallTwo,
-    x: 0,
-    y: 0,
-    h: paperWallTwo.height,
-    w: paperWallTwo.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "paperWallTwo",
+      backgroundObj: "front",
+      img: paperWallTwo,
+      x: 0,
+      y: 0,
+      h: paperWallTwo.height,
+      w: paperWallTwo.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "skeletonOne",
-    backgroundObj: "front",
-    img: skeletonOne,
-    reverse: skeletonOneReverse,
-    x: 0,
-    y: 0,
-    h: skeletonOne.height,
-    w: skeletonOne.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "skeletonOne",
+      backgroundObj: "front",
+      img: skeletonOne,
+      reverse: skeletonOneReverse,
+      x: 0,
+      y: 0,
+      h: skeletonOne.height,
+      w: skeletonOne.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "skeletonTwo",
-    backgroundObj: "front",
-    img: skeletonTwo,
-    reverse: skeletonTwoReverse,
-    x: 0,
-    y: 0,
-    h: skeletonTwo.height,
-    w: skeletonTwo.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "skeletonTwo",
+      backgroundObj: "front",
+      img: skeletonTwo,
+      reverse: skeletonTwoReverse,
+      x: 0,
+      y: 0,
+      h: skeletonTwo.height,
+      w: skeletonTwo.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "paintFive",
-    backgroundObj: "front",
-    img: paintFive,
-    x: 0,
-    y: 0,
-    h: paintFive.height,
-    w: paintFive.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "paintFive",
+      backgroundObj: "front",
+      img: paintFive,
+      x: 0,
+      y: 0,
+      h: paintFive.height,
+      w: paintFive.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "bankDragon",
-    backgroundObj: "front",
-    img: bankDragon,
-    x: 0,
-    y: 0,
-    h: bankDragon.height,
-    w: bankDragon.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "bankDragon",
+      backgroundObj: "front",
+      img: bankDragon,
+      x: 0,
+      y: 0,
+      h: bankDragon.height,
+      w: bankDragon.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "bankCharactere",
-    backgroundObj: "front",
-    img: bankCharactere,
-    x: 0,
-    y: 0,
-    h: bankCharactere.height,
-    w: bankCharactere.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "bankCharactere",
+      backgroundObj: "front",
+      img: bankCharactere,
+      x: 0,
+      y: 0,
+      h: bankCharactere.height,
+      w: bankCharactere.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "restfieldDecoration",
-    backgroundObj: "front",
-    img: restfieldDecoration,
-    x: 0,
-    y: 0,
-    h: restfieldDecoration.height,
-    w: restfieldDecoration.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "restfieldDecoration",
+      backgroundObj: "front",
+      img: restfieldDecoration,
+      x: 0,
+      y: 0,
+      h: restfieldDecoration.height,
+      w: restfieldDecoration.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "distributorPinkFront",
-    backgroundObj: "front",
-    img: distributorPinkFront,
-    x: 0,
-    y: 0,
-    h: distributorPinkFront.height,
-    w: distributorPinkFront.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "distributorPinkFront",
+      backgroundObj: "front",
+      img: distributorPinkFront,
+      x: 0,
+      y: 0,
+      h: distributorPinkFront.height,
+      w: distributorPinkFront.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "restfieldMallbooks",
-    backgroundObj: "front",
-    img: restfieldMallbooks,
-    reverse:restfieldMallbooksReverse,
-    x: 0,
-    y: 0,
-    h: restfieldMallbooks.height,
-    w: restfieldMallbooks.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "restfieldMallbooks",
+      backgroundObj: "front",
+      img: restfieldMallbooks,
+      reverse:restfieldMallbooksReverse,
+      x: 0,
+      y: 0,
+      h: restfieldMallbooks.height,
+      w: restfieldMallbooks.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "restfieldMallbooksTwo",
-    backgroundObj: "front",
-    img: restfieldMallbooksTwo,
-    reverse:restfieldMallbooksTwoReverse,
-    x: 0,
-    y: 0,
-    h: restfieldMallbooksTwo.height,
-    w: restfieldMallbooksTwo.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "restfieldMallbooksTwo",
+      backgroundObj: "front",
+      img: restfieldMallbooksTwo,
+      reverse:restfieldMallbooksTwoReverse,
+      x: 0,
+      y: 0,
+      h: restfieldMallbooksTwo.height,
+      w: restfieldMallbooksTwo.width,
+      category: "furniture",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "restfieldMallbooksThree",
-    backgroundObj: "front",
-    img: restfieldMallbooksThree,
-    x: 0,
-    y: 0,
-    h: restfieldMallbooksThree.height,
-    w: restfieldMallbooksThree.width,
-    category: "furniture",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "restfieldMallbooksThree",
+      backgroundObj: "front",
+      img: restfieldMallbooksThree,
+      x: 0,
+      y: 0,
+      h: restfieldMallbooksThree.height,
+      w: restfieldMallbooksThree.width,
+      category: "furniture",
+      subCategory: "decorations",
 
     subscription: 'none',
   },
@@ -5353,101 +5632,101 @@ socket.on("player", (serverPlayer) => {
     subscription: 'none',
   },
 
-  // furniture - kitchen
-  {
-    name: "cookingPotObj",
-    backgroundObj: false,
-    img: cookingPotObj,
-    x: 0,
-    y: 0,
-    h: 30,
-    w: 26,
-    lightSource: true,
-    animated: true,
-    category: "furniture",
-    subCategory: "kitchen",
+    // furniture - kitchen
+    {
+      name: "cookingPotObj",
+      backgroundObj: false,
+      img: cookingPotObj,
+      x: 0,
+      y: 0,
+      h: 30,
+      w: 26,
+      lightSource: true,
+      animated: true,
+      category: "furniture",
+      subCategory: "kitchen",
 
-    subscription: 'none',
-  },
+      subscription: 'none',
+    },
 
-  {
-    name: "potPlantFour",
-    backgroundObj: false,
-    img: potPlantFour,
-    x: 0,
-    y: 0,
-    h: potPlantFour.height,
-    w: potPlantFour.width,
-    category: "outdoor",
-    subCategory: "plants",
+    {
+      name: "potPlantFour",
+      backgroundObj: false,
+      img: potPlantFour,
+      x: 0,
+      y: 0,
+      h: potPlantFour.height,
+      w: potPlantFour.width,
+      category: "outdoor",
+      subCategory: "plants",
 
-    subscription: 'none',
-  },
+      subscription: 'none',
+    },
 
-  // furniture - storage
-  {
-    name: "shelves",
-    backgroundObj: false,
-    img: shelves,
-    x: 0,
-    y: 0,
-    h: shelves.height,
-    w: shelves.width,
-    category: "furniture",
-    subCategory: "storage",
+    // furniture - storage
+    {
+      name: "shelves",
+      backgroundObj: false,
+      img: shelves,
+      x: 0,
+      y: 0,
+      h: shelves.height,
+      w: shelves.width,
+      category: "furniture",
+      subCategory: "storage",
 
-    subscription: 'none',
-  },
-  {
-    name: "restfieldmallStorage",
-    backgroundObj: false,
-    img: restfieldmallStorage,
-    x: 0,
-    y: 0,
-    h: restfieldmallStorage.height,
-    w: restfieldmallStorage.width,
-    category: "furniture",
-    subCategory: "storage",
+      subscription: 'none',
+    },
+    {
+      name: "restfieldmallStorage",
+      backgroundObj: false,
+      img: restfieldmallStorage,
+      x: 0,
+      y: 0,
+      h: restfieldmallStorage.height,
+      w: restfieldmallStorage.width,
+      category: "furniture",
+      subCategory: "storage",
 
-    subscription: 'none',
-  },
-  {
-    name: "restfieldShelves",
-    backgroundObj: false,
-    img: restfieldShelves,
-    x: 0,
-    y: 0,
-    h: restfieldShelves.height,
-    w: restfieldShelves.width,
-    category: "furniture",
-    subCategory: "storage",
+      subscription: 'none',
+    },
+    {
+      name: "restfieldShelves",
+      backgroundObj: false,
+      img: restfieldShelves,
+      x: 0,
+      y: 0,
+      h: restfieldShelves.height,
+      w: restfieldShelves.width,
+      category: "furniture",
+      subCategory: "storage",
 
-    subscription: 'none',
-  },
-  {
-    name: "restfieldShelvesTwo",
-    backgroundObj: false,
-    img: restfieldShelvesTwo,
-    x: 0,
-    y: 0,
-    h: restfieldShelvesTwo.height,
-    w: restfieldShelvesTwo.width,
-    category: "furniture",
-    subCategory: "storage",
+      subscription: 'none',
+    },
+    {
+      name: "restfieldShelvesTwo",
+      backgroundObj: false,
+      img: restfieldShelvesTwo,
+      x: 0,
+      y: 0,
+      h: restfieldShelvesTwo.height,
+      w: restfieldShelvesTwo.width,
+      category: "furniture",
+      subCategory: "storage",
 
-    subscription: 'none',
-  },
-  {
-    name: "restfieldShelvesThree",
-    backgroundObj: false,
-    img: restfieldShelvesThree,
-    reverse:restfieldShelvesThreeReverse,
-    x: 0,
-    y: 0,
-    h: restfieldShelvesThree.height,
-    w: restfieldShelvesThree.width,
-    category: "furniture",
-    subCategory: "storage",
+      subscription: 'none',
+    },
+    {
+      name: "restfieldShelvesThree",
+      backgroundObj: false,
+      img: restfieldShelvesThree,
+      reverse:restfieldShelvesThreeReverse,
+      x: 0,
+      y: 0,
+      h: restfieldShelvesThree.height,
+      w: restfieldShelvesThree.width,
+      category: "furniture",
+      subCategory: "storage",
 
     subscription: 'none',
   },
@@ -5506,30 +5785,30 @@ socket.on("player", (serverPlayer) => {
     subscription: 'none',
   },
 
-  // furniture - tables
-  {
-    name: "woodTable",
-    backgroundObj: false,
-    img: woodTable,
-    x: 0,
-    y: 0,
-    h: woodTable.height,
-    w: woodTable.width,
-    category: "furniture",
-    subCategory: "tables",
+    // furniture - tables
+    {
+      name: "woodTable",
+      backgroundObj: false,
+      img: woodTable,
+      x: 0,
+      y: 0,
+      h: woodTable.height,
+      w: woodTable.width,
+      category: "furniture",
+      subCategory: "tables",
 
-    subscription: 'none',
-  },
-  {
-    name: "craftingTable",
-    backgroundObj: false,
-    img: craftingTable,
-    x: 0,
-    y: 0,
-    h: craftingTable.height,
-    w: craftingTable.width,
-    category: "furniture",
-    subCategory: "tables",
+      subscription: 'none',
+    },
+    {
+      name: "craftingTable",
+      backgroundObj: false,
+      img: craftingTable,
+      x: 0,
+      y: 0,
+      h: craftingTable.height,
+      w: craftingTable.width,
+      category: "furniture",
+      subCategory: "tables",
 
     subscription: 'none',
   },
@@ -5547,96 +5826,96 @@ socket.on("player", (serverPlayer) => {
     subscription: 'none',
   },
 
-  // outdoor - bush
-  {
-    name: "bushOne",
-    backgroundObj: false,
-    img: bushOne,
-    x: 0,
-    y: 0,
-    h: 19,
-    w: 22,
-    category: "outdoor",
-    subCategory: "plants",
+    // outdoor - bush
+    {
+      name: "bushOne",
+      backgroundObj: false,
+      img: bushOne,
+      x: 0,
+      y: 0,
+      h: 19,
+      w: 22,
+      category: "outdoor",
+      subCategory: "plants",
 
-    subscription: 'none',
-  },
+      subscription: 'none',
+    },
 
-  // outdoor - decorations
-  {
-    name: "cristalTwoLeft",
-    backgroundObj: false,
-    img: cristalTwoLeft,
-    reverse: cristalTwoRight,
-    x: 0,
-    y: 0,
-    h: cristalTwoLeft.height,
-    w: cristalTwoLeft.width,
-    lightSource: true,
-    animated: false,
-    category: "outdoor",
-    subCategory: "decorations",
+    // outdoor - decorations
+    {
+      name: "cristalTwoLeft",
+      backgroundObj: false,
+      img: cristalTwoLeft,
+      reverse: cristalTwoRight,
+      x: 0,
+      y: 0,
+      h: cristalTwoLeft.height,
+      w: cristalTwoLeft.width,
+      lightSource: true,
+      animated: false,
+      category: "outdoor",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "cristalOneRight",
-    backgroundObj: false,
-    img: cristalOneRight,
-    reverse: cristalOneLeft,
-    x: 0,
-    y: 0,
-    h: cristalOneRight.height,
-    w: cristalOneRight.width,
-    lightSource: true,
-    animated: false,
-    category: "outdoor",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "cristalOneRight",
+      backgroundObj: false,
+      img: cristalOneRight,
+      reverse: cristalOneLeft,
+      x: 0,
+      y: 0,
+      h: cristalOneRight.height,
+      w: cristalOneRight.width,
+      lightSource: true,
+      animated: false,
+      category: "outdoor",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "fishPond",
-    backgroundObj: false,
-    img: fishPond,
-    x: 0,
-    y: 0,
-    h: 30,
-    w: 30,
-    lightSource: false,
-    animated: true,
-    category: "outdoor",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "fishPond",
+      backgroundObj: false,
+      img: fishPond,
+      x: 0,
+      y: 0,
+      h: 30,
+      w: 30,
+      lightSource: false,
+      animated: true,
+      category: "outdoor",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
-  {
-    name: "orangeMushroom",
-    backgroundObj: false,
-    img: orangeMushroom,
-    x: 0,
-    y: 0,
-    h: orangeMushroom.height,
-    w: orangeMushroom.width,
-    lightSource: false,
-    animated: false,
-    category: "outdoor",
-    subCategory: "decorations",
+      subscription: 'none',
+    },
+    {
+      name: "orangeMushroom",
+      backgroundObj: false,
+      img: orangeMushroom,
+      x: 0,
+      y: 0,
+      h: orangeMushroom.height,
+      w: orangeMushroom.width,
+      lightSource: false,
+      animated: false,
+      category: "outdoor",
+      subCategory: "decorations",
 
-    subscription: 'members',
-  },
-  {
-    name: "redMushroom",
-    backgroundObj: false,
-    img: redMushroom,
-    x: 0,
-    y: 0,
-    h: redMushroom.height,
-    w: redMushroom.width,
-    lightSource: false,
-    animated: false,
-    category: "outdoor",
-    subCategory: "decorations",
+      subscription: 'members',
+    },
+    {
+      name: "redMushroom",
+      backgroundObj: false,
+      img: redMushroom,
+      x: 0,
+      y: 0,
+      h: redMushroom.height,
+      w: redMushroom.width,
+      lightSource: false,
+      animated: false,
+      category: "outdoor",
+      subCategory: "decorations",
 
     subscription: 'none',
   },
@@ -5686,559 +5965,559 @@ socket.on("player", (serverPlayer) => {
     subscription: 'none',
   },
 
-  // outdoor - fountains
-  {
-    name: "plazaFountain",
-    backgroundObj: false,
-    img: plazaFountain,
-    x: 0,
-    y: 0,
-    h: 84,
-    w: 131,
-    animated: true,
-    category: "outdoor",
-    subCategory: "decorations",
+    // outdoor - fountains
+    {
+      name: "plazaFountain",
+      backgroundObj: false,
+      img: plazaFountain,
+      x: 0,
+      y: 0,
+      h: 84,
+      w: 131,
+      animated: true,
+      category: "outdoor",
+      subCategory: "decorations",
 
-    subscription: 'none',
-  },
+      subscription: 'none',
+    },
 
-  // outdoor - furniture
-  {
-    name: "Resstfieldplatforme",
-    backgroundObj: true,
-    img: Resstfieldplatforme,
-    x: 0,
-    y: 0,
-    h: Resstfieldplatforme.height,
-    w: Resstfieldplatforme.width,
-    category: "outdoor",
-    subCategory: "furniture",
+    // outdoor - furniture
+    {
+      name: "Resstfieldplatforme",
+      backgroundObj: true,
+      img: Resstfieldplatforme,
+      x: 0,
+      y: 0,
+      h: Resstfieldplatforme.height,
+      w: Resstfieldplatforme.width,
+      category: "outdoor",
+      subCategory: "furniture",
 
-    subscription: 'none',
-  },
-  {
-    name: "ResstfieldStructure",
-    backgroundObj: false,
-    img: ResstfieldStructure,
-    reverse:ResstfieldStructureNoLight,
-    x: 0,
-    y: 0,
-    h: ResstfieldStructure.height,
-    w: ResstfieldStructure.width,
-    category: "outdoor",
-    subCategory: "furniture",
+      subscription: 'none',
+    },
+    {
+      name: "ResstfieldStructure",
+      backgroundObj: false,
+      img: ResstfieldStructure,
+      reverse:ResstfieldStructureNoLight,
+      x: 0,
+      y: 0,
+      h: ResstfieldStructure.height,
+      w: ResstfieldStructure.width,
+      category: "outdoor",
+      subCategory: "furniture",
 
-    subscription: 'none',
-  },
-  {
-    name: "flagLine",
-    backgroundObj: "front",
-    img: flagLine,
-    x: 0,
-    y: 0,
-    h: 26,
-    w: 123,
-    animated: true,
-    category: "outdoor",
-    subCategory: "furniture",
+      subscription: 'none',
+    },
+    {
+      name: "flagLine",
+      backgroundObj: "front",
+      img: flagLine,
+      x: 0,
+      y: 0,
+      h: 26,
+      w: 123,
+      animated: true,
+      category: "outdoor",
+      subCategory: "furniture",
 
-    subscription: 'none',
-  },
-  {
-    name: "tombstoneOne",
-    backgroundObj: "front",
-    img: tombstoneOne,
-    x: 0,
-    y: 0,
-    h: tombstoneOne.height,
-    w: tombstoneOne.width,
-    category: "outdoor",
-    subCategory: "furniture",
+      subscription: 'none',
+    },
+    {
+      name: "tombstoneOne",
+      backgroundObj: "front",
+      img: tombstoneOne,
+      x: 0,
+      y: 0,
+      h: tombstoneOne.height,
+      w: tombstoneOne.width,
+      category: "outdoor",
+      subCategory: "furniture",
 
-    subscription: 'none',
-  },
-  {
-    name: "tombstoneTwo",
-    backgroundObj: "front",
-    img: tombstoneTwo,
-    x: 0,
-    y: 0,
-    h: tombstoneTwo.height,
-    w: tombstoneTwo.width,
-    category: "outdoor",
-    subCategory: "furniture",
+      subscription: 'none',
+    },
+    {
+      name: "tombstoneTwo",
+      backgroundObj: "front",
+      img: tombstoneTwo,
+      x: 0,
+      y: 0,
+      h: tombstoneTwo.height,
+      w: tombstoneTwo.width,
+      category: "outdoor",
+      subCategory: "furniture",
 
-    subscription: 'none',
-  },
-  {
-    name: "tombstoneThree",
-    backgroundObj: "front",
-    img: tombstoneThree,
-    x: 0,
-    y: 0,
-    h: tombstoneThree.height,
-    w: tombstoneThree.width,
-    category: "outdoor",
-    subCategory: "furniture",
+      subscription: 'none',
+    },
+    {
+      name: "tombstoneThree",
+      backgroundObj: "front",
+      img: tombstoneThree,
+      x: 0,
+      y: 0,
+      h: tombstoneThree.height,
+      w: tombstoneThree.width,
+      category: "outdoor",
+      subCategory: "furniture",
 
-    subscription: 'none',
-  },
-  {
-    name: "tombstoneFour",
-    backgroundObj: "front",
-    img: tombstoneFour,
-    x: 0,
-    y: 0,
-    h: tombstoneFour.height,
-    w: tombstoneFour.width,
-    category: "outdoor",
-    subCategory: "furniture",
+      subscription: 'none',
+    },
+    {
+      name: "tombstoneFour",
+      backgroundObj: "front",
+      img: tombstoneFour,
+      x: 0,
+      y: 0,
+      h: tombstoneFour.height,
+      w: tombstoneFour.width,
+      category: "outdoor",
+      subCategory: "furniture",
 
-    subscription: 'none',
-  },
-  {
-    name: "tombstoneFive",
-    backgroundObj: "front",
-    img: tombstoneFive,
-    x: 0,
-    y: 0,
-    h: tombstoneFive.height,
-    w: tombstoneFive.width,
-    category: "outdoor",
-    subCategory: "furniture",
+      subscription: 'none',
+    },
+    {
+      name: "tombstoneFive",
+      backgroundObj: "front",
+      img: tombstoneFive,
+      x: 0,
+      y: 0,
+      h: tombstoneFive.height,
+      w: tombstoneFive.width,
+      category: "outdoor",
+      subCategory: "furniture",
 
-    subscription: 'none',
-  },
-  {
-    name: "tombstoneSix",
-    backgroundObj: "front",
-    img: tombstoneSix,
-    x: 0,
-    y: 0,
-    h: tombstoneSix.height,
-    w: tombstoneSix.width,
-    category: "outdoor",
-    subCategory: "furniture",
+      subscription: 'none',
+    },
+    {
+      name: "tombstoneSix",
+      backgroundObj: "front",
+      img: tombstoneSix,
+      x: 0,
+      y: 0,
+      h: tombstoneSix.height,
+      w: tombstoneSix.width,
+      category: "outdoor",
+      subCategory: "furniture",
 
-    subscription: 'none',
-  },
+      subscription: 'none',
+    },
 
-  // outdoor - grass
-  {
-    name: "dryGrass",
-    backgroundObj: false,
-    img: dryGrass,
-    x: 0,
-    y: 0,
-    h: 15,
-    w: 15,
-    lightSource: false,
-    animated: true,
-    category: "outdoor",
-    subCategory: "grass",
+    // outdoor - grass
+    {
+      name: "dryGrass",
+      backgroundObj: false,
+      img: dryGrass,
+      x: 0,
+      y: 0,
+      h: 15,
+      w: 15,
+      lightSource: false,
+      animated: true,
+      category: "outdoor",
+      subCategory: "grass",
 
-    subscription: 'none',
-  },
-  {
-    name: "grassOne",
-    backgroundObj: false,
-    img: grassOne,
-    x: 0,
-    y: 0,
-    h: 7,
-    w: 10,
-    category: "outdoor",
-    subCategory: "grass",
+      subscription: 'none',
+    },
+    {
+      name: "grassOne",
+      backgroundObj: false,
+      img: grassOne,
+      x: 0,
+      y: 0,
+      h: 7,
+      w: 10,
+      category: "outdoor",
+      subCategory: "grass",
 
-    subscription: 'none',
-  },
-  {
-    name: "whiteFlowers",
-    backgroundObj: true,
-    img: whiteFlowers,
-    x: 0,
-    y: 0,
-    h: 13,
-    w: 14,
-    category: "outdoor",
-    subCategory: "grass",
+      subscription: 'none',
+    },
+    {
+      name: "whiteFlowers",
+      backgroundObj: true,
+      img: whiteFlowers,
+      x: 0,
+      y: 0,
+      h: 13,
+      w: 14,
+      category: "outdoor",
+      subCategory: "grass",
 
-    subscription: 'none',
-  },
-  {
-    name: "yellowFlowers",
-    backgroundObj: true,
-    img: yellowFlowers,
-    x: 0,
-    y: 0,
-    h: yellowFlowers.height,
-    w: yellowFlowers.width,
-    category: "outdoor",
-    subCategory: "grass",
+      subscription: 'none',
+    },
+    {
+      name: "yellowFlowers",
+      backgroundObj: true,
+      img: yellowFlowers,
+      x: 0,
+      y: 0,
+      h: yellowFlowers.height,
+      w: yellowFlowers.width,
+      category: "outdoor",
+      subCategory: "grass",
 
-    subscription: 'none',
-  },
-  {
-    name: "patchOfGrass",
-    backgroundObj: true,
-    img: patchOfGrass,
-    x: 0,
-    y: 0,
-    h: patchOfGrass.height,
-    w: patchOfGrass.width,
-    category: "outdoor",
-    subCategory: "grass",
+      subscription: 'none',
+    },
+    {
+      name: "patchOfGrass",
+      backgroundObj: true,
+      img: patchOfGrass,
+      x: 0,
+      y: 0,
+      h: patchOfGrass.height,
+      w: patchOfGrass.width,
+      category: "outdoor",
+      subCategory: "grass",
 
-    subscription: 'none',
-  },
-  {
-    name: "RedFlowers",
-    backgroundObj: true,
-    img: RedFlowers,
-    x: 0,
-    y: 0,
-    h: RedFlowers.height,
-    w: RedFlowers.width,
-    category: "outdoor",
-    subCategory: "grass",
+      subscription: 'none',
+    },
+    {
+      name: "RedFlowers",
+      backgroundObj: true,
+      img: RedFlowers,
+      x: 0,
+      y: 0,
+      h: RedFlowers.height,
+      w: RedFlowers.width,
+      category: "outdoor",
+      subCategory: "grass",
 
-    subscription: 'none',
-  },
+      subscription: 'none',
+    },
 
-  // outdoor - plants
-  {
-    name: "vineTwo",
-    backgroundObj: "front",
-    img: vineTwo,
-    x: 0,
-    y: 0,
-    h: vineTwo.height,
-    w: vineTwo.width,
-    category: "outdoor",
-    subCategory: "plants",
+    // outdoor - plants
+    {
+      name: "vineTwo",
+      backgroundObj: "front",
+      img: vineTwo,
+      x: 0,
+      y: 0,
+      h: vineTwo.height,
+      w: vineTwo.width,
+      category: "outdoor",
+      subCategory: "plants",
 
-    subscription: 'none',
-  },
-  {
-    name: "vineOne",
-    backgroundObj: "front",
-    img: vineOne,
-    x: 0,
-    y: 0,
-    h: 12,
-    w: 42,
-    category: "outdoor",
-    subCategory: "plants",
+      subscription: 'none',
+    },
+    {
+      name: "vineOne",
+      backgroundObj: "front",
+      img: vineOne,
+      x: 0,
+      y: 0,
+      h: 12,
+      w: 42,
+      category: "outdoor",
+      subCategory: "plants",
 
-    subscription: 'none',
-  },
-  {
-    name: "hangingPlant",
-    backgroundObj: "front",
-    img: hangingPlant,
-    x: 0,
-    y: 0,
-    h: hangingPlant.height,
-    w: hangingPlant.width,
-    category: "outdoor",
-    subCategory: "plants",
+      subscription: 'none',
+    },
+    {
+      name: "hangingPlant",
+      backgroundObj: "front",
+      img: hangingPlant,
+      x: 0,
+      y: 0,
+      h: hangingPlant.height,
+      w: hangingPlant.width,
+      category: "outdoor",
+      subCategory: "plants",
 
-    subscription: 'none',
-  },
-  {
-    name: "hangingPlantRed",
-    backgroundObj: "front",
-    img: hangingPlantRed,
-    x: 0,
-    y: 0,
-    h: hangingPlantRed.height,
-    w: hangingPlantRed.width,
-    category: "outdoor",
-    subCategory: "plants",
+      subscription: 'none',
+    },
+    {
+      name: "hangingPlantRed",
+      backgroundObj: "front",
+      img: hangingPlantRed,
+      x: 0,
+      y: 0,
+      h: hangingPlantRed.height,
+      w: hangingPlantRed.width,
+      category: "outdoor",
+      subCategory: "plants",
 
-    subscription: 'none',
-  },
-  {
-    name: "potPlantThree",
-    backgroundObj: false,
-    img: potPlantThree,
-    x: 0,
-    y: 0,
-    h: potPlantThree.height,
-    w: potPlantThree.width,
-    category: "outdoor",
-    subCategory: "plants",
+      subscription: 'none',
+    },
+    {
+      name: "potPlantThree",
+      backgroundObj: false,
+      img: potPlantThree,
+      x: 0,
+      y: 0,
+      h: potPlantThree.height,
+      w: potPlantThree.width,
+      category: "outdoor",
+      subCategory: "plants",
 
-    subscription: 'none',
-  },
-  {
-    name: "potPlantTwo",
-    backgroundObj: false,
-    img: potPlantTwo,
-    x: 0,
-    y: 0,
-    h: potPlantTwo.height,
-    w: potPlantTwo.width,
-    category: "outdoor",
-    subCategory: "plants",
+      subscription: 'none',
+    },
+    {
+      name: "potPlantTwo",
+      backgroundObj: false,
+      img: potPlantTwo,
+      x: 0,
+      y: 0,
+      h: potPlantTwo.height,
+      w: potPlantTwo.width,
+      category: "outdoor",
+      subCategory: "plants",
 
-    subscription: 'none',
-  },
-  {
-    name: "potPlantOne",
-    backgroundObj: false,
-    img: potPlantOne,
-    x: 0,
-    y: 0,
-    h: potPlantOne.height,
-    w: potPlantOne.width,
-    category: "outdoor",
-    subCategory: "plants",
+      subscription: 'none',
+    },
+    {
+      name: "potPlantOne",
+      backgroundObj: false,
+      img: potPlantOne,
+      x: 0,
+      y: 0,
+      h: potPlantOne.height,
+      w: potPlantOne.width,
+      category: "outdoor",
+      subCategory: "plants",
 
-    subscription: 'none',
-  },
-  {
-    name: "bluePotPlant",
-    backgroundObj: false,
-    img: bluePotPlant,
-    x: 0,
-    y: 0,
-    h: bluePotPlant.height,
-    w: bluePotPlant.width,
-    category: "outdoor",
-    subCategory: "plants",
+      subscription: 'none',
+    },
+    {
+      name: "bluePotPlant",
+      backgroundObj: false,
+      img: bluePotPlant,
+      x: 0,
+      y: 0,
+      h: bluePotPlant.height,
+      w: bluePotPlant.width,
+      category: "outdoor",
+      subCategory: "plants",
 
-    subscription: 'none',
-  },
-  {
-    name: "redPotPlant",
-    backgroundObj: false,
-    img: redPotPlant,
-    x: 0,
-    y: 0,
-    h: redPotPlant.height,
-    w: redPotPlant.width,
-    category: "outdoor",
-    subCategory: "plants",
+      subscription: 'none',
+    },
+    {
+      name: "redPotPlant",
+      backgroundObj: false,
+      img: redPotPlant,
+      x: 0,
+      y: 0,
+      h: redPotPlant.height,
+      w: redPotPlant.width,
+      category: "outdoor",
+      subCategory: "plants",
 
-    subscription: 'none',
-  },
+      subscription: 'none',
+    },
 
-  // outdoor - rocks
-  {
-    name: "rockOne",
-    backgroundObj: false,
-    img: rockOne,
-    x: 0,
-    y: 0,
-    h: 27,
-    w: 35,
-    category: "outdoor",
-    subCategory: "rocks",
+    // outdoor - rocks
+    {
+      name: "rockOne",
+      backgroundObj: false,
+      img: rockOne,
+      x: 0,
+      y: 0,
+      h: 27,
+      w: 35,
+      category: "outdoor",
+      subCategory: "rocks",
 
-    subscription: 'none',
-  },
+      subscription: 'none',
+    },
 
-  // outdoor - trees
-  {
-    name: "treeOne",
-    backgroundObj: false,
-    img: treeOne,
-    x: 0,
-    y: 0,
-    h: 70,
-    w: 43,
-    category: "outdoor",
-    subCategory: "trees",
+    // outdoor - trees
+    {
+      name: "treeOne",
+      backgroundObj: false,
+      img: treeOne,
+      x: 0,
+      y: 0,
+      h: 70,
+      w: 43,
+      category: "outdoor",
+      subCategory: "trees",
 
-    subscription: 'none',
-  },
-  {
-    name: "restfieldBigTree",
-    backgroundObj: false,
-    img: restfieldBigTree,
-    x: 0,
-    y: 0,
-    h: restfieldBigTree.height,
-    w: restfieldBigTree.width,
-    category: "outdoor",
-    subCategory: "trees",
+      subscription: 'none',
+    },
+    {
+      name: "restfieldBigTree",
+      backgroundObj: false,
+      img: restfieldBigTree,
+      x: 0,
+      y: 0,
+      h: restfieldBigTree.height,
+      w: restfieldBigTree.width,
+      category: "outdoor",
+      subCategory: "trees",
 
-    subscription: 'member',
-  },
-  {
-    name: "restfieldDeadTreeOne",
-    backgroundObj: false,
-    img: restfieldDeadTreeOne,
-    x: 0,
-    y: 0,
-    h: restfieldDeadTreeOne.height,
-    w: restfieldDeadTreeOne.width,
-    category: "outdoor",
-    subCategory: "trees",
+      subscription: 'member',
+    },
+    {
+      name: "restfieldDeadTreeOne",
+      backgroundObj: false,
+      img: restfieldDeadTreeOne,
+      x: 0,
+      y: 0,
+      h: restfieldDeadTreeOne.height,
+      w: restfieldDeadTreeOne.width,
+      category: "outdoor",
+      subCategory: "trees",
 
-    subscription: 'member',
-  },
-  {
-    name: "restfieldDeadTreeTwo",
-    backgroundObj: false,
-    img: restfieldDeadTreeTwo,
-    x: 0,
-    y: 0,
-    h: restfieldDeadTreeTwo.height,
-    w: restfieldDeadTreeTwo.width,
-    category: "outdoor",
-    subCategory: "trees",
+      subscription: 'member',
+    },
+    {
+      name: "restfieldDeadTreeTwo",
+      backgroundObj: false,
+      img: restfieldDeadTreeTwo,
+      x: 0,
+      y: 0,
+      h: restfieldDeadTreeTwo.height,
+      w: restfieldDeadTreeTwo.width,
+      category: "outdoor",
+      subCategory: "trees",
 
-    subscription: 'member',
-  },
+      subscription: 'member',
+    },
 
-  // outdoor - water
-  {
-    name: "smallLake",
-    backgroundObj: true,
-    img: smallLake,
-    x: 0,
-    y: 0,
-    h: 112,
-    w: 112,
-    lightSource: false,
-    animated: true,
-    category: "outdoor",
-    subCategory: "water",
+    // outdoor - water
+    {
+      name: "smallLake",
+      backgroundObj: true,
+      img: smallLake,
+      x: 0,
+      y: 0,
+      h: 112,
+      w: 112,
+      lightSource: false,
+      animated: true,
+      category: "outdoor",
+      subCategory: "water",
 
-    subscription: 'none',
-  },
-  {
-    name: "smallLakeTwo",
-    backgroundObj: true,
-    img: smallLakeTwo,
-    x: 0,
-    y: 0,
-    h: 70,
-    w: 70,
-    lightSource: false,
-    animated: true,
-    category: "outdoor",
-    subCategory: "water",
+      subscription: 'none',
+    },
+    {
+      name: "smallLakeTwo",
+      backgroundObj: true,
+      img: smallLakeTwo,
+      x: 0,
+      y: 0,
+      h: 70,
+      w: 70,
+      lightSource: false,
+      animated: true,
+      category: "outdoor",
+      subCategory: "water",
 
-    subscription: 'none',
-  },
-  {
-    name: "smallLakeThree",
-    backgroundObj: true,
-    img: smallLakeThree,
-    x: 0,
-    y: 0,
-    h: 70,
-    w: 70,
-    lightSource: false,
-    animated: true,
-    category: "outdoor",
-    subCategory: "water",
+      subscription: 'none',
+    },
+    {
+      name: "smallLakeThree",
+      backgroundObj: true,
+      img: smallLakeThree,
+      x: 0,
+      y: 0,
+      h: 70,
+      w: 70,
+      lightSource: false,
+      animated: true,
+      category: "outdoor",
+      subCategory: "water",
 
-    subscription: 'none',
-  },
+      subscription: 'none',
+    },
 
-  // structure - chest
-  {
-    name: "chestCommon",
-    backgroundObj: false,
-    img: chestCommon,
-    x: 0,
-    y: 0,
-    h: 18,
-    w: 21,
-    lightSource: true,
-    animated: true,
-    category: "structure",
-    subCategory: "chest",
+    // structure - chest
+    {
+      name: "chestCommon",
+      backgroundObj: false,
+      img: chestCommon,
+      x: 0,
+      y: 0,
+      h: 18,
+      w: 21,
+      lightSource: true,
+      animated: true,
+      category: "structure",
+      subCategory: "chest",
 
-    subscription: 'none',
-  },
+      subscription: 'none',
+    },
 
-  // structure - enchanting
-  {
-    name: "enchantingTower",
-    backgroundObj: false,
-    img: enchantingTower,
-    x: 0,
-    y: 0,
-    h: 357,
-    w: 119,
-    category: "structure",
-    subCategory: "enchanting",
+    // structure - enchanting
+    {
+      name: "enchantingTower",
+      backgroundObj: false,
+      img: enchantingTower,
+      x: 0,
+      y: 0,
+      h: 357,
+      w: 119,
+      category: "structure",
+      subCategory: "enchanting",
 
-    subscription: 'dev',
-  },
-  {
-    name: "enchantingTable",
-    backgroundObj: false,
-    img: enchantingTable,
-    x: 0,
-    y: 0,
-    h: 72,
-    w: 75,
-    animated: true,
-    category: "structure",
-    subCategory: "enchanting",
+      subscription: 'dev',
+    },
+    {
+      name: "enchantingTable",
+      backgroundObj: false,
+      img: enchantingTable,
+      x: 0,
+      y: 0,
+      h: 72,
+      w: 75,
+      animated: true,
+      category: "structure",
+      subCategory: "enchanting",
 
-    subscription: 'dev',
-  },
+      subscription: 'dev',
+    },
 
-  // structure - kitchen
-  {
-    name: "cookingStand",
-    backgroundObj: false,
-    img: cookingStand,
-    reverse: cookingStandReverse,
-    x: 0,
-    y: 0,
-    h: cookingStand.height,
-    w: cookingStand.width,
-    category: "furniture",
-    subCategory: "kitchen",
+    // structure - kitchen
+    {
+      name: "cookingStand",
+      backgroundObj: false,
+      img: cookingStand,
+      reverse: cookingStandReverse,
+      x: 0,
+      y: 0,
+      h: cookingStand.height,
+      w: cookingStand.width,
+      category: "furniture",
+      subCategory: "kitchen",
 
-    subscription: 'dev',
-  },
+      subscription: 'dev',
+    },
 
-  // structure - BUILDING
-  {
-    name: "coffeOfGrassland",
-    backgroundObj: true,
-    img: coffeOfGrassland,
-    x: 0,
-    y: 0,
-    h: 131,
-    w: 145,
-    category: "structure",
-    subCategory: "building",
+    // structure - BUILDING
+    {
+      name: "coffeOfGrassland",
+      backgroundObj: true,
+      img: coffeOfGrassland,
+      x: 0,
+      y: 0,
+      h: 131,
+      w: 145,
+      category: "structure",
+      subCategory: "building",
 
-    subscription: 'dev',
-  },
-  {
-    name: "mushroomCastel",
-    backgroundObj: false,
-    img: mushroomCastel,
-    x: 0,
-    y: 0,
-    h: 239,
-    w: 249,
-    category: "structure",
-    subCategory: "building",
+      subscription: 'dev',
+    },
+    {
+      name: "mushroomCastel",
+      backgroundObj: false,
+      img: mushroomCastel,
+      x: 0,
+      y: 0,
+      h: 239,
+      w: 249,
+      category: "structure",
+      subCategory: "building",
 
-    subscription: 'dev',
-  },
-  {
-    name: "grasslandCristal",
-    backgroundObj: false,
-    img: grasslandCristal,
-    x: 0,
-    y: 0,
-    h: 186,
-    w: 116,
-    category: "structure",
-    subCategory: "building",
+      subscription: 'dev',
+    },
+    {
+      name: "grasslandCristal",
+      backgroundObj: false,
+      img: grasslandCristal,
+      x: 0,
+      y: 0,
+      h: 186,
+      w: 116,
+      category: "structure",
+      subCategory: "building",
 
     subscription: 'dev',
   },
@@ -6295,199 +6574,199 @@ socket.on("player", (serverPlayer) => {
     subscription: 'dev',
   },
 
-  //STRUCTURE BRIDGES
-  {
-    name: "grasslandBridgeBackOne",
-    backgroundObj: true,
-    img: grasslandBridgeBackOne,
-    x: 0,
-    y: 0,
-    h: grasslandBridgeBackOne.height,
-    w: grasslandBridgeBackOne.width,
-    category: "structure",
-    subCategory: "bridges",
+    //STRUCTURE BRIDGES
+    {
+      name: "grasslandBridgeBackOne",
+      backgroundObj: true,
+      img: grasslandBridgeBackOne,
+      x: 0,
+      y: 0,
+      h: grasslandBridgeBackOne.height,
+      w: grasslandBridgeBackOne.width,
+      category: "structure",
+      subCategory: "bridges",
 
-    subscription: 'dev',
-  },
-  {
-    name: "grasslandBridgeFrontOne",
-    backgroundObj: false,
-    img: grasslandBridgeFrontOne,
-    x: 0,
-    y: 0,
-    h: 70,
-    w: 35,
-    category: "structure",
-    subCategory: "bridges",
+      subscription: 'dev',
+    },
+    {
+      name: "grasslandBridgeFrontOne",
+      backgroundObj: false,
+      img: grasslandBridgeFrontOne,
+      x: 0,
+      y: 0,
+      h: 70,
+      w: 35,
+      category: "structure",
+      subCategory: "bridges",
 
-    subscription: 'dev',
-  },
-  {
-    name: "grasslandBridgeBackTwo",
-    backgroundObj: true,
-    img: grasslandBridgeBackTwo,
-    x: 0,
-    y: 0,
-    h: grasslandBridgeBackTwo.height,
-    w: grasslandBridgeBackTwo.width,
-    category: "structure",
-    subCategory: "bridges",
+      subscription: 'dev',
+    },
+    {
+      name: "grasslandBridgeBackTwo",
+      backgroundObj: true,
+      img: grasslandBridgeBackTwo,
+      x: 0,
+      y: 0,
+      h: grasslandBridgeBackTwo.height,
+      w: grasslandBridgeBackTwo.width,
+      category: "structure",
+      subCategory: "bridges",
 
-    subscription: 'dev',
-  },
-  {
-    name: "grasslandBridgeFrontTwo",
-    backgroundObj: false,
-    img: grasslandBridgeFrontTwo,
-    x: 0,
-    y: 0,
-    h: grasslandBridgeFrontTwo.height,
-    w: grasslandBridgeFrontTwo.width,
-    category: "structure",
-    subCategory: "bridges",
+      subscription: 'dev',
+    },
+    {
+      name: "grasslandBridgeFrontTwo",
+      backgroundObj: false,
+      img: grasslandBridgeFrontTwo,
+      x: 0,
+      y: 0,
+      h: grasslandBridgeFrontTwo.height,
+      w: grasslandBridgeFrontTwo.width,
+      category: "structure",
+      subCategory: "bridges",
 
-    subscription: 'dev',
-  },
+      subscription: 'dev',
+    },
 
-  //LIGHTS
-  //LANTERNS
-  {
-    name: "lanternOne",
-    backgroundObj: "front",
-    img: lanternOne,
-    x: 0,
-    y: 0,
-    h: lanternOne.height,
-    w: lanternOne.width,
-    category: "light",
-    subCategory: "lanterns",
+    //LIGHTS
+    //LANTERNS
+    {
+      name: "lanternOne",
+      backgroundObj: "front",
+      img: lanternOne,
+      x: 0,
+      y: 0,
+      h: lanternOne.height,
+      w: lanternOne.width,
+      category: "light",
+      subCategory: "lanterns",
 
-    subscription: 'none',
-  },
+      subscription: 'none',
+    },
 
-  //LAMPS LIGHT
-  {
-    name: "lightPoleOne",
-    backgroundObj: false,
-    img: lightPoleOne,
-    reverse:lightPoleOneReverse,
-    lightSource: true,
-    x: 0,
-    y: 0,
-    h: 52,
-    w: 22,
-    lightSource: true,
-    category: "light",
-    subCategory: "lamps",
+    //LAMPS LIGHT
+    {
+      name: "lightPoleOne",
+      backgroundObj: false,
+      img: lightPoleOne,
+      reverse:lightPoleOneReverse,
+      lightSource: true,
+      x: 0,
+      y: 0,
+      h: 52,
+      w: 22,
+      lightSource: true,
+      category: "light",
+      subCategory: "lamps",
 
-    subscription: 'none',
-  },
-  {
-    name: "restfieldPole",
-    backgroundObj: false,
-    img: restfieldPole,
-    lightSource: true,
-    x: 0,
-    y: 0,
-    h: restfieldPole.height,
-    w: restfieldPole.width,
-    lightSource: true,
-    category: "light",
-    subCategory: "lamps",
+      subscription: 'none',
+    },
+    {
+      name: "restfieldPole",
+      backgroundObj: false,
+      img: restfieldPole,
+      lightSource: true,
+      x: 0,
+      y: 0,
+      h: restfieldPole.height,
+      w: restfieldPole.width,
+      lightSource: true,
+      category: "light",
+      subCategory: "lamps",
 
-    subscription: 'none',
-  },
+      subscription: 'none',
+    },
 
-  {
-    name: "mediumTorch",
-    backgroundObj: false,
-    img: mediumTorch,
-    x: 0,
-    y: 0,
-    h: 26,
-    w: 11,
-    animated: true,
-    lightSource: true,
-    category: "light",
-    subCategory: "lamps",
+    {
+      name: "mediumTorch",
+      backgroundObj: false,
+      img: mediumTorch,
+      x: 0,
+      y: 0,
+      h: 26,
+      w: 11,
+      animated: true,
+      lightSource: true,
+      category: "light",
+      subCategory: "lamps",
 
-    subscription: 'none',
-  },
-  {
-    name: "restfieldLamp",
-    backgroundObj: false,
-    img: restfieldLamp,
-    x: 0,
-    y: 0,
-    h: restfieldLamp.height,
-    w: restfieldLamp.width,
-    animated: false,
-    lightSource: true,
-    category: "light",
-    subCategory: "lamps",
+      subscription: 'none',
+    },
+    {
+      name: "restfieldLamp",
+      backgroundObj: false,
+      img: restfieldLamp,
+      x: 0,
+      y: 0,
+      h: restfieldLamp.height,
+      w: restfieldLamp.width,
+      animated: false,
+      lightSource: true,
+      category: "light",
+      subCategory: "lamps",
 
-    subscription: 'member',
-  },
-  {
-    name: "restfielMallLight",
-    backgroundObj: false,
-    img: restfielMallLight,
-    x: 0,
-    y: 0,
-    h: restfielMallLight.height,
-    w: restfielMallLight.width,
-    animated: false,
-    lightSource: true,
-    category: "light",
-    subCategory: "lamps",
+      subscription: 'member',
+    },
+    {
+      name: "restfielMallLight",
+      backgroundObj: false,
+      img: restfielMallLight,
+      x: 0,
+      y: 0,
+      h: restfielMallLight.height,
+      w: restfielMallLight.width,
+      animated: false,
+      lightSource: true,
+      category: "light",
+      subCategory: "lamps",
 
-    subscription: 'member',
-  },
-  {
-    name: "mushroomPoleLeft",
-    backgroundObj: false,
-    img: mushroomPoleLeft,
-    reverse: mushroomPoleRight,
-    x: 0,
-    y: 0,
-    h: mushroomPoleLeft.height,
-    w: mushroomPoleLeft.width,
-    animated: false,
-    lightSource: true,
-    category: "light",
-    subCategory: "lamps",
+      subscription: 'member',
+    },
+    {
+      name: "mushroomPoleLeft",
+      backgroundObj: false,
+      img: mushroomPoleLeft,
+      reverse: mushroomPoleRight,
+      x: 0,
+      y: 0,
+      h: mushroomPoleLeft.height,
+      w: mushroomPoleLeft.width,
+      animated: false,
+      lightSource: true,
+      category: "light",
+      subCategory: "lamps",
 
-    subscription: 'none',
-  },
-  {
-    name: "lightpoleTwo",
-    backgroundObj: false,
-    img: lightpoleTwo,
-    x: 0,
-    y: 0,
-    h: lightpoleTwo.height,
-    w: lightpoleTwo.width,
-    animated: false,
-    lightSource: true,
-    category: "light",
-    subCategory: "lamps",
+      subscription: 'none',
+    },
+    {
+      name: "lightpoleTwo",
+      backgroundObj: false,
+      img: lightpoleTwo,
+      x: 0,
+      y: 0,
+      h: lightpoleTwo.height,
+      w: lightpoleTwo.width,
+      animated: false,
+      lightSource: true,
+      category: "light",
+      subCategory: "lamps",
 
-    subscription: 'none',
-  },
+      subscription: 'none',
+    },
 
-    //LAMPS ceiling LIGHT
-  {
-    name: "restfieldCeilingLamp",
-    backgroundObj: false,
-    img: restfieldCeilingLamp,
-    x: 0,
-    y: 0,
-    h: 87,
-    w: 30,
-    animated: true,
-    lightSource: true,
-    category: "light",
-    subCategory: "lamps",
+      //LAMPS ceiling LIGHT
+    {
+      name: "restfieldCeilingLamp",
+      backgroundObj: false,
+      img: restfieldCeilingLamp,
+      x: 0,
+      y: 0,
+      h: 87,
+      w: 30,
+      animated: true,
+      lightSource: true,
+      category: "light",
+      subCategory: "lamps",
 
     subscription: 'none',
   },
@@ -6525,47 +6804,54 @@ socket.on("player", (serverPlayer) => {
   },
   
 
-    //LAMPS spotlight
-  {
-    name: "christmasLightOne",
-    backgroundObj: false,
-    img: christmasLightOne,
-    x: 0,
-    y: 0,
-    h: christmasLightOne.height,
-    w: christmasLightOne.width,
-    animated: false,
-    lightSource: true,
-    category: "light",
-    subCategory: "spotlights",
+      //LAMPS spotlight
+    {
+      name: "christmasLightOne",
+      backgroundObj: false,
+      img: christmasLightOne,
+      x: 0,
+      y: 0,
+      h: christmasLightOne.height,
+      w: christmasLightOne.width,
+      animated: false,
+      lightSource: true,
+      category: "light",
+      subCategory: "spotlights",
 
-    subscription: 'none',
-  },
-  {
-    name: "christmasLightTwo",
-    backgroundObj: false,
-    img: christmasLightTwo,
-    x: 0,
-    y: 0,
-    h: christmasLightTwo.height,
-    w: christmasLightTwo.width,
-    animated: false,
-    lightSource: true,
-    category: "light",
-    subCategory: "spotlights",
+      subscription: 'none',
+    },
+    {
+      name: "christmasLightTwo",
+      backgroundObj: false,
+      img: christmasLightTwo,
+      x: 0,
+      y: 0,
+      h: christmasLightTwo.height,
+      w: christmasLightTwo.width,
+      animated: false,
+      lightSource: true,
+      category: "light",
+      subCategory: "spotlights",
 
-    subscription: 'none',
-  },
+      subscription: 'none',
+    },
 
-  ]
+    ]
 
     createImagesFromMapObjects(mapObject)
+
+    currentParty.push({
+      name: myPlayer.username,
+      id: myPlayer.id,
+      leader: true,
+    })
   }
 
 
   health()
   updateQuestUI()
   updateProgressBars()
+  updateInventoryUI()
   if (updateDialogs) {
     addMapsInfoToDiv()
     updateDialogs = false
@@ -6726,44 +7012,43 @@ socket.on("player", (serverPlayer) => {
     }
   }
 
-    if (myPlayer.armor.length) {
-      for (const item of myPlayer.armor) {
-        equippedItems[`soul`].style.background = `url(${item.image})`;
-        equippedItems[`soul`].style.backgroundSize = 'cover';
+  if (myPlayer.armor.length) {
+    for (const item of myPlayer.armor) {
+      equippedItems[`soul`].style.background = `url(${item.image})`;
+      equippedItems[`soul`].style.backgroundSize = 'cover';
 
-        if (item.name === "frogSoulInventory") {
-          uiSkinsImg.src = "./ui/uiSkins/uiFrogSkin.gif";
-        } 
-        else if (item.name === "redDemonSoulInventory") {
-          uiSkinsImg.src = "./ui/uiSkins/uiDemonSkin.gif";
-        }
-        else if (item.name === "restfieldSkeletonSoulInventory") {
-          uiSkinsImg.src = "./ui/uiSkins/uiSkeletonSkin.gif";
-        }
-        else if (item.name === "restfieldZombieSoulInventory") {
-          uiSkinsImg.src = "./ui/uiSkins/uiZombieSkin.gif";
-        }
-        else if (item.name === "vampiresSoulInventory") {
-          uiSkinsImg.src = "./ui/uiSkins/uiVampiresSkin.gif";
-        }
-        else if (item.name === "pinkDemonSoulInventory") {
-          uiSkinsImg.src = "./ui/uiSkins/uiPinkSkin.gif";
-        }
-        else if (item.name === "arcanyDemonSoulInventory") {
-          uiSkinsImg.src = "./ui/uiSkins/uiPurpleSkin.gif";
-        }
-        else if (item.name === "reaperSoulInventory") {
-          uiSkinsImg.src = "./ui/uiSkins/uiReaperSkin.gif";
-        }
-        else if (item.name === "ghostSoulInventory") {
-          uiSkinsImg.src = "./ui/uiSkins/uiGhostSkin.gif";
-        }
-        
-        }
-        } else {
-          uiSkinsImg.src = "./ui/uiSkins/uiHumanSkin.gif"
-        }
-
+      if (item.name === "frogSoulInventory") {
+        uiSkinsImg.src = "./ui/uiSkins/uiFrogSkin.gif";
+      } 
+      else if (item.name === "redDemonSoulInventory") {
+        uiSkinsImg.src = "./ui/uiSkins/uiDemonSkin.gif";
+      }
+      else if (item.name === "restfieldSkeletonSoulInventory") {
+        uiSkinsImg.src = "./ui/uiSkins/uiSkeletonSkin.gif";
+      }
+      else if (item.name === "restfieldZombieSoulInventory") {
+        uiSkinsImg.src = "./ui/uiSkins/uiZombieSkin.gif";
+      }
+      else if (item.name === "vampiresSoulInventory") {
+        uiSkinsImg.src = "./ui/uiSkins/uiVampiresSkin.gif";
+      }
+      else if (item.name === "pinkDemonSoulInventory") {
+        uiSkinsImg.src = "./ui/uiSkins/uiPinkSkin.gif";
+      }
+      else if (item.name === "arcanyDemonSoulInventory") {
+        uiSkinsImg.src = "./ui/uiSkins/uiPurpleSkin.gif";
+      }
+      else if (item.name === "reaperSoulInventory") {
+        uiSkinsImg.src = "./ui/uiSkins/uiReaperSkin.gif";
+      }
+      else if (item.name === "ghostSoulInventory") {
+        uiSkinsImg.src = "./ui/uiSkins/uiGhostSkin.gif";
+      }
+      
+      }
+  } else {
+    uiSkinsImg.src = "./ui/uiSkins/uiHumanSkin.gif"
+  }
 
   if (myPlayer.armor.length) {
     equippedItems[`soul`].addEventListener("mousedown", (e) => {
@@ -6801,36 +7086,66 @@ socket.on("player", (serverPlayer) => {
     equippedItems[`weapon`].style.background = `none`;
   }
 
-  // inventorySlots[`inventorySlot0`].style.background = `none`;
+  // if (myPlayer.inventory.length !== 0) {
+  //     for (let i = 0; i < 21; i++) {
 
-  if (myPlayer.inventory.length !== 0) {
-      // console.log(myPlayer.inventory)
-      for (let i = 0; i < 21; i++) {
+  //     if (myPlayer.inventory[i]) {
+  //       inventorySlots[`inventorySlot${i}`].src = myPlayer.inventory[i].image;
+  //     } else {
+  //       inventorySlots[`inventorySlot${i}`].src="data:image/svg+xml;charset=utf8,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%3E%3C/svg%3E";
+  //     }
 
-
-        if (myPlayer.inventory[i]) {
-          inventorySlots[`inventorySlot${i}`].src = myPlayer.inventory[i].image;
-        } else {
-          inventorySlots[`inventorySlot${i}`].src="data:image/svg+xml;charset=utf8,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%3E%3C/svg%3E";
-        }
-
-          function deleteInventoryReference () {
-            deleteInventory(myPlayer.inventory[i], i);
-            audioClick.play();
-          }
-          
-          if (deleting) {
-            inventorySlots[`inventorySlot${i}`].addEventListener("mousedown", deleteInventoryReference);
-          } else {            
-            inventorySlots[`inventorySlot${i}`].addEventListener("mousedown", (e) => {
-              interactInventory(myPlayer.inventory[i], i);
-              audioClick.play();
-            });
-          }
-      };
-    }
+  //     function deleteInventoryReference () {
+  //       deleteInventory(myPlayer.inventory[i], i);
+  //       audioClick.play();
+  //     }
+      
+  //     if (deleting) {
+  //       inventorySlots[`inventorySlot${i}`].addEventListener("mousedown", deleteInventoryReference);
+  //     } else {            
+  //       inventorySlots[`inventorySlot${i}`].addEventListener("mousedown", (e) => {
+  //         interactInventory(myPlayer.inventory[i], i);
+  //         audioClick.play();
+  //       });
+  //     }
+  //   };
+  // }
 
 });
+
+let previousInventory = [];
+
+function updateInventoryUI() {
+  const currentInventory = JSON.stringify(myPlayer.inventory);
+
+  if (currentInventory === JSON.stringify(previousInventory && !deleting)) return;
+
+  previousInventory = JSON.parse(currentInventory);
+
+  for (let i = 0; i < 21; i++) {
+    const slot = inventorySlots[`inventorySlot${i}`];
+    const item = myPlayer.inventory[i];
+
+    slot.src = item ? item.image : "data:image/svg+xml;charset=utf8,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%3E%3C/svg%3E";
+
+    const newSlot = slot.cloneNode(true);
+    slot.parentNode.replaceChild(newSlot, slot);
+
+    if (deleting) {
+      newSlot.addEventListener("mousedown", function deleteInventoryReference() {
+        deleteInventory(item, i);
+        audioClick.play();
+      });
+    } else {
+      newSlot.addEventListener("mousedown", () => {
+        interactInventory(item, i);
+        audioClick.play();
+      });
+    }
+
+    inventorySlots[`inventorySlot${i}`] = newSlot;
+  }
+}
 
 //Language Setting <
 
@@ -6918,6 +7233,11 @@ socket.on("obtained", (item) => {
   const image = item.image;
   obtainedAnim(image);
   socket.emit("updateServer");
+  updateInventoryUI()
+});
+
+socket.on("xp", (item) => {
+  playGainXP(item)
 });
 
 socket.on("xp", (item) => {
@@ -6977,7 +7297,6 @@ socket.on("updateMap", (map) => {
 let mapsInfo = {};
 
 socket.on("loadMap", (map) => {
-  console.log(map)
   let comingMap = map
   let areaNameComing = comingMap.areaName
 
@@ -6988,7 +7307,7 @@ socket.on("loadMap", (map) => {
     comingMap.playerPos = mapsInfo[areaNameComing].playerPos
   }
 
-  mapsInfo[currentLand].playerPos = {x: localPlayerPos.x, y: localPlayerPos.y}
+  if (!inParty) mapsInfo[currentLand].playerPos = {x: localPlayerPos.x, y: localPlayerPos.y}
 
   currentLand = areaNameComing
   mapsInfo[areaNameComing] = comingMap
@@ -7127,6 +7446,8 @@ let wallsVisibility = 0;
 
 let fishingFrame = 1;
 let fishable = false;
+
+let monsterAltar = false;
 
 // setInterval(() => {
 //   playerLocation = [playerX, playerY];
@@ -7327,6 +7648,40 @@ window.addEventListener("keydown", (e) => {
   }
 
   //Shop grasslands open <
+ 
+  //Shop grasslands open >
+
+  if(e?.key?.toLowerCase() === "e" && monsterAltar) {
+    const areaBoss = mapsInfo[currentLand].enemies.find(
+      enemy => enemy.isBoss === true && enemy.active === false
+    );
+    let itemToActivate = null;
+    for (const item of myPlayer.inventory) {
+      if (item.name === monsterAltar) {
+        itemToActivate = myPlayer.inventory.indexOf(item);
+      }
+    }
+    if (areaBoss) {
+      if (itemToActivate) {
+        if ((inParty && isLeader) || !inParty)  {
+          socket.emit("toDelete", [itemToActivate]);
+          if (inParty && isLeader) {
+            socket.emit("leaderActivatedBoss", currentParty);
+          } else {
+            activateBossEnemy(areaBoss)
+          }
+        } else {
+        errorDisplay("Only the party leader can do offerings")
+        }
+      } else {
+        errorDisplay("You don't have the required item")
+      }
+    } else {
+      errorDisplay("There is no area boss at the moment")
+    }
+  }
+
+  //Shop grasslands open <
   
   //Cooking grasslands open >
 
@@ -7498,6 +7853,19 @@ function shootDefaultArcane () {
         playerId: socket.id,
         damage: myPlayer?.weapon[0].damage,
     });
+
+    let toSend = [
+      currentParty, 
+      {
+        angle: bulletAngle,
+        x: playerX + 20,
+        y: playerY + 50,
+        timeLeft: myPlayer?.weapon[0].range,
+        playerId: socket.id,
+        damage: myPlayer?.weapon[0].damage,
+      }]
+
+    if (inParty) socket.emit("partyProjectile", toSend)
 }
 
 
@@ -8057,6 +8425,8 @@ let transitionType = "liquid"
 let transitionTimeout = false;
 
 function transition (format) {
+  if (!isLeader && inParty) return;
+
   if (format === "arcane") {
     transitionArcane()
   }
@@ -8089,6 +8459,12 @@ function changeMap (dynamicFunctionName) {
   // } else {
   //   console.error(`${dynamicFunctionName} is not a valid function`);
   // }
+}
+function changeMapClient (dynamicFunctionName) {
+  socket.emit("requestChangeRoom", dynamicFunctionName);
+    setTimeout(() => {
+      transitionTimeout = false;
+    }, 5000);
 }
 function transitionArcane () {
 
@@ -8137,18 +8513,47 @@ function transitionLiquid() {
       liquidOverlay.style.background = `url(${newGifUrl})`;
     }, 10); 
 
+    
     liquidOverlay.style.display = "block";
     
     const dynamicFunctionName = currentSelectedMap + "Loop";    
     setTimeout(() => {
       changeMap(dynamicFunctionName);
       socket.emit("changeRoom", currentSelectedMap);
+      socket.emit("leaderChangeRoom", [currentSelectedMap, currentParty, playerX, playerY])
     }, 1800);   
     
     setTimeout(() => {
       liquidOverlay.style.display = "none";
     }, 3900);
   }
+}
+
+function transitionLiquidInstant(passedMap) {
+    movezone.play()
+    
+    const gifUrl = "./Textures/liquidTransition.gif"; // Remove `url("")` from the string
+    const newGifUrl = gifUrl + "?" + new Date().getTime(); // Append a timestamp to force reload
+    
+    liquidOverlay.style.background = 'none'; 
+
+    console.log(passedMap)
+    
+    setTimeout(() => {
+      liquidOverlay.style.background = `url(${newGifUrl})`;
+    }, 10); 
+
+    liquidOverlay.style.display = "block";
+
+    setTimeout(() => {
+      changeMapClient(passedMap);
+      socket.emit("changeRoom", passedMap);
+    }, 1800);   
+    
+    setTimeout(() => {
+      liquidOverlay.style.display = "none";
+    }, 3900);
+  
 }
 
 arcaneTransition.style.backgroundColor = "rgba(170, 233, 170, 1)"
@@ -8260,6 +8665,23 @@ errorPopUp.style.filter = color ? color : "none";
 setTimeout(() => {
     errorPopUp.style.opacity = 0;
 }, 4000);
+}
+
+let partyInvite;
+
+function partyAddNotificationDisplay(name) {
+
+partyPopUp.textContent = name;
+
+partyPopUp.style.opacity = 1;
+partyPopUp.style.transition = "opacity 1s ease"; 
+partyPopUp.style.pointerEvents = "all"; 
+
+setTimeout(() => {
+  partyPopUp.style.opacity = 0;
+  partyPopUp.style.pointerEvents = "none"; 
+    partyInvite = null;
+}, 8000);
 }
 
 // Sounds <
@@ -8522,7 +8944,7 @@ canvasLobby.addEventListener('click', function(event) {
 
     if(rotateObj && objClone.reverse){
       objClone.img = objClone.reverse
-      console.log(rotateObj, objClone.img, objClone.reverse)
+      objClone.reversed = true;
     }
 
     mapsInfo[currentLand].objects[currentSelectedObjLayer].push(objClone)
@@ -8538,6 +8960,29 @@ canvasLobby.addEventListener('click', function(event) {
   }
 
 
+  else if (!currentlyPlacingWall && currentDevAction === "monsterAltar" && currentSelectedWall === null) {
+    selectedXcoord = hoveredXCoord;
+    selectedYcoord = hoveredYCoord;
+    currentlyPlacingWall = true;
+  }
+  else if (currentSelectedWall === null && currentlyPlacingWall && currentDevAction === "monsterAltar") {
+    const x = hoveredXCoord;
+    const y = hoveredYCoord;
+    const newWidth = x - selectedXcoord;
+    const newHeight = y - selectedYcoord;
+    
+    mapsInfo[currentLand].colliders.push({
+      type: "monsterAltar",
+      requiredItem: selectedDevItem,
+      x: selectedXcoord,
+      y: selectedYcoord,
+      width: newWidth,
+      height: newHeight,
+      color: `rgb(51, 102, 255, ${wallsVisibility})`
+    })
+    currentlyPlacingWall = false;
+  }
+  
   else if (!currentlyPlacingWall && currentDevAction === "fish" && currentSelectedWall === null) {
     selectedXcoord = hoveredXCoord;
     selectedYcoord = hoveredYCoord;
@@ -8809,22 +9254,24 @@ function calculateValue(resolution) {
 // UI DEV COMMENT >
 
 function deselectUiButton() {
-  placeWalls.style.backgroundColor = "transparent"
-  deleteWalls.style.backgroundColor = "transparent"
+  // console.log("DESELECTING ALL")
+  // currentDevAction = ""
+  monsterLoot.style.display = "none"
+  placeWalls.style.backgroundColor = "#ffe2c1"
+  deleteWalls.style.backgroundColor = "#ffe2c1"
   deleteObjButtonUi.style.backgroundColor = "#ffe2c1"
-  placeFishingArea.style.backgroundColor = "transparent"
-  placeEnchantingArea.style.backgroundColor = "transparent"
-  placeCookingArea.style.backgroundColor = "transparent"
-  hammerButtonUi.style.backgroundColor = "transparent"
-  placeTransition.style.backgroundColor = "transparent"
-  createMapButtonUi.style.backgroundColor = "transparent"
-  placeCraftingArea.style.backgroundColor = "transparent"
-  placeFishingArea.style.backgroundColor = "transparent"
-  placeEnchantingArea.style.backgroundColor = "transparent"
-  placeCookingArea.style.backgroundColor = "transparent"
-  editMapsButtonUi.style.backgroundColor = "transparent"
-  placeMobButtonUi.style.backgroundColor = "transparent"
-  placeAreaButton.style.backgroundColor = "transparent"
+  placeFishingArea.style.backgroundColor = "#ffe2c1"
+  placeEnchantingArea.style.backgroundColor = "#ffe2c1"
+  placeCookingArea.style.backgroundColor = "#ffe2c1"
+  hammerButtonUi.style.backgroundColor = "#ffe2c1"
+  placeTransition.style.backgroundColor = "#ffe2c1"
+  createMapButtonUi.style.backgroundColor = "#ffe2c1"
+  placeCraftingArea.style.backgroundColor = "#ffe2c1"
+  placeFishingArea.style.backgroundColor = "#ffe2c1"
+  placeEnchantingArea.style.backgroundColor = "#ffe2c1"
+  placeCookingArea.style.backgroundColor = "#ffe2c1"
+  editMapsButtonUi.style.backgroundColor = "#ffe2c1"
+  placeMobButtonUi.style.backgroundColor = "#ffe2c1"
   uiBuildingObjects.style.display = "none";
   uiBuildingCategory.style.display = "none";
   roomsDiv.style.display = "none"
@@ -8834,42 +9281,9 @@ function deselectUiButton() {
   monsterCreationParent.style.display = "none"
   editMapsPage.style.display = "none"
   placeArea.style.display = "none"
-  openUi()
+  uiBuildingVisible = true
 }
 
-placeWalls.addEventListener("click", function() {
-  if (currentDevAction !== "wall") {
-  currentSelectedWall = null
-  showWallsFunction(true)
-  currentDevAction = "wall";
-  roomsDiv.style.display = "none"
-  dialogsDiv.style.display = "none"
-  deselectUiButton()
-  placeWalls.style.backgroundColor = "rgba(170, 233, 170, 1)"
-} else {
-  showWallsFunction(false)
-  deselectUiButton()
-  currentDevAction = "none";
- }
-});
-
-deleteWalls.addEventListener("click", function() {
-  showWallsFunction(true)
-  if (currentDevAction !== "delete") {
-    currentDevAction = "delete";
-    roomsDiv.style.display = "none"
-    dialogsDiv.style.display = "none"
-    
-    deselectUiButton()
-    deleteWalls.style.backgroundColor = "rgba(170, 233, 170, 1)"
-  } else {
-    showWallsFunction(false)
-    deselectUiButton()
-    currentDevAction = "none";
-  }
-});
-
-let deleteObject = false
 let rotateObj = false
 
 rotateObjButtonUi.addEventListener("click", function(){
@@ -8877,8 +9291,10 @@ rotateObjButtonUi.addEventListener("click", function(){
   playRandomPop()
   if(!rotateObj){
     rotateObj = true
+    rotateObjButtonUi.style.backgroundColor = "rgba(170, 233, 170, 1)"
   } else {
     rotateObj = false
+    rotateObjButtonUi.style.backgroundColor = "#ffe2c1"
   }
   
 });
@@ -8887,16 +9303,17 @@ deleteObjButtonUi.addEventListener("click", function() {
   showWallsFunction(false)
   playRandomPop()
 if(deleteObject === false) {
+  deselectUiButton()
   roomsDiv.style.display = "none"
   dialogsDiv.style.display = "none"
   currentDevAction = "deleteObj"
 
-  deselectUiButton()
   hammerButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
   deleteObjButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
   uiBuildingObjects.style.display = "flex";
   uiBuildingCategory.style.display = "flex";
   deleteObject = true;
+
 }else if (deleteObject === true) {
   deleteObject = false;
   deleteObjButtonUi.style.backgroundColor = "#ffe2c1"
@@ -8904,24 +9321,37 @@ if(deleteObject === false) {
 }
 });
 
-placeAreaButton.addEventListener("click", function(){
-  showWallsFunction(false)
-  playRandomPop()
-  if(currentDevAction !== "placeArea"){
+layerOneButtonUi.addEventListener("click", function() {
+  if(currentSelectedObjLayer !== 2){
+    currentSelectedObjLayer = 2;
     deselectUiButton()
-    currentDevAction = "placeArea"
-    placeAreaButton.style.backgroundColor = "rgb(148, 223, 148)"
-    placeArea.style.display = "flex"
-  } else {
-    placeArea.style.display = "none"
-    placeAreaButton.style.backgroundColor = "transparent"
-    currentDevAction = "none"
-  }
+    layerThreeButtonUi.style.backgroundColor = "#ffe2c1"
+    layerOneButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
+    currentDevAction = "building";
+    hammerButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
+    uiBuildingObjects.style.display = "flex";
+    uiBuildingCategory.style.display = "flex";
+    
+  } 
+});
+layerThreeButtonUi.addEventListener("click", function() {
+  if(currentSelectedObjLayer !== 0){
+    deselectUiButton()
+    currentSelectedObjLayer = 0;
+    layerThreeButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
+    layerOneButtonUi.style.backgroundColor = "#ffe2c1"
+    currentDevAction = "building";
+    hammerButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
+    uiBuildingObjects.style.display = "flex";
+    uiBuildingCategory.style.display = "flex";
+  } 
+
 })
 
 editMapsButtonUi.addEventListener("click", function(){
   showWallsFunction(false)
   playRandomPop()
+  uiBuildingCategoryDivVisibility.style.display = "none"
   if(currentDevAction !== "editmap"){
     deselectUiButton()
     currentDevAction = "editmap"
@@ -8929,7 +9359,7 @@ editMapsButtonUi.addEventListener("click", function(){
     editMapsButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
   } else {
     editMapsPage.style.display = "none"
-    editMapsButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    editMapsButtonUi.style.backgroundColor = "#FFE2C1"
     currentDevAction = "none"
   }
 })
@@ -8939,12 +9369,13 @@ editMapsDeleteObj.addEventListener("click", function(){
   playRandomPop()
   popupDeleteAllObjParent.style.display = "flex"
   popUpBlackscreen.style.display = "flex"
+  uiBuildingCategoryDivVisibility.style.display = "none"
 })
 
 closeEditMapsTitle.addEventListener("click", function(){
   playRandomPop()
   editMapsPage.style.display = "none"
-  editMapsButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
+  editMapsButtonUi.style.backgroundColor = "#FFE2C1"
   currentDevAction = "none"
 })
 
@@ -8964,6 +9395,11 @@ deleteAllObjButtonCancel.addEventListener("click", function(){
 saveObjButtonUi.addEventListener("click", function() {
   playRandomPop()
   showWallsFunction(false);
+  console.log(mapsInfo[currentLand])
+  for (let enemy of mapsInfo[currentLand].enemies) {
+    enemy.stateTimer = 0;
+    enemy.spawn = _.cloneDeep(enemy.baseSpawn)
+  }
   socket.emit("saveWorld", mapsInfo[currentLand]);
   errorDisplay("Saving map")
 });
@@ -8976,9 +9412,10 @@ sapwnButtonUi.addEventListener("click", function() {
 
 createMapButtonUi.addEventListener("click", function() {
   showWallsFunction(false);
+  uiBuildingCategoryDivVisibility.style.display = "none"
   if (mapInfoDiv.style.display === "flex") {
     mapInfoDiv.style.display = "none"
-    createMapButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    createMapButtonUi.style.backgroundColor = "#ffe2c1"
     noMovement = false
   } else {
     deselectUiButton()
@@ -8989,7 +9426,7 @@ createMapButtonUi.addEventListener("click", function() {
 });
 
 createMapButton.addEventListener("click", function() {
-  showWallsFunction(false);
+  showWallsFunction(false);uiBuildingCategoryDivVisibility.style.display = "none"
   worldInfo = {
     title: mapNameInput.value,
     desc: mapDescInput.value
@@ -9000,122 +9437,58 @@ createMapButton.addEventListener("click", function() {
   noMovement = false
 });
 
-placeFishingArea.addEventListener("click", function() {
-  if (currentDevAction !== "fish") {
-    currentDevAction = "fish";
-    deselectUiButton()
-    placeFishingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
-    showWallsFunction(true)
+let uiBuildingVisible = true
+
+function uiConstructionIsVisible () {
+  if(uiBuildingVisible){
+    uiBuildingVisible = false
+    uiConstructionVisibility.src = "./icons/uiIcon/notVisibleIcon.png"
+    uiBuildingObjects.style.right = "-350px"
+    uiBuildingCategory.style.right = "-370px"
+    uiBuildingCategoryDivVisibility.style.right = "15px"
   } else {
-    currentDevAction = "none";
-    placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-    showWallsFunction(false)
+    uiBuildingVisible = true
+    uiConstructionVisibility.src = "./icons/uiIcon/visibleIcon.png"
+    uiBuildingObjects.style.right = "10px"
+    uiBuildingCategory.style.right = "325px"
+    uiBuildingCategoryDivVisibility.style.right = "480px"
   }
-});
-
-placeEnchantingArea.addEventListener("click", function() {
-if (currentDevAction !== "enchanting") {
-  currentDevAction = "enchanting";
-  deselectUiButton()
-  placeEnchantingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
-  showWallsFunction(true)
-} else {
-  currentDevAction = "none";
-  placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  showWallsFunction(false)
 }
+
+uiConstructionVisibility.addEventListener("click", function() {
+  uiConstructionIsVisible ()
 });
 
-placeCookingArea.addEventListener("click", function() {
-if (currentDevAction !== "cook") {
-  currentDevAction = "cook";
-  deselectUiButton()
-  placeCookingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
-  showWallsFunction(true)
-} else {
-  currentDevAction = "none";
-  placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  showWallsFunction(false)
-}
-});
-
-hammerButtonUi.addEventListener("click", function() {
+informationButton.addEventListener("click", function() {
   showWallsFunction(false)
   playRandomPop()
-  if (currentDevAction !== "building") {
-    currentDevAction = "building";
-    deselectUiButton()
-    cancelUi()
-    uiBuildingObjects.style.display = "flex";
-    uiBuildingCategory.style.display = "flex";
-    hammerButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
-    
-  } else {
-    openUi()
-    currentDevAction = "none";
-    uiBuildingObjects.style.display = "none";
-    uiBuildingCategory.style.display = "none";
-    hammerButtonUi.style.backgroundColor = "#ffe2c1"
-  }
-});
+  deselectUiButton()
 
-layerOneButtonUi.addEventListener("click", function() {
-  if(currentSelectedObjLayer !== 2){
-    currentSelectedObjLayer = 2;
-    deselectUiButton()
-    layerThreeButtonUi.style.backgroundColor = "#ffe2c1"
-    layerTwoButtonUi.style.backgroundColor = "#ffe2c1"
-    layerOneButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
-    currentDevAction = "building";
-    hammerButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
-    uiBuildingObjects.style.display = "flex";
-    uiBuildingCategory.style.display = "flex";
-    
-  } 
-});
-layerTwoButtonUi.addEventListener("click", function() {
-  if(currentSelectedObjLayer !== 1){
-    deselectUiButton()
-    currentSelectedObjLayer = 1;
-    layerThreeButtonUi.style.backgroundColor = "#ffe2c1"
-    layerTwoButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
-    layerOneButtonUi.style.backgroundColor = "#ffe2c1"
-    currentDevAction = "building";
-    hammerButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
-    uiBuildingObjects.style.display = "flex";
-    uiBuildingCategory.style.display = "flex";
-  } 
- 
-});
-layerThreeButtonUi.addEventListener("click", function() {
-  if(currentSelectedObjLayer !== 0){
-    deselectUiButton()
-    currentSelectedObjLayer = 0;
-    layerThreeButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
-    layerTwoButtonUi.style.backgroundColor = "#ffe2c1"
-    layerOneButtonUi.style.backgroundColor = "#ffe2c1"
-    currentDevAction = "building";
-    hammerButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
-    uiBuildingObjects.style.display = "flex";
-    uiBuildingCategory.style.display = "flex";
-  } 
+  currentDevAction = "none";
+  uiBuilding.style.display = "none"
+  uiBuildingObjects.style.display = "none"
+  uiBuildingCategory.style.display = "none";
+  informationButton.style.display = "none"
+  uiBuildingCategoryDivVisibility.style.display = "none"
+  uiBuildingVisible = false
 
-});
+  openUi()
+})
 
 startBuildingBut.addEventListener("click", function() {
   playRandomPop()
+  cancelUi()
+  deselectUiButton()
+  uiBuildingCategoryDivVisibility.style.display = "none"
 
 if (uiBuilding.style.display !== "flex") {
-  
   roomsDiv.style.display = "none"
   dialogsDiv.style.display = "none"
   uiBuilding.style.display = "flex"
-  uiBuildingObjects.style.display = "none"
-  deselectUiButton()
 
   fishSelectorButton.style.display = 'none'
   fishingAvailablevar = false
-  
+  informationButton.style.display = "flex"
 
   if(chatIsActivate = true){
     chatIsActivate = false
@@ -9131,6 +9504,7 @@ if (uiBuilding.style.display !== "flex") {
   uiBuilding.style.display = "none"
   uiBuildingObjects.style.display = "none"
   uiBuildingCategory.style.display = "none";
+  informationButton.style.display = "none"
   openUi()
 }
 });
@@ -9156,6 +9530,45 @@ openMusicPlayerButton.addEventListener("click", function() {
     uiBuilding.style.display = "none"
   } else {
     musicPlayer.style.display = "none"
+  }
+});
+
+hammerButtonUi.addEventListener("click", function() {
+  showWallsFunction(false)
+  playRandomPop()
+  if (currentDevAction !== "building") {
+    deselectUiButton()
+    cancelUi()
+    currentDevAction = "building";
+    uiBuildingObjects.style.display = "flex";
+    uiBuildingCategory.style.display = "flex";
+    hammerButtonUi.style.backgroundColor = "rgb(148, 223, 148)";
+    uiBuildingObjects.style.display = "flex"
+    uiBuildingCategoryDivVisibility.style.display = "flex"
+    
+  } else {
+    cancelUi()
+    currentDevAction = "none";
+    uiBuildingObjects.style.display = "none";
+    uiBuildingCategory.style.display = "none";
+    hammerButtonUi.style.backgroundColor = "#ffe2c1";
+    uiBuildingObjects.style.display = "none"
+    uiBuildingCategoryDivVisibility.style.display = "none"
+  }
+});
+
+placeMobButtonUi.addEventListener("click", function(){
+  showWallsFunction(false)
+
+  if (currentDevAction !== "monster") {
+    currentDevAction = "monster";
+    deselectUiButton()
+    placeMobButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
+    monsterCreationParent.style.display = "flex"
+  } else {
+    monsterCreationParent.style.display = "none"
+    monsterSelectionImageParent.style.display = "none"
+    
   }
 });
 
@@ -9212,49 +9625,129 @@ musicPlayerSlider.addEventListener("input", function () {
   }
 });
 
-placeMobButtonUi.addEventListener("click", function(){
-  showWallsFunction(false)
-  if (currentDevAction !== "monster") {
-    currentDevAction = "monster";
-    deselectUiButton()
-    placeMobButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
-    monsterCreationParent.style.display = "flex"
+//PLACE AREA
+let deleteObject = false
+function placeAreaColorChange(){
+  currentDevAction = "building"
+  placeCraftingArea.style.backgroundColor = "#ffe2c1"
+  placeTransition.style.backgroundColor = "#ffe2c1"
+  monsterAltarButtonUi.style.backgroundColor = "#ffe2c1"
+  placeCookingArea.style.backgroundColor = "#ffe2c1"
+  placeEnchantingArea.style.backgroundColor = "#ffe2c1"
+  placeFishingArea.style.backgroundColor = "#ffe2c1"
+  placeWalls.style.backgroundColor = "#ffe2c1"
+  deleteWalls.style.backgroundColor = "#ffe2c1"
+  roomsDiv.style.display = "none"
+  monsterLoot.style.display = "none"
+}
+placeFishingArea.addEventListener("click", function() {
+  if (currentDevAction !== "fish") {
+    placeAreaColorChange()
+    currentDevAction = "fish";
+    placeFishingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
+    showWallsFunction(true)
   } else {
-    monsterCreationParent.style.display = "none"
-    monsterSelectionImageParent.style.display = "none"
-    monsterLoot.style.display = "none"
-    currentDevAction = "none";
-    placeMobButtonUi.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    placeAreaColorChange()
+    showWallsFunction(false)
   }
 });
 
+placeEnchantingArea.addEventListener("click", function() {
+  if (currentDevAction !== "enchanting") {
+  placeAreaColorChange()
+  currentDevAction = "enchanting";
+  placeEnchantingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
+  showWallsFunction(true)
+} else {
+  placeAreaColorChange()
+  showWallsFunction(false)
+}
+});
+
+placeCookingArea.addEventListener("click", function() {
+  if (currentDevAction !== "cook") {
+  placeAreaColorChange()
+  currentDevAction = "cook";
+  placeCookingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
+  showWallsFunction(true)
+} else {
+  placeAreaColorChange()
+  showWallsFunction(false)
+}
+});
+
+monsterAltarButtonUi.addEventListener("click", function() {
+  if(currentDevAction !== "monsterAltar") {
+    placeAreaColorChange()
+    showWallsFunction(true)
+    monsterLoot.style.display = "flex"
+
+  currentSelectedWall = null
+  currentDevAction = "monsterAltar";
+  monsterAltarButtonUi.style.backgroundColor = "rgba(170, 233, 170, 1)"
+
+} else {
+  showWallsFunction(false)
+  placeAreaColorChange()
+ }
+});
+
 placeCraftingArea.addEventListener("click", function() {
-if (currentDevAction !== "craft") {
+  if (currentDevAction !== "craft") {
+  placeAreaColorChange()
   currentDevAction = "craft";
-  deselectUiButton()
   placeCraftingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
   showWallsFunction(true)
   } else {
+  placeAreaColorChange()
   currentDevAction = "none";
-  placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
   showWallsFunction(false)
   }
 });
 
 placeTransition.addEventListener("click", function() {
 if (currentDevAction !== "transition") {
+  placeAreaColorChange()
   currentDevAction = "transition";
   showWallsFunction(true)
-  deselectUiButton()
   roomsDiv.style.display = "block"
   placeTransition.style.backgroundColor = "rgb(148, 223, 148)"
 } else {
-  roomsDiv.style.display = "none"
+  placeAreaColorChange()
   currentDevAction = "none";
   showWallsFunction(false)
-  placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
 }
 });
+
+placeWalls.addEventListener("click", function() {
+  if(currentDevAction !== "wall") {
+  placeAreaColorChange()
+  showWallsFunction(true)
+  currentSelectedWall = null
+  currentDevAction = "wall";
+  uiBuilding.style.display = "flex"
+  placeWalls.style.backgroundColor = "rgba(170, 233, 170, 1)"
+} else {
+  placeAreaColorChange()
+  showWallsFunction(false)
+  currentDevAction = "building";
+ }
+});
+
+deleteWalls.addEventListener("click", function() {
+  if (currentDevAction !== "delete") {
+    placeAreaColorChange()
+    showWallsFunction(true)
+    currentDevAction = "delete";
+    deleteWalls.style.backgroundColor = "rgba(170, 233, 170, 1)"
+  } else {
+    placeAreaColorChange()
+    showWallsFunction(false)
+    currentDevAction = "building";
+  }
+});
+//PLACE AREA
+
 
 placeChest.addEventListener("click", function() {
 if (currentDevAction !== "chest") {
@@ -9349,6 +9842,7 @@ mapsInfo[currentLand].colliders.forEach(wall => {
   } else if (wall.type === "cook") {
     wall.color = `rgb(153, 255, 102, ${wallsVisibility})`
   } else if (wall.type === "craft") {
+    wall.color = `rgb(179, 255, 213, ${wallsVisibility})`
   } else if (wall.type === "enchanting") {
     wall.color = `rgb(204, 0, 255, ${wallsVisibility})`
   } else if (wall.type === "chest") {
@@ -9356,6 +9850,8 @@ mapsInfo[currentLand].colliders.forEach(wall => {
   } else if (wall.type === "transition") {
     wall.color = `rgb(204, 0, 204, ${wallsVisibility})`
   } else if (wall.type === "dialog") {
+    wall.color = `rgb(179, 255, 213, ${wallsVisibility})`
+  } else if (wall.type === "monsterAltar") {
     wall.color = `rgb(179, 255, 213, ${wallsVisibility})`
   }
 })
@@ -9580,6 +10076,7 @@ let DayCycleState = 0;
 
 let currentSoundtrackVolume = 1;
 let currentNightSoundtrackVolume = 0;
+let nightEnmiesInterval;
 
 setInterval(() => {
   canvasLobby.style.filter = DayCycleFilters[DayCycleState];
@@ -9623,8 +10120,24 @@ setInterval(() => {
   } else {
     targetAlphaCycle = 0; 
   }
+  if (DayCycleState == 2) {
+    nightEnmiesInterval = setInterval(() => {
+      activateNightMobs()
+    }, 2000);
+  } 
+  
+  if (DayCycleState == 1 || DayCycleState == 3) {
+    clearInterval(nightEnmiesInterval)
+  }
+
+  if (DayCycleState == 0) {
+    nightEnmiesInterval = setInterval(() => {
+      activateDayMobs()
+    }, 2000);
+  } 
 
   DayCycleState = (DayCycleState + 1) % DayCycleFilters.length;
+
 
 }, 100000);
 
@@ -9640,6 +10153,7 @@ function mapSetup () {
     playerHeight = humanSkin.height / 6;
 
     // Reset variables
+    monsterAltar = false;
     fishAvailable = false;
     grassCookingAvailable = false;
     grassCraftingAvailable = false;
@@ -9801,6 +10315,8 @@ function drawSceneLayer(layer, num) {
 
   // 👾 Add enemies
   for (const enemy of mapsInfo[currentLand].enemies || []) {
+    if (!enemy.spawn) return;
+
     drawQueue.push({
       type: 'enemy',
       y: enemy.spawn.y + (enemy.h * 3),
@@ -9838,7 +10354,7 @@ function drawSceneLayer(layer, num) {
     } else if (item.type === 'object') {
       const { obj, objectOriginal, layerIndex } = item;
       if (num === layerIndex) {
-        drawOnTop(objectOriginal.img, obj.x, obj.y, obj.w, obj.h, cameraX, cameraY, obj.animated);
+        drawOnTop(item.obj.reversed ? objectOriginal.reverse : objectOriginal.img, obj.x, obj.y, obj.w, obj.h, cameraX, cameraY, obj.animated);
       }
     } else if (item.type === 'onlinePlayer') {
       drawOnlinePlayers(item.player, item.smoothPlayer);
@@ -9851,7 +10367,7 @@ function drawSceneLayer(layer, num) {
   
   for (const item of topLayerObjects) {
     const { obj, objectOriginal } = item;
-    drawOnTop(objectOriginal.img, obj.x, obj.y, obj.w, obj.h, cameraX, cameraY, obj.animated);
+    drawOnTop(item.obj.reversed? objectOriginal.reverse : objectOriginal.img, obj.x, obj.y, obj.w, obj.h, cameraX, cameraY, obj.animated);
   }
   
 }
@@ -10000,6 +10516,9 @@ function drawColliders (type, x, y, w, h) {
         }
         else if (wall.type === "fish") {
           fishAvailable = true;
+        }
+        else if (wall.type === "monsterAltar") {
+          monsterAltar = wall.requiredItem;
         }
         else if (wall.type === "transition") {
           currentSelectedMap = wall.destination
@@ -11143,25 +11662,25 @@ function drawDevWallsPlacement () {
 }
 
 function drawMap(layer) {
-  const targetHue = bossFight ? -95 : 0;
-  const targetLuminosity = dying ? -100 : bossFight ? -50 : 0;
-  const changeSpeed = 1;
+  // const targetHue = bossFight ? -95 : 0;
+  // const targetLuminosity = dying ? -100 : bossFight ? -50 : 0;
+  // const changeSpeed = 1;
 
-  // Adjust hue and luminosity
-  if (currentHue < targetHue) {
-    currentHue = Math.min(currentHue + changeSpeed, targetHue);
-  } else if (currentHue > targetHue) {
-    currentHue = Math.max(currentHue - changeSpeed, targetHue);
-  }
+  // // Adjust hue and luminosity
+  // if (currentHue < targetHue) {
+  //   currentHue = Math.min(currentHue + changeSpeed, targetHue);
+  // } else if (currentHue > targetHue) {
+  //   currentHue = Math.max(currentHue - changeSpeed, targetHue);
+  // }
 
-  if (currentLuminosity < targetLuminosity) {
-    currentLuminosity = Math.min(currentLuminosity + changeSpeed, targetLuminosity);
-  } else if (currentLuminosity > targetLuminosity) {
-    currentLuminosity = Math.max(currentLuminosity - changeSpeed, targetLuminosity);
-  }
+  // if (currentLuminosity < targetLuminosity) {
+  //   currentLuminosity = Math.min(currentLuminosity + changeSpeed, targetLuminosity);
+  // } else if (currentLuminosity > targetLuminosity) {
+  //   currentLuminosity = Math.max(currentLuminosity - changeSpeed, targetLuminosity);
+  // }
 
-  // Apply canvas filters
-  canvas.filter = `hue-rotate(${currentHue}deg) brightness(${100 + currentLuminosity}%)`;
+  // // Apply canvas filters
+  // canvas.filter = `hue-rotate(${currentHue}deg) brightness(${100 + currentLuminosity}%)`;
 
   const mapInfo = mapsInfo[currentLand];
   const frameWidth = 1000; // Width of each frame in the sprite sheet
@@ -11244,7 +11763,7 @@ function activateNormalEnemy (enemy) {
 }
 
 
-function activateBossEnemy (enemy) {
+function activateBossEnemy(enemy) {
   cutscene = true;
   secondaryCameraX = enemy.spawn.x - (enemy.w) + (enemy.w/4);
   secondaryCameraY = enemy.spawn.y + (enemy.h/4);
@@ -11296,6 +11815,57 @@ function activateBossEnemy (enemy) {
       }
     },40)
   }, timeToWake);
+}
+
+function activateNightMobs() {
+  for (let enemy of mapsInfo[currentLand].enemies) {
+    if (!enemy.night) continue;
+   const randomInteger = Math.floor(Math.random() * 21); // 0 to 10 inclusive
+
+    if (randomInteger == 0) continue;
+
+    let activateInterval = setInterval(() => {
+      enemy.framesTimer--
+          
+      if (enemy.framesTimer <= 0) {
+        enemy.framesTimer = 5;
+      }
+      
+      if (enemy.framesTimer === 2) {
+        enemy.frames++
+        if (enemy.frames > 5) {
+          enemy.active = true;
+          clearInterval(activateInterval)
+        }
+      }
+    },40)
+  }
+}
+
+function activateDayMobs() {
+  for (let enemy of mapsInfo[currentLand].enemies) {
+    if (enemy.night) continue;
+
+    const randomInteger = Math.floor(Math.random() * 21); // 0 to 10 inclusive
+
+    if (randomInteger == 0) continue;
+
+    let activateInterval = setInterval(() => {
+      enemy.framesTimer--
+          
+      if (enemy.framesTimer <= 0) {
+        enemy.framesTimer = 5;
+      }
+      
+      if (enemy.framesTimer === 2) {
+        enemy.frames++
+        if (enemy.frames > 5) {
+          enemy.active = true;
+          clearInterval(activateInterval)
+        }
+      }
+    },40)
+  }
 }
 
 function drawEnemy (enemy) {
@@ -11376,6 +11946,48 @@ function drawEnemy (enemy) {
 let bossBarPercentage = 100;
 let spawnerIntervals = []
 
+
+function handleEnemyDeath (enemy) {
+  enemyDeathParticles(enemy)
+    enemy.attackInterval = true;
+    mapsInfo[currentLand].enemies.splice(mapsInfo[currentLand].enemies.indexOf(enemy), 1)
+
+    let dropAmount = enemy.xp
+
+    if (inParty) {
+      dropAmount = dropAmount / currentParty.length
+    }
+
+    socket.emit("enemyKilled", dropAmount);
+
+    if (enemy.drop) {
+      let randomNumber = Math.floor(Math.random() * 101);
+      if (enemy.dropRate >= randomNumber) {
+        socket.emit("enemyDrop", enemy.drop);
+      }
+    }
+
+    const bossAlive = mapsInfo[currentLand].enemies.find(
+      enemy => enemy.isBoss === true && enemy.health > 0
+    );
+    
+    if (!bossAlive) {
+      fightMusic1.pause();
+      fightMusic1.currentTime = 0;
+      SokosBoss.pause();
+      SokosBoss.currentTime = 0;
+      bossFight = false;
+      bossBarParent.style.display = "none";
+      bossBarHealth.style.width = 100 + "%";
+      bossBarHealthFollower.style.width = 100 + "%";
+
+      if (enemy.isBoss) {
+        areaNameDisplay("Boss defeated");
+        challengeCompleted.play();
+      }
+    }
+}
+
 function checkEnemyCombat (enemy) {
   if (enemy.damaged > 0) {
     enemy.damaged--
@@ -11391,93 +12003,30 @@ function checkEnemyCombat (enemy) {
       enemy.currentStateName = "idle"
     }
   }
-
+  
   if (enemy.health <= 0) {
-    enemyDeathParticles(enemy)
-    enemy.attackInterval = true;
-    // attackCircleState(enemy)
-    mapsInfo[currentLand].enemies.splice(mapsInfo[currentLand].enemies.indexOf(enemy), 1)
+    if (inParty && !isLeader) return;
 
-    socket.emit("enemyKilled", enemy.xp);
+    if (inParty && isLeader) {
+      socket.emit("partyEnemyKilled", [enemy, currentParty]);
+    };
 
-    if (enemy.drop) {
-      let randomNumber = Math.floor(Math.random() * 101);
-      if (enemy.dropRate >= randomNumber) {
-        socket.emit("enemyDrop", enemy.drop);
-      }
-    }
-
-    const hasActiveMinions = mapsInfo[currentLand].enemies.some(
-      enemy => enemy.active === true && !enemy.isBoss
-    );
-    const hasActiveBoss = mapsInfo[currentLand].enemies.some(
-      enemy => enemy.active === true && enemy.isBoss
-    );
-    const bossAlive = mapsInfo[currentLand].enemies.find(
-      enemy => enemy.isBoss === true && enemy.health > 0
-    );
-    
-    // if (!hasActiveMinions && bossAlive && !hasActiveBoss) {
-    //   const areaBoss = mapsInfo[currentLand].enemies.find(
-    //     enemy => enemy.isBoss === true && enemy.active === false
-    //   );
-    //   activateBossEnemy(areaBoss)
-    // } else if (!bossAlive) {
-    //   fightMusic1.pause();
-    //   fightMusic1.currentTime = 0;
-    //   SokosBoss.pause();
-    //   SokosBoss.currentTime = 0;
-    //   bossFight = false;
-    //   bossBarParent.style.display = "none";
-    //   bossBarHealth.style.width = 100 + "%";
-    //   bossBarHealthFollower.style.width = 100 + "%";
-
-    //   if (enemy.isBoss) {
-
-    //     if (enemy.name === "mooshroomBossRed") {
-    //       socket.emit("giveItem", "chestKey");
-    //     }
-    //     else if (enemy.name === "restfieldReaper") {
-    //       socket.emit("giveItem", "chestKeyRestfield");
-    //     }
-
-    //     setTimeout(() => {
-    //       frameDuration = 800 / 30;
-    //     }, 100);
-    //     setTimeout(() => {
-    //       frameDuration = 800 / fps;
-    //     }, 1500);
-
-    //     resetTimer()
-    //     areaNameDisplay("Trial Completed");
-    //     challengeCompleted.play();
-    //     challengeActive = false;
-    //     setTimeout(() => {
-    //       let playerPosition;
-
-    //       if (enemy.name === "mooshroomBossRed") {
-    //         playerPosition =  mapsInfo.mushroomForest.playerPos;
-    //         mapsInfo.mushroomForest = _.cloneDeep(originalMapsInfo.mushroomForest);
-    //         mapsInfo.mushroomForest.playerPos = playerPosition;
-    //       }
-    //       if (enemy.name === "restfieldReaper") {
-    //         playerPosition =  mapsInfo.restfieldTrial.playerPos;
-    //         mapsInfo.restfieldTrial = _.cloneDeep(originalMapsInfo.restfieldTrial);
-    //         mapsInfo.restfieldTrial.playerPos = playerPosition;
-    //       }
-    //       hideTimer()
-    //     }, 2000);
-    //     mapsInfo[currentSelectedMap].areaSounds();
-    //   }
-    // }
-
+    handleEnemyDeath(enemy)
     
     let baseSpawn = _.cloneDeep(enemy.baseSpawn)
-    console.log(baseSpawn)
     
     setTimeout(() => {
       enemy.spawn.x = -1000;
       enemy.spawn.y = -1000;
+      if (enemy.isBoss === true) {
+        enemy.active = false;
+      }
+      if (enemy.night === true) {
+        enemy.active = false;
+      }
+      if (DayCycleState == 2 || DayCycleState == 1 ) {
+        enemy.active = false;
+      }
 
       
       if (enemy.spawnTimer) {
@@ -11485,7 +12034,6 @@ function checkEnemyCombat (enemy) {
           enemy.spawn.x = baseSpawn.x;
           enemy.spawn.y = baseSpawn.y;
           enemy.health = enemy.maxHealth
-          console.log(enemy, mapsInfo[currentLand])
           mapsInfo[currentLand].enemies.push(enemy)
         }, enemy.spawnTimer);
 
@@ -11511,7 +12059,20 @@ function checkEnemyCombat (enemy) {
       && enemy.damaged === 0 
       && !projectile.enemy
       ) {
+      if (!enemy.targetPlayer && isLeader) {
+        let playerChosen;
+        for (let indPlayer of players) {
+          if (indPlayer.id == projectile.playerId) {
+            playerChosen = indPlayer;
+          }
+        }
+        console.log(players, projectile, playerChosen)
+        enemy.targetPlayer = playerChosen;
 
+        setTimeout(() => {
+          if (enemy) enemy.targetPlayer = null;
+        }, 5000);
+      }
       enemy.damaged = 2;
       enemy.angle = projectile.angle || projectile.bullet1 || projectile.bullet2;
       projectile.timeLeft = projectile.timeLeft > 1 ? 1 : projectile.timeLeft;
@@ -11567,14 +12128,20 @@ function checkEnemyCombat (enemy) {
 function handleEnemyState(enemy) {
   if (enemy.stateTimer) return;
 
-  
-  enemy.stateTimer = setTimeout(() => {
-    enemy.frames = 0;
-    enemy.stateTimer = null;
-    const states = enemy.states;
-    const chosenState = states[Math.floor(Math.random() * states.length)];
-    executeStateForDuration(enemy, window[chosenState], enemy.enemyStateInt);
-  }, enemy.enemyStateInt);
+  if (isLeader || !inParty) {
+    enemy.stateTimer = setTimeout(() => {
+      enemy.frames = 0;
+      enemy.stateTimer = null;
+      for (let state of enemy.states) {
+        if (state == null) {
+          enemy.states.splice(enemy.states.indexOf(state), 1)
+        }
+      }
+      const states = enemy.states;
+      const chosenState = states[Math.floor(Math.random() * states.length)];
+      executeStateForDuration(enemy, window[chosenState], enemy.enemyStateInt);
+    }, enemy.enemyStateInt);
+  }
 }
 
 function executeStateForDuration(enemy, stateFunction, duration) {
@@ -11650,7 +12217,7 @@ function moveState(enemy) {
   }
 
   // Decide movement when no commitment
-  if (colliders.includes("up") && enemy.spawn.y > playerY - 120) {
+  if (colliders.includes("up") && enemy.spawn.y > (enemy.targetPlayer ?  enemy.targetPlayer.y : playerY) - 120) {
     const direction = chooseDirection(
       playerX < enemy.spawn.x ? "left" : "right",
       "left",
@@ -11658,7 +12225,7 @@ function moveState(enemy) {
     );
     if (direction === "left") enemy.spawn.x -= enemy.speedX;
     if (direction === "right") enemy.spawn.x += enemy.speedX;
-  } else if (colliders.includes("down") && enemy.spawn.y < playerY - 120) {
+  } else if (colliders.includes("down") && enemy.spawn.y < (enemy.targetPlayer ?  enemy.targetPlayer.y : playerY) - 120) {
     const direction = chooseDirection(
       playerX < enemy.spawn.x ? "left" : "right",
       "left",
@@ -11666,17 +12233,17 @@ function moveState(enemy) {
     );
     if (direction === "left") enemy.spawn.x -= enemy.speedX;
     if (direction === "right") enemy.spawn.x += enemy.speedX;
-  } else if (colliders.includes("left") && enemy.spawn.x > playerX - 200) {
+  } else if (colliders.includes("left") && enemy.spawn.x > (enemy.targetPlayer ?  enemy.targetPlayer.x : playerX) - 200) {
     const direction = chooseDirection(
-      playerY < enemy.spawn.y ? "up" : "down",
+      (enemy.targetPlayer ?  enemy.targetPlayer.y : playerY) < enemy.spawn.y ? "up" : "down",
       "up",
       "down"
     );
     if (direction === "up") enemy.spawn.y -= enemy.speedY;
     if (direction === "down") enemy.spawn.y += enemy.speedY;
-  } else if (colliders.includes("right") && enemy.spawn.x < playerX - 200) {
+  } else if (colliders.includes("right") && enemy.spawn.x < (enemy.targetPlayer?  enemy.targetPlayer.x : playerX) - 200) {
     const direction = chooseDirection(
-      playerY < enemy.spawn.y ? "up" : "down",
+      (enemy.targetPlayer ?  enemy.targetPlayer.y : playerY) < enemy.spawn.y ? "up" : "down",
       "up",
       "down"
     );
@@ -11684,10 +12251,10 @@ function moveState(enemy) {
     if (direction === "down") enemy.spawn.y += enemy.speedY;
   } else {
     // No collision or already bypassing, continue normal movement
-    if (enemy.spawn.x > playerX - 200) enemy.spawn.x -= enemy.speedX;
-    if (enemy.spawn.x < playerX - 200) enemy.spawn.x += enemy.speedX;
-    if (enemy.spawn.y > playerY - 120) enemy.spawn.y -= enemy.speedY;
-    if (enemy.spawn.y < playerY - 120) enemy.spawn.y += enemy.speedY;
+    if (enemy.spawn.x > (enemy.targetPlayer ?  enemy.targetPlayer.x : playerX) - 200) enemy.spawn.x -= enemy.speedX;
+    if (enemy.spawn.x < (enemy.targetPlayer ?  enemy.targetPlayer.x : playerX) - 200) enemy.spawn.x += enemy.speedX;
+    if (enemy.spawn.y > (enemy.targetPlayer ?  enemy.targetPlayer.y : playerY) - 120) enemy.spawn.y -= enemy.speedY;
+    if (enemy.spawn.y < (enemy.targetPlayer ?  enemy.targetPlayer.y : playerY) - 120) enemy.spawn.y += enemy.speedY;
   }
 
   resolveEnemyCollisions(enemy);
@@ -11796,7 +12363,6 @@ function moveStateAndMelee(enemy) {
     }
 }
 
-
 function moveStateRandom(enemy) {
   if (enemy.currentStateName === "idle") {
     enemy.currentStateName = "move";
@@ -11893,6 +12459,20 @@ function attackState(enemy) {
       playerId: socket.id,
       enemy: true
     }) 
+
+    let toSend = [
+      currentParty, 
+      {
+      angle: bulletAngle,
+      x: enemy.spawn.x + ((enemy.w)/2) + 200,
+      y: enemy.spawn.y + ((enemy.h)/2) + 200,
+      speed: 5,
+      timeLeft: 100,
+      playerId: socket.id,
+      enemy: true
+      }]
+
+    if (inParty) socket.emit("partyProjectile", toSend)
 
     const basicBulletTree = new Audio("./audios/basicBulletTree.wav");
     basicBulletTree.loop = false;
@@ -12526,10 +13106,17 @@ function updateAllEnemies() {
 }
 
 function getAngleBetweenPlayerAndEnemy(enemy) {
-  const dx = playerX - enemy.spawn.x - ((enemy.w)/2) - 200;
-  const dy = playerY + 100 - enemy.spawn.y - ((enemy.h)/2) - 200;
-  const angle = Math.atan2(dy, dx); // Returns the angle in radians
-  return angle;
+  if (!enemy.targetPlayer) {
+    const dx = playerX - enemy.spawn.x - ((enemy.w)/2) - 200;
+    const dy = playerY + 100 - enemy.spawn.y - ((enemy.h)/2) - 200;
+    const angle = Math.atan2(dy, dx); // Returns the angle in radians
+    return angle;
+  } else {
+    const dx = enemy.targetPlayer.x - enemy.spawn.x - ((enemy.w)/2) - 200;
+    const dy = enemy.targetPlayer.y + 100 - enemy.spawn.y - ((enemy.h)/2) - 200;
+    const angle = Math.atan2(dy, dx); // Returns the angle in radians
+    return angle;
+  }
 }
 
 // Enemy functions <
