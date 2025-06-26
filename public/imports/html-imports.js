@@ -284,6 +284,7 @@ const placeDialog = document.getElementById('placeDialog');
 const uiBuilding = document.getElementById('uiBuilding');
 const uiBuildingObjects = document.getElementById('uiBuildingObjects');
 const monsterAltarButtonUi = document.getElementById('monsterAltarButtonUi');
+const colisionActivatorButton = document.getElementById('colisionActivatorButton');
 
 const uiBuildingCategoryConstruction = document.getElementById('uiBuildingCategoryConstruction');
 const uiBuildingCategoryFurniture = document.getElementById('uiBuildingCategoryFurniture');

@@ -2437,6 +2437,8 @@ function moveLogos() {
             setTimeout(() => {
               noMovement = false
               grassOpenCooking = false;
+              cookingSong.pause()
+              oilFry.pause()
             }, 500)
           }
           element.style.width = `${newWidthPercent}%`;
@@ -3125,6 +3127,7 @@ function deleteInventory(item, index) {
           }, 2000);
   
           inventorySlots[`inventorySlot${index}`].style.background = `red`;
+          inventorySlots[`inventorySlot${index}`].style.borderRadius = `3px`;
   
       } else if (itemsToDelete.includes(index) && deleteSelect) {
   
@@ -3519,76 +3522,117 @@ function updateQuestInfo(quest) {
   questReward.innerHTML = quest.rewardType;
 }
 
-function updateProgressBars() {
-  // Update Fishing progress bar
-  const fishingLevel = levelFormula(myPlayer.fishingLevel); // Current level
-  const xpFishingCurrentLevel = xpForLevel(fishingLevel - 1); // Minimum XP for this level
-  const xpFishingNextLevel = xpForLevel(fishingLevel); // Minimum XP for the next level
-
-  const fishingProgress = Math.min(
-    ((myPlayer.fishingLevel - xpFishingCurrentLevel) / (xpFishingNextLevel - xpFishingCurrentLevel)) * 70,
-    70
-  );
-
-  // console.log(myPlayer.fishingLevel, xpFishingCurrentLevel, xpFishingNextLevel)
-  fishingXPbar.style.width = `${fishingProgress}px`;
-
-  // Update Cooking progress bar
-  const cookingLevel = levelFormula(myPlayer.cookingLevel);
-  const xpCookingCurrentLevel = xpForLevel(cookingLevel - 1);
-  const xpCookingNextLevel = xpForLevel(cookingLevel);
-
-  const cookingProgress = Math.min(
-    ((myPlayer.cookingLevel - xpCookingCurrentLevel) / (xpCookingNextLevel - xpCookingCurrentLevel)) * 70,
-    70
-  );
-
-  cookingXPbar.style.width = `${cookingProgress}px`;
-
-  // Update Combat progress bar
-  const combatLevel = levelFormula(myPlayer.combatLevel);
-  const xpCombatCurrentLevel = xpForLevel(combatLevel - 1);
-  const xpCombatNextLevel = xpForLevel(combatLevel);
-
-  const combatProgress = Math.min(
-    ((myPlayer.combatLevel - xpCombatCurrentLevel) / (xpCombatNextLevel - xpCombatCurrentLevel)) * 70,
-    70
-  );
-
-  combatXPbar.style.width = `${combatProgress}px`;
- 
-  // Update Combat progress bar
-  const craftingLevel = levelFormula(myPlayer.craftingLevel);
-  const xpcraftingCurrentLevel = xpForLevel(craftingLevel - 1);
-  const xpcraftingNextLevel = xpForLevel(craftingLevel);
-
-  const craftingProgress = Math.min(
-    ((myPlayer.craftingLevel - xpcraftingCurrentLevel) / (xpcraftingNextLevel - xpcraftingCurrentLevel)) * 70,
-    70
-  );
-
-  craftingXPbar.style.width = `${craftingProgress}px`;
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'l' || event.key === 'L') {
   
-  // Update Combat progress bar
-  const enchantingLevel = levelFormula(myPlayer.enchantingLevel);
-  const xpenchantingCurrentLevel = xpForLevel(enchantingLevel - 1);
-  const xpenchantingNextLevel = xpForLevel(enchantingLevel);
+    // console.log("should be level 1",levelFormula(12))
+    // console.log("should be level 1",levelFormula(14))
+    // console.log("should be level 1",levelFormula(15))
+    // console.log("should be level 1",levelFormula(16))
+    // console.log("should be level 1",levelFormula(17))
 
-  const enchantingProgress = Math.min(
-    ((myPlayer.enchantingLevel - xpenchantingCurrentLevel) / (xpenchantingNextLevel - xpenchantingCurrentLevel)) * 70,
-    70
-  );
+    for (let i = 2; i < 20; i++) {
+      let minXp = 0;
+      for (let a = 0; a < 3000; a++) {
+        let xperiment = levelFormula(a)
+        if (xperiment === i) {
+          minXp = a
+          // console.log(minXp)
+          break;
+        }
+      }
+      console.log("should be level " + i, "needs this much xp: " + xpForLevel(i), "the function is going to next level at this xp instead " + minXp)
+    }
+  }
+});
 
-  enchantingXPbar.style.width = `${enchantingProgress}px`;
-}
-
+// LEVEL FORMULA IS TO CALCULATE THE LEVEL BASE ON THE XP
 function levelFormula(xp){
-  return Math.floor((1 + Math.sqrt(1 + (4 * xp)/7))/2);
+  return Math.floor((8 + Math.sqrt(64 + 32 * xp)) / 16);
 }
 
+//HERE WE CALCULATE THE NECESSARY XP NEEDED FOR THE LEVEL 
 function xpForLevel(level) {
   if (level < 1) return 0;
   return 8 * Math.pow(level, 2) - 8 * level;
+}
+
+function updateProgressBars() {
+  // Update Fishing progress bar
+   const fishingXP = myPlayer.fishingLevel;
+  const currentFishingLevel = levelFormula(fishingXP); // Current level
+
+  const xpFishingCurrentLevel = xpForLevel(currentFishingLevel); // Minimum XP for this level
+  const xpFishingNextLevel = xpForLevel(currentFishingLevel + 1); // Minimum XP for the next level
+
+  const gainInYourFishingLevel = fishingXP - xpFishingCurrentLevel
+  const neededGainForNextFishingLevel = xpFishingNextLevel - xpFishingCurrentLevel
+
+
+  const fishingProgressInPourcentage =  (gainInYourFishingLevel * 100) / neededGainForNextFishingLevel
+
+  fishingXPbar.style.width = `${fishingProgressInPourcentage < 0 ? 0 : fishingProgressInPourcentage}%`;
+
+  // Update Cooking progress bar
+  const cookingXP = myPlayer.cookingLevel;
+  const currentCookingLevel = levelFormula(cookingXP); // Current level
+
+  const xpCookingCurrentLevel = xpForLevel(currentCookingLevel); // Minimum XP for this level
+  const xpCookingNextLevel = xpForLevel(currentCookingLevel + 1); // Minimum XP for the next level
+
+  const gainInYourCookingLevel = cookingXP - xpCookingCurrentLevel
+  const neededGainForNextCookingLevel = xpCookingNextLevel - xpCookingCurrentLevel
+
+
+  const cookingProgressInPourcentage =  (gainInYourCookingLevel * 100) / neededGainForNextCookingLevel
+
+  cookingXPbar.style.width = `${cookingProgressInPourcentage < 0 ? 0 : cookingProgressInPourcentage}%`;
+
+  // Update Combat progress bar
+  const combatXP = myPlayer.combatLevel;
+  const currentCombatLevel = levelFormula(combatXP); // Current level
+
+  const xpCombatCurrentLevel = xpForLevel(currentCombatLevel); // Minimum XP for this level
+  const xpCombatNextLevel = xpForLevel(currentCombatLevel + 1); // Minimum XP for the next level
+
+  const gainInYourCombatLevel = combatXP - xpCombatCurrentLevel
+  const neededGainForNextCombatLevel = xpCombatNextLevel - xpCombatCurrentLevel
+
+
+  const combatProgressInPourcentage =  (gainInYourCombatLevel * 100) / neededGainForNextCombatLevel
+
+  combatXPbar.style.width = `${combatProgressInPourcentage < 0 ? 0 : combatProgressInPourcentage}%`;
+
+  // Update crafting progress bar
+  const craftingXP = myPlayer.craftingLevel;
+  const currentCraftingLevel = levelFormula(craftingXP); // Current level
+
+  const xpCraftingCurrentLevel = xpForLevel(currentCraftingLevel); // Minimum XP for this level
+  const xpCraftingNextLevel = xpForLevel(currentCraftingLevel + 1); // Minimum XP for the next level
+
+  const gainInYourCraftingLevel = craftingXP - xpCraftingCurrentLevel
+  const neededGainForNextCraftingLevel = xpCraftingNextLevel - xpCraftingCurrentLevel
+
+
+  const craftingProgressInPourcentage =  (gainInYourCraftingLevel * 100) / neededGainForNextCraftingLevel
+
+  craftingXPbar.style.width = `${craftingProgressInPourcentage < 0 ? 0 : craftingProgressInPourcentage}%`;
+
+  // Update Enchanting progress bar
+  const enchantingXP = myPlayer.enchantingLevel;
+  const currentEnchantingLevel = levelFormula(enchantingXP); // Current level
+
+  const xpEnchantingCurrentLevel = xpForLevel(currentEnchantingLevel); // Minimum XP for this level
+  const xpEnchantingNextLevel = xpForLevel(currentEnchantingLevel + 1); // Minimum XP for the next level
+
+  const gainInYourEnchantingLevel = enchantingXP - xpEnchantingCurrentLevel
+  const neededGainForNextEnchantingLevel = xpEnchantingNextLevel - xpEnchantingCurrentLevel
+
+
+  const enchantingProgressInPourcentage =  (gainInYourEnchantingLevel * 100) / neededGainForNextEnchantingLevel;
+
+  enchantingXPbar.style.width = `${enchantingProgressInPourcentage < 0 ? 0 : enchantingProgressInPourcentage}%`;
+
 }
 
 let fishSelected = ''
@@ -3597,8 +3641,6 @@ function displayFishImages() {
   // Clear existing content before adding new elements
   fishSelectorButton.innerHTML = "";
   
-
-
   Object.values(objFishes).forEach(fish => {
       const img = document.createElement("img");
       img.src = fish.img;
@@ -7199,6 +7241,10 @@ socket.on("projectiles", (serverProjectiles) => {
 
 socket.on("obtained", (item) => {
   console.log("OBTAINED", item)
+  console.log('hello', 
+      currentFishingLevel,
+      updateFishingLevel
+  );
   const image = item.image;
   obtainedAnim(image);
   socket.emit("updateServer");
@@ -9423,6 +9469,9 @@ function eyesIsOpen(){
     monsterCreationBottom.style.right = "-380px"
     monsterLoot.style.right = "-380px"
 
+    uiBuilding.style.left = "-380px"
+    toolBar.style.left = "-380px"
+
   } else  if(!uiBuildingVisible) {
     uiBuildingVisible = true
 
@@ -9437,6 +9486,9 @@ function eyesIsOpen(){
     monsterCreationParent.style.right = "10px"
     monsterCreationBottom.style.right = "340px"
     monsterLoot.style.right = "340px"
+
+    uiBuilding.style.left = "12px"
+    toolBar.style.left = "10px"
   }
 }
 
@@ -9447,6 +9499,8 @@ uiConstructionVisibility.addEventListener("click", function() {
 });
 
 informationButton.addEventListener("click", function() {
+  uiBuildingVisible = false
+  eyesIsOpen()
   showWallsFunction(false)
   playRandomPop()
   deselectUiButton()
@@ -9459,7 +9513,6 @@ informationButton.addEventListener("click", function() {
   informationButton.style.display = "none"
   uiBuildingCategoryDivVisibility.style.display = "none"
   uiBuildingVisible = false
-
   openUi()
 })
 
@@ -9678,7 +9731,36 @@ musicPlayerSlider.addEventListener("input", function () {
 });
 
 //PLACE AREA
+let colisionVisible = false
+
+colisionActivatorButton.addEventListener("click", function() {
+  if(colisionVisible){
+    placeWalls.style.display = "none"
+    deleteWalls.style.display = "none"
+    placeFishingArea.style.display = "none"
+    placeEnchantingArea.style.display = "none"
+    placeCraftingArea.style.display = "none"
+    placeCookingArea.style.display = "none"
+    placeTransition.style.display = "none"
+    monsterAltarButtonUi.style.display = "none"
+
+   colisionVisible = false
+  } else {
+    placeWalls.style.display = "flex"
+    deleteWalls.style.display = "flex"
+    placeFishingArea.style.display = "flex"
+    placeEnchantingArea.style.display = "flex"
+    placeCraftingArea.style.display = "flex"
+    placeCookingArea.style.display = "flex"
+    placeTransition.style.display = "flex"
+    monsterAltarButtonUi.style.display = "flex"
+
+    colisionVisible = true
+  }
+})
+
 let deleteObject = false
+
 function placeAreaColorChange(){
   currentDevAction = "building"
   placeCraftingArea.style.backgroundColor = "#ffe2c1"

@@ -241,14 +241,16 @@
 
       <div id="uiBuildingCategoryDivBottom" >
         <div>
-          <img class="pointerActivator uiButtonBG" id="wallButtonUi" src="./icons/uiIcon/wallIcon.png"></img>
-          <img class="pointerActivator uiButtonBG" id="deletewWallButtonUi" src="./icons/uiIcon/deletewallsIcon.png"></img>
-          <img class="uiButtonBG pointerActivator" id="fishingButtonUi" src="./icons/uiIcon/fishingIcon.png"></img>
-          <img class="uiButtonBG pointerActivator" id="enchantingButtonUi" src="./icons/uiIcon/enchantingIcon.png"></img>
-          <img class="uiButtonBG pointerActivator" id="craftingButtonUi" src="./icons/uiIcon/craftingIcon.png"></img>
-          <img class="uiButtonBG pointerActivator" id="cookingButtonUi" src="./icons/uiIcon/cookingIcon.png"></img>
-          <img class="uiButtonBG pointerActivator" id="portalButtonUi" src="./icons/uiIcon/portal.png"></img>
-          <img class="uiButtonBG pointerActivator" id="monsterAltarButtonUi" src="./icons/uiIcon/placeMob.png"></img>
+          <img class="pointerActivator uiButtonBG displayNone" id="wallButtonUi" src="./icons/uiIcon/wallIcon.png"></img>
+          <img class="pointerActivator uiButtonBG displayNone" id="deletewWallButtonUi" src="./icons/uiIcon/deletewallsIcon.png"></img>
+          <img class="uiButtonBG pointerActivator displayNone" id="fishingButtonUi" src="./icons/uiIcon/fishingIcon.png"></img>
+          <img class="uiButtonBG pointerActivator displayNone" id="enchantingButtonUi" src="./icons/uiIcon/enchantingIcon.png"></img>
+          <img class="uiButtonBG pointerActivator displayNone" id="craftingButtonUi" src="./icons/uiIcon/craftingIcon.png"></img>
+          <img class="uiButtonBG pointerActivator displayNone" id="cookingButtonUi" src="./icons/uiIcon/cookingIcon.png"></img>
+          <img class="uiButtonBG pointerActivator displayNone" id="portalButtonUi" src="./icons/uiIcon/portal.png"></img>
+          <img class="uiButtonBG pointerActivator displayNone" id="monsterAltarButtonUi" src="./icons/uiIcon/placeMob.png"></img>
+          <img class="uiButtonBG pointerActivator" id="colisionActivatorButton" src="./icons/uiIcon/colisionIcon.png"></img>
+          
         </div>
         <div>
           <img class="pointerActivator uiButtonBG" id="deleteObjButtonUi" src="./icons/uiIcon/deleteIcon.png"></img>
@@ -447,33 +449,48 @@
         <div id="skillLevels">
 
           <div class="individualSkill">
-            <p class="individualSkillNum" id="fishingLevel">LVL 1</p>
+            <p class="individualSkillNum" id="fishingLevel">LVL 0</p>
             <img class="individualSkillImg" src="./ui/LVLicon/iconLVLFishing.png">
-            <div class="fishingXPbar skillBar"></div>
+
+            <div class="barContainer">
+              <div class="skillBar fishingXPbar"></div>
+            </div>
           </div>
 
           <div class="individualSkill">
             <p class="individualSkillNum" id="cookingLevel">LVL 2</p>
             <img class="individualSkillImg" src="./ui/LVLicon/iconLVLCooking.png">
-            <div class="cookingXPbar skillBar"></div>
+
+            <div class="barContainer">
+              <div class="skillBar cookingXPbar"></div>
+            </div>
           </div>
 
           <div class="individualSkill">
             <p class="individualSkillNum" id="craftingLevel">LVL 1</p>
             <img class="individualSkillImg" src="./ui/LVLicon/iconLVLCrafting.png">
-            <div class="craftingXPbar skillBar"></div>
+
+            <div class="barContainer">
+              <div class="skillBar craftingXPbar"></div>
+            </div>
           </div>
 
           <div class="individualSkill">
             <p class="individualSkillNum" id="combatLevel">LVL 2</p>
             <img class="individualSkillImg" src="./ui/LVLicon/iconLVLCombat.png">
-            <div class="combatXPbar skillBar"></div>
+            
+            <div class="barContainer">
+              <div class="skillBar combatXPbar"></div>
+            </div>
           </div>
 
           <div class="individualSkill">
             <p class="individualSkillNum" id="enchantingLevel">LVL 2</p>
             <img class="individualSkillImg" src="./ui/LVLicon/iconLVLEnchanting.png">
-            <div class="enchantingXPbar skillBar"></div>
+
+            <div class="barContainer">
+              <div class="skillBar enchantingXPbar"></div>
+            </div>
           </div>
 
         </div>

@@ -139,7 +139,7 @@ const lobbySong = new Audio("./audios/lobbySong.wav");
 lobbySong.loop = true;
 lobbySong.volume = 0.8;
 
-const levelUpAudio = new Audio("./audios/levelUp.wav");
+const levelUpAudio = new Audio("./audios/levelUpFirst.mp3");
 levelUpAudio.loop = false;
 levelUpAudio.volume = 0.5;
 

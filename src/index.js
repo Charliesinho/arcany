@@ -258,8 +258,8 @@ async function main() {
                 let xp = player.fishing
 
                 function levelFormula(xp){
-                    return Math.floor((1 + Math.sqrt(1 + (4 * xp)/7))/2);
-                  }
+                    return Math.floor((8 + Math.sqrt(64 + 32 * xp)) / 16);
+                }
                 
                 let fishingLevelNum = levelFormula(xp) ;
                 
@@ -292,7 +292,7 @@ async function main() {
                     }
 
                     if (player.inventory.length <= 21) {
-                        console.log('hello', selectedFish); 
+                        console.log('hello', selectedFish,); 
 
                         player.inventory.push(selectedFish);
                         player.fishing += selectedFish.xp
