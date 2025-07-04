@@ -570,15 +570,27 @@ color: white;
     animation: opacityUp 1s ease 2.2s forwards;
 }
 
+.barContainer{
+    width: 70px !important;
+    position: absolute;
+    top: 30px;
+    right: 6px;
+    background-color: transparent;
+    height: 20px;
+    z-index: 0;
+
+}
 .skillBar {
     height: 20px;
     bottom: 15px;
     /* width: 100% !important; */
-    max-width: 70px;
+    max-width: 100%;
     background: #60c560;
     position: absolute;
     border-right: solid 3px #493e29;
-    left: 53px;
+    top: 0px;
+    top: 0px;
+    z-index: 1;
 }
 
 #areaName {
@@ -750,6 +762,7 @@ color: white;
     border: solid 0px #b3a496;
     outline: solid 0px #393939;
     z-index: 1;
+    transition: all 0.4s ease;
 }
 #uiBuildingObjects{
     position: absolute;
@@ -851,6 +864,9 @@ color: white;
     background-size: cover;
     background-repeat: no-repeat;
     border-radius: 5px;
+}
+.displayNone{
+    display: none;
 }
 #uiBuildingCategoryDiv > p {
     padding: 4px;
@@ -1999,7 +2015,6 @@ color: white;
     padding: 10px;
     transition: all .2s ease-out;
 }
-
 .inventoryItem:active {
     filter: brightness(100);
 }
@@ -2096,6 +2111,7 @@ color: white;
     align-items: center;
     gap: 5px;
     z-index: 1;
+    transition: all 0.4s ease;
 }
 
 .toolBarIcon{
