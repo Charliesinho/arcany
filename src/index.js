@@ -371,6 +371,9 @@ async function main() {
         socket.on("healMax", (max) => {
             async function consume() {
                 const player = await Player.findOne({socket: socket.id}).exec();
+
+                if (!player) return;
+
                 player.health = max;
                 await Player.findOneAndUpdate({socket: socket.id}, {health: player.health}, {new: true});
                 myPlayer[socket.id] = player;
