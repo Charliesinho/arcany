@@ -115,58 +115,157 @@
 
     <div id="uiBuilding">
       <div id="uiBuildingToolsDiv">
-        <!-- <h1>Actions</h1> -->
-        <!-- <br/> -->
-        <img class="uiButtonBG pointerActivator" id="createMapButtonUi" src="./icons/uiIcon/create.png"></img>
-        <img class="uiButtonBG pointerActivator" id="sapwnButtonUi" src="./icons/uiIcon/setSpawnIcon.png"></img>
-        <img class="uiButtonBG pointerActivator" id="editMapButtonUi" src="./icons/uiIcon/edit.png"></img>
         <img class="uiButtonBG pointerActivator" id="saveObjButtonUi" src="./icons/uiIcon/save.png"></img>
-        <!-- <h1>Layers</h1> -->
-        <!-- <br/> -->
+        <img class="uiButtonBG pointerActivator" id="mapButtonUi" src="./icons/uiIcon/mapIcon.png"></img>
         <img class="uiButtonBG pointerActivator" id="placeMobButtonUi" src="./icons/uiIcon/placeMob.png"></img>
-        <!-- <br/> -->
         <img class="uiButtonBG pointerActivator" id="hammerButtonUi" src="./icons/uiIcon/hammerIcon.png"></img>
       </div>
 
     </div>
-    <div id="roomsDev"></div>
+
+    <div id="mapEditor">
+      <div id="mapEditorButton">
+        <button class="pointerActivator" id="editMapButtonUi">EDIT YOUR MAP</button>
+        <button class="pointerActivator" id="createMapButtonUi">CREATE A MAP</button>
+      </div>
+
+      <div id="mapInfo">
+        <h2>CREATE A NEW MAP</h2>
+        <input id="mapNameInput" value="MY MAP"/>
+        <textarea type="text" id="mapDescInput">map description</textarea>
+
+        <div class="mapInfoDropdown">
+          <button class="mapInfoDropdownButton pointerActivator" id="mapInfoTypeContent">TYPE</button>
+          <div class="mapInfoDropdownContent" id="mapInfoTypeButton">
+            <p class="mapInfoDropdownContentType mapInfoTypeItem pointerActivator" id="adventure">Adventure</p>
+            <p class="mapInfoDropdownContentType mapInfoTypeItem pointerActivator" id="social">Social</p>
+            <p class="mapInfoDropdownContentType mapInfoTypeItem pointerActivator" id="pvp">PVP</p>
+          </div>
+        </div>
+
+        <div class="mapInfoDropdown">
+          <button class="mapInfoDropdownButton pointerActivator" id="mapInfoColorBaseContent">BASE COLOR</button>
+            <div class="mapInfoDropdownContent"  id="mapInfoColorBaseButton">
+              <p class="mapInfoDropdownContentType mapInfoColorBaseItem pointerActivator" id="standard">Standard</p>
+              <p class="mapInfoDropdownContentType mapInfoColorBaseItem pointerActivator" id="black">Black</p>
+              <p class="mapInfoDropdownContentType mapInfoColorBaseItem pointerActivator" id="darkblue">Blue</p>
+              <p class="mapInfoDropdownContentType mapInfoColorBaseItem pointerActivator" id="red">Red</p>
+            </div>
+        </div>
+
+        <div class="mapInfoDropdown">
+          <button class="mapInfoDropdownButton pointerActivator" id="mapInfoPrivacyContent">PRIVACY</button>
+            <div class="mapInfoDropdownContent"  id="mapInfoPrivacyButton">
+              <p class="mapInfoDropdownContentType mapInfoPrivacyItem pointerActivator" id="public">Public</p>
+              <p class="mapInfoDropdownContentType mapInfoPrivacyItem pointerActivator" id="private">Private</p>
+            </div>
+        </div>
+
+        <div class="pointerActivator disabled" id="createMapButton">
+          <p>CREATE</p>
+          <p id="createMapButtonPopUp">You must fill in all the fields to create your map</p>
+        </div>
+      </div>
+      
+      <div id="editMaps">
+        <h2>EDIT YOUR MAP</h2>
+        <div class="mapInfoDropdown">
+          <button class="mapInfoDropdownButton pointerActivator" id="">WhICH MAP DO YOU WANT TO EDIT ?</button>
+          <div class="mapInfoDropdownContent" id="">
+            <p class="mapInfoDropdownContentType mapInfoTypeItem pointerActivator" id="adventure">Adventure</p>
+          </div>
+        </div>
+        
+        <input id="editMapsRenameInput" value=""/>
+        <textarea type="text" id="editMapsDescriptionInput"></textarea>
+
+        <div class="mapInfoDropdownButton pointerActivator" id="sapwnButtonUi"></div>
+
+        <div class="mapInfoDropdown">
+          <button class="mapInfoDropdownButton pointerActivator" id="editColorBaseContent">BASE COLOR</button>
+            <div class="mapInfoDropdownContent"  id="editColorBaseButton">
+              <p class="mapInfoDropdownContentType mapInfoColorBaseItem pointerActivator" id="standard">Standard</p>
+              <p class="mapInfoDropdownContentType mapInfoColorBaseItem pointerActivator" id="black">Black</p>
+              <p class="mapInfoDropdownContentType mapInfoColorBaseItem pointerActivator" id="darkblue">Blue</p>
+              <p class="mapInfoDropdownContentType mapInfoColorBaseItem pointerActivator" id="red">Red</p>
+            </div>
+        </div>
+
+        <div id="editMapsDeleteObj" class="mapInfoDropdownButton pointerActivator">Delete all objects</div>
+
+        <div id="editMapsSaveSettingSave" class="mapInfoDropdownButton greenHover pointerActivator">Save map</div>
+        <div id="editMapsSaveSettingDelete" class="mapInfoDropdownButton redHover pointerActivator">Delete map</div>
+
+
+        <!-- <div>
+          <div class="editMapsParent">
+            <h1 id="editMapsTitle">Your map</h1>
+          </div>
+          
+          <div class="editMapsParent">
+  
+            <div class="editMapsChildText">
+              <div id="editMapsRenameDiv" >
+                <p>Rename your map</p>
+                <input id="editMapsRenameInput" value="new name"></input>
+              </div>
+    
+              <div id="editMapsDescriptionDiv" >
+                <p>Description</p>
+                <textarea type="text" id="editMapsDescriptionInput" value="Description"></textarea>
+              </div>
+            </div>
+            <div class="editMapsChildText">
+              <button id="editMapsChooseBase" class="editMapsEditButton pointerActivator greenHover">Choose a new base</button>
+  
+              <button id="editMapsDeleteObj" class="editMapsEditButton pointerActivator redHover">Delete all objects</button>
+            </div>
+          </div>
+        </div>
+  
+        <div id="editMapsSaveSetting">
+          <div id="editMapsSaveSettingSave" class="editMapsSaveSettingButton greenHover pointerActivator">Save map</div>
+          <div id="editMapsSaveSettingDelete" class="editMapsSaveSettingButton redHover pointerActivator">Delete map</div>
+        </div> -->
+      </div>
+    </div>
+
+    <div id="roomsDev">
+    </div>
     
     <div id="placeArea">
     </div>
 
-    <div id="editMaps">
+    <div id="chestCreatorParent">
+      <p id="chestCreatorTitle">CHEST</p>
+
       <div>
-        <div class="editMapsParent">
-          <h1 id="editMapsTitle">Your map</h1>
-          <img id="closeEditMapsTitle" class="pointerActivator" src="./icons/uiIcon/deleteIcon.png" style="width: 25px; height: 25px;">
+        <div class="chestCreatorChild">
+          <p>What it gives</p>
+          <button id="chestCreatorButtonGive" class="pointerActivator"></button>
         </div>
-        
-        <div class="editMapsParent">
-
-          <div class="editMapsChildText">
-            <div id="editMapsRenameDiv" >
-              <p>Rename your map</p>
-              <input id="editMapsRenameInput" value="new name"></input>
-            </div>
   
-            <div id="editMapsDescriptionDiv" >
-              <p>Description</p>
-              <textarea type="text" id="editMapsDescriptionInput" value="Description"></textarea>
-            </div>
-          </div>
-          <div class="editMapsChildText">
-            <button id="editMapsChooseBase" class="editMapsEditButton pointerActivator greenHover">Choose a new base</button>
-
-            <button id="editMapsDeleteObj" class="editMapsEditButton pointerActivator redHover">Delete all objects</button>
-          </div>
+        <div class="chestCreatorChild">
+          <p>What it takes</p>
+          <button id="chestCreatorButtonTake" class="pointerActivator"></button>
         </div>
       </div>
 
-      <div id="editMapsSaveSetting">
-        <div id="editMapsSaveSettingSave" class="editMapsSaveSettingButton greenHover pointerActivator">Save map</div>
-        <div id="editMapsSaveSettingDelete" class="editMapsSaveSettingButton redHover pointerActivator">Delete map</div>
+      <div> 
+        <p id="chestCreatorPlaceChest">PLACE CHEST</p>
+        <p id="chestCreatorResetChest">RESET</p>
       </div>
     </div>
+
+    <div id="lootPanel">
+      <div id="lootPanelTop">
+        <p>LOOT</p>
+        <img id="closeLootPanel" class="pointerActivator" src="./ui/uiBookCloseIconBlack.png" >
+      </div>
+      <div id="lootPanelItems"></div>
+    </div>
+
+    
 
     <div id="popupDeleteAllObjParent">
 
@@ -217,6 +316,7 @@
       </div>
       
       <div id="monsterCreationBottom">
+        <p id="monsterCreationBottomTitle">MONSTER DROPS</p>
         <div id="lootCreationInputs">
           <input placeholder="Rate" id="lootRateInput" />
           <input placeholder="XP drop" id="monsterXpInput" />
@@ -224,15 +324,13 @@
         </div>
         <div id="lootImage" class="pointerActivator"></div>
       </div>
-
-      <div id="monsterLoot"></div>
       
       <div id="monsterSelectionImageParent"></div>
     </div>
 
     <div id="uiBuildingCategory">
       <div  id="uiBuildingCategoryDiv">
-        <img class="pointerActivator uiButtonBG" id="uiBuildingCategoryConstruction" src="./icons/uiIcon/wallIcon.png" style="background-color: rgb(148, 223, 148)""></img>
+        <img class="pointerActivator uiButtonBG" id="uiBuildingCategoryConstruction" src="./icons/uiIcon/wallIcon2.png" style="background-color: rgb(148, 223, 148)""></img>
         <img class="pointerActivator uiButtonBG" id="uiBuildingCategoryFurniture" src="./icons/uiIcon/furnitureIcon.png"></img>
         <img class="pointerActivator uiButtonBG" id="uiBuildingCategoryStructure" src="./icons/uiIcon/structureIcon.png"></img>
         <img class="pointerActivator uiButtonBG" id="uiBuildingCategoryOutdoor" src="./icons/uiIcon/outdoorIcon.png"></img>
@@ -240,17 +338,21 @@
       </div>
 
       <div id="uiBuildingCategoryDivBottom" >
-        <div>
-          <img class="pointerActivator uiButtonBG displayNone" id="wallButtonUi" src="./icons/uiIcon/wallIcon.png"></img>
-          <img class="pointerActivator uiButtonBG displayNone" id="deletewWallButtonUi" src="./icons/uiIcon/deletewallsIcon.png"></img>
-          <img class="uiButtonBG pointerActivator displayNone" id="fishingButtonUi" src="./icons/uiIcon/fishingIcon.png"></img>
-          <img class="uiButtonBG pointerActivator displayNone" id="enchantingButtonUi" src="./icons/uiIcon/enchantingIcon.png"></img>
-          <img class="uiButtonBG pointerActivator displayNone" id="craftingButtonUi" src="./icons/uiIcon/craftingIcon.png"></img>
-          <img class="uiButtonBG pointerActivator displayNone" id="cookingButtonUi" src="./icons/uiIcon/cookingIcon.png"></img>
-          <img class="uiButtonBG pointerActivator displayNone" id="portalButtonUi" src="./icons/uiIcon/portal.png"></img>
-          <img class="uiButtonBG pointerActivator displayNone" id="monsterAltarButtonUi" src="./icons/uiIcon/placeMob.png"></img>
-          <img class="uiButtonBG pointerActivator" id="colisionActivatorButton" src="./icons/uiIcon/colisionIcon.png"></img>
-          
+        <div id="uiBuildingCategoryDivBottomPlaceWall">
+          <div>
+            <img class="pointerActivator uiButtonBG displayNone" id="wallButtonUi" src="./icons/uiIcon/wallIcon.png"></img>
+            <img class="pointerActivator uiButtonBG displayNone" id="deletewWallButtonUi" src="./icons/uiIcon/deletewallsIcon.png"></img>
+            <img class="uiButtonBG pointerActivator displayNone" id="fishingButtonUi" src="./icons/uiIcon/fishingIcon.png"></img>
+            <img class="uiButtonBG pointerActivator displayNone" id="enchantingButtonUi" src="./icons/uiIcon/enchantingIcon.png"></img>
+            <img class="uiButtonBG pointerActivator displayNone" id="craftingButtonUi" src="./icons/uiIcon/craftingIcon.png"></img>
+          </div>
+          <div>
+            <img class="uiButtonBG pointerActivator displayNone" id="placeChest" src="./icons/uiIcon/chestIcon.png"></img>
+            <img class="uiButtonBG pointerActivator displayNone" id="cookingButtonUi" src="./icons/uiIcon/cookingIcon.png"></img>
+            <img class="uiButtonBG pointerActivator displayNone" id="portalButtonUi" src="./icons/uiIcon/portal.png"></img>
+            <img class="uiButtonBG pointerActivator displayNone" id="monsterAltarButtonUi" src="./icons/uiIcon/placeMob.png"></img>
+            <img class="uiButtonBG pointerActivator" id="colisionActivatorButton" src="./icons/uiIcon/colisionIcon.png"></img>
+          </div>
         </div>
         <div>
           <img class="pointerActivator uiButtonBG" id="deleteObjButtonUi" src="./icons/uiIcon/deleteIcon.png"></img>
@@ -283,7 +385,6 @@
               <div class="filterSubCategoryConstruction" id="windows">Windows</div>
               <div class="filterSubCategoryConstruction" id="Ruins">Ruins</div>
             </div>
-
           </div>
         </div>
 
@@ -366,15 +467,6 @@
              </div>
         </div>
       </div>
-    </div>
-
-    <div id="mapInfo">
-      <h1>Map name</h1>
-      <input id="mapNameInput" />
-      <h1>Map Description</h1>
-      <textarea type="text" id="mapDescInput"></textarea>
-      <!-- <button class="pointerActivator">Set spawn point</button> -->
-      <button class="pointerActivator" id="createMapButton">Create</button>
     </div>
     
     <div id="informationButton">Building mode</div>
@@ -516,15 +608,8 @@
 
     <div id="uiInventory" class="inventoryShadow inventoryHide dragParent">
 
-      <!-- <div class="inventorySlotBG">
-        <div class="pointerActivator inventoryItem equipmentItem artifactEquipped"></div>
-      </div> 
-      <div class="inventorySlotBG">
-        <div class="pointerActivator inventoryItem equipmentItem artifactEquipped"></div>
-      </div> 
-      <div class="inventorySlotBG">
-        <div class="pointerActivator inventoryItem equipmentItem artifactEquipped"></div>
-      </div>  -->
+      <p class="titleUI">INVENTORY</p>
+
       <div class="inventorySlotBG">
         <img class="pointerActivator inventoryItem inventorySlot0"></img>
       </div>
@@ -595,7 +680,9 @@
 
     </div>
   
-    <div id="uiSoulCollection" class="inventoryShadow soulsHide">       
+    <div id="uiSoulCollection" class="inventoryShadow soulsHide">    
+        <p class="titleUI">SOULS</p>
+
           <div class="inventorySlotBG">
             <div class="pointerActivator inventoryItem soulSlot soul1"></div>
           </div> 
@@ -662,9 +749,11 @@
     </div>
 
     <div id="uiQuest">
+      <p class="titleUI">QUESTS</p>
     </div>
 
     <div id="uiBooks">
+      <p class="titleUI">BOOKS</p>
       <img class="pointerActivator uibooks" id="uiBooksIngredients"  src="./ui/uiBooks/uiBooksIngredients.gif">
       <img class="pointerActivator uibooks" id="uiBooksHistory"  src="./ui/uiBooks/uiBooksHistory.gif">
       <img class="pointerActivator uibooks" id="uiBooksSoulsAndClothes"  src="./ui/uiBooks/uiBooksSoulsAndClothes.gif">

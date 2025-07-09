@@ -10,6 +10,12 @@ const WorldSchema = new mongoose.Schema({
   type: {
     type: String,
   },
+  privacy:{
+    type: String,
+  },
+  colorBase:{
+    type: String,
+  },
   biome: {
     type: String,
   },

@@ -184,19 +184,15 @@ let cameraShakeY = -180;
 monsterImage.addEventListener("click", function(){
   if (monsterSelectionImageParent.style.display != "flex") {
     monsterSelectionImageParent.style.display = "flex"
-    monsterLoot.style.display = "none"
+
   } else {
     monsterSelectionImageParent.style.display = "none"
   }
 });
 
-lootImage.addEventListener("click", function(){
-  if (monsterLoot.style.display != "flex") {
-    monsterLoot.style.display = "flex"
-  } else {
-    monsterLoot.style.display = "none"
-  }
-});
+lootImage.addEventListener("click", function() {
+  HandleLootPanel(true)
+} )
 
 let mobsImages = [
   {
@@ -627,10 +623,14 @@ attackIcons.forEach(attack => {
   monsterCreationAttacks.appendChild(attackImg);
 });
 
-let selectedDevItem = "stick";
+let selectedDevItem = null;
 
-function populateMonsterLoot() {
-  monsterLoot.innerHTML = ""; // Clear existing items
+let selectedItemGive = null;
+let selectedItemTake = null;
+let currentSelectionTarget = null;
+
+function populatelootPanel() {
+  // lootPanel.innerHTML = ""; // Clear existing items
 
   Object.values(allItemsObj).forEach(obj => {
     const itemImg = document.createElement("img");
@@ -645,17 +645,29 @@ function populateMonsterLoot() {
     itemImg.style.margin = "5px";
 
     itemImg.addEventListener("click", () => {
-      if (selectedMob) {
-        selectedMob.drop = obj.name;
-      }
-
       selectedDevItem = obj.name;
+      if(selectedMob) {
+        selectedMob.drop = selectedDevItem;
+      }
 
       lootImage.style.backgroundImage = `url(${obj.image})`;
       lootImage.style.backgroundSize = `contain`;
+
+      if (currentSelectionTarget === "give") {
+        selectedItemGive = obj.name;
+        chestCreatorButtonGive.style.backgroundImage = `url(${obj.image})`;
+        chestCreatorButtonGive.style.backgroundSize = `contain`;
+
+      } else if (currentSelectionTarget === "take") {
+        selectedItemTake = obj.name;
+        chestCreatorButtonTake.style.backgroundImage = `url(${obj.image})`;
+        chestCreatorButtonTake.style.backgroundSize = `contain`;
+      }
+
+      HandleLootPanel(false)
     });
 
-    monsterLoot.appendChild(itemImg);
+    lootPanelItems.appendChild(itemImg);
   });
 }
 
@@ -740,7 +752,7 @@ function openIvn() {
 
   if (uiIsClose){
     menuUi.style.right = "0";
-    uiButtonParent.style.right = "44vh";
+    uiButtonParent.style.right = "38.5vh";
     menuUiButtonOpener.style.right = "0vh"
     uiIsClose = false
     
@@ -759,7 +771,7 @@ function openIvn() {
    } else {
       menuUi.style.right = "-45.5vh";
       uiButtonParent.style.right = "-10vh";
-      menuUiButtonOpener.style.right = "9vh"
+      menuUiButtonOpener.style.right = "8vh"
       uiIsClose = true
       menuUiButtonProfile.style.zIndex = "1"
       menuUiButtonInventory.style.zIndex = "1"
@@ -1367,70 +1379,17 @@ socket.on("partyProjectileClient", (projectiles) => {
 
 // Chest > 
 rewardChest.addEventListener("click", () => {
-  openChestIsland ()
+  openChestIsland()
 });
 
 let currentLeft = 0
-let currentChestItem = "stick"
+let currentChestItem = null
 
 function openChestIsland () {
-  if (IslandChestOpened === false) {
 
-    IslandChestOpened = true;
-
-    const key = myPlayer.inventory.find(item => (item.name === "chestKey"));
-    const chestKeyRestfield = myPlayer.inventory.find(item => (item.name === "chestKeyRestfield"));
-    const chestKeyCommon = myPlayer.inventory.find(item => (item.name === "chestKeyCommon"));
-
-    if (key || chestKeyRestfield || chestKeyCommon) {
-
-        const openChest = setInterval(() => {
-    
-          if (currentLeft >= 700) {
-            clearInterval(openChest)
-    
-            setTimeout(() => {
-              currentLeft = 0
-              rewardChest.style.left = `-${currentLeft}%`;
-              IslandChestOpened = false;
-            }, 1000);
-          }
-    
-          rewardChest.style.left = `-${currentLeft}%`;
-    
-          currentLeft += 100;
-        }, 50);
-        
-        if (currentChestItem === "mushroomTrial") {
-          if (key) {
-            socket.emit("rewardChest", currentChestItem);
-            openChestAudio.play()
-          } else {
-            clearInterval(openChest)
-          }
-        } 
-        else if (currentChestItem === "restfieldTrial") {
-          if (chestKeyRestfield) {
-            socket.emit("rewardChest", currentChestItem);
-            openChestAudio.play()
-          } else {
-            clearInterval(openChest)
-          }
-        } 
-        else if (chestKeyCommon) {
-          socket.emit("rewardChest", currentChestItem);
-          openChestAudio.play()
-        }
-        else {
-          errorDisplay("Your inventory is full.")
-        }
-    }
-    else {
-      errorDisplay("Your dont have a key.")
-      IslandChestOpened = false;
-    }
-    }
-
+  console.log("You are trying to open a chest")
+  socket.emit("rewardChest", currentChestItem);
+  // openChestAudio.play()
 
 }
 
@@ -7361,7 +7320,7 @@ socket.on("loginAttempt", (res) => {
     // intervalCanvasBase = setInterval(lobbyLoop, 16.67); //Initial canvas
     console.log("logged in")
     
-    populateMonsterLoot()
+    populatelootPanel()
 
     chatInput.style.display = "block";
     playerHeartParent.style.display = "block";
@@ -7762,49 +7721,52 @@ window.addEventListener("keydown", (e) => {
   //Enchanting grasslands open <
 
   //Chest island open >
-
   if(e?.key?.toLowerCase() === "e" && IslandChestAvailable & !IslandOpenChest) {
-    const key = myPlayer.inventory.find(item => item.name === "chestKey");
-    const chestKeyRestfield = myPlayer.inventory.find(item => (item.name === "chestKeyRestfield"));
-    const chestKeyCommon = myPlayer.inventory.find(item => (item.name === "chestKeyCommon"));
 
-    if ((currentChestItem === "mushroomTrial") && !key) {
-      areaNameDisplay("Trial Started")
-      console.log("trial started")
-      challengeAccepted.play()
-      timer.style.display = "flex";
-      setTimeout(() => {
-        startTimer();
-        mapsInfo[currentLand].enemies?.forEach(enemy => {
-          activateNormalEnemy(enemy);
-        })
-        const rocksFall = new Audio("./audios/rocksFall.wav");
-        rocksFall.loop = false;
-        rocksFall.volume = 0.1;
-        rocksFall.play();
-        suspense1.play();
-      }, 2000);
-    } 
-    else if ((currentChestItem === "restfieldTrial") && !chestKeyRestfield) {
-      areaNameDisplay("Trial Started")
-      challengeAccepted.play()
-      timer.style.display = "flex";
-      setTimeout(() => {
-        startTimer();
-        mapsInfo[currentLand].enemies?.forEach(enemy => {
-          activateNormalEnemy(enemy);
-        })
-        const rocksFall = new Audio("./audios/rocksFall.wav");
-        rocksFall.loop = false;
-        rocksFall.volume = 0.1;
-        rocksFall.play();
-        suspense1.play();
-      }, 2000);
-    } 
-    else if (((currentChestItem === "restfieldTrial") && chestKeyRestfield) || ((currentChestItem === "mushroomTrial") && key) || chestKeyCommon) {
-      IslandOpenChest = true;
-      openShopAudio.play();
-    }
+    IslandOpenChest = true;
+    openChestIsland()
+
+    // const key = myPlayer.inventory.find(item => item.name === "chestKey");
+    // const chestKeyRestfield = myPlayer.inventory.find(item => (item.name === "chestKeyRestfield"));
+    // const chestKeyCommon = myPlayer.inventory.find(item => (item.name === "chestKeyCommon"));
+
+    // if ((currentChestItem === "mushroomTrial") && !key) {
+    //   areaNameDisplay("Trial Started")
+    //   console.log("trial started")
+    //   challengeAccepted.play()
+    //   timer.style.display = "flex";
+    //   setTimeout(() => {
+    //     startTimer();
+    //     mapsInfo[currentLand].enemies?.forEach(enemy => {
+    //       activateNormalEnemy(enemy);
+    //     })
+    //     const rocksFall = new Audio("./audios/rocksFall.wav");
+    //     rocksFall.loop = false;
+    //     rocksFall.volume = 0.1;
+    //     rocksFall.play();
+    //     suspense1.play();
+    //   }, 2000);
+    // } 
+    // else if ((currentChestItem === "restfieldTrial") && !chestKeyRestfield) {
+    //   areaNameDisplay("Trial Started")
+    //   challengeAccepted.play()
+    //   timer.style.display = "flex";
+    //   setTimeout(() => {
+    //     startTimer();
+    //     mapsInfo[currentLand].enemies?.forEach(enemy => {
+    //       activateNormalEnemy(enemy);
+    //     })
+    //     const rocksFall = new Audio("./audios/rocksFall.wav");
+    //     rocksFall.loop = false;
+    //     rocksFall.volume = 0.1;
+    //     rocksFall.play();
+    //     suspense1.play();
+    //   }, 2000);
+    // } 
+    // else if (((currentChestItem === "restfieldTrial") && chestKeyRestfield) || ((currentChestItem === "mushroomTrial") && key) || chestKeyCommon) {
+    //   IslandOpenChest = true;
+    //   openShopAudio.play();
+    // }
   } else if (e?.key?.toLowerCase() === "e" && IslandChestAvailable & IslandOpenChest) {
     IslandOpenChest = false;
   }
@@ -8687,6 +8649,10 @@ setTimeout(() => {
 }, 4000);
 }
 
+socket.on("errorMessage", (info) => {
+  errorDisplay(info)
+})
+
 function errorDisplay(name, color) {
 
 errorPopUp.textContent = name;
@@ -9120,7 +9086,8 @@ canvasLobby.addEventListener('click', function(event) {
     
     mapsInfo[currentLand].colliders.push({
       type: "chest",
-      item: currentChestItem,
+      item: selectedItemGive,
+      requiredItem: selectedItemTake,
       x: selectedXcoord,
       y: selectedYcoord,
       width: newWidth,
@@ -9211,7 +9178,6 @@ filterSubCategoryConstruction.forEach(component => {
   component.addEventListener('click', () => {
     constructionFilter = component.id
     handleConstructionFilter(constructionFilter)
-
   });
 })
 
@@ -9241,6 +9207,7 @@ function createImagesFromMapObjects(mapObjects) {
 
     parentDiv.addEventListener('click', () => {
       currentObjToPlace = obj.name
+
       const clickHover = new Audio("./audios/tapWood.wav");
       clickHover.volume = 0.3;
       clickHover.loop = false;
@@ -9275,7 +9242,6 @@ function createImagesFromMapObjects(mapObjects) {
     }
     if(category === "light"){
       uiBuildingLight.appendChild(parentDiv);
-      
     }
   });
 }
@@ -9289,7 +9255,6 @@ function calculateValue(resolution) {
 function deselectUiButton() {
   // console.log("DESELECTING ALL")
   // currentDevAction = ""
-  monsterLoot.style.display = "none"
   placeWalls.style.backgroundColor = "#ffe2c1"
   deleteWalls.style.backgroundColor = "#ffe2c1"
   deleteObjButtonUi.style.backgroundColor = "#ffe2c1"
@@ -9305,6 +9270,7 @@ function deselectUiButton() {
   placeCookingArea.style.backgroundColor = "#ffe2c1"
   editMapsButtonUi.style.backgroundColor = "#ffe2c1"
   placeMobButtonUi.style.backgroundColor = "#ffe2c1"
+  mapButtonUi.style.backgroundColor = "#ffe2c1"
   uiBuildingObjects.style.display = "none";
   uiBuildingCategory.style.display = "none";
   roomsDiv.style.display = "none"
@@ -9314,6 +9280,7 @@ function deselectUiButton() {
   monsterCreationParent.style.display = "none"
   editMapsPage.style.display = "none"
   placeArea.style.display = "none"
+  mapEditor.style.display = "none"
   uiBuildingVisible = true
 }
 
@@ -9355,6 +9322,7 @@ if(deleteObject === false) {
 });
 
 layerOneButtonUi.addEventListener("click", function() {
+  playRandomPop()
   if(currentSelectedObjLayer !== 2){
     currentSelectedObjLayer = 2;
     deselectUiButton()
@@ -9368,6 +9336,7 @@ layerOneButtonUi.addEventListener("click", function() {
   } 
 });
 layerThreeButtonUi.addEventListener("click", function() {
+  playRandomPop()
   if(currentSelectedObjLayer !== 0){
     deselectUiButton()
     currentSelectedObjLayer = 0;
@@ -9381,99 +9350,10 @@ layerThreeButtonUi.addEventListener("click", function() {
 
 })
 
-editMapsButtonUi.addEventListener("click", function(){
-  showWallsFunction(false)
-  playRandomPop()
-  uiBuildingCategoryDivVisibility.style.display = "none"
-  if(currentDevAction !== "editmap"){
-    deselectUiButton()
-    currentDevAction = "editmap"
-    editMapsPage.style.display = "flex"
-    editMapsButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
-  } else {
-    editMapsPage.style.display = "none"
-    editMapsButtonUi.style.backgroundColor = "#FFE2C1"
-    currentDevAction = "none"
-  }
-})
-
-editMapsDeleteObj.addEventListener("click", function(){
-  showWallsFunction(false)
-  playRandomPop()
-  popupDeleteAllObjParent.style.display = "flex"
-  popUpBlackscreen.style.display = "flex"
-  uiBuildingCategoryDivVisibility.style.display = "none"
-})
-
-closeEditMapsTitle.addEventListener("click", function(){
-  playRandomPop()
-  editMapsPage.style.display = "none"
-  editMapsButtonUi.style.backgroundColor = "#FFE2C1"
-  currentDevAction = "none"
-})
-
-deleteAllObjButton.addEventListener("click", function(){
-  playRandomPop()
-  socket.emit("deleteAllObj", mapsInfo[currentLand].areaName);
-  popupDeleteAllObjParent.style.display = "none"
-  popUpBlackscreen.style.display = "none"
-})
-
-deleteAllObjButtonCancel.addEventListener("click", function(){
-  playRandomPop()
-  popupDeleteAllObjParent.style.display = "none"
-  popUpBlackscreen.style.display = "none"
-})
-
-saveObjButtonUi.addEventListener("click", function() {
-  playRandomPop()
-  showWallsFunction(false);
-  console.log(mapsInfo[currentLand])
-  for (let enemy of mapsInfo[currentLand].enemies) {
-    enemy.stateTimer = 0;
-    enemy.spawn = _.cloneDeep(enemy.baseSpawn)
-  }
-  socket.emit("saveWorld", mapsInfo[currentLand]);
-  errorDisplay("Saving map")
-});
-
-sapwnButtonUi.addEventListener("click", function() {
-  showWallsFunction(false);
-  socket.emit("setSpawn", [localPlayerPos, currentLand]);
-  errorDisplay("Setting spawn point")
-});
-
-createMapButtonUi.addEventListener("click", function() {
-  showWallsFunction(false);
-  uiBuildingCategoryDivVisibility.style.display = "none"
-  if (mapInfoDiv.style.display === "flex") {
-    mapInfoDiv.style.display = "none"
-    createMapButtonUi.style.backgroundColor = "#ffe2c1"
-    noMovement = false
-  } else {
-    deselectUiButton()
-    createMapButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
-    mapInfoDiv.style.display = "flex"
-    noMovement = true
-  }
-});
-
-createMapButton.addEventListener("click", function() {
-  showWallsFunction(false);
-  uiBuildingCategoryDivVisibility.style.display = "none"
-  worldInfo = {
-    title: mapNameInput.value,
-    desc: mapDescInput.value
-  }
-  socket.emit("createWorld", worldInfo);
-  errorDisplay("Creating map")
-  mapInfoDiv.style.display = "none"
-  noMovement = false
-});
-
 let uiBuildingVisible = true
 
 function eyesIsOpen(){
+  playRandomPop()
   if(uiBuildingVisible){
     uiConstructionVisibility.src = "./icons/uiIcon/notVisibleIcon.png"
     uiConstructionVisibility.style.background = "rgb(255, 0, 0)"
@@ -9485,16 +9365,16 @@ function eyesIsOpen(){
 
     monsterCreationParent.style.right = "-380px"
     monsterCreationBottom.style.right = "-380px"
-    monsterLoot.style.right = "-380px"
 
     uiBuilding.style.left = "-380px"
     toolBar.style.left = "-380px"
+    roomsDev.style.right = "-380px"
 
   } else  if(!uiBuildingVisible) {
     uiBuildingVisible = true
 
     uiConstructionVisibility.src = "./icons/uiIcon/visibleIcon.png"
-    uiConstructionVisibility.style.background = "#33ff00"
+    uiConstructionVisibility.style.background = "rgb(148, 223, 148) "
     console.log(uiBuildingVisible)
     uiBuildingVisible = true
 
@@ -9503,15 +9383,15 @@ function eyesIsOpen(){
 
     monsterCreationParent.style.right = "10px"
     monsterCreationBottom.style.right = "340px"
-    monsterLoot.style.right = "340px"
+
 
     uiBuilding.style.left = "12px"
     toolBar.style.left = "10px"
+    roomsDev.style.right = "554px"
   }
 }
 
 uiConstructionVisibility.addEventListener("click", function() {
-  showWallsFunction(false)
   playRandomPop()
   eyesIsOpen()
 });
@@ -9523,6 +9403,7 @@ informationButton.addEventListener("click", function() {
   playRandomPop()
   deselectUiButton()
   handleDisplayToolBarsBuildingMode()
+  placeAreaColorChange()
 
   currentDevAction = "none";
   uiBuilding.style.display = "none"
@@ -9596,10 +9477,12 @@ if (uiBuilding.style.display !== "flex") {
   uiBuildingCategory.style.display = "none";
   informationButton.style.display = "none"
   openUi()
+  placeAreaColorChange()
 }
 });
 
 hideAndSickButton.addEventListener("click", () => {
+  playRandomPop()
   if (hideAndSickvar === false){
     hideAndSickvar = true
   } else {
@@ -9609,6 +9492,7 @@ hideAndSickButton.addEventListener("click", () => {
   
 })
 fishingAvailableButton.addEventListener("click", () => {
+  playRandomPop()
   if (fishingAvailablevar === false){
     fishSelectorButton.style.display = 'flex'
     fishingAvailablevar = true
@@ -9631,6 +9515,7 @@ fishingAvailableButton.addEventListener("click", () => {
 })
 
 openMusicPlayerButton.addEventListener("click", function() {
+  playRandomPop()
   if (musicPlayer.style.display != "block") {
     deselectUiButton()
     musicPlayer.style.display = "block"
@@ -9680,7 +9565,7 @@ hammerButtonUi.addEventListener("click", function() {
 
 placeMobButtonUi.addEventListener("click", function(){
   showWallsFunction(false)
-
+  playRandomPop()
   if (currentDevAction !== "monster") {
     deselectUiButton()
     currentDevAction = "monster";
@@ -9694,6 +9579,306 @@ placeMobButtonUi.addEventListener("click", function(){
     monsterSelectionImageParent.style.display = "none"
   }
 });
+
+// MAPS EDITOR
+
+let mapType = ""
+let buttonTypeIsPress = false
+
+function CloseAllDropDown(){
+  mapInfoTypeButton.style.display = "none";
+  mapInfoTypeContent.style.top = "0px"
+  mapInfoTypeContent.style.boxShadow = "3px 3px #0000003b"
+
+  mapInfoColorBaseButton.style.display = "none";
+  mapInfoColorBaseContent.style.top = "0px"
+  mapInfoColorBaseContent.style.boxShadow = "3px 3px #0000003b"
+
+}
+function checkIfAllFieldAreField(){
+  if(mapType !== "" && mapColorBase !== "" && mapPrivacy !== ""){
+    createMapButton.style.backgroundColor = "#c4ffc4"
+    createMapButton.style.boxShadow = "rgba(0, 0, 0, 0.23) 3px 3px"
+    createMapButton.style.bottom = "18px"
+
+    createMapButton.classList.add("active");
+    createMapButton.classList.remove("disabled");
+
+  } else {
+    createMapButton.classList.remove("active");
+    createMapButton.classList.add("disabled");
+
+    createMapButton.style.backgroundColor = "#c0b9b9"
+    createMapButton.style.boxShadow = "rgba(0, 0, 0, 0.23) 0px 0px"
+    createMapButton.style.bottom = "15px"
+  }
+}
+
+mapInfoTypeContent.addEventListener("click", function(){
+  playRandomPop()
+  buttonColorBaseIsPress = false
+  buttonPrivacyIsPress = false
+
+  if(buttonTypeIsPress === false) {
+    CloseAllDropDown()
+    mapInfoTypeButton.style.display = "block";
+    mapInfoTypeContent.style.top = "3px"
+    mapInfoTypeContent.style.boxShadow = "0px 0px #0000003b"
+
+    buttonTypeIsPress = true
+
+    if(mapType !== ""){
+      mapInfoTypeContent.style.backgroundColor = "#c4ffc4"
+    } else {
+      mapInfoTypeContent.style.backgroundColor = "white"
+    }
+
+  } else {
+    CloseAllDropDown()
+
+    buttonTypeIsPress = false
+
+    if(mapType !== ""){
+      mapInfoTypeContent.style.backgroundColor = "#c4ffc4"
+    } else {
+      mapInfoTypeContent.style.backgroundColor = "white"
+    }
+  }
+});
+mapInfoTypeItem.forEach(item => {
+
+  item.addEventListener("click", function() {
+    const newLabel = this.id;
+    mapInfoTypeContent.textContent = newLabel.toUpperCase();
+    mapType = newLabel
+
+    mapInfoTypeButton.style.display = "none";
+    mapInfoTypeContent.style.top = "0px"
+    mapInfoTypeContent.style.boxShadow = "3px 3px #0000003b"
+    mapInfoTypeContent.style.backgroundColor = "#c4ffc4"
+
+    buttonTypeIsPress = false
+    checkIfAllFieldAreField()
+  });
+
+});
+
+let buttonColorBaseIsPress = false
+let mapColorBase = ""
+
+mapInfoColorBaseContent.addEventListener("click", function(){
+  playRandomPop()
+  buttonTypeIsPress = false
+  buttonPrivacyIsPress = false
+
+  if(buttonColorBaseIsPress === false) {
+    CloseAllDropDown()
+    mapInfoColorBaseButton.style.display = "block";
+    mapInfoColorBaseContent.style.top = "3px"
+    mapInfoColorBaseContent.style.boxShadow = "0px 0px #0000003b"
+
+    buttonColorBaseIsPress = true
+
+    if(mapColorBase !== ""){
+      mapInfoColorBaseContent.style.backgroundColor = "#c4ffc4"
+    } else {
+      mapInfoColorBaseContent.style.backgroundColor = "white"
+    }
+
+  } else {
+    CloseAllDropDown()
+    buttonColorBaseIsPress = false
+
+    if(mapColorBase !== ""){
+      mapInfoColorBaseContent.style.backgroundColor = "#c4ffc4"
+    } else {
+      mapInfoColorBaseContent.style.backgroundColor = "white"
+    }
+  }
+});
+mapInfoColorBaseItem.forEach(item => {
+
+  item.addEventListener("click", function() {
+    const newLabel = this.id;
+    mapInfoColorBaseContent.textContent = newLabel.toUpperCase();
+    mapColorBase = newLabel
+
+    mapInfoColorBaseButton.style.display = "none";
+    mapInfoColorBaseContent.style.top = "0px"
+    mapInfoColorBaseContent.style.boxShadow = "3px 3px #0000003b"
+    mapInfoColorBaseContent.style.backgroundColor = "#c4ffc4"
+
+    console.log(mapColorBase)
+
+    buttonColorBaseIsPress = false
+    checkIfAllFieldAreField()
+  });
+
+});
+
+let buttonPrivacyIsPress = false
+let mapPrivacy = ""
+
+mapInfoPrivacyContent.addEventListener("click", function(){
+  playRandomPop()
+  buttonColorBaseIsPress = false
+  buttonTypeIsPress = false
+
+  if(buttonPrivacyIsPress === false) {
+    CloseAllDropDown()
+    mapInfoPrivacyButton.style.display = "block";
+    mapInfoPrivacyContent.style.top = "3px"
+    mapInfoPrivacyContent.style.boxShadow = "0px 0px #0000003b"
+
+    buttonPrivacyIsPress = true
+
+    if(mapPrivacy !== ""){
+      mapInfoPrivacyContent.style.backgroundColor = "#c4ffc4"
+    } else {
+      mapInfoPrivacyContent.style.backgroundColor = "white"
+    }
+
+  } else {
+    CloseAllDropDown()
+    buttonPrivacyIsPress = false
+
+    if(mapPrivacy !== ""){
+      mapInfoPrivacyContent.style.backgroundColor = "#c4ffc4"
+    } else {
+      mapInfoPrivacyContent.style.backgroundColor = "white"
+    }
+  }
+});
+mapInfoPrivacyItem.forEach(item => {
+
+  item.addEventListener("click", function() {
+    const newLabel = this.id;
+    mapInfoPrivacyContent.textContent = newLabel.toUpperCase();
+    mapPrivacy = newLabel
+
+    mapInfoPrivacyButton.style.display = "none";
+    mapInfoPrivacyContent.style.top = "0px"
+    mapInfoPrivacyContent.style.boxShadow = "3px 3px #0000003b"
+    mapInfoPrivacyContent.style.backgroundColor = "#c4ffc4"
+
+    console.log(mapPrivacy)
+
+    buttonPrivacyIsPress = false
+    checkIfAllFieldAreField()
+  });
+
+});
+
+
+mapButtonUi.addEventListener("click", function(){
+  showWallsFunction(false)
+  playRandomPop()
+
+  if(currentDevAction == "createNewMap"){
+    return
+  }
+
+  if (currentDevAction !== "editmap") {
+    deselectUiButton()
+
+    currentDevAction = "editmap";
+    mapButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
+    mapEditor.style.display = "flex"
+ 
+    editMapsPage.style.display = "flex"
+    editMapsButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
+
+  } else {
+    currentDevAction = "";
+    deselectUiButton()
+  }
+});
+
+editMapsButtonUi.addEventListener("click", function(){
+  showWallsFunction(false)
+  playRandomPop()
+  
+  createMapButtonUi.style.backgroundColor = "#ffe2c1"
+  mapInfoDiv.style.display = "none"
+
+  currentDevAction = "editmap"
+  editMapsPage.style.display = "flex"
+  editMapsButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
+})
+
+editMapsDeleteObj.addEventListener("click", function(){
+  showWallsFunction(false)
+  playRandomPop()
+  popupDeleteAllObjParent.style.display = "flex"
+  popUpBlackscreen.style.display = "flex"
+  uiBuildingCategoryDivVisibility.style.display = "none"
+})
+
+deleteAllObjButton.addEventListener("click", function(){
+  playRandomPop()
+  socket.emit("deleteAllObj", mapsInfo[currentLand].areaName);
+  popupDeleteAllObjParent.style.display = "none"
+  popUpBlackscreen.style.display = "none"
+})
+
+deleteAllObjButtonCancel.addEventListener("click", function(){
+  playRandomPop()
+  popupDeleteAllObjParent.style.display = "none"
+  popUpBlackscreen.style.display = "none"
+})
+
+saveObjButtonUi.addEventListener("click", function() {
+  playRandomPop()
+  showWallsFunction(false);
+  console.log(mapsInfo[currentLand])
+  for (let enemy of mapsInfo[currentLand].enemies) {
+    enemy.stateTimer = 0;
+    enemy.spawn = _.cloneDeep(enemy.baseSpawn)
+  }
+  socket.emit("saveWorld", mapsInfo[currentLand]);
+  errorDisplay("Saving map")
+});
+
+sapwnButtonUi.addEventListener("click", function() {
+  showWallsFunction(false);
+  socket.emit("setSpawn", [localPlayerPos, currentLand]);
+  errorDisplay("Setting spawn point")
+});
+
+createMapButtonUi.addEventListener("click", function() {
+  showWallsFunction(false);
+  playRandomPop()
+  
+  editMapsButtonUi.style.backgroundColor = "#ffe2c1"
+  editMapsPage.style.display = "none"
+
+  currentDevAction === "createNewMap"
+  mapInfoDiv.style.display = "flex"
+  createMapButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
+});
+
+createMapButton.addEventListener("click", function() {
+  if(mapType !== "" && mapColorBase !== "" && mapPrivacy !== ""){
+    showWallsFunction(false);
+  
+    worldInfo = {
+      title: mapNameInput.value,
+      desc: mapDescInput.value,
+      privacy: mapPrivacy,
+      type: mapType,
+      colorBase: mapColorBase,
+    }
+    
+    socket.emit("createWorld", worldInfo);
+    errorDisplay("Creating map")
+    // currentDevAction === "editmap"
+    noMovement = false
+
+  } else {
+    errorDisplay("You must fill in all the fields to create your map")
+  }
+});
+// MAPS EDITOR
 
 let musicLibrary = {
   grasslands: [grasslandsST1, grasslandsST2, grasslandsST3, grasslandsST4, grasslandsST5]
@@ -9752,9 +9937,12 @@ musicPlayerSlider.addEventListener("input", function () {
 let colisionVisible = false
 
 colisionActivatorButton.addEventListener("click", function() {
+  playRandomPop()
   if(colisionVisible){
+    placeAreaColorChange()
     placeWalls.style.display = "none"
     deleteWalls.style.display = "none"
+    placeChest.style.display = "none"
     placeFishingArea.style.display = "none"
     placeEnchantingArea.style.display = "none"
     placeCraftingArea.style.display = "none"
@@ -9763,9 +9951,11 @@ colisionActivatorButton.addEventListener("click", function() {
     monsterAltarButtonUi.style.display = "none"
 
    colisionVisible = false
+   showWallsFunction(false)
   } else {
     placeWalls.style.display = "flex"
     deleteWalls.style.display = "flex"
+    placeChest.style.display = "flex"
     placeFishingArea.style.display = "flex"
     placeEnchantingArea.style.display = "flex"
     placeCraftingArea.style.display = "flex"
@@ -9774,12 +9964,14 @@ colisionActivatorButton.addEventListener("click", function() {
     monsterAltarButtonUi.style.display = "flex"
 
     colisionVisible = true
+    showWallsFunction(true)
   }
 })
 
 let deleteObject = false
 
 function placeAreaColorChange(){
+  HandleLootPanel(false)
   currentDevAction = "building"
   placeCraftingArea.style.backgroundColor = "#ffe2c1"
   placeTransition.style.backgroundColor = "#ffe2c1"
@@ -9789,10 +9981,22 @@ function placeAreaColorChange(){
   placeFishingArea.style.backgroundColor = "#ffe2c1"
   placeWalls.style.backgroundColor = "#ffe2c1"
   deleteWalls.style.backgroundColor = "#ffe2c1"
+  placeChest.style.background =  "#ffe2c1"
   roomsDiv.style.display = "none"
-  monsterLoot.style.display = "none"
+  chestCreatorParent.style.display = "none"
 }
+
+function HandleLootPanel(state){
+  if(state === true){
+    lootPanel.style.display = "flex";
+
+  } else if(state === false){
+    lootPanel.style.display = "none";
+  }
+}
+
 placeFishingArea.addEventListener("click", function() {
+  playRandomPop()
   if (currentDevAction !== "fish") {
     placeAreaColorChange()
     currentDevAction = "fish";
@@ -9800,11 +10004,11 @@ placeFishingArea.addEventListener("click", function() {
     showWallsFunction(true)
   } else {
     placeAreaColorChange()
-    showWallsFunction(false)
   }
 });
 
 placeEnchantingArea.addEventListener("click", function() {
+  playRandomPop()
   if (currentDevAction !== "enchanting") {
   placeAreaColorChange()
   currentDevAction = "enchanting";
@@ -9812,11 +10016,11 @@ placeEnchantingArea.addEventListener("click", function() {
   showWallsFunction(true)
 } else {
   placeAreaColorChange()
-  showWallsFunction(false)
 }
 });
 
 placeCookingArea.addEventListener("click", function() {
+  playRandomPop()
   if (currentDevAction !== "cook") {
   placeAreaColorChange()
   currentDevAction = "cook";
@@ -9824,27 +10028,26 @@ placeCookingArea.addEventListener("click", function() {
   showWallsFunction(true)
 } else {
   placeAreaColorChange()
-  showWallsFunction(false)
 }
 });
 
 monsterAltarButtonUi.addEventListener("click", function() {
+  playRandomPop()
   if(currentDevAction !== "monsterAltar") {
     placeAreaColorChange()
     showWallsFunction(true)
-    monsterLoot.style.display = "flex"
 
   currentSelectedWall = null
   currentDevAction = "monsterAltar";
   monsterAltarButtonUi.style.backgroundColor = "rgba(170, 233, 170, 1)"
 
 } else {
-  showWallsFunction(false)
   placeAreaColorChange()
  }
 });
 
 placeCraftingArea.addEventListener("click", function() {
+  playRandomPop()
   if (currentDevAction !== "craft") {
   placeAreaColorChange()
   currentDevAction = "craft";
@@ -9852,12 +10055,11 @@ placeCraftingArea.addEventListener("click", function() {
   showWallsFunction(true)
   } else {
   placeAreaColorChange()
-  currentDevAction = "none";
-  showWallsFunction(false)
   }
 });
 
 placeTransition.addEventListener("click", function() {
+  playRandomPop()
 if (currentDevAction !== "transition") {
   placeAreaColorChange()
   currentDevAction = "transition";
@@ -9866,12 +10068,11 @@ if (currentDevAction !== "transition") {
   placeTransition.style.backgroundColor = "rgb(148, 223, 148)"
 } else {
   placeAreaColorChange()
-  currentDevAction = "none";
-  showWallsFunction(false)
 }
 });
 
 placeWalls.addEventListener("click", function() {
+  playRandomPop()
   if(currentDevAction !== "wall") {
   placeAreaColorChange()
   showWallsFunction(true)
@@ -9881,12 +10082,11 @@ placeWalls.addEventListener("click", function() {
   placeWalls.style.backgroundColor = "rgba(170, 233, 170, 1)"
 } else {
   placeAreaColorChange()
-  showWallsFunction(false)
-  currentDevAction = "building";
  }
 });
 
 deleteWalls.addEventListener("click", function() {
+  playRandomPop()
   if (currentDevAction !== "delete") {
     placeAreaColorChange()
     showWallsFunction(true)
@@ -9894,65 +10094,50 @@ deleteWalls.addEventListener("click", function() {
     deleteWalls.style.backgroundColor = "rgba(170, 233, 170, 1)"
   } else {
     placeAreaColorChange()
-    showWallsFunction(false)
-    currentDevAction = "building";
   }
 });
-//PLACE AREA
-
 
 placeChest.addEventListener("click", function() {
 if (currentDevAction !== "chest") {
-  currentDevAction = "chest";
-  roomsDiv.style.display = "none"
-  placeEnchantingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  deleteWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  dialogsDiv.style.display = "none"
-  placeDialog.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeWalls.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeFishingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeCookingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeCraftingArea.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  placeTransition.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  startBuildingBut.style.backgroundColor = "rgb(255 255 255 / 29%)"
-  deselectUiButton()
-  placeChest.style.backgroundColor = "rgba(170, 233, 170, 1)"
-   uiBuilding.style.display = "none"
-   uiBuildingObjects.style.display = "none"
+    placeAreaColorChange()
+    showWallsFunction(true)
+    chestCreatorParent.style.display = "flex"
+    currentDevAction = "chest";
+    placeChest.style.background = "rgba(170, 233, 170, 1)"
 } else {
-  currentDevAction = "none";
-  placeChest.style.backgroundColor = "rgb(255 255 255 / 29%)"
+    placeAreaColorChange()
+    HandleLootPanel(false)
+    currentDevAction = "building";
 }
 });
 
-placeChestStick.style.backgroundColor = "rgba(170, 233, 170, 1)" //Initially selected
+chestCreatorButtonGive.addEventListener("click", function() {
+  currentSelectionTarget = "give"
+  HandleLootPanel(true)
+});
+chestCreatorButtonTake.addEventListener("click", function() {
+  currentSelectionTarget = "take"
+  HandleLootPanel(true)
+});
+chestCreatorResetChest.addEventListener("click", function() {
+  selectedItemGive = null;
+  selectedItemTake = null;
+  currentSelectionTarget = null
 
-placeChestStick.addEventListener("click", function() {
-  if (currentChestItem !== "stick") {
-    currentChestItem = "stick";
-    placeChestGem.style.backgroundColor = "rgb(255 255 255 / 29%)"
-    placeChestVeg.style.backgroundColor = "rgb(255 255 255 / 29%)"
-    placeChestStick.style.backgroundColor = "rgba(170, 233, 170, 1)"
-  }
+  chestCreatorButtonGive.style.backgroundImage = "url(./icons/uiIcon/exclamation.png)";
+  chestCreatorButtonTake.style.backgroundImage = "url(./icons/uiIcon/exclamation.png)";
+  console.log(selectedItemGive, selectedItemTake, currentSelectionTarget)
+});
+chestCreatorPlaceChest.addEventListener("click", function() {
+  chestCreatorParent.style.display = "none"
+  HandleLootPanel(false)
+});
+closeLootPanel.addEventListener("click", function() {
+  HandleLootPanel(false)
 });
 
-placeChestVeg.addEventListener("click", function() {
-  if (currentChestItem !== "vegetable") {
-    currentChestItem = "vegetable";
-    placeChestGem.style.backgroundColor = "rgb(255 255 255 / 29%)"
-    placeChestStick.style.backgroundColor = "rgb(255 255 255 / 29%)"
-    placeChestVeg.style.backgroundColor = "rgba(170, 233, 170, 1)"
-  }
-});
+//PLACE AREA
 
-placeChestGem.addEventListener("click", function() {
-  if (currentChestItem !== "gem") {
-    currentChestItem = "gem";
-    placeChestVeg.style.backgroundColor = "rgb(255 255 255 / 29%)"
-    placeChestStick.style.backgroundColor = "rgb(255 255 255 / 29%)"
-    placeChestGem.style.backgroundColor = "rgba(170, 233, 170, 1)"
-  }
-});
 
 placeDialog.addEventListener("click", function() {
   if (currentDevAction !== "dialog") {
@@ -9978,7 +10163,6 @@ placeDialog.addEventListener("click", function() {
 });
 
 function showWallsFunction(state) {
-  playRandomPop()
 if (state === true) {
   wallsVisibility = 0.5;
   showWalls.style.backgroundColor = "rgba(170, 233, 170, 1)"
@@ -10016,6 +10200,7 @@ exportObjectAsText(mapsInfo[currentLand].colliders, "walls")
 let uiBuildingCategoryActivate = "construction"
 
 function displayuiBuildingCategory() {
+  playRandomPop()
   uiBuildingConstruction.style.display = 'none'
   uiBuildingFurniture.style.display = 'none'
   uiBuildingStructure.style.display = 'none'
@@ -10717,14 +10902,15 @@ function drawColliders (type, x, y, w, h) {
         }
         else if (wall.type === "chest") {
           IslandChestAvailable = true;
-          currentChestItem = wall.item;
-          if (IslandOpenChest) {
-            rewardFrame.style.visibility = "visible";
-            rewardFrame.style.opacity = "1";
-          } else {
-            rewardFrame.style.opacity = "0";
-            rewardFrame.style.visibility = "hidden";
-          }
+          currentChestItem = [wall.item, wall.requiredItem];
+          
+          // if (IslandOpenChest) {
+          //   // rewardFrame.style.visibility = "visible";
+          //   // rewardFrame.style.opacity = "1";
+          // } else {
+          //   rewardFrame.style.opacity = "0";
+          //   rewardFrame.style.visibility = "hidden";
+          // }
         }
       }
       else {
@@ -10751,7 +10937,7 @@ function drawColliders (type, x, y, w, h) {
         if (wall.type === "chest" && chestCounter === 0) {
           IslandChestAvailable = false;
           IslandOpenChest = false;
-          rewardFrame.style.visibility = "hidden";
+          // rewardFrame.style.visibility = "hidden";
         }
         if (wall.type === "scoreBoard") {
           scoreAvailable = false;

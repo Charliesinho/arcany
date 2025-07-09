@@ -386,7 +386,10 @@ const gainXpText = document.getElementById("gainXpText")
 const monsterImage = document.getElementById("monsterImage");
 const monsterSelectionImageParent = document.getElementById("monsterSelectionImageParent");
 const monsterCreationAttacks = document.getElementById("monsterCreationAttacks");
-const monsterLoot = document.getElementById("monsterLoot");
+const lootPanel = document.getElementById("lootPanel");
+const lootPanelItems = document.getElementById("lootPanelItems");
+const chestCreatorParent = document.getElementById("chestCreatorParent");
+const closeLootPanel = document.getElementById("closeLootPanel");
 const lootImage = document.getElementById("lootImage");
 const monsterNameInput = document.getElementById("monsterNameInput");
 
@@ -395,7 +398,6 @@ const monsterCreationParent = document.getElementById("monsterCreationParent");
 
 //EDIT MAPS
 const editMapsButtonUi = document.getElementById("editMapButtonUi")
-const closeEditMapsTitle = document.getElementById("closeEditMapsTitle")
 const editMapsPage = document.getElementById("editMaps")
 const editMapsRenameInput = document.getElementById("editMapsRenameInput");
 const editMapsDeleteObj = document.getElementById("editMapsDeleteObj");
@@ -403,6 +405,25 @@ const popupDeleteAllObjParent = document.getElementById("popupDeleteAllObjParent
 const popUpBlackscreen = document.getElementById("popUpBlackscreen");
 const deleteAllObjButton = document.getElementById("deleteAllObjButton");
 const deleteAllObjButtonCancel = document.getElementById("deleteAllObjButtonCancel");
+const mapButtonUi = document.getElementById("mapButtonUi");
+const mapEditor = document.getElementById("mapEditor");
+
+const mapInfoTypeContent = document.getElementById("mapInfoTypeContent");
+const mapInfoTypeButton = document.getElementById("mapInfoTypeButton");
+const mapInfoTypeItem = document.querySelectorAll(".mapInfoTypeItem");
+
+const mapInfoColorBaseContent = document.getElementById("mapInfoColorBaseContent");
+const mapInfoColorBaseButton = document.getElementById("mapInfoColorBaseButton");
+const mapInfoColorBaseItem = document.querySelectorAll(".mapInfoColorBaseItem");
+
+const mapInfoPrivacyContent = document.getElementById("mapInfoPrivacyContent");
+const mapInfoPrivacyButton = document.getElementById("mapInfoPrivacyButton");
+const mapInfoPrivacyItem = document.querySelectorAll(".mapInfoPrivacyItem");
 
 //placeArea
 const placeArea = document.getElementById("placeArea");
+const chestCreatorButtonGive = document.getElementById("chestCreatorButtonGive");
+const chestCreatorButtonTake = document.getElementById("chestCreatorButtonTake");
+const chestCreatorResetChest = document.getElementById("chestCreatorResetChest");
+const chestCreatorPlaceChest = document.getElementById("chestCreatorPlaceChest");
+
