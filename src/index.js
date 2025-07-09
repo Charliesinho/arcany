@@ -893,154 +893,51 @@ async function main() {
 
                 const player = await Player.findOne({socket: socket.id}).exec();
 
-                if (player.inventory.length <= 21) {
-                    
-                    // if (item === "stick") {
-                    //     const key = player.inventory.find(item => item.name === "chestKeyCommon");
 
-                    //     if (key) {
-                    //         player.inventory.splice(player.inventory.indexOf(key), 1);
-                    //     if (number < 80) {
-                    //         player.inventory.push(stick);  
-                    //         io.to(socket.id).emit('obtained', stick);
-                    //     } else {
-                    //         player.inventory.push(stick);  
-                    //         io.to(socket.id).emit('obtained', stick);
-                    //     }
-                    //     }
-                    // }
-                    // if (item === "baseWeapon") {
 
-                    //     if (number < 80) {
-                    //         player.inventory.push(arcaneStaffCommon);  
-                    //         io.to(socket.id).emit('obtained', arcaneStaffCommon);
-                    //     } else {
-                    //         player.inventory.push(arcaneRepeaterInv);                                           
-                    //         io.to(socket.id).emit('obtained', arcaneRepeaterInv);
-                            
-                    //     }
-                    // }
-                    // if (item === "rune") {
-                    //     const key = player.inventory.find(item => item.name === "chestKeyCommon");
+                if (player.inventory.length <= 20) {
 
-                    //     if (key) {
-                    //         player.inventory.splice(player.inventory.indexOf(key), 1);
-    
-                    //         if (number < 60) {
-                    //             player.inventory.push(runeRange);  
-                    //             io.to(socket.id).emit('obtained', runeRange);
-                    //         } else if (number >= 60 && number <= 80) {
-                    //             player.inventory.push(runeFireRate);                                           
-                    //             io.to(socket.id).emit('obtained', runeFireRate);
-                    //         } else {
-                    //             player.inventory.push(runeBullets);                                           
-                    //             io.to(socket.id).emit('obtained', runeBullets);
-                    //         }
-                    //     }
-                    // }
-                    // if (item === "gemArcane") {
-                    //     const key = player.inventory.find(item => item.name === "chestKeyCommon");
+                    const itemToPush = Object.values(itemsObj).find(thing => thing.name === item[0]);
+                    console.log(item[0], item[1]);
 
-                    //     if (key) {
-                    //         player.inventory.splice(player.inventory.indexOf(key), 1);
-    
-                    //         if (number < 60) {
-                    //             player.inventory.push(arcaneGem);  
-                    //             io.to(socket.id).emit('obtained', arcaneGem);
-                    //         } else if (number >= 60 && number <= 80) {
-                    //             player.inventory.push(arcaneGem2);                                           
-                    //             io.to(socket.id).emit('obtained', arcaneGem2);
-                    //         } else {
-                    //             player.inventory.push(arcaneGem3);                                           
-                    //             io.to(socket.id).emit('obtained', arcaneGem3);
-                    //         }
-                    //     }
-                    // }
-                    // if (item === "mushroomTrial") {
-                    //     const key = player.inventory.find(item => item.name === "chestKey");
+                    if(item[1]) {
+                        const key = Object.values(itemsObj).find(thing => thing.name === item[1]);
 
-                    //     if (key) {
-                    //         player.inventory.splice(player.inventory.indexOf(key), 1);
-    
-                    //         if (number < 30) {
-                    //             player.inventory.push(chestKeyCommon);  
-                    //             io.to(socket.id).emit('obtained', chestKeyCommon);
-                    //         } 
-                    //         else if (number >= 30 && number < 60) {
-                    //             player.inventory.push(arcaneStaffCommon);                                           
-                    //             io.to(socket.id).emit('obtained', arcaneStaffCommon);
-                    //         } 
-                    //         else if (number >= 60 && number < 80) {
-                    //             player.inventory.push(ballo);                                           
-                    //             io.to(socket.id).emit('obtained', ballo);
-                    //         } 
-                    //         else if (number >= 80 && number < 90) {
-                    //             player.inventory.push(redMushroomlInventory);                                           
-                    //             io.to(socket.id).emit('obtained', redMushroomlInventory);
-                    //         } 
-                    //         else {
-                    //             player.inventory.push(arcaneRepeaterInv);                                           
-                    //             io.to(socket.id).emit('obtained', arcaneRepeaterInv);
-                    //         }
-                    //     }
-                    // }
-                    // if (item === "restfieldTrial") {
-                    //     const key = player.inventory.find(item => item.name === "chestKeyRestfield");
+                        const index = player.inventory.findIndex(item => item.name === key.name);
 
-                    //     if (key) {
-                    //         player.inventory.splice(player.inventory.indexOf(key), 1);
-    
-                    //         if (number < 30) {
-                    //             player.inventory.push(skullHelmet);  
-                    //             io.to(socket.id).emit('obtained', skullHelmet);
-                    //         } 
-                    //         else if (number >= 30 && number < 60) {
-                    //             player.inventory.push(chestKeyCommon);                                           
-                    //             io.to(socket.id).emit('obtained', chestKeyCommon);
-                    //         } 
-                    //         else if (number >= 60 && number < 80) {
-                    //             player.souls.push(restfieldSkeletonSoulInventory);                 
-                    //             await Player.findOneAndUpdate({socket: socket.id}, {souls: player.souls}, {new: true});                          
-                    //             io.to(socket.id).emit('obtained', restfieldSkeletonSoulInventory);
-                    //         } 
-                    //         else if (number >= 80 && number < 90) {
-                    //             player.inventory.push(reaperInventory);                                           
-                    //             io.to(socket.id).emit('obtained', reaperInventory);
-                    //         } 
-                    //         else {
-                    //             player.souls.push(reaperSoulInventory);                 
-                    //             await Player.findOneAndUpdate({socket: socket.id}, {souls: player.souls}, {new: true});                          
-                    //             io.to(socket.id).emit('obtained', reaperSoulInventory);
-                    //         }
-                    //     }
-                    // }
-                    // if (item === "blueClothes") {
-                    //     const key = player.inventory.find(item => item.name === "chestKeyCommon");
+                        if (index === -1) {
+                            io.to(socket.id).emit('errorMessage', `You need a ${item[1]} to get ${item[0]}`);
+                            console.log("Key required but not in inventory:", key.name);
+                            return;
+                        }
 
-                    //     if (key) {
-                    //         player.inventory.splice(player.inventory.indexOf(key), 1);
-            
-                    //         player.inventory.push(fishermanClothes);                                           
-                    //         io.to(socket.id).emit('obtained', fishermanClothes);
-                            
-                    //     }
-                    // }
+                        player.inventory.splice(index, 1);
 
-                    
-                    const key = player.inventory.find(item => item.name === "chestKeyCommon");
+                        if(itemToPush.type === "soul"){
+                            player.souls.push(itemToPush);
+                            await Player.findOneAndUpdate({socket: socket.id}, {souls: player.souls}, {new: true});
+                        } else {
+                            player.inventory.push(itemToPush);
+                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
+                        }
 
-                    if (key) {
-                        player.inventory.splice(player.inventory.indexOf(key), 1);
-                        const itemToPush = Object.values(itemsObj).find(thing => thing.name === item);
-                        player.inventory.push(itemToPush);                                           
-                        io.to(socket.id).emit('obtained', itemToPush); 
+                    } else {
+
+                        if(itemToPush.type === "soul"){
+                            player.souls.push(itemToPush);
+                            await Player.findOneAndUpdate({socket: socket.id}, {souls: player.souls}, {new: true});
+                        } else {
+                            player.inventory.push(itemToPush);
+                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
+                        }
                     }
-                       
-                    
-                    
-                    await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
-                    myPlayer[socket.id] = player;      
+
+                    io.to(socket.id).emit('obtained', itemToPush);    
+                    myPlayer[socket.id] = player;
+                } else {
+                    io.to(socket.id).emit('errorMessage', "You don't have space in your inventory");
                 }
+
               }
               consume()
         });
@@ -1051,7 +948,6 @@ async function main() {
 
                 const player = await Player.findOne({socket: socket.id}).exec();
 
-                
                 if (player.inventory.length <= 20) {
                     let itemToGive = itemsObj[item];
                     if (!itemToGive)return
@@ -1326,7 +1222,9 @@ async function main() {
             await World.create({
                 areaName: worldInfo.title , 
                 description: worldInfo.desc ,
-                // type: worldInfo.type ,
+                type: worldInfo.type ,
+                colorBase: worldInfo.colorBase ,
+                privacy: worldInfo.privacy ,
                 // biome: worldInfo.biome ,
                 // playerMade: worldInfo.playerMade ,
                 playerPos: {x: 1000, y: 1000} ,
