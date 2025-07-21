@@ -1370,8 +1370,10 @@ socket.on("leaderChangeRoomClient", (info) => {
   transitionLiquidInstant(info[0])
 })
 
-socket.on("partyProjectileClient", (projectile) => {
-  projectilesClient.push(projectile)
+socket.on("partyProjectileClient", (projectiles) => {
+  for (projectile of projectiles) {
+    projectilesClient.push(projectile)
+  }
 })
 
 // Trade system <
@@ -13444,7 +13446,7 @@ function attackState(enemy) {
 
     let toSend = [
       currentParty, 
-      {
+      [{
       angle: bulletAngle,
       x: enemy.spawn.x + ((enemy.w)/2) + 200,
       y: enemy.spawn.y + ((enemy.h)/2) + 200,
@@ -13452,7 +13454,7 @@ function attackState(enemy) {
       timeLeft: 100,
       playerId: socket.id,
       enemy: true
-      }]
+      }]]
 
     if (inParty) socket.emit("partyProjectile", toSend)
 
@@ -13527,6 +13529,57 @@ function lazerMooshState(enemy) {
       playerId: socket.id,
       enemy: true
     }) 
+
+    let toSend = [
+      currentParty, 
+      [{
+        angle: bulletAngle,
+        x: enemy.spawn.x + ((enemy.w)/2) + 200,
+        y: enemy.spawn.y + ((enemy.h)/2) + 200,
+        speed: 12,
+        timeLeft: 250,
+        playerId: socket.id,
+        enemy: true
+      },
+      {
+        angle: bulletAngle + 0.1,
+        x: enemy.spawn.x + ((enemy.w)/2) + 200,
+        y: enemy.spawn.y + ((enemy.h)/2) + 200,
+        speed: 12,
+        timeLeft: 250,
+        playerId: socket.id,
+        enemy: true
+      },
+      {
+        angle: bulletAngle - 0.1,
+        x: enemy.spawn.x + ((enemy.w)/2) + 200,
+        y: enemy.spawn.y + ((enemy.h)/2) + 200,
+        speed: 12,
+        timeLeft: 250,
+        playerId: socket.id,
+        enemy: true
+      },
+      {
+        angle: bulletAngle + 0.3,
+        x: enemy.spawn.x + ((enemy.w)/2) + 200,
+        y: enemy.spawn.y + ((enemy.h)/2) + 200,
+        speed: 12,
+        timeLeft: 250,
+        playerId: socket.id,
+        enemy: true
+      },
+      {
+        angle: bulletAngle - 0.3,
+        x: enemy.spawn.x + ((enemy.w)/2) + 200,
+        y: enemy.spawn.y + ((enemy.h)/2) + 200,
+        speed: 12,
+        timeLeft: 250,
+        playerId: socket.id,
+        enemy: true
+      }
+    ]]
+
+    if (inParty) socket.emit("partyProjectile", toSend)
 
     playRandomPop()
   }
@@ -13632,6 +13685,7 @@ function attackCircleMooshBossState(enemy) {
       const basicBulletTree = new Audio("./audios/basicBulletTree.wav");
       basicBulletTree.loop = false;
       basicBulletTree.volume = 0.5;
+      let allProjectiles = []
       // basicBulletTree.play()
       for (let i = 0; i < totalBullets; i++) {
         const bulletAngle = i * angleIncrement; // Calculate angle for each bullet
@@ -13644,7 +13698,21 @@ function attackCircleMooshBossState(enemy) {
           playerId: socket.id,
           enemy: true,
         });
+        allProjectiles.push({
+          angle: attackCircleMooshBossStateVar ? bulletAngle : bulletAngle + 0.05,
+          x: enemy.spawn.x + ((enemy.w)/2) + 200 + Math.cos(bulletAngle) * 20, // Offset to create a circular spawn
+          y: enemy.spawn.y + ((enemy.h)/2) + 200 + Math.sin(bulletAngle) * 20,
+          speed: 7,
+          timeLeft: 400,
+          playerId: socket.id,
+          enemy: true,
+        })
       }
+      let toSend = [
+        currentParty, 
+        allProjectiles]
+  
+      if (inParty) socket.emit("partyProjectile", toSend)
     }, 1000);
 
 
@@ -14394,7 +14462,7 @@ function checkFPS(currentTime) {
   }
 }
 
-function generalMapLoop(currentTime, map) {
+function generalMapLoop(currentTime) {
   if (checkFPS(currentTime)) updateGame();
   intervalCanvasBase = requestAnimationFrame(generalMapLoop)
 }
