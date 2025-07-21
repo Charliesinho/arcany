@@ -1217,6 +1217,26 @@ async function main() {
             }
 
         })
+        socket.on("updateWorld", async (data) => {
+            try {
+                await World.findOneAndUpdate(
+                { areaName: data.title },
+                {
+                    description: data.desc,
+                    privacy: data.privacy,
+                    type: data.type,
+                    colorBase: data.colorBase
+                },
+                { new: true }
+                );
+
+                io.to(socket.id).emit("updateWorldSuccess", data.title);
+            } catch (error) {
+                io.to(socket.id).emit("updateWorldError", "Could not update map");
+                console.error(error);
+            }
+        });
+
 
         socket.on("createWorld", async (worldInfo) => {
             await World.create({
@@ -1234,6 +1254,20 @@ async function main() {
             }, {new: true});
             io.to(socket.id).emit('createWorldSuccesful', worldInfo.title);
         })
+
+        socket.on("deleteWorld", async (mapName) => {
+            try {
+                const result = await World.findOneAndDelete({ areaName: mapName }).exec();
+
+                if (result) {
+                    io.to(socket.id).emit("errorMessage", "Map succesfully deleted")
+                } else {
+                    io.to(socket.id).emit("errorMessage", "Map not found")
+                }
+            } catch (err) {
+                io.to(socket.id).emit("errorMessage", "Error deleting map")
+            }
+        });
        
         socket.on("placedObject", async (info) => {
             const layerKey = `objects.${info.currentSelectedObjLayer}`;
@@ -1318,6 +1352,13 @@ async function main() {
             roomChange()
             
             io.to(socket.id).emit('loadMap', newWorld);
+        })
+
+        socket.on("requestMapInfo", async (mapName) => {
+            const newWorld = await World.findOne({areaName: mapName}).exec();
+            if (!newWorld) return;
+            
+            io.to(socket.id).emit('requestMapInfoClient', newWorld);
         })
         
         socket.on("requestRooms", async (info) => {

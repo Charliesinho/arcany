@@ -14,6 +14,9 @@ h2, h1 {
     font-size: 15px;
     font-weight: 400;
 }
+button:focus {
+  outline: none;
+}
 
 .uiProfileLevel {
     font-size: 24px;
@@ -137,7 +140,8 @@ body {
 #mapEditorButton > button{
     position: relative;
     top: 0px;
-    width: 100%;
+    left: -5px;
+    width: 103%;
     height: 35%;
     border-radius: 6px;
     border: solid 2px black;
@@ -905,7 +909,7 @@ color: white;
 #informationButton{
     display: none;
     position: absolute;
-    z-index: 2;
+    z-index: 1;
     right: 46%;
     top: 10px;
     width: 150px;
@@ -1013,7 +1017,7 @@ color: white;
     right: 50%;
     position: absolute;
     bottom: 10px;
-    z-index: 10;
+    z-index: 1;
     transition: all 0.4s ease;
 }
 #uiBuildingCategoryDivVisibility:hover{
@@ -1085,35 +1089,33 @@ color: white;
     font-weight: 600;
 }
 
-#mapInfo {
+
+.mapCreationParent {
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    gap: 20px;
-    padding: 20px 0px;
+    gap: 15px;
+    padding: 0px 0px 10px;
     overflow: hidden;
-    margin-bottom: 70px;
+    margin-bottom: 7vh;
 }
-
-#mapInfo > h1 {
+.mapCreationParent > h1 {
     font-size: 27px;
     margin: 0;
 }
-
-#mapInfo > input {
+.mapCreationParent > input {
     border: none;
     width: 78%;
     padding: 5px 15px;
     background: white;
-    height: 30px;
+    height: 4vh;
     border-radius: 4px;
     border: solid 1px #00000052;
     box-shadow: 3px 3px #0000003b;
 }
-
 #createMapButton {
     position: absolute;
     bottom: 15px;
@@ -1123,19 +1125,17 @@ color: white;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 55px;
+    height: 6vh;
     font-size: 20px;
     border-radius: 4px;
     border: solid 1px #00000052;
     box-shadow: 0px 0px #0000003b;
     transition: all 0.3s ease;
 }
-
 #createMapButton.active:hover {
     bottom: 15px !important;
     box-shadow: 0px 0px #0000003b !important;
 }
-
 #createMapButtonPopUp{
     display: none;
     position: absolute;
@@ -1152,19 +1152,19 @@ color: white;
 #createMapButton.disabled:hover #createMapButtonPopUp{
     display: flex;
 }
-
-#mapDescInput {
+.creationMapTexteArea {
     border: none;
     background: white;
+    position: relative;
     height: 30px;
     border-radius: 4px;
     border: solid 1px #00000052;
     box-shadow: 3px 3px #0000003b;
     height: 160px !important;
-    width: 78%;
+    width: 76%;
     padding: 15px 15px;
+    transition: all 0.3s ease;
 }
-
 
 .mapInfoDropdown {
   position: relative;
@@ -1177,7 +1177,7 @@ color: white;
     width: 100%;
     padding: 5px 15px;
     background-color: #ffffff;
-    height: 55px;
+    height: 5vh;
     border-radius: 4px;
     border: solid 1px #00000052;
     box-shadow: 3px 3px #0000003b;
@@ -1188,6 +1188,7 @@ color: white;
     box-shadow: 0px 0px #0000003b !important;
 }
 .mapInfoDropdownContent {
+    max-height: 250px;
     display: none;
     position: absolute;
     background-color: white;
@@ -1196,6 +1197,7 @@ color: white;
     z-index: 1;
     text-align: center;
     border-radius: 5px;
+    overflow: scroll;
 }
 .mapInfoDropdownContent > p {
   color: black;
@@ -1205,6 +1207,46 @@ color: white;
 }
 .mapInfoDropdownContent > p:hover {
   background-color: #f1f1f1;
+}
+
+.editionSettingBottom{
+    position: absolute;
+    bottom: 20px;
+    justify-self: center;
+    align-self: center;
+    display: flex;
+    flex-direction: row;
+    width: 85%;
+    gap: 35px;
+}
+.editionSettingBottomButton{
+    position: relative;
+    top: 0px;
+    display: flex;
+    width: 90%;
+    padding: 5px 15px;
+    background-color: #94DF94;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 4.5vh;
+    font-size: 13px;
+    border-radius: 4px;
+    border: solid 1px #00000052;
+    box-shadow: 3px 3px #0000003b;
+    transition: all 0.3s ease;
+}
+#editMapsSaveSettingDelete{
+    background-color: #FF0000;
+}
+.editionSettingBottomButton:hover{
+    top: 3px;
+    box-shadow: 0px 0px #0000003b;
+}
+.disabled-button {
+  background-color: rgb(192, 185, 185) !important;
+  box-shadow: 0px 0px rgb(0, 0, 0) !important;
+  top: 3px !important;
 }
 
 
@@ -1292,91 +1334,6 @@ color: white;
 }
 
 /* EDIT MAPS */
-#editMaps{
-    display: flex;
-    width: 100%;
-    height: 100%;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-}
-#editMapsTitle{
-    margin-bottom: 11px;
-}
-#editMapsSaveSetting{
-    display: flex;
-    width: 80%;
-    justify-content: space-between;
-    align-items: center;
-}
-.editMapsEditButton{
-    width: 140px;
-    padding: 5px;
-    position: relative;
-    top: 0;
-    border-radius: 5px;
-    background: transparent;
-    border: solid 2.5px #b3a49654;
-    outline: solid 2.5px #2525253d;
-    transition: all .2s ease;
-    text-align: center;
-    margin-bottom: 7px;
-}
-.editMapsSaveSettingButton{
-    width: max-content;
-    padding: 5px;
-    position: relative;
-    top: 0;
-    border-radius: 5px;
-    background: transparent;
-    border: solid 2.5px #b3a49654;
-    outline: solid 2.5px #2525253d;
-    transition: all .2s ease;
-    text-align: center;
-}
-.greenHover:hover{
-    top: -3px;
-    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.142);
-    background-color: rgb(148, 223, 148);
-}
-.redHover:hover{
-    top: -3px;
-    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.142);
-    background-color: rgb(216, 129, 129);
-    border: solid 2.5px #d6514854;
-    outline: solid 2.5px #e01e1e98;
-}
-.editMapsParent{
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    justify-content: space-between;
-}
-.editMapsChildText{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-#editMapsRenameDiv{
-    display: flex;
-    flex-direction: column;
-}
-#editMapsRenameInput{
-    background: white;
-    height: 30px;
-    border-radius: 4px;
-    border: solid 1px #00000052;
-    box-shadow: 3px 3px #0000003b;
-}
-#editMapsDescriptionInput{
-    border: none;
-    width: 230px;
-    background: white;
-    border-radius: 4px;
-    border: solid 1px #00000052;
-    box-shadow: 3px 3px #0000003b;
-    height: 125px;
-}
 
 #popupDeleteAllObjParent{
     width: 100vw;
@@ -1395,9 +1352,13 @@ color: white;
     z-index: 2;
 }
 #popupDeleteAllObjChild{
-    width: 300px;
+    width: 235px;
     height: 125px;
     position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     z-index: 1;
     border: solid 3px #b3a496;
     outline: solid 3px #393939;
@@ -1406,12 +1367,37 @@ color: white;
     transform: translate(-50%, -50%);
     background: #FFE2C1;
     border-radius: 6px;
-    padding: 15px;
+    padding: 20px;
+    gap: 15px;
+}
+#popupDeleteAllObjChild > p{
+    text-align: center;
 }
 #popupDeleteAllObjChild > div{
     display: flex;
-    justify-content: space-evenly;
-    margin-top: 30px
+    gap: 20px;
+}
+.editMapsSaveSettingButton{
+    position: relative;
+    top: 0px;
+    width: 70px;
+    height: 35px;
+    background-color: white; 
+    border: solid 1px black;
+    border-radius: 5px;
+    box-shadow: 0px 3px 0px black;
+    transition: all 0.2s ease;
+}
+.editMapsSaveSettingButton:hover{
+    top: 3px;
+    box-shadow: 0px 0px 0px black;
+}
+
+#deleteAllObjButton:hover {
+  background-color: #94DF94;
+}
+#deleteAllObjButtonCancel:hover {
+  background-color: #E47681;
 }
 
 
@@ -2436,11 +2422,11 @@ color: white;
     /* display: flex
 ; */
     /* height: 300px; */
-    border-radius: 3px;
     background: var(--backgroundObjects);
     opacity: .3;
     transition: all .2s ease;
     animation: showChat 0.5s ease forwards;
+    border-radius: 6px;
 }
 
 

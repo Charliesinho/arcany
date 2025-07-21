@@ -298,7 +298,6 @@ const musicPlayerPlay = document.getElementById('musicPlayerPlay');
 
 const filterSubCategoryConstruction = document.querySelectorAll('.filterSubCategoryConstruction')
 
-
 const mapNameInput = document.getElementById('mapNameInput');
 const mapDescInput = document.getElementById('mapDescInput');
 const createMapButton = document.getElementById('createMapButton');
@@ -397,28 +396,51 @@ const placeMobButtonUi = document.getElementById("placeMobButtonUi");
 const monsterCreationParent = document.getElementById("monsterCreationParent");
 
 //EDIT MAPS
-const editMapsButtonUi = document.getElementById("editMapButtonUi")
+const editMapButtonUi = document.getElementById("editMapButtonUi")
 const editMapsPage = document.getElementById("editMaps")
 const editMapsRenameInput = document.getElementById("editMapsRenameInput");
 const editMapsDeleteObj = document.getElementById("editMapsDeleteObj");
 const popupDeleteAllObjParent = document.getElementById("popupDeleteAllObjParent");
+const popupTexteInfo = document.getElementById("popupTexteInfo");
 const popUpBlackscreen = document.getElementById("popUpBlackscreen");
 const deleteAllObjButton = document.getElementById("deleteAllObjButton");
 const deleteAllObjButtonCancel = document.getElementById("deleteAllObjButtonCancel");
 const mapButtonUi = document.getElementById("mapButtonUi");
 const mapEditor = document.getElementById("mapEditor");
 
+const mapToEdit = document.getElementById("mapToEdit");
+const mapToEditDiv = document.getElementById("mapToEditDiv");
+
+
+// TYPE OF THE MAP
+const editMapInfoTypeContent = document.getElementById("editMapInfoTypeContent");
+const editMapInfoTypeButton = document.getElementById("editMapInfoTypeButton");
+
 const mapInfoTypeContent = document.getElementById("mapInfoTypeContent");
 const mapInfoTypeButton = document.getElementById("mapInfoTypeButton");
 const mapInfoTypeItem = document.querySelectorAll(".mapInfoTypeItem");
+
+// COLOR BASE OF THE MAP
+const editColorBaseContent = document.getElementById("editColorBaseContent");
+const editColorBaseButton = document.getElementById("editColorBaseButton");
 
 const mapInfoColorBaseContent = document.getElementById("mapInfoColorBaseContent");
 const mapInfoColorBaseButton = document.getElementById("mapInfoColorBaseButton");
 const mapInfoColorBaseItem = document.querySelectorAll(".mapInfoColorBaseItem");
 
+// PRIVACY OF THE MAP
+const editPrivacyContent = document.getElementById("editPrivacyContent");
+const editPrivacyButton = document.getElementById("editPrivacyButton");
+
 const mapInfoPrivacyContent = document.getElementById("mapInfoPrivacyContent");
 const mapInfoPrivacyButton = document.getElementById("mapInfoPrivacyButton");
 const mapInfoPrivacyItem = document.querySelectorAll(".mapInfoPrivacyItem");
+
+const teleporterToEditMap = document.getElementById("teleporterToEditMap");
+const editMapsDescriptionInput = document.getElementById("editMapsDescriptionInput");
+
+const editMapsSaveSettingDelete = document.getElementById("editMapsSaveSettingDelete");
+
 
 //placeArea
 const placeArea = document.getElementById("placeArea");

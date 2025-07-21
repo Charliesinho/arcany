@@ -1,6 +1,7 @@
 //Change this to push >
 // const socket = io(`ws://localhost:5000`);
 
+
 // const cloneDeep = require('lodash/cloneDeep');
 
 //const socket = io(`https://arcanyGame.up.railway.app/`);
@@ -1448,6 +1449,13 @@ function updateHistoryChat(value, sender) {
 }
 
 let keyBlocker = true;
+window.addEventListener("keydown", function (e) {
+  const active = document.activeElement;
+  if ((e.code === "Space" || e.code === "Enter") && active.tagName === "BUTTON") {
+    e.preventDefault();
+  }
+});
+
 
 window.addEventListener("keydown", (e) => {
   if(keyBlocker) return
@@ -2418,7 +2426,7 @@ function moveLogos() {
 function movePaddleWithKeys(event) {
   const middlePos = container.clientWidth / 2 - (paddle.clientWidth / 2); // Middle position
   const rightPos = container.clientWidth - paddle.clientWidth;      // Right position
-  const leftPos = 0;                                                  // Left position
+  const leftPos = 0;                                                  // Front position
 
   // Move paddle based on current position and key pressed
   if (event.key === 'ArrowLeft') {
@@ -4302,6 +4310,34 @@ socket.on("player", (serverPlayer) => {
       subscription: 'none',
     },
     {
+      name: "restfieldFenceTwo",
+      backgroundObj: false,
+      img: restfieldFenceTwo,
+      reverse: restfieldFenceTwoReverse,
+      x: 0,
+      y: 0,
+      h: restfieldFenceTwo.height,
+      w: restfieldFenceTwo.width,
+      category: "construction",
+      subCategory: "fences",
+
+      subscription: 'none',
+    },
+    {
+      name: "restfieldFenceThree",
+      backgroundObj: false,
+      img: restfieldFenceThree,
+      reverse: restfieldFenceThreeReverse,
+      x: 0,
+      y: 0,
+      h: restfieldFenceThree.height,
+      w: restfieldFenceThree.width,
+      category: "construction",
+      subCategory: "fences",
+
+      subscription: 'none',
+    },
+    {
       name: "restfieldFenceOne",
       backgroundObj: false,
       img: restfieldFenceOne,
@@ -4310,20 +4346,6 @@ socket.on("player", (serverPlayer) => {
       y: 0,
       h: restfieldFenceOne.height,
       w: restfieldFenceOne.width,
-      category: "construction",
-      subCategory: "fences",
-
-      subscription: 'none',
-    },
-    {
-      name: "restfieldFenceTwo",
-      backgroundObj: false,
-      img: restfieldFenceTwo,
-      reverse:restfieldFenceTwoReverse,
-      x: 0,
-      y: 0,
-      h: restfieldFenceTwo.height,
-      w: restfieldFenceTwo.width,
       category: "construction",
       subCategory: "fences",
 
@@ -4566,19 +4588,7 @@ socket.on("player", (serverPlayer) => {
 
       subscription: 'none',
     },
-    {
-      name: "woodFloor",
-      backgroundObj: true,
-      img: woodFloor,
-      x: 0,
-      y: 0,
-      h: woodFloor.height,
-      w: woodFloor.width,
-      category: "construction",
-      subCategory: "floors",
-
-      subscription: 'none',
-    },
+   
     {
       name: "plantPatch",
       backgroundObj: true,
@@ -4658,16 +4668,46 @@ socket.on("player", (serverPlayer) => {
 
     subscription: 'none',
   },
-  
+
+  // CONSTRUCTION FLOOR
+   {
+      name: "woodFloor",
+      backgroundObj: true,
+      img: woodFloor,
+      reverse: woodFloorReverse,
+      x: 0,
+      y: 0,
+      h: woodFloor.height,
+      w: woodFloor.width,
+      category: "construction",
+      subCategory: "floors",
+
+      subscription: 'none',
+    },
+   {
+      name: "woodFloorTwo",
+      backgroundObj: true,
+      img: woodFloorTwo,
+      reverse: woodFloorTwoReverse,
+      x: 0,
+      y: 0,
+      h: woodFloorTwo.height,
+      w: woodFloorTwo.width,
+      category: "construction",
+      subCategory: "floors",
+
+      subscription: 'none',
+    },
   //CONSTRUCTION DOORS
   {
-    name: "restfieldMallDoor",
+    name: "woodDoor",
     backgroundObj: false,
-    img: restfieldMallDoor,
+    img: woodDoor,
+    reverse: restfieldMallDoor,
     x: 0,
     y: 0,
-    h: restfieldMallDoor.height,
-    w: restfieldMallDoor.width,
+    h: woodDoor.height,
+    w: woodDoor.width,
     category: "construction",
     subCategory: "doors",
 
@@ -4845,10 +4885,38 @@ socket.on("player", (serverPlayer) => {
 
     subscription: 'none',
   },
+  {
+    name: "woodWallpaper",
+    backgroundObj: false,
+    img: woodWallpaper,
+    reverse: blueWallpaper,
+    x: 0,
+    y: 0,
+    h: woodWallpaper.height,
+    w: woodWallpaper.width,
+    category: "construction",
+    subCategory: "walls",
+
+    subscription: 'none',
+  },
+  {
+    name: "whiteWallpaper",
+    backgroundObj: false,
+    img: whiteWallpaper,
+    reverse: greenWallpaper,
+    x: 0,
+    y: 0,
+    h: whiteWallpaper.height,
+    w: whiteWallpaper.width,
+    category: "construction",
+    subCategory: "walls",
+
+    subscription: 'none',
+  },
   
 
   //CONSTRUCTIONS ROOF
-{
+  {
     name: "restfieldMallBrokenRoof",
     backgroundObj: false,
     img: restfieldMallBrokenRoof,
@@ -4861,7 +4929,7 @@ socket.on("player", (serverPlayer) => {
 
     subscription: 'none',
   },
-{
+  {
     name: "restfieldMallBrokenRoofTwo",
     backgroundObj: false,
     img: restfieldMallBrokenRoofTwo,
@@ -4869,6 +4937,19 @@ socket.on("player", (serverPlayer) => {
     y: 0,
     h: restfieldMallBrokenRoofTwo.height,
     w: restfieldMallBrokenRoofTwo.width,
+    category: "construction",
+    subCategory: "roofs",
+
+    subscription: 'none',
+  },
+  {
+    name: "woodRoof",
+    backgroundObj: false,
+    img: woodRoof,
+    x: 0,
+    y: 0,
+    h: woodRoof.height,
+    w: woodRoof.width,
     category: "construction",
     subCategory: "roofs",
 
@@ -5165,6 +5246,19 @@ socket.on("player", (serverPlayer) => {
       subscription: 'none',
     },
     {
+      name: "chairFront",
+      backgroundObj: "back",
+      img: chairFront,
+      x: 0,
+      y: 0,
+      h: chairFront.height,
+      w: chairFront.width,
+      category: "furniture",
+      subCategory: "chairs",
+
+      subscription: 'none',
+    },
+    {
       name: "chairRight",
       backgroundObj: "back",
       img: chairRight,
@@ -5172,6 +5266,34 @@ socket.on("player", (serverPlayer) => {
       y: 0,
       h: chairRight.height,
       w: chairRight.width,
+      category: "furniture",
+      subCategory: "chairs",
+
+      subscription: 'none',
+    },
+    {
+      name: "whiteSofa",
+      backgroundObj: "front",
+      img: whiteSofa,
+      reverse: redSofa,
+      x: 0,
+      y: 0,
+      h: whiteSofa.height,
+      w: whiteSofa.width,
+      category: "furniture",
+      subCategory: "chairs",
+
+      subscription: 'none',
+    },
+    {
+      name: "whiteBigSofa",
+      backgroundObj: "front",
+      img: whiteBigSofa,
+      reverse: redBigSofa,
+      x: 0,
+      y: 0,
+      h: whiteBigSofa.height,
+      w: whiteBigSofa.width,
       category: "furniture",
       subCategory: "chairs",
 
@@ -5642,6 +5764,60 @@ socket.on("player", (serverPlayer) => {
     },
 
     // furniture - storage
+    {
+      name: "smallShelves",
+      backgroundObj: false,
+      img: smallShelves,
+      x: 0,
+      y: 0,
+      h: smallShelves.height,
+      w: smallShelves.width,
+      category: "furniture",
+      subCategory: "storage",
+
+      subscription: 'none',
+    },
+    {
+      name: "whiteShelves",
+      backgroundObj: false,
+      img: whiteShelves,
+      reverse: wookShelves,
+      x: 0,
+      y: 0,
+      h: whiteShelves.height,
+      w: whiteShelves.width,
+      category: "furniture",
+      subCategory: "storage",
+
+      subscription: 'none',
+    },
+    {
+      name: "bigWhiteShelves",
+      backgroundObj: false,
+      img: bigWhiteShelves,
+      reverse: bigWoodShelves,
+      x: 0,
+      y: 0,
+      h: bigWhiteShelves.height,
+      w: bigWhiteShelves.width,
+      category: "furniture",
+      subCategory: "storage",
+
+      subscription: 'none',
+    },
+    {
+      name: "shelvesSecond",
+      backgroundObj: false,
+      img: shelvesSecond,
+      x: 0,
+      y: 0,
+      h: shelvesSecond.height,
+      w: shelvesSecond.width,
+      category: "furniture",
+      subCategory: "storage",
+
+      subscription: 'none',
+    },
     {
       name: "shelves",
       backgroundObj: false,
@@ -6453,6 +6629,20 @@ socket.on("player", (serverPlayer) => {
       y: 0,
       h: cookingStand.height,
       w: cookingStand.width,
+      category: "furniture",
+      subCategory: "kitchen",
+
+      subscription: 'dev',
+    },
+    {
+      name: "gazpot",
+      backgroundObj: false,
+      img: gazpot,
+      reverse: gazpotgreen,
+      x: 0,
+      y: 0,
+      h: gazpot.height,
+      w: gazpot.width,
       category: "furniture",
       subCategory: "kitchen",
 
@@ -9250,6 +9440,31 @@ function calculateValue(resolution) {
 
 // UI DEV COMMENT >
 
+let popupDisplay = ""
+
+function popupFullScreen(state){
+  showWallsFunction(false)
+
+  if(state === false){
+    popupDeleteAllObjParent.style.display = "none"
+    popUpBlackscreen.style.display = "none"
+    popupDisplay = ""
+
+  } else {
+    if (popupDisplay === "deleteAllObj") {
+      popupTexteInfo.innerText = `DO YOU REALLY WANT TO DELETE ALL THE OBJECTS OF ${mapToEditName} ?`;
+
+    } else if (popupDisplay === "deleteMap") {
+      popupTexteInfo.innerText = `DO YOU REALLY WANT TO DELETE ${mapToEditName} ?`;
+    }
+
+    popupDeleteAllObjParent.style.display = "flex"
+    popUpBlackscreen.style.display = "flex"
+  
+  }
+
+}
+
 function deselectUiButton() {
   // console.log("DESELECTING ALL")
   // currentDevAction = ""
@@ -9266,7 +9481,7 @@ function deselectUiButton() {
   placeFishingArea.style.backgroundColor = "#ffe2c1"
   placeEnchantingArea.style.backgroundColor = "#ffe2c1"
   placeCookingArea.style.backgroundColor = "#ffe2c1"
-  editMapsButtonUi.style.backgroundColor = "#ffe2c1"
+  editMapButtonUi.style.backgroundColor = "#ffe2c1"
   placeMobButtonUi.style.backgroundColor = "#ffe2c1"
   mapButtonUi.style.backgroundColor = "#ffe2c1"
   uiBuildingObjects.style.display = "none";
@@ -9368,6 +9583,8 @@ function eyesIsOpen(){
     toolBar.style.left = "-380px"
     roomsDev.style.right = "-380px"
 
+    mapEditor.style.right = "-380px"
+
   } else  if(!uiBuildingVisible) {
     uiBuildingVisible = true
 
@@ -9382,10 +9599,12 @@ function eyesIsOpen(){
     monsterCreationParent.style.right = "10px"
     monsterCreationBottom.style.right = "340px"
 
-
     uiBuilding.style.left = "12px"
     toolBar.style.left = "10px"
     roomsDev.style.right = "554px"
+    
+    mapEditor.style.right = "10px"
+
   }
 }
 
@@ -9578,37 +9797,170 @@ placeMobButtonUi.addEventListener("click", function(){
   }
 });
 
-// MAPS EDITOR
+// MAPS EDITOR <
+let mapType = "";
+let mapColorBase = "";
+let mapPrivacy = "";
 
-let mapType = ""
+let mapToEditName = "";
+let editedMapType = "";
+let editColorBase = "";
+let editPrivacy = "";
+
 let buttonTypeIsPress = false
+let buttonColorBaseIsPress = false
+let buttonMapToEditIsPress = false;
+let buttonPrivacyIsPress = false
 
 function CloseAllDropDown(){
+  // MAP NAME
+  mapToEditDiv.style.display = "none"
+  mapToEdit.style.top = "0px"
+  mapToEdit.style.boxShadow = "3px 3px #0000003b"
+
+  // MAP TYPE
   mapInfoTypeButton.style.display = "none";
   mapInfoTypeContent.style.top = "0px"
   mapInfoTypeContent.style.boxShadow = "3px 3px #0000003b"
+
+  editMapInfoTypeButton.style.display = "none";
+  editMapInfoTypeContent.style.top = "0px"
+  editMapInfoTypeContent.style.boxShadow = "3px 3px #0000003b"
+
+  // MAP BASE COLOR
+  editColorBaseButton.style.display = "none";
+  editColorBaseContent.style.top = "0px"
+  editColorBaseContent.style.boxShadow = "3px 3px #0000003b"
 
   mapInfoColorBaseButton.style.display = "none";
   mapInfoColorBaseContent.style.top = "0px"
   mapInfoColorBaseContent.style.boxShadow = "3px 3px #0000003b"
 
+  // MAP PRIVACY
+  editPrivacyButton.style.display = "none";
+  editPrivacyContent.style.top = "0px"
+  editPrivacyContent.style.boxShadow = "3px 3px #0000003b"
+
+  mapInfoPrivacyButton.style.display = "none";
+  mapInfoPrivacyContent.style.top = "0px"
+  mapInfoPrivacyContent.style.boxShadow = "3px 3px #0000003b"
+
 }
-function checkIfAllFieldAreField(){
-  if(mapType !== "" && mapColorBase !== "" && mapPrivacy !== ""){
-    createMapButton.style.backgroundColor = "#c4ffc4"
-    createMapButton.style.boxShadow = "rgba(0, 0, 0, 0.23) 3px 3px"
-    createMapButton.style.bottom = "18px"
+function checkIfAllFieldAreFill(state){
+  if(state === "creationMap"){
+    if(mapType !== "" && mapColorBase !== "" && mapPrivacy !== ""){
+      createMapButton.style.backgroundColor = "#c4ffc4"
+      createMapButton.style.boxShadow = "rgba(0, 0, 0, 0.23) 3px 3px"
+      createMapButton.style.bottom = "18px"
+  
+      createMapButton.classList.add("active");
+      createMapButton.classList.remove("disabled");
+  
+    } else {
+      createMapButton.classList.remove("active");
+      createMapButton.classList.add("disabled");
+  
+      createMapButton.style.backgroundColor = "#c0b9b9"
+      createMapButton.style.boxShadow = "rgba(0, 0, 0, 0.23) 0px 0px"
+      createMapButton.style.bottom = "15px"
+    }
+  } else if(state === "editionMap"){
+  const buttonBottom = [
+      "editMapsSaveSettingSave",
+      "editMapsSaveSettingDelete",
+      ];
+  const buttonIds = [
+      "teleporterToEditMap",
+      "editMapInfoTypeContent",
+      "editColorBaseContent",
+      "editPrivacyContent",
+      "sapwnButtonUi",
+      "editMapsDeleteObj",
+      "editMapsDescriptionInput"
+      ];
 
-    createMapButton.classList.add("active");
-    createMapButton.classList.remove("disabled");
+      if(mapToEditName !== ""){
+        buttonIds.forEach(id => {
+          const button = document.getElementById(id);
+          if (button) {
+            button.style.boxShadow = "#C4AD94 3px 3px"
+            button.style.top = "0px"
+            button.style.backgroundColor = "rgb(255, 255, 255)"
+          }
+        });
+        buttonBottom.forEach(id => {
+          const button = document.getElementById(id);
+          if (button) {
+            button.classList.remove("disabled-button"); // retire la classe grise
+          }
+          document.getElementById("editMapsDescriptionInput").disabled = false
+        });
+        
+    } else {
+      
+        buttonIds.forEach(id => {
+          const button = document.getElementById(id);
+          if (button) {
+            button.style.boxShadow = "rgb(0, 0, 0) 0px 0px"
+            button.style.top = "3px"
+            button.style.backgroundColor = "rgb(192, 185, 185)"
+          }
+        });
+        buttonBottom.forEach(id => {
+          const button = document.getElementById(id);
+          if (button) {
+            button.classList.add("disabled-button"); // retire la classe grise
+          }
+        });
+        document.getElementById("editMapsDescriptionInput").disabled = true
+    }
+  }
+}
+function resetAllMapAction(state){
+  if(state === "resetCreationMap"){
+    mapType = ""
+    mapColorBase = ""
+    mapPrivacy = ""
 
-  } else {
-    createMapButton.classList.remove("active");
-    createMapButton.classList.add("disabled");
+    buttonTypeIsPress = false
+    buttonColorBaseIsPress = false
+    buttonPrivacyIsPress = false
 
-    createMapButton.style.backgroundColor = "#c0b9b9"
-    createMapButton.style.boxShadow = "rgba(0, 0, 0, 0.23) 0px 0px"
-    createMapButton.style.bottom = "15px"
+    mapNameInput.value = "MY MAP"
+    mapDescInput.value = "map description"
+
+    mapInfoTypeContent.style.backgroundColor = "white"
+    mapInfoTypeContent.innerHTML = "TYPE"
+
+    mapInfoColorBaseContent.style.backgroundColor = "white"
+    mapInfoColorBaseContent.innerHTML = "COLOR BASE"
+
+    mapInfoPrivacyContent.style.backgroundColor = "white"
+    mapInfoPrivacyContent.innerHTML = "PRIVACY"
+
+    checkIfAllFieldAreFill("creationMap") 
+    checkIfAllFieldAreFill("editionMap") 
+
+  } else if(state === "resetEditionMap"){
+    mapToEditName = "";
+    editedMapType = "";
+    editColorBase = "";
+    editPrivacy = "";
+
+    checkIfAllFieldAreFill("editionMap")
+    // editMapsDescriptionInput.value = ""
+    // mapToEdit.innerText = "WHICH MAP DO YOU WANT TO EDIT ?";
+
+    // mapToEdit.style.backgroundColor = "white"
+
+    // editMapInfoTypeContent.style.backgroundColor = "white"
+    // editMapInfoTypeContent.innerHTML = "TYPE"
+
+    // editColorBaseContent.style.backgroundColor = "white"
+    // editColorBaseContent.innerHTML = "COLOR BASE"
+
+    // editPrivacyContent.style.backgroundColor = "white"
+    // editPrivacyContent.innerHTML = "PRIVACY"
   }
 }
 
@@ -9643,27 +9995,83 @@ mapInfoTypeContent.addEventListener("click", function(){
     }
   }
 });
-mapInfoTypeItem.forEach(item => {
+editMapInfoTypeContent.addEventListener("click", function(){
+  if(mapToEditName === ""){
+    errorDisplay("You must choose a map to edit")
+    return
+  }
+  playRandomPop()
+  buttonColorBaseIsPress = false
+  buttonPrivacyIsPress = false
 
-  item.addEventListener("click", function() {
-    const newLabel = this.id;
-    mapInfoTypeContent.textContent = newLabel.toUpperCase();
-    mapType = newLabel
+  if(buttonTypeIsPress === false) {
+    CloseAllDropDown()
+    editMapInfoTypeButton.style.display = "block";
+    editMapInfoTypeContent.style.top = "3px"
+    editMapInfoTypeContent.style.boxShadow = "0px 0px #0000003b"
 
-    mapInfoTypeButton.style.display = "none";
-    mapInfoTypeContent.style.top = "0px"
-    mapInfoTypeContent.style.boxShadow = "3px 3px #0000003b"
-    mapInfoTypeContent.style.backgroundColor = "#c4ffc4"
+    buttonTypeIsPress = true
 
+  } else {
+    CloseAllDropDown()
     buttonTypeIsPress = false
-    checkIfAllFieldAreField()
+  }
+});
+mapInfoTypeItem.forEach(item => {
+  item.addEventListener("click", function() {
+    if(currentDevAction === "createNewMap"){
+      // HERE IS THE PANEL TYPE FOR CREATION
+      const newLabel = this.id;
+      mapInfoTypeContent.textContent = newLabel.toUpperCase();
+      mapType = newLabel
+  
+      mapInfoTypeButton.style.display = "none";
+      mapInfoTypeContent.style.top = "0px"
+      mapInfoTypeContent.style.boxShadow = "3px 3px #0000003b"
+      mapInfoTypeContent.style.backgroundColor = "#c4ffc4"
+  
+      buttonTypeIsPress = false
+      checkIfAllFieldAreFill("creationMap")
+
+    } else if(currentDevAction === "editmap"){
+      // HERE IS THE PANEL TYPE FOR EDITION
+      const newLabel = this.id;
+
+      editMapInfoTypeContent.textContent = newLabel.toUpperCase();
+      editedMapType = newLabel
+      editMapInfoTypeButton.style.display = "none";
+      editMapInfoTypeContent.style.top = "0px"
+      editMapInfoTypeContent.style.boxShadow = "3px 3px #0000003b"
+      editMapInfoTypeContent.style.backgroundColor = "#c4ffc4"
+
+      buttonTypeIsPress = false
+    }
   });
 
 });
 
-let buttonColorBaseIsPress = false
-let mapColorBase = ""
+editColorBaseContent.addEventListener("click", function(){
+  if(mapToEditName === ""){
+    errorDisplay("You must choose a map to edit")
+    return
+  }
 
+  playRandomPop()
+  buttonTypeIsPress = false
+  buttonPrivacyIsPress = false
+
+  if(buttonColorBaseIsPress === false) {
+    CloseAllDropDown()
+    editColorBaseButton.style.display = "block";
+    editColorBaseContent.style.top = "3px"
+    editColorBaseContent.style.boxShadow = "0px 0px #0000003b"
+
+    buttonColorBaseIsPress = true
+  } else {
+    CloseAllDropDown()
+    buttonColorBaseIsPress = false
+  }
+});
 mapInfoColorBaseContent.addEventListener("click", function(){
   playRandomPop()
   buttonTypeIsPress = false
@@ -9697,32 +10105,67 @@ mapInfoColorBaseContent.addEventListener("click", function(){
 mapInfoColorBaseItem.forEach(item => {
 
   item.addEventListener("click", function() {
-    const newLabel = this.id;
-    mapInfoColorBaseContent.textContent = newLabel.toUpperCase();
-    mapColorBase = newLabel
-
-    mapInfoColorBaseButton.style.display = "none";
-    mapInfoColorBaseContent.style.top = "0px"
-    mapInfoColorBaseContent.style.boxShadow = "3px 3px #0000003b"
-    mapInfoColorBaseContent.style.backgroundColor = "#c4ffc4"
-
-    console.log(mapColorBase)
-
-    buttonColorBaseIsPress = false
-    checkIfAllFieldAreField()
+    if(currentDevAction === "createNewMap"){
+      const newLabel = this.id;
+      mapInfoColorBaseContent.textContent = newLabel.toUpperCase();
+      mapColorBase = newLabel
+  
+      mapInfoColorBaseButton.style.display = "none";
+      mapInfoColorBaseContent.style.top = "0px"
+      mapInfoColorBaseContent.style.boxShadow = "3px 3px #0000003b"
+      mapInfoColorBaseContent.style.backgroundColor = "#c4ffc4"
+  
+      console.log(mapColorBase)
+  
+      buttonColorBaseIsPress = false
+      checkIfAllFieldAreFill("creationMap")
+      
+    } else if(currentDevAction === "editmap"){
+      const newLabel = this.id;
+      editColorBaseContent.textContent = newLabel.toUpperCase();
+      editColorBase = newLabel
+  
+      editColorBaseButton.style.display = "none";
+      editColorBaseContent.style.top = "0px"
+      editColorBaseContent.style.boxShadow = "3px 3px #0000003b"
+      editColorBaseContent.style.backgroundColor = "#c4ffc4"
+  
+      console.log(editColorBase)
+  
+      buttonColorBaseIsPress = false
+    }
   });
 
 });
 
-let buttonPrivacyIsPress = false
-let mapPrivacy = ""
+editPrivacyContent.addEventListener("click", function(){
+  if(mapToEditName === ""){
+    errorDisplay("You must choose a map to edit")
+    return
+  }
 
+  playRandomPop()
+  buttonColorBaseIsPress = false
+  buttonTypeIsPress = false
+
+  if(!buttonPrivacyIsPress) {
+    CloseAllDropDown()
+    editPrivacyButton.style.display = "block";
+    editPrivacyContent.style.top = "3px"
+    editPrivacyContent.style.boxShadow = "0px 0px #0000003b"
+
+    buttonPrivacyIsPress = true
+  } else {
+    CloseAllDropDown()
+    buttonPrivacyIsPress = false
+  }
+});
 mapInfoPrivacyContent.addEventListener("click", function(){
   playRandomPop()
   buttonColorBaseIsPress = false
   buttonTypeIsPress = false
 
-  if(buttonPrivacyIsPress === false) {
+  if(!buttonPrivacyIsPress) {
     CloseAllDropDown()
     mapInfoPrivacyButton.style.display = "block";
     mapInfoPrivacyContent.style.top = "3px"
@@ -9748,43 +10191,88 @@ mapInfoPrivacyContent.addEventListener("click", function(){
   }
 });
 mapInfoPrivacyItem.forEach(item => {
-
   item.addEventListener("click", function() {
-    const newLabel = this.id;
-    mapInfoPrivacyContent.textContent = newLabel.toUpperCase();
-    mapPrivacy = newLabel
+    if(currentDevAction === "createNewMap"){
+      const newLabel = this.id;
+      mapInfoPrivacyContent.textContent = newLabel.toUpperCase();
+      mapPrivacy = newLabel
+  
+      mapInfoPrivacyButton.style.display = "none";
+      mapInfoPrivacyContent.style.top = "0px"
+      mapInfoPrivacyContent.style.boxShadow = "3px 3px #0000003b"
+      mapInfoPrivacyContent.style.backgroundColor = "#c4ffc4"
+  
+      buttonPrivacyIsPress = false
+      checkIfAllFieldAreFill("creationMap")
 
-    mapInfoPrivacyButton.style.display = "none";
-    mapInfoPrivacyContent.style.top = "0px"
-    mapInfoPrivacyContent.style.boxShadow = "3px 3px #0000003b"
-    mapInfoPrivacyContent.style.backgroundColor = "#c4ffc4"
-
-    console.log(mapPrivacy)
-
-    buttonPrivacyIsPress = false
-    checkIfAllFieldAreField()
+    } else if(currentDevAction === "editmap"){
+      const newLabel = this.id;
+      editPrivacyContent.textContent = newLabel.toUpperCase();
+      editPrivacy = newLabel
+  
+      editPrivacyButton.style.display = "none";
+      editPrivacyContent.style.top = "0px"
+      editPrivacyContent.style.boxShadow = "3px 3px #0000003b"
+      editPrivacyContent.style.backgroundColor = "#c4ffc4"
+  
+      buttonPrivacyIsPress = false
+    }
   });
-
 });
 
+
+
+mapToEdit.addEventListener("click", function(){
+  playRandomPop()
+  socket.emit("requestRooms", "");
+
+  if(!buttonMapToEditIsPress){
+    mapToEditDiv.style.display = "block"
+    mapToEdit.style.top = "3px"
+    mapToEdit.style.boxShadow = "0px 0px #0000003b"
+
+    if(mapToEditName !== ""){
+      mapToEdit.style.backgroundColor = "#c4ffc4"
+    } else {
+      mapToEdit.style.backgroundColor = "white"
+    }
+
+    buttonMapToEditIsPress = true
+  } else {
+    mapToEditDiv.style.display = "none"
+    mapToEdit.style.top = "0px"
+    mapToEdit.style.boxShadow = "3px 3px #0000003b"
+
+    if(mapToEditName !== ""){
+      mapToEdit.style.backgroundColor = "#c4ffc4"
+    } else {
+      mapToEdit.style.backgroundColor = "white"
+    }
+
+    buttonMapToEditIsPress = false
+  }
+
+});
 
 mapButtonUi.addEventListener("click", function(){
   showWallsFunction(false)
   playRandomPop()
+  CloseAllDropDown()
+  resetAllMapAction("resetCreationMap")
+  resetAllMapAction("resetEditionMap")
 
   if(currentDevAction == "createNewMap"){
     return
-  }
-
-  if (currentDevAction !== "editmap") {
+  } else if (currentDevAction !== "editmap") {
+    console.log()
     deselectUiButton()
-
+    checkIfAllFieldAreFill("editionMap")
     currentDevAction = "editmap";
     mapButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
     mapEditor.style.display = "flex"
  
     editMapsPage.style.display = "flex"
-    editMapsButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
+    editMapButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
 
   } else {
     currentDevAction = "";
@@ -9792,7 +10280,7 @@ mapButtonUi.addEventListener("click", function(){
   }
 });
 
-editMapsButtonUi.addEventListener("click", function(){
+editMapButtonUi.addEventListener("click", function(){
   showWallsFunction(false)
   playRandomPop()
   
@@ -9801,28 +10289,45 @@ editMapsButtonUi.addEventListener("click", function(){
 
   currentDevAction = "editmap"
   editMapsPage.style.display = "flex"
-  editMapsButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
+  editMapButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
 })
 
 editMapsDeleteObj.addEventListener("click", function(){
+  if(mapToEditName === ""){
+    errorDisplay("You must choose a map to edit")
+    console.log(mapToEditName)
+    return
+  }
   showWallsFunction(false)
   playRandomPop()
-  popupDeleteAllObjParent.style.display = "flex"
-  popUpBlackscreen.style.display = "flex"
-  uiBuildingCategoryDivVisibility.style.display = "none"
+  
+  popupDisplay = "deleteAllObj"
+  popupFullScreen(true)
 })
+
 
 deleteAllObjButton.addEventListener("click", function(){
   playRandomPop()
-  socket.emit("deleteAllObj", mapsInfo[currentLand].areaName);
-  popupDeleteAllObjParent.style.display = "none"
-  popUpBlackscreen.style.display = "none"
+  if(popupDisplay === "deleteAllObj"){
+    // HERE DELETE ALL THE OBJECT OF THE MAP
+    currentLand = mapToEditName
+    console.log(currentLand)
+    socket.emit("deleteAllObj", mapsInfo[currentLand].areaName);
+
+  } else if (popupDisplay === "deleteMap"){
+    // HERE DELETE THE MAP
+    deleteMap()
+    CloseAllDropDown()
+    mapToEditName = ""
+    resetAllMapAction("resetEditionMap")
+  }
+  
+  popupFullScreen(false)
 })
 
 deleteAllObjButtonCancel.addEventListener("click", function(){
   playRandomPop()
-  popupDeleteAllObjParent.style.display = "none"
-  popUpBlackscreen.style.display = "none"
+  popupFullScreen(false)
 })
 
 saveObjButtonUi.addEventListener("click", function() {
@@ -9834,25 +10339,31 @@ saveObjButtonUi.addEventListener("click", function() {
     enemy.spawn = _.cloneDeep(enemy.baseSpawn)
   }
   socket.emit("saveWorld", mapsInfo[currentLand]);
-  errorDisplay("Saving map")
+  errorDisplay("Saving map", "hue-rotate(90deg)")
 });
 
 sapwnButtonUi.addEventListener("click", function() {
+  if(mapToEditName === ""){
+    errorDisplay("You must choose a map to edit")
+    return
+  }
   showWallsFunction(false);
   socket.emit("setSpawn", [localPlayerPos, currentLand]);
-  errorDisplay("Setting spawn point")
+  errorDisplay("Setting spawn point", "hue-rotate(90deg)")
 });
 
 createMapButtonUi.addEventListener("click", function() {
   showWallsFunction(false);
   playRandomPop()
   
-  editMapsButtonUi.style.backgroundColor = "#ffe2c1"
+  editMapButtonUi.style.backgroundColor = "#ffe2c1"
   editMapsPage.style.display = "none"
 
-  currentDevAction === "createNewMap"
+  currentDevAction = "createNewMap"
   mapInfoDiv.style.display = "flex"
   createMapButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
+
+  console.log(currentDevAction)
 });
 
 createMapButton.addEventListener("click", function() {
@@ -9866,17 +10377,91 @@ createMapButton.addEventListener("click", function() {
       type: mapType,
       colorBase: mapColorBase,
     }
-    
+
     socket.emit("createWorld", worldInfo);
     errorDisplay("Creating map")
     // currentDevAction === "editmap"
     noMovement = false
 
+    currentSelectedMap = mapToEditName
+    console.log("THE MAP I WILL TELEPORT:", currentSelectedMap)
+    changeMap(currentSelectedMap)
+
   } else {
     errorDisplay("You must fill in all the fields to create your map")
   }
 });
-// MAPS EDITOR
+
+
+
+editMapsSaveSettingSave.addEventListener("click", function() {
+  currentLand = mapToEditName
+  console.log(
+    "MAP SELECTIONNE: ", currentLand,
+    "desc:", editMapsDescriptionInput.value,
+    "privacy:", editPrivacyContent.innerText, 
+    "type:", editMapInfoTypeContent.innerText,
+    "colorBase:", editColorBaseContent.innerText,
+  )
+
+  const updatedWorldInfo = {
+    title: mapToEditName,
+    desc: editMapsDescriptionInput.value,
+    privacy: editPrivacyContent.innerText, 
+    type: editMapInfoTypeContent.innerText,
+    colorBase: editColorBaseContent.innerText,
+  };
+
+  errorDisplay(`${currentLand} map saved!`, "hue-rotate(90deg)")
+  socket.emit("updateWorld", updatedWorldInfo);
+});
+
+
+teleporterToEditMap.addEventListener("click", function() {
+  if(mapToEditName === ""){
+    errorDisplay("You must choose a map to edit")
+    console.log(mapToEditName)
+    return
+  }
+
+  currentSelectedMap = mapToEditName
+
+  console.log("THE MAP I WILL TELEPORT:", currentSelectedMap)
+  changeMap()
+});
+
+function deleteMap(){
+  console.log("YOU WILL DELETE:", currentSelectedMap)
+  socket.emit("deleteWorld", currentSelectedMap)
+
+  currentSelectedMap = "Castle Side"
+  changeMap()
+
+  mapToEditName = ""
+  if (mapToEditName === "") {
+    mapToEdit.innerText = "WHICH MAP DO YOU WANT TO EDIT ?";
+    mapToEdit.style.backgroundColor = "white"
+
+    editMapsDescriptionInput.value = ""
+  }
+
+  console.log("Iam requesting")
+  socket.emit("requestRooms", "");
+}
+editMapsSaveSettingDelete.addEventListener("click", function() {
+  if(mapToEditName === ""){
+    errorDisplay("You must choose a map to edit")
+    console.log(mapToEditName)
+    return
+  }
+
+  popupDisplay = "deleteMap"
+  currentSelectedMap = mapToEditName
+
+  popupFullScreen(true)
+});
+
+// MAPS EDITOR >
 
 let musicLibrary = {
   grasslands: [grasslandsST1, grasslandsST2, grasslandsST3, grasslandsST4, grasslandsST5]
@@ -10281,35 +10866,82 @@ function isColliding(player, wall) {
 }
 
 socket.on("requestRoomsCompleted", (rooms) => {
-  // console.log(rooms)
+  // Réinitialise les deux conteneurs
   roomsDiv.innerHTML = '';
+  mapToEditDiv.innerHTML = "";
+
   for (let key of rooms) {
-    console.log(key)
-      if (key == null) continue;
-      
-      const pElement = document.createElement('p');
-      
-      pElement.innerHTML = key;
-      pElement.classList.add('roomsDev-item');
+    if (key == null) continue;
 
-      pElement.addEventListener('click', () => {
-        currentSelectedMap = key;
+    // === POUR LE PANEL DEV (roomsDiv) ===
+    const pElement = document.createElement('p');
+    pElement.innerHTML = key;
+    pElement.classList.add('roomsDev-item');
 
-        pElement.classList.add('textjump');
-        pElement.innerHTML = "Selected!";
-        setTimeout(() => {
-          pElement.classList.remove('textjump');
-          pElement.innerHTML = key;
-        }, 1000);
-      });
+    pElement.addEventListener('click', () => {
+      mapToEditName = key;
 
-      roomsDiv.appendChild(pElement);
+      pElement.classList.add('textjump');
+      pElement.innerHTML = "Selected!";
+
+      setTimeout(() => {
+        pElement.classList.remove('textjump');
+        pElement.innerHTML = key;
+      }, 1000);
+    });
+
+    roomsDiv.appendChild(pElement);
+
+    // === POUR LE DROPDOWN D'ÉDITION (mapToEditDiv) ===
+    const editOption = document.createElement('p');
+    editOption.innerText = key;
+    editOption.id = key;
+    editOption.classList.add('mapInfoDropdownContentType', 'mapInfoTypeItem', 'pointerActivator');
+
+    editOption.addEventListener('click', () => {
+      document.getElementById('mapToEdit').innerText = key;
+      mapToEditName = key;
+
+      mapToEditDiv.style.display = "none";
+      buttonMapToEditIsPress = false;
+
+      mapToEditDiv.style.display = "none"
+      mapToEdit.style.top = "0px"
+      mapToEdit.style.boxShadow = "3px 3px #0000003b"
+      mapToEdit.style.backgroundColor = "#c4ffc4"
+
+      socket.emit("requestMapInfo", mapToEditName);
+      checkIfAllFieldAreFill("editionMap")
+    });
+
+    mapToEditDiv.appendChild(editOption);
   }
+});
+
+
+socket.on("requestMapInfoClient", (mapInfo) => {
+  console.log(mapInfo)
+
+  editMapsDescriptionInput.value = mapInfo.description
+  editMapInfoTypeContent.innerHTML = mapInfo.type.toUpperCase()
+  editColorBaseContent.innerHTML = mapInfo.colorBase.toUpperCase()
+  editPrivacyContent.innerHTML = mapInfo.privacy.toUpperCase()
+
+  console.log(
+    "description: ", editMapsDescriptionInput.value, 
+    "Type of map:", mapInfo.type, 
+    "Privacy of the map:", mapInfo.privacy,
+    "Base color of the map:", mapInfo.colorBase)
 })
 
+
 socket.on("createWorldSuccesful", (name) => {
+  currentSelectedMap = name
+  changeMap()
   addMapsInfoToDiv()
   errorDisplay(`${name} map created!`, "hue-rotate(90deg)")
+  
+  
 })
 
 function addMapsInfoToDiv() {
@@ -10328,6 +10960,7 @@ function addMapsInfoToDiv() {
 
         pElement.classList.add('textjump');
         pElement.innerHTML = "Selected!";
+
         setTimeout(() => {
           pElement.classList.remove('textjump');
           pElement.innerHTML = key;
