@@ -8417,7 +8417,7 @@ let transitionTimeout = false;
 function transition (format) {
   if (!isLeader && inParty) return;
 
-  if (!inParty && !dying) mapsInfo[currentLand].playerPos = {x: localPlayerPos.x, y: localPlayerPos.y}
+  mapsInfo[currentLand].playerPos = {x: localPlayerPos.x, y: localPlayerPos.y}
 
   if (format === "arcane") {
     transitionArcane()
@@ -8431,6 +8431,7 @@ function transition (format) {
 }
 function changeMap (dynamicFunctionName) {
   socket.emit("requestChangeRoom", currentSelectedMap);
+  console.log(currentSelectedMap)
   setTimeout(() => {
     if (DayCycleState == 0) activateDayMobs()
   }, 5000);
@@ -8457,6 +8458,7 @@ function changeMap (dynamicFunctionName) {
 }
 function changeMapClient (dynamicFunctionName) {
   socket.emit("requestChangeRoom", dynamicFunctionName);
+  console.log(currentSelectedMap, "client")
     setTimeout(() => {
       transitionTimeout = false;
     }, 5000);
