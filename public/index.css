@@ -739,16 +739,24 @@ color: white;
 
 #respawn {
     display: none;
+    overflow: hidden;
     position: absolute;
     z-index: 1;
     color: black;
     opacity: 0;
     left: 50%;
-    top: 55%;
+    top: 50%;
     transform: translate(-50%, -50%);
     font-size: 50px;
     padding: 10px 40px;
-    animation: opacityUp 1s ease 2.2s forwards;
+    animation: opacityUpRespawn 2s ease forwards;
+    background: #FFE2C1;
+    border: solid 3px #b3a496;
+    outline: solid 3px #393939;
+    border-radius: 4px;
+    padding: 4px 12px;
+    width: 392px;
+    height: 99px;
 }
 
 .barContainer{
@@ -1503,15 +1511,15 @@ color: white;
 #partyMembers {
     min-width: 200px;
     min-height: 50px;
-    border: solid 3px #b3a496;
-    outline: solid 3px #393939;
     z-index: 2;
     background: #FFE2C1;
+    border: solid 3px #b3a496;
+    outline: solid 3px #393939;
     border-radius: 4px;
+    padding: 4px 12px;
     position: absolute;
     left: 20px;
     top: 20px;
-    padding: 4px 12px;
     display: none;
 }
 
@@ -3051,6 +3059,17 @@ color: white;
     }
     100% {
         opacity: 1;
+    }
+}
+
+@keyframes opacityUpRespawn {
+    0% {
+        opacity: 0;
+        width: 0;
+    }
+    100% {
+        opacity: 1;
+        width: 392px;
     }
 }
 

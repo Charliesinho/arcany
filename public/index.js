@@ -3316,9 +3316,12 @@ function playerDeath() {
   
   bossFight = false;
   // blackScreen()
+  console.log(areAllPartyMembersAlive(currentParty, players))
+  if (!areAllPartyMembersAlive(currentParty, players)) {
+    // youDied.style.display = "block";
+    respawn.style.display = "block";
+  }
 
-  youDied.style.display = "block";
-  respawn.style.display = "block";
 
 }
 
@@ -3368,7 +3371,10 @@ function blackScreen () {
 }
 
 respawn.addEventListener("click", () => {
-  console.log(currentParty)
+  if (inParty && !isLeader) {
+    errorDisplay("Only the leader can respawn everyone")
+    return;
+  }
   mapsInfo = _.cloneDeep(originalMapsInfo);
   socket.emit("healMax", maxHealth);
   if (inParty && isLeader) {
@@ -3659,6 +3665,7 @@ questClose.addEventListener("click", () => {
 
 let updateDialogs = true;
 let mapObject;
+let firstTimeLoggedIn = true;
 
 socket.on("removeKeyBlocker", () => {
   keyBlocker = false 
@@ -7027,6 +7034,18 @@ socket.on("player", (serverPlayer) => {
     })
   }
 
+  if (firstTimeLoggedIn) {
+    firstTimeLoggedIn = false;
+    if (myPlayer.health <= 0) {
+      socket.emit("healMax", maxHealth);
+      errorDisplay("You were dead last time so you were brought here and healed up by the scouts", "hue-rotate(90deg)")
+      setTimeout(() => {
+        noMovement = false;
+        dying = false;
+        // console.log(dying, noMovement)
+      }, 1000);
+    }
+  }
 
   health()
   updateQuestUI()
@@ -7674,7 +7693,7 @@ window.addEventListener("keydown", (e) => {
       footsteps.play();
       footsteps.loop = true;
       animPlayer = "moveUp"
-  
+      
       movingUp = true;
     } else if (keyCheck === "s") {
       footsteps.play();
@@ -7697,28 +7716,39 @@ window.addEventListener("keydown", (e) => {
   
       movingLeft = true;
     } else if (e.code === "Space" && !dashingAllowed) {
-      let oldPlayerSpeed = playerSpeed
-      playerSpeed = 30
+      let oldPlayerSpeed = playerSpeed;
+    
+      // Calculate dash boost using deltaTime — this is device-dependent and OK
+      playerSpeed = (playerSpeed * deltaTime) * 800;
+    
+      const dashSpeed = playerSpeed - oldPlayerSpeed; // This is the boost amount
+      const dashDuration = 200; // in ms
+      const intervalTime = 50; // ms
+      const steps = dashDuration / intervalTime;
+      const dashDecayPerStep = playerSpeed / steps;
+    
       dashing = true;
-      dashingAllowed = true
+      dashingAllowed = true;
+    
       const dash = new Audio("./audios/dash.wav");
       dash.loop = false;
-      dash.play()
-
+      dash.play();
+    
       const interval = setInterval(() => {
-        playerSpeed -= 10;
-
-        if (playerSpeed < oldPlayerSpeed) {
+        playerSpeed -= dashDecayPerStep;
+    
+        if (playerSpeed <= oldPlayerSpeed) {
           playerSpeed = oldPlayerSpeed;
-          clearInterval(interval)
+          clearInterval(interval);
           dashing = false;
-          
+    
           setTimeout(() => {
-            dashingAllowed = false
+            dashingAllowed = false;
           }, 200);
         }
-      }, 50);
+      }, intervalTime);
     }
+    
 
     if (myPlayer) {
       if(keyBlocker){
@@ -8290,7 +8320,7 @@ let playerHeight = humanSkin.height / 6;
 let playerZoomX = 291.6;
 let playerZoomY = 291.6;
 let generalZoom = 5;
-let playerSpeed = 4;
+let playerSpeed = 400;
 
 let framesPlayerTotal = 6;
 let frameCurrentPlayer = 0;
@@ -11047,6 +11077,14 @@ function shortestAngleDiff(a, b) {
   return diff;
 }
 
+function areAllPartyMembersAlive(currentParty, players) {
+  return currentParty.some(partyMember => {
+    const fullPlayer = players.find(p => p.id === partyMember.id);
+    return fullPlayer && fullPlayer.health > 0;
+  });
+}
+
+
 
 const DayCycleFilters = [
   'sepia(0%) hue-rotate(0deg) saturate(1) contrast(1) brightness(1)',  
@@ -11148,33 +11186,61 @@ function mapSetup () {
     // Set cameras
     if (!cutscene) {
     
-      if (
-        playerX - canvasLobby.width / 2 + 10 >= 0 && 
-        playerX + canvasLobby.width / 2 + 10 <= 4300
-      ) {
-        angleDifferenceX = 0;
-        secondaryCameraX = playerX - canvasLobby.width / 2 + 10;
-      } else if (playerX - canvasLobby.width / 2 + 10 >= 0) {
-        secondaryCameraX = 4300 - canvasLobby.width;
-        angleDifferenceX = (playerX - canvasLobby.width / 2 + 10) - (4300 - canvasLobby.width)
-      } else {
-        secondaryCameraX = -100;
-        angleDifferenceX = (playerX - canvasLobby.width / 2 + 10) - (-100)
+     // Default to local player
+    let cameraTarget = {
+      x: playerX,
+      y: playerY
+    };
+
+    // If dying, look for an alive party member
+    if (dying && inParty) {
+      for (let i = 0; i < currentParty.length; i++) {
+        const partyMemberId = currentParty[i].id;
+        const partyPlayer = players.find(p => p.id === partyMemberId);
+
+        if (partyPlayer && partyPlayer.health > 0) {
+          cameraTarget.x = partyPlayer.x;
+          cameraTarget.y = partyPlayer.y;
+          break;
+        }
       }
 
-      if (
-        playerY - canvasLobby.height / 2 + 50 >= 0 && 
-        playerY + canvasLobby.height / 2 + 50 <= 4300 
-      ) {
-        angleDifferenceY = 0;
-        secondaryCameraY = playerY - canvasLobby.height / 2 + 50;
-      } else if (playerY - canvasLobby.height / 2 + 50 >= 0) {
-        secondaryCameraY = 4300 - canvasLobby.height;
-        angleDifferenceY = (playerY - canvasLobby.height / 2 + 10) - (4300 - canvasLobby.height)
-      } else {
-        secondaryCameraY = -100;
-        angleDifferenceY = (playerY - canvasLobby.height / 2 + 10) - (-100)
+      if (dying && !areAllPartyMembersAlive(currentParty, players)) {
+        // youDied.style.display = "block";
+        respawn.style.display = "block";
       }
+    }
+
+    // X camera logic
+    if (
+      cameraTarget.x - canvasLobby.width / 2 + 10 >= 0 && 
+      cameraTarget.x + canvasLobby.width / 2 + 10 <= 4300
+    ) {
+      angleDifferenceX = 0;
+      secondaryCameraX = cameraTarget.x - canvasLobby.width / 2 + 10;
+    } else if (cameraTarget.x - canvasLobby.width / 2 + 10 >= 0) {
+      secondaryCameraX = 4300 - canvasLobby.width;
+      angleDifferenceX = (cameraTarget.x - canvasLobby.width / 2 + 10) - (4300 - canvasLobby.width);
+    } else {
+      secondaryCameraX = -100;
+      angleDifferenceX = (cameraTarget.x - canvasLobby.width / 2 + 10) - (-100);
+    }
+
+    // Y camera logic
+    if (
+      cameraTarget.y - canvasLobby.height / 2 + 50 >= 0 && 
+      cameraTarget.y + canvasLobby.height / 2 + 50 <= 4300 
+    ) {
+      angleDifferenceY = 0;
+      secondaryCameraY = cameraTarget.y - canvasLobby.height / 2 + 50;
+    } else if (cameraTarget.y - canvasLobby.height / 2 + 50 >= 0) {
+      secondaryCameraY = 4300 - canvasLobby.height;
+      angleDifferenceY = (cameraTarget.y - canvasLobby.height / 2 + 10) - (4300 - canvasLobby.height);
+    } else {
+      secondaryCameraY = -100;
+      angleDifferenceY = (cameraTarget.y - canvasLobby.height / 2 + 10) - (-100);
+    }
+
       cameraFollow();
       
     } else {
@@ -11388,27 +11454,28 @@ function drawOnTop (img, x, y, width, height, cx, cy, anim) {
 }
 
 function localPlayerMovement () {
+  // console.log(deltaTime)
   if (movingLeft && allowedMoveUpLeft) {
     inputs["left"] = true;
-    playerX -= playerSpeed;
+    playerX -= playerSpeed * deltaTime;
   } else {
     inputs["left"] = false;
   }
   if (movingRight && allowedMoveUpRight) {
     inputs["right"] = true;
-    playerX += playerSpeed;
+    playerX += playerSpeed * deltaTime;
   } else {
     inputs["right"] = false;
   }
   if (movingUp && allowedMoveUpUp) {
     inputs["up"] = true;
-    playerY -= playerSpeed;
+    playerY -= playerSpeed * deltaTime;
   } else {
     inputs["up"] = false;
   }
   if (movingDown && allowedMoveUpDown) {
     inputs["down"] = true;
-    playerY += playerSpeed;
+    playerY += playerSpeed * deltaTime;
   } else {
     inputs["down"] = false;
   }
@@ -13013,6 +13080,8 @@ function handleEnemyDeath (enemy) {
     }
 }
 
+let targetedPlayerTimeout = null;
+
 function checkEnemyCombat (enemy) {
   if (enemy.damaged > 0) {
     enemy.damaged--
@@ -13078,19 +13147,20 @@ function checkEnemyCombat (enemy) {
       && enemy.damaged === 0 
       && !projectile.enemy
       ) {
-      if (!enemy.targetPlayer && isLeader) {
+      if (isLeader) {
         let playerChosen;
+        // clearTimeout(targetedPlayerTimeout)
         for (let indPlayer of players) {
           if (indPlayer.id == projectile.playerId) {
             playerChosen = indPlayer;
           }
         }
-        console.log(playerChosen)
-        enemy.targetPlayer = playerChosen;
+        console.log(currentParty)
+        enemy.targetPlayer = playerChosen.id;
 
-        setTimeout(() => {
-          if (enemy) enemy.targetPlayer = null;
-        }, 5000);
+        // targetedPlayerTimeout = setTimeout(() => {
+        //   if (enemy) enemy.targetPlayer = null;
+        // }, 10000);
       }
       enemy.damaged = 2;
       enemy.angle = projectile.angle || projectile.bullet1 || projectile.bullet2;
@@ -13173,7 +13243,7 @@ function executeStateForDuration(enemy, stateFunction, duration) {
 
   const intervalId = setInterval(() => {
     stateFunction(enemy);
-    if (counter >= repetitions || !mapsInfo[currentLand].enemies.includes(enemy) || dying) {
+    if (counter >= repetitions || !mapsInfo[currentLand].enemies.includes(enemy)) {
       clearInterval(intervalId)
       enemy.currentStateName = "idle"
     };
@@ -14203,8 +14273,14 @@ function getAngleBetweenPlayerAndEnemy(enemy) {
     const angle = Math.atan2(dy, dx); // Returns the angle in radians
     return angle;
   } else {
-    const dx = enemy.targetPlayer.x - enemy.spawn.x - ((enemy.w)/2) - 200;
-    const dy = enemy.targetPlayer.y + 100 - enemy.spawn.y - ((enemy.h)/2) - 200;
+    let currentTarget = null;
+    for (let player of players) {
+      if (player.id === enemy.targetPlayer) {
+        currentTarget = player;
+      }
+    }
+    const dx = currentTarget.x - enemy.spawn.x - ((enemy.w)/2) - 200;
+    const dy = currentTarget.y + 100 - enemy.spawn.y - ((enemy.h)/2) - 200;
     const angle = Math.atan2(dy, dx); // Returns the angle in radians
     return angle;
   }
@@ -14395,8 +14471,10 @@ function enemyDeathParticles (enemy) {
 // Particle system <
 
 let lastTime = performance.now();       
+let lastTimeUpdateMap = performance.now();       
 let fps = 60;                        
-let frameDuration = 800 / fps;  
+let frameDuration = 1000 / fps;  
+let accumulatedTime = 0;
 
 let targetAlphaCycle = 0;
 let currentAlphaCycle = 0;
@@ -14494,15 +14572,24 @@ function updateGame() {
   drawColliders("player", "", "", "", "")
 }
 
-function checkFPS(currentTime) {
-  const deltaTime = currentTime - lastTime;
-  if (deltaTime >= frameDuration) {
-    lastTime = currentTime - (deltaTime % frameDuration);
-    return true
+function checkFPS() {
+  const currentTime = performance.now();
+  const deltaTimeFPS = currentTime - lastTimeUpdateMap;
+
+  if (deltaTimeFPS >= frameDuration) {
+    lastTimeUpdateMap += frameDuration;
+    return true;
   }
 }
 
+let deltaTime = 0;
 function generalMapLoop(currentTime) {
-  if (checkFPS(currentTime)) updateGame();
-  intervalCanvasBase = requestAnimationFrame(generalMapLoop)
+  deltaTime = (currentTime - lastTime) / 1000; // in seconds
+  lastTime = currentTime;                      // ✅ fix: update lastTime here
+if (checkFPS()) updateGame();
+   
+  // console.log(currentTime, lastTime, deltaTime);
+
+  
+  intervalCanvasBase = requestAnimationFrame(generalMapLoop);
 }
