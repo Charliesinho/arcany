@@ -44,23 +44,24 @@ window.addEventListener("load", () => {
   loadingProgress = 100;
   console.log("Finished loading");
   document.getElementById("introLogo-img").style.display = "none";
-  let videoIntro = document.getElementById("introLogo-video")
-  videoIntro.volume = 0.2;
-  videoIntro.play();
-  let scrollInterval =setInterval(() => {
-    if (window.scrollY > 0) {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth' 
-      });
-    } else {
-      clearInterval(scrollInterval)
-    }
-  }, 20);
+  document.getElementById("introLogo").style.display = "none";
+  // let videoIntro = document.getElementById("introLogo-video")
+  // videoIntro.volume = 0.2;
+  // videoIntro.play();
+  // let scrollInterval =setInterval(() => {
+  //   if (window.scrollY > 0) {
+  //     window.scrollTo({
+  //       top: 0,
+  //       behavior: 'smooth' 
+  //     });
+  //   } else {
+  //     clearInterval(scrollInterval)
+  //   }
+  // }, 20);
   
-  setTimeout(() => {
-    document.getElementById("introLogo").style.display = "none";
-  }, 5000);
+  // setTimeout(() => {
+  //   document.getElementById("introLogo").style.display = "none";
+  // }, 5000);
   
   clearInterval(loadingInterval);
 });
@@ -1032,6 +1033,24 @@ function handleLogin(action) {
 
   socket.emit("loginInfo", loginInfo);
   document.getElementById("introLogo-img").style.display = "block";
+
+  document.getElementById("introLogo").style.display = "flex";
+  let videoIntro = document.getElementById("introLogo-video")
+  videoIntro.volume = 0.2;
+  videoIntro.play();
+
+  setTimeout(() => {
+    document.getElementById("introLogo").style.opacity = "0";
+  }, 3000);
+
+  setTimeout(() => {
+    areaNameDisplay(currentSelectedMap);
+    
+  }, 5000);
+  setTimeout(() => {
+    document.getElementById("introLogo").style.display = "none";
+  }, 10000);
+
   // socket.emit("loadEnemies", enemies);
 }
 
@@ -7319,72 +7338,72 @@ function updateInventoryUI() {
 
 //Language Setting <
 
-  let openerLanguages = {
-    "english": "I understand this is an early alpha version, and nothing can be recorded or shared. You can now choose your langague",
-    "spanish": "Entiendo que esta es una versión alfa temprana y que no se puede grabar ni compartir nada. Ahora puede elegir su idioma.",
-    "french": "Je comprends qu'il s'agit d'une version alpha et que rien ne peut être enregistré ou partagé. Vous pouvez maintenant choisir votre langue.",
-    "portuguese": "Entendo que esta é uma versão alfa inicial e que nada pode ser gravado ou compartilhado. Agora você pode escolher seu idioma.",
-  }
+  // let openerLanguages = {
+  //   "english": "I understand this is an early alpha version, and nothing can be recorded or shared. You can now choose your langague",
+  //   "spanish": "Entiendo que esta es una versión alfa temprana y que no se puede grabar ni compartir nada. Ahora puede elegir su idioma.",
+  //   "french": "Je comprends qu'il s'agit d'une version alpha et que rien ne peut être enregistré ou partagé. Vous pouvez maintenant choisir votre langue.",
+  //   "portuguese": "Entendo que esta é uma versão alfa inicial e que nada pode ser gravado ou compartilhado. Agora você pode escolher seu idioma.",
+  // }
 
-  let selectedLanguage = "fr"
+  // let selectedLanguage = "fr"
 
-  en.addEventListener('click', function() {
-    openerScreenButton.innerHTML= openerLanguages.english
-    en.innerHTML = "English"
-    sp.innerHTML = "Spanish"
-    fr.innerHTML = "French"
-    pt.innerHTML = "Portuguese"
+  // en.addEventListener('click', function() {
+  //   openerScreenButton.innerHTML= openerLanguages.english
+  //   en.innerHTML = "English"
+  //   sp.innerHTML = "Spanish"
+  //   fr.innerHTML = "French"
+  //   pt.innerHTML = "Portuguese"
   
-    selectedLanguage = "en"
+  //   selectedLanguage = "en"
 
-    en.style.background = "rgb(171, 255, 93)"
-    sp.style.background = "white"
-    fr.style.background = "white"
-    pt.style.background = "white"
+  //   en.style.background = "rgb(171, 255, 93)"
+  //   sp.style.background = "white"
+  //   fr.style.background = "white"
+  //   pt.style.background = "white"
 
-  })
-  sp.addEventListener('click', function() {
-    openerScreenButton.innerHTML= openerLanguages.spanish
-    en.innerHTML = "Inglés"
-    sp.innerHTML = "Español"
-    fr.innerHTML = "Francés"
-    pt.innerHTML = "Portugués"
+  // })
+  // sp.addEventListener('click', function() {
+  //   openerScreenButton.innerHTML= openerLanguages.spanish
+  //   en.innerHTML = "Inglés"
+  //   sp.innerHTML = "Español"
+  //   fr.innerHTML = "Francés"
+  //   pt.innerHTML = "Portugués"
 
-    selectedLanguage = "sp"
+  //   selectedLanguage = "sp"
 
-    en.style.background = "white"
-    sp.style.background = "rgb(171, 255, 93)"
-    fr.style.background = "white"
-    pt.style.background = "white"
-  })
-  fr.addEventListener('click', function() {
-    openerScreenButton.innerHTML= openerLanguages.french
-    en.innerHTML = "Anglais"
-    sp.innerHTML = "Espagnol"
-    fr.innerHTML = "Francais"
-    pt.innerHTML = "Portuguais"
+  //   en.style.background = "white"
+  //   sp.style.background = "rgb(171, 255, 93)"
+  //   fr.style.background = "white"
+  //   pt.style.background = "white"
+  // })
+  // fr.addEventListener('click', function() {
+  //   openerScreenButton.innerHTML= openerLanguages.french
+  //   en.innerHTML = "Anglais"
+  //   sp.innerHTML = "Espagnol"
+  //   fr.innerHTML = "Francais"
+  //   pt.innerHTML = "Portuguais"
 
-    selectedLanguage = "fr"
+  //   selectedLanguage = "fr"
 
-    en.style.background = "white"
-    sp.style.background = "white"
-    fr.style.background = "rgb(171, 255, 93)"
-    pt.style.background = "white"
-  })
-  pt.addEventListener('click', function() {
-    openerScreenButton.innerHTML= openerLanguages.portuguese
-    en.innerHTML = "Inglês"
-    sp.innerHTML = "Espanhol"
-    fr.innerHTML = "Francês"
-    pt.innerHTML = "Português"
+  //   en.style.background = "white"
+  //   sp.style.background = "white"
+  //   fr.style.background = "rgb(171, 255, 93)"
+  //   pt.style.background = "white"
+  // })
+  // pt.addEventListener('click', function() {
+  //   openerScreenButton.innerHTML= openerLanguages.portuguese
+  //   en.innerHTML = "Inglês"
+  //   sp.innerHTML = "Espanhol"
+  //   fr.innerHTML = "Francês"
+  //   pt.innerHTML = "Português"
 
-    selectedLanguage = "pt"
+  //   selectedLanguage = "pt"
 
-    en.style.background = "white"
-    sp.style.background = "white"
-    fr.style.background = "white"
-    pt.style.background = "rgb(171, 255, 93)"
-  })
+  //   en.style.background = "white"
+  //   sp.style.background = "white"
+  //   fr.style.background = "white"
+  //   pt.style.background = "rgb(171, 255, 93)"
+  // })
 
 //Language Setting >
 
@@ -7501,10 +7520,11 @@ socket.on("loginAttempt", (res) => {
     allItemsObj = res.itemsObj;
     let areaNameComing = comingMap.areaName
     currentLand = areaNameComing
+    currentSelectedMap = comingMap.areaName
     mapsInfo[areaNameComing] = comingMap
     localPlayerPos = comingMap.playerPos
     audioIntro.pause();
-    loggedIn.play();
+    //loggedIn.play();
     intervalCanvasBase = requestAnimationFrame(generalMapLoop)
     lobbySoundtrack()
     // intervalCanvasBase = setInterval(lobbyLoop, 16.67); //Initial canvas

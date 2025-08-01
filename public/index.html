@@ -22,54 +22,51 @@
 
     <div id="popUpBlackscreen"></div>
 
+    
     <div id="openerScreen">
-      <div id="openerScreen-upper">
-        <div class="openerScreen-child">
-          <img id="openerScreen-title" src="./Textures/ARCANY.png"/>
-          <div id="openerScreen-content">
-            <div>
-              <h2>The building test is over, but fear not! Another adventure is approaching...</h2>
-              <br/>
-              <p>The building test showed us a lot of the potential in giving players the freedom to
-                build what their heart desires in their own land.
-                <br/>
-                <br/>
-                Now it's time to take it to the next level, we will upgrade and fully integrate this system in the game,
-                so not only you can build your home or business but you can also invite friends to it or visit other's lands,
-                this will open the doors for parties, minigames and public Businesses to claim their ground in the land of Arcany!
-                <br/>
-                <br/>
-                Thank you for your participation, we'll see you soon!
-              </p>
-            </div>
-            <button id="openerScreen-button" class="pointerActivator">
-              <img id="openerScreen-icon" src="./icons/uiIcon/fish.png" />
-              Access is restricted
-            </button>
-          </div>
-          <div id="languageSetting">
-            <button id="en" class="pointerActivator languageSetting-button">English</button>
-            <button id="sp" class="pointerActivator languageSetting-button">Spanish</button>
-            <button id="fr" class="pointerActivator languageSetting-button">French</button>
-            <button id="pt" class="pointerActivator languageSetting-button">Portuguese</button>
-          </div>
+      <div id="navbar">
+        <div class="glow-wrap">
+          <img src="./gameplay/logoArcany.png"  >
         </div>
-        <div class="openerScreen-childImg">
-          <div style="background: url(https://cdn.discordapp.com/attachments/1338128656832135178/1338166428767096916/image.png?ex=67ad63da&is=67ac125a&hm=336c3a17201c28a6222347f8b361ca690c7de87acb7cd90e704a4632f0a6d460&);"></div>
-          <div style="background: url(https://cdn.discordapp.com/attachments/1338128656832135178/1338938592533151886/image.png?ex=67ad8ffc&is=67ac3e7c&hm=8c94d4a6539ac3609cc1b0cc7513b9ed550fddc63d58844c15616bb9f5739bb0&);"></div>
+
+        <div>
+          <button>HOME</button>
+          <button>ACTUALITY</button>
+          <button>SHOP</button>
+          <button>CONTACT US</button>
         </div>
-      </div>
-      <div id="openerScreen-lower">
-        <a id="openerScreen-discord" class="pointerActivator" href="https://discord.gg/TWe2NKn8Sx" target="_blank" rel="noopener noreferrer">
-          <img src="https://static.vecteezy.com/system/resources/previews/006/892/625/non_2x/discord-logo-icon-editorial-free-vector.jpg" />
-          <p>Follow us in Discord to participate in the next alpha test!</p>
-        </a>
-        <a id="openerScreen-discord" class="pointerActivator youtubeButton" href="https://www.youtube.com/@Polypoode" target="_blank" rel="noopener noreferrer">
-          <img src="https://cdn.pixabay.com/photo/2023/04/25/00/48/youtube-7949229_1280.png" />
-          <p>Follow our Youtube channel to get the latest updates and devlogs!</p>
-        </a>
+
+        <div>
+          <button>LOG IN</button>
+        </div>
 
       </div>
+
+      <div id="homePage" >
+         <div id="loginArt">
+          <div></div>
+          <iframe if="" src='https://my.spline.design/crystalcopy-cd35cf24974b9bb9c15c0590dee4980f/' frameborder='0' width='100%' height='100%'></iframe>
+        </div>
+
+        <div id="homePageText">
+          <h1>ARCANY</h1>
+          <p>We're currently developing our MMO Arcany, click here to give it a try! The building test showed us a lot of the potential in giving players the freedom to
+          build what their heart desires in their own land.
+          </p>
+          <div>
+            <button id="playNowButton" class="pointerActivator homePageTextButton">
+              PLAY NOW
+            </button>
+
+            <button id="downloadButton" class="pointerActivator homePageTextButton">
+              DOWNLOAD
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      
+
     </div>
 
     <div class="custom-cursor"></div>
@@ -1122,11 +1119,7 @@
       <!-- <input type="submit" value="Send"> -->
     </form>
 
-
     <div id="loginScreen" class="">
-      <div id="loginArt">
-        <iframe if="" src='https://my.spline.design/crystalcopy-cd35cf24974b9bb9c15c0590dee4980f/' frameborder='0' width='100%' height='100%'></iframe>
-      </div>
       <form id="login">
         <h1 id="signIn">Sign in</h1>
         <input

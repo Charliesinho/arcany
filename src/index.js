@@ -294,6 +294,8 @@ async function main() {
                     if (player.inventory.length <= 21) {
                         console.log('hello', selectedFish,); 
 
+                        if(selectedFish === null) return
+
                         player.inventory.push(selectedFish);
                         player.fishing += selectedFish.xp
 
@@ -488,18 +490,6 @@ async function main() {
                             plate = commonMeatPlate;
                             xp = 100;
                         }
-                        //  else if (totalLevel < 6) {
-                        //     plate = uncommonFish;
-                        //     xp = 50;
-                        // }
-                        //  else if (totalLevel < 10) {
-                        //     plate = rareFish;
-                        //     xp = 100;
-                        // }
-                        // else if (totalLevel === 10) {
-                        //     plate = octopusPlate;
-                        //     xp = 200;
-                        // }
                     }
                     else if (arrayOfTypes.includes("fish")) {
                         if (totalLevel < 4) {
@@ -523,7 +513,8 @@ async function main() {
                         plate = trashPlate;
                             xp = 0;
                     }
-                    
+
+                    if(plate === null) return
 
                     player.inventory.push(plate);        
                     player.cooking = player.cooking + xp;                                 
@@ -543,10 +534,6 @@ async function main() {
 
             async function cooking() {
                 const player = await Player.findOne({socket: socket.id}).exec();
-
-                    // player.inventory.splice(item.index, 1);
-                                           
-                    // await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
         
                     myPlayer[socket.id] = player;   
 
@@ -581,6 +568,8 @@ async function main() {
                     }
 
                     staff.charges -= 1;
+
+                    if(plate === null) return
                     
 
                     player.inventory.push(staff);                                           
@@ -598,10 +587,6 @@ async function main() {
 
             async function cooking() {
                 const player = await Player.findOne({socket: socket.id}).exec();
-
-                    // player.inventory.splice(item.index, 1);
-                                           
-                    // await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
         
                     myPlayer[socket.id] = player;   
 
@@ -640,6 +625,8 @@ async function main() {
                         staff = trashCrafting,
                         xp = 0;
                     }
+
+                    if(plate === null) return
 
                     player.inventory.push(staff); 
                     player.crafting += xp;                                          
@@ -1104,48 +1091,7 @@ async function main() {
                         map: map,
                         itemsObj
                     }
-                    // await pushItem(runeBullets, socket)
-                    // await pushItem(runeFireRate, socket)
-                    // await pushItem(runeRange, socket)
-                    //await pushItem(restfieldBlanket, socket)
-                    //await pushItem(restfieldBlanket, socket)
-                    // await pushItem(treeLeaf, socket)
-                    //await pushItem(treeLeaf, socket)
-                    // await pushItem(smallCommonMeat, socket)
-                    // await pushItem(ballo, socket)
-                    // await pushItem(sardin, socket)
-                    //await pushItem(octopus, socket)
-                    // await pushItem(bass, socket)
-                    // await pushItem(reaperClothes, socket)
-                    // await pushItem(blackVampiresClothes, socket)
-                    // await pushItem(fishermanClothes, socket)
-                    // await pushItem(tropicalHat, socket)
-                    // await pushItem(skullHelmet, socket)
-                    // await pushItem(stick, socket)
-                    // await pushItem(stick, socket)
-                    // await pushItem(stick, socket)
-                    // await pushItem(chestKeyCommon, socket)
-                    // await pushItem(arcaneGem2, socket)
-                    // await pushItem(arcaneGem3, socket)
-                    // await pushItem(arcaneRepeaterInv, socket)
-                    // await pushItem(arcaneLancerInv, socket)
-                    // await pushItem(arcaneStaffCommon, socket)
-                    //await pushItem(arcaneStaffCommon, socket)
-
-                    // await Player.findOneAndUpdate({socket: socket.id}, {souls: [restfieldSkeletonSoulInventory, ghostSoulInventory, restfieldZombieSoulInventory, redDemonSoulInventory, pinkDemonSoulInventory]}, {new: true});
-
-                    // let item = {
-                    //     type: "questItem",
-                    //     name: "slimePoison",
-                    //     value: 20
-                    //     image: "./inventory/slimePotion.png",
-                    // }
-                    // let inventory = newPlayerData.inventory
-                    // inventory.push(item);
-                    // await Player.findOneAndUpdate({username: username}, {inventory: inventory}, {new: true}).exec()
-                    // myPlayer[socket.id] = newPlayerData;
-
-
+            
                     io.to(id).emit('loginAttempt', loginAttempt);
                     io.to(id).emit('removeKeyBlocker', "");
 
