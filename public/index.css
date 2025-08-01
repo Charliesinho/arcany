@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=Tiny5&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jersey+15&display=swap');
 
 h2, h1 {
     font-weight: 400;
@@ -454,12 +455,15 @@ body {
   }
 
 #introLogo {
+    display: none;
     position: absolute;
     z-index: 15;
     
     height: 100vh;
     width: 100vw;
     background-color: black;
+    pointer-events: none;
+    transition: all 5s ease;
 }
 
 #introLogo > video {
@@ -471,6 +475,7 @@ body {
 }
 
 #introLogo-img {
+    display: none;
     position: absolute;
     bottom: 20px;
     right: 20px;
@@ -480,180 +485,243 @@ body {
 }
 
 #openerScreen {
-    height: 100vh;
+    min-height: 100vh;
     width: 100vw;
-    /* background-color: #101519; */
-    background: url("./Textures/arcaneBack.gif");
-    background-repeat: repeat;
-
     position: absolute;
     top: 0;
     left: 0;
     z-index: 10;
-
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 30px;
+    justify-content: flex-start;
 }
-
-.openerScreen-child {
-    height: 100%;
+#navbar {
     display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
+    padding: 10px 30px;
+    width: calc(100% - 60px);
+    height: calc(40px - 20px);
+    flex-direction: row;
+    justify-content: space-between;
+    position: absolute;
+    color: white;
+    z-index: 1;
+}
+#navbar > div{
+    display: flex;
+    gap: 70px;
+}
+#navbar > div > button {
     position: relative;
-    top: 100px;
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 17px;
+    cursor: pointer;
+    z-index: 2;
+    padding: 10px 20px; /* pour espace autour du texte */
+    border-radius: 8px; /* pour un glow arrondi */
+    overflow: visible; /* empêche le ::before de déborder */
+}
+
+/* Glow uniquement au hover */
+#navbar > div > button::before {
+    content: "";
+    position: absolute;
+    top: 13px;
+    left: 0px;
+    width: 99%;
+    height: 51%;
+    background: white;
+    border-radius: 100%;
+    filter: blur(10px);
     opacity: 0;
-    animation: cardUp 1s ease 1s forwards;
+    z-index: 1;
+    transition: opacity 0.3s ease;
 }
 
-.openerScreen-childImg {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
-    gap: 30px;
+#navbar > div > button:hover::before {
+    opacity: 0.4;
 }
 
-.openerScreen-childImg > div {
-    height: 323px;
-    width: 531.6px;
-    border: solid 1px white;
-    background-size: cover !important;
-    background-position: center !important;
+
+.glow-wrap {
     position: relative;
-    top: 100px;
-    opacity: 0;
-    animation: cardUp 1s ease 1.5s forwards;
+    width: 45px;
+    height: 45px;
+    display: inline-block;
 }
 
-#openerScreen-upper {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    gap: 30px;
+.glow-wrap::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    background: white;
+    border-radius: 50%;
+    filter: blur(15px);
+    z-index: 1;
+    animation: pulseGlow 2.5s infinite;
 }
 
-.openerScreen-childImg > div:first-child {
-    animation: cardUp 1s ease 2s forwards;
+.glow-wrap img {
+    width: 45px;
+    height: 45px;
+    position: relative;
+    z-index: 2;
+    display: block;
+    border-radius: 50%;
 }
 
-#openerScreen-button {
-    line-height: 25px;
-    /* height: 100px; */
-    width: 248px;
-    padding: 14px;
-    color: #ffffff;
-    font-size: 20px;
-    font-weight: 400;
-    border: solid 0px rgb(93 51 51);
-    background-color: rgb(129 103 205 / 0%);
-    border-radius: -2px;
-    box-shadow: 0 3px rgb(255 255 255);
+@keyframes pulseGlow {
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(0.7);
+        opacity: 0.3;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0.3;
+    }
+}
+
+
+
+#homePage {
+    width: 100vw;
+    background-repeat: repeat;
     position: relative;
     top: 0;
-    transition: all .2s ease;
+    left: 0;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
+    justify-content: flex-start;
 }
+#loginArt {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    pointer-events: none;
 
-#openerScreen-button:hover {
-    
-    /* background-color: rgb(171, 255, 93); */
-    /* background-color: rgb(255, 93, 93); */
-    /* border: solid 0px rgb(125, 188, 66); */
-    color: #ff4545;
-    width: 300px;
+    /* position: absolute; */
+    left: 0;
+    top: 0;
 
-    /* top: 10px; */
+    background-color: black;
+
+    transition: all .5s ease;
 }
-
-#openerScreen-icon {
-    width: 36px;
-    position: relative;
-    top: -3px;
+#loginArt > div {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-color: #0a021c;
+    background-color: #0a021c;
+    animation: fadeInOpacity 6s forwards;
 }
-
-#openerScreen-title {
-    width: 530px;
-    border: solid 1px white;
-    border-bottom: none;
+@keyframes fadeInOpacity {
+    from {
+        opacity: 0.1;
+    }
+    to {
+        opacity: 0.7;
+    }
 }
-
-#openerScreen-content {
-    width: 530px;
-    height: 574px;
-    background: linear-gradient(180deg, rgb(14, 13, 89) 0%, rgb(42 11 67) 100%);
-    outline: solid 1px #ffffff5c;
-    outline-offset: -11px;
-    border: solid 1px white;
-    border-top: none;
+#homePageText{
+    display: flex;
     flex-direction: column;
-    display: flex;
-    align-items: center;
-}
-
-#openerScreen-lower {
-    display: flex;
-    gap: 30px;
-}
-
-#openerScreen-discord {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    width: 482px;
-    padding: 10px 25px;
-    background-color: rgb(88, 100, 242);
-    border-radius: 5px;
-    filter: hue-rotate(0deg) brightness(1);
-    text-decoration: none;
-    /* transition: all .2s ease; */
-    position: relative;
-    top: 100px;
+    position: absolute;
+    color: white;
+    top: 30%;
+    left: 5%;
+    max-width: 590px;
     opacity: 0;
-    animation: cardUp 1s ease 2.5s forwards;
+    animation: fadeInOpacityHomePageText 8s forwards;
 }
-#openerScreen-discord:hover {
-    filter: hue-rotate(-147deg) brightness(1.3);
+@keyframes fadeInOpacityHomePageText {
+    0% {
+        opacity: 0;
+    } 
+    20%{
+    opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
-#openerScreen-discord > img {
-    width: 50px;
-}
-#openerScreen-discord > p {
-color: white;
-}
-
-.youtubeButton {
-    background-color: #C50607 !important;
-}
-.youtubeButton:hover {
-    background-color: #C50607 !important;
-    filter: hue-rotate(124deg) brightness(1.6) !important;
-}
-
-#openerScreen-content > div {
-    padding: 43px;
-}
-
-#openerScreen-content  p {
-    text-align: justify;
-    color: #d8b2ff;
-    line-height: 21px;
-}
-
-#openerScreen-content  h2 {
-    text-align: center;
-    color: #e0b3ff;
+#homePageText > h1{
+    font-size: 220px;
+    font-family: "Jersey 15", sans-serif !important;
     font-weight: 400;
-    text-shadow: 0 0 10px #ff45ff;
-    font-size: 28px;
+    font-style: normal;
+}
+#homePageText > p{
+    display: flex;
+    position: relative;
+    font-size: 18px;
+    top: -18px;
+    left: 3px;
+    text-align: justify;
+}
+#homePageText > div{
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+}
+#downloadButton:hover{
+    background-color: rgb(82, 11, 215);
+    border: solid 2px rgb(45, 5, 118);
+    color: white;
+}
+.homePageTextButton{
+    display: flex;
+    position: relative;
+    top: 0px;
+    width: 100%;
+    height: 50px;
+    border-radius: 6px;
+    border: solid 2px #000000;
+    box-shadow: 0px 4px 0px 1px black;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+    overflow: hidden; 
+    background-color: white; 
+
+}
+.homePageTextButton:hover{
+    top: 4px;
+    box-shadow: 0px 0px 0px 0px black;
+    background-color: #25c006; 
+    border: solid 2px #135705;
+    color: white;
+}
+.homePageTextButton::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 5%;
+    height: 100%;
+    background: linear-gradient(
+        120deg,
+        rgba(0, 0, 0, 0) 0%,
+        rgb(255, 255, 255) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    transform: skewX(-20deg);
+}
+
+.homePageTextButton:hover::after {
+    animation: shine 0.7s forwards;
+}
+@keyframes shine {
+    from {
+        left: -75%;
+    }
+    to {
+        left: 125%;
+    }
 }
 
 #languageSetting{
@@ -1549,20 +1617,6 @@ color: white;
 #tradeScreen button:hover {
 
     background: #90c3fd;
-}
-
-#navBar {
-    width: 97.5vw;
-    height: 100px;
-
-    background-color: rgb(68, 54, 49);
-    border-radius: 15px;
-    border: solid 4px black;
-    box-shadow: 0 -10px  10px rgba(66, 66, 66, 0.315);
-
-    position: absolute;
-    bottom: -15px;
-    left: 0;
 }
 
 /* playerHeartParent */
@@ -2514,12 +2568,12 @@ color: white;
     
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
     gap: 20px;
 
     height: 100vh;
-    width: 350px;
+    width: 100vw;
 
     /* box-shadow: -5px 0 300px 200px rgb(16, 21, 25); */
 
@@ -2533,7 +2587,6 @@ color: white;
 }
 
 #signIn {
-    margin-top: 200px;
     margin-bottom:10px;
     color: white;
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
@@ -2618,21 +2671,7 @@ color: white;
     cursor: none !important;
 }
 
-#loginArt {
-    width: 100%;
-    height: 100vh;
 
-    pointer-events: none;
-
-    /* position: absolute; */
-    left: 0;
-    top: 0;
-
-    background-color: black;
-
-    transition: all .5s ease;
-
-}
 
 #hearts {
     position: absolute;

@@ -146,7 +146,8 @@ const uiSkinsImg = document.getElementById("uiSkinsImg");
 const circleCharacter = document.getElementById("circleCharacter");
 const mountainsUi = document.getElementById("mountainsUi");
 
-const openerScreenButton = document.getElementById("openerScreen-button");
+const playNowButton = document.getElementById("playNowButton");
+const loginNotPlaying = document.getElementById("loginNotPlaying");
 const openerScreen = document.getElementById("openerScreen");
 
 const loginScreen = document.getElementById("loginScreen");
