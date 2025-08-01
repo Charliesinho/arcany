@@ -129,10 +129,10 @@
         <button class="pointerActivator" id="createMapButtonUi">CREATE A MAP</button>
       </div>
 
-      <div id="mapInfo">
+      <div id="mapInfo" class="mapCreationParent">
         <h2>CREATE A NEW MAP</h2>
         <input id="mapNameInput" value="MY MAP"/>
-        <textarea type="text" id="mapDescInput">map description</textarea>
+        <textarea type="text" id="mapDescInput" class="creationMapTexteArea">map description</textarea>
 
         <div class="mapInfoDropdown">
           <button class="mapInfoDropdownButton pointerActivator" id="mapInfoTypeContent">TYPE</button>
@@ -167,19 +167,29 @@
         </div>
       </div>
       
-      <div id="editMaps">
+      <div id="editMaps" class="mapCreationParent">
         <h2>EDIT YOUR MAP</h2>
+
         <div class="mapInfoDropdown">
-          <button class="mapInfoDropdownButton pointerActivator" id="">WhICH MAP DO YOU WANT TO EDIT ?</button>
-          <div class="mapInfoDropdownContent" id="">
-            <p class="mapInfoDropdownContentType mapInfoTypeItem pointerActivator" id="adventure">Adventure</p>
+          <button class="mapInfoDropdownButton pointerActivator" id="mapToEdit">WhICH MAP DO YOU WANT TO EDIT ?</button>
+          <div class="mapInfoDropdownContent" id="mapToEditDiv">
           </div>
         </div>
-        
-        <input id="editMapsRenameInput" value=""/>
-        <textarea type="text" id="editMapsDescriptionInput"></textarea>
 
-        <div class="mapInfoDropdownButton pointerActivator" id="sapwnButtonUi"></div>
+        <div class="mapInfoDropdown">
+          <button class="mapInfoDropdownButton pointerActivator" id="teleporterToEditMap">TELEPORT TO YOUR MAP</button>
+        </div>
+        
+        <textarea type="text" id="editMapsDescriptionInput" class="creationMapTexteArea"></textarea>
+
+        <div class="mapInfoDropdown">
+          <button class="mapInfoDropdownButton pointerActivator" id="editMapInfoTypeContent">TYPE</button>
+          <div class="mapInfoDropdownContent" id="editMapInfoTypeButton">
+            <p class="mapInfoDropdownContentType mapInfoTypeItem pointerActivator" id="adventure">Adventure</p>
+            <p class="mapInfoDropdownContentType mapInfoTypeItem pointerActivator" id="social">Social</p>
+            <p class="mapInfoDropdownContentType mapInfoTypeItem pointerActivator" id="pvp">PVP</p>
+          </div>
+        </div>
 
         <div class="mapInfoDropdown">
           <button class="mapInfoDropdownButton pointerActivator" id="editColorBaseContent">BASE COLOR</button>
@@ -191,42 +201,28 @@
             </div>
         </div>
 
-        <div id="editMapsDeleteObj" class="mapInfoDropdownButton pointerActivator">Delete all objects</div>
-
-        <div id="editMapsSaveSettingSave" class="mapInfoDropdownButton greenHover pointerActivator">Save map</div>
-        <div id="editMapsSaveSettingDelete" class="mapInfoDropdownButton redHover pointerActivator">Delete map</div>
-
-
-        <!-- <div>
-          <div class="editMapsParent">
-            <h1 id="editMapsTitle">Your map</h1>
-          </div>
-          
-          <div class="editMapsParent">
-  
-            <div class="editMapsChildText">
-              <div id="editMapsRenameDiv" >
-                <p>Rename your map</p>
-                <input id="editMapsRenameInput" value="new name"></input>
-              </div>
-    
-              <div id="editMapsDescriptionDiv" >
-                <p>Description</p>
-                <textarea type="text" id="editMapsDescriptionInput" value="Description"></textarea>
-              </div>
+        <div class="mapInfoDropdown">
+          <button class="mapInfoDropdownButton pointerActivator" id="editPrivacyContent">PRIVACY</button>
+            <div class="mapInfoDropdownContent"  id="editPrivacyButton">
+              <p class="mapInfoDropdownContentType mapInfoPrivacyItem pointerActivator" id="public">Public</p>
+              <p class="mapInfoDropdownContentType mapInfoPrivacyItem pointerActivator" id="private">Private</p>
             </div>
-            <div class="editMapsChildText">
-              <button id="editMapsChooseBase" class="editMapsEditButton pointerActivator greenHover">Choose a new base</button>
-  
-              <button id="editMapsDeleteObj" class="editMapsEditButton pointerActivator redHover">Delete all objects</button>
-            </div>
-          </div>
         </div>
-  
-        <div id="editMapsSaveSetting">
-          <div id="editMapsSaveSettingSave" class="editMapsSaveSettingButton greenHover pointerActivator">Save map</div>
-          <div id="editMapsSaveSettingDelete" class="editMapsSaveSettingButton redHover pointerActivator">Delete map</div>
-        </div> -->
+        
+        <div class="mapInfoDropdown">
+          <button class="mapInfoDropdownButton pointerActivator" id="sapwnButtonUi">SET YOUR SPAWN POINT</button>
+        </div>
+        <div class="mapInfoDropdown">
+          <button id="editMapsDeleteObj" class="mapInfoDropdownButton pointerActivator">DELETE ALL THE OBJECTS</button>
+        </div>
+
+
+        <div class="editionSettingBottom">
+          <button id="editMapsSaveSettingSave" class="editionSettingBottomButton pointerActivator">SAVE MAP</button>
+        
+          <button id="editMapsSaveSettingDelete" class="editionSettingBottomButton pointerActivator">DELETE MAP</button>
+        </div>
+
       </div>
     </div>
 
@@ -268,12 +264,11 @@
     
 
     <div id="popupDeleteAllObjParent">
-
       <div id="popupDeleteAllObjChild">
-        <p>Do you really want to delete all the objects of this map ?</p>
+        <p id="popupTexteInfo"></p>
         <div id="popupDeleteAllObjChildDiv">
-          <button id="deleteAllObjButton" class="editMapsSaveSettingButton greenHover pointerActivator">Yes</button>
-          <button id="deleteAllObjButtonCancel" class="editMapsSaveSettingButton redHover pointerActivator">Cancel</button>
+          <button id="deleteAllObjButton" class="editMapsSaveSettingButton pointerActivator">Yes</button>
+          <button id="deleteAllObjButtonCancel" class="editMapsSaveSettingButton pointerActivator">Cancel</button>
         </div>
       </div>
     </div>

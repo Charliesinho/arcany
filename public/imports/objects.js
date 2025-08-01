@@ -45,8 +45,9 @@ const redSmallCarpet = new Image();
 redSmallCarpet.src = "./objects/furniture/carpets/redSmallCarpet.png"
 const chairLeft = new Image();
 chairLeft.src = "./objects/furniture/chairs/chairLeft.png"
-const chairRight = new Image();
-chairRight.src = "./objects/furniture/chairs/chairRight.png"
+
+const chairFront = new Image();
+chairFront.src = "./objects/furniture/chairs/chairFront.png"
 const decoOne = new Image();
 decoOne.src = "./objects/furniture/decorations/decoOne.png"
 const hangingPlant = new Image();
@@ -67,10 +68,28 @@ paintTwo.src = "./objects/furniture/decorations/paintTwo.png"
 
 const vineTwo = new Image();
 vineTwo.src = "./objects/outdoor/plants/vineTwo.png"
+
+// FURNITURE CHAIR
+const whiteBigSofa = new Image();
+whiteBigSofa.src = "./objects/furniture/chairs/whiteBigSofa.png"
+const redBigSofa = new Image();
+redBigSofa.src = "./objects/furniture/chairs/redBigSofa.png"
+const whiteSofa = new Image();
+whiteSofa.src = "./objects/furniture/chairs/whiteSofa.png"
+const redSofa = new Image();
+redSofa.src = "./objects/furniture/chairs/redSofa.png"
+const chairRight = new Image();
+chairRight.src = "./objects/furniture/chairs/chairRight.png"
+
+// CONSTRUCTION FLOOR
 const woodFloor = new Image();
 woodFloor.src = "./objects/construction/floors/woodFloor.png"
-
-
+const woodFloorReverse = new Image();
+woodFloorReverse.src = "./objects/construction/floors/woodFloorReverse.png"
+const woodFloorTwo = new Image();
+woodFloorTwo.src = "./objects/construction/floors/woodFloorTwo.png"
+const woodFloorTwoReverse = new Image();
+woodFloorTwoReverse.src = "./objects/construction/floors/woodFloorTwoReverse.png"
 
 // CONSTRUCTION WALLS
 const woodWallDestroyed = new Image();
@@ -97,12 +116,23 @@ const restfieldMallWallTwo = new Image();
 restfieldMallWallTwo.src = "./objects/construction/walls/restfieldMallWallTwo.png"
 const restfieldMallWallShadow = new Image();
 restfieldMallWallShadow.src = "./objects/construction/walls/restfieldMallWallShadow.png"
+const woodWallpaper = new Image();
+woodWallpaper.src = "./objects/construction/walls/woodWallpaper.png"
+const whiteWallpaper = new Image();
+whiteWallpaper.src = "./objects/construction/walls/whiteWallpaper.png"
+const greenWallpaper = new Image();
+greenWallpaper.src = "./objects/construction/walls/greenWallpaper.png"
+
+const blueWallpaper = new Image();
+blueWallpaper.src = "./objects/construction/walls/blueWallpaper.png"
 
 //CONSTRUCTION ROOF
 const restfieldMallBrokenRoof = new Image();
 restfieldMallBrokenRoof.src = "./objects/construction/roofs/restfieldMallBrokenRoof.png"
 const restfieldMallBrokenRoofTwo = new Image();
 restfieldMallBrokenRoofTwo.src = "./objects/construction/roofs/restfieldMallBrokenRoofTwo.png"
+const woodRoof = new Image();
+woodRoof.src = "./objects/construction/roofs/woodRoof.png"
 
 
 
@@ -121,15 +151,19 @@ const woodSmallWallVertDiagonalReverse = new Image();
 woodSmallWallVertDiagonalReverse.src = "./objects/construction/fences/woodSmallWallVertDiagonalReverse.png"
 const restfieldFence = new Image();
 restfieldFence.src = "./objects/construction/fences/restfieldFence.png"
+const restfieldFenceThree = new Image();
+restfieldFenceThree.src = "./objects/construction/fences/restfieldFenceThree.png"
+const restfieldFenceThreeReverse = new Image();
+restfieldFenceThreeReverse.src = "./objects/construction/fences/restfieldFenceThreeReverse.png"
 const restfieldFenceOne = new Image();
 restfieldFenceOne.src = "./objects/construction/fences/restfieldFenceOne.png"
 const restfieldFenceOneReverse = new Image();
 restfieldFenceOneReverse.src = "./objects/construction/fences/restfieldFenceOneReverse.png"
-
 const restfieldFenceTwo = new Image();
 restfieldFenceTwo.src = "./objects/construction/fences/restfieldFenceTwo.png"
 const restfieldFenceTwoReverse = new Image();
 restfieldFenceTwoReverse.src = "./objects/construction/fences/restfieldFenceTwoReverse.png"
+
 const restfieldMallFence = new Image();
 restfieldMallFence.src = "./objects/construction/fences/restfieldMallFence.png"
 const restfieldMallFenceReverse = new Image();
@@ -184,6 +218,8 @@ restfieldMallParkingReverse.src = "./objects/construction/floors/restfieldMallPa
 //CONSTRUCTION DOOR
 const restfieldMallDoor = new Image();
 restfieldMallDoor.src = "./objects/construction/doors/restfieldMallDoor.png"
+const woodDoor = new Image();
+woodDoor.src = "./objects/construction/doors/woodDoor.png"
 const restfieldArc = new Image();
 restfieldArc.src = "./objects/construction/doors/restfieldArc.png"
 const restfieldArcTwo = new Image();
@@ -447,10 +483,26 @@ const cookingStand = new Image();
 cookingStand.src = "./objects/furniture/kitchen/cookingStand.png"
 const cookingStandReverse = new Image();
 cookingStandReverse.src = "./objects/furniture/kitchen/cookingStandReverse.png"
+const gazpot = new Image();
+gazpot.src = "./objects/furniture/kitchen/gazpot.png"
+const gazpotgreen = new Image();
+gazpotgreen.src = "./objects/furniture/kitchen/gazpotgreen.png"
 
 //FURNITURE STORAGE
+const smallShelves = new Image();
+smallShelves.src = "./objects/furniture/storage/smallShelves.png"
+const bigWhiteShelves = new Image();
+bigWhiteShelves.src = "./objects/furniture/storage/bigWhiteShelves.png"
+const whiteShelves = new Image();
+whiteShelves.src = "./objects/furniture/storage/whiteShelves.png"
+const wookShelves = new Image();
+wookShelves.src = "./objects/furniture/storage/wookShelves.png"
+const bigWoodShelves = new Image();
+bigWoodShelves.src = "./objects/furniture/storage/bigWoodShelves.png"
 const shelves = new Image();
 shelves.src = "./objects/furniture/storage/shelves.png"
+const shelvesSecond = new Image();
+shelvesSecond.src = "./objects/furniture/storage/shelvesSecond.png"
 const restfieldmallStorage = new Image();
 restfieldmallStorage.src = "./objects/furniture/storage/restfieldmallStorage.png"
 const restfieldShelves = new Image();
