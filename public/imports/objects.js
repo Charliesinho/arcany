@@ -565,3 +565,8 @@ christmasLightOne.src = "./objects/light/spotlights/christmasLightOne.png"
 const christmasLightTwo = new Image();
 christmasLightTwo.src = "./objects/light/spotlights/christmasLightTwo.png"
 
+
+// PLAYER TOMB
+const commonPlayerTomb = new Image();
+commonPlayerTomb.src = "./objects/notPlaceable/commonPlayerTomb.png"
+
