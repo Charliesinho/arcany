@@ -1144,6 +1144,65 @@ async function main() {
                 playerCreate();
             };
         });
+        socket.on("loginInfoNotPlaying", (info) => {
+            const username = info.username;
+            const password = info.password;
+            const id = socket.id;
+            const action = info.action;
+
+            async function playerLogin() {
+                const playerData = await Player.findOne({username: username}).exec();
+    
+                if (playerData && playerData.password === password) {
+                    const newPlayerData = await Player.findOneAndUpdate({username: username}, {socket: id}, {new: true}).exec()  
+                    usernames[socket.id] = username;  
+                    myPlayer[socket.id] = newPlayerData; 
+                    inventoryStore[socket.id] = myPlayer[socket.id];
+                    let map = await World.findOne({areaName: newPlayerData.area}).exec();
+
+                
+                    const loginAttempt = newPlayerData
+            
+                    io.to(id).emit('loginAttemptNotPlaying', loginAttempt);
+
+
+                } else if (playerData && playerData.password !== password) { 
+                    const loginAttempt = "failed";
+                    io.to(id).emit('loginAttempt', loginAttempt); 
+                }             
+            };
+            async function playerCreate() {   
+                const playerData = await Player.findOne({username: username}).exec();
+                
+                if (!playerData) {
+                    const newPlayerData = await Player.create({username: username, password: password, socket: id}, {new: true});
+                    usernames[socket.id] = username;  
+                    myPlayer[socket.id] = newPlayerData;
+
+                    const loginAttempt = "success";
+                    io.to(id).emit('loginAttempt', loginAttempt); 
+
+                    await pushItem(chestKeyCommon, socket)
+
+                    // await Player.findOneAndUpdate({socket: socket.id}, {souls: [restfieldZombieSoulInventory, redDemonSoulInventory, pinkDemonSoulInventory, vampiresSoulInventory]}, {new: true});
+                    const playerData = await Player.findOne({username: username}).exec();
+
+                    myPlayer[socket.id] = playerData;
+                    
+
+                } else if (playerData) { 
+                    const loginAttempt = "existing";
+                    io.to(id).emit('loginAttempt', loginAttempt); 
+                }     
+            };
+            
+            if (action === "login") {
+                playerLogin();
+            }
+            else if (action === "create") {
+                playerCreate();
+            };
+        });
 
         socket.on("saveWorld", async (worldInfo) => {
             const worldData = await World.findOne({areaName: worldInfo.areaName}).exec();

@@ -1011,7 +1011,7 @@ pointerActivator.forEach(item => {
 });
 
 //Mouse cursor <
-
+let wantingToPlay = false
 let shootingBlock = true;
 let myPlayer;
 
@@ -1031,41 +1031,56 @@ function handleLogin(action) {
         action: action,
   }
 
-  socket.emit("loginInfo", loginInfo);
-  document.getElementById("introLogo-img").style.display = "block";
+  if(wantingToPlay){
+    socket.emit("loginInfo", loginInfo);
+    document.getElementById("introLogo-img").style.display = "block";
+  
+    document.getElementById("introLogo").style.display = "flex";
+    let videoIntro = document.getElementById("introLogo-video")
+    videoIntro.volume = 0.2;
+    videoIntro.play();
+  
+    setTimeout(() => {
+      document.getElementById("introLogo").style.opacity = "0";
+    }, 3000);
+  
+    setTimeout(() => {
+      areaNameDisplay(currentSelectedMap);
+      
+    }, 5000);
+    setTimeout(() => {
+      document.getElementById("introLogo").style.display = "none";
+    }, 10000);
 
-  document.getElementById("introLogo").style.display = "flex";
-  let videoIntro = document.getElementById("introLogo-video")
-  videoIntro.volume = 0.2;
-  videoIntro.play();
-
-  setTimeout(() => {
-    document.getElementById("introLogo").style.opacity = "0";
-  }, 3000);
-
-  setTimeout(() => {
-    areaNameDisplay(currentSelectedMap);
-    
-  }, 5000);
-  setTimeout(() => {
-    document.getElementById("introLogo").style.display = "none";
-  }, 10000);
-
-  // socket.emit("loadEnemies", enemies);
+  } else {
+    console.log("You are just connect bro")
+    socket.emit("loginInfoNotPlaying", loginInfo);
+    document.getElementById("introLogo-img").style.display = "block";
+  }
 }
+let generalPlayerInfo = null
 
-openerScreenButton.addEventListener("click", function() {
+socket.on("loginAttemptNotPlaying", (playerInfo) => {
+  document.getElementById("introLogo-img").style.display = "none";
+  loginScreen.style.display = "none";
+  console.log(playerInfo)
+  generalPlayerInfo = playerInfo
+  loginNotPlaying.innerHTML = generalPlayerInfo.username;
+})
+
+playNowButton.addEventListener("click", function() {
   loginScreen.style.display = "flex";
+  wantingToPlay = true
+
   window.scrollTo({
     top: 0,
     behavior: 'smooth'
   });
   setTimeout(() => {
     openerScreen.classList.add('animIntro');
-    audioIntro.play();
   }, 500);
   setTimeout(() => {
-    openerScreen.style.display = "none"
+    openerScreen.style.display = "flex"
   }, 1000);
   
   setTimeout(() => {
@@ -1085,11 +1100,33 @@ openerScreenButton.addEventListener("click", function() {
   // }
 });
 
+loginNotPlaying.addEventListener("click", function (event) {
+
+  if (myPlayer.username !== "none") {
+    console.log("myPlayer:", myPlayer);
+
+  } else {
+
+    loginScreen.style.display = "flex";
+    loginScreen.style.zIndex = "10";
+    wantingToPlay = false
+  
+      window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+    audioClick.play();
+  }
+});
+
 loginButton.addEventListener("click", function (event) {
   event.preventDefault()
   handleLogin("login");
   audioClick.play();
+
+
 });
+
 
 createButton.addEventListener("click", function(){
   event.preventDefault()
