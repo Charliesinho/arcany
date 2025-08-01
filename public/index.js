@@ -1052,6 +1052,10 @@ function handleLogin(action) {
       document.getElementById("introLogo").style.display = "none";
     }, 10000);
 
+    setTimeout(() => {
+      openerScreen.style.display = "none"
+    }, 2000);
+
   } else {
     console.log("You are just connect bro")
     socket.emit("loginInfoNotPlaying", loginInfo);
@@ -1065,39 +1069,47 @@ socket.on("loginAttemptNotPlaying", (playerInfo) => {
   loginScreen.style.display = "none";
   console.log(playerInfo)
   generalPlayerInfo = playerInfo
-  loginNotPlaying.innerHTML = generalPlayerInfo.username;
+
+
+  loginNotPlayingP.innerText = generalPlayerInfo.username;
+  loginNotPlayingIMG.style.display = "flex";
+  armor = drawPlayerArmor(generalPlayerInfo)
+  console.log(armor)
+  loginNotPlayingIMG.style.backgroundImage = `url(${armor.src})`;
+  loginNotPlayingIMGTOPTRICK.style.backgroundImage = `url(${armor.src})`;
+  console.log(loginNotPlayingIMG.style.backgroundImage)
+  loginNotPlaying.style.borderTopLeftRadius = "0";
+  loginNotPlaying.style.borderBottomLeftRadius = "0";
 })
 
 playNowButton.addEventListener("click", function() {
   loginScreen.style.display = "flex";
   wantingToPlay = true
 
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth'
-  });
-  setTimeout(() => {
-    openerScreen.classList.add('animIntro');
-  }, 500);
-  setTimeout(() => {
-    openerScreen.style.display = "flex"
-  }, 1000);
-  
-  setTimeout(() => {
-    loginBox.style.marginRight = "0"
+  if(generalPlayerInfo !== null){
+    console.log(generalPlayerInfo)
+    handleLogin("login");
+
+  } else {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+    setTimeout(() => {
+      openerScreen.classList.add('animIntro');
+    }, 500);
+    setTimeout(() => {
+      openerScreen.style.display = "flex"
+    }, 1000);
     
-  }, 4000);
-  audioClick.play();
+    setTimeout(() => {
+      loginBox.style.marginRight = "0"
+      
+    }, 4000);
+    audioClick.play();
+  }
 
-  // const elem = document.documentElement; // makes the whole page fullscreen
 
-  // if (elem.requestFullscreen) {
-  //   elem.requestFullscreen();
-  // } else if (elem.webkitRequestFullscreen) { // Safari
-  //   elem.webkitRequestFullscreen();
-  // } else if (elem.msRequestFullscreen) { // IE11
-  //   elem.msRequestFullscreen();
-  // }
 });
 
 loginNotPlaying.addEventListener("click", function (event) {
@@ -1106,14 +1118,13 @@ loginNotPlaying.addEventListener("click", function (event) {
     console.log("myPlayer:", myPlayer);
 
   } else {
-
     loginScreen.style.display = "flex";
     loginScreen.style.zIndex = "10";
     wantingToPlay = false
   
-      window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
+    window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
     });
     audioClick.play();
   }
@@ -12274,7 +12285,7 @@ function drawOnlinePlayers (player, smoothPlayer) {
 }
 
 
-function drawPlayerArmor (player) {
+function drawPlayerArmor(player) {
   if (player.health <= 0) return;
   if (player.armor[0]) {   
     let name = player.armor[0].name;

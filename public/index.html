@@ -26,18 +26,22 @@
     <div id="openerScreen">
       <div id="navbar">
         <div class="glow-wrap">
-          <img src="./gameplay/logoArcany.png"  >
+          <img src="./gameplay/logoArcany.png">
         </div>
 
         <div>
-          <button>HOME</button>
-          <button>ACTUALITY</button>
-          <button>SHOP</button>
-          <button>CONTACT US</button>
+          <button class="navButton pointerActivator">HOME</button>
+          <button class="navButton pointerActivator">NEWS</button>
+          <button class="navButton pointerActivator">SHOP</button>
+          <button class="navButton pointerActivator">CONTACT US</button>
         </div>
 
         <div>
-          <button id="loginNotPlaying">LOG IN</button>
+          <div class="navButton pointerActivator" id="loginNotPlaying">
+            <div id="loginNotPlayingIMG"></div>
+            <div id="loginNotPlayingIMGTOPTRICK"></div>
+            <p id="loginNotPlayingP">LOG IN</p> 
+          </div>
         </div>
 
       </div>
@@ -64,11 +68,41 @@
           </div>
         </div>
       </div>
-      
-      
 
+      <div id="newsPage">
+        <div id="newsPageTitle">
+          <h1>NEWS</h1>
+        </div>
+
+
+        <div id="newsPageTimer">
+          <p>NEXT UPDATE IN:</p>
+          <div>
+            <p id="newsPageTimerNum">00:00</p>
+          </div>
+        </div>
+
+        <div id="newsPageIMGdiv">
+          <div>
+            <img src="./gameplay/img1.png" alt="">
+            <p>Here you give some knew of what the fuck is going on.</p>
+          </div>
+          <div>
+            <img src="./lobby.png" alt="">
+            <p>Here you give some knew of what the fuck is going on.</p>
+          </div>
+          <div>
+            <img src="./slime.png" alt="">
+            <p>Here you give some knew of what the fuck is going on.</p>
+          </div>
+          <div>
+            <img src="./shopBack.png" alt="">
+            <p>Here you give some knew of what the fuck is going on.</p>
+          </div>
+        </div>
+      
+      </div>
     </div>
-
     <div class="custom-cursor"></div>
 
     <div id="gainXpDiv">
