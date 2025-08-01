@@ -42,7 +42,7 @@ let loadingInterval = setInterval(updateProgress, 200);
 
 window.addEventListener("load", () => {
   loadingProgress = 100;
-  console.log("Finished loading");
+  // console.log("Finished loading");
   document.getElementById("introLogo-img").style.display = "none";
   document.getElementById("introLogo").style.display = "none";
   // let videoIntro = document.getElementById("introLogo-video")
@@ -1390,8 +1390,12 @@ socket.on("leaderChangeRoomClient", (info) => {
 })
 
 socket.on("partyProjectileClient", (projectiles) => {
-  for (projectile of projectiles) {
-    projectilesClient.push(projectile)
+  if (Array.isArray(projectiles)) {
+    for (projectile of projectiles) {
+      projectilesClient.push(projectile)
+    }
+  } else {
+    projectilesClient.push(projectiles)
   }
 })
 
@@ -3312,12 +3316,9 @@ function playerDeath() {
 
   dying = true;
   challengeActive = false;
+  noMovement = true;
 
   if (inParty && !isLeader) return;
-
-  if (inParty && isLeader) {
-    socket.emit("respawnEveryone", currentParty)
-  }
 
   bossBarParent.style.display = "none";
   bossBarHealth.style.width = 100 + "%";
@@ -3333,7 +3334,7 @@ function playerDeath() {
   hideTimer()
   
   bossFight = false;
-  blackScreen()
+  // blackScreen()
 
   youDied.style.display = "block";
   respawn.style.display = "block";
@@ -3341,6 +3342,8 @@ function playerDeath() {
 }
 
 function respawnPlayer () {
+  // console.log("HELLOOOOO")
+  hideBossBar()
   mapsInfo = _.cloneDeep(originalMapsInfo);
   socket.emit("healMax", maxHealth);
 
@@ -3349,7 +3352,8 @@ function respawnPlayer () {
     respawn.style.display = "none";
     projectilesClient = [];
     noMovement = false;
-    blackScreen ()
+    dying = false;
+    // blackScreen()
     currentSelectedMap = "Castle Side"
     changeMap()
     // socket.emit("changeRoom", currentSelectedMap);
@@ -3383,17 +3387,23 @@ function blackScreen () {
 }
 
 respawn.addEventListener("click", () => {
+  console.log(currentParty)
   mapsInfo = _.cloneDeep(originalMapsInfo);
   socket.emit("healMax", maxHealth);
+  if (inParty && isLeader) {
+    socket.emit("respawnEveryone", currentParty)
+  }
 
   setTimeout(() => {
     youDied.style.display = "none";
     respawn.style.display = "none";
     projectilesClient = [];
     noMovement = false;
-    blackScreen ()
+    dying = false;
+    // blackScreen ()
     currentSelectedMap = "Castle Side"
     changeMap()
+    hideBossBar()
     // socket.emit("changeRoom", currentSelectedMap);
   }, 200);
   
@@ -8180,6 +8190,7 @@ function shootArcaneLancer () {
 }
 
 canvasLobby.addEventListener("mousedown", (e) => {
+  if (dying) return;
   clearInterval(shootInterval)
   if (fishing) return;
   mouseLeftPressed = true;
@@ -8627,7 +8638,7 @@ let transitionTimeout = false;
 function transition (format) {
   if (!isLeader && inParty) return;
 
-  if (!inParty && !dying) mapsInfo[currentLand].playerPos = {x: localPlayerPos.x, y: localPlayerPos.y}
+  mapsInfo[currentLand].playerPos = {x: localPlayerPos.x, y: localPlayerPos.y}
 
   if (format === "arcane") {
     transitionArcane()
@@ -8641,6 +8652,7 @@ function transition (format) {
 }
 function changeMap (dynamicFunctionName) {
   socket.emit("requestChangeRoom", currentSelectedMap);
+  console.log(currentSelectedMap)
   setTimeout(() => {
     if (DayCycleState == 0) activateDayMobs()
   }, 5000);
@@ -8667,6 +8679,7 @@ function changeMap (dynamicFunctionName) {
 }
 function changeMapClient (dynamicFunctionName) {
   socket.emit("requestChangeRoom", dynamicFunctionName);
+  console.log(currentSelectedMap, "client")
     setTimeout(() => {
       transitionTimeout = false;
     }, 5000);
@@ -11718,7 +11731,16 @@ function drawLocalPlayer () {
       let armor = drawPlayerArmor(player);
       let artifact = drawPlayerArtifact(player);
       // console.log(playerWidth, playerHeight)
-      if ((animPlayer === "sittingDown" || animPlayer === "fishing") && player.lastLooked === "right"){
+      if (player.health <= 0) {
+        canvas.drawImage(
+          commonPlayerTomb,
+          playerX - cameraX - cameraShakeX - playerAdjustmentX -120,
+          playerY - cameraY - cameraShakeY - playerAdjustmentY -40,
+          commonPlayerTomb.width * generalZoom,
+          commonPlayerTomb.height * generalZoom,
+        );
+      }
+      else if ((animPlayer === "sittingDown" || animPlayer === "fishing") && player.lastLooked === "right"){
         frameCurrentPlayer = frameCurrentPlayer % 6;
   
         playerCutX = frameCurrentPlayer * playerWidth;
@@ -11985,7 +12007,16 @@ function drawOnlinePlayers (player, smoothPlayer) {
   drawPlayerWeaponSheated(player)
 
   function drawPlayerOnline () {
-    if ((player.anim === "sittingDown" || player.anim === "fishing") && player.lastLooked === "right") {
+    if (player.health <= 0) {
+      canvas.drawImage(
+        commonPlayerTomb,
+        smoothPlayer.smoothX - cameraX - 120 - cameraShakeX - 85,
+        smoothPlayer.smoothY - cameraY - 40 - cameraShakeY - 130,
+        commonPlayerTomb.width * generalZoom,
+        commonPlayerTomb.height * generalZoom,
+      );
+    }
+    else if ((player.anim === "sittingDown" || player.anim === "fishing") && player.lastLooked === "right") {
       frameCurrentPlayer = frameCurrentPlayer % 6;
 
       playerCutX = frameCurrentPlayer * playerWidth;
@@ -12207,6 +12238,7 @@ function drawOnlinePlayers (player, smoothPlayer) {
 
 
 function drawPlayerArmor (player) {
+  if (player.health <= 0) return;
   if (player.armor[0]) {   
     let name = player.armor[0].name;
     return window[name];  
@@ -12216,6 +12248,7 @@ function drawPlayerArmor (player) {
 }
 
 function drawPlayerArtifact (player) {
+  if (player.health <= 0) return;
   if (player.artifact[0]) {
     let name = player.artifact[0].name;
     return window[name]; 
@@ -12253,6 +12286,7 @@ function drawPlayerAnimation (player) {
 }
 
 function drawPlayerWeaponOut (player) {
+  if (player.health <= 0) return;
   if (fishing) {
     canvas.save(); // Save the current canvas state
     canvas.translate(playerX - cameraX - cameraShakeX - 150 +18 - recoil, playerY + cameraShakeY + 180 - cameraY +70); // Translate to the player's position
@@ -12287,6 +12321,7 @@ function drawPlayerWeaponOut (player) {
 
 function drawPlayerWeaponSheated(player) {
   let smoothPlayer = Object.values(smoothPlayers).find(Splayer => Splayer.username === player.username)
+  if (player.health <= 0) return;
   if (player.anim === "fishing") {
     canvas.save(); // Save the current canvas state
     canvas.translate(smoothPlayer.smoothX - cameraX - cameraShakeX - 150 +18 - recoil, smoothPlayer.smoothY + cameraShakeY + 180 - cameraY + 70); // Translate to the player's position
@@ -12775,7 +12810,6 @@ function activateBossEnemy(enemy) {
     bossBarImg.src = "./Textures/bossBarMoosh.png"
   }
   else if (enemy.name === "restfieldReaper") {
-    bossBarImg.src = "./Textures/bossBarReaper.png"
     SokosBoss.play();
     timeToWake = 10000;
     bossBarImg.src = "./Textures/bossBarReaper.png"
@@ -12822,6 +12856,8 @@ function activateNightMobs() {
    const randomInteger = Math.floor(Math.random() * 21); // 0 to 10 inclusive
 
     if (randomInteger == 0) continue;
+
+    enemyDeathParticles(enemy)
 
     let activateInterval = setInterval(() => {
       enemy.framesTimer--
@@ -12951,6 +12987,17 @@ function drawEnemy (enemy) {
 let bossBarPercentage = 100;
 let spawnerIntervals = []
 
+function hideBossBar () {
+  fightMusic1.pause();
+  fightMusic1.currentTime = 0;
+  SokosBoss.pause();
+  SokosBoss.currentTime = 0;
+  bossFight = false;
+  bossBarParent.style.display = "none";
+  bossBarHealth.style.width = 100 + "%";
+  bossBarHealthFollower.style.width = 100 + "%";
+}
+
 
 function handleEnemyDeath (enemy) {
   enemyDeathParticles(enemy)
@@ -12977,14 +13024,7 @@ function handleEnemyDeath (enemy) {
     );
     
     if (!bossAlive) {
-      fightMusic1.pause();
-      fightMusic1.currentTime = 0;
-      SokosBoss.pause();
-      SokosBoss.currentTime = 0;
-      bossFight = false;
-      bossBarParent.style.display = "none";
-      bossBarHealth.style.width = 100 + "%";
-      bossBarHealthFollower.style.width = 100 + "%";
+      hideBossBar()
 
       if (enemy.isBoss) {
         areaNameDisplay("Boss defeated");
@@ -13065,7 +13105,7 @@ function checkEnemyCombat (enemy) {
             playerChosen = indPlayer;
           }
         }
-        console.log(players, projectile, playerChosen)
+        console.log(playerChosen)
         enemy.targetPlayer = playerChosen;
 
         setTimeout(() => {

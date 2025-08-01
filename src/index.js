@@ -724,7 +724,7 @@ async function main() {
         
         socket.on("respawnEveryone", (info) => {
             async function share() {
-                for (let user of info[1]) {
+                for (let user of info) {
                     if (user.id != socket.id) {
                         io.to(user.id).emit('respawnEveryoneClient', true);           
                     }
