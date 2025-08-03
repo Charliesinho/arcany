@@ -148,7 +148,11 @@ const mountainsUi = document.getElementById("mountainsUi");
 
 const playNowButton = document.getElementById("playNowButton");
 const loginNotPlaying = document.getElementById("loginNotPlaying");
+const loginNotPlayingIMG = document.getElementById("loginNotPlayingIMG");
+const loginNotPlayingIMGTOPTRICK = document.getElementById("loginNotPlayingIMGTOPTRICK");
+const loginNotPlayingP = document.getElementById("loginNotPlayingP");
 const openerScreen = document.getElementById("openerScreen");
+const newsPageTimerNum = document.getElementById("newsPageTimerNum");
 
 const loginScreen = document.getElementById("loginScreen");
 
