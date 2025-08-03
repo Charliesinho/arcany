@@ -7574,6 +7574,11 @@ socket.on("loadMap", (map) => {
   currentLand = areaNameComing
   mapsInfo[areaNameComing] = comingMap
   localPlayerPos = {x: comingMap.playerPos.x, y: comingMap.playerPos.y}
+  setTimeout(() => {
+    localPlayerPos = {x: comingMap.playerPos.x, y: comingMap.playerPos.y}
+    // console.log(mapsInfo, areaNameComing, comingMap.playerPos, localPlayerPos)
+  }, 1000);
+
 })
 
 let allItemsObj = {}
@@ -7776,7 +7781,7 @@ window.addEventListener("keydown", (e) => {
       let oldPlayerSpeed = playerSpeed;
     
       // Calculate dash boost using deltaTime — this is device-dependent and OK
-      playerSpeed = (playerSpeed * deltaTime) * 800;
+      playerSpeed = (playerSpeed * fixedDeltaTime) * 400;
     
       const dashSpeed = playerSpeed - oldPlayerSpeed; // This is the boost amount
       const dashDuration = 200; // in ms
@@ -8146,7 +8151,7 @@ function shootDefaultArcane () {
 }
 
 
-  console.log(myPlayer?.weapon[0].bullets)
+  // console.log(myPlayer?.weapon[0].bullets)
 
   shooting = true;
 
@@ -8377,7 +8382,7 @@ let playerHeight = humanSkin.height / 6;
 let playerZoomX = 291.6;
 let playerZoomY = 291.6;
 let generalZoom = 5;
-let playerSpeed = 400;
+let playerSpeed = 350;
 
 let framesPlayerTotal = 6;
 let frameCurrentPlayer = 0;
@@ -8704,6 +8709,9 @@ let transitionTimeout = false;
 
 function transition (format) {
   if (!isLeader && inParty) return;
+  if (transitionTimeout) return;
+
+  console.log(currentLand)
 
   mapsInfo[currentLand].playerPos = {x: localPlayerPos.x, y: localPlayerPos.y}
 
@@ -8719,7 +8727,7 @@ function transition (format) {
 }
 function changeMap (dynamicFunctionName) {
   socket.emit("requestChangeRoom", currentSelectedMap);
-  console.log(currentSelectedMap)
+
   setTimeout(() => {
     if (DayCycleState == 0) activateDayMobs()
   }, 5000);
@@ -11514,25 +11522,25 @@ function localPlayerMovement () {
   // console.log(deltaTime)
   if (movingLeft && allowedMoveUpLeft) {
     inputs["left"] = true;
-    playerX -= playerSpeed * deltaTime;
+    playerX -= playerSpeed * fixedDeltaTime;
   } else {
     inputs["left"] = false;
   }
   if (movingRight && allowedMoveUpRight) {
     inputs["right"] = true;
-    playerX += playerSpeed * deltaTime;
+    playerX += playerSpeed * fixedDeltaTime;
   } else {
     inputs["right"] = false;
   }
   if (movingUp && allowedMoveUpUp) {
     inputs["up"] = true;
-    playerY -= playerSpeed * deltaTime;
+    playerY -= playerSpeed * fixedDeltaTime;
   } else {
     inputs["up"] = false;
   }
   if (movingDown && allowedMoveUpDown) {
     inputs["down"] = true;
-    playerY += playerSpeed * deltaTime;
+    playerY += playerSpeed * fixedDeltaTime;
   } else {
     inputs["down"] = false;
   }
@@ -14528,7 +14536,7 @@ function enemyDeathParticles (enemy) {
 // Particle system <
 
 let lastTime = performance.now();       
-let lastTimeUpdateMap = performance.now();       
+let lastTimeUpdateMap = lastTime;       
 let fps = 60;                        
 let frameDuration = 1000 / fps;  
 let accumulatedTime = 0;
@@ -14601,27 +14609,30 @@ function nightTimeCanvas() {
   canvas.globalCompositeOperation = 'source-over';
 }
 
-function updateGame() {
-  mapSetup();
-
-  drawMap("back")
-
-  drawObjects("background")
-  drawObjects("backer")
+function updateGame(shouldUpdate) {
+  if (shouldUpdate) {
+    mapSetup();
   
-  // Particle settings
-  particlesActor()
-  shootingParticles()
-  dashParticles()
-  // // playerTrailParticles()
- 
-  // Player settings
-  drawSceneLayer("sorted", 0);
-  drawLocalBullets()
+    drawMap("back")
   
-  nightTimeCanvas()
-  drawUsername()
-  drawChat()
+    drawObjects("background")
+    drawObjects("backer")
+    
+    // Particle settings
+    particlesActor()
+    shootingParticles()
+    dashParticles()
+    // // playerTrailParticles()
+   
+    // Player settings
+    drawSceneLayer("sorted", 0);
+    drawLocalBullets()
+    
+    nightTimeCanvas()
+    drawUsername()
+    drawChat()
+  }
+
   
   // Dev Colliders
   playerCollision()
@@ -14629,24 +14640,32 @@ function updateGame() {
   drawColliders("player", "", "", "", "")
 }
 
+let deltaTime = 0;
+const fixedDeltaTime = 1 / 60; // ≈ 0.016666 seconds
+
 function checkFPS() {
   const currentTime = performance.now();
+  // console.log(lastTimeUpdateMap, currentTime);  // Comment out in production to avoid slowdown
+
   const deltaTimeFPS = currentTime - lastTimeUpdateMap;
 
   if (deltaTimeFPS >= frameDuration) {
-    lastTimeUpdateMap += frameDuration;
+    // Catch up by the number of frame durations passed (handle lag/skips)
+    lastTimeUpdateMap += frameDuration * Math.floor(deltaTimeFPS / frameDuration);
     return true;
   }
+  return false;
 }
 
-let deltaTime = 0;
 function generalMapLoop(currentTime) {
-  deltaTime = (currentTime - lastTime) / 1000; // in seconds
-  lastTime = currentTime;                      // ✅ fix: update lastTime here
-if (checkFPS()) updateGame();
-   
-  // console.log(currentTime, lastTime, deltaTime);
+  const shouldUpdate = checkFPS();
 
-  
-  intervalCanvasBase = requestAnimationFrame(generalMapLoop);
+  if (shouldUpdate) {
+    deltaTime = fixedDeltaTime;  // Use fixed time step
+    updateGame(true);
+  } else {
+    updateGame(false); // Optional: visual-only updates
+  }
+
+  requestAnimationFrame(generalMapLoop);
 }

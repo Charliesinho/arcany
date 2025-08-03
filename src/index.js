@@ -569,7 +569,7 @@ async function main() {
 
                     staff.charges -= 1;
 
-                    if(plate === null) return
+                    if(staff === null) return
                     
 
                     player.inventory.push(staff);                                           
@@ -626,7 +626,7 @@ async function main() {
                         xp = 0;
                     }
 
-                    if(plate === null) return
+                    if(staff === null) return
 
                     player.inventory.push(staff); 
                     player.crafting += xp;                                          
