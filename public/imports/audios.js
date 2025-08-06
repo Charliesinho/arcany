@@ -42,6 +42,10 @@ const movezone = new Audio("./audios/movezone.wav");
 movezone.loop = false;
 movezone.volume = 1;
 
+const weaponBreak = new Audio("./audios/weaponBreak.wav");
+weaponBreak.loop = false;
+weaponBreak.volume = 0.3;
+
 const audioQuestObtained = new Audio("./audios/questObtained.wav");
 audioQuestObtained.volume = 0.4;
 audioQuestObtained.loop = false;

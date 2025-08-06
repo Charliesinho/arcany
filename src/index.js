@@ -605,17 +605,41 @@ async function main() {
                     let staff;
                     let xp = 0;
 
-                    if (arrayOfNames.includes("arcaneGem2") && arrayOfNames.includes("stick")) {
-                        staff = arcaneLancerInv;   
-                        xp = 1000; 
+                    if (arrayOfNames.includes("arcaneGem2")) {
+                        if (arrayOfNames.includes("stick")) {
+                            staff = arcaneLancerInv;   
+                            xp = 20; 
+                        }
+                        else if (arrayOfNames.includes("willowStick")) {
+                            staff = arcaneLancerInv;   
+                            staff.durability *= 2;
+                            staff.maxDurability += 10;
+                            xp = 30; 
+                        }
                     }
-                    else if (arrayOfNames.includes("arcaneGem") && arrayOfNames.includes("stick")) {
-                        staff = arcaneStaffCommon; 
-                        xp = 500;
+                    else if (arrayOfNames.includes("arcaneGem")) {
+                        if (arrayOfNames.includes("stick")) {
+                            staff = arcaneStaffCommon;   
+                            xp = 20; 
+                        }
+                        else if (arrayOfNames.includes("willowStick")) {
+                            staff = arcaneStaffCommon;   
+                            staff.durability *= 2;
+                            staff.maxDurability += 10;
+                            xp = 30; 
+                        }
                     }
-                    else if (arrayOfNames.includes("arcaneGem3") && arrayOfNames.includes("stick")) {
-                        staff = arcaneRepeaterInv; 
-                        xp = 1500;
+                    else if (arrayOfNames.includes("arcaneGem3")) {
+                        if (arrayOfNames.includes("stick")) {
+                            staff = arcaneRepeaterInv;   
+                            xp = 20; 
+                        }
+                        else if (arrayOfNames.includes("willowStick")) {
+                            staff = arcaneRepeaterInv;   
+                            staff.durability *= 2;
+                            staff.maxDurability += 10;
+                            xp = 30; 
+                        }
                     } 
                     else if (arrayOfNames.includes("restfieldBlanket")){
                         staff = restfieldGhostClothes; 
@@ -639,6 +663,34 @@ async function main() {
               cooking()
         });
 
+        socket.on("weaponBroke", (xp) => {
+
+            async function deleteWeapon() {
+                const player = await Player.findOne({socket: socket.id}).exec();                                           
+                player.weapon = []
+                
+                await Player.findOneAndUpdate({socket: socket.id}, {weapon: []}, {new: true});
+                myPlayer[socket.id] = player;   
+                                   
+                
+              };
+              deleteWeapon()
+        });
+       
+        socket.on("weaponDurabilityDown", (amount) => {
+
+            async function deleteWeapon() {
+                const player = await Player.findOne({socket: socket.id}).exec();                                           
+        
+                player.weapon[0].durability = amount
+                await Player.findOneAndUpdate({socket: socket.id}, {weapon: player.weapon}, {new: true});
+                myPlayer[socket.id] = player;   
+                                   
+                
+              };
+              deleteWeapon()
+        });
+        
         socket.on("enemyKilled", (xp) => {
 
             async function expObtained() {
@@ -1654,7 +1706,8 @@ const arcaneStaffCommon = {
     enchanted: false,
     charges: 1,
 
-    durability: 50,
+    durability: 30,
+    maxDurability: 30,
     damage: 1,
     bullets: 1,
     speed: 1,
@@ -1673,6 +1726,7 @@ const arcaneRepeaterInv = {
     charges: 3,
 
     durability: 50,
+    maxDurability: 50,
     damage: 0.5,
     bullets: 3,
     speed: 1,
@@ -1690,7 +1744,8 @@ const arcaneLancerInv = {
     enchanted: false,
     charges: 2,
 
-    durability: 50,
+    durability: 20,
+    maxDurability: 20,
     damage: 3,
     bullets: 1,
     speed: 2,

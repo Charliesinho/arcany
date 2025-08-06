@@ -2851,9 +2851,9 @@ body {
     opacity: 0;
     filter: saturate(2);
     position: absolute;
-    top: 50%;
+    top: 80%;
     left: 50%;
-    transform: translate(-50%, 86%);
+    transform: translate(-50%, -50%);
     z-index: 100;
     pointer-events: none;
     border: none;
@@ -2863,6 +2863,7 @@ body {
 @keyframes stars {
     0% {      
         opacity: 0;
+        top: 80%;
     }
     20% {
         opacity: 1;
@@ -2872,6 +2873,7 @@ body {
     }
     100% {
         opacity: 0;
+        top: 70%;
     }
 }
 
@@ -2919,10 +2921,11 @@ body {
 
 @keyframes obtained {
     0% {
-    height: 0;
-    width: 0;
-    left: 50%;
-    opacity: 0;
+        height: 0;
+        width: 0;
+        left: 50%;
+        top: 80%;
+        opacity: 0;
     }
     10% {
         height: 150px;
@@ -2934,24 +2937,22 @@ body {
         height: 160px;
         width: 160px;
         left: 50%;
-        opacity: 1;
+
     }
     14% {
         height: 150px;
         width: 150px;
         left: 50%;
-        opacity: 1;
     }
     80% {
         height: 150px;
         width: 150px;
         left: 50%;
-        opacity: 1;
     }
     100% {
         height: 60px;
         width: 60px;
-        left: 100%;
+        top: 70%;
         opacity: 0;
     }
 }

@@ -3275,19 +3275,28 @@ function buyItem (item) {
 
 //Inventory interaction <
 
-function obtainedAnim (image) {
+function obtainedAnim(image) {
 
-  obtainedItem.classList.remove('obtainedAnim');
-  catchGif.classList.remove('starsAnim');
+  const itemClone = obtainedItem.cloneNode(true);
+  const gifClone = catchGif.cloneNode(true);
+
+  itemClone.style.background = `url(${image})`;
+  itemClone.style.backgroundSize = "contain";
+
+  itemClone.classList.add('obtainedAnim');
+  gifClone.classList.add('starsAnim');
+
+  catchGif.parentNode.appendChild(gifClone);
+  obtainedItem.parentNode.appendChild(itemClone);
+
   audioSuccess.play();
 
   setTimeout(() => {
-    obtainedItem.style.background = `url(${image})`;
-    obtainedItem.style.backgroundSize = "contain"
-    obtainedItem.classList.add('obtainedAnim');
-    catchGif.classList.add('starsAnim');
-  }, 500);
+    itemClone.remove();
+    gifClone.remove();
+  }, 3000);
 }
+
 
 function playGainXP (xp) {
   gainXpText.innerHTML = "+" + xp + "xp"
@@ -7283,31 +7292,31 @@ socket.on("player", (serverPlayer) => {
       equippedItems[`soul`].style.background = `url(${item.image})`;
       equippedItems[`soul`].style.backgroundSize = 'cover';
 
-      if (item.name === "frogSoulInventory") {
+      if (item.name === "frogSoulInventory" && !uiSkinsImg.src.includes("uiFrogSkin")) {
         uiSkinsImg.src = "./ui/uiSkins/uiFrogSkin.gif";
       } 
-      else if (item.name === "redDemonSoulInventory") {
+      else if (item.name === "redDemonSoulInventory" && !uiSkinsImg.src.includes("uiDemonSkin")) {
         uiSkinsImg.src = "./ui/uiSkins/uiDemonSkin.gif";
       }
-      else if (item.name === "restfieldSkeletonSoulInventory") {
+      else if (item.name === "restfieldSkeletonSoulInventory" && !uiSkinsImg.src.includes("uiSkeletonSkin")) {
         uiSkinsImg.src = "./ui/uiSkins/uiSkeletonSkin.gif";
       }
-      else if (item.name === "restfieldZombieSoulInventory") {
+      else if (item.name === "restfieldZombieSoulInventory" && !uiSkinsImg.src.includes("uiZombieSkin")) {
         uiSkinsImg.src = "./ui/uiSkins/uiZombieSkin.gif";
       }
-      else if (item.name === "vampiresSoulInventory") {
+      else if (item.name === "vampiresSoulInventory" && !uiSkinsImg.src.includes("uiVampiresSkin")) {
         uiSkinsImg.src = "./ui/uiSkins/uiVampiresSkin.gif";
       }
-      else if (item.name === "pinkDemonSoulInventory") {
+      else if (item.name === "pinkDemonSoulInventory" && !uiSkinsImg.src.includes("uiPinkSkin")) {
         uiSkinsImg.src = "./ui/uiSkins/uiPinkSkin.gif";
       }
-      else if (item.name === "arcanyDemonSoulInventory") {
+      else if (item.name === "arcanyDemonSoulInventory" && !uiSkinsImg.src.includes("uiPurpleSkin")) {
         uiSkinsImg.src = "./ui/uiSkins/uiPurpleSkin.gif";
       }
-      else if (item.name === "reaperSoulInventory") {
+      else if (item.name === "reaperSoulInventory" && !uiSkinsImg.src.includes("uiReaperSkin")) {
         uiSkinsImg.src = "./ui/uiSkins/uiReaperSkin.gif";
       }
-      else if (item.name === "ghostSoulInventory") {
+      else if (item.name === "ghostSoulInventory" && !uiSkinsImg.src.includes("uiGhostSkin")) {
         uiSkinsImg.src = "./ui/uiSkins/uiGhostSkin.gif";
       }
       
@@ -8132,11 +8141,13 @@ function shootDefaultArcane () {
   // cameraShake();
 
   // console.log(myPlayer?.weapon[0])
+  let weaponDurabilityLoss = 0;
  
   for (let i = 0; i < myPlayer?.weapon[0].bullets; i++) {
     let spread = 0.1; // Adjust this value to control bullet spread
     let offset = Math.ceil(i / 2) * spread; // Increase spread step by step
     let bulletAngle = (i % 2 === 0) ? angle - offset : angle + offset; // Alternating spread
+    weaponDurabilityLoss -= 1;
 
     projectilesClient.push({
         angle: bulletAngle,
@@ -8145,6 +8156,7 @@ function shootDefaultArcane () {
         timeLeft: myPlayer?.weapon[0].range,
         playerId: socket.id,
         damage: myPlayer?.weapon[0].damage,
+        color: "smokePurple",
     });
 
     let toSend = [
@@ -8156,13 +8168,28 @@ function shootDefaultArcane () {
         timeLeft: myPlayer?.weapon[0].range,
         playerId: socket.id,
         damage: myPlayer?.weapon[0].damage,
+        color: "smokePurple",
       }]
 
     if (inParty) socket.emit("partyProjectile", toSend)
 }
 
+  myPlayer.weapon[0].durability += weaponDurabilityLoss;
 
-  // console.log(myPlayer?.weapon[0].bullets)
+  console.log(myPlayer.weapon[0].durability, weaponDurabilityLoss)
+
+  if (myPlayer?.weapon[0].durability < 0) {
+    errorDisplay("Your weapon broke!")
+    socket.emit("weaponBroke")
+    weaponBreak.play()
+    push360Particles("smokeGrey", 30, myPlayer.x, myPlayer.y)
+    return;
+  }
+  else if (myPlayer.weapon[0].maxDurability * 0.05 > myPlayer.weapon[0].durability) {
+    errorDisplay("Your weapon is about to break")
+  }
+
+  socket.emit("weaponDurabilityDown", myPlayer.weapon[0].durability);
 
   shooting = true;
 
@@ -8199,6 +8226,7 @@ function shootArcaneRepeater () {
       timeLeft: 10,
       playerId: socket.id,
       damage: 0.5,
+      color: "smokePurple",
     }) 
 
     projectilesClient.push({
@@ -8208,6 +8236,7 @@ function shootArcaneRepeater () {
       timeLeft: 10,
       playerId: socket.id,
       damage: 0.5,
+      color: "smokePurple",
     }) 
 
     projectilesClient.push({
@@ -8217,6 +8246,7 @@ function shootArcaneRepeater () {
       timeLeft: 10,
       playerId: socket.id,
       damage: 0.5,
+      color: "smokePurple",
     }) 
 
   shooting = true;
@@ -8252,6 +8282,7 @@ function shootArcaneLancer () {
     timeLeft: 30,
     playerId: socket.id,
     damage: 5,
+    color: "smokePurple",
   }) 
 
   
@@ -11487,6 +11518,10 @@ function drawSceneLayer(layer, num) {
     } else if (item.type === 'onlinePlayer') {
       drawOnlinePlayers(item.player, item.smoothPlayer);
     } else if (item.type === 'player') {
+      particlesActor()
+      shootingParticles()
+      dashParticles()
+      drawLocalBullets()
       drawLocalPlayer();
     }
   }
@@ -12573,9 +12608,14 @@ function drawChat () {
   } 
 }
 
+let bulletAmountController = 0;
+
 function drawLocalBullets () {
   for (const projectile of projectilesClient) {
     projectile.timeLeft--
+
+    bulletAmountController++;
+    if (bulletAmountController === 10) bulletAmountController = 0;
 
     let wallCollision = drawColliders("bullet", projectile.x, projectile.y, 40, 40)
     if (wallCollision) {
@@ -12584,201 +12624,201 @@ function drawLocalBullets () {
 
     if (projectile.enemy) {
       canvas.drawImage(bulletStick, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
-      push360Particles("yellow", 1, projectile.x + 20, projectile.y - 50)
+       if (bulletAmountController === 0) push360Particles("yellow", 1, projectile.x + 0, projectile.y - 60)
     } 
     else {
       if (myPlayer?.weapon[0]?.name === "solarStaffCommon") {
         canvas.drawImage(bulletStick, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
-        push360Particles("red", 1, projectile.x + 20, projectile.y - 50)
+        if (bulletAmountController === 0) push360Particles(projectile.color, 1, projectile.x + 20, projectile.y - 50)
       }
       if (myPlayer?.weapon[0]?.name === "arcaneStaffCommon" || myPlayer?.weapon[0]?.name === "arcaneRepeaterInv" || myPlayer?.weapon[0]?.name === "arcaneLancerInv") {
         canvas.drawImage(bulletStickBlue, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
-        push360Particles("purple", 1, projectile.x + 20, projectile.y - 50)
+        if (bulletAmountController === 0) push360Particles(projectile.color, 1, projectile.x + 20, projectile.y - 50)
       }
     }
 
     if (projectile.timeLeft < 0) {
       projectilesClient.splice(projectilesClient.indexOf(projectile), 1)
-      push360Particles("white", 5, projectile.x + 20, projectile.y - 50)
+      push360Particles("white", 10, projectile.x + 20, projectile.y - 50)
     }
   }
 }
 
-function drawSlimeEnemy () {
-  for (const enemy of enemiesClient) {
+// function drawSlimeEnemy () {
+//   for (const enemy of enemiesClient) {
 
-    if (enemy.enabled) {
+//     if (enemy.enabled) {
       
-      frameCurrentEnemy = frameCurrentEnemy % 4;
-      enemyCutX = frameCurrentEnemy * enemyWidth;
+//       frameCurrentEnemy = frameCurrentEnemy % 4;
+//       enemyCutX = frameCurrentEnemy * enemyWidth;
 
-      if (enemy.health <= 0) { 
-        spawnSlime()
-        socket.emit("enemyKilled", "slime");
-        enemiesClient.splice(enemiesClient.indexOf(enemy), 1)
+//       if (enemy.health <= 0) { 
+//         spawnSlime()
+//         socket.emit("enemyKilled", "slime");
+//         enemiesClient.splice(enemiesClient.indexOf(enemy), 1)
 
-        for (let i = 0; i < 20; i++) {
-          const angle = angleMouse + (Math.random() * 0.5 * 2 - 0.2) ;; // Random angle
-          const speed = Math.floor(Math.random() * (20 - 8 + 1)) + 5;; // Random speed (adjust as needed)
-          const size = 25; // Random size between 3 and 8
-          const particleX = enemy.x;
-          const particleY = enemy.y;
+//         for (let i = 0; i < 20; i++) {
+//           const angle = angleMouse + (Math.random() * 0.5 * 2 - 0.2) ;; // Random angle
+//           const speed = Math.floor(Math.random() * (20 - 8 + 1)) + 5;; // Random speed (adjust as needed)
+//           const size = 25; // Random size between 3 and 8
+//           const particleX = enemy.x;
+//           const particleY = enemy.y;
     
-          const randomNumber = Math.floor(Math.random() * 2) + 1;
+//           const randomNumber = Math.floor(Math.random() * 2) + 1;
           
-          if (randomNumber === 1) {
+//           if (randomNumber === 1) {
 
-            particles.push({ x: 1, y: 1, size: size, color: '#6d64b6', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partSlime"].speedDec, sizeDecrease: particlesSystem["partSlime"].sizeDec, name: particlesSystem["partSlime"].name });
+//             particles.push({ x: 1, y: 1, size: size, color: '#6d64b6', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partSlime"].speedDec, sizeDecrease: particlesSystem["partSlime"].sizeDec, name: particlesSystem["partSlime"].name });
                   
-          } else {
+//           } else {
     
-            particles.push({ x: 1, y: 1, size: size, color: '#afa6ff', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partSlime"].speedDec, sizeDecrease: particlesSystem["partSlime"].sizeDec, name: particlesSystem["partSlime"].name });
-          }
+//             particles.push({ x: 1, y: 1, size: size, color: '#afa6ff', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partSlime"].speedDec, sizeDecrease: particlesSystem["partSlime"].sizeDec, name: particlesSystem["partSlime"].name });
+//           }
     
-        }
-      }
+//         }
+//       }
       
-      if (enemy.damaged > 0) {
+//       if (enemy.damaged > 0) {
 
-        enemy.damaged--
+//         enemy.damaged--
 
-          canvas.drawImage(
-            slimeDMG,
-            enemyCutX,
-            enemyCutY,
-            enemyWidth,
-            enemyHeight,
-            enemy.x - cameraX - 30,
-            enemy.y - cameraY,
-            enemy.width * 1.5,
-            enemy.height * 1.5
-          );
+//           canvas.drawImage(
+//             slimeDMG,
+//             enemyCutX,
+//             enemyCutY,
+//             enemyWidth,
+//             enemyHeight,
+//             enemy.x - cameraX - 30,
+//             enemy.y - cameraY,
+//             enemy.width * 1.5,
+//             enemy.height * 1.5
+//           );
 
-            enemy.x += Math.cos(enemy.angle) * enemy.damaged ;
-            enemy.y += Math.sin(enemy.angle) * enemy.damaged;
+//             enemy.x += Math.cos(enemy.angle) * enemy.damaged ;
+//             enemy.y += Math.sin(enemy.angle) * enemy.damaged;
 
-            if (enemy.damaged > 8) {
+//             if (enemy.damaged > 8) {
 
               
 
-              for (let i = 0; i < 3; i++) {
-                const angle = angleMouse + (Math.random() * 0.5 * 2 - 0.2); // Random angle
-                const speed = Math.floor(Math.random() * (20 - 8 + 1)) + 13;; // Random speed (adjust as needed)
-                const size = 15; // Random size between 3 and 8
-                const particleX = enemy.x;
-                const particleY = enemy.y;
+//               for (let i = 0; i < 3; i++) {
+//                 const angle = angleMouse + (Math.random() * 0.5 * 2 - 0.2); // Random angle
+//                 const speed = Math.floor(Math.random() * (20 - 8 + 1)) + 13;; // Random speed (adjust as needed)
+//                 const size = 15; // Random size between 3 and 8
+//                 const particleX = enemy.x;
+//                 const particleY = enemy.y;
           
-                const randomNumber = Math.floor(Math.random() * 2) + 1;
+//                 const randomNumber = Math.floor(Math.random() * 2) + 1;
                 
-                if (randomNumber === 1) {
+//                 if (randomNumber === 1) {
 
-                  particles.push({ x: 1, y: 1, size: size, color: '#6d64b6', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partSlime"].speedDec, sizeDecrease: particlesSystem["partSlime"].sizeDec, name: particlesSystem["partSlime"].name });
+//                   particles.push({ x: 1, y: 1, size: size, color: '#6d64b6', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partSlime"].speedDec, sizeDecrease: particlesSystem["partSlime"].sizeDec, name: particlesSystem["partSlime"].name });
                         
-                } else {
+//                 } else {
           
-                  particles.push({ x: 1, y: 1, size: size, color: '#afa6ff', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partSlime"].speedDec, sizeDecrease: particlesSystem["partSlime"].sizeDec, name: particlesSystem["partSlime"].name });
-                }
+//                   particles.push({ x: 1, y: 1, size: size, color: '#afa6ff', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partSlime"].speedDec, sizeDecrease: particlesSystem["partSlime"].sizeDec, name: particlesSystem["partSlime"].name });
+//                 }
           
-              }
+//               }
 
-            }
+//             }
 
 
           
-        } else {
-          if (enemyHitAudio.currentTime > 0) {
-            enemyHitAudio.currentTime = 0
-            enemyHitAudio.pause()
-          }
-          enemyWidth = slime.width / 4
-          enemyHeight = slime.height / 1;
+//         } else {
+//           if (enemyHitAudio.currentTime > 0) {
+//             enemyHitAudio.currentTime = 0
+//             enemyHitAudio.pause()
+//           }
+//           enemyWidth = slime.width / 4
+//           enemyHeight = slime.height / 1;
 
-          canvas.drawImage(
-            slime,
-            enemyCutX,
-            enemyCutY,
-            enemyWidth,
-            enemyHeight,
-            enemy.x - cameraX - 30,
-            enemy.y - cameraY,
-            enemy.width * 1.5,
-            enemy.height * 1.5
-          );
+//           canvas.drawImage(
+//             slime,
+//             enemyCutX,
+//             enemyCutY,
+//             enemyWidth,
+//             enemyHeight,
+//             enemy.x - cameraX - 30,
+//             enemy.y - cameraY,
+//             enemy.width * 1.5,
+//             enemy.height * 1.5
+//           );
 
-          if (enemy.x > enemy.nextTarget.x) {
-            enemy.x -= enemy.speed;
-          } else if (enemy.x < enemy.nextTarget.x) {
-              enemy.x += enemy.speed;
-          } 
+//           if (enemy.x > enemy.nextTarget.x) {
+//             enemy.x -= enemy.speed;
+//           } else if (enemy.x < enemy.nextTarget.x) {
+//               enemy.x += enemy.speed;
+//           } 
   
-          if (enemy.y > enemy.nextTarget.y) {
-              enemy.y -= enemy.speed;
-          } else if (enemy.y < enemy.nextTarget.y) {
-              enemy.y += enemy.speed;
-          } 
-        }
+//           if (enemy.y > enemy.nextTarget.y) {
+//               enemy.y -= enemy.speed;
+//           } else if (enemy.y < enemy.nextTarget.y) {
+//               enemy.y += enemy.speed;
+//           } 
+//         }
         
-        enemy.nextTargetCount--;
-        if (enemy.nextTargetCount <= 0) {
-          enemy.nextTarget = slimeGetRandomCoords();
-          enemy.nextTargetCount = Math.floor(Math.random() * 100) + 50;;
-        }
+//         enemy.nextTargetCount--;
+//         if (enemy.nextTargetCount <= 0) {
+//           enemy.nextTarget = slimeGetRandomCoords();
+//           enemy.nextTargetCount = Math.floor(Math.random() * 100) + 50;;
+//         }
           
-        const username = myPlayer.id; 
-        const distance = Math.sqrt(
-          (myPlayer.x + 15 - enemy.x) ** 2 + (myPlayer.y + 15 - enemy.y) ** 2
-        );
-        if (distance <= 15 && !myPlayer.invincible) {
+//         const username = myPlayer.id; 
+//         const distance = Math.sqrt(
+//           (myPlayer.x + 15 - enemy.x) ** 2 + (myPlayer.y + 15 - enemy.y) ** 2
+//         );
+//         if (distance <= 15 && !myPlayer.invincible) {
           
-          if (myPlayer.health > 1) {
-            myPlayer.health -= 1;
-            // updateHealth(username, myPlayer.health, myPlayer.id);
-          } else {
-            myPlayer.x = 1280;
-            myPlayer.y = 1220;
-            myPlayer.health = 3;
-            // updateHealth(username, myPlayer.health, myPlayer.id);
-          }
-          myPlayer.invincible = true;
-          break;
-        }
+//           if (myPlayer.health > 1) {
+//             myPlayer.health -= 1;
+//             // updateHealth(username, myPlayer.health, myPlayer.id);
+//           } else {
+//             myPlayer.x = 1280;
+//             myPlayer.y = 1220;
+//             myPlayer.health = 3;
+//             // updateHealth(username, myPlayer.health, myPlayer.id);
+//           }
+//           myPlayer.invincible = true;
+//           break;
+//         }
         
-        for (const projectile of projectilesClient) {
-          if (projectile.x > enemy.x && projectile.x < enemy.x + 100 && projectile.y > enemy.y && projectile.y < enemy.y + 100 && enemy.damaged === 0 && myPlayer?.weapon[0]?.name === "solarStaffCommon") {
-            enemy.damaged = 10;
-            enemy.angle = projectile.angle || projectile.bullet1 || projectile.bullet2;
-            projectilesClient.splice(projectilesClient.indexOf(projectile), 1)
-            enemy.health = enemy.health - generalLevelCombat
+//         for (const projectile of projectilesClient) {
+//           if (projectile.x > enemy.x && projectile.x < enemy.x + 100 && projectile.y > enemy.y && projectile.y < enemy.y + 100 && enemy.damaged === 0 && myPlayer?.weapon[0]?.name === "solarStaffCommon") {
+//             enemy.damaged = 10;
+//             enemy.angle = projectile.angle || projectile.bullet1 || projectile.bullet2;
+//             projectilesClient.splice(projectilesClient.indexOf(projectile), 1)
+//             enemy.health = enemy.health - generalLevelCombat
 
-            if (enemy.health > 0) {
-              enemyHitAudio.play()
-            } else {
-              splatAudio.play()
-            }
-          }
+//             if (enemy.health > 0) {
+//               enemyHitAudio.play()
+//             } else {
+//               splatAudio.play()
+//             }
+//           }
         
-        }
+//         }
     
             
-    } else {
-        enemy.disabledTimer--;
-        if (enemy.disabledTimer <= 0) {
-            enemy.disabledTimer = 500;
-            enemy.enabled = true;
-        }
-    }
-  }
-  enemyAnimDelay--
-  if (enemyAnimDelay <= 0)
-  {
-    enemyFramesDrawn++
-    if (enemyFramesDrawn >= framesEnemyTotal) {
-      frameCurrentEnemy++;
-      enemyFramesDrawn = 0;
-    }
-    enemyAnimDelay = 2;
-  }
-}
+//     } else {
+//         enemy.disabledTimer--;
+//         if (enemy.disabledTimer <= 0) {
+//             enemy.disabledTimer = 500;
+//             enemy.enabled = true;
+//         }
+//     }
+//   }
+//   enemyAnimDelay--
+//   if (enemyAnimDelay <= 0)
+//   {
+//     enemyFramesDrawn++
+//     if (enemyFramesDrawn >= framesEnemyTotal) {
+//       frameCurrentEnemy++;
+//       enemyFramesDrawn = 0;
+//     }
+//     enemyAnimDelay = 2;
+//   }
+// }
 
 function drawDevWallsPlacement () {
   if (currentlyPlacingWall) {
@@ -14372,15 +14412,38 @@ function getAngleBetweenPlayerAndEnemy(enemy) {
 const maxParticlesShootDefault = 3;
 const maxParticlesWalk = 1;
 const highParticles = 5;
+let smokeRotation = 0;
 
-function particlesActor () {
+
+function particlesActor() {
+  // Increment shared smoke rotation each frame
+  smokeRotation += 0.05; // adjust speed of rotation if needed
+
   particles.forEach(particle => {
-    canvas.beginPath();
-    canvas.fillStyle = particle.color;
-    canvas.fillRect(particle.initalX + particle.x - cameraX - 10, particle.intialY + particle.y - cameraY + 50, particle.size, particle.size);
-    canvas.lineWidth = 2; 
-    canvas.strokeStyle = 'black';
-    canvas.strokeRect(particle.initalX + particle.x - cameraX - 10, particle.intialY + particle.y - cameraY + 50, particle.size, particle.size)  
+    const x = particle.initalX + particle.x - cameraX - 10;
+    const y = particle.intialY + particle.y - cameraY + 50;
+    const size = particle.size;
+
+    const isSmoke = particle.color === "smokeGrey" || particle.color === "smokePurple" || particle.color === "white" || particle.color === "yellow";
+
+    // console.log(isSmoke, particle.color)
+    if (isSmoke) {
+      // Rotate the canvas around the center of the image
+      canvas.save();
+      canvas.translate(x + size / 2, y + size / 2); // move origin to center of particle
+      canvas.rotate(smokeRotation);                 // apply shared rotation
+      canvas.drawImage(particle.color === "smokePurple" ? smokePurpleImg : particle.color === "yellow" ? smokeYellowImg : smokeGreyImg, -size / 2, -size / 2, size, size); // draw centered
+      canvas.restore();
+    } else {
+      // Default behavior: draw colored square
+      canvas.fillStyle = particle.color;
+      canvas.fillRect(x, y, size, size);
+
+      // Optional border
+      canvas.lineWidth = 2;
+      canvas.strokeStyle = 'black';
+      canvas.strokeRect(x, y, size, size);
+    }
 
     // Move particles
     particle.x += Math.cos(particle.angle) * particle.speed;
@@ -14390,14 +14453,15 @@ function particlesActor () {
       particle.y -= 1;
     }
 
-    // Decrease size over time
+    // Shrink and slow down particles
     particle.size -= particle.sizeDecrease;
-    particle.speed -= particle.speedDecrease * particle.speed
+    particle.speed -= particle.speedDecrease * particle.speed;
   });
 
-  particles = particles.filter(particle => particle.size > 0 );
-
+  // Remove dead particles
+  particles = particles.filter(p => p.size > 0);
 }
+
 
 function shootingParticles () {
   if (shooting) {
@@ -14405,7 +14469,7 @@ function shootingParticles () {
       const angle = angleMouse + (Math.random() * 0.2 * 2 - 0.2);; // Random angle
       const radius = Math.random() * 20; // Random radius (adjust as needed)
       const speed = Math.floor(Math.random() * (50 + 1)) + 1; // Random speed (adjust as needed)
-      const size = 15; // Random size between 3 and 8
+      const size = 48; // Random size between 3 and 8
       const particleX = playerX;
       const particleY = playerY;
 
@@ -14416,7 +14480,7 @@ function shootingParticles () {
           particles.push({ x: 1, y: 1, size: size, color: 'red', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partShootDefault"].speedDec, sizeDecrease: particlesSystem["partShootDefault"].sizeDec, name: particlesSystem["partShootDefault"].name });
         }
         else if (myPlayer?.weapon[0]?.name === "arcaneStaffCommon") {
-          particles.push({ x: 1, y: 1, size: size, color: 'purple', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partShootDefault"].speedDec, sizeDecrease: particlesSystem["partShootDefault"].sizeDec, name: particlesSystem["partShootDefault"].name });
+          particles.push({ x: 1, y: 1, size: size, color: 'smokePurple', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partShootDefault"].speedDec, sizeDecrease: particlesSystem["partShootDefault"].sizeDec, name: particlesSystem["partShootDefault"].name });
         }
         else if (myPlayer?.weapon[0]?.name === "nuclearStaffCommon") {
           particles.push({ x: 1, y: 1, size: size, color: 'green', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partShootDefault"].speedDec, sizeDecrease: particlesSystem["partShootDefault"].sizeDec, name: particlesSystem["partShootDefault"].name });
@@ -14432,17 +14496,17 @@ function shootingParticles () {
 }
 
 function dashParticles () {
-  if (playerSpeed > 10 && (movingDown || movingUp || movingLeft || movingRight)) {
-    for (let i = 0; i < highParticles; i++) {
+  if (dashing) {
+    for (let i = 0; i < 3; i++) {
       const angleDegrees = Math.random() * 360;
       const angleRadians = angleDegrees * (Math.PI / 180); // Convert degrees to radians
       const speed = (Math.random() * 6) + 1; // Random speed (adjust as needed)
-      const size = 20; // Random size between 3 and 8
+      const size = 48; // Random size between 3 and 8
       const particleX = playerX;
       const particleY = playerY;
 
       
-      particles.push({ x: 1, y: 1, size: size, color: 'white', speed: speed, angle: angleRadians, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partDash"].speedDec, sizeDecrease: particlesSystem["partDash"].sizeDec, name: particlesSystem["partDash"].name });   
+      particles.push({ x: 1, y: 1, size: size, color: 'smokeGrey', speed: speed, angle: angleRadians, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partDash"].speedDec, sizeDecrease: particlesSystem["partDash"].sizeDec, name: particlesSystem["partDash"].name });   
       
 
     }
@@ -14467,7 +14531,7 @@ function push360Particles (color, amount, x, y) {
   for (let i = 0; i < amount; i++) {
     const speed = Math.floor(Math.random() * (1 - 1 + 8)) + 1;
     const angleDegrees = Math.random() * Math.PI * 2;
-    const size = 20 ;
+    const size = 48 ;
     const particleX = x;
     const particleY = y;
     // console.log(angleDegrees)
@@ -14526,7 +14590,7 @@ function enemyDeathParticles (enemy) {
   for (let i = 0; i < 20; i++) {
     const angle = Math.random() * Math.PI * 2; // Random angle
     const speed = Math.floor(Math.random() * (20 - 16 + 1)) + 1;; // Random speed (adjust as needed)
-    const size = 30; // Random size between 3 and 8
+    const size = 54; // Random size between 3 and 8
     const particleX = enemy.spawn.x + 180;
     const particleY = enemy.spawn.y + 190;
 
@@ -14534,7 +14598,7 @@ function enemyDeathParticles (enemy) {
     
     if (randomNumber === 1) {
 
-      particles.push({ x: 1, y: 1, size: size, color: 'whie', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partSlime"].speedDec, sizeDecrease: particlesSystem["partSlime"].sizeDec, name: particlesSystem["partSlime"].name });
+      particles.push({ x: 1, y: 1, size: size, color: 'white', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partSlime"].speedDec, sizeDecrease: particlesSystem["partSlime"].sizeDec, name: particlesSystem["partSlime"].name });
             
     } else {
 
@@ -14629,16 +14693,16 @@ function updateGame(shouldUpdate) {
     drawObjects("background")
     drawObjects("backer")
     
-    // Particle settings
-    particlesActor()
-    shootingParticles()
-    dashParticles()
-    // // playerTrailParticles()
-   
     // Player settings
     drawSceneLayer("sorted", 0);
-    drawLocalBullets()
     
+    // Particle settings
+    // particlesActor()
+    // shootingParticles()
+    // dashParticles()
+    // drawLocalBullets()
+    // // playerTrailParticles()
+
     nightTimeCanvas()
     drawUsername()
     drawChat()
