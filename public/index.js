@@ -139,6 +139,9 @@ chatBubble.src = "chatBubble.png";
 const chatBubbleBigger = new Image();
 chatBubbleBigger.src = "chatBubbleBigger.png";
 
+const typingBubble = new Image();
+typingBubble.src = "./Textures/typingBubble.png";
+
 const nameTaglvl1 = new Image();
 nameTaglvl1.src = "./nameTags/nameTaglvl1.png";
 const nameTaglvl2 = new Image();
@@ -723,7 +726,7 @@ Object.entries(inputMappings).forEach(([inputId, mobProp]) => {
     else {
       selectedMob[mobProp] = num;
     }
-    console.log(selectedMob)
+    console.log(selectedMob, value)
   });
 });
 
@@ -1476,14 +1479,14 @@ const recentMessages = new Map();
 
 function showChatFunction(){
   if(!chatIsActivate){
-    chat.style.display = "block";
+    chat.style.opacity = "1";
     chatIsActivate = true;
     
     fishSelectorButton.style.display = 'none'
     fishingAvailablevar = false
 
   }else if(chatIsActivate){
-    chat.style.display = "none";
+    chat.style.opacity = "0";
     chatButton.style.bottom = "10px"
     chatIsActivate = false;
 
@@ -1507,19 +1510,45 @@ function updateHistoryChat(value, sender) {
 
     if (recentMessages.has(messageKey)) {
         const lastAdded = recentMessages.get(messageKey);
-        if (now - lastAdded < 2000) return; // Ignore messages added within the last 2 seconds
+        if (now - lastAdded < 2000) return;
     }
 
-    recentMessages.set(messageKey, now); // Update the timestamp
+    recentMessages.set(messageKey, now);
 
+    if (targetDiv.children.length >= 10) {
+        targetDiv.firstChild.style.opacity = "0";
+        setTimeout(() => {
+            targetDiv.removeChild(targetDiv.firstChild);
+        }, 1000);
+    }
+
+    // Create new chat message with spans
     const newParagraph = document.createElement("p");
-    newParagraph.textContent = senderKey + ": " + value;
     newParagraph.classList.add("chatText");
+
+    const nameSpan = document.createElement("span");
+    nameSpan.textContent = senderKey + ": ";
+    nameSpan.classList.add("chatName");
+
+    const messageSpan = document.createElement("span");
+    messageSpan.textContent = value;
+    messageSpan.classList.add("chatMessage");
+
+    newParagraph.appendChild(nameSpan);
+    newParagraph.appendChild(messageSpan);
     targetDiv.appendChild(newParagraph);
 
-    // Cleanup old messages to prevent memory leak
+    // Reset animation for all messages
+    Array.from(targetDiv.children).forEach(msg => {
+        msg.style.animation = "none";
+        msg.offsetHeight; // force reflow
+        msg.style.animation = null;
+    });
+
     setTimeout(() => recentMessages.delete(messageKey), 2000);
 }
+
+
 
 let keyBlocker = true;
 window.addEventListener("keydown", function (e) {
@@ -1529,6 +1558,8 @@ window.addEventListener("keydown", function (e) {
   }
 });
 
+let typing = false;
+let typingInterval = null;
 
 window.addEventListener("keydown", (e) => {
   if(keyBlocker) return
@@ -1536,25 +1567,30 @@ window.addEventListener("keydown", (e) => {
   if (e?.key === "Enter") {
     e.preventDefault();
     if (chatInput === document.activeElement) {
-            if (chatInput.value) {
-                const chatMessage = chatInput.value;
-                e.preventDefault();  
-                updateHistoryChat(chatInput.value, "myPlayer")         
+      if (chatInput.value) {
+          const chatMessage = chatInput.value;
+          e.preventDefault();  
+          updateHistoryChat(chatInput.value, "myPlayer")         
 
-                socket.emit("chatMessage", chatMessage);
-                chatInput.value = "";
-                chatInput.disabled = true;
-                chatInput.disabled = false;
-                blockMovement = false;
-                noMovement = false
-            }
+          socket.emit("chatMessage", chatMessage);
+          chatInput.value = "";
+          chatInput.disabled = true;
+          chatInput.disabled = false;
+          blockMovement = false;
+          noMovement = false
+          typing = false
+          clearInterval(typingInterval)
+      }
     } else {
-          if(!chatIsActivate) showChatFunction()
-            chatInput.focus();
-            blockMovement = true;
-            noMovement = true
-            setTimeout(() => { 
-            }, 500);
+      if(!chatIsActivate) showChatFunction()
+        chatInput.focus();
+      blockMovement = true;
+      noMovement = true
+      typing = true
+      typingInterval = setInterval(() => {
+          bubbleFrameTyping = (bubbleFrameTyping + 1) % totalFramesTyping;
+      }, 100);
+
     }
     }
 
@@ -2854,7 +2890,7 @@ let tradedItems = []
 let tradingArray = []
 
 function interactInventory(item, index) {
-  console.log(item)
+
   if (item.type === "soul") {
 
     if(consumeAvailable === true) {
@@ -2863,7 +2899,7 @@ function interactInventory(item, index) {
 
       setTimeout(() => {
         consumeAvailable = true;
-      }, 1000);
+      }, 500);
 
       socket.emit("consumable", item);
       
@@ -3076,7 +3112,7 @@ function interactInventory(item, index) {
 
           setTimeout(() => {
             consumeAvailable = true;
-          }, 1000);
+          }, 500);
 
           inventorySlots[`inventorySlot${index}`].src = `data:,`;
           inventorySlots[`inventorySlot${index}`].removeEventListener("mousedown", (e) => interactInventory(item, index));
@@ -3087,7 +3123,11 @@ function interactInventory(item, index) {
           // } else {
             item.maxPower = maxHealth;
             item.index = myPlayer.inventory.indexOf(item);
-  
+
+            if (item.type == "food") {
+              eat.play()
+              push360Particles("smokeGreen", 30, myPlayer.x, myPlayer.y)
+            }
             socket.emit("consumable", item);
           // }
 
@@ -7282,7 +7322,7 @@ socket.on("player", (serverPlayer) => {
       soulsInventory[`soul${myPlayer.souls.indexOf(soul) + 1}`].style.backgroundSize = 'cover';
       soulsInventory[`soul${myPlayer.souls.indexOf(soul) + 1}`].addEventListener("mousedown", (e) => {
         interactInventory(soul);
-        audioEquip.play();
+        // audioEquip.play();
       });
     }
   }
@@ -7402,14 +7442,15 @@ function updateInventoryUI() {
     const item = myPlayer.inventory[i];
 
     
+    
+    slot.src = item ? item.image : "data:image/svg+xml;charset=utf8,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%3E%3C/svg%3E";
+    
     if (item === undefined) {
       slot.parentNode.style.opacity = "0.3"
+      // continue;
     } else {
       slot.parentNode.style.opacity = "1"
     }
-
-    slot.src = item ? item.image : "data:image/svg+xml;charset=utf8,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%3E%3C/svg%3E";
-
 
     const newSlot = slot.cloneNode(true);
     slot.parentNode.replaceChild(newSlot, slot);
@@ -7420,10 +7461,60 @@ function updateInventoryUI() {
         audioClick.play();
       });
     } else {
-      newSlot.addEventListener("mousedown", () => {
-        interactInventory(item, i);
-        audioClick.play();
-      });
+
+      
+      if (item) {
+        newSlot.addEventListener("mousedown", () => {
+          interactInventory(item, i);
+          const audioEquip = new Audio("./audios/equip.mp3");
+          audioEquip.loop = false;
+          if (item?.type == "artifact") {
+            audioEquip.play();
+          } else {
+            audioClick.play();
+          }
+        });
+        newSlot.addEventListener("mousemove", (e) => {
+          const tooltipWidth = tooltip.offsetWidth;
+          const tooltipHeight = tooltip.offsetHeight;
+          const offsetX = 10;
+          const offsetY = 10;
+  
+          const spaceBelow = window.innerHeight - e.clientY;
+          const showAbove = spaceBelow < tooltipHeight + 20;
+  
+          const top = showAbove
+            ? e.clientY - tooltipHeight - offsetY
+            : e.clientY + offsetY;
+  
+          tooltip.style.left = `${e.clientX - tooltipWidth - offsetX}px`;
+          tooltip.style.top = `${top}px`;
+        });
+        newSlot.addEventListener("mouseenter", () => {
+          tooltip.querySelector("h1").textContent = item.displayName || item.name;
+          tooltip.style.background = item.rarity === "common" ? "url(./ui/commonTooltip.png)" : item.rarity === "rare" ? "url(./ui/rareTooltip.png)" : item.rarity === "legendary" ? "url(./ui/legendaryTooltip.png)" : "url(./ui/commonTooltip.png)";
+          tooltip.style.backgroundSize = "cover";
+          tooltip.style.color = item.rarity === "legendary" ? "white" : "#3c2c23";
+          tooltip.querySelector("h2").textContent = item.rarity || "-";
+          tooltip.querySelector("h3").textContent = item.level || "0";
+          tooltip.querySelector("h4").textContent = item.durability >= 0 ? item.durability + " dur" : "";
+          tooltip.querySelector("h5").textContent = item.damage ? item.damage + " dmg" : "";
+          tooltip.querySelector("h6").textContent = item.charges >= 0 ? item.charges + " ench" : "";
+          tooltip.querySelector("p").textContent = item.description || "Description not available";
+          tooltip.querySelector("img").src = item.image || null;
+          tooltip.classList.add('pointerActivator');
+          if (item.enchanted === true) {
+            tooltip.classList.add('enchanted');
+          } else {
+            tooltip.classList.remove('enchanted');
+          }
+          tooltip.style.display = "block";
+        });
+  
+        newSlot.addEventListener("mouseleave", () => {
+          tooltip.style.display = "none";
+        });
+      }
     }
 
     inventorySlots[`inventorySlot${i}`] = newSlot;
@@ -7602,11 +7693,8 @@ socket.on("loadMap", (map) => {
   currentLand = areaNameComing
   mapsInfo[areaNameComing] = comingMap
   localPlayerPos = {x: comingMap.playerPos.x, y: comingMap.playerPos.y}
-  setTimeout(() => {
-    localPlayerPos = {x: comingMap.playerPos.x, y: comingMap.playerPos.y}
-    // console.log(mapsInfo, areaNameComing, comingMap.playerPos, localPlayerPos)
-  }, 1000);
-
+  playerX = comingMap.playerPos.x;
+  playerY = comingMap.playerPos.y;
 })
 
 let allItemsObj = {}
@@ -8138,6 +8226,77 @@ let mouseLeftPressed = false;
 let shootInterval;
 
 
+function shootDefaultSolar () {
+  let angle = angleMouse
+  const audioShootNature = new Audio("./audios/shootNature.wav");
+  audioShootNature.loop = false;
+  audioShootNature.volume = 0.8;
+  audioShootNature.play()
+
+  let weaponDurabilityLoss = 0;
+ 
+  for (let i = 0; i < myPlayer?.weapon[0].bullets; i++) {
+    let spread = 0.1; // Adjust this value to control bullet spread
+    let offset = Math.ceil(i / 2) * spread; // Increase spread step by step
+    let bulletAngle = (i % 2 === 0) ? angle - offset : angle + offset; // Alternating spread
+    weaponDurabilityLoss -= 1;
+
+    projectilesClient.push({
+        angle: bulletAngle,
+        x: playerX + 20,
+        y: playerY + 50,
+        timeLeft: myPlayer?.weapon[0].range,
+        playerId: socket.id,
+        damage: myPlayer?.weapon[0].damage,
+        color: "smokeRed",
+    });
+
+    let toSend = [
+      currentParty, 
+      {
+        angle: bulletAngle,
+        x: playerX + 20,
+        y: playerY + 50,
+        timeLeft: myPlayer?.weapon[0].range,
+        playerId: socket.id,
+        damage: myPlayer?.weapon[0].damage,
+        color: "smokeRed",
+      }]
+
+    if (inParty) socket.emit("partyProjectile", toSend)
+}
+
+  myPlayer.weapon[0].durability += weaponDurabilityLoss;
+
+  if (myPlayer?.weapon[0].durability < 0) {
+    errorDisplay("Your weapon broke!")
+    socket.emit("weaponBroke")
+    weaponBreak.play()
+    push360Particles("smokeGrey", 30, myPlayer.x, myPlayer.y)
+    return;
+  }
+  else if (myPlayer.weapon[0].maxDurability * 0.05 > myPlayer.weapon[0].durability) {
+    errorDisplay("Your weapon is about to break")
+  }
+
+  socket.emit("weaponDurabilityDown", myPlayer.weapon[0].durability);
+
+  shooting = true;
+
+  setTimeout(() => {
+    shooting = false;
+  }, 20);
+
+  const interval = setInterval(() => {
+      if (mainSkillCooldown > myPlayer?.weapon[0].fireRate) {
+          mainSkillCooldown = 0;
+          recoil = 0
+          clearInterval(interval);
+      }
+      mainSkillCooldown++;
+      recoil += recoil > 9 ? 0 : 3;
+  }, 20);
+}
 function shootDefaultArcane () {
   let angle = angleMouse
   const audioShootNature = new Audio("./audios/shootNature.wav");
@@ -8148,7 +8307,7 @@ function shootDefaultArcane () {
   // socket.emit("projectile", angle);
   // cameraShake();
 
-  // console.log(myPlayer?.weapon[0])
+  console.log("helloooooo")
   let weaponDurabilityLoss = 0;
  
   for (let i = 0; i < myPlayer?.weapon[0].bullets; i++) {
@@ -8327,78 +8486,14 @@ canvasLobby.addEventListener("mousedown", (e) => {
                 shootDefaultArcane()
               }
             }, 200)
-            }
-            else if (myPlayer?.weapon[0].name === "solarStaffCommon") {
-  
-              projectilesClient.push({
-                angle,
-                x: playerX + 20,
-                y: playerY + 50,
-                timeLeft: 100,
-                playerId: socket.id,
-              }) 
-  
-              shooting = true;
-  
-              setTimeout(() => {
-                shooting = false;
-              }, 20);
-    
-              const interval = setInterval(() => {
-                  if (mainSkillCooldown > 2) {
-                      mainSkillCooldown = 0;
-                      recoil = 0
-                      clearInterval(interval);
-                  }
-                  mainSkillCooldown++;
-                  recoil += 4
-              }, 20);
-            }
-            else if (myPlayer?.weapon[0].name === "nuclearStaffCommon") {
-  
-              projectilesClient.push({
-                angle,
-                x: playerX + 20,
-                y: playerY + 50,
-                timeLeft: 200,
-                playerId: socket.id,
-              }) 
-  
-              shooting = true;
-  
-              setTimeout(() => {
-                shooting = false;
-              }, 20);
-    
-              const interval = setInterval(() => {
-                  if (mainSkillCooldown > 2) {
-                      mainSkillCooldown = 0;
-                      recoil = 0
-                      clearInterval(interval);
-                  }
-                  mainSkillCooldown++;
-                  recoil += 4
-              }, 20);
-            }
-  
-            else if (myPlayer?.weapon[0].name === "arcaneRepeaterInv") {
-  
-            shootArcaneRepeater()
+          } else if (myPlayer?.weapon[0].name.includes("solar")) {
+            shootDefaultSolar()
             shootInterval = setInterval(() => {
               if (mainSkillCooldown === 1 || mainSkillCooldown === 0) {
-                shootArcaneRepeater()
+                shootDefaultSolar()
               }
-            }, 100)
-            }
-            else if (myPlayer?.weapon[0].name === "arcaneLancerInv") {
-            shootArcaneLancer()
-            shootInterval = setInterval(() => {
-              if (mainSkillCooldown === 1 || mainSkillCooldown === 0) {
-                shootArcaneLancer()
-              }
-            }, 100)
-            }
-  
+            }, 200)
+          }
         }
       }
     }
@@ -8761,7 +8856,7 @@ function transition (format) {
   if (!isLeader && inParty) return;
   if (transitionTimeout) return;
 
-  console.log(currentLand)
+  console.log("Setting player POS to: ", localPlayerPos, " in ", currentLand)
 
   mapsInfo[currentLand].playerPos = {x: localPlayerPos.x, y: localPlayerPos.y}
 
@@ -8777,6 +8872,8 @@ function transition (format) {
 }
 function changeMap (dynamicFunctionName) {
   socket.emit("requestChangeRoom", currentSelectedMap);
+
+  console.log("Changing maps function running")
 
   setTimeout(() => {
     if (DayCycleState == 0) activateDayMobs()
@@ -8846,6 +8943,7 @@ function transitionLiquid() {
   if (transitionTimeout === false) {
     transitionTimeout = true;  
     movezone.play()
+    console.log("Starting transition liquid to ", currentSelectedMap)
     
     const gifUrl = "./Textures/liquidTransition.gif"; // Remove `url("")` from the string
     const newGifUrl = gifUrl + "?" + new Date().getTime(); // Append a timestamp to force reload
@@ -8863,7 +8961,7 @@ function transitionLiquid() {
     setTimeout(() => {
       changeMap(dynamicFunctionName);
       socket.emit("changeRoom", currentSelectedMap);
-      socket.emit("leaderChangeRoom", [currentSelectedMap, currentParty, playerX, playerY])
+      if (inParty && isLeader) socket.emit("leaderChangeRoom", [currentSelectedMap, currentParty, playerX, playerY])
     }, 1800);   
     
     setTimeout(() => {
@@ -12572,6 +12670,11 @@ function drawUsername () {
   }
 }
 
+let bubbleFrameTyping = 0;
+const totalFramesTyping = 8;
+const frameWidthTyping = 21;
+const frameHeightTyping = 12;
+
 function drawChat () {
   function drawChatBubble (img, player, x, xd, y, yd, w, h, cx, cy ) {
     canvas.drawImage(img, x + xd, y + yd, w , h)
@@ -12581,8 +12684,16 @@ function drawChat () {
     canvas.fillStyle = "black";
     canvas.fillText(player.chatMessage, x +cx, y -cy);
   }
+  function drawChatBubbleAnim (img, player, x, xd, y, yd, w, h, cx, cy ) {
+    const sx = bubbleFrameTyping * frameWidthTyping;
+    const sy = 0;
+
+    canvas.drawImage(img, sx, sy, frameWidthTyping, frameHeightTyping, x + xd, y + yd, w, h);
+  }
+
   for (const player of players) {
     if (player.room === myPlayer.room && player.username === myPlayer.username) {
+      
       if (player.chatMessage !== "none") {
         console.log(player.chatMessage.length)
         if (player.chatMessage.length > 20) {
@@ -12590,6 +12701,8 @@ function drawChat () {
         } else {
           drawChatBubble(chatBubble, player, playerX - cameraX, -90, playerY - cameraY, -115, 200, 60, 15, 90 )
         }
+      } else if (typing) {
+        drawChatBubbleAnim(typingBubble, player, playerX - cameraX, -40, playerY - cameraY, -115, 100, 60, 5, 90 )
       }
     }
     else if (player.room === myPlayer.room) {
@@ -12635,11 +12748,11 @@ function drawLocalBullets () {
        if (bulletAmountController === 0) push360Particles("yellow", 1, projectile.x + 0, projectile.y - 60)
     } 
     else {
-      if (myPlayer?.weapon[0]?.name === "solarStaffCommon") {
+      if (myPlayer?.weapon[0]?.name.includes("solar")) {
         canvas.drawImage(bulletStick, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
         if (bulletAmountController === 0) push360Particles(projectile.color, 1, projectile.x + 20, projectile.y - 50)
       }
-      if (myPlayer?.weapon[0]?.name === "arcaneStaffCommon" || myPlayer?.weapon[0]?.name === "arcaneRepeaterInv" || myPlayer?.weapon[0]?.name === "arcaneLancerInv") {
+      if (myPlayer?.weapon[0]?.name.includes("arcane")) {
         canvas.drawImage(bulletStickBlue, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
         if (bulletAmountController === 0) push360Particles(projectile.color, 1, projectile.x + 20, projectile.y - 50)
       }
@@ -13271,6 +13384,15 @@ function checkEnemyCombat (enemy) {
       && enemy.damaged === 0 
       && !projectile.enemy
       ) {
+        console.log(enemy, projectile)
+        if (enemy.type) {
+          if (enemy.type == "solar" && !projectile.color.includes("Purple")) {
+            return;
+          }
+          else if (enemy.type == "arcane" && !projectile.color.includes("Red")) {
+            return;
+          }
+        }
       if (isLeader) {
         let playerChosen;
         // clearTimeout(targetedPlayerTimeout)
@@ -14432,7 +14554,7 @@ function particlesActor() {
     const y = particle.intialY + particle.y - cameraY + 50;
     const size = particle.size;
 
-    const isSmoke = particle.color === "smokeGrey" || particle.color === "smokePurple" || particle.color === "white" || particle.color === "yellow";
+    const isSmoke = particle.color === "smokeGrey" || particle.color === "smokePurple" || particle.color === "white" || particle.color === "yellow" || particle.color === "smokeGreen" || particle.color === "smokeRed";
 
     // console.log(isSmoke, particle.color)
     if (isSmoke) {
@@ -14440,7 +14562,12 @@ function particlesActor() {
       canvas.save();
       canvas.translate(x + size / 2, y + size / 2); // move origin to center of particle
       canvas.rotate(smokeRotation);                 // apply shared rotation
-      canvas.drawImage(particle.color === "smokePurple" ? smokePurpleImg : particle.color === "yellow" ? smokeYellowImg : smokeGreyImg, -size / 2, -size / 2, size, size); // draw centered
+      canvas.drawImage(particle.color === "smokePurple" ? smokePurpleImg 
+        : particle.color === "yellow" ? smokeYellowImg 
+        : particle.color === "smokeGreen" ? smokeGreenImg 
+        : particle.color === "smokeRed" ? smokeRedImg 
+        : smokeGreyImg, 
+      -size / 2, -size / 2, size, size); // draw centered
       canvas.restore();
     } else {
       // Default behavior: draw colored square
@@ -14484,14 +14611,14 @@ function shootingParticles () {
       const randomNumber = Math.floor(Math.random() * 2) + 1;
       
       if (randomNumber === 1) {
-        if (myPlayer?.weapon[0]?.name === "solarStaffCommon") {
-          particles.push({ x: 1, y: 1, size: size, color: 'red', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partShootDefault"].speedDec, sizeDecrease: particlesSystem["partShootDefault"].sizeDec, name: particlesSystem["partShootDefault"].name });
+        if (myPlayer?.weapon[0]?.name.includes("solar")) {
+          particles.push({ x: 1, y: 1, size: size, color: 'smokeRed', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partShootDefault"].speedDec, sizeDecrease: particlesSystem["partShootDefault"].sizeDec, name: particlesSystem["partShootDefault"].name });
         }
-        else if (myPlayer?.weapon[0]?.name === "arcaneStaffCommon") {
+        else if (myPlayer?.weapon[0]?.name.includes("arcane")) {
           particles.push({ x: 1, y: 1, size: size, color: 'smokePurple', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partShootDefault"].speedDec, sizeDecrease: particlesSystem["partShootDefault"].sizeDec, name: particlesSystem["partShootDefault"].name });
         }
-        else if (myPlayer?.weapon[0]?.name === "nuclearStaffCommon") {
-          particles.push({ x: 1, y: 1, size: size, color: 'green', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partShootDefault"].speedDec, sizeDecrease: particlesSystem["partShootDefault"].sizeDec, name: particlesSystem["partShootDefault"].name });
+        else if (myPlayer?.weapon[0]?.name.includes("nuclear")) {
+          particles.push({ x: 1, y: 1, size: size, color: 'smokeGreen', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partShootDefault"].speedDec, sizeDecrease: particlesSystem["partShootDefault"].sizeDec, name: particlesSystem["partShootDefault"].name });
         }
       } else {
 

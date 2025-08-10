@@ -46,12 +46,13 @@ const weaponBreak = new Audio("./audios/weaponBreak.wav");
 weaponBreak.loop = false;
 weaponBreak.volume = 0.3;
 
+const eat = new Audio("./audios/eat.wav");
+eat.loop = false;
+eat.volume = 0.7;
+
 const audioQuestObtained = new Audio("./audios/questObtained.wav");
 audioQuestObtained.volume = 0.4;
 audioQuestObtained.loop = false;
-
-const audioEquip = new Audio("./audios/equip.mp3");
-audioEquip.loop = false;
 
 const audioBuy = new Audio("./audios/buy.wav");
 audioBuy.loop = false;

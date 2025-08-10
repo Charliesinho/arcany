@@ -454,3 +454,5 @@ const chestCreatorButtonTake = document.getElementById("chestCreatorButtonTake")
 const chestCreatorResetChest = document.getElementById("chestCreatorResetChest");
 const chestCreatorPlaceChest = document.getElementById("chestCreatorPlaceChest");
 
+const tooltip = document.getElementById("itemTooltip");
+

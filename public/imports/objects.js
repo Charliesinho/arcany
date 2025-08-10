@@ -577,3 +577,7 @@ const smokePurpleImg = new Image();
 smokePurpleImg.src = "./Textures/smokePurple.png"
 const smokeYellowImg = new Image();
 smokeYellowImg.src = "./Textures/smokeYellow.png"
+const smokeGreenImg = new Image();
+smokeGreenImg.src = "./Textures/smokeGreen.png"
+const smokeRedImg = new Image();
+smokeRedImg.src = "./Textures/smokeRed.png"

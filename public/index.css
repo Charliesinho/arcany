@@ -1905,6 +1905,125 @@ body {
     position: relative;
     z-index: 2;
 }
+
+#itemTooltip {
+   position: fixed;
+    /* background-color: black; */
+    opacity: 0;
+    color: #3c2c23;
+    padding: 8px;
+    border-radius: 4px;
+    pointer-events: none;
+    display: none;
+    z-index: 1000;
+    font-size: 14px;
+    width: 237px;
+    height: 350px;
+    background-image: url(./ui/commonTooltip.png);
+    background-size: cover;
+    animation: opacityUp 0.2s ease 0.5s forwards;
+}
+
+#itemTooltip > h1 {
+    font-weight: 400;
+    margin: 0;
+    position: absolute;
+    top: 26px;
+    left: 29px;
+    font-size: 17px;
+}
+#itemTooltip > h2 {
+    font-weight: 400;
+    font-size: 17px;
+    margin: 0;
+    position: absolute;
+    top: 69px;
+    left: 169px;
+}
+#itemTooltip > h3 {
+    font-weight: 400;
+    font-size: 17px;
+    margin: 0;
+    position: absolute;
+    left: 216px;
+    top: 24px;
+}
+#itemTooltip > h4 {
+    font-weight: 400;
+    font-size: 17px;
+    margin: 0;
+    position: absolute;
+    left: 169px;
+    top: 100px;
+}
+#itemTooltip > h5 {
+    font-weight: 400;
+    font-size: 17px;
+    margin: 0;
+    position: absolute;
+    left: 169px;
+    top: 124px;
+}
+#itemTooltip > h6 {
+    font-weight: 400;
+    font-size: 17px;
+    margin: 0;
+    position: absolute;
+    top: 149px;
+    left: 169px;
+}
+#itemTooltip > p {
+    position: absolute;
+    top: 217px;
+    left: 37px;
+    width: 182px;
+    text-align: justify;
+}
+#itemTooltip > img {
+    position: absolute;
+    height: 121px;
+    top: 67px;
+    left: 22px;
+}
+
+.enchanted {
+  position: relative;
+  overflow: hidden;
+  border-radius: 22px !important;
+  /* isolation: isolate; */
+}
+
+/* Blurred blobs container */
+.enchanted::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 300%;
+  height: 300%;
+  background: radial-gradient(circle at 20% 30%, rgba(170, 0, 255, 0.336) 0%, transparent 60%),
+              radial-gradient(circle at 70% 50%, rgba(0, 255, 255, 0.2) 0%, transparent 60%),
+              radial-gradient(circle at 40% 80%, rgba(255, 255, 0, 0.2) 0%, transparent 50%);
+  /* mix-blend-mode: screen; */
+  filter: blur(100px);
+  animation: blobShift 3s infinite;
+  pointer-events: none;
+  z-index: 2;
+}
+
+@keyframes blobShift {
+  0% {
+    transform: translate(0%, 0%) rotate(0deg);
+  }
+  50% {
+    transform: translate(-20%, -10%) rotate(360deg);
+  }
+  100% {
+    transform: translate(0%, 0%) rotate(0deg);
+  }
+}
+
+
 #uiSkinsImgParent{
     background: url(./ui/uiInventoryBackgroundPlayer.png);
     background-size: contain;
@@ -2584,7 +2703,7 @@ body {
 }
 
 #chat {
-    display: none;
+    display: block;
     position: absolute;
     z-index: 1;
     bottom: 107px;
@@ -2593,11 +2712,12 @@ body {
     /* display: flex
 ; */
     /* height: 300px; */
-    background: var(--backgroundObjects);
-    opacity: .3;
+    /* background: var(--backgroundObjects); */
+    opacity: 0;
     transition: all .2s ease;
     animation: showChat 0.5s ease forwards;
     border-radius: 6px;
+    pointer-events: none;
 }
 
 
@@ -2605,31 +2725,45 @@ body {
     opacity: 1;
 }
 
+.chatName {
+    color: black;
+    font-weight: bold;
+}
+
+.chatMessage {
+    color: grey;
+    margin-left: 6px;
+}
+
 #chat input {
-    height: 20px;
-    width: 400px;
-    border: none;
-    border-radius: 2px;
-    outline: none 1px white;
-    outline-offset: -5px;
-    background: var(--backgroundObjects);
+    height: 10px;
+    width: 200px;
+    border-radius: 5px;
     padding: 20px;
-    color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
     font-size: 16px;
     font-weight: 300;
+    border: solid 3px #b3a496;
+    outline: solid 3px #393939;
+    background: #ffe2c1;
 }
 
 #chat input::placeholder {
-    color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
     font-size: 16px;
     font-weight: 300;
 }
 
 #chatHistory {
-    height: 150px;
+    max-height: 538px;
     width: 400px;
     padding: 20px;
     overflow: scroll;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    transition: all 1s ease;
+    pointer-events: none;
 }
 
 #loginScreen {
@@ -2641,6 +2775,30 @@ body {
 
    z-index: 4;
    
+}
+
+.chatText {
+    margin: 0px;
+    background: #ffffff;
+    min-height: 30px;
+    border-radius: 6px;
+    padding: 0px 10px;
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    color: black;
+    border: solid 3px black;
+    box-shadow: 2px 2px black;
+    position: relative;
+    top: 1px;
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 1s ease;
+    animation: cardUpNoOpacity 1s ease;
+}
+
+.cardUpClass {
+    animation: cardUpNoOpacity 1s ease;
 }
 
 .downLogIn {
@@ -3230,6 +3388,15 @@ body {
     100% {
         opacity: 1;
         top: 0px;
+    }
+}
+
+@keyframes cardUpNoOpacity {
+    0% {
+        top: 40px;
+    }
+    100% {
+        top: 1px;
     }
 }
 
