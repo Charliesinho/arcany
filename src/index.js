@@ -193,6 +193,7 @@ async function main() {
             chatMessage: "none",
             blockMovement: false,
             chatTimer: 0,
+            typing: false,
 
             iFrames: 75,
             invincible: false,
@@ -226,6 +227,16 @@ async function main() {
                 player.weaponAngle = angleMouse;
                 break;
             }
+            }
+        });
+       
+        socket.on("updateTyping", (state) => {
+        
+            for (const player of players) {
+                if (player.id === socket.id) {
+                    player.typing = state;
+                    break;
+                }
             }
         });
   

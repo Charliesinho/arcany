@@ -1573,13 +1573,14 @@ window.addEventListener("keydown", (e) => {
           updateHistoryChat(chatInput.value, "myPlayer")         
 
           socket.emit("chatMessage", chatMessage);
+          socket.emit("updateTyping", false);
           chatInput.value = "";
           chatInput.disabled = true;
           chatInput.disabled = false;
           blockMovement = false;
           noMovement = false
           typing = false
-          clearInterval(typingInterval)
+          // clearInterval(typingInterval)
       }
     } else {
       if(!chatIsActivate) showChatFunction()
@@ -1587,10 +1588,10 @@ window.addEventListener("keydown", (e) => {
       blockMovement = true;
       noMovement = true
       typing = true
-      typingInterval = setInterval(() => {
-          bubbleFrameTyping = (bubbleFrameTyping + 1) % totalFramesTyping;
-      }, 100);
-
+      // typingInterval = setInterval(() => {
+      //     bubbleFrameTyping = (bubbleFrameTyping + 1) % totalFramesTyping;
+      // }, 100);
+      socket.emit("updateTyping", true);
     }
     }
 
@@ -7859,7 +7860,7 @@ let fishingInterval;
 let fishingTimeout;
 
 window.addEventListener("keydown", (e) => {
-  if(keyBlocker) return
+  if(keyBlocker || typing) return
   let keyCheck = e?.key?.toLowerCase()
 
   if (keyCheck === "o") {
@@ -11302,7 +11303,7 @@ function areAllPartyMembersAlive(currentParty, players) {
 const DayCycleFilters = [
   'sepia(0%) hue-rotate(0deg) saturate(1) contrast(1) brightness(1)',  
   'sepia(64%) hue-rotate(-39deg) saturate(2) contrast(.9) brightness(.9)', 
-  'sepia(0%) hue-rotate(0deg) saturate(1) contrast(1) brightness(0.7)', 
+  'sepia(0%) hue-rotate(-0deg) saturate(0.5) contrast(2) brightness(0.7)', 
   'sepia(64%) hue-rotate(-39deg) saturate(2) contrast(.9) brightness(.9)'
 ];
 
@@ -11908,7 +11909,7 @@ function drawColliders (type, x, y, w, h) {
         height: h
       }
 
-      canvas.fillRect(colliderToCheck.x, colliderToCheck.y, colliderToCheck.width, colliderToCheck.height);
+      // canvas.fillRect(colliderToCheck.x, colliderToCheck.y, colliderToCheck.width, colliderToCheck.height);
 
       let collidingX = "free";
       let collidingY = "free";
@@ -12674,8 +12675,17 @@ let bubbleFrameTyping = 0;
 const totalFramesTyping = 8;
 const frameWidthTyping = 21;
 const frameHeightTyping = 12;
+let waiterFrames = 0;
 
 function drawChat () {
+  waiterFrames++
+  
+  
+  if (waiterFrames > 5) {
+    waiterFrames = 0;
+    bubbleFrameTyping = (bubbleFrameTyping + 1) % 8;
+  }
+
   function drawChatBubble (img, player, x, xd, y, yd, w, h, cx, cy ) {
     canvas.drawImage(img, x + xd, y + yd, w , h)
     canvas.beginPath();
@@ -12695,7 +12705,6 @@ function drawChat () {
     if (player.room === myPlayer.room && player.username === myPlayer.username) {
       
       if (player.chatMessage !== "none") {
-        console.log(player.chatMessage.length)
         if (player.chatMessage.length > 20) {
           drawChatBubble(chatBubbleBigger, player, playerX - cameraX, -190, playerY - cameraY, -115, 400, 60, 5, 90 )
         } else {
@@ -12706,24 +12715,19 @@ function drawChat () {
       }
     }
     else if (player.room === myPlayer.room) {
+      let smoothPlayer = Object.values(smoothPlayers).find(Splayer => Splayer.username === player.username)
       if (player.chatMessage !== "none") {
-        let smoothPlayer = Object.values(smoothPlayers).find(Splayer => Splayer.username === player.username)
-        // canvas.drawImage(chatBubble, smoothPlayer.smoothX - cameraX -85, smoothPlayer.smoothY - cameraY -115, 200, 60)
-        // canvas.beginPath();
-        // canvas.font = "bolder 16px Tiny5";
-        // canvas.textAlign = "center";
-        // canvas.fillStyle = "black";
-        // canvas.fillText(player.chatMessage, smoothPlayer.smoothX - cameraX +15, smoothPlayer.smoothY - cameraY -90);
-
         if (player.chatMessage.length > 20) {
           drawChatBubble(chatBubbleBigger, player, smoothPlayer.smoothX - cameraX, -190, smoothPlayer.smoothY - cameraY, -115, 400, 60, 5, 90 )
         } else {
           drawChatBubble(chatBubble, player, smoothPlayer.smoothX - cameraX, -90, smoothPlayer.smoothY - cameraY, -115, 200, 60, 15, 90 )
-        }
+        } 
 
-        if (player.chatTimer === 80) {
+        if (player.chatTimer === 700) {
           updateHistoryChat(player.chatMessage, player)
         }
+      } else if (player.typing) {
+        drawChatBubbleAnim(typingBubble, player, smoothPlayer.smoothX - cameraX, -40, smoothPlayer.smoothY - cameraY, -115, 100, 60, 5, 90 )
       }
     }
   } 
@@ -13195,7 +13199,7 @@ function activateDayMobs() {
 
 function drawEnemy (enemy) {
   // mapsInfo[currentLand].enemies?.forEach(enemy => {
-
+    // console.log(enemy.currentStateName)
     if (enemy.active === false) {
       enemy.imgch = enemy.imgh * 9
       canvas.drawImage(
@@ -13318,6 +13322,7 @@ function handleEnemyDeath (enemy) {
 }
 
 let targetedPlayerTimeout = null;
+let enemyAttackInterval = null;
 
 function checkEnemyCombat (enemy) {
   if (enemy.damaged > 0) {
@@ -13356,6 +13361,7 @@ function checkEnemyCombat (enemy) {
           enemy.spawn.x = baseSpawn.x;
           enemy.spawn.y = baseSpawn.y;
           enemy.health = enemy.maxHealth
+          enemy.frames = 0;
           mapsInfo[currentLand].enemies.push(enemy)
           if (DayCycleState == 0) {
             activateDayMobs()
@@ -13408,7 +13414,7 @@ function checkEnemyCombat (enemy) {
         //   if (enemy) enemy.targetPlayer = null;
         // }, 10000);
       }
-      enemy.damaged = 2;
+      enemy.damaged = 6;
       enemy.angle = projectile.angle || projectile.bullet1 || projectile.bullet2;
       projectile.timeLeft = projectile.timeLeft > 1 ? 1 : projectile.timeLeft;
       enemy.health = enemy.health - projectile.damage;
@@ -13461,45 +13467,73 @@ function checkEnemyCombat (enemy) {
 }
 
 function handleEnemyState(enemy) {
-  if (enemy.stateTimer) return;
-  let validStates = [];
-  for (let state of enemy.states) {
-    if (state != null) {
-      // enemy.states.splice(enemy.states.indexOf(state), 1)
-      validStates.push(state)
-    }
-  }
+  if (enemy.stateActive || !enemy.active) return;
+
+  let validStates = enemy.states.filter(s => typeof s === "string" && s.trim() !== "");
+
+  if (validStates.length === 0) return; // No valid states, skip
 
   if (isLeader || !inParty) {
-    enemy.stateTimer = setTimeout(() => {
-      enemy.frames = 0;
-      enemy.stateTimer = null;
-      const states = validStates;
-      const chosenState = states[Math.floor(Math.random() * states.length)];
-      executeStateForDuration(enemy, window[chosenState], enemy.enemyStateInt);
-    }, enemy.enemyStateInt);
+    enemy.frames = 0;
+    const chosenState = validStates[Math.floor(Math.random() * validStates.length)];
+
+    enemy.stateFunction = typeof window[chosenState] === "function" ? window[chosenState] : null;
+    enemy.stateDuration = enemy.enemyStateInt;
+    enemy.stateStartTime = performance.now();
+    enemy.stateActive = true;
+
+    // Reset stateLastTick so the interval timer starts fresh
+    enemy.stateLastTick = 0;
+
+    // Reset attack permission to true when starting a new state
+    enemy.attackInterval = true;
+
+    // Always explicitly set a name here
+    enemy.currentStateName = chosenState;
   }
 }
 
-function executeStateForDuration(enemy, stateFunction, duration) {
-  const interval = 50;
-  const repetitions = duration / interval;
-  let counter = 0;
-  if (typeof stateFunction !== "function") return;
+function updateEnemyState(enemy, now) {
+  if (!enemy.stateActive) return;
+  if (waiterFrames != 0) return;
 
-  const intervalId = setInterval(() => {
-    stateFunction(enemy);
-    if (counter >= repetitions || !mapsInfo[currentLand].enemies.includes(enemy)) {
-      clearInterval(intervalId)
-      enemy.currentStateName = "idle"
-    };
-    counter++;
-  }, interval);
+  if (typeof enemy.stateFunction !== "function") {
+    enemy.stateActive = false;
+    enemy.currentStateName = "idle";
+    return;
+  }
+
+  // Safety timeout to reset if stuck too long
+  if (now - enemy.stateStartTime > enemy.stateDuration * 2) {
+    enemy.stateActive = false;
+    enemy.stateFunction = null;
+    enemy.currentStateName = "idle";
+    return;
+  }
+
+  if (!enemy.stateLastTick) enemy.stateLastTick = 0;
+  const interval = 100; // ms
+
+  // Run the state function only every 50ms max
+  if (now - enemy.stateLastTick >= interval) {
+    enemy.stateFunction(enemy, now);
+    enemy.stateLastTick = now;
+  }
+
+  // End state when duration exceeded or enemy no longer present
+  if (now - enemy.stateStartTime >= enemy.stateDuration ||
+      !mapsInfo[currentLand].enemies.includes(enemy)) {
+    enemy.stateActive = false;
+    enemy.stateFunction = null;
+    enemy.currentStateName = "idle";
+    enemy.stateLastTick = 0;
+  }
 }
+
 
 function moveState(enemy) {
   // console.log(enemy.currentStateName)
-  if (enemy.currentStateName === "idle") {
+  if (enemy.currentStateName !== "dmg") {
     enemy.currentStateName = "move";
   }
 
@@ -13602,7 +13636,7 @@ function moveState(enemy) {
 
 function moveStateAndMelee(enemy) {
   // console.log(enemy.currentStateName)
-  if (enemy.currentStateName === "idle") {
+  if (enemy.currentStateName !== "dmg") {
     enemy.currentStateName = "move";
   }
 
@@ -13704,7 +13738,7 @@ function moveStateAndMelee(enemy) {
 }
 
 function moveStateRandom(enemy) {
-  if (enemy.currentStateName === "idle") {
+  if (enemy.currentStateName !== "dmg") {
     enemy.currentStateName = "move";
   }
 
@@ -13772,12 +13806,14 @@ function startCommitmentTimer(enemy) {
 }
 
 function idleState(enemy) {
-  enemy.currentStateName = "idle"
+  if (enemy.currentStateName !== "dmg") {
+    enemy.currentStateName = "idle"
+  }
 }
 
 function attackState(enemy) {
   
-  if (enemy.currentStateName === "idle") {
+  if (enemy.currentStateName !== "dmg") {
     enemy.currentStateName = "attack1";
   }
   
@@ -13978,12 +14014,15 @@ function playRandomBuild() {
 }
 
 function attackCircleState(enemy) {
-  if (enemy.currentStateName === "idle") {
+
+  if (enemy.currentStateName !== "dmg") {
     enemy.currentStateName = "attack2";
   }
-  
+
   if (enemy.attackInterval) {
+    clearTimeout(enemy.bulletTimeout)
     enemy.attackInterval = false;
+    // console.log("ATTACK")
 
     const totalBullets = 20; // Total bullets forming the circle
     const angleIncrement = (2 * Math.PI) / totalBullets; // Full circle divided into 20 parts
@@ -14008,7 +14047,7 @@ function attackCircleState(enemy) {
     }, 1000);
 
 
-    setTimeout(() => {
+    enemy.bulletTimeout = setTimeout(() => {
       enemy.attackInterval = true;
     }, 3000);
   }
@@ -14016,7 +14055,7 @@ function attackCircleState(enemy) {
 
 let attackCircleMooshBossStateVar = false;
 function attackCircleMooshBossState(enemy) {
-  if (enemy.currentStateName === "idle") {
+  if (enemy.currentStateName !== "dmg") {
     enemy.currentStateName = "attack2";
   }
   
@@ -14026,6 +14065,7 @@ function attackCircleMooshBossState(enemy) {
     attackCircleMooshBossStateVar = true
   }
   
+  console.log(enemy.attackInterval)
   if (enemy.attackInterval) {
     enemy.attackInterval = false;
 
@@ -14820,7 +14860,9 @@ function nightTimeCanvas() {
 }
 
 function updateGame(shouldUpdate) {
+  
   if (shouldUpdate) {
+    const now = performance.now();
     mapSetup();
   
     drawMap("back")
@@ -14841,6 +14883,13 @@ function updateGame(shouldUpdate) {
     nightTimeCanvas()
     drawUsername()
     drawChat()
+
+    for (let enemy of mapsInfo[currentLand].enemies) {
+      if (!enemy.stateActive) {
+        handleEnemyState(enemy);  // Start a new state if none active
+      }
+      updateEnemyState(enemy, now);  // Run active state logic
+    }
   }
 
   
