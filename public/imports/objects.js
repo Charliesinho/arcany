@@ -570,3 +570,14 @@ christmasLightTwo.src = "./objects/light/spotlights/christmasLightTwo.png"
 const commonPlayerTomb = new Image();
 commonPlayerTomb.src = "./objects/notPlaceable/commonPlayerTomb.png"
 
+// SMOKE
+const smokeGreyImg = new Image();
+smokeGreyImg.src = "./Textures/smoke.png"
+const smokePurpleImg = new Image();
+smokePurpleImg.src = "./Textures/smokePurple.png"
+const smokeYellowImg = new Image();
+smokeYellowImg.src = "./Textures/smokeYellow.png"
+const smokeGreenImg = new Image();
+smokeGreenImg.src = "./Textures/smokeGreen.png"
+const smokeRedImg = new Image();
+smokeRedImg.src = "./Textures/smokeRed.png"

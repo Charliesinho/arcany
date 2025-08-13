@@ -193,6 +193,7 @@ async function main() {
             chatMessage: "none",
             blockMovement: false,
             chatTimer: 0,
+            typing: false,
 
             iFrames: 75,
             invincible: false,
@@ -226,6 +227,16 @@ async function main() {
                 player.weaponAngle = angleMouse;
                 break;
             }
+            }
+        });
+       
+        socket.on("updateTyping", (state) => {
+        
+            for (const player of players) {
+                if (player.id === socket.id) {
+                    player.typing = state;
+                    break;
+                }
             }
         });
   
@@ -568,10 +579,13 @@ async function main() {
                     }
 
                     staff.charges -= 1;
+                    staff.enchanted = true;
+                    staff.damage = Math.floor((staff.damage - items[1].negative) * 10) / 10;
 
-                    if(plate === null) return
+                    if (staff.damage < 0) staff.damage = 0.1
+
+                    if(staff === null) return
                     
-
                     player.inventory.push(staff);                                           
                     player.enchanting += xp;                                           
                     await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
@@ -605,17 +619,41 @@ async function main() {
                     let staff;
                     let xp = 0;
 
-                    if (arrayOfNames.includes("arcaneGem2") && arrayOfNames.includes("stick")) {
-                        staff = arcaneLancerInv;   
-                        xp = 1000; 
+                    if (arrayOfNames.includes("arcaneGem2")) {
+                        if (arrayOfNames.includes("stick")) {
+                            staff = arcaneLancerInv;   
+                            xp = 20; 
+                        }
+                        else if (arrayOfNames.includes("willowStick")) {
+                            staff = arcaneLancerInv;   
+                            staff.durability *= 2;
+                            staff.maxDurability += 10;
+                            xp = 30; 
+                        }
                     }
-                    else if (arrayOfNames.includes("arcaneGem") && arrayOfNames.includes("stick")) {
-                        staff = arcaneStaffCommon; 
-                        xp = 500;
+                    else if (arrayOfNames.includes("arcaneGem")) {
+                        if (arrayOfNames.includes("stick")) {
+                            staff = arcaneStaffCommon;   
+                            xp = 20; 
+                        }
+                        else if (arrayOfNames.includes("willowStick")) {
+                            staff = arcaneStaffCommon;   
+                            staff.durability *= 2;
+                            staff.maxDurability += 10;
+                            xp = 30; 
+                        }
                     }
-                    else if (arrayOfNames.includes("arcaneGem3") && arrayOfNames.includes("stick")) {
-                        staff = arcaneRepeaterInv; 
-                        xp = 1500;
+                    else if (arrayOfNames.includes("arcaneGem3")) {
+                        if (arrayOfNames.includes("stick")) {
+                            staff = arcaneRepeaterInv;   
+                            xp = 20; 
+                        }
+                        else if (arrayOfNames.includes("willowStick")) {
+                            staff = arcaneRepeaterInv;   
+                            staff.durability *= 2;
+                            staff.maxDurability += 10;
+                            xp = 30; 
+                        }
                     } 
                     else if (arrayOfNames.includes("restfieldBlanket")){
                         staff = restfieldGhostClothes; 
@@ -626,7 +664,12 @@ async function main() {
                         xp = 0;
                     }
 
-                    if(plate === null) return
+                    console.log(staff)
+
+                    if (!staff) {
+                        io.to(socket.id).emit('errorMessage', "Something went wrong");
+                        return
+                    }
 
                     player.inventory.push(staff); 
                     player.crafting += xp;                                          
@@ -639,6 +682,34 @@ async function main() {
               cooking()
         });
 
+        socket.on("weaponBroke", (xp) => {
+
+            async function deleteWeapon() {
+                const player = await Player.findOne({socket: socket.id}).exec();                                           
+                player.weapon = []
+                
+                await Player.findOneAndUpdate({socket: socket.id}, {weapon: []}, {new: true});
+                myPlayer[socket.id] = player;   
+                                   
+                
+              };
+              deleteWeapon()
+        });
+       
+        socket.on("weaponDurabilityDown", (amount) => {
+
+            async function deleteWeapon() {
+                const player = await Player.findOne({socket: socket.id}).exec();                                           
+        
+                player.weapon[0].durability = amount
+                await Player.findOneAndUpdate({socket: socket.id}, {weapon: player.weapon}, {new: true});
+                myPlayer[socket.id] = player;   
+                                   
+                
+              };
+              deleteWeapon()
+        });
+        
         socket.on("enemyKilled", (xp) => {
 
             async function expObtained() {
@@ -879,16 +950,46 @@ async function main() {
 
             async function consume() {
 
-                const number = Math.floor(Math.random() * (100 - 1 + 1) + 1);
-
+                
                 const player = await Player.findOne({socket: socket.id}).exec();
+                
+                const itemToPush = Object.values(itemsObj).find(thing => thing.name === item[0]);
 
+                if (!itemToPush) {
+                    io.to(socket.id).emit('errorMessage', "Something went wrong");
+                    return
+                };
 
+                if (itemToPush.type === "soul"){
+                    let soulsHave = []
+                    for (let soul of player.souls) {
+                        soulsHave.push(soul.name)
+                    }
+                    if (soulsHave.includes(itemToPush.name)) {
+                        io.to(socket.id).emit('errorMessage', "You already have this soul");
+                        return;
+                    }
+                    player.souls.push(itemToPush);
+                    await Player.findOneAndUpdate({socket: socket.id}, {souls: player.souls}, {new: true});
+                    io.to(socket.id).emit('obtained', itemToPush);    
+                    myPlayer[socket.id] = player;
+                    return;
+                } 
 
                 if (player.inventory.length <= 20) {
 
-                    const itemToPush = Object.values(itemsObj).find(thing => thing.name === item[0]);
-                    console.log(item[0], item[1]);
+                    // console.log(item[0], item[1]);
+                    for (let checkingItem of player.inventory) {
+                        if (checkingItem == null) {
+                            const indexNull = player.inventory.indexOf(checkingItem);
+                            player.inventory.splice(indexNull, 1);
+                        }
+                    }
+
+                    if (itemToPush.name.toLowerCase().includes("rune")) {
+                        const number = Math.floor(Math.random() * ((100 * itemToPush?.level) - 1 + 1) + 1);
+                        itemToPush.negative = (number / 100)
+                    }
 
                     if(item[1]) {
                         const key = Object.values(itemsObj).find(thing => thing.name === item[1]);
@@ -902,24 +1003,15 @@ async function main() {
                         }
 
                         player.inventory.splice(index, 1);
-
-                        if(itemToPush.type === "soul"){
-                            player.souls.push(itemToPush);
-                            await Player.findOneAndUpdate({socket: socket.id}, {souls: player.souls}, {new: true});
-                        } else {
-                            player.inventory.push(itemToPush);
-                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
-                        }
+                        player.inventory.push(itemToPush);
+                        await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
+                        
 
                     } else {
 
-                        if(itemToPush.type === "soul"){
-                            player.souls.push(itemToPush);
-                            await Player.findOneAndUpdate({socket: socket.id}, {souls: player.souls}, {new: true});
-                        } else {
-                            player.inventory.push(itemToPush);
-                            await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
-                        }
+                        player.inventory.push(itemToPush);
+                        await Player.findOneAndUpdate({socket: socket.id}, {inventory: player.inventory}, {new: true});
+                        
                     }
 
                     io.to(socket.id).emit('obtained', itemToPush);    
@@ -1083,8 +1175,6 @@ async function main() {
                     myPlayer[socket.id] = newPlayerData; 
                     inventoryStore[socket.id] = myPlayer[socket.id];
                     let map = await World.findOne({areaName: newPlayerData.area}).exec();
-
-                    
 
                     const loginAttempt = {
                         msg: "success",
@@ -1415,7 +1505,7 @@ async function main() {
             
             for (const player of players) {
                 if (player.id === socket.id) {
-                    player.chatTimer = 200;                    
+                    player.chatTimer = 800;                    
                 }
             }         
         });
@@ -1560,6 +1650,8 @@ const trashCrafting = {
     value: 5,
     rarity: "common",
     image: "./inventory/trashCrafting.png",
+    displayName: "Junk",
+    description: "Some people's junk is someone else's treasure",
 };
 const arcaneGem = {
     type: "gem",
@@ -1568,14 +1660,18 @@ const arcaneGem = {
     value: 5,
     rarity: "common",
     image: "./inventory/arcaneGem.png",
+    displayName: "Simple Arcane Gem",
+    description: "This gem is very geometrically simple so don't expect much",
 };
 const arcaneGem2 = {
     type: "gem",
     name: "arcaneGem2",
     level: 2,
     value: 10,
-    rarity: "uncommon",
+    rarity: "common",
     image: "./inventory/arcaneGem2.png",
+    displayName: "Linear Arcane Gem",
+    description: "A very sharp gem, seems accurate...",
 };
 const arcaneGem3 = {
     type: "gem",
@@ -1584,6 +1680,8 @@ const arcaneGem3 = {
     value: 15,
     rarity: "rare",
     image: "./inventory/arcaneGem3.png",
+    displayName: "Triple Arcane Gem",
+    description: "I wonder what kind of natural conditions must occur in order for this gem to take this shape",
 };
 const arcaneGem4 = {
     type: "gem",
@@ -1608,14 +1706,18 @@ const solarGem = {
     value: 5,
     rarity: "common",
     image: "./inventory/solarGem.png",
+    displayName: "Simple Solar Gem",
+    description: "Looks similar to a saphire, but is very warm to the touch, like if it just came out of the oven",
 };
 const nuclearGem = {
     type: "gem",
     name: "nuclearGem",
     level: 5,
     value: 5,
-    rarity: "common",
+    rarity: "legendary",
     image: "./inventory/nuclearGem.png",
+    displayName: "Simple Nuclear Gem",
+    description: "This feels wrong, this for sure is not from this world, or the next... However it feels good to the touch, not warm or cold, like something new",
 };
 const commonFishStick = {
     type: "food",
@@ -1647,6 +1749,10 @@ const rareFishStick = {
 const arcaneStaffCommon = {
     type: "weapon",
     name: "arcaneStaffCommon",
+
+    displayName: "Basic Arcane Staff",
+    description: "This basic weapon will do a bit of damage to solar enemies (Solar meaning normal creatures that feed off solar energy), don't expect much from it but at least it can get you out of sticky situations!",
+
     level: 1,
     value: 30,
     rarity: "common",
@@ -1654,7 +1760,8 @@ const arcaneStaffCommon = {
     enchanted: false,
     charges: 1,
 
-    durability: 50,
+    durability: 30,
+    maxDurability: 30,
     damage: 1,
     bullets: 1,
     speed: 1,
@@ -1665,6 +1772,10 @@ const arcaneStaffCommon = {
 const arcaneRepeaterInv = {
     type: "weapon",
     name: "arcaneRepeaterInv",
+
+    displayName: "Triple Arcane Staff",
+    description: "Don't let the amount of bullets full you, the damage of this staff is very low, however, if enchanted, it can become a pretty crazy weapon, with a 180 degrees hit angle.",
+
     level: 3,
     value: 30,
     rarity: "common",
@@ -1673,6 +1784,7 @@ const arcaneRepeaterInv = {
     charges: 3,
 
     durability: 50,
+    maxDurability: 50,
     damage: 0.5,
     bullets: 3,
     speed: 1,
@@ -1683,6 +1795,10 @@ const arcaneRepeaterInv = {
 const arcaneLancerInv = {
     type: "weapon",
     name: "arcaneLancerInv",
+
+    displayName: "Linear Arcane Staff",
+    description: "This staff shoots impressively slow, but it's bullet deal  a massive amount of damage. Many people use it as a 'sniper', given it's long range.",
+
     level: 2,
     value: 60,
     rarity: "common",
@@ -1690,7 +1806,8 @@ const arcaneLancerInv = {
     enchanted: false,
     charges: 2,
 
-    durability: 50,
+    durability: 20,
+    maxDurability: 20,
     damage: 3,
     bullets: 1,
     speed: 2,
@@ -1706,18 +1823,46 @@ const solarStaffCommon = {
     value: 20,
     rarity: "common",
     image: "./inventory/solarStaffCommon.png",
+    displayName: "Basic Solar Staff",
+    description: "I could hurt someone with this, better be careful",
+
+    durability: 20,
+    maxDurability: 20,
+    damage: 1,
+    bullets: 1,
+    speed: 1,
+    range: 20,
+    fireRate: 10,
+    special: "none",
+    enchanted: false,
+    charges: 1,
 };
 const nuclearStaffCommon = {
     type: "weapon",
     name: "nuclearStaffCommon",
     level: 5,
     value: 50,
-    rarity: "common",
+    rarity: "legendary",
     image: "./inventory/nuclearStaffCommon.png",
+
+    durability: 20,
+    maxDurability: 20,
+    damage: 2,
+    bullets: 1,
+    speed: 1,
+    range: 50,
+    fireRate: 10,
+    special: "none",
+    enchanted: false,
+    charges: 5,
 };
 const stick = {
     type: "stick",
     name: "stick",
+
+    displayName: "Regular stick",
+    description: "A regular branch from a tree or bush",
+
     level: 1,
     value: 2,
     rarity: "common",
@@ -1726,6 +1871,10 @@ const stick = {
 const willowStick = {
     type: "stick",
     name: "willowStick",
+
+    displayName: "Willow stick",
+    description: "The willow stick it's said to come from plants that absorved a tiny bit of arcane energy. This stick will give more durability to your weapons",
+
     level: 1,
     value: 2,
     rarity: "rare",
@@ -1738,6 +1887,9 @@ const chestKey = {
     value: 30,
     rarity: "rare",
     image: "./inventory/chestKey.png",
+
+    displayName: "Red Mushroom Key",
+    description: "A key that is able to open any red mushroom chest, these are found in mushroom infested areas.",
 };
 const chestKeyCommon = {
     type: "key",
@@ -1746,6 +1898,9 @@ const chestKeyCommon = {
     value: 30,
     rarity: "rare",
     image: "./inventory/chestKeyCommon.png",
+
+    displayName: "Gold Key",
+    description: "This simple key can open any gold chest you find in the world, I supposed whoever was in charge of the lock didnt think this through...",
 };
 const chestKeyRestfield = {
     type: "key",
@@ -1754,6 +1909,9 @@ const chestKeyRestfield = {
     value: 30,
     rarity: "rare",
     image: "./inventory/chestKeyRestfield.png",
+
+    displayName: "Cemetery key",
+    description: "This key is scary somehow, it should be able to open any restfield cemetary chest, if you dare to find one",
 };
 
 const low = {
@@ -1763,8 +1921,11 @@ const low = {
     zone: "solar",
     xp: 5,
     value: 4,
-    rarity: "rare",
+    rarity: "common",
     image: "./inventory/low.png",
+
+    displayName: "Low",
+    description: "A very common fish, when the cataclysm first happened, people ate this fish to survive because it was very easy to catch. It is not super smart",
 };
 const sardine = {
     type: "fish",
@@ -1775,6 +1936,9 @@ const sardine = {
     value: 1,
     rarity: "common",
     image: "./inventory/sarding.png",
+
+    displayName: "Sardine",
+    description: "A bright red fish, iconic in these lands. It can be used to make great recepies but some people use it to craft... clothes?",
 };
 const nemi = {
     type: "fish",
@@ -1783,8 +1947,11 @@ const nemi = {
     zone: "solar",
     xp: 15,
     value: 4,
-    rarity: "rare",
+    rarity: "common",
     image: "./inventory/nemi.png",
+
+    displayName: "Nemi",
+    description: "This fish must tell really good jokes, if only I could understand",
 };
 const crab = {
     type: "fish",
@@ -1793,8 +1960,11 @@ const crab = {
     zone: "ocean",
     xp: 20,
     value: 4,
-    rarity: "rare",
+    rarity: "common",
     image: "./inventory/crab.png",
+
+    displayName: "Crab",
+    description: "The Crab can be found on shorelines, it can be turned into great soups",
 };
 const hanami = {
     type: "fish",
@@ -1964,48 +2134,66 @@ const treeLeaf = {
     name: "treeLeaf",
     level: 1,
     value: 4,
-    rarity: "rare",
+    rarity: "common",
     image: "./inventory/treeLeaf.png",
+
+    displayName: "Green Leaf",
+    description: "This leaf is common in the Grasslands, it can be combined with fish to make sushi, a culinary delicacy mentioned in the old stories",
 };
 const miniMushroom = {
     type: "quest",
     name: "miniMushroom",
     level: 2,
     value: 4,
-    rarity: "rare",
+    rarity: "common",
     image: "./inventory/miniMushroom.png",
+
+    displayName: "Red Mushroom",
+    description: "A simple red mushroom, very common on the Grasslands",
 };
 const bone = {
     type: "material",
     name: "bone",
     level: 3,
     value: 4,
-    rarity: "rare",
+    rarity: "common",
     image: "./inventory/bone.png",
+
+    displayName: "Bone",
+    description: "This type of bone comes from solar creatures, such as humans. It smells like death",
 };
 const smallCommonMeat = {
     type: "meat",
     name: "smallCommonMeat",
     level: 1,
     value: 4,
-    rarity: "rare",
+    rarity: "common",
     image: "./inventory/smallCommonMeat.png",
+
+     displayName: "Small Common Meat",
+    description: "This meat comes from a small solar creature, it can be cooked and, even if the taste is great, is not super nutritive due to it's small size",
 };
 const slimeGuts = {
     type: "quest",
     name: "slimeGuts",
     level: 1,
     value: 4,
-    rarity: "rare",
+    rarity: "common",
     image: "./inventory/slimeGuts.png",
+
+    displayName: "Slimy Goo",
+    description: "I have no idea what this slimy substance is, but it is definitely not from our world",
 };
  const restfieldBlanket = {
     type: "material",
     name: "restfieldBlanket",
     level: 3,
     value: 4,
-    rarity: "rare",
+    rarity: "common",
     image: "./inventory/restfieldBlanket.png",
+
+    displayName: "Ghost Blanket",
+    description: "Ghosts are solar beings that have been cursed to roam this world forever, they are known to put a blanket on because of how ashamed they are of their rotten appearance",
 };
 const runeBullets = {
     type: "rune",
@@ -2015,6 +2203,12 @@ const runeBullets = {
     code: "054231",
     rarity: "rare",
     image: "./inventory/runeBullets.png",
+
+    displayName: "Common Bullet Rune",
+    negative: 0,
+    get description() {
+        return "This rune will add an extra bullet to your weapon, however it will reduce the damage it deals by " + this.negative
+    },
 };
 const runeFireRate = {
     type: "rune",
@@ -2024,6 +2218,12 @@ const runeFireRate = {
     code: "502341",
     rarity: "rare",
     image: "./inventory/runeFireRate.png",
+
+    displayName: "Common Rate Rune",
+    negative: 0,
+    get description() {
+        return "This rune will make your weapon shoot faster, however it will reduce the damage it deals by " + this.negative
+    },
 };
 const runeRange = {
     type: "rune",
@@ -2033,6 +2233,12 @@ const runeRange = {
     code: "203145",
     rarity: "rare",
     image: "./inventory/runeRange.png",
+
+    displayName: "Common Range Rune",
+    negative: 0,
+    get description() {
+        return "This rune will make your weapon shoot further, however it will reduce the damage it deals by " + this.negative
+    },
 };
 
 //food

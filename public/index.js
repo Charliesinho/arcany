@@ -147,6 +147,9 @@ chatBubble.src = "chatBubble.png";
 const chatBubbleBigger = new Image();
 chatBubbleBigger.src = "chatBubbleBigger.png";
 
+const typingBubble = new Image();
+typingBubble.src = "./Textures/typingBubble.png";
+
 const nameTaglvl1 = new Image();
 nameTaglvl1.src = "./nameTags/nameTaglvl1.png";
 const nameTaglvl2 = new Image();
@@ -731,7 +734,7 @@ Object.entries(inputMappings).forEach(([inputId, mobProp]) => {
     else {
       selectedMob[mobProp] = num;
     }
-    console.log(selectedMob)
+    console.log(selectedMob, value)
   });
 });
 
@@ -1484,14 +1487,14 @@ const recentMessages = new Map();
 
 function showChatFunction(){
   if(!chatIsActivate){
-    chat.style.display = "block";
+    chat.style.opacity = "1";
     chatIsActivate = true;
     
     fishSelectorButton.style.display = 'none'
     fishingAvailablevar = false
 
   }else if(chatIsActivate){
-    chat.style.display = "none";
+    chat.style.opacity = "0";
     chatButton.style.bottom = "10px"
     chatIsActivate = false;
 
@@ -1515,19 +1518,45 @@ function updateHistoryChat(value, sender) {
 
     if (recentMessages.has(messageKey)) {
         const lastAdded = recentMessages.get(messageKey);
-        if (now - lastAdded < 2000) return; // Ignore messages added within the last 2 seconds
+        if (now - lastAdded < 2000) return;
     }
 
-    recentMessages.set(messageKey, now); // Update the timestamp
+    recentMessages.set(messageKey, now);
 
+    if (targetDiv.children.length >= 10) {
+        targetDiv.firstChild.style.opacity = "0";
+        setTimeout(() => {
+            targetDiv.removeChild(targetDiv.firstChild);
+        }, 1000);
+    }
+
+    // Create new chat message with spans
     const newParagraph = document.createElement("p");
-    newParagraph.textContent = senderKey + ": " + value;
     newParagraph.classList.add("chatText");
+
+    const nameSpan = document.createElement("span");
+    nameSpan.textContent = senderKey + ": ";
+    nameSpan.classList.add("chatName");
+
+    const messageSpan = document.createElement("span");
+    messageSpan.textContent = value;
+    messageSpan.classList.add("chatMessage");
+
+    newParagraph.appendChild(nameSpan);
+    newParagraph.appendChild(messageSpan);
     targetDiv.appendChild(newParagraph);
 
-    // Cleanup old messages to prevent memory leak
+    // Reset animation for all messages
+    Array.from(targetDiv.children).forEach(msg => {
+        msg.style.animation = "none";
+        msg.offsetHeight; // force reflow
+        msg.style.animation = null;
+    });
+
     setTimeout(() => recentMessages.delete(messageKey), 2000);
 }
+
+
 
 let keyBlocker = true;
 window.addEventListener("keydown", function (e) {
@@ -1537,6 +1566,8 @@ window.addEventListener("keydown", function (e) {
   }
 });
 
+let typing = false;
+let typingInterval = null;
 
 window.addEventListener("keydown", (e) => {
   if(keyBlocker) return
@@ -1544,25 +1575,31 @@ window.addEventListener("keydown", (e) => {
   if (e?.key === "Enter") {
     e.preventDefault();
     if (chatInput === document.activeElement) {
-            if (chatInput.value) {
-                const chatMessage = chatInput.value;
-                e.preventDefault();  
-                updateHistoryChat(chatInput.value, "myPlayer")         
+      if (chatInput.value) {
+          const chatMessage = chatInput.value;
+          e.preventDefault();  
+          updateHistoryChat(chatInput.value, "myPlayer")         
 
-                socket.emit("chatMessage", chatMessage);
-                chatInput.value = "";
-                chatInput.disabled = true;
-                chatInput.disabled = false;
-                blockMovement = false;
-                noMovement = false
-            }
+          socket.emit("chatMessage", chatMessage);
+          socket.emit("updateTyping", false);
+          chatInput.value = "";
+          chatInput.disabled = true;
+          chatInput.disabled = false;
+          blockMovement = false;
+          noMovement = false
+          typing = false
+          // clearInterval(typingInterval)
+      }
     } else {
-          if(!chatIsActivate) showChatFunction()
-            chatInput.focus();
-            blockMovement = true;
-            noMovement = true
-            setTimeout(() => { 
-            }, 500);
+      if(!chatIsActivate) showChatFunction()
+        chatInput.focus();
+      blockMovement = true;
+      noMovement = true
+      typing = true
+      // typingInterval = setInterval(() => {
+      //     bubbleFrameTyping = (bubbleFrameTyping + 1) % totalFramesTyping;
+      // }, 100);
+      socket.emit("updateTyping", true);
     }
     }
 
@@ -2862,7 +2899,7 @@ let tradedItems = []
 let tradingArray = []
 
 function interactInventory(item, index) {
-  console.log(item)
+
   if (item.type === "soul") {
 
     if(consumeAvailable === true) {
@@ -2871,7 +2908,7 @@ function interactInventory(item, index) {
 
       setTimeout(() => {
         consumeAvailable = true;
-      }, 1000);
+      }, 500);
 
       socket.emit("consumable", item);
       
@@ -3084,7 +3121,7 @@ function interactInventory(item, index) {
 
           setTimeout(() => {
             consumeAvailable = true;
-          }, 1000);
+          }, 500);
 
           inventorySlots[`inventorySlot${index}`].src = `data:,`;
           inventorySlots[`inventorySlot${index}`].removeEventListener("mousedown", (e) => interactInventory(item, index));
@@ -3095,7 +3132,11 @@ function interactInventory(item, index) {
           // } else {
             item.maxPower = maxHealth;
             item.index = myPlayer.inventory.indexOf(item);
-  
+
+            if (item.type == "food") {
+              eat.play()
+              push360Particles("smokeGreen", 30, myPlayer.x, myPlayer.y)
+            }
             socket.emit("consumable", item);
           // }
 
@@ -3283,19 +3324,28 @@ function buyItem (item) {
 
 //Inventory interaction <
 
-function obtainedAnim (image) {
+function obtainedAnim(image) {
 
-  obtainedItem.classList.remove('obtainedAnim');
-  catchGif.classList.remove('starsAnim');
+  const itemClone = obtainedItem.cloneNode(true);
+  const gifClone = catchGif.cloneNode(true);
+
+  itemClone.style.background = `url(${image})`;
+  itemClone.style.backgroundSize = "contain";
+
+  itemClone.classList.add('obtainedAnim');
+  gifClone.classList.add('starsAnim');
+
+  catchGif.parentNode.appendChild(gifClone);
+  obtainedItem.parentNode.appendChild(itemClone);
+
   audioSuccess.play();
 
   setTimeout(() => {
-    obtainedItem.style.background = `url(${image})`;
-    obtainedItem.style.backgroundSize = "contain"
-    obtainedItem.classList.add('obtainedAnim');
-    catchGif.classList.add('starsAnim');
-  }, 500);
+    itemClone.remove();
+    gifClone.remove();
+  }, 3000);
 }
+
 
 function playGainXP (xp) {
   gainXpText.innerHTML = "+" + xp + "xp"
@@ -3391,9 +3441,12 @@ function playerDeath() {
   
   bossFight = false;
   // blackScreen()
+  console.log(areAllPartyMembersAlive(currentParty, players))
+  if (!areAllPartyMembersAlive(currentParty, players)) {
+    // youDied.style.display = "block";
+    respawn.style.display = "block";
+  }
 
-  youDied.style.display = "block";
-  respawn.style.display = "block";
 
 }
 
@@ -3443,7 +3496,10 @@ function blackScreen () {
 }
 
 respawn.addEventListener("click", () => {
-  console.log(currentParty)
+  if (inParty && !isLeader) {
+    errorDisplay("Only the leader can respawn everyone")
+    return;
+  }
   mapsInfo = _.cloneDeep(originalMapsInfo);
   socket.emit("healMax", maxHealth);
   if (inParty && isLeader) {
@@ -3734,6 +3790,7 @@ questClose.addEventListener("click", () => {
 
 let updateDialogs = true;
 let mapObject;
+let firstTimeLoggedIn = true;
 
 socket.on("removeKeyBlocker", () => {
   keyBlocker = false 
@@ -7102,6 +7159,18 @@ socket.on("player", (serverPlayer) => {
     })
   }
 
+  if (firstTimeLoggedIn) {
+    firstTimeLoggedIn = false;
+    if (myPlayer.health <= 0) {
+      socket.emit("healMax", maxHealth);
+      errorDisplay("You were dead last time so you were brought here and healed up by the scouts", "hue-rotate(90deg)")
+      setTimeout(() => {
+        noMovement = false;
+        dying = false;
+        // console.log(dying, noMovement)
+      }, 1000);
+    }
+  }
 
   health()
   updateQuestUI()
@@ -7262,7 +7331,7 @@ socket.on("player", (serverPlayer) => {
       soulsInventory[`soul${myPlayer.souls.indexOf(soul) + 1}`].style.backgroundSize = 'cover';
       soulsInventory[`soul${myPlayer.souls.indexOf(soul) + 1}`].addEventListener("mousedown", (e) => {
         interactInventory(soul);
-        audioEquip.play();
+        // audioEquip.play();
       });
     }
   }
@@ -7272,31 +7341,31 @@ socket.on("player", (serverPlayer) => {
       equippedItems[`soul`].style.background = `url(${item.image})`;
       equippedItems[`soul`].style.backgroundSize = 'cover';
 
-      if (item.name === "frogSoulInventory") {
+      if (item.name === "frogSoulInventory" && !uiSkinsImg.src.includes("uiFrogSkin")) {
         uiSkinsImg.src = "./ui/uiSkins/uiFrogSkin.gif";
       } 
-      else if (item.name === "redDemonSoulInventory") {
+      else if (item.name === "redDemonSoulInventory" && !uiSkinsImg.src.includes("uiDemonSkin")) {
         uiSkinsImg.src = "./ui/uiSkins/uiDemonSkin.gif";
       }
-      else if (item.name === "restfieldSkeletonSoulInventory") {
+      else if (item.name === "restfieldSkeletonSoulInventory" && !uiSkinsImg.src.includes("uiSkeletonSkin")) {
         uiSkinsImg.src = "./ui/uiSkins/uiSkeletonSkin.gif";
       }
-      else if (item.name === "restfieldZombieSoulInventory") {
+      else if (item.name === "restfieldZombieSoulInventory" && !uiSkinsImg.src.includes("uiZombieSkin")) {
         uiSkinsImg.src = "./ui/uiSkins/uiZombieSkin.gif";
       }
-      else if (item.name === "vampiresSoulInventory") {
+      else if (item.name === "vampiresSoulInventory" && !uiSkinsImg.src.includes("uiVampiresSkin")) {
         uiSkinsImg.src = "./ui/uiSkins/uiVampiresSkin.gif";
       }
-      else if (item.name === "pinkDemonSoulInventory") {
+      else if (item.name === "pinkDemonSoulInventory" && !uiSkinsImg.src.includes("uiPinkSkin")) {
         uiSkinsImg.src = "./ui/uiSkins/uiPinkSkin.gif";
       }
-      else if (item.name === "arcanyDemonSoulInventory") {
+      else if (item.name === "arcanyDemonSoulInventory" && !uiSkinsImg.src.includes("uiPurpleSkin")) {
         uiSkinsImg.src = "./ui/uiSkins/uiPurpleSkin.gif";
       }
-      else if (item.name === "reaperSoulInventory") {
+      else if (item.name === "reaperSoulInventory" && !uiSkinsImg.src.includes("uiReaperSkin")) {
         uiSkinsImg.src = "./ui/uiSkins/uiReaperSkin.gif";
       }
-      else if (item.name === "ghostSoulInventory") {
+      else if (item.name === "ghostSoulInventory" && !uiSkinsImg.src.includes("uiGhostSkin")) {
         uiSkinsImg.src = "./ui/uiSkins/uiGhostSkin.gif";
       }
       
@@ -7381,7 +7450,16 @@ function updateInventoryUI() {
     const slot = inventorySlots[`inventorySlot${i}`];
     const item = myPlayer.inventory[i];
 
+    
+    
     slot.src = item ? item.image : "data:image/svg+xml;charset=utf8,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%3E%3C/svg%3E";
+    
+    if (item === undefined) {
+      slot.parentNode.style.opacity = "0.3"
+      // continue;
+    } else {
+      slot.parentNode.style.opacity = "1"
+    }
 
     const newSlot = slot.cloneNode(true);
     slot.parentNode.replaceChild(newSlot, slot);
@@ -7392,10 +7470,60 @@ function updateInventoryUI() {
         audioClick.play();
       });
     } else {
-      newSlot.addEventListener("mousedown", () => {
-        interactInventory(item, i);
-        audioClick.play();
-      });
+
+      
+      if (item) {
+        newSlot.addEventListener("mousedown", () => {
+          interactInventory(item, i);
+          const audioEquip = new Audio("./audios/equip.mp3");
+          audioEquip.loop = false;
+          if (item?.type == "artifact") {
+            audioEquip.play();
+          } else {
+            audioClick.play();
+          }
+        });
+        newSlot.addEventListener("mousemove", (e) => {
+          const tooltipWidth = tooltip.offsetWidth;
+          const tooltipHeight = tooltip.offsetHeight;
+          const offsetX = 10;
+          const offsetY = 10;
+  
+          const spaceBelow = window.innerHeight - e.clientY;
+          const showAbove = spaceBelow < tooltipHeight + 20;
+  
+          const top = showAbove
+            ? e.clientY - tooltipHeight - offsetY
+            : e.clientY + offsetY;
+  
+          tooltip.style.left = `${e.clientX - tooltipWidth - offsetX}px`;
+          tooltip.style.top = `${top}px`;
+        });
+        newSlot.addEventListener("mouseenter", () => {
+          tooltip.querySelector("h1").textContent = item.displayName || item.name;
+          tooltip.style.background = item.rarity === "common" ? "url(./ui/commonTooltip.png)" : item.rarity === "rare" ? "url(./ui/rareTooltip.png)" : item.rarity === "legendary" ? "url(./ui/legendaryTooltip.png)" : "url(./ui/commonTooltip.png)";
+          tooltip.style.backgroundSize = "cover";
+          tooltip.style.color = item.rarity === "legendary" ? "white" : "#3c2c23";
+          tooltip.querySelector("h2").textContent = item.rarity || "-";
+          tooltip.querySelector("h3").textContent = item.level || "0";
+          tooltip.querySelector("h4").textContent = item.durability >= 0 ? item.durability + " dur" : "";
+          tooltip.querySelector("h5").textContent = item.damage ? item.damage + " dmg" : "";
+          tooltip.querySelector("h6").textContent = item.charges >= 0 ? item.charges + " ench" : "";
+          tooltip.querySelector("p").textContent = item.description || "Description not available";
+          tooltip.querySelector("img").src = item.image || null;
+          tooltip.classList.add('pointerActivator');
+          if (item.enchanted === true) {
+            tooltip.classList.add('enchanted');
+          } else {
+            tooltip.classList.remove('enchanted');
+          }
+          tooltip.style.display = "block";
+        });
+  
+        newSlot.addEventListener("mouseleave", () => {
+          tooltip.style.display = "none";
+        });
+      }
     }
 
     inventorySlots[`inventorySlot${i}`] = newSlot;
@@ -7574,6 +7702,8 @@ socket.on("loadMap", (map) => {
   currentLand = areaNameComing
   mapsInfo[areaNameComing] = comingMap
   localPlayerPos = {x: comingMap.playerPos.x, y: comingMap.playerPos.y}
+  playerX = comingMap.playerPos.x;
+  playerY = comingMap.playerPos.y;
 })
 
 let allItemsObj = {}
@@ -7738,7 +7868,7 @@ let fishingInterval;
 let fishingTimeout;
 
 window.addEventListener("keydown", (e) => {
-  if(keyBlocker) return
+  if(keyBlocker || typing) return
   let keyCheck = e?.key?.toLowerCase()
 
   if (keyCheck === "o") {
@@ -7750,7 +7880,7 @@ window.addEventListener("keydown", (e) => {
       footsteps.play();
       footsteps.loop = true;
       animPlayer = "moveUp"
-  
+      
       movingUp = true;
     } else if (keyCheck === "s") {
       footsteps.play();
@@ -7773,28 +7903,39 @@ window.addEventListener("keydown", (e) => {
   
       movingLeft = true;
     } else if (e.code === "Space" && !dashingAllowed) {
-      let oldPlayerSpeed = playerSpeed
-      playerSpeed = 30
+      let oldPlayerSpeed = playerSpeed;
+    
+      // Calculate dash boost using deltaTime — this is device-dependent and OK
+      playerSpeed = (playerSpeed * fixedDeltaTime) * 400;
+    
+      const dashSpeed = playerSpeed - oldPlayerSpeed; // This is the boost amount
+      const dashDuration = 200; // in ms
+      const intervalTime = 50; // ms
+      const steps = dashDuration / intervalTime;
+      const dashDecayPerStep = playerSpeed / steps;
+    
       dashing = true;
-      dashingAllowed = true
+      dashingAllowed = true;
+    
       const dash = new Audio("./audios/dash.wav");
       dash.loop = false;
-      dash.play()
-
+      dash.play();
+    
       const interval = setInterval(() => {
-        playerSpeed -= 10;
-
-        if (playerSpeed < oldPlayerSpeed) {
+        playerSpeed -= dashDecayPerStep;
+    
+        if (playerSpeed <= oldPlayerSpeed) {
           playerSpeed = oldPlayerSpeed;
-          clearInterval(interval)
+          clearInterval(interval);
           dashing = false;
-          
+    
           setTimeout(() => {
-            dashingAllowed = false
+            dashingAllowed = false;
           }, 200);
         }
-      }, 50);
+      }, intervalTime);
     }
+    
 
     if (myPlayer) {
       if(keyBlocker){
@@ -8094,22 +8235,20 @@ let mouseLeftPressed = false;
 let shootInterval;
 
 
-function shootDefaultArcane () {
+function shootDefaultSolar () {
   let angle = angleMouse
   const audioShootNature = new Audio("./audios/shootNature.wav");
   audioShootNature.loop = false;
   audioShootNature.volume = 0.8;
   audioShootNature.play()
 
-  // socket.emit("projectile", angle);
-  // cameraShake();
-
-  // console.log(myPlayer?.weapon[0])
+  let weaponDurabilityLoss = 0;
  
   for (let i = 0; i < myPlayer?.weapon[0].bullets; i++) {
     let spread = 0.1; // Adjust this value to control bullet spread
     let offset = Math.ceil(i / 2) * spread; // Increase spread step by step
     let bulletAngle = (i % 2 === 0) ? angle - offset : angle + offset; // Alternating spread
+    weaponDurabilityLoss -= 1;
 
     projectilesClient.push({
         angle: bulletAngle,
@@ -8118,6 +8257,7 @@ function shootDefaultArcane () {
         timeLeft: myPlayer?.weapon[0].range,
         playerId: socket.id,
         damage: myPlayer?.weapon[0].damage,
+        color: "smokeRed",
     });
 
     let toSend = [
@@ -8129,13 +8269,103 @@ function shootDefaultArcane () {
         timeLeft: myPlayer?.weapon[0].range,
         playerId: socket.id,
         damage: myPlayer?.weapon[0].damage,
+        color: "smokeRed",
       }]
 
     if (inParty) socket.emit("partyProjectile", toSend)
 }
 
+  myPlayer.weapon[0].durability += weaponDurabilityLoss;
 
-  console.log(myPlayer?.weapon[0].bullets)
+  if (myPlayer?.weapon[0].durability < 0) {
+    errorDisplay("Your weapon broke!")
+    socket.emit("weaponBroke")
+    weaponBreak.play()
+    push360Particles("smokeGrey", 30, myPlayer.x, myPlayer.y)
+    return;
+  }
+  else if (myPlayer.weapon[0].maxDurability * 0.05 > myPlayer.weapon[0].durability) {
+    errorDisplay("Your weapon is about to break")
+  }
+
+  socket.emit("weaponDurabilityDown", myPlayer.weapon[0].durability);
+
+  shooting = true;
+
+  setTimeout(() => {
+    shooting = false;
+  }, 20);
+
+  const interval = setInterval(() => {
+      if (mainSkillCooldown > myPlayer?.weapon[0].fireRate) {
+          mainSkillCooldown = 0;
+          recoil = 0
+          clearInterval(interval);
+      }
+      mainSkillCooldown++;
+      recoil += recoil > 9 ? 0 : 3;
+  }, 20);
+}
+function shootDefaultArcane () {
+  let angle = angleMouse
+  const audioShootNature = new Audio("./audios/shootNature.wav");
+  audioShootNature.loop = false;
+  audioShootNature.volume = 0.8;
+  audioShootNature.play()
+
+  // socket.emit("projectile", angle);
+  // cameraShake();
+
+  console.log("helloooooo")
+  let weaponDurabilityLoss = 0;
+ 
+  for (let i = 0; i < myPlayer?.weapon[0].bullets; i++) {
+    let spread = 0.1; // Adjust this value to control bullet spread
+    let offset = Math.ceil(i / 2) * spread; // Increase spread step by step
+    let bulletAngle = (i % 2 === 0) ? angle - offset : angle + offset; // Alternating spread
+    weaponDurabilityLoss -= 1;
+
+    projectilesClient.push({
+        angle: bulletAngle,
+        x: playerX + 20,
+        y: playerY + 50,
+        timeLeft: myPlayer?.weapon[0].range,
+        playerId: socket.id,
+        damage: myPlayer?.weapon[0].damage,
+        color: "smokePurple",
+    });
+
+    let toSend = [
+      currentParty, 
+      {
+        angle: bulletAngle,
+        x: playerX + 20,
+        y: playerY + 50,
+        timeLeft: myPlayer?.weapon[0].range,
+        playerId: socket.id,
+        damage: myPlayer?.weapon[0].damage,
+        color: "smokePurple",
+      }]
+
+    if (inParty) socket.emit("partyProjectile", toSend)
+}
+
+  myPlayer.weapon[0].durability += weaponDurabilityLoss;
+
+  console.log(myPlayer.weapon[0].durability, weaponDurabilityLoss)
+
+  if (myPlayer?.weapon[0].durability < 0) {
+    errorDisplay("Your weapon broke!")
+    socket.emit("weaponBroke")
+    weaponBreak.play()
+    push360Particles("smokeGrey", 30, myPlayer.x, myPlayer.y)
+    return;
+  }
+  else if (myPlayer.weapon[0].maxDurability * 0.05 > myPlayer.weapon[0].durability) {
+    errorDisplay("Your weapon is about to break")
+  }
+
+  socket.emit("weaponDurabilityDown", myPlayer.weapon[0].durability);
 
   shooting = true;
 
@@ -8172,6 +8402,7 @@ function shootArcaneRepeater () {
       timeLeft: 10,
       playerId: socket.id,
       damage: 0.5,
+      color: "smokePurple",
     }) 
 
     projectilesClient.push({
@@ -8181,6 +8412,7 @@ function shootArcaneRepeater () {
       timeLeft: 10,
       playerId: socket.id,
       damage: 0.5,
+      color: "smokePurple",
     }) 
 
     projectilesClient.push({
@@ -8190,6 +8422,7 @@ function shootArcaneRepeater () {
       timeLeft: 10,
       playerId: socket.id,
       damage: 0.5,
+      color: "smokePurple",
     }) 
 
   shooting = true;
@@ -8225,6 +8458,7 @@ function shootArcaneLancer () {
     timeLeft: 30,
     playerId: socket.id,
     damage: 5,
+    color: "smokePurple",
   }) 
 
   
@@ -8261,78 +8495,14 @@ canvasLobby.addEventListener("mousedown", (e) => {
                 shootDefaultArcane()
               }
             }, 200)
-            }
-            else if (myPlayer?.weapon[0].name === "solarStaffCommon") {
-  
-              projectilesClient.push({
-                angle,
-                x: playerX + 20,
-                y: playerY + 50,
-                timeLeft: 100,
-                playerId: socket.id,
-              }) 
-  
-              shooting = true;
-  
-              setTimeout(() => {
-                shooting = false;
-              }, 20);
-    
-              const interval = setInterval(() => {
-                  if (mainSkillCooldown > 2) {
-                      mainSkillCooldown = 0;
-                      recoil = 0
-                      clearInterval(interval);
-                  }
-                  mainSkillCooldown++;
-                  recoil += 4
-              }, 20);
-            }
-            else if (myPlayer?.weapon[0].name === "nuclearStaffCommon") {
-  
-              projectilesClient.push({
-                angle,
-                x: playerX + 20,
-                y: playerY + 50,
-                timeLeft: 200,
-                playerId: socket.id,
-              }) 
-  
-              shooting = true;
-  
-              setTimeout(() => {
-                shooting = false;
-              }, 20);
-    
-              const interval = setInterval(() => {
-                  if (mainSkillCooldown > 2) {
-                      mainSkillCooldown = 0;
-                      recoil = 0
-                      clearInterval(interval);
-                  }
-                  mainSkillCooldown++;
-                  recoil += 4
-              }, 20);
-            }
-  
-            else if (myPlayer?.weapon[0].name === "arcaneRepeaterInv") {
-  
-            shootArcaneRepeater()
+          } else if (myPlayer?.weapon[0].name.includes("solar")) {
+            shootDefaultSolar()
             shootInterval = setInterval(() => {
               if (mainSkillCooldown === 1 || mainSkillCooldown === 0) {
-                shootArcaneRepeater()
+                shootDefaultSolar()
               }
-            }, 100)
-            }
-            else if (myPlayer?.weapon[0].name === "arcaneLancerInv") {
-            shootArcaneLancer()
-            shootInterval = setInterval(() => {
-              if (mainSkillCooldown === 1 || mainSkillCooldown === 0) {
-                shootArcaneLancer()
-              }
-            }, 100)
-            }
-  
+            }, 200)
+          }
         }
       }
     }
@@ -8366,7 +8536,7 @@ let playerHeight = humanSkin.height / 6;
 let playerZoomX = 291.6;
 let playerZoomY = 291.6;
 let generalZoom = 5;
-let playerSpeed = 4;
+let playerSpeed = 350;
 
 let framesPlayerTotal = 6;
 let frameCurrentPlayer = 0;
@@ -8693,6 +8863,9 @@ let transitionTimeout = false;
 
 function transition (format) {
   if (!isLeader && inParty) return;
+  if (transitionTimeout) return;
+
+  console.log("Setting player POS to: ", localPlayerPos, " in ", currentLand)
 
   mapsInfo[currentLand].playerPos = {x: localPlayerPos.x, y: localPlayerPos.y}
 
@@ -8708,7 +8881,9 @@ function transition (format) {
 }
 function changeMap (dynamicFunctionName) {
   socket.emit("requestChangeRoom", currentSelectedMap);
-  console.log(currentSelectedMap)
+
+  console.log("Changing maps function running")
+
   setTimeout(() => {
     if (DayCycleState == 0) activateDayMobs()
   }, 5000);
@@ -8777,6 +8952,7 @@ function transitionLiquid() {
   if (transitionTimeout === false) {
     transitionTimeout = true;  
     movezone.play()
+    console.log("Starting transition liquid to ", currentSelectedMap)
     
     const gifUrl = "./Textures/liquidTransition.gif"; // Remove `url("")` from the string
     const newGifUrl = gifUrl + "?" + new Date().getTime(); // Append a timestamp to force reload
@@ -8794,7 +8970,7 @@ function transitionLiquid() {
     setTimeout(() => {
       changeMap(dynamicFunctionName);
       socket.emit("changeRoom", currentSelectedMap);
-      socket.emit("leaderChangeRoom", [currentSelectedMap, currentParty, playerX, playerY])
+      if (inParty && isLeader) socket.emit("leaderChangeRoom", [currentSelectedMap, currentParty, playerX, playerY])
     }, 1800);   
     
     setTimeout(() => {
@@ -11123,11 +11299,19 @@ function shortestAngleDiff(a, b) {
   return diff;
 }
 
+function areAllPartyMembersAlive(currentParty, players) {
+  return currentParty.some(partyMember => {
+    const fullPlayer = players.find(p => p.id === partyMember.id);
+    return fullPlayer && fullPlayer.health > 0;
+  });
+}
+
+
 
 const DayCycleFilters = [
   'sepia(0%) hue-rotate(0deg) saturate(1) contrast(1) brightness(1)',  
   'sepia(64%) hue-rotate(-39deg) saturate(2) contrast(.9) brightness(.9)', 
-  'sepia(0%) hue-rotate(0deg) saturate(1) contrast(1) brightness(0.7)', 
+  'sepia(0%) hue-rotate(-0deg) saturate(0.5) contrast(2) brightness(0.7)', 
   'sepia(64%) hue-rotate(-39deg) saturate(2) contrast(.9) brightness(.9)'
 ];
 
@@ -11224,33 +11408,61 @@ function mapSetup () {
     // Set cameras
     if (!cutscene) {
     
-      if (
-        playerX - canvasLobby.width / 2 + 10 >= 0 && 
-        playerX + canvasLobby.width / 2 + 10 <= 4300
-      ) {
-        angleDifferenceX = 0;
-        secondaryCameraX = playerX - canvasLobby.width / 2 + 10;
-      } else if (playerX - canvasLobby.width / 2 + 10 >= 0) {
-        secondaryCameraX = 4300 - canvasLobby.width;
-        angleDifferenceX = (playerX - canvasLobby.width / 2 + 10) - (4300 - canvasLobby.width)
-      } else {
-        secondaryCameraX = -100;
-        angleDifferenceX = (playerX - canvasLobby.width / 2 + 10) - (-100)
+     // Default to local player
+    let cameraTarget = {
+      x: playerX,
+      y: playerY
+    };
+
+    // If dying, look for an alive party member
+    if (dying && inParty) {
+      for (let i = 0; i < currentParty.length; i++) {
+        const partyMemberId = currentParty[i].id;
+        const partyPlayer = players.find(p => p.id === partyMemberId);
+
+        if (partyPlayer && partyPlayer.health > 0) {
+          cameraTarget.x = partyPlayer.x;
+          cameraTarget.y = partyPlayer.y;
+          break;
+        }
       }
 
-      if (
-        playerY - canvasLobby.height / 2 + 50 >= 0 && 
-        playerY + canvasLobby.height / 2 + 50 <= 4300 
-      ) {
-        angleDifferenceY = 0;
-        secondaryCameraY = playerY - canvasLobby.height / 2 + 50;
-      } else if (playerY - canvasLobby.height / 2 + 50 >= 0) {
-        secondaryCameraY = 4300 - canvasLobby.height;
-        angleDifferenceY = (playerY - canvasLobby.height / 2 + 10) - (4300 - canvasLobby.height)
-      } else {
-        secondaryCameraY = -100;
-        angleDifferenceY = (playerY - canvasLobby.height / 2 + 10) - (-100)
+      if (dying && !areAllPartyMembersAlive(currentParty, players)) {
+        // youDied.style.display = "block";
+        respawn.style.display = "block";
       }
+    }
+
+    // X camera logic
+    if (
+      cameraTarget.x - canvasLobby.width / 2 + 10 >= 0 && 
+      cameraTarget.x + canvasLobby.width / 2 + 10 <= 4300
+    ) {
+      angleDifferenceX = 0;
+      secondaryCameraX = cameraTarget.x - canvasLobby.width / 2 + 10;
+    } else if (cameraTarget.x - canvasLobby.width / 2 + 10 >= 0) {
+      secondaryCameraX = 4300 - canvasLobby.width;
+      angleDifferenceX = (cameraTarget.x - canvasLobby.width / 2 + 10) - (4300 - canvasLobby.width);
+    } else {
+      secondaryCameraX = -100;
+      angleDifferenceX = (cameraTarget.x - canvasLobby.width / 2 + 10) - (-100);
+    }
+
+    // Y camera logic
+    if (
+      cameraTarget.y - canvasLobby.height / 2 + 50 >= 0 && 
+      cameraTarget.y + canvasLobby.height / 2 + 50 <= 4300 
+    ) {
+      angleDifferenceY = 0;
+      secondaryCameraY = cameraTarget.y - canvasLobby.height / 2 + 50;
+    } else if (cameraTarget.y - canvasLobby.height / 2 + 50 >= 0) {
+      secondaryCameraY = 4300 - canvasLobby.height;
+      angleDifferenceY = (cameraTarget.y - canvasLobby.height / 2 + 10) - (4300 - canvasLobby.height);
+    } else {
+      secondaryCameraY = -100;
+      angleDifferenceY = (cameraTarget.y - canvasLobby.height / 2 + 10) - (-100);
+    }
+
       cameraFollow();
       
     } else {
@@ -11421,6 +11633,10 @@ function drawSceneLayer(layer, num) {
     } else if (item.type === 'onlinePlayer') {
       drawOnlinePlayers(item.player, item.smoothPlayer);
     } else if (item.type === 'player') {
+      particlesActor()
+      shootingParticles()
+      dashParticles()
+      drawLocalBullets()
       drawLocalPlayer();
     }
   }
@@ -11464,27 +11680,28 @@ function drawOnTop (img, x, y, width, height, cx, cy, anim) {
 }
 
 function localPlayerMovement () {
+  // console.log(deltaTime)
   if (movingLeft && allowedMoveUpLeft) {
     inputs["left"] = true;
-    playerX -= playerSpeed;
+    playerX -= playerSpeed * fixedDeltaTime;
   } else {
     inputs["left"] = false;
   }
   if (movingRight && allowedMoveUpRight) {
     inputs["right"] = true;
-    playerX += playerSpeed;
+    playerX += playerSpeed * fixedDeltaTime;
   } else {
     inputs["right"] = false;
   }
   if (movingUp && allowedMoveUpUp) {
     inputs["up"] = true;
-    playerY -= playerSpeed;
+    playerY -= playerSpeed * fixedDeltaTime;
   } else {
     inputs["up"] = false;
   }
   if (movingDown && allowedMoveUpDown) {
     inputs["down"] = true;
-    playerY += playerSpeed;
+    playerY += playerSpeed * fixedDeltaTime;
   } else {
     inputs["down"] = false;
   }
@@ -11700,7 +11917,7 @@ function drawColliders (type, x, y, w, h) {
         height: h
       }
 
-      canvas.fillRect(colliderToCheck.x, colliderToCheck.y, colliderToCheck.width, colliderToCheck.height);
+      // canvas.fillRect(colliderToCheck.x, colliderToCheck.y, colliderToCheck.width, colliderToCheck.height);
 
       let collidingX = "free";
       let collidingY = "free";
@@ -12462,7 +12679,21 @@ function drawUsername () {
   }
 }
 
+let bubbleFrameTyping = 0;
+const totalFramesTyping = 8;
+const frameWidthTyping = 21;
+const frameHeightTyping = 12;
+let waiterFrames = 0;
+
 function drawChat () {
+  waiterFrames++
+  
+  
+  if (waiterFrames > 5) {
+    waiterFrames = 0;
+    bubbleFrameTyping = (bubbleFrameTyping + 1) % 8;
+  }
+
   function drawChatBubble (img, player, x, xd, y, yd, w, h, cx, cy ) {
     canvas.drawImage(img, x + xd, y + yd, w , h)
     canvas.beginPath();
@@ -12471,44 +12702,53 @@ function drawChat () {
     canvas.fillStyle = "black";
     canvas.fillText(player.chatMessage, x +cx, y -cy);
   }
+  function drawChatBubbleAnim (img, player, x, xd, y, yd, w, h, cx, cy ) {
+    const sx = bubbleFrameTyping * frameWidthTyping;
+    const sy = 0;
+
+    canvas.drawImage(img, sx, sy, frameWidthTyping, frameHeightTyping, x + xd, y + yd, w, h);
+  }
+
   for (const player of players) {
     if (player.room === myPlayer.room && player.username === myPlayer.username) {
+      
       if (player.chatMessage !== "none") {
-        console.log(player.chatMessage.length)
         if (player.chatMessage.length > 20) {
           drawChatBubble(chatBubbleBigger, player, playerX - cameraX, -190, playerY - cameraY, -115, 400, 60, 5, 90 )
         } else {
           drawChatBubble(chatBubble, player, playerX - cameraX, -90, playerY - cameraY, -115, 200, 60, 15, 90 )
         }
+      } else if (typing) {
+        drawChatBubbleAnim(typingBubble, player, playerX - cameraX, -40, playerY - cameraY, -115, 100, 60, 5, 90 )
       }
     }
     else if (player.room === myPlayer.room) {
+      let smoothPlayer = Object.values(smoothPlayers).find(Splayer => Splayer.username === player.username)
       if (player.chatMessage !== "none") {
-        let smoothPlayer = Object.values(smoothPlayers).find(Splayer => Splayer.username === player.username)
-        // canvas.drawImage(chatBubble, smoothPlayer.smoothX - cameraX -85, smoothPlayer.smoothY - cameraY -115, 200, 60)
-        // canvas.beginPath();
-        // canvas.font = "bolder 16px Tiny5";
-        // canvas.textAlign = "center";
-        // canvas.fillStyle = "black";
-        // canvas.fillText(player.chatMessage, smoothPlayer.smoothX - cameraX +15, smoothPlayer.smoothY - cameraY -90);
-
         if (player.chatMessage.length > 20) {
           drawChatBubble(chatBubbleBigger, player, smoothPlayer.smoothX - cameraX, -190, smoothPlayer.smoothY - cameraY, -115, 400, 60, 5, 90 )
         } else {
           drawChatBubble(chatBubble, player, smoothPlayer.smoothX - cameraX, -90, smoothPlayer.smoothY - cameraY, -115, 200, 60, 15, 90 )
-        }
+        } 
 
-        if (player.chatTimer === 80) {
+        if (player.chatTimer === 700) {
           updateHistoryChat(player.chatMessage, player)
         }
+      } else if (player.typing) {
+        drawChatBubbleAnim(typingBubble, player, smoothPlayer.smoothX - cameraX, -40, smoothPlayer.smoothY - cameraY, -115, 100, 60, 5, 90 )
       }
     }
   } 
 }
 
+let bulletAmountController = 0;
+
 function drawLocalBullets () {
   for (const projectile of projectilesClient) {
     projectile.timeLeft--
+
+    bulletAmountController++;
+    if (bulletAmountController === 10) bulletAmountController = 0;
 
     let wallCollision = drawColliders("bullet", projectile.x, projectile.y, 40, 40)
     if (wallCollision) {
@@ -12517,201 +12757,201 @@ function drawLocalBullets () {
 
     if (projectile.enemy) {
       canvas.drawImage(bulletStick, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
-      push360Particles("yellow", 1, projectile.x + 20, projectile.y - 50)
+       if (bulletAmountController === 0) push360Particles("yellow", 1, projectile.x + 0, projectile.y - 60)
     } 
     else {
-      if (myPlayer?.weapon[0]?.name === "solarStaffCommon") {
+      if (myPlayer?.weapon[0]?.name.includes("solar")) {
         canvas.drawImage(bulletStick, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
-        push360Particles("red", 1, projectile.x + 20, projectile.y - 50)
+        if (bulletAmountController === 0) push360Particles(projectile.color, 1, projectile.x + 20, projectile.y - 50)
       }
-      if (myPlayer?.weapon[0]?.name === "arcaneStaffCommon" || myPlayer?.weapon[0]?.name === "arcaneRepeaterInv" || myPlayer?.weapon[0]?.name === "arcaneLancerInv") {
+      if (myPlayer?.weapon[0]?.name.includes("arcane")) {
         canvas.drawImage(bulletStickBlue, projectile.x - cameraX, projectile.y - cameraY -10, 40, 40)
-        push360Particles("purple", 1, projectile.x + 20, projectile.y - 50)
+        if (bulletAmountController === 0) push360Particles(projectile.color, 1, projectile.x + 20, projectile.y - 50)
       }
     }
 
     if (projectile.timeLeft < 0) {
       projectilesClient.splice(projectilesClient.indexOf(projectile), 1)
-      push360Particles("white", 5, projectile.x + 20, projectile.y - 50)
+      push360Particles("white", 10, projectile.x + 20, projectile.y - 50)
     }
   }
 }
 
-function drawSlimeEnemy () {
-  for (const enemy of enemiesClient) {
+// function drawSlimeEnemy () {
+//   for (const enemy of enemiesClient) {
 
-    if (enemy.enabled) {
+//     if (enemy.enabled) {
       
-      frameCurrentEnemy = frameCurrentEnemy % 4;
-      enemyCutX = frameCurrentEnemy * enemyWidth;
+//       frameCurrentEnemy = frameCurrentEnemy % 4;
+//       enemyCutX = frameCurrentEnemy * enemyWidth;
 
-      if (enemy.health <= 0) { 
-        spawnSlime()
-        socket.emit("enemyKilled", "slime");
-        enemiesClient.splice(enemiesClient.indexOf(enemy), 1)
+//       if (enemy.health <= 0) { 
+//         spawnSlime()
+//         socket.emit("enemyKilled", "slime");
+//         enemiesClient.splice(enemiesClient.indexOf(enemy), 1)
 
-        for (let i = 0; i < 20; i++) {
-          const angle = angleMouse + (Math.random() * 0.5 * 2 - 0.2) ;; // Random angle
-          const speed = Math.floor(Math.random() * (20 - 8 + 1)) + 5;; // Random speed (adjust as needed)
-          const size = 25; // Random size between 3 and 8
-          const particleX = enemy.x;
-          const particleY = enemy.y;
+//         for (let i = 0; i < 20; i++) {
+//           const angle = angleMouse + (Math.random() * 0.5 * 2 - 0.2) ;; // Random angle
+//           const speed = Math.floor(Math.random() * (20 - 8 + 1)) + 5;; // Random speed (adjust as needed)
+//           const size = 25; // Random size between 3 and 8
+//           const particleX = enemy.x;
+//           const particleY = enemy.y;
     
-          const randomNumber = Math.floor(Math.random() * 2) + 1;
+//           const randomNumber = Math.floor(Math.random() * 2) + 1;
           
-          if (randomNumber === 1) {
+//           if (randomNumber === 1) {
 
-            particles.push({ x: 1, y: 1, size: size, color: '#6d64b6', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partSlime"].speedDec, sizeDecrease: particlesSystem["partSlime"].sizeDec, name: particlesSystem["partSlime"].name });
+//             particles.push({ x: 1, y: 1, size: size, color: '#6d64b6', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partSlime"].speedDec, sizeDecrease: particlesSystem["partSlime"].sizeDec, name: particlesSystem["partSlime"].name });
                   
-          } else {
+//           } else {
     
-            particles.push({ x: 1, y: 1, size: size, color: '#afa6ff', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partSlime"].speedDec, sizeDecrease: particlesSystem["partSlime"].sizeDec, name: particlesSystem["partSlime"].name });
-          }
+//             particles.push({ x: 1, y: 1, size: size, color: '#afa6ff', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partSlime"].speedDec, sizeDecrease: particlesSystem["partSlime"].sizeDec, name: particlesSystem["partSlime"].name });
+//           }
     
-        }
-      }
+//         }
+//       }
       
-      if (enemy.damaged > 0) {
+//       if (enemy.damaged > 0) {
 
-        enemy.damaged--
+//         enemy.damaged--
 
-          canvas.drawImage(
-            slimeDMG,
-            enemyCutX,
-            enemyCutY,
-            enemyWidth,
-            enemyHeight,
-            enemy.x - cameraX - 30,
-            enemy.y - cameraY,
-            enemy.width * 1.5,
-            enemy.height * 1.5
-          );
+//           canvas.drawImage(
+//             slimeDMG,
+//             enemyCutX,
+//             enemyCutY,
+//             enemyWidth,
+//             enemyHeight,
+//             enemy.x - cameraX - 30,
+//             enemy.y - cameraY,
+//             enemy.width * 1.5,
+//             enemy.height * 1.5
+//           );
 
-            enemy.x += Math.cos(enemy.angle) * enemy.damaged ;
-            enemy.y += Math.sin(enemy.angle) * enemy.damaged;
+//             enemy.x += Math.cos(enemy.angle) * enemy.damaged ;
+//             enemy.y += Math.sin(enemy.angle) * enemy.damaged;
 
-            if (enemy.damaged > 8) {
+//             if (enemy.damaged > 8) {
 
               
 
-              for (let i = 0; i < 3; i++) {
-                const angle = angleMouse + (Math.random() * 0.5 * 2 - 0.2); // Random angle
-                const speed = Math.floor(Math.random() * (20 - 8 + 1)) + 13;; // Random speed (adjust as needed)
-                const size = 15; // Random size between 3 and 8
-                const particleX = enemy.x;
-                const particleY = enemy.y;
+//               for (let i = 0; i < 3; i++) {
+//                 const angle = angleMouse + (Math.random() * 0.5 * 2 - 0.2); // Random angle
+//                 const speed = Math.floor(Math.random() * (20 - 8 + 1)) + 13;; // Random speed (adjust as needed)
+//                 const size = 15; // Random size between 3 and 8
+//                 const particleX = enemy.x;
+//                 const particleY = enemy.y;
           
-                const randomNumber = Math.floor(Math.random() * 2) + 1;
+//                 const randomNumber = Math.floor(Math.random() * 2) + 1;
                 
-                if (randomNumber === 1) {
+//                 if (randomNumber === 1) {
 
-                  particles.push({ x: 1, y: 1, size: size, color: '#6d64b6', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partSlime"].speedDec, sizeDecrease: particlesSystem["partSlime"].sizeDec, name: particlesSystem["partSlime"].name });
+//                   particles.push({ x: 1, y: 1, size: size, color: '#6d64b6', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partSlime"].speedDec, sizeDecrease: particlesSystem["partSlime"].sizeDec, name: particlesSystem["partSlime"].name });
                         
-                } else {
+//                 } else {
           
-                  particles.push({ x: 1, y: 1, size: size, color: '#afa6ff', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partSlime"].speedDec, sizeDecrease: particlesSystem["partSlime"].sizeDec, name: particlesSystem["partSlime"].name });
-                }
+//                   particles.push({ x: 1, y: 1, size: size, color: '#afa6ff', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partSlime"].speedDec, sizeDecrease: particlesSystem["partSlime"].sizeDec, name: particlesSystem["partSlime"].name });
+//                 }
           
-              }
+//               }
 
-            }
+//             }
 
 
           
-        } else {
-          if (enemyHitAudio.currentTime > 0) {
-            enemyHitAudio.currentTime = 0
-            enemyHitAudio.pause()
-          }
-          enemyWidth = slime.width / 4
-          enemyHeight = slime.height / 1;
+//         } else {
+//           if (enemyHitAudio.currentTime > 0) {
+//             enemyHitAudio.currentTime = 0
+//             enemyHitAudio.pause()
+//           }
+//           enemyWidth = slime.width / 4
+//           enemyHeight = slime.height / 1;
 
-          canvas.drawImage(
-            slime,
-            enemyCutX,
-            enemyCutY,
-            enemyWidth,
-            enemyHeight,
-            enemy.x - cameraX - 30,
-            enemy.y - cameraY,
-            enemy.width * 1.5,
-            enemy.height * 1.5
-          );
+//           canvas.drawImage(
+//             slime,
+//             enemyCutX,
+//             enemyCutY,
+//             enemyWidth,
+//             enemyHeight,
+//             enemy.x - cameraX - 30,
+//             enemy.y - cameraY,
+//             enemy.width * 1.5,
+//             enemy.height * 1.5
+//           );
 
-          if (enemy.x > enemy.nextTarget.x) {
-            enemy.x -= enemy.speed;
-          } else if (enemy.x < enemy.nextTarget.x) {
-              enemy.x += enemy.speed;
-          } 
+//           if (enemy.x > enemy.nextTarget.x) {
+//             enemy.x -= enemy.speed;
+//           } else if (enemy.x < enemy.nextTarget.x) {
+//               enemy.x += enemy.speed;
+//           } 
   
-          if (enemy.y > enemy.nextTarget.y) {
-              enemy.y -= enemy.speed;
-          } else if (enemy.y < enemy.nextTarget.y) {
-              enemy.y += enemy.speed;
-          } 
-        }
+//           if (enemy.y > enemy.nextTarget.y) {
+//               enemy.y -= enemy.speed;
+//           } else if (enemy.y < enemy.nextTarget.y) {
+//               enemy.y += enemy.speed;
+//           } 
+//         }
         
-        enemy.nextTargetCount--;
-        if (enemy.nextTargetCount <= 0) {
-          enemy.nextTarget = slimeGetRandomCoords();
-          enemy.nextTargetCount = Math.floor(Math.random() * 100) + 50;;
-        }
+//         enemy.nextTargetCount--;
+//         if (enemy.nextTargetCount <= 0) {
+//           enemy.nextTarget = slimeGetRandomCoords();
+//           enemy.nextTargetCount = Math.floor(Math.random() * 100) + 50;;
+//         }
           
-        const username = myPlayer.id; 
-        const distance = Math.sqrt(
-          (myPlayer.x + 15 - enemy.x) ** 2 + (myPlayer.y + 15 - enemy.y) ** 2
-        );
-        if (distance <= 15 && !myPlayer.invincible) {
+//         const username = myPlayer.id; 
+//         const distance = Math.sqrt(
+//           (myPlayer.x + 15 - enemy.x) ** 2 + (myPlayer.y + 15 - enemy.y) ** 2
+//         );
+//         if (distance <= 15 && !myPlayer.invincible) {
           
-          if (myPlayer.health > 1) {
-            myPlayer.health -= 1;
-            // updateHealth(username, myPlayer.health, myPlayer.id);
-          } else {
-            myPlayer.x = 1280;
-            myPlayer.y = 1220;
-            myPlayer.health = 3;
-            // updateHealth(username, myPlayer.health, myPlayer.id);
-          }
-          myPlayer.invincible = true;
-          break;
-        }
+//           if (myPlayer.health > 1) {
+//             myPlayer.health -= 1;
+//             // updateHealth(username, myPlayer.health, myPlayer.id);
+//           } else {
+//             myPlayer.x = 1280;
+//             myPlayer.y = 1220;
+//             myPlayer.health = 3;
+//             // updateHealth(username, myPlayer.health, myPlayer.id);
+//           }
+//           myPlayer.invincible = true;
+//           break;
+//         }
         
-        for (const projectile of projectilesClient) {
-          if (projectile.x > enemy.x && projectile.x < enemy.x + 100 && projectile.y > enemy.y && projectile.y < enemy.y + 100 && enemy.damaged === 0 && myPlayer?.weapon[0]?.name === "solarStaffCommon") {
-            enemy.damaged = 10;
-            enemy.angle = projectile.angle || projectile.bullet1 || projectile.bullet2;
-            projectilesClient.splice(projectilesClient.indexOf(projectile), 1)
-            enemy.health = enemy.health - generalLevelCombat
+//         for (const projectile of projectilesClient) {
+//           if (projectile.x > enemy.x && projectile.x < enemy.x + 100 && projectile.y > enemy.y && projectile.y < enemy.y + 100 && enemy.damaged === 0 && myPlayer?.weapon[0]?.name === "solarStaffCommon") {
+//             enemy.damaged = 10;
+//             enemy.angle = projectile.angle || projectile.bullet1 || projectile.bullet2;
+//             projectilesClient.splice(projectilesClient.indexOf(projectile), 1)
+//             enemy.health = enemy.health - generalLevelCombat
 
-            if (enemy.health > 0) {
-              enemyHitAudio.play()
-            } else {
-              splatAudio.play()
-            }
-          }
+//             if (enemy.health > 0) {
+//               enemyHitAudio.play()
+//             } else {
+//               splatAudio.play()
+//             }
+//           }
         
-        }
+//         }
     
             
-    } else {
-        enemy.disabledTimer--;
-        if (enemy.disabledTimer <= 0) {
-            enemy.disabledTimer = 500;
-            enemy.enabled = true;
-        }
-    }
-  }
-  enemyAnimDelay--
-  if (enemyAnimDelay <= 0)
-  {
-    enemyFramesDrawn++
-    if (enemyFramesDrawn >= framesEnemyTotal) {
-      frameCurrentEnemy++;
-      enemyFramesDrawn = 0;
-    }
-    enemyAnimDelay = 2;
-  }
-}
+//     } else {
+//         enemy.disabledTimer--;
+//         if (enemy.disabledTimer <= 0) {
+//             enemy.disabledTimer = 500;
+//             enemy.enabled = true;
+//         }
+//     }
+//   }
+//   enemyAnimDelay--
+//   if (enemyAnimDelay <= 0)
+//   {
+//     enemyFramesDrawn++
+//     if (enemyFramesDrawn >= framesEnemyTotal) {
+//       frameCurrentEnemy++;
+//       enemyFramesDrawn = 0;
+//     }
+//     enemyAnimDelay = 2;
+//   }
+// }
 
 function drawDevWallsPlacement () {
   if (currentlyPlacingWall) {
@@ -12967,7 +13207,7 @@ function activateDayMobs() {
 
 function drawEnemy (enemy) {
   // mapsInfo[currentLand].enemies?.forEach(enemy => {
-
+    // console.log(enemy.currentStateName)
     if (enemy.active === false) {
       enemy.imgch = enemy.imgh * 9
       canvas.drawImage(
@@ -13089,6 +13329,9 @@ function handleEnemyDeath (enemy) {
     }
 }
 
+let targetedPlayerTimeout = null;
+let enemyAttackInterval = null;
+
 function checkEnemyCombat (enemy) {
   if (enemy.damaged > 0) {
     enemy.damaged--
@@ -13126,6 +13369,7 @@ function checkEnemyCombat (enemy) {
           enemy.spawn.x = baseSpawn.x;
           enemy.spawn.y = baseSpawn.y;
           enemy.health = enemy.maxHealth
+          enemy.frames = 0;
           mapsInfo[currentLand].enemies.push(enemy)
           if (DayCycleState == 0) {
             activateDayMobs()
@@ -13154,21 +13398,31 @@ function checkEnemyCombat (enemy) {
       && enemy.damaged === 0 
       && !projectile.enemy
       ) {
-      if (!enemy.targetPlayer && isLeader) {
+        console.log(enemy, projectile)
+        if (enemy.type) {
+          if (enemy.type == "solar" && !projectile.color.includes("Purple")) {
+            return;
+          }
+          else if (enemy.type == "arcane" && !projectile.color.includes("Red")) {
+            return;
+          }
+        }
+      if (isLeader) {
         let playerChosen;
+        // clearTimeout(targetedPlayerTimeout)
         for (let indPlayer of players) {
           if (indPlayer.id == projectile.playerId) {
             playerChosen = indPlayer;
           }
         }
-        console.log(playerChosen)
-        enemy.targetPlayer = playerChosen;
+        console.log(currentParty)
+        enemy.targetPlayer = playerChosen.id;
 
-        setTimeout(() => {
-          if (enemy) enemy.targetPlayer = null;
-        }, 5000);
+        // targetedPlayerTimeout = setTimeout(() => {
+        //   if (enemy) enemy.targetPlayer = null;
+        // }, 10000);
       }
-      enemy.damaged = 2;
+      enemy.damaged = 6;
       enemy.angle = projectile.angle || projectile.bullet1 || projectile.bullet2;
       projectile.timeLeft = projectile.timeLeft > 1 ? 1 : projectile.timeLeft;
       enemy.health = enemy.health - projectile.damage;
@@ -13221,45 +13475,73 @@ function checkEnemyCombat (enemy) {
 }
 
 function handleEnemyState(enemy) {
-  if (enemy.stateTimer) return;
-  let validStates = [];
-  for (let state of enemy.states) {
-    if (state != null) {
-      // enemy.states.splice(enemy.states.indexOf(state), 1)
-      validStates.push(state)
-    }
-  }
+  if (enemy.stateActive || !enemy.active) return;
+
+  let validStates = enemy.states.filter(s => typeof s === "string" && s.trim() !== "");
+
+  if (validStates.length === 0) return; // No valid states, skip
 
   if (isLeader || !inParty) {
-    enemy.stateTimer = setTimeout(() => {
-      enemy.frames = 0;
-      enemy.stateTimer = null;
-      const states = validStates;
-      const chosenState = states[Math.floor(Math.random() * states.length)];
-      executeStateForDuration(enemy, window[chosenState], enemy.enemyStateInt);
-    }, enemy.enemyStateInt);
+    enemy.frames = 0;
+    const chosenState = validStates[Math.floor(Math.random() * validStates.length)];
+
+    enemy.stateFunction = typeof window[chosenState] === "function" ? window[chosenState] : null;
+    enemy.stateDuration = enemy.enemyStateInt;
+    enemy.stateStartTime = performance.now();
+    enemy.stateActive = true;
+
+    // Reset stateLastTick so the interval timer starts fresh
+    enemy.stateLastTick = 0;
+
+    // Reset attack permission to true when starting a new state
+    enemy.attackInterval = true;
+
+    // Always explicitly set a name here
+    enemy.currentStateName = chosenState;
   }
 }
 
-function executeStateForDuration(enemy, stateFunction, duration) {
-  const interval = 50;
-  const repetitions = duration / interval;
-  let counter = 0;
-  if (typeof stateFunction !== "function") return;
+function updateEnemyState(enemy, now) {
+  if (!enemy.stateActive) return;
+  if (waiterFrames != 0) return;
 
-  const intervalId = setInterval(() => {
-    stateFunction(enemy);
-    if (counter >= repetitions || !mapsInfo[currentLand].enemies.includes(enemy) || dying) {
-      clearInterval(intervalId)
-      enemy.currentStateName = "idle"
-    };
-    counter++;
-  }, interval);
+  if (typeof enemy.stateFunction !== "function") {
+    enemy.stateActive = false;
+    enemy.currentStateName = "idle";
+    return;
+  }
+
+  // Safety timeout to reset if stuck too long
+  if (now - enemy.stateStartTime > enemy.stateDuration * 2) {
+    enemy.stateActive = false;
+    enemy.stateFunction = null;
+    enemy.currentStateName = "idle";
+    return;
+  }
+
+  if (!enemy.stateLastTick) enemy.stateLastTick = 0;
+  const interval = 100; // ms
+
+  // Run the state function only every 50ms max
+  if (now - enemy.stateLastTick >= interval) {
+    enemy.stateFunction(enemy, now);
+    enemy.stateLastTick = now;
+  }
+
+  // End state when duration exceeded or enemy no longer present
+  if (now - enemy.stateStartTime >= enemy.stateDuration ||
+      !mapsInfo[currentLand].enemies.includes(enemy)) {
+    enemy.stateActive = false;
+    enemy.stateFunction = null;
+    enemy.currentStateName = "idle";
+    enemy.stateLastTick = 0;
+  }
 }
+
 
 function moveState(enemy) {
   // console.log(enemy.currentStateName)
-  if (enemy.currentStateName === "idle") {
+  if (enemy.currentStateName !== "dmg") {
     enemy.currentStateName = "move";
   }
 
@@ -13362,7 +13644,7 @@ function moveState(enemy) {
 
 function moveStateAndMelee(enemy) {
   // console.log(enemy.currentStateName)
-  if (enemy.currentStateName === "idle") {
+  if (enemy.currentStateName !== "dmg") {
     enemy.currentStateName = "move";
   }
 
@@ -13464,7 +13746,7 @@ function moveStateAndMelee(enemy) {
 }
 
 function moveStateRandom(enemy) {
-  if (enemy.currentStateName === "idle") {
+  if (enemy.currentStateName !== "dmg") {
     enemy.currentStateName = "move";
   }
 
@@ -13532,12 +13814,14 @@ function startCommitmentTimer(enemy) {
 }
 
 function idleState(enemy) {
-  enemy.currentStateName = "idle"
+  if (enemy.currentStateName !== "dmg") {
+    enemy.currentStateName = "idle"
+  }
 }
 
 function attackState(enemy) {
   
-  if (enemy.currentStateName === "idle") {
+  if (enemy.currentStateName !== "dmg") {
     enemy.currentStateName = "attack1";
   }
   
@@ -13738,12 +14022,15 @@ function playRandomBuild() {
 }
 
 function attackCircleState(enemy) {
-  if (enemy.currentStateName === "idle") {
+
+  if (enemy.currentStateName !== "dmg") {
     enemy.currentStateName = "attack2";
   }
-  
+
   if (enemy.attackInterval) {
+    clearTimeout(enemy.bulletTimeout)
     enemy.attackInterval = false;
+    // console.log("ATTACK")
 
     const totalBullets = 20; // Total bullets forming the circle
     const angleIncrement = (2 * Math.PI) / totalBullets; // Full circle divided into 20 parts
@@ -13768,7 +14055,7 @@ function attackCircleState(enemy) {
     }, 1000);
 
 
-    setTimeout(() => {
+    enemy.bulletTimeout = setTimeout(() => {
       enemy.attackInterval = true;
     }, 3000);
   }
@@ -13776,7 +14063,7 @@ function attackCircleState(enemy) {
 
 let attackCircleMooshBossStateVar = false;
 function attackCircleMooshBossState(enemy) {
-  if (enemy.currentStateName === "idle") {
+  if (enemy.currentStateName !== "dmg") {
     enemy.currentStateName = "attack2";
   }
   
@@ -13786,6 +14073,7 @@ function attackCircleMooshBossState(enemy) {
     attackCircleMooshBossStateVar = true
   }
   
+  console.log(enemy.attackInterval)
   if (enemy.attackInterval) {
     enemy.attackInterval = false;
 
@@ -14279,8 +14567,14 @@ function getAngleBetweenPlayerAndEnemy(enemy) {
     const angle = Math.atan2(dy, dx); // Returns the angle in radians
     return angle;
   } else {
-    const dx = enemy.targetPlayer.x - enemy.spawn.x - ((enemy.w)/2) - 200;
-    const dy = enemy.targetPlayer.y + 100 - enemy.spawn.y - ((enemy.h)/2) - 200;
+    let currentTarget = null;
+    for (let player of players) {
+      if (player.id === enemy.targetPlayer) {
+        currentTarget = player;
+      }
+    }
+    const dx = currentTarget.x - enemy.spawn.x - ((enemy.w)/2) - 200;
+    const dy = currentTarget.y + 100 - enemy.spawn.y - ((enemy.h)/2) - 200;
     const angle = Math.atan2(dy, dx); // Returns the angle in radians
     return angle;
   }
@@ -14296,15 +14590,43 @@ function getAngleBetweenPlayerAndEnemy(enemy) {
 const maxParticlesShootDefault = 3;
 const maxParticlesWalk = 1;
 const highParticles = 5;
+let smokeRotation = 0;
 
-function particlesActor () {
+
+function particlesActor() {
+  // Increment shared smoke rotation each frame
+  smokeRotation += 0.05; // adjust speed of rotation if needed
+
   particles.forEach(particle => {
-    canvas.beginPath();
-    canvas.fillStyle = particle.color;
-    canvas.fillRect(particle.initalX + particle.x - cameraX - 10, particle.intialY + particle.y - cameraY + 50, particle.size, particle.size);
-    canvas.lineWidth = 2; 
-    canvas.strokeStyle = 'black';
-    canvas.strokeRect(particle.initalX + particle.x - cameraX - 10, particle.intialY + particle.y - cameraY + 50, particle.size, particle.size)  
+    const x = particle.initalX + particle.x - cameraX - 10;
+    const y = particle.intialY + particle.y - cameraY + 50;
+    const size = particle.size;
+
+    const isSmoke = particle.color === "smokeGrey" || particle.color === "smokePurple" || particle.color === "white" || particle.color === "yellow" || particle.color === "smokeGreen" || particle.color === "smokeRed";
+
+    // console.log(isSmoke, particle.color)
+    if (isSmoke) {
+      // Rotate the canvas around the center of the image
+      canvas.save();
+      canvas.translate(x + size / 2, y + size / 2); // move origin to center of particle
+      canvas.rotate(smokeRotation);                 // apply shared rotation
+      canvas.drawImage(particle.color === "smokePurple" ? smokePurpleImg 
+        : particle.color === "yellow" ? smokeYellowImg 
+        : particle.color === "smokeGreen" ? smokeGreenImg 
+        : particle.color === "smokeRed" ? smokeRedImg 
+        : smokeGreyImg, 
+      -size / 2, -size / 2, size, size); // draw centered
+      canvas.restore();
+    } else {
+      // Default behavior: draw colored square
+      canvas.fillStyle = particle.color;
+      canvas.fillRect(x, y, size, size);
+
+      // Optional border
+      canvas.lineWidth = 2;
+      canvas.strokeStyle = 'black';
+      canvas.strokeRect(x, y, size, size);
+    }
 
     // Move particles
     particle.x += Math.cos(particle.angle) * particle.speed;
@@ -14314,14 +14636,15 @@ function particlesActor () {
       particle.y -= 1;
     }
 
-    // Decrease size over time
+    // Shrink and slow down particles
     particle.size -= particle.sizeDecrease;
-    particle.speed -= particle.speedDecrease * particle.speed
+    particle.speed -= particle.speedDecrease * particle.speed;
   });
 
-  particles = particles.filter(particle => particle.size > 0 );
-
+  // Remove dead particles
+  particles = particles.filter(p => p.size > 0);
 }
+
 
 function shootingParticles () {
   if (shooting) {
@@ -14329,21 +14652,21 @@ function shootingParticles () {
       const angle = angleMouse + (Math.random() * 0.2 * 2 - 0.2);; // Random angle
       const radius = Math.random() * 20; // Random radius (adjust as needed)
       const speed = Math.floor(Math.random() * (50 + 1)) + 1; // Random speed (adjust as needed)
-      const size = 15; // Random size between 3 and 8
+      const size = 48; // Random size between 3 and 8
       const particleX = playerX;
       const particleY = playerY;
 
       const randomNumber = Math.floor(Math.random() * 2) + 1;
       
       if (randomNumber === 1) {
-        if (myPlayer?.weapon[0]?.name === "solarStaffCommon") {
-          particles.push({ x: 1, y: 1, size: size, color: 'red', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partShootDefault"].speedDec, sizeDecrease: particlesSystem["partShootDefault"].sizeDec, name: particlesSystem["partShootDefault"].name });
+        if (myPlayer?.weapon[0]?.name.includes("solar")) {
+          particles.push({ x: 1, y: 1, size: size, color: 'smokeRed', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partShootDefault"].speedDec, sizeDecrease: particlesSystem["partShootDefault"].sizeDec, name: particlesSystem["partShootDefault"].name });
         }
-        else if (myPlayer?.weapon[0]?.name === "arcaneStaffCommon") {
-          particles.push({ x: 1, y: 1, size: size, color: 'purple', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partShootDefault"].speedDec, sizeDecrease: particlesSystem["partShootDefault"].sizeDec, name: particlesSystem["partShootDefault"].name });
+        else if (myPlayer?.weapon[0]?.name.includes("arcane")) {
+          particles.push({ x: 1, y: 1, size: size, color: 'smokePurple', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partShootDefault"].speedDec, sizeDecrease: particlesSystem["partShootDefault"].sizeDec, name: particlesSystem["partShootDefault"].name });
         }
-        else if (myPlayer?.weapon[0]?.name === "nuclearStaffCommon") {
-          particles.push({ x: 1, y: 1, size: size, color: 'green', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partShootDefault"].speedDec, sizeDecrease: particlesSystem["partShootDefault"].sizeDec, name: particlesSystem["partShootDefault"].name });
+        else if (myPlayer?.weapon[0]?.name.includes("nuclear")) {
+          particles.push({ x: 1, y: 1, size: size, color: 'smokeGreen', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partShootDefault"].speedDec, sizeDecrease: particlesSystem["partShootDefault"].sizeDec, name: particlesSystem["partShootDefault"].name });
         }
       } else {
 
@@ -14356,17 +14679,17 @@ function shootingParticles () {
 }
 
 function dashParticles () {
-  if (playerSpeed > 10 && (movingDown || movingUp || movingLeft || movingRight)) {
-    for (let i = 0; i < highParticles; i++) {
+  if (dashing) {
+    for (let i = 0; i < 3; i++) {
       const angleDegrees = Math.random() * 360;
       const angleRadians = angleDegrees * (Math.PI / 180); // Convert degrees to radians
       const speed = (Math.random() * 6) + 1; // Random speed (adjust as needed)
-      const size = 20; // Random size between 3 and 8
+      const size = 48; // Random size between 3 and 8
       const particleX = playerX;
       const particleY = playerY;
 
       
-      particles.push({ x: 1, y: 1, size: size, color: 'white', speed: speed, angle: angleRadians, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partDash"].speedDec, sizeDecrease: particlesSystem["partDash"].sizeDec, name: particlesSystem["partDash"].name });   
+      particles.push({ x: 1, y: 1, size: size, color: 'smokeGrey', speed: speed, angle: angleRadians, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partDash"].speedDec, sizeDecrease: particlesSystem["partDash"].sizeDec, name: particlesSystem["partDash"].name });   
       
 
     }
@@ -14391,7 +14714,7 @@ function push360Particles (color, amount, x, y) {
   for (let i = 0; i < amount; i++) {
     const speed = Math.floor(Math.random() * (1 - 1 + 8)) + 1;
     const angleDegrees = Math.random() * Math.PI * 2;
-    const size = 20 ;
+    const size = 48 ;
     const particleX = x;
     const particleY = y;
     // console.log(angleDegrees)
@@ -14450,7 +14773,7 @@ function enemyDeathParticles (enemy) {
   for (let i = 0; i < 20; i++) {
     const angle = Math.random() * Math.PI * 2; // Random angle
     const speed = Math.floor(Math.random() * (20 - 16 + 1)) + 1;; // Random speed (adjust as needed)
-    const size = 30; // Random size between 3 and 8
+    const size = 54; // Random size between 3 and 8
     const particleX = enemy.spawn.x + 180;
     const particleY = enemy.spawn.y + 190;
 
@@ -14458,7 +14781,7 @@ function enemyDeathParticles (enemy) {
     
     if (randomNumber === 1) {
 
-      particles.push({ x: 1, y: 1, size: size, color: 'whie', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partSlime"].speedDec, sizeDecrease: particlesSystem["partSlime"].sizeDec, name: particlesSystem["partSlime"].name });
+      particles.push({ x: 1, y: 1, size: size, color: 'white', speed: speed, angle: angle, initalX: particleX, intialY: particleY, speedDecrease: particlesSystem["partSlime"].speedDec, sizeDecrease: particlesSystem["partSlime"].sizeDec, name: particlesSystem["partSlime"].name });
             
     } else {
 
@@ -14471,8 +14794,10 @@ function enemyDeathParticles (enemy) {
 // Particle system <
 
 let lastTime = performance.now();       
+let lastTimeUpdateMap = lastTime;       
 let fps = 60;                        
-let frameDuration = 800 / fps;  
+let frameDuration = 1000 / fps;  
+let accumulatedTime = 0;
 
 let targetAlphaCycle = 0;
 let currentAlphaCycle = 0;
@@ -14542,27 +14867,39 @@ function nightTimeCanvas() {
   canvas.globalCompositeOperation = 'source-over';
 }
 
-function updateGame() {
-  mapSetup();
-
-  drawMap("back")
-
-  drawObjects("background")
-  drawObjects("backer")
+function updateGame(shouldUpdate) {
   
-  // Particle settings
-  particlesActor()
-  shootingParticles()
-  dashParticles()
-  // // playerTrailParticles()
- 
-  // Player settings
-  drawSceneLayer("sorted", 0);
-  drawLocalBullets()
+  if (shouldUpdate) {
+    const now = performance.now();
+    mapSetup();
   
-  nightTimeCanvas()
-  drawUsername()
-  drawChat()
+    drawMap("back")
+  
+    drawObjects("background")
+    drawObjects("backer")
+    
+    // Player settings
+    drawSceneLayer("sorted", 0);
+    
+    // Particle settings
+    // particlesActor()
+    // shootingParticles()
+    // dashParticles()
+    // drawLocalBullets()
+    // // playerTrailParticles()
+
+    nightTimeCanvas()
+    drawUsername()
+    drawChat()
+
+    for (let enemy of mapsInfo[currentLand].enemies) {
+      if (!enemy.stateActive) {
+        handleEnemyState(enemy);  // Start a new state if none active
+      }
+      updateEnemyState(enemy, now);  // Run active state logic
+    }
+  }
+
   
   // Dev Colliders
   playerCollision()
@@ -14570,15 +14907,32 @@ function updateGame() {
   drawColliders("player", "", "", "", "")
 }
 
-function checkFPS(currentTime) {
-  const deltaTime = currentTime - lastTime;
-  if (deltaTime >= frameDuration) {
-    lastTime = currentTime - (deltaTime % frameDuration);
-    return true
+let deltaTime = 0;
+const fixedDeltaTime = 1 / 60; // ≈ 0.016666 seconds
+
+function checkFPS() {
+  const currentTime = performance.now();
+  // console.log(lastTimeUpdateMap, currentTime);  // Comment out in production to avoid slowdown
+
+  const deltaTimeFPS = currentTime - lastTimeUpdateMap;
+
+  if (deltaTimeFPS >= frameDuration) {
+    // Catch up by the number of frame durations passed (handle lag/skips)
+    lastTimeUpdateMap += frameDuration * Math.floor(deltaTimeFPS / frameDuration);
+    return true;
   }
+  return false;
 }
 
 function generalMapLoop(currentTime) {
-  if (checkFPS(currentTime)) updateGame();
-  intervalCanvasBase = requestAnimationFrame(generalMapLoop)
+  const shouldUpdate = checkFPS();
+
+  if (shouldUpdate) {
+    deltaTime = fixedDeltaTime;  // Use fixed time step
+    updateGame(true);
+  } else {
+    updateGame(false); // Optional: visual-only updates
+  }
+
+  requestAnimationFrame(generalMapLoop);
 }
