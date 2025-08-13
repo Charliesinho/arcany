@@ -22,6 +22,32 @@ setTimeout(() => {
   }, 20);
 }, 1000);
 
+openerScreen.addEventListener("scroll", function () {
+    console.log(openerScreen.scrollTop > 800); 
+
+    
+    if (openerScreen.scrollTop > 50) {
+      navbar.classList.add("scrolled");
+    } else {
+      navbar.classList.remove("scrolled");
+    }
+
+    const pillar = document.getElementById("pillarAnim");
+    const titleAnim = document.getElementById("titleAnim");
+    const divAnim = document.querySelectorAll(".divAnim");
+
+    if (openerScreen.scrollTop > 600) {
+      pillar.classList.add("visible");
+      titleAnim.classList.add("visible");
+      divAnim.forEach(div => div.classList.add("visible"));
+    } else {
+      pillar.classList.remove("visible");
+      titleAnim.classList.remove("visible");
+      divAnim.forEach(div => div.classList.remove("visible"));
+    }
+  });
+
+
 document.addEventListener("contextmenu", function (e) {
   e.preventDefault();
 });
@@ -42,27 +68,9 @@ let loadingInterval = setInterval(updateProgress, 200);
 
 window.addEventListener("load", () => {
   loadingProgress = 100;
-  // console.log("Finished loading");
   document.getElementById("introLogo-img").style.display = "none";
   document.getElementById("introLogo").style.display = "none";
-  // let videoIntro = document.getElementById("introLogo-video")
-  // videoIntro.volume = 0.2;
-  // videoIntro.play();
-  // let scrollInterval =setInterval(() => {
-  //   if (window.scrollY > 0) {
-  //     window.scrollTo({
-  //       top: 0,
-  //       behavior: 'smooth' 
-  //     });
-  //   } else {
-  //     clearInterval(scrollInterval)
-  //   }
-  // }, 20);
-  
-  // setTimeout(() => {
-  //   document.getElementById("introLogo").style.display = "none";
-  // }, 5000);
-  
+
   clearInterval(loadingInterval);
 });
 

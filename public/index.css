@@ -502,10 +502,14 @@ body {
     width: calc(100% - 60px);
     flex-direction: row;
     justify-content: space-between;
-    position: absolute;
+    position: fixed;
     color: white;
     z-index: 1;
     align-items: center;
+    transition: all 0.4s ease;
+}
+#navbar.scrolled {
+  background-color: #0b0120;
 }
 #navbar > div{
     display: flex;
@@ -761,27 +765,51 @@ body {
     }
 }
 
+/* NEW PAGE  */
+#pillarAnim{
+    display: block;
+    height: 980px;
+    width: 315px;
+    position: absolute;
+    top: 220px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 2s ease;
+    pointer-events: none;
+    transform: translateY(30);
+}
+.visible{
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  pointer-events: auto;
+}
 #newsPage{
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+    flex-direction: row-reverse;
+    justify-content: center;
     align-items: center;
     position: relative;
     padding: 30px 20px;
     width: calc(100vw - 40px);
-    height: calc(100vw - 60px);
+    height: calc(100vh - 60px);
     background-color: #0B051C;
-    gap: 30px;
+    gap: 120px;
+    overflow: hidden;
 }
 #newsPageTitle{
+    height: calc(100% - 120px);
     display: flex;
-    flex-direction: row;
-    gap: 30px;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
+    overflow: visible;
 }
-#newsPageTitle >h1{
-    font-size: 110px;
+#titleAnim{
+    transform: translateY(-30px);
+    opacity: 0;
+    position: relative;
+    font-size: 150px;
     font-family: "Jersey 15", sans-serif !important;
     font-weight: 400;
     font-style: normal;
@@ -792,43 +820,87 @@ body {
     0 0 3px #420baf, 
     0 0 58px #420baf, 
     0 0 30px #420baf;
+
+    transition: all 2s ease;
 }
 
-#newsPageTimer{
-    display: flex;
-    border: solid 2px #420baf;
-    width: 70%;
-    height: 100px;
-    background-color: #0b051c;
-    color: white;
-    gap: 60px;
-    justify-content: center;
-    align-items: center;
-    font-size: 50px;
-
-  box-shadow:
-    0 0 1px #420baf, 
-    0 0 3px #420baf, 
-    0 0 3px #420baf, 
-    0 0 8px #420baf, 
-    0 0 17px #420baf
-}
 #newsPageIMGdiv{
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-direction: column;
+    height: calc(100% - 150px);
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
     gap: 30px;
-    justify-content: center;
+    padding: 20px;
+    width: calc(50% - 40px);
+    margin-top: 120px;
+    overflow: visible;
+    transition: all 3s ease;
 }
-#newsPageIMGdiv > div{
+
+.divAnim{
+    position: relative;
+    overflow: hidden; 
+    opacity: 0;
     display: flex;
     flex-direction: column;
-
+    justify-content: center;
     color: white;
+    width: 100%;
+    max-width: 800px;
+    height: 245px;
+    border-radius: 32px;
+    padding: 10px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    box-shadow:
+            0 0 1px #420baf,
+        0 0 1px #420baf,
+        0 0 1px #420baf,
+        0 0 1px #420baf,
+        0 0 20px #420baf;
+
+    transition: all 3s ease;
+    align-items: flex-start;
+
 }
-#newsPageIMGdiv > div > img{
-    width: 500px !important;
-    
+
+.divAnim::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0);
+  transition: background 0.3s ease;
+  z-index: 0;
+}
+.divAnim:hover::before {
+  background: rgba(0, 0, 0, 0.567); /* assombrit au hover */
+}
+.divAnim > * {
+  position: relative; /* pour que le contenu reste au-dessus du ::before */
+  z-index: 1;
+}
+
+.divAnim > p,
+.divAnim > h1 {
+    padding: 0px 50px;
+    opacity: 0;
+    color: white;
+    text-align: center;
+    transform: translateY(10px);
+    transition: opacity 0.4s ease, transform 0.6s ease;
+    text-align: left;
+}
+
+.divAnim:hover > p,
+.divAnim:hover > h1
+ {
+  opacity: 1;
+  transform: translateY(0); 
 }
 
 #languageSetting{

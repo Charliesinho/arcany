@@ -13,6 +13,8 @@ const fr = document.getElementById("fr");
 const pt = document.getElementById("pt");
 //Labguage Button > //
 
+const navbar = document.getElementById("navbar");
+
 // UI >
 const menuUi = document.getElementById("ui");
 const menuUiProfile = document.getElementById("uiProfile");
