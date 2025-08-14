@@ -14,6 +14,7 @@ const pt = document.getElementById("pt");
 //Labguage Button > //
 
 const navbar = document.getElementById("navbar");
+const membershipPageButton = document.getElementById("membershipPageButton");
 
 // UI >
 const menuUi = document.getElementById("ui");
