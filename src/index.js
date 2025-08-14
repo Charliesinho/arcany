@@ -1654,7 +1654,7 @@ const trashCrafting = {
     description: "Some people's junk is someone else's treasure",
 };
 const arcaneGem = {
-    type: "gem",
+    type: "material",
     name: "arcaneGem",
     level: 1,
     value: 5,
@@ -1664,7 +1664,7 @@ const arcaneGem = {
     description: "This gem is very geometrically simple so don't expect much",
 };
 const arcaneGem2 = {
-    type: "gem",
+    type: "material",
     name: "arcaneGem2",
     level: 2,
     value: 10,
@@ -1674,7 +1674,7 @@ const arcaneGem2 = {
     description: "A very sharp gem, seems accurate...",
 };
 const arcaneGem3 = {
-    type: "gem",
+    type: "material",
     name: "arcaneGem3",
     level: 3,
     value: 15,
@@ -1684,7 +1684,7 @@ const arcaneGem3 = {
     description: "I wonder what kind of natural conditions must occur in order for this gem to take this shape",
 };
 const arcaneGem4 = {
-    type: "gem",
+    type: "material",
     name: "arcaneGem4",
     level: 4,
     value: 20,
@@ -1692,7 +1692,7 @@ const arcaneGem4 = {
     image: "./inventory/arcaneGem4.png",
 };
 const arcaneGem5 = {
-    type: "gem",
+    type: "material",
     name: "arcaneGem5",
     level: 5,
     value: 50,
@@ -1700,7 +1700,7 @@ const arcaneGem5 = {
     image: "./inventory/arcaneGem5.png",
 };
 const solarGem = {
-    type: "gem",
+    type: "material",
     name: "solarGem",
     level: 1,
     value: 5,
@@ -1710,7 +1710,7 @@ const solarGem = {
     description: "Looks similar to a saphire, but is very warm to the touch, like if it just came out of the oven",
 };
 const nuclearGem = {
-    type: "gem",
+    type: "material",
     name: "nuclearGem",
     level: 5,
     value: 5,
@@ -1857,7 +1857,7 @@ const nuclearStaffCommon = {
     charges: 5,
 };
 const stick = {
-    type: "stick",
+    type: "material",
     name: "stick",
 
     displayName: "Regular stick",
@@ -1869,7 +1869,7 @@ const stick = {
     image: "./inventory/stick.png",
 };
 const willowStick = {
-    type: "stick",
+    type: "material",
     name: "willowStick",
 
     displayName: "Willow stick",
@@ -1915,7 +1915,7 @@ const chestKeyRestfield = {
 };
 
 const low = {
-    type: "fish",
+    type: "ingredient",
     name: "low",
     level: 1,
     zone: "solar",
@@ -1928,7 +1928,7 @@ const low = {
     description: "A very common fish, when the cataclysm first happened, people ate this fish to survive because it was very easy to catch. It is not super smart",
 };
 const sardine = {
-    type: "fish",
+    type: "ingredient",
     name: "sardine",
     level: 5,
     zone: "solar",
@@ -1941,7 +1941,7 @@ const sardine = {
     description: "A bright red fish, iconic in these lands. It can be used to make great recepies but some people use it to craft... clothes?",
 };
 const nemi = {
-    type: "fish",
+    type: "ingredient",
     name: "nemi",
     level: 7,
     zone: "solar",
@@ -1954,7 +1954,7 @@ const nemi = {
     description: "This fish must tell really good jokes, if only I could understand",
 };
 const crab = {
-    type: "fish",
+    type: "ingredient",
     name: "crab",
     level: 10,
     zone: "ocean",
@@ -1967,7 +1967,7 @@ const crab = {
     description: "The Crab can be found on shorelines, it can be turned into great soups",
 };
 const hanami = {
-    type: "fish",
+    type: "ingredient",
     name: "hanami",
     level: 12,
     zone: "solar",
@@ -1977,7 +1977,7 @@ const hanami = {
     image: "./inventory/hanami.png",
 };
 const willy = {
-    type: "fish",
+    type: "ingredient",
     name: "willy",
     level: 17,
     zone: "solar",
@@ -1987,7 +1987,7 @@ const willy = {
     image: "./inventory/willy.png",
 };
 const cork = {
-    type: "fish",
+    type: "ingredient",
     name: "cork",
     level: 17,
     zone: "solar",
@@ -2118,7 +2118,7 @@ const minrow = {
 };
 
 const fishBones = {
-    type: "fish",
+    type: "material",
     name: "fishBones",
     level: 1,
     zone: "solar",
@@ -2130,7 +2130,7 @@ const fishBones = {
 
 
 const treeLeaf = {
-    type: "leaf",
+    type: "ingredient",
     name: "treeLeaf",
     level: 1,
     value: 4,
@@ -2141,7 +2141,7 @@ const treeLeaf = {
     description: "This leaf is common in the Grasslands, it can be combined with fish to make sushi, a culinary delicacy mentioned in the old stories",
 };
 const miniMushroom = {
-    type: "quest",
+    type: "ingredient",
     name: "miniMushroom",
     level: 2,
     value: 4,
@@ -2163,7 +2163,7 @@ const bone = {
     description: "This type of bone comes from solar creatures, such as humans. It smells like death",
 };
 const smallCommonMeat = {
-    type: "meat",
+    type: "ingredient",
     name: "smallCommonMeat",
     level: 1,
     value: 4,
@@ -2174,7 +2174,7 @@ const smallCommonMeat = {
     description: "This meat comes from a small solar creature, it can be cooked and, even if the taste is great, is not super nutritive due to it's small size",
 };
 const slimeGuts = {
-    type: "quest",
+    type: "ingredient",
     name: "slimeGuts",
     level: 1,
     value: 4,
