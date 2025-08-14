@@ -825,7 +825,17 @@ body {
     background-color: #0B051C;
     gap: 120px;
     overflow: hidden;
+    background:
+        linear-gradient(
+            to top,
+            rgba(11, 5, 28, 0) 0%,  /* fully transparent until halfway */
+            #0B051C 80%             /* solid color at the bottom */
+        ),
+        url(./Textures/sardinBack.png);
+    background-size: 100px;
+    background-repeat: repeat;
 }
+
 #newsPageTitle{
     height: calc(100% - 120px);
     display: flex;

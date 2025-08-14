@@ -1560,8 +1560,8 @@ window.addEventListener("keydown", (e) => {
   
   if (e?.key === "Enter") {
     e.preventDefault();
-    if (chatInput === document.activeElement) {
-      console.log("hey")
+
+    if (chatInput == document.activeElement) {
       if (chatInput.value) {
           const chatMessage = chatInput.value;
           e.preventDefault();  
@@ -1579,7 +1579,7 @@ window.addEventListener("keydown", (e) => {
       }
     } else {
       if(!chatIsActivate) showChatFunction()
-        chatInput.focus();
+      chatInput.focus();
       blockMovement = true;
       noMovement = true
       typing = true
@@ -3055,10 +3055,10 @@ function interactInventory(item, index) {
           
           pop.play()
 
-          if (item.type === "rune" && item.level > currentEnchantingLevel) {
-            errorDisplay("You need Enchanting level " + item.level + " to use this item.")
-            return;
-          } 
+          // if (item.type === "rune" && item.level > currentEnchantingLevel) {
+          //   errorDisplay("You need Enchanting level " + item.level + " to use this item.")
+          //   return;
+          // } 
          
           if (enchantingArray[0]?.type !== item.type) {
             if (enchantingArray.length === 0 && item.type === "weapon" && item.charges > 0) {
