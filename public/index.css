@@ -532,6 +532,24 @@ body {
     padding: 5px 13px;
     justify-content: center;
 }
+.navButton::before {
+    content: "";
+    position: absolute;
+    top: 7px;
+    left: 0px;
+    width: 99%;
+    height: 51%;
+    background: white;
+    border-radius: 100%;
+    filter: blur(10px);
+    opacity: 0;
+    z-index: 1;
+    transition: opacity 0.3s ease;
+}
+
+.navButton:hover::before {
+    opacity: 0.4;
+}
 #loginNotPlaying{
     background-color: white !important;
     color: black !important;
@@ -568,24 +586,7 @@ body {
     background-position-y: -41px;
 }
 
-#navbar > div > button::before {
-    content: "";
-    position: absolute;
-    top: 7px;
-    left: 0px;
-    width: 99%;
-    height: 51%;
-    background: white;
-    border-radius: 100%;
-    filter: blur(10px);
-    opacity: 0;
-    z-index: 1;
-    transition: opacity 0.3s ease;
-}
 
-#navbar > div > button:hover::before {
-    opacity: 0.4;
-}
 
 
 .glow-wrap {

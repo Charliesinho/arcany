@@ -1,0 +1,163 @@
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=Tiny5&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jersey+15&display=swap');
+
+h2, h1 {
+    font-weight: 400;
+    margin: 0;
+}
+
+.textTitle{
+    font-size: 39px;
+    font-weight: 100;
+}
+.textStandard{
+    font-size: 15px;
+    font-weight: 400;
+}
+button:focus {
+  outline: none;
+}
+
+.uiProfileLevel {
+    font-size: 24px;
+    font-weight: 400;
+    position: relative;
+    left: 2px;
+    top: -8px;
+    color: #00000061;
+}
+:root {
+    --backgroundObjects: rgb(48, 37, 37);
+    --backgroundObjectsBorder: rgb(44, 40, 39);
+  }
+  p{
+    margin: 0px;
+  }
+
+* {
+    user-select: none; /* Standard syntax */
+    -webkit-user-select: none; /* Chrome, Safari, Opera */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    cursor: none;
+    font-family: "Tiny5", serif !important;
+    /* font-weight: 100 ; */
+    -webkit-user-drag: none;
+    image-rendering: pixelated;
+  }
+  
+body {
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    background: #0c0521 !important;
+
+}
+#solar >.glow-wrap-card::before {
+    background: rgba(255, 0, 0, 0.861) !important;
+}
+#arcane >.glow-wrap-card::before {
+    background: rgb(155, 135, 255) !important;
+}
+#nuclear >.glow-wrap-card::before {
+    background: rgb(101, 255, 122) !important;
+}
+.glow-wrap-card{
+    position: absolute;
+    width: 450px;
+    height: 450px;
+    display: inline-block;
+    z-index: 0;
+}
+.glow-wrap-card::before {
+    content: "";
+    position: absolute;
+    top: 45%;
+    left: 46%;
+    transform: translate(-50%, -50%);
+    width: 249px;
+    height: 480px;
+    background: white;
+    border-radius: 0%;
+    filter: blur(56px);
+    z-index: 1;
+    animation: pulseGlow 10.5s infinite;
+}
+
+#membershipPage{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    gap: 100px;
+}
+
+#membershipPageNav{
+    width: calc(100vw - 30px - 30px);
+    padding: 30px;
+    color: white;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+    h1{
+        font-size: 70px;
+    }
+    a{
+        display: flex;
+        position: absolute;
+        display: flex;
+        left: 30px;
+        bottom: 37px;
+        text-decoration: unset;
+    }
+}
+#membershipPageContent{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: calc(100vw - 40px) ;
+    padding: 20px;
+}
+#membershipPageContent > div{
+    overflow: visible;
+}
+#arcaneMembership{
+    background-image: url(./membershipCard/arcaneSubsciption.gif);
+}
+#solarMembership{
+    background-image: url(./membershipCard/solarSubsciption.gif);
+}
+#nuclearMembership{
+    background-image: url(./membershipCard/nuclearSubsciption.gif);
+}
+.cardMembership{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 430px;
+    height: 430px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: aliceblue;
+    position: relative;
+}
+
+.membershipText{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 191px;
+    right: 139px;
+    font-size: 14px;
+    gap: 10px;
+}
+.line{
+    text-decoration: line-through;
+}

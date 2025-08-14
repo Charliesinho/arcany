@@ -45,12 +45,13 @@ openerScreen.addEventListener("scroll", function () {
       titleAnim.classList.remove("visible");
       divAnim.forEach(div => div.classList.remove("visible"));
     }
-  });
+});
 
 
 document.addEventListener("contextmenu", function (e) {
   e.preventDefault();
 });
+
 
 let loadingProgress = 0;
 
@@ -72,6 +73,10 @@ window.addEventListener("load", () => {
   document.getElementById("introLogo").style.display = "none";
 
   clearInterval(loadingInterval);
+});
+
+membershipPageButton.addEventListener("click", function(){
+  window.location.href = "membership.html";
 });
 
 const emptyMap = new Image();
@@ -1001,27 +1006,6 @@ closeBookButton.addEventListener("click", function(){
 
 //Ui interaction <
 
-//Mouse cursor >
-
-const customCursor = document.querySelector('.custom-cursor');
-const pointerActivator = document.querySelectorAll('.pointerActivator');
-
-document.addEventListener('mousemove', function(e) {
-  customCursor.style.left = e.pageX + 'px';
-  customCursor.style.top = e.pageY + 'px';
-});
-
-pointerActivator.forEach(item => {
-  item.addEventListener('mouseenter', function() {
-    customCursor.style.backgroundImage = "url('../cursors/pointer.png')";
-  });
-
-  item.addEventListener('mouseleave', function() {
-    customCursor.style.backgroundImage = "url('../cursors/default.png')";
-  });
-});
-
-//Mouse cursor <
 let wantingToPlay = false
 let shootingBlock = true;
 let myPlayer;
