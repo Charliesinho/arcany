@@ -558,7 +558,7 @@ body {
 }
 #loginNotPlayingIMG{
     position: absolute;
-    left: -43px;
+    right: -43px;
     display: none;
     width: 46px;
     background-repeat: no-repeat;
@@ -573,7 +573,7 @@ body {
 }
 #loginNotPlayingIMGTOPTRICK{
     position: absolute;
-    left: -38px;
+    right: -51px;
     top: -15px;
     display: flex;
     width: 59px;
@@ -697,6 +697,7 @@ body {
     font-family: "Jersey 15", sans-serif !important;
     font-weight: 400;
     font-style: normal;
+    text-shadow: 7px 7px #000000;
 }
 #homePageText > p{
     display: flex;
@@ -711,11 +712,36 @@ body {
     flex-direction: row;
     gap: 25px;
 }
+
 #downloadButton:hover{
     background-color: rgb(82, 11, 215);
     border: solid 2px rgb(45, 5, 118);
     color: white;
 }
+
+#discordButton {
+    background-color: #5865f2;
+    border: solid 2px rgb(15, 25, 53);
+    color: white;
+    margin-top: 28px;
+    text-decoration: none;
+    height: 47px;
+    font-size: 15px;
+    font-weight: 100;
+}
+
+#discordButton:hover{
+    background-color: #717cf5;
+    border: solid 2px rgb(255, 255, 255);
+    color: white;
+}
+
+#discordButton > img {
+   height: 30px;
+   margin-right: 10px;
+}
+
+
 .homePageTextButton{
     display: flex;
     position: relative;
@@ -799,7 +825,17 @@ body {
     background-color: #0B051C;
     gap: 120px;
     overflow: hidden;
+    background:
+        linear-gradient(
+            to top,
+            rgba(11, 5, 28, 0) 0%,  /* fully transparent until halfway */
+            #0B051C 80%             /* solid color at the bottom */
+        ),
+        url(./Textures/sardinBack.png);
+    background-size: 100px;
+    background-repeat: repeat;
 }
+
 #newsPageTitle{
     height: calc(100% - 120px);
     display: flex;
@@ -851,7 +887,7 @@ body {
     width: 100%;
     max-width: 800px;
     height: 245px;
-    border-radius: 32px;
+    border-radius: 12px;
     padding: 10px;
     background-repeat: no-repeat;
     background-size: cover;
@@ -865,6 +901,7 @@ body {
 
     transition: all 3s ease;
     align-items: flex-start;
+    border: solid 1px #ffffff;
 
 }
 
@@ -872,14 +909,18 @@ body {
   content: "";
   position: absolute;
   top: 0; left: 0;
+  border-radius: 12px;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0);
-  transition: background 0.3s ease;
+  background: linear-gradient(90deg,rgba(18, 5, 56, 0.76) 0%, rgba(29, 18, 79, 0.71) 12%, rgba(47, 0, 255, 0) 100%);
+  transition: all 0.5s ease;
   z-index: 0;
 }
 .divAnim:hover::before {
-  background: rgba(0, 0, 0, 0.567); /* assombrit au hover */
+  background: rgba(18, 5, 56, 0.7); /* assombrit au hover */
+  backdrop-filter: blur(3px);
+  outline: solid 1px white;
+  outline-offset: -10px;
 }
 .divAnim > * {
   position: relative; /* pour que le contenu reste au-dessus du ::before */
@@ -889,12 +930,21 @@ body {
 .divAnim > p,
 .divAnim > h1 {
     padding: 0px 50px;
+    height: 0px;
     opacity: 0;
     color: white;
     text-align: center;
     transform: translateY(10px);
-    transition: opacity 0.4s ease, transform 0.6s ease;
+    transition: all 0.4s ease;
     text-align: left;
+}
+
+.divAnim > h1 {
+    margin-bottom: 10px;
+    opacity: 1;
+    height: auto;
+    text-shadow: 2px 2px black, 0px 0px 20px #ffffff75;
+    /* background: rgba(18, 5, 56, 0.7); */
 }
 
 .divAnim:hover > p,
@@ -902,6 +952,7 @@ body {
  {
   opacity: 1;
   transform: translateY(0); 
+  height: auto;
 }
 
 #languageSetting{

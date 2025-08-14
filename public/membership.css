@@ -60,7 +60,7 @@ body {
     background: rgba(255, 0, 0, 0.861) !important;
 }
 #arcane >.glow-wrap-card::before {
-    background: rgb(155, 135, 255) !important;
+    background: rgb(182, 168, 255) !important;
 }
 #nuclear >.glow-wrap-card::before {
     background: rgb(101, 255, 122) !important;
@@ -75,16 +75,52 @@ body {
 .glow-wrap-card::before {
     content: "";
     position: absolute;
-    top: 45%;
-    left: 46%;
+    top: 42%;
+    left: 57%;
     transform: translate(-50%, -50%);
-    width: 249px;
-    height: 480px;
+    width: 353px;
+    height: 503px;
     background: white;
     border-radius: 0%;
     filter: blur(56px);
     z-index: 1;
     animation: pulseGlow 10.5s infinite;
+}
+
+.glow-wrap-card-arcane {
+    margin-left: -120px;
+}
+
+.middleParagraph {
+    color: white;
+    width: 50vw;
+    max-width: 800px;
+    text-align: justify;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    margin-bottom: 50px;
+    border: solid 1px white;
+    padding: 32px;
+    border-radius: 10px;
+    background: #0b051c;
+    line-height: 23px;
+}
+
+#columnRight {
+    width: 250px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    filter: brightness(.4) sepia(1) hue-rotate(596deg);
+}
+
+#columnLeft {
+    width: 250px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    filter: brightness(.4) sepia(1) hue-rotate(596deg);
 }
 
 #membershipPage{
@@ -93,6 +129,16 @@ body {
     height: 100vh;
     width: 100vw;
     gap: 100px;
+    background:
+        linear-gradient(
+            to top,
+            rgba(11, 5, 28, 0) 40%,  
+            #0B051C 100%             
+        ),
+        url(./Textures/sardinBack.png);
+    background-size: 100px;
+    backdrop-filter: brightnes(2);
+    overflow: scroll;
 }
 
 #membershipPageNav{
@@ -107,6 +153,9 @@ body {
 
     h1{
         font-size: 70px;
+        text-shadow: 5px 5px #281a5b;
+        margin-top: 50px;
+        margin-bottom: -50px;
     }
     a{
         display: flex;
@@ -129,6 +178,16 @@ body {
 }
 #arcaneMembership{
     background-image: url(./membershipCard/arcaneSubsciption.gif);
+    margin: 0 -120px 0 -120px;
+    position: relative;
+    bottom: 80px;
+}
+
+#arcaneMembership:hover {
+    background-image: url(./membershipCard/arcaneSubsciption.gif);
+    margin: -40px -145px 0 -145px;
+    position: relative;
+    bottom: 80px;
 }
 #solarMembership{
     background-image: url(./membershipCard/solarSubsciption.gif);
@@ -141,22 +200,48 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 430px;
-    height: 430px;
+    width: 530px;
+    height: 530px;
     background-repeat: no-repeat;
     background-size: cover;
     color: aliceblue;
     position: relative;
+    transition: all .5s ease;
+    filter: none;
 }
+
+.cardMembership:hover {
+    width: 580px;
+    height: 580px;
+    color: aliceblue;
+    position: relative;
+    filter: brightness(1.2);
+    margin: -25px -25px;
+}
+
+#membershipPageContent:hover .cardMembership:not(:hover) {
+    filter: brightness(.9) grayscale(.2);
+}
+
+.cardMembership:hover > .membershipText{
+    top: 257px;
+    right: 217px;
+    font-size: 16px;
+    gap: 16.5px;
+}
+
 
 .membershipText{
     display: flex;
     flex-direction: column;
     position: absolute;
-    top: 191px;
-    right: 139px;
+    top: 235px;
+    right: 204px;
     font-size: 14px;
-    gap: 10px;
+    gap: 16px;
+    font-weight: 100;
+    text-shadow: 1px 1px black;
+    transition: all .5s ease;
 }
 .line{
     text-decoration: line-through;

@@ -1073,8 +1073,9 @@ socket.on("loginAttemptNotPlaying", (playerInfo) => {
   loginNotPlayingIMG.style.backgroundImage = `url(${armor.src})`;
   loginNotPlayingIMGTOPTRICK.style.backgroundImage = `url(${armor.src})`;
   console.log(loginNotPlayingIMG.style.backgroundImage)
-  loginNotPlaying.style.borderTopLeftRadius = "0";
-  loginNotPlaying.style.borderBottomLeftRadius = "0";
+  loginNotPlaying.style.borderTopRightRadius = "0";
+  loginNotPlaying.style.borderBottomRightRadius = "0";
+  loginNotPlaying.style.right = "22px";
 })
 
 playNowButton.addEventListener("click", function() {
@@ -1554,11 +1555,13 @@ let typing = false;
 let typingInterval = null;
 
 window.addEventListener("keydown", (e) => {
+
   if(keyBlocker) return
   
   if (e?.key === "Enter") {
     e.preventDefault();
-    if (chatInput === document.activeElement) {
+
+    if (chatInput == document.activeElement) {
       if (chatInput.value) {
           const chatMessage = chatInput.value;
           e.preventDefault();  
@@ -1576,7 +1579,7 @@ window.addEventListener("keydown", (e) => {
       }
     } else {
       if(!chatIsActivate) showChatFunction()
-        chatInput.focus();
+      chatInput.focus();
       blockMovement = true;
       noMovement = true
       typing = true
@@ -2908,10 +2911,10 @@ function interactInventory(item, index) {
             return;
           }
 
-          // if (item.level > cookingLevelSimple) {
-          //   errorDisplay("You need to be at least Cooking level " + item.level + " to use this item.")
-          //   return;
-          // }
+          if (item.type === "ingredient" && item.level > currentCookingLevel) {
+            errorDisplay("You need Cooking level " + item.level + " to use this item.")
+            return;
+          } 
 
           consumeAvailable = false;
 
@@ -2962,10 +2965,10 @@ function interactInventory(item, index) {
             return;
           }
 
-          // if (item.level > craftingLevelSimple) {
-          //   errorDisplay("You need to be at least Crafting level " + item.level + " to use this item.")
-          //   return;
-          // }
+          if (item.type === "material" && item.level > currentCraftingLevel) {
+            errorDisplay("You need Crafting level " + item.level + " to use this item.")
+            return;
+          } 
           
           consumeAvailable = false;
           
@@ -3052,11 +3055,10 @@ function interactInventory(item, index) {
           
           pop.play()
 
-          // if (item.level > enchantingLevelSimple) {
-          //   errorDisplay("You need to be at least Enchanting level " + item.level + " to use this item.")
+          // if (item.type === "rune" && item.level > currentEnchantingLevel) {
+          //   errorDisplay("You need Enchanting level " + item.level + " to use this item.")
           //   return;
-          // }
-          
+          // } 
          
           if (enchantingArray[0]?.type !== item.type) {
             if (enchantingArray.length === 0 && item.type === "weapon" && item.charges > 0) {
@@ -3110,10 +3112,12 @@ function interactInventory(item, index) {
           inventorySlots[`inventorySlot${index}`].src = `data:,`;
           inventorySlots[`inventorySlot${index}`].removeEventListener("mousedown", (e) => interactInventory(item, index));
 
-          // if (item.type === "weapon" && item.level > combatLevelSimple) {
-          //   errorDisplay("You need to be at least Combat level " + item.level + " to use this item.")
-          //   return;
-          // } else {
+          if (item.type === "weapon" && item.level > currentCombatLevel) {
+            errorDisplay("You need Combat level " + item.level + " to use this item.")
+            return;
+          } 
+          
+          else {
             item.maxPower = maxHealth;
             item.index = myPlayer.inventory.indexOf(item);
 
@@ -3122,7 +3126,7 @@ function interactInventory(item, index) {
               push360Particles("smokeGreen", 30, myPlayer.x, myPlayer.y)
             }
             socket.emit("consumable", item);
-          // }
+          }
 
           
         }
@@ -7304,6 +7308,18 @@ socket.on("player", (serverPlayer) => {
    
   }
   // Fishing level <
+
+  generalLevel = (currentFishingLevel + currentCraftingLevel + currentCookingLevel + currentEnchantingLevel + currentCombatLevel) / 15
+  uiProfileLevel.innerHTML = generalLevel;
+  if (generalLevel < 2) {
+    uiProfileRank.src = "./ui/Rank/rankOne.png"
+  }
+  else if (generalLevel < 3) {
+    uiProfileRank.src = "./ui/Rank/rankTwo.png"
+  }
+  else {
+    uiProfileRank.src = "./ui/Rank/rankThree.png"
+  }
 
   //BAR PROGRESSION
 
@@ -12647,7 +12663,7 @@ function drawUsernameLocal (player) {
   canvas.font = "400 12px Tiny5";
   canvas.textAlign = "center";
   canvas.fillStyle = "black";
-  canvas.fillText(Math.trunc((player.cookingLevel / 1000) + (player.fishingLevel / 1000)) , playerX - cameraX + 10, playerY  - cameraY - 32.5);
+  canvas.fillText(Math.trunc(generalLevel) , playerX - cameraX + 10, playerY  - cameraY - 32.5);
 }
 
 function drawUsername () {
