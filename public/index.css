@@ -507,13 +507,29 @@ body {
     z-index: 1;
     align-items: center;
     transition: all 0.4s ease;
+
+    a{
+        color: white;
+        display: flex;
+        position: absolute;
+        display: flex;
+        text-decoration: unset;
+    }
+}
+.navbarbg{
+    background-color: #0b0120;
+    box-shadow: 0px 0px 27px 24px #0b0120;
+}
+#navigationbutton{
+    display: flex;
+    width: 45%;
+    justify-content: space-between;
 }
 #navbar.scrolled {
   background-color: #0b0120;
 }
 #navbar > div{
     display: flex;
-    gap: 70px;
 }
 .navButton{
     position: relative;
@@ -528,14 +544,13 @@ body {
     height: calc(45px - 20px);
     border-radius: 8px;
     overflow: visible;
-    /* height: 35px; */
-    padding: 5px 13px;
+    width: max-content;
     justify-content: center;
 }
 .navButton::before {
     content: "";
     position: absolute;
-    top: 7px;
+    top: 9px;
     left: 0px;
     width: 99%;
     height: 51%;
@@ -544,11 +559,11 @@ body {
     filter: blur(10px);
     opacity: 0;
     z-index: 1;
-    transition: opacity 0.3s ease;
+    transition: all 0.5s ease;
 }
 
 .navButton:hover::before {
-    opacity: 0.4;
+    opacity: 0.2;
 }
 #loginNotPlaying{
     background-color: white !important;
