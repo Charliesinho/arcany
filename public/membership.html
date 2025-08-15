@@ -16,21 +16,47 @@
     <div class="custom-cursor"></div>
 
     <div id="membershipPage">
-        <img id="columnRight" src="./structures/column.gif" />
-        <img id="columnLeft" src="./structures/column.gif" />
+        
+        <div id="navbar" class="navbarbg">
+        <div class="glow-wrap">
+          <img src="./gameplay/logoArcany.png">
+        </div>
+
+        <div id="navigationbutton">
+          <div class="navButton pointerActivator"><a class="navButton pointerActivator" href="index.html">HOME</a></div>
+          <div class="navButton pointerActivator"><a class="navButton pointerActivator">NEWS</a></div>
+          <div id="membershipPageButton" class="navButton pointerActivator"> <a class="navButton pointerActivator" href="membership.html">MEMBERSHIP</a></div>
+          <div class="navButton pointerActivator"><a class="navButton pointerActivator"class="navButton pointerActivator" href="">CONTACT US</a></div>
+        </div>
+
+        <div>
+          <div class="navButton pointerActivator" id="loginNotPlaying">
+            <p id="loginNotPlayingP">LOG IN</p> 
+            <div id="loginNotPlayingIMG"></div>
+            <div id="loginNotPlayingIMGTOPTRICK"></div>
+          </div>
+        </div>
+
+      </div>
+
+        <img id="columnTopRight" class="columnBg" src="./structures/longColumnon.png" />
+        <img id="columnTopLeft" class="columnBg" src="./structures/longColumnon.png" />
+        <img id="columnRight" class="columnBg" src="./structures/longColumnon.png" />
+        <img id="columnLeft" class="columnBg" src="./structures/longColumnon.png" />
+        <img id="crystalLeft" src="./membershipCard/rotatingCrystal.gif" />
+        <img id="crystalRight" src="./membershipCard/rotatingCrystal.gif" />
+        
+        
         <div id="membershipPageNav">
             <h1>MEMBERSHIP</h1>
-            <a class="pointerActivator navButton" href="index.html">BACK HOME</a>
         </div>
         <p class="middleParagraph">
-            Embark on your journey as an Arcany supporter and help shape the future of the realm.  
-            Starting with a Solar Membership, you’ll unlock the complete game — a living, ever-expanding world brimming with quests, secrets, and hidden corners waiting to be discovered.  
-            Master the art of enchanting to forge weapons unlike any other, infusing them with powerful runes to create a blade that’s truly your own.  
-            And with each membership tier, your in-game name will shine with a distinctive tag, marking you as a champion of Arcany’s growth and legacy.
+            Here’s Arcany’s subscription ! 
+            Every bit of support will helps us to keep the world of Arcany alive, and inspires us to make it bigger and better every day.
         </p>
 
         <div id="membershipPageContent">
-            <div id="solar">
+            <div id="solar" class="pointerActivator">
                 <div class="glow-wrap-card"></div>
                 <div class="cardMembership" id="solarMembership">
                     <div class="membershipText">
@@ -43,9 +69,9 @@
                         <p>Solar name tag</p>
                     </div>
                 </div>
-                <button>Subscribe here</button>
+                <button>Subscribe to Solar</button>
             </div>
-            <div id="arcane">
+            <div id="arcane" class="pointerActivator">
                 <div class="glow-wrap-card glow-wrap-card-arcane"></div>
                 <div class="cardMembership" id="arcaneMembership">
                     <div class="membershipText">
@@ -58,9 +84,9 @@
                         <p>Arcane name tag</p>
                     </div>
                 </div>
-                <button>Subscribe here</button>
+                <button>Subscribe to Arcane</button>
             </div>
-            <div id="nuclear">
+            <div id="nuclear" class="pointerActivator">
                 <div class="glow-wrap-card"></div>
                 <div class="cardMembership" id="nuclearMembership">
                     <div class="membershipText">
@@ -73,11 +99,18 @@
                         <p>Nuclear name tag</p>
                     </div>
                 </div>
-                <button>Subscribe here</button>
+                <button>Subscribe to Nuclear</button>
             </div>
-    
+            
+
             
         </div>
+        <p>
+        Embark on your journey as an Arcany supporter and help shape the future of the realm.  
+        Starting with a Solar Membership, you’ll unlock the complete game — a living, ever-expanding world brimming with quests, secrets, and hidden corners waiting to be discovered.  
+        Master the art of enchanting to forge weapons unlike any other, infusing them with powerful runes to create a blade that’s truly your own.  
+        And with each membership tier, your in-game name will shine with a distinctive tag, marking you as a champion of Arcany’s growth and legacy.
+        </p>
     </div>
     <script src="/cursor.js"></script>
 </body>
