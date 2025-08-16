@@ -283,6 +283,7 @@ const placeFishingArea = document.getElementById("fishingButtonUi");
 const placeCraftingArea = document.getElementById("craftingButtonUi");
 const placeCookingArea = document.getElementById("cookingButtonUi");
 const placeChest = document.getElementById("placeChest");
+const placeChat = document.getElementById("placeChat");
 const placeTransition = document.getElementById("portalButtonUi");
 const roomsDiv = document.getElementById('roomsDev');
 const dialogsDiv = document.getElementById('dialogsDev');
@@ -401,6 +402,8 @@ const lootImage = document.getElementById("lootImage");
 const monsterNameInput = document.getElementById("monsterNameInput");
 
 const placeMobButtonUi = document.getElementById("placeMobButtonUi");
+const questButtonUi = document.getElementById("questButtonUi");
+const questMenu = document.getElementById("quest-menu");
 const monsterCreationParent = document.getElementById("monsterCreationParent");
 
 //EDIT MAPS

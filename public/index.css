@@ -3508,6 +3508,24 @@ body {
     }
 }
 
+@keyframes opacityUpAndPop {
+    0% {
+        opacity: 0;
+        width: 30px;
+    }
+    10% {
+        opacity: 1;
+    }
+    95% {
+        opacity: 1;
+        width: 544px;
+    }
+    100% {
+        opacity: 1;
+        width: 534px;
+    }
+}
+
 @keyframes opacityUpRespawn {
     0% {
         opacity: 0;
@@ -4220,7 +4238,7 @@ body {
     }
 }
 
-.container {
+.chat-container {
 	margin: 0 auto;
     display: none;
     flex-direction: row;
@@ -4230,11 +4248,12 @@ body {
     opacity: 0;
     bottom: 0;
     left: 50%;
-    transform: translate(-50%, -90%);
+    transform-origin: center center;
+    transform: scale(1)translate(-50%, -90%);
     z-index: 3;
     background: url("./Textures/dialogBack.png");
     background-size: contain;
-    animation: opacityUp .3s ease forwards;
+    animation: opacityUpAndPop .2s ease forwards;
     background-repeat: no-repeat;
 }
 
@@ -4261,22 +4280,40 @@ body {
 
 .text-wrap {
 	position: relative;
-	padding: 15px;
-	/* border: 2px solid #333; */
-	height: 148px;
-	overflow: hidden;
-	width: 500px;
+    padding: 15px;
+    /* border: 2px solid #333; */
+    height: 148px;
+    overflow: hidden;
+    width: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
+#canvas-lobby {
+    transition: transform 0.7s ease, filter 10s ease;
+    transform-origin: center center; /* zoom from center */
+  }
+  
 
 .text-block {
     margin: 0;
+    padding: 5px 32px;
+    text-align: center;
     font-size: 23px;
     font-weight: 500;
-    padding: 5px 10px;
-    line-height: 1.4em;
-    height: 140px;
+    line-height: 1.4; /* keep normal line spacing */
+    /* height: 140px; */
     overflow: hidden;
+    
+    display: block; /* use normal block flow */
 }
+
+/* spans inside text-block */
+.text-block span {
+    display: inline-block; /* allows animations but keeps letters close */
+}
+
 
 .more-icon {
 	display: none;

@@ -7,11 +7,33 @@
     <script src="https://cdn.jsdelivr.net/gh/bevacqua/dragula@3.7.3/dist/dragula.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lodash/lodash.min.js"></script>
     <link rel="stylesheet" href="./index.css" />
+    <link rel="stylesheet" href="./questPanel.css" />
     <link rel="icon" href="./ui/arcanyicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bevacqua/dragula@3.7.3/dist/dragula.min.css">
     <title>Arcany</title>
   </head>
   <body id="body">
+    <div id="quest-menu">
+      <div class="status">
+        <strong>Selected variable</strong> (kept on <code class="inline">window.selectedQuestStep</code>):
+        <div id="selection-readout">null</div>
+      </div>
+    
+      <!-- Quest Selector -->
+      <div class="quest-selector">
+        <label for="questSelect">Choose quest:</label>
+        <select id="questSelect"></select>
+      </div>
+    
+      <!-- Container DIV -->
+      <div id="quest-container" class="quest-card"></div>
+    
+      <p class="footer-note">
+        • Click the <em>quest title</em> to set <code class="inline">["questName", null]</code> (selects the quest).<br>
+        • Click any <em>step</em> to set <code class="inline">["questName", stepNumber]</code> (1-based).
+      </p>
+    </div>
+
     <img id="introLogo-img" src="./gameplay/loading.gif" />
     <div id="introLogo">
       <video id="introLogo-video" width="640" height="360">
@@ -160,6 +182,7 @@
 
     <div id="uiBuilding">
       <div id="uiBuildingToolsDiv">
+        <img class="uiButtonBG pointerActivator" id="questButtonUi" src="./icons/uiIcon/chatIcon.png"></img>
         <img class="uiButtonBG pointerActivator" id="saveObjButtonUi" src="./icons/uiIcon/save.png"></img>
         <img class="uiButtonBG pointerActivator" id="mapButtonUi" src="./icons/uiIcon/mapIcon.png"></img>
         <img class="uiButtonBG pointerActivator" id="placeMobButtonUi" src="./icons/uiIcon/placeMob.png"></img>
@@ -387,6 +410,7 @@
             <img class="uiButtonBG pointerActivator displayNone" id="craftingButtonUi" src="./icons/uiIcon/craftingIcon.png"></img>
           </div>
           <div>
+            <img class="uiButtonBG pointerActivator displayNone" id="placeChat" src="./icons/uiIcon/chatIcon.png"></img>
             <img class="uiButtonBG pointerActivator displayNone" id="placeChest" src="./icons/uiIcon/chestIcon.png"></img>
             <img class="uiButtonBG pointerActivator displayNone" id="cookingButtonUi" src="./icons/uiIcon/cookingIcon.png"></img>
             <img class="uiButtonBG pointerActivator displayNone" id="portalButtonUi" src="./icons/uiIcon/portal.png"></img>
@@ -1205,17 +1229,17 @@
       <div id="overlay">
         
 
-      <div class="container">
-        <div class="char-img"></div>
+      <div class="chat-container" id="chatPanel" style="display:none;">
         <div>
           <div class="name-wrap">
-            <span class="char-name"></span>
+            <span class="char-name" id="charName">Quest NPC</span>
           </div>
           <div class="text-wrap">
-            <p class="text-block"></p>
+            <p class="text-block" id="chatText"></p>
           </div>
         </div>
       </div>
+        
 
       <div id="exploreMap">
         <img class="exploreMapImage" src="./beachMap.png"></img>
@@ -1345,6 +1369,7 @@
     <script src="./imports/clothes.js"></script>
     <script src="./imports/audios.js"></script>
     <script src="./imports/html-imports.js"></script>
+    <script src="./questList.js"></script>
     <script src="/index.js"></script>
     <script src="/cursor.js"></script>
     <!-- <script type="module" src="/index.js"></script> -->

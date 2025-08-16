@@ -1552,7 +1552,6 @@ window.addEventListener("keydown", function (e) {
 });
 
 let typing = false;
-let typingInterval = null;
 
 window.addEventListener("keydown", (e) => {
 
@@ -7868,7 +7867,7 @@ let fishingInterval;
 let fishingTimeout;
 
 window.addEventListener("keydown", (e) => {
-  if(keyBlocker || typing) return
+  if(keyBlocker || typing || dialogOpened) return
   let keyCheck = e?.key?.toLowerCase()
 
   if (keyCheck === "o") {
@@ -7880,7 +7879,6 @@ window.addEventListener("keydown", (e) => {
       footsteps.play();
       footsteps.loop = true;
       animPlayer = "moveUp"
-      
       movingUp = true;
     } else if (keyCheck === "s") {
       footsteps.play();
@@ -7947,12 +7945,12 @@ window.addEventListener("keydown", (e) => {
 
     //Dialog grasslands open >
 
-  if(e?.key?.toLowerCase() === "e" && dialogAvailable & !dialogOpened) {
-    dialogOpened = true;
-    startDialog(currentDialogTitle);
-  } else if (e?.key?.toLowerCase() === "e" && dialogAvailable & dialogOpened) {
-    dialogOpened = false;
-  }
+  // if(e?.key?.toLowerCase() === "e" && dialogAvailable & !dialogOpened) {
+  //   dialogOpened = true;
+  //   startDialog();
+  // } else if (e?.key?.toLowerCase() === "e" && dialogAvailable & dialogOpened) {
+  //   dialogOpened = false;
+  // }
 
   //Dialog grasslands open <
   
@@ -8199,7 +8197,7 @@ window.addEventListener("keydown", (e) => {
 });
 
 window.addEventListener("keyup", (e) => {
-  if(keyBlocker) return
+  // if(keyBlocker) return
   let keyCheck = e?.key?.toLowerCase()
   if (keyCheck === "w" || keyCheck === "z") {
     movingUp = false;
@@ -8642,7 +8640,7 @@ var blockChar = document.querySelector('.char-name');
 var textBlock = document.querySelector('.text-block');
 var starquest = document.querySelector('.starquest');
 var charimg = document.querySelector('.char-img');
-var containerChat = document.querySelector('.container');
+var containerChat = document.querySelector('.chat-container');
 
 var textSpeed = 20;
 let currentDialogTitle = ""
@@ -8785,23 +8783,9 @@ socket.on("inventoryFull", () => {
 })
 
 // Function to start a specific dialog
-function startDialog(dialogKey) {
-    if (dialogBoxes[dialogKey]) {
-      console.log(dialogBoxes[dialogKey]);
-      currentDialogParent =  dialogBoxes[dialogKey]
-      if ((dialogBoxes[dialogKey].questName && !myPlayer.questsOngoing.some(obj => obj.title === dialogBoxes[dialogKey].questName)) || !dialogBoxes[dialogKey].questName) {
-        currentDialog = dialogBoxes[dialogKey].dialogText;
-      } 
-      else if (dialogBoxes[dialogKey].questName && myPlayer.questsOngoing.some(obj => obj.title === dialogBoxes[dialogKey].questName)) {
-        console.log(dialogBoxes[dialogKey].questName)
-        currentDialog = dialogBoxes[dialogKey].progressText;
-      }
-      currentDialogIndex = 0;
-      displayDialogParagraph();
-    } else {
-        console.error("Dialog not found: " + dialogKey);
-    }
-}
+// function startDialog() {
+    
+// }
 
 // // Increase text print speed on spacebar press (keydown)
 // document.addEventListener('keydown', function(event) {
@@ -9437,6 +9421,33 @@ canvasLobby.addEventListener('click', function(event) {
     currentlyPlacingWall = false;
   }
   
+  else if (!currentlyPlacingWall && currentDevAction === "chat" && currentSelectedWall === null) {
+    selectedXcoord = hoveredXCoord;
+    selectedYcoord = hoveredYCoord;
+    currentlyPlacingWall = true;
+  }
+  else if (currentSelectedWall === null && currentlyPlacingWall && currentDevAction === "chat") {
+    const x = hoveredXCoord;
+    const y = hoveredYCoord;
+    const newWidth = x - selectedXcoord;
+    const newHeight = y - selectedYcoord;
+    
+    if (window.selectedQuestStep) {
+      mapsInfo[currentLand].colliders.push({
+        type: "chat",
+        quest: window.selectedQuestStep,
+        x: selectedXcoord,
+        y: selectedYcoord,
+        width: newWidth,
+        height: newHeight,
+        color: `rgb(255, 204, 204, ${wallsVisibility})`
+      })
+    } else {
+      errorDisplay("No quest step selected")
+    }
+    currentlyPlacingWall = false;
+  }
+  
   else if (!currentlyPlacingWall && currentDevAction === "fish" && currentSelectedWall === null) {
     selectedXcoord = hoveredXCoord;
     selectedYcoord = hoveredYCoord;
@@ -10055,12 +10066,22 @@ placeMobButtonUi.addEventListener("click", function(){
     currentDevAction = "monster";
     placeMobButtonUi.style.backgroundColor = "rgb(148, 223, 148)"
     monsterCreationParent.style.display = "flex"
-    monsterCreationParent.style.display = "flex"
   } else {
     deselectUiButton()
     currentDevAction = "none";
     monsterCreationParent.style.display = "none"
     monsterSelectionImageParent.style.display = "none"
+  }
+});
+
+questButtonUi.addEventListener("click", function(){
+  playRandomPop()
+  console.log(window.selectedQuestStep)
+  if (questMenu.style.display != "block") {
+    questMenu.style.display = "block"
+    window.selectedQuestStep = null;
+  } else {
+    questMenu.style.display = "none"
   }
 });
 
@@ -10793,6 +10814,7 @@ colisionActivatorButton.addEventListener("click", function() {
     placeWalls.style.display = "none"
     deleteWalls.style.display = "none"
     placeChest.style.display = "none"
+    placeChat.style.display = "none"
     placeFishingArea.style.display = "none"
     placeEnchantingArea.style.display = "none"
     placeCraftingArea.style.display = "none"
@@ -10806,6 +10828,7 @@ colisionActivatorButton.addEventListener("click", function() {
     placeWalls.style.display = "flex"
     deleteWalls.style.display = "flex"
     placeChest.style.display = "flex"
+    placeChat.style.display = "flex"
     placeFishingArea.style.display = "flex"
     placeEnchantingArea.style.display = "flex"
     placeCraftingArea.style.display = "flex"
@@ -10832,6 +10855,7 @@ function placeAreaColorChange(){
   placeWalls.style.backgroundColor = "#ffe2c1"
   deleteWalls.style.backgroundColor = "#ffe2c1"
   placeChest.style.background =  "#ffe2c1"
+  placeChat.style.background =  "#ffe2c1"
   roomsDiv.style.display = "none"
   chestCreatorParent.style.display = "none"
 }
@@ -10851,6 +10875,18 @@ placeFishingArea.addEventListener("click", function() {
     placeAreaColorChange()
     currentDevAction = "fish";
     placeFishingArea.style.backgroundColor = "rgba(170, 233, 170, 1)"
+    showWallsFunction(true)
+  } else {
+    placeAreaColorChange()
+  }
+});
+
+placeChat.addEventListener("click", function() {
+  playRandomPop()
+  if (currentDevAction !== "chat") {
+    placeAreaColorChange()
+    currentDevAction = "chat";
+    placeChat.style.backgroundColor = "rgba(170, 233, 170, 1)"
     showWallsFunction(true)
   } else {
     placeAreaColorChange()
@@ -11035,8 +11071,8 @@ mapsInfo[currentLand].colliders.forEach(wall => {
     wall.color = `rgb(255, 255, 204, ${wallsVisibility})`
   } else if (wall.type === "transition") {
     wall.color = `rgb(204, 0, 204, ${wallsVisibility})`
-  } else if (wall.type === "dialog") {
-    wall.color = `rgb(179, 255, 213, ${wallsVisibility})`
+  } else if (wall.type === "chat") {
+    wall.color = `rgb(255, 204, 204, ${wallsVisibility})`
   } else if (wall.type === "monsterAltar") {
     wall.color = `rgb(179, 255, 213, ${wallsVisibility})`
   }
@@ -11405,6 +11441,7 @@ function mapSetup () {
     grassCraftingAvailable = false;
     IslandChestAvailable = false;
 
+    console.log(cutscene)
     // Set cameras
     if (!cutscene) {
     
@@ -11681,6 +11718,8 @@ function drawOnTop (img, x, y, width, height, cx, cy, anim) {
 
 function localPlayerMovement () {
   // console.log(deltaTime)
+  if (dialogOpened) return;
+
   if (movingLeft && allowedMoveUpLeft) {
     inputs["left"] = true;
     playerX -= playerSpeed * fixedDeltaTime;
@@ -11754,7 +11793,7 @@ function drawColliders (type, x, y, w, h) {
         const adjustedY = wallX.y - cameraShakeY - cameraY;
         
         if (isColliding(colliderToCheck, { x: adjustedX, y: adjustedY, width: wallX.width, height: wallX.height })) {
-          if (wall.type === "dialog") {
+          if (wall.type === "chat") {
             dialogCounter++
           }
           else if (wall.type === "chest") {
@@ -11805,12 +11844,12 @@ function drawColliders (type, x, y, w, h) {
           if (!challengeActive) transition(wall.format)
           
         }
-        else if (wall.type === "dialog") {
-          if (!myPlayer.questsCompleted.find(quest => quest.title === dialogBoxes[wall.name].questName))
+        else if (wall.type === "chat") {
+          // if (!myPlayer.questsCompleted.find(quest => quest.title === dialogBoxes[wall.name].questName))
           dialogAvailable = true;
-          currentDialogTitle = wall.name;
+          currentDialogTitle = wall.quest;
           if (dialogOpened) {
-            containerChat.style.display = "flex";
+            containerChat.style.display = "block";
           } else {
             containerChat.style.display = "none";
           }
@@ -11853,12 +11892,11 @@ function drawColliders (type, x, y, w, h) {
         }
       }
       else {
-        if (wall.type === "dialog" && dialogCounter === 0) {
+        if (wall.type === "chat" && dialogCounter === 0) {
           dialogOpened = false;
           containerChat.style.display = "none";
           cutscene = false;
           dialogAvailable = false;
-          currentDialogTitle = ""
         }
         if (wall.type === "cook") {
           grassOpenCooking = false;
